@@ -1,0 +1,16 @@
+.font-kecil {
+	font-size: 12px;
+}
+.dataTables_wrapper .dataTables_paginate {
+	float: right;
+}
+.btn-sm {
+	padding: 6px 8px !important;
+}
+.hilang {
+	display: none !important;
+}
+.table-tbody td {
+	/* background-color: aqua !important; */
+	padding: 5px !important;
+}
