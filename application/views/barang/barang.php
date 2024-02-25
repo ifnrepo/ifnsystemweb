@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
-        <a href="<?= base_url().'satuan/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Satuan"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+        <a href="<?= base_url().'barang/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Barang"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
       </div>
     </div>
   </div>
@@ -37,6 +37,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <td><?= $no; ?></td>
                   <td><?= $key['kode']; ?></td>
                   <td><?= $key['nama_barang']; ?></td>
+                  <td>-</td>
+                  <td><?= $key['namasatuan']; ?></td>
                   <td>
                     <a href="<?= base_url().'satuan/editsatuan/'.$key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editsatuan" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Satuan" rel="<?= $key['id']; ?>" title="Edit data">
                       <i class="fa fa-edit"></i>
