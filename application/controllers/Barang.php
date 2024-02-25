@@ -23,14 +23,17 @@ class Barang extends CI_Controller {
 		$this->load->view('layouts/footer',$footer);
 	}
     public function tambahdata(){
-        $this->load->view('satuan/addsatuan');
+        $data['itemsatuan'] = $this->satuanmodel->getdata();
+        $data['kode'] = time();
+        $this->load->view('barang/addbarang',$data);
     }
-    public function simpansatuan(){
+    public function simpanbarang(){
         $data = [
-            'kodesatuan'=>$_POST['kode'],
-            'namasatuan'=>$_POST['nama']
+            'kode'=>$_POST['kode'],
+            'nama_barang'=>$_POST['nama'],
+            'id_satuan'=>$_POST['sat']
         ];
-        $hasil = $this->satuanmodel->simpansatuan($data);
+        $hasil = $this->barangmodel->simpanbarang($data);
         echo $hasil;
     }
     public function editsatuan($id){

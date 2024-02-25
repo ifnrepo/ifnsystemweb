@@ -1,7 +1,9 @@
 <?php 
 class Barangmodel extends CI_Model{
     public function getdata(){
-        $query = $this->db->query("Select * from barang");
+        $query = $this->db->query("Select barang.*,satuan.namasatuan 
+        from barang
+        left join satuan on satuan.id = barang.id_satuan");
         return $query;
     }
     public function getdatabyid($id){
