@@ -15,9 +15,11 @@
 
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Exdo</label>
-            <div class="col">
-                <input type="text" class="form-control font-kecil" name="exdo" id="exdo" placeholder="exdo">
-            </div>
+            <select name="exdo" id="exdo">
+                <option value="export">export</option>
+                <option value="domestik">domestik</option>
+            </select>
+
         </div>
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Alamat</label>
@@ -94,10 +96,10 @@
 
 <div class="modal-footer">
     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="simpancostumer">Simpan</button>
+    <button type="button" class="btn btn-primary" id="simpancustomer">Simpan</button>
 </div>
 <script>
-    $("#simpancostumer").click(function() {
+    $("#simpancustomer").click(function() {
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -116,10 +118,12 @@
                 telp: $("#telp").val(),
                 email: $("#email").val(),
                 kontak: $("#kontak").val(),
-                keterangan: $("#keterangan").val(),
+                keterangan: $("#keterangan").val()
             },
             success: function(data) {
+                alert(data);
                 window.location.reload();
+
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

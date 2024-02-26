@@ -17,7 +17,7 @@ class Customer_model extends CI_Model
     {
         // $query = $this->db->insert('customer', $data);
         // return $query;
-        $this->db->insert('customer', $data);
+        return $this->db->insert('customer', $data);
     }
     public function updatecustomer($data)
     {

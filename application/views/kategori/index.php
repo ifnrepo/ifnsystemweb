@@ -17,6 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </div>
 <div class="page-body">
     <div class="container-xl">
+
         <div class="card">
             <div class="card-body">
                 <div id="table-default" class="table-responsive">
