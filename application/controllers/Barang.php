@@ -11,7 +11,7 @@ class Barang extends CI_Controller {
         }
         $this->load->model('barangmodel');
         $this->load->model('satuanmodel');
-        // $this->load->model('kategorimodel');
+        $this->load->model('kategorimodel');
     }
 	public function index()
 	{  
@@ -24,6 +24,7 @@ class Barang extends CI_Controller {
 	}
     public function tambahdata(){
         $data['itemsatuan'] = $this->satuanmodel->getdata();
+        $data['itemkategori'] = $this->kategorimodel->getdata();
         $data['kode'] = time();
         $this->load->view('barang/addbarang',$data);
     }
@@ -31,28 +32,33 @@ class Barang extends CI_Controller {
         $data = [
             'kode'=>$_POST['kode'],
             'nama_barang'=>$_POST['nama'],
-            'id_satuan'=>$_POST['sat']
+            'id_satuan'=>$_POST['sat'],
+            'id_kategori'=>$_POST['kat']
         ];
         $hasil = $this->barangmodel->simpanbarang($data);
         echo $hasil;
     }
-    public function editsatuan($id){
-        $data['data'] = $this->satuanmodel->getdatabyid($id)->row_array();
-        $this->load->view('satuan/editsatuan',$data);
+    public function editbarang($id){
+        $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
+        $data['itemsatuan'] = $this->satuanmodel->getdata();
+        $data['itemkategori'] = $this->kategorimodel->getdata();
+        $this->load->view('barang/editbarang',$data);
     }
-    public function updatesatuan(){
+    public function updatebarang(){
         $data = [
             'id'=>$_POST['id'],
-            'kodesatuan'=>$_POST['kode'],
-            'namasatuan'=>$_POST['nama']
+            'kode'=>$_POST['kode'],
+            'nama_barang'=>$_POST['nama'],
+            'id_satuan'=>$_POST['sat'],
+            'id_kategori'=>$_POST['kat']
         ];
-        $hasil = $this->satuanmodel->updatesatuan($data);
+        $hasil = $this->barangmodel->updatebarang($data);
         echo $hasil;
     }
-    public function hapussatuan($id){
-        $hasil = $this->satuanmodel->hapussatuan($id);
+    public function hapusbarang($id){
+        $hasil = $this->barangmodel->hapusbarang($id);
         if($hasil){
-            $url = base_url().'satuan';
+            $url = base_url().'barang';
             redirect($url);
         }
     }
