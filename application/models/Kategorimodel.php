@@ -17,7 +17,7 @@ class Kategorimodel extends CI_Model
     {
         // $query = $this->db->insert('kategori', $data);
         // return $query;
-        $this->db->insert('kategori', $data);
+        return $this->db->insert('kategori', $data);
     }
     public function updatekategori($data)
     {
