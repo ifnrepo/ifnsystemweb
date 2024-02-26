@@ -19,7 +19,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="container-xl">
         <div class="card">
             <div class="card-body font-kecil">
-                <form method="POST" action="<?= base_url('customer/edit/' . $data['id']); ?>">
+                <form method="POST" action="<?= base_url('customer/updatecustomer'); ?>">
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="mb-1 row">
@@ -37,9 +37,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">Exdo</label>
-                                <div class="col">
-                                    <input type="text" class="form-control font-kecil" name="exdo" id="exdo" value="<?= $data['exdo']; ?>">
-                                </div>
+                                <select name="exdo" id="exdo">
+                                    <option value="export">export</option>
+                                    <option value="domestik">domestik</option>
+                                </select>
+
                             </div>
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">Alamat</label>
@@ -59,14 +61,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" value=" <?= $data['kecamatan']; ?>">
                                 </div>
                             </div>
-                        </div>
-                        <div class="col-sm-6">
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">kab_kota</label>
                                 <div class="col">
                                     <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" value=" <?= $data['kab_kota']; ?>">
                                 </div>
                             </div>
+                        </div>
+                        <div class="col-sm-6">
+
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">provinsi</label>
                                 <div class="col">
@@ -103,13 +106,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <input type="text" class="form-control font-kecil" name="kontak" id="kontak" value=" <?= $data['kontak']; ?>">
                                 </div>
                             </div>
-                        </div>
-                        <div class="mb-1 row">
-                            <label class="col-3 col-form-label required">Keterangan</label>
-                            <div class="col">
-                                <input type="text area" class="form-control font-kecil" name="keterangan" id="keterangan" value=" <?= $data['keterangan']; ?>">
+                            <div class="mb-1 row">
+                                <label class="col-3 col-form-label required">Keterangan</label>
+                                <div class="col">
+                                    <input type="text area" class="form-control font-kecil" name="keterangan" id="keterangan" value=" <?= $data['keterangan']; ?>">
+                                </div>
                             </div>
                         </div>
+
 
                         <div class="hr mt-2 mb-1"></div>
                         <div class="card-body pt-2">

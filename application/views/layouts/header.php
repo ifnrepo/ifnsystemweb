@@ -325,7 +325,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 4); ?>" href="./">
                       Supplier
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="./">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('customer'); ?>">
                       Customer
                     </a>
                   </div>

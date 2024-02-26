@@ -17,6 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </div>
 <div class="page-body">
     <div class="container-xl">
+        <?= $pesan = $this->session->flashdata('pesan'); ?>
         <div class="card">
             <div class="card-body">
                 <div id="table-default" class="table-responsive">
@@ -27,17 +28,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Kode Customer</th>
                                 <th>Nama Customer</th>
                                 <th>Exdo</th>
-                                <!-- <th>Alamat</th>
-                                <th>Desa</th>
-                                <th>Kecamatan</th>
-                                <th>Kabupaten/Kota</th>
-                                <th>provinsi</th>
-                                <th>Kode Pos</th>
-                                <th>Npwp</th> -->
-                                <!-- <th>Telephone</th>
-                                <th>Email</th>
-                                <th>Kontak</th>
-                                <th>Keterangan</th> -->
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -49,17 +39,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= $key['kode_customer']; ?></td>
                                     <td><?= $key['nama_customer']; ?></td>
                                     <td><?= $key['exdo']; ?></td>
-                                    <!-- <td><?= $key['alamat']; ?></td>
-                                    <td><?= $key['desa']; ?></td>
-                                    <td><?= $key['kecamatan']; ?></td>
-                                    <td><?= $key['kab_kota']; ?></td>
-                                    <td><?= $key['propinsi']; ?></td>
-                                    <td><?= $key['kodepos']; ?></td>
-                                    <td><?= $key['npwp']; ?></td> -->
-                                    <!-- <td><?= $key['telp']; ?></td>
-                                    <td><?= $key['email']; ?></td>
-                                    <td><?= $key['kontak']; ?></td>
-                                    <td><?= $key['keterangan']; ?></td> -->
                                     <td>
                                         <a href="<?= base_url() . 'customer/viewcustomer/' . $key['id']; ?>" class="btn btn-sm btn-teal btn-icon" id="edituser" rel="<?= $key['id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View customer">
                                             <i class="fa fa-eye"></i>
@@ -67,7 +46,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <a href="<?= base_url() . 'customer/editcustomer/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" rel="<?= $key['id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'customer/hapuscostumer/' . $key['id']; ?>" title="Hapus data">
+                                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'customer/hapuscustomer/' . $key['id']; ?>" title="Hapus data">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     </td>
