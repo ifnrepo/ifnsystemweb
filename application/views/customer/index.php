@@ -10,7 +10,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </h2>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <a href="<?= base_url() . 'customer/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Customer"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                <a href="<?= base_url() . 'customer/tambahdata' ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Customer"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
             </div>
         </div>
     </div>
