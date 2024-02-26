@@ -61,9 +61,9 @@
             </div>
         </div>
         <div class="mb-1 row">
-            <label class="col-3 col-form-label required">Alamat</label>
+            <label class="col-3 col-form-label required">Npwp</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="alamat" id="alamat" placeholder="alamat">
+                <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="NPWP">
             </div>
         </div>
         <div class="mb-1 row">
@@ -87,7 +87,7 @@
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Keterangan</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="keterangan" id="keteranagn" placeholder="Keterangan">
+                <input type="text" class="form-control font-kecil" name="keterangan" id="keterangan" placeholder="Keterangan">
             </div>
         </div>
     </div>
@@ -121,7 +121,6 @@
                 keterangan: $("#keterangan").val()
             },
             success: function(data) {
-                alert(data);
                 window.location.reload();
 
             },
