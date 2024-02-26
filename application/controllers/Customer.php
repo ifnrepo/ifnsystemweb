@@ -11,7 +11,6 @@ class Customer extends CI_Controller
             redirect($url);
         }
 
-        $this->load->library('session');
         $this->load->model('customer_model');
     }
 
@@ -56,39 +55,52 @@ class Customer extends CI_Controller
 
         $header['header'] = 'master';
         $data['data'] = $this->customer_model->getdatabyid($id);
-        $this->load->view('layouts/header', $header);
+        // $this->load->view('layouts/header', $header);
         $this->load->view('customer/editcustomer', $data);
-        $this->load->view('layouts/footer');
+        // $this->load->view('layouts/footer');
     }
     public function updatecustomer()
     {
         $data = [
-            'id' => $this->input->post('id'),
-            'kode_customer' => $this->input->post('kode_customer'),
-            'nama_customer' => $this->input->post('nama_customer'),
-            'exdo' => $this->input->post('exdo'),
-            'alamat' => $this->input->post('alamat'),
-            'desa' => $this->input->post('desa'),
-            'kecamatan' => $this->input->post('kecamatan'),
-            'kab_kota' => $this->input->post('kab_kota'),
-            'propinsi' => $this->input->post('propinsi'),
-            'kodepos' => $this->input->post('kodepos'),
-            'npwp' => $this->input->post('npwp'),
-            'telp' => $this->input->post('telp'),
-            'email' => $this->input->post('email'),
-            'kontak' => $this->input->post('kontak'),
-            'keterangan' => $this->input->post('keterangan')
+            // 'id' => $this->input->post('id'),
+            // 'kode_customer' => $this->input->post('kode_customer'),
+            // 'nama_customer' => $this->input->post('nama_customer'),
+            // 'exdo' => $this->input->post('exdo'),
+            // 'alamat' => $this->input->post('alamat'),
+            // 'desa' => $this->input->post('desa'),
+            // 'kecamatan' => $this->input->post('kecamatan'),
+            // 'kab_kota' => $this->input->post('kab_kota'),
+            // 'propinsi' => $this->input->post('propinsi'),
+            // 'kodepos' => $this->input->post('kodepos'),
+            // 'npwp' => $this->input->post('npwp'),
+            // 'telp' => $this->input->post('telp'),
+            // 'email' => $this->input->post('email'),
+            // 'kontak' => $this->input->post('kontak'),
+            // 'keterangan' => $this->input->post('keterangan')
+            'id' => $_POST['id'],
+            'kode_customer' => $_POST['kode_customer'],
+            'nama_customer' => $_POST['nama_customer'],
+            'exdo' => $_POST['exdo'],
+            'alamat' => $_POST['alamat'],
+            'desa' => $_POST['desa'],
+            'kecamatan' => $_POST['kecamatan'],
+            'kab_kota' => $_POST['kab_kota'],
+            'propinsi' => $_POST['propinsi'],
+            'kodepos' => $_POST['kodepos'],
+            'npwp' => $_POST['npwp'],
+            'telp' => $_POST['telp'],
+            'email' => $_POST['email'],
+            'kontak' => $_POST['kontak'],
+            'keterangan' => $_POST['keterangan']
         ];
-
-
-        $this->load->model('customer_model');
         $hasil = $this->customer_model->updatecustomer($data);
-        if ($hasil) {
-            $this->session->set_flashdata('pesan', ' <div class="alert alert-success" role="alert"> Data  berhasil diperbarui.');
-        } else {
-            $this->session->set_flashdata('pesan', ' <div class="alert alert-danger" role="alert"> Gagal memperbarui data ');
-        }
-        redirect('customer');
+        // if ($hasil) {
+        //     $this->session->set_flashdata('pesan', ' <div class="alert alert-success" role="alert"> Data  berhasil diperbarui.');
+        // } else {
+        //     $this->session->set_flashdata('pesan', ' <div class="alert alert-danger" role="alert"> Gagal memperbarui data ');
+        // }
+        //redirect('customer');
+        echo $hasil;
     }
 
     public function hapuscustomer($id)

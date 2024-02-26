@@ -15,16 +15,17 @@
 
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Exdo</label>
-            <select name="exdo" id="exdo">
-                <option value="export">export</option>
-                <option value="domestik">domestik</option>
-            </select>
-
+            <div class="col">
+                <select class="form-select" name="exdo" id="exdo">
+                    <option value="export">Export</option>
+                    <option value="domestik">Domestik</option>
+                </select>
+            </div>
         </div>
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Alamat</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="alamat" id="alamat" placeholder="Alamat">
+                <textarea class="form-control" name="alamat" id="alamat" cols="30" rows="3" placeholder="Alamat"></textarea>
             </div>
         </div>
         <div class="mb-1 row">
@@ -41,7 +42,7 @@
             </div>
         </div>
         <div class="mb-1 row">
-            <label class="col-3 col-form-label required">kab_kota</label>
+            <label class="col-3 col-form-label required">Kab/Kota</label>
             <div class="col">
                 <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" placeholder="Kab/Kota">
             </div>
@@ -87,7 +88,7 @@
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Keterangan</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="keterangan" id="keterangan" placeholder="Keterangan">
+                <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="3" placeholder="Keterangan"></textarea>
             </div>
         </div>
     </div>
