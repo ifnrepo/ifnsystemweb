@@ -4,13 +4,14 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kode</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="kode" id="kode" placeholder="Kode" value="<?= $kode; ?>">
+                    <input type="hidden" name="id" id="id" value="<?= $data['id']; ?>">
+                    <input type="text" class="form-control font-kecil" name="kode" id="kode" placeholder="Kode" value="<?= $data['kode']; ?>">
                 </div>
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Nama Barang</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="nama_barang" id="nama_barang" placeholder="Nama Barang">
+                    <input type="text" class="form-control font-kecil" name="nama_barang" id="nama_barang" placeholder="Nama Barang" value="<?= $data['nama_barang']; ?>">
                 </div>
             </div>
             <div class="mb-1 row">
@@ -18,8 +19,8 @@
                 <div class="col"> 
                     <select class="form-select font-kecil" id="id_kategori" name="id_kategori">
                         <option value="">--Pilih Kategori--</option>
-                        <?php foreach ($itemkategori as $kategori) { ?>
-                            <option value="<?= $kategori['id']; ?>"><?= '['.$kategori['kategori_id'].'] '.$kategori['nama_kategori']; ?></option>
+                        <?php foreach ($itemkategori as $kategori) { $selek = $kategori['id']==$data['id_kategori'] ? 'selected' : ''; ?>
+                            <option value="<?= $kategori['id']; ?>" <?= $selek; ?>><?= '['.$kategori['kategori_id'].'] '.$kategori['nama_kategori']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -29,8 +30,8 @@
                 <div class="col">
                     <select class="form-select font-kecil" id="id_satuan" name="id_satuan">
                         <option value="">--Pilih Satuan--</option>
-                        <?php foreach ($itemsatuan->result_array() as $satuan) { ?>
-                            <option value="<?= $satuan['id']; ?>"><?= '['.$satuan['kodesatuan'].'] '.$satuan['namasatuan']; ?></option>
+                        <?php foreach ($itemsatuan->result_array() as $satuan) { $selek = $satuan['id']==$data['id_satuan'] ? 'selected' : ''; ?>
+                            <option value="<?= $satuan['id']; ?>" <?= $selek; ?>><?= '['.$satuan['kodesatuan'].'] '.$satuan['namasatuan']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -40,13 +41,13 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="simpanbarang" >Simpan</button>
+    <button type="button" class="btn btn-primary" id="updatebarang" >Simpan</button>
 </div>
 <script>
     $(document).ready(function(){
         $("#nama_barang").focus();
     })
-    $("#simpanbarang").click(function(){
+    $("#updatebarang").click(function(){
         if($("#kode").val() == ''){
             pesan('Kode harus di isi !','error');
             return;
@@ -66,12 +67,13 @@
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url+'barang/simpanbarang',
+            url: base_url+'barang/updatebarang',
             data: {
                 kode: $("#kode").val(),
                 nama: $("#nama_barang").val(),
                 sat: $("#id_satuan").val(),
-                kat: $("#id_kategori").val()
+                kat: $("#id_kategori").val(),
+                id: $("#id").val()
             },
             success: function(data){
                 window.location.reload();
