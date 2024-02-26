@@ -4,7 +4,9 @@ class Kategorimodel extends CI_Model
     public function getdata()
     {
         $query = $this->db->get('kategori')->result_array();
-        // $query = $this->db->query("Select * from satuan");
+        // $query = $this->db->query("Select * from satuan");  
+
+        // coba
         return $query;
     }
     public function getdatabyid($id)
