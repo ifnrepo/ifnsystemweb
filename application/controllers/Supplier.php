@@ -53,14 +53,14 @@ class Supplier extends CI_Controller
 
         $header['header'] = 'master';
         $data['data'] = $this->supplier_model->getdatabyid($id);
-        $this->load->view('layouts/header', $header);
+        // $this->load->view('layouts/header', $header);
         $this->load->view('supplier/editsupplier', $data);
-        $this->load->view('layouts/footer');
+        // $this->load->view('layouts/footer');
     }
     public function updatesupplier()
     {
         $data = [
-            'id' => $this->input->post('id'),
+            'id' => $_POST['id'],
             'kode' => $_POST['kode'],
             'nama_supplier' => $_POST['nama_supplier'],
             'alamat' => $_POST['alamat'],
@@ -76,16 +76,8 @@ class Supplier extends CI_Controller
             'jabatan' => $_POST['jabatan'],
             'keterangan' => $_POST['keterangan']
         ];
-
-
-        $this->load->model('supplier_model');
         $hasil = $this->supplier_model->updatesupplier($data);
-        if ($hasil) {
-            $this->session->set_flashdata('pesan', ' <div class="alert alert-success" role="alert"> Data  berhasil diperbarui.');
-        } else {
-            $this->session->set_flashdata('pesan', ' <div class="alert alert-danger" role="alert"> Gagal memperbarui data ');
-        }
-        redirect('supplier');
+        echo $hasil;
     }
 
     public function hapussupplier($id)

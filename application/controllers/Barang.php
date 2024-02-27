@@ -17,7 +17,7 @@ class Barang extends CI_Controller {
 	{  
         $header['header'] = 'master';
         $data['data'] = $this->barangmodel->getdata();
-        $footer['footer'] = 'barang';
+        $footer['fungsi'] = 'barang';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('barang/barang',$data);
 		$this->load->view('layouts/footer',$footer);
@@ -33,7 +33,8 @@ class Barang extends CI_Controller {
             'kode'=>$_POST['kode'],
             'nama_barang'=>$_POST['nama'],
             'id_satuan'=>$_POST['sat'],
-            'id_kategori'=>$_POST['kat']
+            'id_kategori'=>$_POST['kat'],
+            'dln'=>$_POST['dln']
         ];
         $hasil = $this->barangmodel->simpanbarang($data);
         echo $hasil;
@@ -50,7 +51,8 @@ class Barang extends CI_Controller {
             'kode'=>$_POST['kode'],
             'nama_barang'=>$_POST['nama'],
             'id_satuan'=>$_POST['sat'],
-            'id_kategori'=>$_POST['kat']
+            'id_kategori'=>$_POST['kat'],
+            'dln'=>$_POST['dln']
         ];
         $hasil = $this->barangmodel->updatebarang($data);
         echo $hasil;
@@ -59,6 +61,51 @@ class Barang extends CI_Controller {
         $hasil = $this->barangmodel->hapusbarang($id);
         if($hasil){
             $url = base_url().'barang';
+            redirect($url);
+        }
+    }
+    public function bombarang($id){
+        $header['header'] = 'master';
+        $data['detail'] = $this->barangmodel->getdatabyid($id)->row_array();
+        $data['data'] = $this->barangmodel->getdatabom($id);
+        $footer['fungsi'] = 'barang';
+		$this->load->view('layouts/header',$header);
+		$this->load->view('barang/bombarang',$data);
+		$this->load->view('layouts/footer',$footer);
+    }
+    public function addbombarang($id){
+        $data['barang'] = $this->barangmodel->getdata();
+        $data['id_barang'] = $id; 
+        $this->load->view('barang/addbombarang',$data);
+    }
+    public function simpanbombarang(){
+        $data = [
+            'id_barang' => $_POST['id_barang'],
+            'id_barang_bom' => $_POST['id_bbom'],
+            'persen' => $_POST['psn']
+        ];
+        $hasil = $this->barangmodel->simpanbombarang($data);
+        echo $hasil;
+    }
+    public function editbombarang($id){
+        $data['barang'] = $this->barangmodel->getdata();
+        $data['detail'] = $this->barangmodel->getdatabombyid($id)->row_array();
+        $this->load->view('barang/editbombarang',$data);
+    }
+    public function updatebombarang(){
+        $data = [
+            'id_barang' => $_POST['id_barang'],
+            'id_barang_bom' => $_POST['id_bbom'],
+            'persen' => $_POST['psn'],
+            'id' => $_POST['id']
+        ];
+        $hasil = $this->barangmodel->updatebombarang($data);
+        echo $hasil;
+    }
+    public function hapusbombarang($id,$idb){
+        $hasil = $this->barangmodel->hapusbombarang($id);
+        if($hasil){
+            $url = base_url().'barang/bombarang/'.$idb;
             redirect($url);
         }
     }

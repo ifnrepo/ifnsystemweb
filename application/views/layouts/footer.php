@@ -27,6 +27,7 @@
     <script src=<?= base_url()."assets/libs/jsvectormap/dist/js/jsvectormap.min.js?1692870487" ?> defer></script>
     <script src=<?= base_url()."assets/libs/jsvectormap/dist/maps/world.js?1692870487" ?> defer></script>
     <script src=<?= base_url()."assets/libs/jsvectormap/dist/maps/world-merc.js?1692870487" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/tom-select/dist/js/tom-select.base.min.js?1692870487" ?> defer></script>
     <!-- Tabler Core -->
 	<script src=<?= base_url()."assets/js/demo-theme.min.js?1692870487" ?>></script>
     <script src=<?= base_url()."assets/js/tabler.min.js?1692870487" ?> defer></script>
@@ -43,12 +44,15 @@
     <script src="<?= base_url(); ?>assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
     <script src="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.js"></script>
     <script src="<?= base_url(); ?>assets/vendor/select2/js/select2.min.js"></script>
+	<!-- Custom JS -->
+	<script src="<?= base_url(); ?>assets/js/myscript.js"></script>
 	<?php if(isset($fungsi) && $fungsi=='userapps'){ ?>
 		<script src="<?= base_url(); ?>assets/js/own/userapps.js"></script>
 	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='barang'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/barang.js"></script>
+	<?php } ?>
 
-	<!-- Custom JS -->
-	<script src="<?= base_url(); ?>assets/js/myscript.js"></script>
     <script>
       // @formatter:off
       document.addEventListener("DOMContentLoaded", function () {
