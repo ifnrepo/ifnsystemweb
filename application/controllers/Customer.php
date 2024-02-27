@@ -62,21 +62,6 @@ class Customer extends CI_Controller
     public function updatecustomer()
     {
         $data = [
-            // 'id' => $this->input->post('id'),
-            // 'kode_customer' => $this->input->post('kode_customer'),
-            // 'nama_customer' => $this->input->post('nama_customer'),
-            // 'exdo' => $this->input->post('exdo'),
-            // 'alamat' => $this->input->post('alamat'),
-            // 'desa' => $this->input->post('desa'),
-            // 'kecamatan' => $this->input->post('kecamatan'),
-            // 'kab_kota' => $this->input->post('kab_kota'),
-            // 'propinsi' => $this->input->post('propinsi'),
-            // 'kodepos' => $this->input->post('kodepos'),
-            // 'npwp' => $this->input->post('npwp'),
-            // 'telp' => $this->input->post('telp'),
-            // 'email' => $this->input->post('email'),
-            // 'kontak' => $this->input->post('kontak'),
-            // 'keterangan' => $this->input->post('keterangan')
             'id' => $_POST['id'],
             'kode_customer' => $_POST['kode_customer'],
             'nama_customer' => $_POST['nama_customer'],
