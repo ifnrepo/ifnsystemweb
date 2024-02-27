@@ -322,7 +322,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 3); ?>" href="<?= base_url() . 'barang'; ?>">
                       Barang
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 4); ?>" href="./">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 4); ?>" href="<?= base_url('supplier'); ?>">
                       Supplier
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('customer'); ?>">

@@ -1,37 +1,128 @@
 <div class="container-xl">
     <div class="row">
-        <div class="col-12">
+        <div class="col-6">
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Id Kategori</label>
+                <label class="col-3 col-form-label required">Kode</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="kategori_id" id="kategori_id" placeholder="Id Kategori">
+                    <input type="text" class="form-control font-kecil" name="kode" id="kode" placeholder="Kode">
                 </div>
             </div>
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Nama Kategori</label>
+                <label class="col-3 col-form-label required">Nama Supplier</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="nama_kategori" id="nama_kategori" placeholder="Nama Kategori">
+                    <input type="text" class="form-control font-kecil" name="nama_supplier" id="nama_supplier" placeholder="Nama supplier">
+                </div>
+            </div>
+
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Alamat</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="alamat" id="alamat" placeholder="Alamat">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Desa</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="desa" id="desa" placeholder="desa">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Kecamatan</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" placeholder="Kecamatan">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">kab_kota</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" placeholder="Kab/Kota">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Provinsi</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" placeholder="propinsi">
+                </div>
+            </div>
+        </div>
+        <div class="col-6">
+
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Kode Pos</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" placeholder="kodepos">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Npwp</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="Npwp">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Telp</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="telp" id="telp" placeholder="Telp">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Email</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Kontak</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="kontak" id="kontak" placeholder="Kontak">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Jabatan</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Keterangan</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="keterangan" id="keterangan" placeholder="Keterangan">
                 </div>
             </div>
         </div>
     </div>
 </div>
+
+
 <div class="modal-footer">
     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="simpankategori">Simpan</button>
+    <button type="button" class="btn btn-primary" id="simpansupplier">Simpan</button>
 </div>
 <script>
-    $("#simpankategori").click(function() {
+    $("#simpansupplier").click(function() {
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url + 'kategori/simpankategori',
+            url: base_url + 'supplier/simpansupplier',
             data: {
-                kategori_id: $("#kategori_id").val(),
-                nama_kategori: $("#nama_kategori").val()
+                kode: $("#kode").val(),
+                nama_supplier: $("#nama_supplier").val(),
+                alamat: $("#alamat").val(),
+                desa: $("#desa").val(),
+                kecamatan: $("#kecamatan").val(),
+                kab_kota: $("#kab_kota").val(),
+                propinsi: $("#propinsi").val(),
+                kodepos: $("#kodepos").val(),
+                npwp: $("#npwp").val(),
+                telp: $("#telp").val(),
+                email: $("#email").val(),
+                kontak: $("#kontak").val(),
+                jabatan: $("#jabatan").val(),
+                keterangan: $("#keterangan").val()
             },
             success: function(data) {
                 window.location.reload();
+
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
