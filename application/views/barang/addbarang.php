@@ -1,5 +1,5 @@
 <div class="container-xl"> 
-    <div class="row">
+    <div class="row font-kecil">
         <div class="col-12">
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kode</label>
@@ -35,6 +35,15 @@
                     </select>
                 </div>
             </div>
+            <div class="row mt-2">
+                <label class="col-3 col-form-label pt-0"></label>
+                <div class="col">
+                    <label class="form-check">
+                        <input class="form-check-input" id="dln" name="dln" type="checkbox">
+                        <span class="form-check-label">DLN</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -47,6 +56,7 @@
         $("#nama_barang").focus();
     })
     $("#simpanbarang").click(function(){
+        var x = $("#dln").prop('checked') ? 1 : 0;
         if($("#kode").val() == ''){
             pesan('Kode harus di isi !','error');
             return;
@@ -71,7 +81,8 @@
                 kode: $("#kode").val(),
                 nama: $("#nama_barang").val(),
                 sat: $("#id_satuan").val(),
-                kat: $("#id_kategori").val()
+                kat: $("#id_kategori").val(),
+                dln: x
             },
             success: function(data){
                 window.location.reload();

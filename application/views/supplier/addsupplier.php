@@ -1,5 +1,5 @@
 <div class="container-xl">
-    <div class="row">
+    <div class="row font-kecil">
         <div class="col-6">
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kode</label>
@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Nama Supplier</label>
+                <label class="col-3 col-form-label required">Supplier</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" name="nama_supplier" id="nama_supplier" placeholder="Nama supplier">
                 </div>
@@ -17,7 +17,7 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Alamat</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="alamat" id="alamat" placeholder="Alamat">
+                    <textarea class="form-control font-kecil" name="alamat" id="alamat" rows="3"></textarea>
                 </div>
             </div>
             <div class="mb-1 row">
@@ -86,7 +86,7 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Keterangan</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="keterangan" id="keterangan" placeholder="Keterangan">
+                    <textarea class="form-control font-kecil" name="keterangan" rows="3" id="keterangan"></textarea>
                 </div>
             </div>
         </div>
@@ -100,6 +100,14 @@
 </div>
 <script>
     $("#simpansupplier").click(function() {
+        if($("#kode").val() == ''){
+            pesan('Kode harus di isi !','error');
+            return;
+            }
+        if($("#nama_supplier").val() == ''){
+            pesan('Nama Supplier harus di isi !','error');
+            return;
+        }
         $.ajax({
             dataType: "json",
             type: "POST",

@@ -36,6 +36,15 @@
                     </select>
                 </div>
             </div>
+            <div class="row mt-2">
+                <label class="col-3 col-form-label pt-0"></label>
+                <div class="col">
+                    <label class="form-check">
+                        <input class="form-check-input" id="dln" name="dln" type="checkbox" <?php if($data['dln']==1){ echo 'checked'; } ?>>
+                        <span class="form-check-label">DLN</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -48,6 +57,7 @@
         $("#nama_barang").focus();
     })
     $("#updatebarang").click(function(){
+        var x = $("#dln").prop('checked') ? 1 : 0;
         if($("#kode").val() == ''){
             pesan('Kode harus di isi !','error');
             return;
@@ -73,7 +83,8 @@
                 nama: $("#nama_barang").val(),
                 sat: $("#id_satuan").val(),
                 kat: $("#id_kategori").val(),
-                id: $("#id").val()
+                id: $("#id").val(),
+                dln: x
             },
             success: function(data){
                 window.location.reload();

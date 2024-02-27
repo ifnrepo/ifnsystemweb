@@ -1,14 +1,14 @@
-<div class="row">
+<div class="row font-kecil">
     <div class="col-6">
         <div class="mb-1 row">
-            <label class="col-3 col-form-label required">Kode Customer</label>
+            <label class="col-3 col-form-label required">Kode</label>
             <div class="col">
                 <input type="hidden" name="id" id="id" value="<?= $data['id']; ?>" >
                 <input type="text" class="form-control font-kecil" name="kode_customer" id="kode_customer" value="<?= $data['kode_customer']; ?>" placeholder="Kode Customer">
             </div>
         </div>
         <div class="mb-1 row">
-            <label class="col-3 col-form-label required">Nama Customer</label>
+            <label class="col-3 col-form-label required">Customer</label>
             <div class="col">
                 <input type="text" class="form-control font-kecil" name="nama_customer" id="nama_customer" value="<?= $data['nama_customer']; ?>" placeholder="Nama Customer">
             </div>
@@ -98,10 +98,18 @@
 
 <div class="modal-footer">
     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="updatecustomer">Simpan</button>
+    <button type="button" class="btn btn-primary" id="updatecustomer">Update</button>
 </div>
 <script>
     $("#updatecustomer").click(function() {
+        if($("#kode_customer").val() == ''){
+            pesan('Kode harus di isi !','error');
+            return;
+            }
+        if($("#nama_customer").val() == ''){
+            pesan('Nama Customer harus di isi !','error');
+            return;
+        }
         $.ajax({
             dataType: "json",
             type: "POST",
