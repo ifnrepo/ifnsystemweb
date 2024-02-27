@@ -37,13 +37,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <td><?= $no; ?></td>
                   <td><?= $key['kode']; ?></td>
                   <td><?= $key['nama_barang']; ?></td>
-                  <td>-</td>
+                  <td><?= $key['nama_kategori']; ?></td>
                   <td><?= $key['namasatuan']; ?></td>
                   <td>
-                    <a href="<?= base_url().'satuan/editsatuan/'.$key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editsatuan" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Satuan" rel="<?= $key['id']; ?>" title="Edit data">
+                    <a href="<?= base_url().'barang/editbarang/'.$key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editsatuan" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Satuan" rel="<?= $key['id']; ?>" title="Edit data">
                       <i class="fa fa-edit"></i>
                     </a>
-                    <a class="btn btn-sm btn-danger btn-icon text-white" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url().'satuan/hapussatuan/'.$key['id']; ?>" title="Hapus data">
+                    <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusbarang" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url().'barang/hapusbarang/'.$key['id']; ?>" title="Hapus data">
                       <i class="fa fa-trash-o"></i>
                     </a>
                   </td>

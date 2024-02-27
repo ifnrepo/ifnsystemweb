@@ -10,7 +10,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </h2>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <a href="<?= base_url() . 'customer/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Customer"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                <a href="<?= base_url() . 'customer/tambahdata' ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Data Customer"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
             </div>
         </div>
     </div>
@@ -40,14 +40,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= $key['nama_customer']; ?></td>
                                     <td><?= $key['exdo']; ?></td>
                                     <td>
-                                        <a href="<?= base_url() . 'customer/viewcustomer/' . $key['id']; ?>" class="btn btn-sm btn-teal btn-icon" id="edituser" rel="<?= $key['id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View customer">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
-                                        <a href="<?= base_url() . 'customer/editcustomer/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" rel="<?= $key['id']; ?>" title="Edit data">
+                                        <a href="<?= base_url() . 'customer/editcustomer/' . $key['id']; ?>"  data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Customer" class="btn btn-sm btn-primary btn-icon text-white" rel="<?= $key['id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <a class="btn btn-sm btn-danger btn-icon text-white" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'customer/hapuscustomer/' . $key['id']; ?>" title="Hapus data">
                                             <i class="fa fa-trash-o"></i>
+                                        </a>
+                                        <a href="<?= base_url() . 'customer/viewcustomer/' . $key['id']; ?>" class="btn btn-sm btn-teal btn-icon" id="edituser" rel="<?= $key['id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View customer">
+                                            <i class="fa fa-eye"></i>
                                         </a>
                                     </td>
                                 </tr>

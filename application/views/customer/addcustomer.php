@@ -13,14 +13,19 @@
                     <input type="text" class="form-control font-kecil" name="nama_customer" id="nama_customer" placeholder="Nama Customer">
                 </div>
             </div>
-
-            <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Exdo</label>
-                <select name="exdo" id="exdo">
-                    <option value="export">export</option>
-                    <option value="domestik">domestik</option>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Exdo</label>
+            <div class="col">
+                <select class="form-select" name="exdo" id="exdo">
+                    <option value="export">Export</option>
+                    <option value="domestik">Domestik</option>
                 </select>
-
+            </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Alamat</label>
+            <div class="col">
+                <textarea class="form-control" name="alamat" id="alamat" cols="30" rows="3" placeholder="Alamat"></textarea>
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Alamat</label>
@@ -41,11 +46,11 @@
                     <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" placeholder="Kecamatan">
                 </div>
             </div>
-            <div class="mb-1 row">
-                <label class="col-3 col-form-label required">kab_kota</label>
-                <div class="col">
-                    <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" placeholder="Kab/Kota">
-                </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Kab/Kota</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" placeholder="Kab/Kota">
             </div>
         </div>
         <div class="col-6">
@@ -61,11 +66,11 @@
                     <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" placeholder="kodepos">
                 </div>
             </div>
-            <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Npwp</label>
-                <div class="col">
-                    <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="npwp">
-                </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Npwp</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="NPWP">
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Telp</label>
@@ -85,11 +90,11 @@
                     <input type="text" class="form-control font-kecil" name="kontak" id="kontak" placeholder="Kontak">
                 </div>
             </div>
-            <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Keterangan</label>
-                <div class="col">
-                    <input type="text" class="form-control font-kecil" name="keterangan" id="keterangan" placeholder="Keterangan">
-                </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Keterangan</label>
+            <div class="col">
+                <textarea class="form-control" name="keterangan" id="keterangan" cols="30" rows="3" placeholder="Keterangan"></textarea>
             </div>
         </div>
     </div>
@@ -123,7 +128,6 @@
                 keterangan: $("#keterangan").val()
             },
             success: function(data) {
-                alert(data);
                 window.location.reload();
 
             },
