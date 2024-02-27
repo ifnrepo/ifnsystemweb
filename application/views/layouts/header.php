@@ -328,6 +328,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('customer'); ?>">
                       Customer
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('nettype'); ?>">
+                      Nettype
+                    </a>
                   </div>
                 </div>
               </div>
