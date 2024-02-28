@@ -49,9 +49,9 @@
     <!-- Photo -->
     <div class="bg-cover h-100 min-vh-100 d-flex d-flex-column" style="background-image: url(<?= base_url(); ?>assets/image/bg.png)">
         <div class="text-center w-100 p-4 d-flex d-flex-column" style="background-color: rgba(255,255,255,.25);">
-            <div class="w-100 p-4 align-self-lg-center pb-4" style="background-color: rgba(255,255,255,.25);font-size: 24px;">
+            <div class="w-100 p-4 align-self-lg-center pb-4" style="background-color: rgba(255,255,255,.5);font-size: 24px;">
                 Selamat Datang, Pengguna Aplikasi <br>
-                <img src="<?= base_url(); ?>assets/image/logodepanK.png" height="85" alt="" class="mt-4">
+                <img src="<?= base_url(); ?>assets/image/logosystem2.png" height="190" alt="" class="mt-4">
             </div>
         </div>    
     </div>
