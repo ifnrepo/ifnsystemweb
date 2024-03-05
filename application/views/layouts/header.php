@@ -334,6 +334,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('dept'); ?>">
                       Departemen
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('ref_dokumen'); ?>">
+                      Referensi Document
+                    </a>
                   </div>
                 </div>
               </div>
