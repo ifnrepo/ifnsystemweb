@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <div class="page-header d-print-none">
   <div class="container-xl">
@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
-        <a href="<?= base_url().'userapps' ?>" class="btn btn-warning btn-sm text-black"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+        <a href="<?= base_url() . 'userapps' ?>" class="btn btn-warning btn-sm text-black"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
       </div>
     </div>
   </div>
@@ -77,7 +77,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <div class="card-body pt-2">
                 <div class="row">
                   <div class="col"><a href="./tambahdata" class="btn btn-danger btn-sm w-100">
-                    <i class="fa fa-refresh mr-1"></i>
+                      <i class="fa fa-refresh mr-1"></i>
                       Reset
                     </a></div>
                   <div class="col"><a class="btn btn-primary btn-sm w-100 text-white" id="tambahuser">
@@ -127,6 +127,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                                 <input class="form-check-input" id="master5" name="master5" type="checkbox">
                                 <span class="form-check-label">Customer</span>
                               </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master6" name="master6" type="checkbox">
+                                <span class="form-check-label">Nettype</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master7" name="master7" type="checkbox">
+                                <span class="form-check-label">Departemen</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master8" name="master8" type="checkbox">
+                                <span class="form-check-label">Referensi Dokumen</span>
+                              </label>
                             </div>
                             <div class="col-6">
                               <!-- Ini untuk row berikutnya -->
@@ -156,4 +168,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
   </div>
 </div>
-        

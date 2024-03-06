@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <div class="page-header d-print-none">
   <div class="container-xl">
@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
-        <a href="<?= base_url().'userapps' ?>" class="btn btn-warning btn-sm text-black"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+        <a href="<?= base_url() . 'userapps' ?>" class="btn btn-warning btn-sm text-black"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
       </div>
     </div>
   </div>
@@ -67,7 +67,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       <span class="col">Aktif</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
-                          <?php $stsaktif = $user['aktif']==1 ? 'checked' : ''; ?>
+                          <?php $stsaktif = $user['aktif'] == 1 ? 'checked' : ''; ?>
                           <input class="form-check-input" name="aktif" id="aktif" type="checkbox" <?= $stsaktif; ?>>
                         </label>
                       </span>
@@ -78,8 +78,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <div class="hr mt-2 mb-1"></div>
               <div class="card-body pt-2">
                 <div class="row">
-                  <div class="col"><a href="<?= base_url().'userapps/editdata/'.$user['id']; ?>" class="btn btn-danger btn-sm w-100">
-                    <i class="fa fa-refresh mr-1"></i>
+                  <div class="col"><a href="<?= base_url() . 'userapps/editdata/' . $user['id']; ?>" class="btn btn-danger btn-sm w-100">
+                      <i class="fa fa-refresh mr-1"></i>
                       Reset
                     </a></div>
                   <div class="col"><a class="btn btn-primary btn-sm w-100 text-white" id="edituser">
@@ -110,24 +110,36 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                           <div class="row">
                             <div class="col-6">
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="master1" name="master1" type="checkbox" <?= cekceklis($user['master'],1); ?>>
+                                <input class="form-check-input" id="master1" name="master1" type="checkbox" <?= cekceklis($user['master'], 1); ?>>
                                 <span class="form-check-label">Satuan</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="master2" name="master2" type="checkbox" <?= cekceklis($user['master'],2); ?>>
+                                <input class="form-check-input" id="master2" name="master2" type="checkbox" <?= cekceklis($user['master'], 2); ?>>
                                 <span class="form-check-label">Kategori Barang</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="master3" name="master3" type="checkbox" <?= cekceklis($user['master'],3); ?>>
+                                <input class="form-check-input" id="master3" name="master3" type="checkbox" <?= cekceklis($user['master'], 3); ?>>
                                 <span class="form-check-label">Barang</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="master4" name="master4" type="checkbox" <?= cekceklis($user['master'],4); ?>>
+                                <input class="form-check-input" id="master4" name="master4" type="checkbox" <?= cekceklis($user['master'], 4); ?>>
                                 <span class="form-check-label">Supplier</span>
                               </label>
                               <label class="form-check">
-                                <input class="form-check-input" id="master5" name="master5" type="checkbox" <?= cekceklis($user['master'],5); ?>>
+                                <input class="form-check-input" id="master5" name="master5" type="checkbox" <?= cekceklis($user['master'], 5); ?>>
                                 <span class="form-check-label">Customer</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master6" name="master6" type="checkbox" <?= cekceklis($user['master'], 6); ?>>
+                                <span class="form-check-label">Nettype</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master7" name="master7" type="checkbox" <?= cekceklis($user['master'], 7); ?>>
+                                <span class="form-check-label">Departemen</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master8" name="master8" type="checkbox" <?= cekceklis($user['master'], 8); ?>>
+                                <span class="form-check-label">Referensi Dokumen</span>
                               </label>
                             </div>
                             <div class="col-6">
@@ -140,7 +152,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                             <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
                             <div class="col">
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="manajemen1" name="manajemen1" type="checkbox" <?= cekceklis($user['manajemen'],1); ?>>
+                                <input class="form-check-input" id="manajemen1" name="manajemen1" type="checkbox" <?= cekceklis($user['manajemen'], 1); ?>>
                                 <span class="form-check-label">User Manajemen</span>
                               </label>
                             </div>
@@ -158,4 +170,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
   </div>
 </div>
-        

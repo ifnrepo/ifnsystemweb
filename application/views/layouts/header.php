@@ -328,13 +328,13 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('customer'); ?>">
                       Customer
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('nettype'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 6); ?>" href="<?= base_url('nettype'); ?>">
                       Nettype
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('dept'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 7); ?>" href="<?= base_url('dept'); ?>">
                       Departemen
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('ref_dokumen'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 8); ?>" href="<?= base_url('ref_dokumen'); ?>">
                       Referensi Document
                     </a>
                   </div>
