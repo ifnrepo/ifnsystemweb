@@ -1,5 +1,5 @@
 <?php
-defined('BASEPATH') OR exit('No direct script access allowed');
+defined('BASEPATH') or exit('No direct script access allowed');
 ?>
 <div class="page-header d-print-none">
   <div class="container-xl">
@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
-        <a href="<?= base_url().'userapps' ?>" class="btn btn-warning btn-sm text-black"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+        <a href="<?= base_url() . 'userapps' ?>" class="btn btn-warning btn-sm text-black"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
       </div>
     </div>
   </div>
@@ -38,6 +38,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <label class="col-3 col-form-label required">Jabatan</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="Jabatan">
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Level User</label>
+                <div class="col">
+                  <select name="id_level_user" id="id_level_user" class="form-control">
+                    <option value="Select Menu">Level User</option>
+                    <?php foreach ($level as $a) : ?>
+                      <option value="<?= $a['id']; ?>"><?= $a['level']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">
@@ -77,7 +88,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <div class="card-body pt-2">
                 <div class="row">
                   <div class="col"><a href="./tambahdata" class="btn btn-danger btn-sm w-100">
-                    <i class="fa fa-refresh mr-1"></i>
+                      <i class="fa fa-refresh mr-1"></i>
                       Reset
                     </a></div>
                   <div class="col"><a class="btn btn-primary btn-sm w-100 text-white" id="tambahuser">
@@ -156,4 +167,3 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     </div>
   </div>
 </div>
-        

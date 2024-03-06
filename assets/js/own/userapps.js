@@ -1,4 +1,4 @@
-$(document).ready(function () {});
+$(document).ready(function () { });
 $("#tambahuser").click(function () {
 	if ($("#name").val() == "") {
 		pesan("Nama tidak boleh kosong !", "error");
@@ -10,6 +10,10 @@ $("#tambahuser").click(function () {
 	}
 	if ($("#jabatan").val() == "") {
 		pesan("Jabatan tidak boleh kosong !", "error");
+		return;
+	}
+	if ($("#id_level_user").val() == "") {
+		pesan("Level User tidak boleh kosong !", "error");
 		return;
 	}
 	if ($("#email").val() == "") {
@@ -37,6 +41,10 @@ $("#edituser").click(function () {
 	}
 	if ($("#jabatan").val() == "") {
 		pesan("Jabatan tidak boleh kosong !", "error");
+		return;
+	}
+	if ($("#id_level_user").val() == "") {
+		pesan("Level User tidak boleh kosong !", "error");
 		return;
 	}
 	if ($("#email").val() == "") {
