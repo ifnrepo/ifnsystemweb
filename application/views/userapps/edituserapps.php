@@ -42,6 +42,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Level User </label>
+                <div class="col">
+                  <select name="id_level_user" id="id_level_user" class="form-control">
+                    <option value="Select Menu">Level User</option>
+                    <?php foreach ($level as $a) : ?>
+                      <option value="<?= $a['id']; ?>" <?= ($user['id_level_user'] == $a['id']) ? 'selected' : ''; ?>>
+                        <?= $a['level']; ?>
+                      </option>
+                    <?php endforeach; ?>
+                  </select>
+
+                </div>
+              </div>
+              <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Email</label>
                 <div class="col">
                   <input type="email" class="form-control font-kecil" name="email" id="email" placeholder="Enter email" value="<?= $user['email']; ?>">

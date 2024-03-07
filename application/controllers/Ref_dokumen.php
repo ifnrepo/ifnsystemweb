@@ -11,6 +11,7 @@ class Ref_dokumen extends CI_Controller
             redirect($url);
         }
         $this->load->model('refdokumen_model');
+        // $this-load->model('refdokumen_model)
     }
 
     public function index()
