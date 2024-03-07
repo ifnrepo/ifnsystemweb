@@ -69,8 +69,15 @@ class Userappsmodel extends CI_Model
         }
         $data['master'] = $master;
         $data['manajemen'] = $manajemen;
-        $this->db->where('id', $data['id']);
-        $hasil = $this->db->update('user', $data);
+
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('user',$data);
+        if($data['id']==$this->session->userdata('id')){
+            $cek = $this->getdatabyid($data['id'])->row_array();
+            $this->session->set_userdata('manajemen',$cek['manajemen']);
+            $this->session->set_userdata('master',$cek['master']);
+        }
+
         return $hasil;
     }
 }

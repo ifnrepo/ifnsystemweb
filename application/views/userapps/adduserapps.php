@@ -138,6 +138,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master5" name="master5" type="checkbox">
                                 <span class="form-check-label">Customer</span>
                               </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master6" name="master6" type="checkbox">
+                                <span class="form-check-label">Nettype</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master7" name="master7" type="checkbox">
+                                <span class="form-check-label">Departemen</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" id="master8" name="master8" type="checkbox">
+                                <span class="form-check-label">Referensi Dokumen</span>
+                              </label>
                             </div>
                             <div class="col-6">
                               <!-- Ini untuk row berikutnya -->
