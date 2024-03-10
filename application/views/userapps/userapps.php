@@ -26,17 +26,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Nama</th>
                 <th>Username</th>
                 <th>Password</th>
+                <th>Level User</th>
                 <th>Input On</th>
                 <th>Active</th>
                 <th>Aksi</th>
               </tr>
             </thead>
-            <<tbody class="table-tbody" style="font-size: 13px !important;">
+            <tbody class="table-tbody" style="font-size: 13px !important;">
               <?php foreach ($data as $key) : ?>
                 <tr>
                   <td><?= $key['name']; ?></td>
                   <td><?= $key['username']; ?></td>
                   <td><?= visibpass(decrypto($key['password'])); ?></td>
+                  <td><?= $key['level']; ?></td>
                   <td><?= $key['inputon']; ?></td>
                   <td><span class="badge <?= ($key['aktif'] == 1) ? 'bg-green' : 'bg-red'; ?> ms-auto"></span></td>
                   <td>

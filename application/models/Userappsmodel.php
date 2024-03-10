@@ -12,7 +12,13 @@ class Userappsmodel extends CI_Model
 
     public function getdatabyid($id)
     {
-        $query = $this->db->query("Select * from user where id = " . $id);
+        $query = $this->db->query("Select * from user left join level_user on level_user.id = user.id_level_user where user.id = " . $id);
+        return $query;
+    }
+
+    public function getdatabyuser($user)
+    {
+        $query = $this->db->query("Select user.*,level_user.id as idlevel from user left join level_user on level_user.id = user.id_level_user where user.username = '" . $user."' ");
         return $query;
     }
     public function hapusdata($id)
