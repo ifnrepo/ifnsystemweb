@@ -164,6 +164,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master9" name="master9" type="checkbox" <?= cekceklis($user['master'], 9); ?>>
                                 <span class="form-check-label">Kategori Departemen</span>
                               </label>
+                              <!-- xx -->
                             </div>
                           </div>
 
@@ -183,10 +184,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <div class="row">
                             <div class="col-6">
                               <?php $no=0; foreach($daftardept as $dept): $no++; ?>
-                                <label class="form-check mb-1">
-                                  <input class="form-check-input" id="dept<?= $no; ?>" name="dept<?= $no; ?>" rel="<?= $dept['dept_id']; ?>" type="checkbox">
-                                  <span class="form-check-label"><?= $dept['dept_id'].' - '.$dept['departemen']; ?></span>
-                                </label>
+
                               <?php endforeach; ?>
                             </div>
                           </div>

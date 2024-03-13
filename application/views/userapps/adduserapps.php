@@ -155,6 +155,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master8" name="master8" type="checkbox">
                                 <span class="form-check-label">Referensi Dokumen</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master9" name="master9" type="checkbox">
+                                <span class="form-check-label">Kategori Departemen</span>
+                              </label>
                             </div>
                           </div>
 
@@ -174,10 +178,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <div class="row">
                             <div class="col-6">
                               <?php foreach($daftardept as $dept): ?>
-                                <label class="form-check mb-1">
-                                  <input class="form-check-input" id="dept1" name="dept1" type="checkbox">
-                                  <span class="form-check-label"><?= $dept['dept_id'].' - '.$dept['departemen']; ?></span>
-                                </label>
+
                               <?php endforeach; ?>
                             </div>
                           </div>
