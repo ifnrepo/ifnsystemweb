@@ -15,6 +15,7 @@ class Userapps extends CI_Controller
 				alert("OKE");
      		</script>';
 		$this->load->model('userappsmodel');
+		$this->load->model('dept_model','deptmodel');
 	}
 	public function index()
 	{
@@ -37,6 +38,7 @@ class Userapps extends CI_Controller
 		$header['header'] = 'manajemen';
 		$data['action'] = base_url() . 'userapps/simpandata';
 		$data['data'] = $this->userappsmodel->getdata();
+		$data['daftardept'] = $this->deptmodel->getdata();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
@@ -48,6 +50,7 @@ class Userapps extends CI_Controller
 		$header['header'] = 'manajemen';
 		$data['action'] = base_url() . 'userapps/updatedata';
 		$data['user'] = $this->userappsmodel->getdatabyid($id)->row_array();
+		$data['daftardept'] = $this->deptmodel->getdata();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);

@@ -10,7 +10,7 @@
   <link href="<?= base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
   <link href="<?= base_url(); ?>assets/css/font-awesome.min.css" rel="stylesheet">
   <link href=<?= base_url() . "assets/css/tabler.min.css?1692870487" ?> rel="stylesheet" />
-  <link href=<?= base_url() . "assets/css/tabler-flags.min.css?1692870487" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/tabler-flags.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/tabler-payments.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/tabler-vendors.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/demo.min.css?1692870487" ?> rel="stylesheet" />
@@ -258,7 +258,7 @@
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
-                <div><?= $this->session->userdata('name'); ?></div>
+                <div><?= $this->session->userdata('name').' ['.$this->session->userdata('level_user').']'; ?></div>
                 <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan'); ?></div>
               </div>
             </a>
@@ -394,7 +394,7 @@
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
-                <div><?= $this->session->userdata('name'); ?></div>
+                <div><?= $this->session->userdata('name').' ['.$this->session->userdata('level_user').']'; ?></div>
                 <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan'); ?></div>
               </div>
             </a>

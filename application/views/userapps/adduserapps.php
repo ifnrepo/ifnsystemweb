@@ -111,6 +111,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <li class="nav-item">
                           <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab">User Manajemen</a>
                         </li>
+                        <li class="nav-item">
+                          <a href="#tabs-departemen-1" class="nav-link" data-bs-toggle="tab">Hak Departemen</a>
+                        </li>
                       </ul>
                     </div>
                     <div class="card-body">
@@ -152,6 +155,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master8" name="master8" type="checkbox">
                                 <span class="form-check-label">Referensi Dokumen</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master9" name="master9" type="checkbox">
+                                <span class="form-check-label">Kategori Departemen</span>
+                              </label>
                             </div>
                           </div>
 
@@ -164,6 +171,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="manajemen1" name="manajemen1" type="checkbox">
                                 <span class="form-check-label">User Manajemen</span>
                               </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-departemen-1">
+                          <div class="row">
+                            <div class="col-6">
+                              <?php foreach($daftardept as $dept): ?>
+
+                              <?php endforeach; ?>
                             </div>
                           </div>
                         </div>

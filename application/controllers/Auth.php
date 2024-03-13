@@ -8,6 +8,7 @@ class Auth extends CI_Controller
         parent::__construct();
         $this->load->library('form_validation');
         // $this->load->library('session');
+        $this->load->model('userappsmodel');
     }
 
     public function index(){
@@ -46,7 +47,8 @@ class Auth extends CI_Controller
                                 </div>';
         $username = $this->input->post('username');
         $password = $this->input->post('password');
-        $user = $this->db->get_where('user', ['username' => $username])->row_array();
+        // $user = $this->db->get_where('user', ['username' => $username])->row_array();
+        $user = $this->userappsmodel->getdatabyuser($username)->row_array();
         if ($user) {
             if (encrypto($password)==$user['password'] && $user['aktif']==1) {
                 $user_data = [
@@ -56,6 +58,7 @@ class Auth extends CI_Controller
                     'jabatan' => $user['jabatan'],
                     'master' => $user['master'],
                     'manajemen' => $user['manajemen'],
+                    'level_user' => $user['idlevel'],
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);

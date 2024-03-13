@@ -116,6 +116,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <li class="nav-item">
                           <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab">User Manajemen</a>
                         </li>
+                        <li class="nav-item">
+                          <a href="#tabs-departemen-1" class="nav-link" data-bs-toggle="tab">Hak Departemen</a>
+                        </li>
                       </ul>
                     </div>
                     <div class="card-body">
@@ -161,6 +164,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master9" name="master9" type="checkbox" <?= cekceklis($user['master'], 9); ?>>
                                 <span class="form-check-label">Kategori Departemen</span>
                               </label>
+                              <!-- xx -->
                             </div>
                           </div>
 
@@ -173,6 +177,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="manajemen1" name="manajemen1" type="checkbox" <?= cekceklis($user['manajemen'], 1); ?>>
                                 <span class="form-check-label">User Manajemen</span>
                               </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-departemen-1">
+                          <div class="row">
+                            <div class="col-6">
+                              <?php $no=0; foreach($daftardept as $dept): $no++; ?>
+
+                              <?php endforeach; ?>
                             </div>
                           </div>
                         </div>

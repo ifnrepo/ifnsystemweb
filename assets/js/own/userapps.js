@@ -1,4 +1,4 @@
-$(document).ready(function () { });
+$(document).ready(function () {});
 $("#tambahuser").click(function () {
 	if ($("#name").val() == "") {
 		pesan("Nama tidak boleh kosong !", "error");
@@ -30,6 +30,7 @@ $("#tambahuser").click(function () {
 	}
 	document.formtambahuser.submit();
 });
+
 $("#edituser").click(function () {
 	if ($("#name").val() == "") {
 		pesan("Nama tidak boleh kosong !", "error");
