@@ -30,3 +30,16 @@ function cekmenudetail($kata,$nomor){
     }
     return $hasil;
 }
+function cekoth($key1,$key2,$key3){
+    $hasil = '';
+    if($key1=='1'){
+        $hasil .= 'PB; ';
+    }
+    if($key2=='1'){
+        $hasil .= 'BBL; ';
+    }
+    if($key3=='1'){
+        $hasil .= 'ADJ; ';
+    }
+    return $hasil;
+}
