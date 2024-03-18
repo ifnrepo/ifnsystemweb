@@ -24,14 +24,19 @@ class Dept extends CI_Controller
 
     public function tambahdata()
     {
-        $this->load->view('dept/add_dept');
+        $data['katedept'] = $this->dept_model->getdatakatedept();
+        $this->load->view('dept/add_dept',$data);
     }
 
     public function simpandept()
     {
         $data = [
             'dept_id' => strtoupper($_POST['dept_id']),
-            'departemen' => strtoupper($_POST['departemen'])
+            'departemen' => strtoupper($_POST['departemen']),
+            'katedept_id' => strtoupper($_POST['kat']),
+            'pb' => $_POST['pb'],
+            'bbl' => $_POST['bbl'],
+            'adj' => $_POST['adj']
         ];
         $hasil = $this->dept_model->simpandept($data);
         echo $hasil;
@@ -39,13 +44,18 @@ class Dept extends CI_Controller
     public function editdept($dept_id)
     {
         $data['data'] = $this->dept_model->getdatabyid($dept_id);
+        $data['katedept'] = $this->dept_model->getdatakatedept();
         $this->load->view('dept/edit_dept', $data);
     }
     public function updatedept()
     {
         $data = [
             'dept_id' => strtoupper($_POST['dept_id']),
-            'departemen' => strtoupper($_POST['departemen'])
+            'departemen' => strtoupper($_POST['departemen']),
+            'katedept_id' => strtoupper($_POST['kat']),
+            'pb' => $_POST['pb'],
+            'bbl' => $_POST['bbl'],
+            'adj' => $_POST['adj']
         ];
         $hasil = $this->dept_model->updatedept($data);
         echo $hasil;

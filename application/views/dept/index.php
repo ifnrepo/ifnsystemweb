@@ -27,16 +27,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>No</th>
                                 <th>Kode</th>
                                 <th>Nama Departemen</th>
+                                <th>Kategori</th>
+                                <th>Oth</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="table-tbody" style="font-size: 13px !important;">
                             <?php $no = 0;
-                            foreach ($dept as $key) : $no++; ?>
+                            foreach ($dept as $key) : $no++; $oth = cekoth($key['pb'],$key['bbl'],$key['adj']); ?>
                                 <tr>
                                     <td><?= $no; ?></td>
                                     <td><?= $key['dept_id']; ?></td>
                                     <td><?= $key['departemen']; ?></td>
+                                    <td><?= strtoupper($key['nama']); ?></td>
+                                    <td><?= $oth ?></td>
                                     <td>
                                         <a href="<?= base_url() . 'dept/editdept/' . $key['dept_id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editkategori" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Departemen" rel="<?= $key['dept_id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
