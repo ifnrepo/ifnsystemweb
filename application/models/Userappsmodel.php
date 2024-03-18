@@ -18,7 +18,7 @@ class Userappsmodel extends CI_Model
 
     public function getdatabyuser($user)
     {
-        $query = $this->db->query("Select user.*,level_user.id as idlevel from user left join level_user on level_user.id = user.id_level_user where user.username = '" . $user."' ");
+        $query = $this->db->query("Select user.*,level_user.id as idlevel from user left join level_user on level_user.id = user.id_level_user where user.username = '" . $user . "' ");
         return $query;
     }
     public function hapusdata($id)
@@ -65,6 +65,14 @@ class Userappsmodel extends CI_Model
                 unset($data['master' . $x]);
             }
         }
+        // Set modul transaksi
+        $transaksi = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['transaksi' . $x])) {
+                $transaksi = substr_replace($transaksi, '10', ($x * 2) - 2, 2);
+                unset($data['transaksi' . $x]);
+            }
+        }
         // Set modul manajemen
         $manajemen = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -74,14 +82,16 @@ class Userappsmodel extends CI_Model
             }
         }
         $data['master'] = $master;
+        $data['transaksi'] = $transaksi;
         $data['manajemen'] = $manajemen;
 
-        $this->db->where('id',$data['id']);
-        $hasil = $this->db->update('user',$data);
-        if($data['id']==$this->session->userdata('id')){
+        $this->db->where('id', $data['id']);
+        $hasil = $this->db->update('user', $data);
+        if ($data['id'] == $this->session->userdata('id')) {
             $cek = $this->getdatabyid($data['id'])->row_array();
-            $this->session->set_userdata('manajemen',$cek['manajemen']);
-            $this->session->set_userdata('master',$cek['master']);
+            $this->session->set_userdata('master', $cek['master']);
+            $this->session->set_userdata('transaksi', $cek['transaksi']);
+            $this->session->set_userdata('manajemen', $cek['manajemen']);
         }
 
         return $hasil;

@@ -114,6 +114,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <a href="#tabs-home-1" class="nav-link active" data-bs-toggle="tab">Master Data</a>
                         </li>
                         <li class="nav-item">
+                          <a href="#tabs-transaksi-1" class="nav-link" data-bs-toggle="tab">Transaksi</a>
+                        </li>
+                        <li class="nav-item">
                           <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab">User Manajemen</a>
                         </li>
                         <li class="nav-item">
@@ -167,8 +170,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <!-- xx -->
                             </div>
                           </div>
-
                         </div>
+
+                        <div class="tab-pane " id="tabs-transaksi-1">
+                          <div class="row">
+                            <div class="col">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi1" name="transaksi1" type="checkbox" <?= cekceklis($user['transaksi'], 1); ?>>
+                                <span class="form-check-label">PB (BON PERMINTAAN BARANG)</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi2" name="transaksi2" type="checkbox" <?= cekceklis($user['transaksi'], 2); ?>>
+                                <span class="form-check-label">BBL (BON PEMBELIAN BARANG)</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi3" name="transaksi3" type="checkbox" <?= cekceklis($user['transaksi'], 3); ?>>
+                                <span class="form-check-label">ADJ (BON ADJUSTMEN)</span>
+                              </label>
+                              <!-- xx -->
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="tab-pane" id="tabs-profile-1">
                           <div class="row">
                             <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
@@ -183,7 +206,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="tab-pane" id="tabs-departemen-1">
                           <div class="row">
                             <div class="col-6">
-                              <?php $no=0; foreach($daftardept as $dept): $no++; ?>
+                              <?php $no = 0;
+                              foreach ($daftardept as $dept) : $no++; ?>
 
                               <?php endforeach; ?>
                             </div>
