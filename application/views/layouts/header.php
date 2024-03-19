@@ -200,7 +200,7 @@
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
-                <div><?= $this->session->userdata('name').' ['.$this->session->userdata('level_user').']'; ?></div>
+                <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
                 <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan'); ?></div>
               </div>
             </a>
@@ -286,6 +286,42 @@
                 </div>
               </div>
             </li>
+
+            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('transaksi')); ?>">
+              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'transaksi') {
+                                                    echo 'active';
+                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-coin">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+                    <path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1" />
+                    <path d="M12 7v10" />
+                  </svg>
+                </span>
+                <span class="nav-link-title ">
+                  Transaksi
+                </span>
+              </a>
+              <div class="dropdown-menu <?php if (isset($header) && $header == 'transaksi') {
+                                          echo 'show active';
+                                        } ?>">
+                <div class="dropdown-menu-columns">
+                  <div class="dropdown-menu-column">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 1); ?>" href="<?= base_url('pb'); ?>">
+                      PB (Permintaan Barang)
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 2); ?>" href="<?= base_url('bbl'); ?>">
+                      BBL (Bon Pembelian Barang)
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 3); ?>" href="<?= base_url('adj'); ?>">
+                      ADJ (Bon Adjustmen)
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
             <li class="nav-item <?= cekmenuheader($this->session->userdata('manajemen')); ?>">
               <a class="nav-link <?php if (isset($header) && $header == 'manajemen') {
                                     echo 'active';
@@ -336,7 +372,7 @@
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
-                <div><?= $this->session->userdata('name').' ['.$this->session->userdata('level_user').']'; ?></div>
+                <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
                 <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan'); ?></div>
               </div>
             </a>
