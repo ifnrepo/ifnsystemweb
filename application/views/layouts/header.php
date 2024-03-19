@@ -108,6 +108,32 @@
       </div>
     </div>
   </div>
+  <div class="modal modal-blur fade" id="modal-success" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-status bg-success"></div>
+        <div class="modal-body text-center py-4">
+          <!-- Download SVG icon from http://tabler-icons.io/i/circle-check -->
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>
+          <h3>Coming Soon</h3>
+          <div class="text-secondary">Permintaan anda sudah berhasil, halaman masih dalam tahap pembuatan oleh TIM</div>
+        </div>
+        <div class="modal-footer">
+          <div class="w-100">
+            <div class="row">
+              <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                  Go to dashboard
+                </a></div>
+              <div class="col"><a href="#" class="btn btn-success w-100" data-bs-dismiss="modal">
+                  Close modal
+                </a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal fade" id="modalBox-sm" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class='modal-dialog modal-sm'>
       <div class='modal-content'>
@@ -134,90 +160,6 @@
             <button type="button" class="btn btn-social btn-flat btn-danger btn-sm" id="ok-delete"><i class='fa fa-trash-o'></i> Hapus</button>
           </a>
           <button type="button" class="btn btn-social btn-flat btn-warning btn-sm" data-dismiss="modal"><i class='fa fa-arrow-right'></i> Tutup</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class='modal fade' id='confirm-task' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
-    <div class='modal-dialog'>
-      <div class='modal-content'>
-        <div class='modal-header btn-info'>
-          <h6 class='modal-title' id='myModalLabel'><i class='fa fa-exclamation-triangle text-red'></i> Konfirmasi</h6>
-          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-        </div>
-        <div class='modal-body font-kecil text-black'>
-          <div id="test">
-            Apakah Anda yakin ingin menghapus data ini?
-          </div>
-        </div>
-        <div class='modal-footer font-kecil'>
-          <a class='btn-oke'>
-            <button type="button" class="btn btn-social btn-flat btn-danger btn-sm" id="ok-delete"><i class='fa fa-check'></i> Ya</button>
-          </a>
-          <button type="button" class="btn btn-social btn-flat btn-warning btn-sm" data-dismiss="modal"><i class='fa fa-arrow-right'></i> Tidak</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class='modal fade' id='confirm-tasu' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
-    <div class='modal-dialog'>
-      <div class='modal-content'>
-        <div class='modal-header btn-info'>
-          <h6 class='modal-title' id='myModalLabel'><i class='fa fa-exclamation-triangle text-red'></i> Konfirmasi</h6>
-          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-        </div>
-        <div class='modal-body font-kecil text-black'>
-          <div id="test">
-            Apakah Anda yakin ingin menyimpan data ini?
-          </div>
-        </div>
-        <div class='modal-footer font-kecil'>
-          <a class='btn-oke'>
-            <button type="button" class="btn btn-social btn-flat btn-danger btn-sm" id="ok-simpan"><i class='fa fa-check'></i> Ya</button>
-          </a>
-          <button type="button" class="btn btn-social btn-flat btn-warning btn-sm" data-dismiss="modal"><i class='fa fa-arrow-right'></i> Tidak</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class='modal fade' id='confirm-taso' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true'>
-    <div class='modal-dialog'>
-      <div class='modal-content'>
-        <div class='modal-header btn-info'>
-          <h6 class='modal-title' id='myModalLabel'><i class='fa fa-exclamation-triangle text-red'></i> Konfirmasi</h6>
-          <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button>
-        </div>
-        <div class='modal-body font-kecil text-black'>
-          <div id="test">
-            Apakah Anda yakin ingin menyimpan data ini?
-          </div>
-        </div>
-        <div class='modal-footer font-kecil'>
-          <a class='btn-oke'>
-            <button type="button" class="btn btn-social btn-flat btn-danger btn-sm" id="ok-simpanhpp"><i class='fa fa-check'></i> Ya</button>
-          </a>
-          <button type="button" class="btn btn-social btn-flat btn-warning btn-sm" data-dismiss="modal"><i class='fa fa-arrow-right'></i> Tidak</button>
-        </div>
-      </div>
-    </div>
-  </div>
-  <div class='modal fade' id='confirm-taskx' tabindex='-1' role='dialog' aria-labelledby='myModalLabel' aria-hidden='true' data-backdrop="static" data-keyboard="false">
-    <div class='modal-dialog'>
-      <div class='modal-content'>
-        <div class='modal-header btn-info'>
-          <h6 class='modal-title' id='myModalLabel'><i class='fa fa-exclamation-triangle text-red'></i> Konfirmasi</h6>
-          <!-- <button type='button' class='close' data-dismiss='modal' aria-hidden='true'>&times;</button> -->
-        </div>
-        <div class='modal-body font-kecil text-black'>
-          <div id="testi">
-            Apakah Anda yakin ingin menghapus data ini?
-          </div>
-        </div>
-        <div class='modal-footer font-kecil'>
-          <a class='btn-oke'>
-            <button type="button" class="btn btn-social btn-flat btn-danger btn-sm" id="ok-delete"><i class='fa fa-check'></i> Ya</button>
-          </a>
-          <button type="button" class="btn btn-social btn-flat btn-warning btn-sm" id="batal-xxx"><i class='fa fa-arrow-right'></i> Tidak</button>
         </div>
       </div>
     </div>
