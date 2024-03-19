@@ -9,7 +9,7 @@
                     Copyright &copy; 2023
                   </li>
                   <li class="list-inline-item">
-					<a href="#">
+					<a href="#" data-bs-toggle="modal" data-bs-target="#modal-success">
 						Tim IT IFN
 					</a>
                   </li>
