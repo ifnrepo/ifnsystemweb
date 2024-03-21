@@ -19,7 +19,7 @@
                     <select class="form-select font-kecil" id="id_kategori" name="id_kategori">
                         <option value="">--Pilih Kategori--</option>
                         <?php foreach ($itemkategori as $kategori) { ?>
-                            <option value="<?= $kategori['id']; ?>"><?= '['.$kategori['kategori_id'].'] '.$kategori['nama_kategori']; ?></option>
+                            <option value="<?= $kategori['kategori_id']; ?>"><?= '['.$kategori['kategori_id'].'] '.$kategori['nama_kategori']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
