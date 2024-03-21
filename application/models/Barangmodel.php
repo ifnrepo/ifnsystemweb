@@ -4,7 +4,7 @@ class Barangmodel extends CI_Model{
         $query = $this->db->query("Select barang.*,satuan.namasatuan,kategori.nama_kategori,
         (select count(*) from bom_barang where id_barang = barang.id) as jmbom
         from barang
-        left join kategori on kategori.id = barang.id_kategori
+        left join kategori on kategori.kategori_id = barang.id_kategori
         left join satuan on satuan.id = barang.id_satuan");
         return $query;
     }
@@ -24,6 +24,7 @@ class Barangmodel extends CI_Model{
         return $query;
     }
     public function hapusbarang($id){
+        $querye = $this->db->query("Delete from bom_barang where id_barang =".$id);
         $query = $this->db->query("Delete from barang where id =".$id);
         return $query;
     }

@@ -19,8 +19,8 @@
                 <div class="col"> 
                     <select class="form-select font-kecil" id="id_kategori" name="id_kategori">
                         <option value="">--Pilih Kategori--</option>
-                        <?php foreach ($itemkategori as $kategori) { $selek = $kategori['id']==$data['id_kategori'] ? 'selected' : ''; ?>
-                            <option value="<?= $kategori['id']; ?>" <?= $selek; ?>><?= '['.$kategori['kategori_id'].'] '.$kategori['nama_kategori']; ?></option>
+                        <?php foreach ($itemkategori as $kategori) { $selek = $kategori['kategori_id']==$data['id_kategori'] ? 'selected' : ''; ?>
+                            <option value="<?= $kategori['kategori_id']; ?>" <?= $selek; ?>><?= '['.$kategori['kategori_id'].'] '.$kategori['nama_kategori']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
