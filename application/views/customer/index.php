@@ -40,15 +40,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= $key['nama_customer']; ?></td>
                                     <td><?= $key['exdo']; ?></td>
                                     <td>
-                                        <a href="<?= base_url() . 'customer/editcustomer/' . $key['id']; ?>"  data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Customer" class="btn btn-sm btn-primary btn-icon text-white" rel="<?= $key['id']; ?>" title="Edit data">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'customer/hapuscustomer/' . $key['id']; ?>" title="Hapus data">
-                                            <i class="fa fa-trash-o"></i>
-                                        </a>
-                                        <a href="<?= base_url() . 'customer/viewcustomer/' . $key['id']; ?>" class="btn btn-sm btn-teal btn-icon" id="edituser" rel="<?= $key['id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View customer">
-                                            <i class="fa fa-eye"></i>
-                                        </a>
+                                        <div class="btn-group" role="group">
+                                            <label for="btn-radio-dropdown-dropdown" class="btn btn-sm btn-success btn-flat dropdown-toggle text-black" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                            Aksi
+                                            </label>
+                                            <div class="dropdown-menu">
+                                                <label class="dropdown-item p-1">
+                                                    <a href="<?= base_url() . 'customer/editcustomer/' . $key['id']; ?>"  data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Customer" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="<?= $key['id']; ?>" title="Edit data">
+                                                        <i class="fa fa-edit pr-1"></i> Edit Data
+                                                    </a>
+                                                </label>
+                                                <label class="dropdown-item p-1">
+                                                    <a class="btn btn-sm btn-danger btn-icon text-white w-100" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'customer/hapuscustomer/' . $key['id']; ?>" title="Hapus data">
+                                                        <i class="fa fa-trash-o pr-1"></i> Hapus Data
+                                                    </a>
+                                                </label>
+                                                <label class="dropdown-item p-1">
+                                                    <a href="<?= base_url() . 'customer/viewcustomer/' . $key['id']; ?>" class="btn btn-sm btn-teal btn-icon w-100" id="edituser" rel="<?= $key['id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View customer">
+                                                        <i class="fa fa-eye pr-1"></i> View Data
+                                                    </a>
+                                                </label>
+                                            </div>
+                                        </div>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
