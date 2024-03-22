@@ -16,10 +16,10 @@ class Barang extends CI_Controller {
 	public function index()
 	{  
         $header['header'] = 'master';
-        $data['data'] = $this->barangmodel->getdata();
+        // $data['data'] = $this->barangmodel->getdata();
         $footer['fungsi'] = 'barang';
 		$this->load->view('layouts/header',$header);
-		$this->load->view('barang/barang',$data);
+		$this->load->view('barang/barang');
 		$this->load->view('layouts/footer',$footer);
 	}
     public function tambahdata(){
@@ -74,7 +74,7 @@ class Barang extends CI_Controller {
 		$this->load->view('layouts/footer',$footer);
     }
     public function addbombarang($id){
-        $data['barang'] = $this->barangmodel->getdata();
+        $data['barang'] = $this->barangmodel->getdatajson();
         $data['id_barang'] = $id; 
         $this->load->view('barang/addbombarang',$data);
     }
@@ -108,5 +108,38 @@ class Barang extends CI_Controller {
             $url = base_url().'barang/bombarang/'.$idb;
             redirect($url);
         }
+    }
+    public function get_data_barang(){
+        $list = $this->barangmodel->get_datatables();
+        $data = array();
+        $no = $_POST['start'];
+        foreach($list as $field){
+            $no++;
+            $row = array();
+            $row[] = $no;
+            $row[] = $field->kode;
+            $row[] = $field->nama_barang;
+            $row[] = $field->nama_kategori;
+            $row[] = $field->namasatuan;
+            if($field->dln == 1){
+                $row[] = '<i class="fa fa-check text-success"></i>';
+            }else{
+                $row[] = '-';
+            }
+            $jmbon = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg badge-notification badge-pill'>!</span>" : "";
+            $buton = "<a href=".base_url().'barang/editbarang/'.$field->id." class='btn btn-sm btn-primary btn-icon text-white mr-1' rel=".$field->id." title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
+            $buton .= "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=".base_url().'barang/hapusbarang/'.$field->id."><i class='fa fa-trash-o'></i></a>";
+            $buton .= "<a href=".base_url().'barang/bombarang/'.$field->id ." class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM".$jmbon."</a>";
+            $row[] = $buton;
+
+            $data[] = $row;
+        }
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->barangmodel->count_all(),
+            "recordsFiltered" => $this->barangmodel->count_filtered(),
+            "data" => $data,
+        );
+        echo json_encode($output);
     }
 }
