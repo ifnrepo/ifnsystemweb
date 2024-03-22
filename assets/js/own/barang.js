@@ -33,10 +33,27 @@
 // 			},
 // 		});
 // });
+var table;
 $(document).ready(function () {
 	$(".datatabledengandiv").DataTable({
 		dom: "<'extra'>frtip",
 	});
 	$("div.extra").html($("#sisipkan").html()).insertAfter(".dataTables_filter");
 	$(".dataTables_filter").css("float", "right");
+
+	table = $("#tabelnya").DataTable({
+		processing: true,
+		serverSide: true,
+		order: [],
+		ajax: {
+			url: base_url + "barang/get_data_barang",
+			type: "POST",
+		},
+		columnDefs: [
+			{
+				targets: [0],
+				orderable: false,
+			},
+		],
+	});
 });

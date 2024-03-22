@@ -6,7 +6,7 @@
                 <label class="col-3 col-form-label required">Nama Barang</label>
                 <div class="col"> 
                     <select class="form-select font-kecil" id="id_barang_bom" name="id_barang_bom">
-                        <option value="">--Pilih Barang--</option>
+                        <option value=""></option>
                         <?php foreach ($barang->result_array() as $barang) { ?>
                             <option value="<?= $barang['id']; ?>"><?= $barang['nama_barang']; ?></option>
                         <?php } ?>
