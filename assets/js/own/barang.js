@@ -55,5 +55,6 @@ $(document).ready(function () {
 				orderable: false,
 			},
 		],
+		pageLength: 50,
 	});
 });
