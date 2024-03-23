@@ -126,7 +126,7 @@ class Barang extends CI_Controller {
             }else{
                 $row[] = '-';
             }
-            $jmbon = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg badge-notification badge-pill'>!</span>" : "";
+            $jmbon = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg badge-notification badge-pill'>".$field->jmbom."</span>" : "";
             $buton = "<a href=".base_url().'barang/editbarang/'.$field->id." class='btn btn-sm btn-primary btn-icon text-white mr-1' rel=".$field->id." title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
             $buton .= "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=".base_url().'barang/hapusbarang/'.$field->id."><i class='fa fa-trash-o'></i></a>";
             $buton .= "<a href=".base_url().'barang/bombarang/'.$field->id ." class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM".$jmbon."</a>";
