@@ -24,6 +24,18 @@
             </div>
         </div>
         <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Port</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="port" id="port" value="<?= $data['port']; ?>" placeholder="Port">
+            </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Country</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="country" id="country" value="<?= $data['country']; ?>" placeholder="Country">
+            </div>
+        </div>
+        <div class="mb-1 row">
             <label class="col-3 col-form-label required">Alamat</label>
             <div class="col">
                 <textarea class="form-control" name="alamat" id="alamat" cols="30" rows="3" placeholder="Alamat"><?= $data['alamat'] ?></textarea>
@@ -35,7 +47,8 @@
                 <input type="text" class="form-control font-kecil" name="desa" id="desa" value="<?= $data['desa']; ?>" placeholder="Desa">
             </div>
         </div>
-
+    </div>
+    <div class="col-6">
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Kecamatan</label>
             <div class="col">
@@ -48,8 +61,6 @@
                 <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" value="<?= $data['kab_kota']; ?>" placeholder="Kab/Kota">
             </div>
         </div>
-    </div>
-    <div class="col-6">
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Provinsi</label>
             <div class="col">
@@ -118,6 +129,8 @@
                 kode_customer: $("#kode_customer").val(),
                 nama_customer: $("#nama_customer").val(),
                 exdo: $("#exdo").val(),
+                port: $("#port").val(),
+                country: $("#country").val(),
                 alamat: $("#alamat").val(),
                 desa: $("#desa").val(),
                 kecamatan: $("#kecamatan").val(),

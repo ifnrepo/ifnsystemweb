@@ -28,6 +28,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Kode Customer</th>
                                 <th>Nama Customer</th>
                                 <th>Exdo</th>
+                                <th>Port</th>
+                                <th>Country</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -39,6 +41,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= $key['kode_customer']; ?></td>
                                     <td><?= $key['nama_customer']; ?></td>
                                     <td><?= $key['exdo']; ?></td>
+                                    <td><?= $key['port']; ?></td>
+                                    <td><?= $key['country']; ?></td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <label for="btn-radio-dropdown-dropdown" class="btn btn-sm btn-success btn-flat dropdown-toggle text-black" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

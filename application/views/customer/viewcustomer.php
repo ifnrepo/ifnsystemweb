@@ -40,9 +40,21 @@
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Port</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="port" id="port" value="<?= $data['port']; ?>" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Country</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="country" id="country" value="<?= $data['country']; ?>" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Alamat</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="alamat" id="alamat" value="<?= $data['alamat']; ?>" readonly>
+                                                                    <textarea class="form-control" name="alamat" id="alamat" cols="30" rows="3" placeholder="Alamat"><?= $data['alamat'] ?></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
@@ -57,14 +69,15 @@
                                                                     <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" value=" <?= $data['kecamatan']; ?>" readonly>
                                                                 </div>
                                                             </div>
+                                                          
+                                                        </div>
+                                                        <div class="col-sm-6">
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">kab_kota</label>
                                                                 <div class="col">
                                                                     <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" value=" <?= $data['kab_kota']; ?>" readonly>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
 
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">provinsi</label>
@@ -102,15 +115,14 @@
                                                                     <input type="text" class="form-control font-kecil" name="kontak" id="kontak" value=" <?= $data['kontak']; ?>" readonly>
                                                                 </div>
                                                             </div>
-
-                                                        </div>
-                                                        <div class="mb-1 row">
-                                                            <label class="col-3 col-form-label required">Keterangan</label>
-                                                            <div class="col">
-                                                                <input type="text area" class="form-control font-kecil" name="keterangan" id="keterangan" value=" <?= $data['keterangan']; ?>" readonly>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Keterangan</label>
+                                                                <div class="col">
+                                                                    <textarea class="form-control font-kecil" name="keterangan" id="keterangan" value=" <?= $data['keterangan']; ?>" readonly> </textarea>
+                                                                </div>
                                                             </div>
                                                         </div>
-                                                    </div>
+                                                    </div>  
                                                 </div>
                                             </div>
                                         </div>
