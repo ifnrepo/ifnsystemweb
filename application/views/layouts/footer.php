@@ -52,6 +52,9 @@
 	<?php if(isset($fungsi) && $fungsi=='barang'){ ?>
 		<script src="<?= base_url(); ?>assets/js/own/barang.js"></script>
 	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='pb'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/pb.js"></script>
+	<?php } ?>
 
     <script>
       // @formatter:off

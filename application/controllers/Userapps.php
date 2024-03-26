@@ -51,6 +51,7 @@ class Userapps extends CI_Controller
 		$data['action'] = base_url() . 'userapps/updatedata';
 		$data['user'] = $this->userappsmodel->getdatabyid($id)->row_array();
 		$data['daftardept'] = $this->deptmodel->getdata();
+		$data['jmldept'] = $this->deptmodel->jmldept();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);

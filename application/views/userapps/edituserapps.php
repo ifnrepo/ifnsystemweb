@@ -207,8 +207,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <div class="row">
                             <div class="col-6">
                               <?php $no = 0;
+                              $jml = $jmldept;
                               foreach ($daftardept as $dept) : $no++; ?>
-
+                                <label class="form-check mb-1">
+                                  <input class="form-check-input" id="<?= $dept['dept_id']; ?>" name="<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['hakdepartemen'], $dept['dept_id']); ?>>
+                                  <span class="form-check-label"><?= $dept['departemen']; ?></span>
+                                </label>
                               <?php endforeach; ?>
                             </div>
                           </div>

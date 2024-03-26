@@ -15,6 +15,16 @@ function cekceklis($kata,$nomor){
     }
     return $hasil;
 }
+function cekceklisdep($kata,$dept){
+    $hasil = '';
+    for($x=1;$x<=50;$x++){
+        if(substr($kata,($x*2)-2,2)==$dept){
+            $hasil = 'checked';
+            $x=51;
+        }
+    }
+    return $hasil;
+}
 function cekmenuheader($kata){
     $hasil = '';
     $pos = strpos($kata,'1');

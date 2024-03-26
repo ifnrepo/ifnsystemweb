@@ -81,9 +81,20 @@ class Userappsmodel extends CI_Model
                 unset($data['manajemen' . $x]);
             }
         }
+        // Set hak departemen
+        $hakdepartemen = '';
+        $datdept = $this->deptmodel->getdata();
+        foreach($datdept as $dept){
+            if(isset($data[$dept['dept_id']])){
+                $hakdepartemen .= $dept['dept_id'];
+                unset($data[$dept['dept_id']]);
+            }
+        }
+
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
         $data['manajemen'] = $manajemen;
+        $data['hakdepartemen'] = $hakdepartemen;
 
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('user', $data);
@@ -92,6 +103,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('master', $cek['master']);
             $this->session->set_userdata('transaksi', $cek['transaksi']);
             $this->session->set_userdata('manajemen', $cek['manajemen']);
+            $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
         }
 
         return $hasil;
