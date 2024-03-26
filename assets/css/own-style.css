@@ -1,6 +1,9 @@
 .font-kecil {
 	font-size: 12px;
 }
+.font-bold {
+	font-weight: bold !important;
+}
 .dataTables_wrapper .dataTables_paginate {
 	float: right;
 }

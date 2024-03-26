@@ -9,6 +9,13 @@ class Dept_model extends CI_Model
         
         return $this->db->get()->result_array();
     }
+    public function jmldept(){
+        $this->db->select('dept.*, kategori_departemen.nama');
+        $this->db->from('dept');
+        $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
+        
+        return $this->db->get()->num_rows();
+    }
     public function getdatakatedept(){
         return $this->db->get('kategori_departemen')->result_array();
     }

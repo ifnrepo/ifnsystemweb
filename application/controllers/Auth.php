@@ -59,6 +59,7 @@ class Auth extends CI_Controller
                     'master' => $user['master'],
                     'manajemen' => $user['manajemen'],
                     'transaksi' => $user['transaksi'],
+                    'hakdepartemen' => $user['hakdepartemen'],
                     'level_user' => $user['idlevel'],
                     'getinifn' => true
                 ];
