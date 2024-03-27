@@ -3,10 +3,16 @@ class Nettype_model extends CI_Model
 {
     public function getdata()
     {
-        return $this->db->get('nettype')->result_array();
-        // $query = $this->db->query("Select * from satuan");  
+        $this->db->select('nettype.*, kategori.nama_kategori');
+        $this->db->from('nettype');
+        $this->db->join('kategori', 'kategori.kategori_id = nettype.id_kategori', 'left');
+        
+        return $this->db->get()->result_array();
 
+    }
 
+    public function getdata_kategori(){
+        return $this->db->get('kategori')->result_array();
     }
     public function getdatabyid($id)
     {
