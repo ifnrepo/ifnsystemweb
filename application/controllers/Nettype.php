@@ -24,13 +24,15 @@ class Nettype extends CI_Controller
 
     public function tambahdata()
     {
-        $this->load->view('nettype/addnettype');
+        $data['kategori'] = $this->nettype_model->getdata_kategori();
+        $this->load->view('nettype/addnettype', $data);
     }
 
     public function simpannettype()
     {
         $data = [
             'name_nettype' => $_POST['name_nettype'],
+            'id_kategori' => $_POST['id_kategori'],
         ];
         $hasil = $this->nettype_model->simpannettype($data);
         echo $hasil;
@@ -38,6 +40,7 @@ class Nettype extends CI_Controller
     public function editnettype($id)
     {
         $data['data'] = $this->nettype_model->getdatabyid($id);
+        $data['kategori'] = $this->nettype_model->getdata_kategori();
         $this->load->view('nettype/editnettype', $data);
     }
     public function updatenettype()

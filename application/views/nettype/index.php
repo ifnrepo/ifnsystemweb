@@ -26,6 +26,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <tr>
                                 <th>No</th>
                                 <th>Net Type</th>
+                                <th>Kategori</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -35,6 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <tr>
                                     <td><?= $no; ?></td>
                                     <td><?= $key['name_nettype']; ?></td>
+                                    <td><?= $key['nama_kategori']; ?></td>
                                     <td>
                                         <a href="<?= base_url() . 'nettype/editnettype/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editkategori" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Net Type" rel="<?= $key['id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
