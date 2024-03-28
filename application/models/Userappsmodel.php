@@ -104,6 +104,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('transaksi', $cek['transaksi']);
             $this->session->set_userdata('manajemen', $cek['manajemen']);
             $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
+            $this->session->set_userdata('arrdep',arrdep($cek['hakdepartemen']));
         }
 
         return $hasil;
