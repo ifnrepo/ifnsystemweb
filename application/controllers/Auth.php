@@ -64,6 +64,7 @@ class Auth extends CI_Controller
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);
+                $this->session->set_userdata('arrdep',arrdep($user['hakdepartemen']));
                 $url = base_url('Main');
                 redirect($url);
             } else {
