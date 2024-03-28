@@ -41,25 +41,50 @@ class Dept extends CI_Controller
         $hasil = $this->dept_model->simpandept($data);
         echo $hasil;
     }
-    public function editdept($dept_id)
+    // public function editdept($dept_id)
+    // {
+    //     $data['data'] = $this->dept_model->getdatabyid($dept_id);
+    //     $data['katedept'] = $this->dept_model->getdatakatedept();
+    //     $this->load->view('dept/edit_dept', $data);
+    // }
+
+    public function edit_new($dept_id)
     {
+        $header['header'] = 'master';
+        $data['action'] = base_url() . 'dept/updatedata';
         $data['data'] = $this->dept_model->getdatabyid($dept_id);
+        $data['departemen'] = $this->dept_model->getdata();
+        $data['jmldept'] = $this->dept_model->jmldept();
         $data['katedept'] = $this->dept_model->getdatakatedept();
-        $this->load->view('dept/edit_dept', $data);
+        $footer['fungsi'] = 'dept';
+        
+        $this->load->view('layouts/header', $header);
+        $this->load->view('dept/edit_new', $data);
+        $this->load->view('layouts/footer', $footer);
+
     }
-    public function updatedept()
-    {
-        $data = [
-            'dept_id' => strtoupper($_POST['dept_id']),
-            'departemen' => strtoupper($_POST['departemen']),
-            'katedept_id' => strtoupper($_POST['kat']),
-            'pb' => $_POST['pb'],
-            'bbl' => $_POST['bbl'],
-            'adj' => $_POST['adj']
-        ];
-        $hasil = $this->dept_model->updatedept($data);
-        echo $hasil;
-    }
+    // public function updatedept()
+    // {
+    //     $data = [
+    //         'dept_id' => strtoupper($_POST['dept_id']),
+    //         'departemen' => strtoupper($_POST['departemen']),
+    //         'katedept_id' => strtoupper($_POST['kat']),
+    //         'pb' => $_POST['pb'],
+    //         'bbl' => $_POST['bbl'],
+    //         'adj' => $_POST['adj']
+    //     ];
+    //     $hasil = $this->dept_model->updatedept($data);
+    //     echo $hasil;
+    // }
+
+    public function updatedata()
+	{
+		$query = $this->dept_model->updatedata();
+		if ($query) {
+			$url = base_url('dept');
+			redirect($url);
+		}
+	}
     public function hapusdept($dept_id)
     {
         $hasil = $this->dept_model->hapusdept($dept_id);
@@ -68,4 +93,10 @@ class Dept extends CI_Controller
             redirect($url);
         }
     }
+
+    public function view($dept_id)
+	{
+        $data['dept'] = $this->dept_model->getdatabyid($dept_id);
+		$this->load->view('dept/view', $data);
+	}
 }
