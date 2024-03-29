@@ -54,7 +54,6 @@ class Dept extends CI_Controller
         $data['action'] = base_url() . 'dept/updatedata';
         $data['data'] = $this->dept_model->getdatabyid($dept_id);
         $data['departemen'] = $this->dept_model->getdata();
-        $data['jmldept'] = $this->dept_model->jmldept();
         $data['katedept'] = $this->dept_model->getdatakatedept();
         $footer['fungsi'] = 'dept';
         

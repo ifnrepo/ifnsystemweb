@@ -101,10 +101,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <?php $no = 0;
                               // $jml = $jmldept;
                               foreach ($departemen as $dept) : $no++; ?>
-                                <label class="form-check mb-1">
-                                  <input class="form-check-input" id="<?= $dept['dept_id']; ?>" name="<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($data['pengeluaran'], $dept['dept_id']); ?>>
+                               <label class="form-check mb-1">
+                                  <input class="form-check-input" id="pengeluaran<?= $dept['dept_id']; ?>" name="pengeluaran<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($data['pengeluaran'], $dept['dept_id']); ?>>
                                   <span class="form-check-label"><?= $dept['departemen']; ?></span>
-                                </label>
+                              </label>
                               <?php endforeach; ?>
                             </div>
                           </div>
@@ -117,10 +117,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <?php $no = 0;
                               // $jml = $jmldept;
                               foreach ($departemen as $dept) : $no++; ?>
-                                <label class="form-check mb-1">
-                                  <input class="form-check-input" id="<?= $dept['dept_id']; ?>" name="<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($data['penerimaan'], $dept['dept_id']); ?>>
+                               <label class="form-check mb-1">
+                                  <input class="form-check-input" id="penerimaan<?= $dept['dept_id']; ?>" name="penerimaan<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($data['penerimaan'], $dept['dept_id']); ?>>
                                   <span class="form-check-label"><?= $dept['departemen']; ?></span>
-                                </label>
+                              </label>
                               <?php endforeach; ?>
                             </div>
                             </div>
