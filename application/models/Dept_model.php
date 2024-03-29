@@ -36,44 +36,43 @@ class Dept_model extends CI_Model
 
     public function updatedata()
     {
-     
         $data = $_POST;
-        
         $data['pb'] = isset($data['pb']) ? '1' : '0';
         $data['bbl'] = isset($data['bbl']) ? '1' : '0';
         $data['adj'] = isset($data['adj']) ? '1' : '0';
-       
+        
         $pengeluaran = '';
-        $datdept = $this->dept_model->getdata();
-        foreach($datdept as $dept){
-            if(isset($data[$dept['dept_id']])){
-                $pengeluaran .= $dept['dept_id'];
-                unset($data[$dept['dept_id']]);
-            }
-        }
-
         $penerimaan = '';
+        
         $datdept = $this->dept_model->getdata();
-        foreach($datdept as $dept){
-            if(isset($data[$dept['dept_id']])){
+        
+        foreach($datdept as $dept) {
+            if(isset($data['pengeluaran' . $dept['dept_id']])) {
+                $pengeluaran .= $dept['dept_id'];
+                unset($data['pengeluaran' . $dept['dept_id']]);
+            }
+            if(isset($data['penerimaan' . $dept['dept_id']])) {
                 $penerimaan .= $dept['dept_id'];
-                unset($data[$dept['dept_id']]);
+                unset($data['penerimaan' . $dept['dept_id']]);
             }
         }
-
+        
         $data['pengeluaran'] = $pengeluaran;
         $data['penerimaan'] = $penerimaan;
-
+        
         $this->db->where('dept_id', $data['dept_id']);
         $hasil = $this->db->update('dept', $data);
+        
         if ($data['dept_id'] == $this->session->userdata('dept_id')) {
             $cek = $this->getdatabyid($data['dept_id'])->row_array();
             $this->session->set_userdata('pengeluaran', $cek['pengeluaran']);
             $this->session->set_userdata('penerimaan', $cek['penerimaan']);
-    
         }
-        return $hasil;
+         
+        return $hasil; 
     }
+    
+    
     public function hapusdept($dept_id)
     {
         $this->db->where('dept_id', $dept_id);
