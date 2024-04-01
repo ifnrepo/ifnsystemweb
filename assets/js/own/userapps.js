@@ -8,7 +8,7 @@ $("#tambahuser").click(function () {
 		pesan("Bagian tidak boleh kosong !", "error");
 		return;
 	}
-	if ($("#jabatan").val() == "") {
+	if ($("#id_dept").val() == "") {
 		pesan("Jabatan tidak boleh kosong !", "error");
 		return;
 	}
@@ -40,7 +40,7 @@ $("#edituser").click(function () {
 		pesan("Bagian tidak boleh kosong !", "error");
 		return;
 	}
-	if ($("#jabatan").val() == "") {
+	if ($("#id_dept").val() == "") {
 		pesan("Jabatan tidak boleh kosong !", "error");
 		return;
 	}

@@ -3,9 +3,10 @@ class Userappsmodel extends CI_Model
 {
     public function getdata()
     {
-        $this->db->select('user.*, level_user.level');
+        $this->db->select('user.*, level_user.level, dept.departemen');
         $this->db->from('user');
         $this->db->join('level_user', 'level_user.id = user.id_level_user', 'left');
+        $this->db->join('dept','dept.dept_id = user.id_dept', 'left');
 
         return $this->db->get()->result_array();
     }
