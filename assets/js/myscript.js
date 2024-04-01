@@ -185,6 +185,13 @@ $(document).ready(function () {
 		info: false,
 		scrollY: false,
 	});
+	$(".datatable6").DataTable({
+		paging: false,
+		searching: false,
+		info: false,
+		scrollY: false,
+		pageLength: 50,
+	});
 	$("#modal-danger").on("show.bs.modal", function (e) {
 		document.getElementById("message").innerHTML = $(e.relatedTarget).data(
 			"message"

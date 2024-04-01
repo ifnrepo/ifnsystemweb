@@ -4,60 +4,60 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Departemen Asal</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="dept_idx" id="dept_idx" placeholder="Id Departemen">
+                    <input type="text" class="form-control font-kecil" name="dept_idx" id="dept_idx" placeholder="Id Departemen" disabled>
+                    <input type="text" class="form-control font-kecil hilang" name="dept_idy" id="dept_idy" >
                 </div>
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Departemen Tujuan</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="departemen" id="departemen" placeholder="Departemen">
+                    <input type="text" class="form-control font-kecil" name="id_deptx" id="id_deptx" placeholder="Departemen" disabled>
+                    <input type="text" class="form-control font-kecil hilang" name="id_depty" id="id_depty">
                 </div>
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Tgl Transaksi</label>
                 <div class="col">
-                  <select name="katedept_id" id="katedept_id" class="form-control">
-                    <option value="">Pilih Kategori</option>
-                    <?php foreach ($katedept as $a) : ?>
-                      <option value="<?= $a['id']; ?>"><?= $a['nama']; ?></option>
-                    <?php endforeach; ?>
-                  </select>
+                    <input type="text" class="form-control font-kecil" name="tgl" id="tgl" placeholder="Tgl Transaksi" value="<?= date('d-m-Y'); ?>">
                 </div>
             </div>
         </div>
     </div>
 </div>
 <div class="modal-footer font-kecil">
-    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Batal</button>
-    <button type="button" class="btn btn-success text-black" id="simpandept">Mulai Transaksi</button>
+    <button type="button" class="btn me-auto" id="butbatal" data-bs-dismiss="modal">Batal</button>
+    <button type="button" class="btn btn-success text-black" id="buatpb">Buat Transaksi</button>
 </div>
 <script>
     $(document).ready(function(){
-        $("#dept_idx").val($("#dept_kirim").attr('rel'));
-        $("#departemen").val($("#id_dept").val());
+        $("#dept_idx").val($("#dept_kirim option:selected").attr('rel'));
+        $("#dept_idy").val($("#dept_kirim").val());
+        $("#id_deptx").val($("#dept_tuju option:selected").attr('rel'));
+        $("#id_depty").val($("#dept_tuju").val());
+        $("#tgl").datepicker({
+            autoclose: true,
+            format : "dd-mm-yyyy"
+        });
     })
-    $("#simpandept").click(function() {
-        var cekpb = $("#pb").prop('checked') ? '1' : '0';
-        var cekbbl = $("#bbl").prop('checked') ? '1' : '0';
-        var cekadj = $("#adj").prop('checked') ? '1' : '0';
+    $("#buatpb").click(function() {
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url + 'dept/simpandept',
+            url: base_url+"pb/tambahpb",
             data: {
-                dept_id: $("#dept_id").val(),
-                departemen: $("#departemen").val(),
-                kat: $("#katedept_id").val(),
-                pb: cekpb,
-                bbl: cekbbl,
-                adj: cekadj
+                dept_id: $("#dept_idy").val(),
+                dept_tuju: $("#id_depty").val(),
+                tgl: $("#tgl").val()
             },
-            success: function(data) {
-                window.location.reload();
+            success: function(data){
+                // alert('berhasil');
+                alert(data);
+                window.location.href = base_url+"pb/datapb/"+data;
+                $("#butbatal").click();
             },
-            error: function(xhr, ajaxOptions, thrownError) {
+            error: function(xhr, ajaxOptions, thrownError){
                 console.log(xhr.status);
-                console.log(thrownError);
+			    console.log(thrownError);
             }
         })
     })
