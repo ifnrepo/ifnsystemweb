@@ -62,3 +62,17 @@ function arrdep($dep){
     }
     return $arrdep;
 }
+function tglmysql($tgl){
+    $pisah = explode("-",$tgl);
+    return $pisah[2]."-".$pisah[1]."-".$pisah[0];
+}
+function nomorpb($tgl,$asal,$tuju){
+    $bl = date('m',strtotime($tgl));
+    $th = date('y',strtotime($tgl));
+    $thp = date('Y',strtotime($tgl));
+    $CI = &get_instance();
+    $kode = $CI->pb_model->getnomorpb($bl,$thp,$asal,$tuju);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return $asal."-".$tuju."/BP/".$bl.$th."/".sprintf("%03s",$urut);
+}

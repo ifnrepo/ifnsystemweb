@@ -21,17 +21,17 @@
       </div>
     </div>
 	<!-- jquery latest version -->
-	<script src="<?= base_url(); ?>assets/js/vendor/jquery-2.2.4.min.js"></script>
+	<script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
     <!-- Libs JS -->
-    <script src=<?= base_url()."assets/libs/apexcharts/dist/apexcharts.min.js?1692870487" ?> defer></script>
-    <script src=<?= base_url()."assets/libs/jsvectormap/dist/js/jsvectormap.min.js?1692870487" ?> defer></script>
-    <script src=<?= base_url()."assets/libs/jsvectormap/dist/maps/world.js?1692870487" ?> defer></script>
-    <script src=<?= base_url()."assets/libs/jsvectormap/dist/maps/world-merc.js?1692870487" ?> defer></script>
-    <script src=<?= base_url()."assets/libs/tom-select/dist/js/tom-select.base.min.js?1692870487" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/apexcharts/dist/apexcharts.min.js" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/jsvectormap/dist/js/jsvectormap.min.js" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/jsvectormap/dist/maps/world.js" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/jsvectormap/dist/maps/world-merc.js" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/tom-select/dist/js/tom-select.base.min.js" ?> defer></script>
     <!-- Tabler Core -->
-	<script src=<?= base_url()."assets/js/demo-theme.min.js?1692870487" ?>></script>
-    <script src=<?= base_url()."assets/js/tabler.min.js?1692870487" ?> defer></script>
-    <script src=<?= base_url()."assets/js/demo.min.js?1692870487" ?> defer></script>
+	<script src=<?= base_url()."assets/js/demo-theme.min.js" ?>></script>
+    <script src=<?= base_url()."assets/js/tabler.min.js" ?> defer></script>
+    <script src=<?= base_url()."assets/js/demo.min.js" ?> defer></script>
     <!-- bootstrap 4 js -->
     <script src="<?= base_url(); ?>assets/js/popper.min.js"></script>
     <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
