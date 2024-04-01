@@ -12,6 +12,10 @@ $("#tambahuser").click(function () {
 		pesan("Jabatan tidak boleh kosong !", "error");
 		return;
 	}
+	if ($("#jabatan").val() == "") {
+		pesan("Jabatan tidak boleh kosong !", "error");
+		return;
+	}
 	if ($("#id_level_user").val() == "") {
 		pesan("Level User tidak boleh kosong !", "error");
 		return;
@@ -41,6 +45,10 @@ $("#edituser").click(function () {
 		return;
 	}
 	if ($("#id_dept").val() == "") {
+		pesan("Jabatan tidak boleh kosong !", "error");
+		return;
+	}
+	if ($("#jabtan").val() == "") {
 		pesan("Jabatan tidak boleh kosong !", "error");
 		return;
 	}

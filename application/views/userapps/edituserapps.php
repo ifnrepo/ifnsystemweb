@@ -51,6 +51,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="mb-1 row">
+                <label class="col-3 col-form-label required">jabatan</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $user['jabatan']; ?>">
+                </div>
+              </div>
+              <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Level User </label>
                 <div class="col">
                   <select name="id_level_user" id="id_level_user" class="form-control">
