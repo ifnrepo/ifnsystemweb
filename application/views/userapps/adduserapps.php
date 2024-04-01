@@ -31,13 +31,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Bagian</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="bagian" id="bagian" placeholder="Bagian">
+                  <input type="text" class="form-control font-kecil" name="bagian" id="bagian" placeholder="Bagian" >
                 </div>
               </div>
               <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Jabatan</label>
+                <label class="col-3 col-form-label required">Departemen</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="Jabatan">
+                  <select name="id_dept" id="id_dept" class="form-control">
+                    <option value="Select Menu">Departemen</option>
+                    <?php foreach ($dept as $dep) : ?>
+                      <option value="<?= $dep['dept_id']; ?>"><?= $dep['departemen']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">

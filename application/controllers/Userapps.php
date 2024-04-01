@@ -39,12 +39,13 @@ class Userapps extends CI_Controller
 		$data['action'] = base_url() . 'userapps/simpandata';
 		$data['data'] = $this->userappsmodel->getdata();
 		$data['daftardept'] = $this->deptmodel->getdata();
+		$data['dept'] = $this->db->get('dept')->result_array();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/adduserapps', $data);
 		$this->load->view('layouts/footer', $footer);
-	}
+	}  
 	public function editdata($id)
 	{
 		$header['header'] = 'manajemen';
@@ -53,6 +54,7 @@ class Userapps extends CI_Controller
 		$data['daftardept'] = $this->deptmodel->getdata();
 		$data['jmldept'] = $this->deptmodel->jmldept();
 		$data['level'] = $this->db->get('level_user')->result_array();
+		$data['dept'] = $this->db->get('dept')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/edituserapps', $data);

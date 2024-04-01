@@ -36,9 +36,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Jabatan</label>
+                <label class="col-3 col-form-label required">Departemen </label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="Jabatan" value="<?= $user['jabatan']; ?>">
+                <select name="id_dept" id="id_dept" class="form-control">
+                    <option value="">Departemen</option>
+                    <?php foreach ($dept as $dep) : ?>
+                        <?php if ($dep['dept_id'] == $user['id_dept']) : ?>
+                        <option value="<?= $dep['dept_id']; ?>" selected><?= $dep['departemen']; ?></option>
+                        <?php else : ?>
+                        <option value="<?= $dep['dept_id']; ?>"><?= $dep['departemen']; ?></option>
+                        <?php endif; ?>
+                    <?php endforeach; ?>
+                 </select>
                 </div>
               </div>
               <div class="mb-1 row">
@@ -52,7 +61,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </option>
                     <?php endforeach; ?>
                   </select>
-
                 </div>
               </div>
               <div class="mb-1 row">
