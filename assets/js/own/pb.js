@@ -4,6 +4,18 @@ $(document).ready(function () {
 	// });
 	// $("div.extra").html($("#sisipkan").html()).insertAfter(".dataTables_filter");
 	// $(".dataTables_filter").css("float", "right");
+	var url = window.location.href;
+	var pisah = url.split("/");
+	// alert(pisah[5]);
+	if (pisah[2] == "localhost") {
+		if (pisah[5] == "datapb" || pisah[5] == "datapb") {
+			getdatadetailpb();
+		}
+	} else {
+		if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
+			// getdatainvoice();
+		}
+	}
 	$("#dept_kirim").change();
 });
 $("#dept_kirim").change(function () {
@@ -35,6 +47,24 @@ $("#dept_tuju").change(function () {
 		$("#adddatapb").addClass("disabled");
 	}
 });
+$("#simpandetailbarang").click(function () {
+	if ($("#id_barang").val() == "") {
+		pesan("Isi / Cari nama barang", "error");
+		return;
+	}
+	if ($("#id_satuan").val() == "") {
+		pesan("Isi Satuan barang", "error");
+		return;
+	}
+	if (
+		($("#pcs").val() == "" || $("#pcs").val() == "0") &&
+		($("#kgs").val() == "" || $("#kgs").val() == "0")
+	) {
+		pesan("Isi Qty atau Kgs", "error");
+		return;
+	}
+	document.formbarangpb.submit();
+});
 function getdatapb() {
 	$.ajax({
 		dataType: "json",
@@ -43,6 +73,25 @@ function getdatapb() {
 		data: {
 			dept_id: $("#dept_kirim").val(),
 			dept_tuju: $("#dept_tuju").val(),
+		},
+		success: function (data) {
+			// alert(data.datagroup);
+			// window.location.reload();
+			$("#body-table").html(data.datagroup).show();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
+function getdatadetailpb() {
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "pb/getdatadetailpb",
+		data: {
+			id_header: $("#id_header").val(),
 		},
 		success: function (data) {
 			// alert(data.datagroup);

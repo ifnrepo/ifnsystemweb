@@ -12,6 +12,7 @@ class Pb extends CI_Controller {
         $this->load->model('pb_model');
         $this->load->model('barangmodel');
         $this->load->model('dept_model','deptmodel');
+        $this->load->model('satuanmodel');
     }
     public function index(){
         $header['header'] = 'transaksi';
@@ -23,12 +24,19 @@ class Pb extends CI_Controller {
 		$this->load->view('pb/pb',$data);
 		$this->load->view('layouts/footer',$footer);
     }
+    public function clear(){
+        $this->session->unset_userdata('deptsekarang');
+        $this->session->unset_userdata('tujusekarang');
+        $url = base_url('Pb');
+        redirect($url);
+    }
     public function getdatapb(){
         $hasil = '';
         $kode = [
             'dept_id' => $_POST['dept_id'],
             'dept_tuju' => $_POST['dept_tuju'],
         ];
+        $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
         $data = $this->pb_model->getdatapb($kode);
         foreach ($data as $hsl) {
             
@@ -46,11 +54,33 @@ class Pb extends CI_Controller {
         $cocok = array('datagroup'=>$hasil);
 		echo json_encode($cocok);
     }
+    public function getdatadetailpb(){
+        $kode = $_POST['id_header'];
+        $data = $this->pb_model->getdatadetailpb($kode);
+        $hasil = '';
+        $no=1;
+        foreach ($data as $dt) {
+            $hasil .= "<tr>";
+            $hasil .= "<td>".$dt['nama_barang']."</td>";
+            $hasil .= "<td>".$dt['kode']."</td>";
+            $hasil .= "<td>".$dt['namasatuan']."</td>";
+            $hasil .= "<td class='text-center'>".rupiah($dt['pcs'],0)."</td>";
+            $hasil .= "<td>".rupiah($dt['kgs'],0)."</td>";
+            $hasil .= "<td class='text-center'>";
+            $hasil .= "<a href='#' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
+            $hasil .= "<a href='".base_url().'pb/hapusdetailpb/'.$dt['id']."' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
+            $hasil .= "</td>";
+            $hasil .= "</tr>";
+        }
+        $cocok = array('datagroup'=>$hasil);
+		echo json_encode($cocok);
+    }
     public function tambahdata(){
         $this->load->view('pb/add_pb');
     }
     public function depttujupb(){
         $kode = $_POST['kode'];
+        $this->session->set_userdata('deptsekarang',$kode);
         $cekdata = $this->pb_model->depttujupb($kode);
         echo $cekdata;
     }
@@ -69,6 +99,7 @@ class Pb extends CI_Controller {
     public function datapb($id){
         $header['header'] = 'transaksi';
         $data['data'] = $this->pb_model->getdatabyid($id);
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
         $footer['fungsi'] = 'pb';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('pb/datapb',$data);
@@ -78,6 +109,43 @@ class Pb extends CI_Controller {
         $hasil = $this->pb_model->hapusdata($id);
         if($hasil){
             $url = base_url().'pb';
+            redirect($url);
+        }
+    }
+    public function addspecbarang(){
+        $this->load->view('pb/addspecbarang');
+    }
+    public function getspecbarang(){
+        $mode = $_POST['mode'];
+        $brg = $_POST['data'];
+        $html = '';
+        $query = $this->pb_model->getspecbarang($mode,$brg);
+        foreach($query as $que){
+            $html .= "<tr>";
+            $html .= "<td>".$que['nama_barang']."</td>";
+            $html .= "<td>".$que['kode']."</td>";
+            $html .= "<td>Satuan</td>";
+            $html .= "<td>";
+            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='".$que['nama_barang']."' rel2='".$que['id']."' rel3=".$que['id_satuan'].">Pilih</a>";
+            $html .= "</td>";
+            $html .= "</tr>";
+        }
+        $cocok = array('datagroup'=>$html);
+        echo json_encode($cocok);
+    }
+    public function simpandetailbarang(){
+        $hasil = $this->pb_model->simpandetailbarang();
+        if($hasil){
+            $kode = $hasil['id'];
+            $url = base_url().'pb/datapb/'.$kode;
+            redirect($url);
+        }
+    }
+    public function hapusdetailpb($id){
+        $hasil = $this->pb_model->hapusdetailpb($id);
+        if($hasil){
+            $kode = $hasil['id'];
+            $url = base_url().'pb/datapb/'.$kode;
             redirect($url);
         }
     }
