@@ -326,7 +326,7 @@
                                         } ?>">
                 <div class="dropdown-menu-columns">
                   <div class="dropdown-menu-column">
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 1); ?>" href="<?= base_url('pb'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 1); ?>" href="<?= base_url('pb/clear'); ?>">
                       PB (Permintaan Barang)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 2); ?>" href="<?= base_url('bbl'); ?>">

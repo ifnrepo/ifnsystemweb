@@ -31,7 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Bagian</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="bagian" id="bagian" placeholder="Bagian" >
+                  <input type="text" class="form-control font-kecil" name="bagian" id="bagian" placeholder="Bagian" style="text-transform:uppercase">
                 </div>
               </div>
               <div class="mb-1 row">

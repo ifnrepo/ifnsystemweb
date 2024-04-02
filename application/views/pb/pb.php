@@ -32,8 +32,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-control form-sm font-kecil font-bold" id="dept_kirim"  name="dept_kirim">
-                        <?php foreach ($hakdep as $hak): ?>
-                          <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>"><?= $hak['departemen']; ?></option>
+                        <?php foreach ($hakdep as $hak): $selek = $this->session->userdata('deptsekarang')== null ? 'IT' : $this->session->userdata('deptsekarang'); ?>
+                          <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?php if($selek==$hak['dept_id']) echo "selected"; ?>><?= $hak['departemen']; ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>
@@ -44,8 +44,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-control form-sm font-kecil font-bold" id="dept_tuju" name="dept_tuju">
-                        <?php foreach ($dephak as $hak): ?>
-                          <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>"><?= $hak['departemen']; ?></option>
+                        <?php foreach ($dephak as $hak): $selek = $this->session->userdata('tujusekarang')== null ? '' : $this->session->userdata('tujusekarang'); ?>
+                          <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?php if($selek==$hak['dept_id']) echo "selected"; ?>><?= $hak['departemen']; ?></option>
                         <?php endforeach; ?>
                       </select>
                     </div>

@@ -32,6 +32,7 @@ class Userappsmodel extends CI_Model
         $data = $_POST;
         $data['aktif'] = isset($data['aktif']) ? 1 : 0;
         $data['password'] = encrypto($data['password']);
+        $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
         $master = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -58,6 +59,7 @@ class Userappsmodel extends CI_Model
         $data = $_POST;
         $data['aktif'] = isset($data['aktif']) ? 1 : 0;
         $data['password'] = encrypto($data['password']);
+        $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
         $master = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {

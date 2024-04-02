@@ -46,7 +46,7 @@
             url: base_url+"pb/tambahpb",
             data: {
                 dept_id: $("#dept_idy").val(),
-                dept_tuju: $("#id_depty").val(),
+                dept_tuju: $("#id_depty").val(), 
                 tgl: $("#tgl").val()
             },
             success: function(data){
