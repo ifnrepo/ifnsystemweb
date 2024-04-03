@@ -207,3 +207,10 @@ function namabulanpendek($id){
         );
     return $bulan[(int)$id];
 }
+function datauser($kode,$kolom){
+    if($kode!=''){
+    $CI = &get_instance();
+    $kode = $CI->usermodel->getdatabyid($kode)->row_array();
+    return $kode[$kolom];
+    }
+}

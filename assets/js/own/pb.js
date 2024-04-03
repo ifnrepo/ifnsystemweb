@@ -17,6 +17,7 @@ $(document).ready(function () {
 		}
 	}
 	$("#dept_kirim").change();
+	// $("#tglpb").datepicker();
 });
 $("#dept_kirim").change(function () {
 	$.ajax({
@@ -64,6 +65,43 @@ $("#simpandetailbarang").click(function () {
 		return;
 	}
 	document.formbarangpb.submit();
+});
+$("#resetdetailbarang").click(function () {
+	$("#id_barang").val("");
+	$("#nama_barang").val("");
+	$("#id_satuan").val("");
+	$("#pcs").val("");
+	$("#kgs").val("");
+	$("#id").val("");
+});
+$("#nama_barang").on("keyup", function (e) {
+	if (e.key == "Enter" || e.keycode === 13) {
+		$("#caribarang").click();
+	}
+});
+$(document).on("click", "#editdetailpb", function () {
+	var noid = $(this).attr("rel");
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "pb/getdetailpbbyid",
+		data: {
+			id: noid,
+		},
+		success: function (data) {
+			$("#id").val(data[0].id);
+			$("#id_barang").val(data[0].id_barang);
+			$("#nama_barang").val(data[0].nama_barang);
+			$("#id_satuan").val(data[0].id_satuan);
+			$("#pcs").val(data[0].pcs);
+			$("#kgs").val(data[0].kgs);
+			$("#formbarangpb").attr("action", base_url + "pb/updatedetailbarang");
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
 });
 function getdatapb() {
 	$.ajax({

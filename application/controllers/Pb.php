@@ -13,6 +13,7 @@ class Pb extends CI_Controller {
         $this->load->model('barangmodel');
         $this->load->model('dept_model','deptmodel');
         $this->load->model('satuanmodel');
+        $this->load->model('userappsmodel','usermodel');
     }
     public function index(){
         $header['header'] = 'transaksi';
@@ -39,11 +40,12 @@ class Pb extends CI_Controller {
         $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
         $data = $this->pb_model->getdatapb($kode);
         foreach ($data as $hsl) {
-            
+            $jmlrec = $hsl['jumlah_barang']==null ? '' : $hsl['jumlah_barang'].' Item ';
             $hasil .= "<tr>";
             $hasil .= "<td>".tglmysql($hsl['tgl'])."</td>";
-            $hasil .= "<td>".$hsl['nomor_dok']."</td>";
-            $hasil .= "<td></td>";
+            $hasil .= "<td class='font-bold'>".$hsl['nomor_dok']."</td>";
+            $hasil .= "<td>".$jmlrec."</td>";
+            $hasil .= "<td style='line-height: 13px'>".datauser($hsl['user_ok'],'name')."<br><span style='font-size: 10px;'>".tglmysql($hsl['tgl_ok'])."</span></td>";
             $hasil .= "<td></td>";
             $hasil .= "<td>";
             $hasil .= "<a href=".base_url().'pb/datapb/'.$hsl["id"]." class='btn btn-sm btn-primary btn-flat mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
@@ -67,7 +69,7 @@ class Pb extends CI_Controller {
             $hasil .= "<td class='text-center'>".rupiah($dt['pcs'],0)."</td>";
             $hasil .= "<td>".rupiah($dt['kgs'],0)."</td>";
             $hasil .= "<td class='text-center'>";
-            $hasil .= "<a href='#' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
+            $hasil .= "<a href='#' id='editdetailpb' rel='".$dt['id']."' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
             $hasil .= "<a href='".base_url().'pb/hapusdetailpb/'.$dt['id']."' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
@@ -77,6 +79,9 @@ class Pb extends CI_Controller {
     }
     public function tambahdata(){
         $this->load->view('pb/add_pb');
+    }
+    public function edittgl(){
+        $this->load->view('pb/edit_tgl');
     }
     public function depttujupb(){
         $kode = $_POST['kode'];
@@ -95,6 +100,28 @@ class Pb extends CI_Controller {
         ];
         $simpan = $this->pb_model->tambahpb($data);
         echo $simpan['id'];
+    }
+    public function updatepb(){
+        $data = [
+            'tgl' => tglmysql($_POST['tgl']),
+            'keterangan' => $_POST['ket'],
+            'id' => $_POST['id']
+        ];
+        $simpan = $this->pb_model->updatepb($data);
+        echo $simpan;
+    }
+    public function simpanpb($id){
+        $data = [
+            'data_ok' => 1,
+            'tgl_ok' => date('Y-m-d'),
+            'user_ok' => $this->session->userdata('id'),
+            'id' => $id
+        ];
+        $simpan = $this->pb_model->simpanpb($data);
+        if($simpan){
+            $url = base_url().'pb';
+            redirect($url);
+        }
     }
     public function datapb($id){
         $header['header'] = 'transaksi';
@@ -133,8 +160,21 @@ class Pb extends CI_Controller {
         $cocok = array('datagroup'=>$html);
         echo json_encode($cocok);
     }
+    public function getdetailpbbyid(){
+        $data = $_POST['id'];
+        $hasil = $this->pb_model->getdatadetailpbbyid($data);
+        echo json_encode($hasil);
+    }
     public function simpandetailbarang(){
         $hasil = $this->pb_model->simpandetailbarang();
+        if($hasil){
+            $kode = $hasil['id'];
+            $url = base_url().'pb/datapb/'.$kode;
+            redirect($url);
+        }
+    }
+    public function updatedetailbarang(){
+        $hasil = $this->pb_model->updatedetailbarang();
         if($hasil){
             $kode = $hasil['id'];
             $url = base_url().'pb/datapb/'.$kode;
