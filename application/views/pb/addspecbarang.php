@@ -41,11 +41,15 @@
 </div>
 <div class="modal-footer">
     <!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button> -->
-    <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal" id="keluarform">Keluar</button>
+    <!-- <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal" id="keluarform">Keluar</button> -->
 </div>
 <script>
     $(document).ready(function(){
         $("#keyw").focus();
+        $("#keyw").val($("#nama_barang").val());
+        if($("#keyw").val() != ''){
+            $("#getbarang").click();
+        }
     })
     $("#keyw").on('keyup',function(e){
         if(e.key == 'Enter' || e.keycode === 13){
@@ -81,7 +85,7 @@
         $("#nama_barang").val(x);
         $("#id_barang").val(y);
         $("#id_satuan").val(z)
-        $("#keluarform").click();
+        $("#modal-scroll").modal('hide');
     })
     // $("#simpanbarang").click(function(){
         // if($("#id_barang_bom").val() == ''){

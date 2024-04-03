@@ -51,7 +51,6 @@
             },
             success: function(data){
                 // alert('berhasil');
-                alert(data);
                 window.location.href = base_url+"pb/datapb/"+data;
                 $("#butbatal").click();
             },

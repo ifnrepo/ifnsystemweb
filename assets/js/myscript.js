@@ -26,6 +26,7 @@ $(document).ready(function () {
 	modalBoxLg();
 	modalBoxLg2();
 	modalBoxXl();
+	modalBoxSc();
 
 	$(".tglpilih").datepicker({
 		autoclose: true,
@@ -198,6 +199,12 @@ $(document).ready(function () {
 		);
 		$(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
 	});
+	$("#modal-info").on("show.bs.modal", function (e) {
+		document.getElementById("message-info").innerHTML = $(e.relatedTarget).data(
+			"message"
+		);
+		$(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
+	});
 	$("#confirm-delete").on("show.bs.modal", function (e) {
 		var string = document.getElementById("confirm-delete").innerHTML;
 		var hasil = string.replace(
@@ -268,6 +275,17 @@ function modalBoxSm() {
 
 function modalBoxLg() {
 	$("#modal-large").on("show.bs.modal", function (e) {
+		var link = $(e.relatedTarget);
+		var title = link.data("title");
+		var modal = $(this);
+		modal.find(".modal-title").text(title);
+		$(this).find(".fetched-data").load(link.attr("href"));
+	});
+	return false;
+}
+
+function modalBoxSc() {
+	$("#modal-scroll").on("show.bs.modal", function (e) {
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);

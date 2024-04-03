@@ -70,6 +70,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <tr>
                 <th>Tgl</th>
                 <th>Nomor</th>
+                <th>Jumlah Item</th>
                 <th>Dibuat Oleh</th>
                 <th>Disetujui Oleh</th>
                 <th>Aksi</th>
