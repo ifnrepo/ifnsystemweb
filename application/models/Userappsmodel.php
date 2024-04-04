@@ -131,4 +131,8 @@ class Userappsmodel extends CI_Model
 
         return $hasil;
     }
+    public function getdatalevel(){
+        $query = $this->db->get('level_user')->result_array();
+        return $query;
+    }
 }

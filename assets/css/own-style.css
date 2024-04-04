@@ -4,6 +4,9 @@
 .font-bold {
 	font-weight: bold !important;
 }
+.font-italic {
+	font-style: italic !important;
+}
 .dataTables_wrapper .dataTables_paginate {
 	float: right;
 }
@@ -16,4 +19,10 @@
 .table-tbody td {
 	/* background-color: aqua !important; */
 	padding: 5px !important;
+}
+.btn-flat {
+	border-radius: 0px !important;
+}
+.bg-gray {
+	background-color: #e6e6e6 !important;
 }

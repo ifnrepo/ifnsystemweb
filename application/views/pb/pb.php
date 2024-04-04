@@ -20,9 +20,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="card">
       <div class="card-body">
         <div id="sisipkan" class="sticky-top bg-white">
-          <div class="mb-1">
-            <a href="<?= base_url().'pb/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
-            <a href="#" data-bs-toggle="offcanvas" data-bs-target="#offcanvasEnd" data-title="Add Data BOM" class="btn btn-success btn-sm" ><i class="fa fa-file-o"></i><span class="ml-1">Browse Data</span></a>
+          <div class="row mb-1 d-flex align-items-between">
+            <div class="col-sm-6">
+              <a href="<?= base_url().'pb/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+            </div>
+            <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
+            <?php $selek = $this->session->userdata('levelsekarang')== null ? 1 : $this->session->userdata('levelsekarang'); ?>
+              <select class="form-control form-sm font-kecil font-bold bg-primary text-white" id="level" name="level" style="width: 150px;" <?= $levnow; ?>>
+                <option value="1" <?php if($selek==1){echo "selected"; } ?>>User Maker</option>
+                <option value="2" <?php if($levnow!='disabled' && $selek==2){ echo "selected"; } ?>>User Approver</option>
+              </select>
+            </div>
           </div>
           <div class="card card-active" style="clear:both;" >
             <div class="card-body p-2 font-kecil">
@@ -44,9 +52,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-control form-sm font-kecil font-bold" id="dept_tuju" name="dept_tuju">
-                        <?php foreach ($dephak as $hak): $selek = $this->session->userdata('tujusekarang')== null ? '' : $this->session->userdata('tujusekarang'); ?>
-                          <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?php if($selek==$hak['dept_id']) echo "selected"; ?>><?= $hak['departemen']; ?></option>
-                        <?php endforeach; ?>
+                       
                       </select>
                     </div>
                   </span>
@@ -73,6 +79,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <th>Jumlah Item</th>
                 <th>Dibuat Oleh</th>
                 <th>Disetujui Oleh</th>
+                <th>Keterangan</th>
                 <th>Aksi</th>
               </tr>
             </thead>
