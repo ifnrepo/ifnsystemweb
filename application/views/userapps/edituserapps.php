@@ -188,7 +188,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                         <div class="tab-pane " id="tabs-transaksi-1">
                           <div class="row">
-                            <div class="col">
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi1" name="transaksi1" type="checkbox" <?= cekceklis($user['transaksi'], 1); ?>>
                                 <span class="form-check-label">PB (BON PERMINTAAN BARANG)</span>
@@ -199,7 +199,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi3" name="transaksi3" type="checkbox" <?= cekceklis($user['transaksi'], 3); ?>>
+                                <span class="form-check-label">IN (BON PENERIMAAN BARANG)</span>
+                              </label>
+                            </div>
+                            <div class="col-6">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi4" name="transaksi4" type="checkbox" <?= cekceklis($user['transaksi'], 4); ?>>
+                                <span class="form-check-label">OUT (BON PENGELUARAN BARANG)</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi5" name="transaksi5" type="checkbox" <?= cekceklis($user['transaksi'], 5); ?>>
                                 <span class="form-check-label">ADJ (BON ADJUSTMEN)</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi6" name="transaksi6" type="checkbox" <?= cekceklis($user['transaksi'], 6); ?>>
+                                <span class="form-check-label">PO (PURCHASE ORDER)</span>
                               </label>
                               <!-- xx -->
                             </div>
