@@ -202,7 +202,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">IN (BON PENERIMAAN BARANG)</span>
                               </label>
                             </div>
-                            <div class="col-6">
+                            <div class="col-6"> 
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi4" name="transaksi4" type="checkbox" <?= cekceklis($user['transaksi'], 4); ?>>
                                 <span class="form-check-label">OUT (BON PENGELUARAN BARANG)</span>

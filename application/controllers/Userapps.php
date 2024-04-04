@@ -39,6 +39,7 @@ class Userapps extends CI_Controller
 		$data['action'] = base_url() . 'userapps/simpandata';
 		$data['data'] = $this->userappsmodel->getdata();
 		$data['daftardept'] = $this->deptmodel->getdata();
+		$data['jmldept'] = $this->deptmodel->jmldept();
 		$data['dept'] = $this->db->get('dept')->result_array();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$footer['fungsi'] = 'userapps';

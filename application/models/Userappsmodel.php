@@ -41,6 +41,14 @@ class Userappsmodel extends CI_Model
                 unset($data['master' . $x]);
             }
         }
+         // Set modul transaksi
+         $transaksi = str_repeat('0', 100);
+         for ($x = 1; $x <= 50; $x++) {
+             if (isset($data['transaksi' . $x])) {
+                 $transaksi = substr_replace($transaksi, '10', ($x * 2) - 2, 2);
+                 unset($data['transaksi' . $x]);
+             }
+         }
         // Set modul manajemen
         $manajemen = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -49,8 +57,19 @@ class Userappsmodel extends CI_Model
                 unset($data['manajemen' . $x]);
             }
         }
+          // Set hak departemen
+          $hakdepartemen = '';
+          $datdept = $this->deptmodel->getdata();
+          foreach($datdept as $dept){
+              if(isset($data[$dept['dept_id']])){
+                  $hakdepartemen .= $dept['dept_id'];
+                  unset($data[$dept['dept_id']]);
+              }
+          }
         $data['master'] = $master;
+        $data['transaksi'] = $transaksi;
         $data['manajemen'] = $manajemen;
+        $data['hakdepartemen'] = $hakdepartemen;
         $hasil = $this->db->insert('user', $data);
         return $hasil;
     }
