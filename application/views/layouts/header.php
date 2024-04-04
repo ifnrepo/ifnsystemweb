@@ -369,13 +369,22 @@
                 <div class="dropdown-menu-columns">
                   <div class="dropdown-menu-column">
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 1); ?>" href="<?= base_url('pb/clear'); ?>">
-                      PB (Permintaan Barang)
+                      PB (Bon Permintaan Barang)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 2); ?>" href="<?= base_url('bbl'); ?>">
                       BBL (Bon Pembelian Barang)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 3); ?>" href="<?= base_url('adj'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 3); ?>" href="<?= base_url('in'); ?>">
+                      IN (Bon Penerimaan Barang)
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 4); ?>" href="<?= base_url('out'); ?>">
+                      OUT (Bon Pengeluaran Barang)
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj'); ?>">
                       ADJ (Bon Adjustmen)
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po'); ?>">
+                      PO (Purchase Order)
                     </a>
                   </div>
                 </div>
