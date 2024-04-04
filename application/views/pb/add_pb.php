@@ -25,8 +25,8 @@
     </div>
 </div>
 <div class="modal-footer font-kecil">
-    <button type="button" class="btn me-auto" id="butbatal" data-bs-dismiss="modal">Batal</button>
-    <button type="button" class="btn btn-success text-black" id="buatpb">Buat Transaksi</button>
+    <button type="button" class="btn me-auto btn-sm" id="butbatal" data-bs-dismiss="modal">Batal</button>
+    <button type="button" class="btn btn-success btn-sm text-black" id="buatpb">Buat Transaksi</button>
 </div>
 <script>
     $(document).ready(function(){

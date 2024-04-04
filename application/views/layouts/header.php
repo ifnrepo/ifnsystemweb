@@ -208,18 +208,18 @@
   </div>
   <!-- End Modal -->
   <!-- Canvas -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasEnd" aria-labelledby="offcanvasEndLabel" style="min-width:50% !important">
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="canvasdet" aria-labelledby="offcanvasEndLabel" style="min-width:65% !important">
     <div class="offcanvas-header">
-      <h2 class="offcanvas-title" id="offcanvasEndLabel">End offcanvas</h2>
+      <div class="offcanvas-title" id="offcanvasEndLabel">Lorem Title</div>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">
-      <div>
+      <div class="fetched-data">
         Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab assumenda ea est, eum exercitationem fugiat illum itaque laboriosam magni necessitatibus, nemo nisi numquam quae reiciendis repellat sit soluta unde. Aut!
       </div>
       <div class="mt-3">
-        <button class="btn btn-primary" type="button" data-bs-dismiss="offcanvas">
-          Close offcanvas
+        <button class="btn btn-primary btn-sm btn-flat" type="button" data-bs-dismiss="offcanvas">
+          Close
         </button>
       </div>
     </div>

@@ -27,6 +27,7 @@ $(document).ready(function () {
 	modalBoxLg2();
 	modalBoxXl();
 	modalBoxSc();
+	canvasoff();
 
 	$(".tglpilih").datepicker({
 		autoclose: true,
@@ -205,6 +206,7 @@ $(document).ready(function () {
 		);
 		$(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
 	});
+
 	$("#confirm-delete").on("show.bs.modal", function (e) {
 		var string = document.getElementById("confirm-delete").innerHTML;
 		var hasil = string.replace(
@@ -317,6 +319,24 @@ function modalBoxXl() {
 	return false;
 }
 
+function canvasoff() {
+	$("#canvasdet").on("show.bs.offcanvas", function (e) {
+		var link = $(e.relatedTarget);
+		var title = link.data("title");
+		var modal = $(this);
+		modal.find(".offcanvas-title").text(title);
+		$(this).find(".fetched-data").load(link.attr("href"));
+	});
+	return false;
+}
+// $("#canvasdet").on("show.bs.offcanvas", function (e) {
+// 	var x = $(e.relatedTarget).data("title");
+// 	document.getElementById("offcanvasEndLabel").innerHTML = x;
+// 	document.getElementById("fetched-data").innerHTML = $(e.relatedTarget).data(
+// 		"href"
+// 	);
+// 	// $(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
+// });
 function angkaJam(evt) {
 	var charCode = evt.which ? evt.which : event.keyCode;
 	if (charCode > 31 && (charCode < 48 || charCode > 58)) return false;

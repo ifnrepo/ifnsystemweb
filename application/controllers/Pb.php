@@ -17,9 +17,10 @@ class Pb extends CI_Controller {
     }
     public function index(){
         $header['header'] = 'transaksi';
-        // $data['data'] = $this->barangmodel->getdata();
+        $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
+        $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         $footer['fungsi'] = 'pb';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('pb/pb',$data);
@@ -28,6 +29,7 @@ class Pb extends CI_Controller {
     public function clear(){
         $this->session->unset_userdata('deptsekarang');
         $this->session->unset_userdata('tujusekarang');
+        $this->session->unset_userdata('levelsekarang');
         $url = base_url('Pb');
         redirect($url);
     }
@@ -36,20 +38,41 @@ class Pb extends CI_Controller {
         $kode = [
             'dept_id' => $_POST['dept_id'],
             'dept_tuju' => $_POST['dept_tuju'],
+            'level' => $_POST['levelsekarang']
         ];
         $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
+        $this->session->set_userdata('levelsekarang',$_POST['levelsekarang']);
         $data = $this->pb_model->getdatapb($kode);
         foreach ($data as $hsl) {
-            $jmlrec = $hsl['jumlah_barang']==null ? '' : $hsl['jumlah_barang'].' Item ';
-            $hasil .= "<tr>";
+            $jmlrec = $hsl['jmlrex']==null ? '' : $hsl['jmlrex'].' Item ';
+            $tungguoke= '';
+            $tunggukonfirmasi = '';
+            if($hsl['data_ok']==0){
+                $tungguoke = 'Bon Belum divalidasi/disimpan';
+            }
+            if( $hsl['data_ok']==1 && $hsl['ok_tuju']==0){
+                $tunggukonfirmasi = 'Menunggu Konfirmasi Kepala Dept';
+            }
+            $hasil .= "<tr class=''>";
             $hasil .= "<td>".tglmysql($hsl['tgl'])."</td>";
-            $hasil .= "<td class='font-bold'>".$hsl['nomor_dok']."</td>";
+            $hasil .= "<td class='font-bold'>";
+            $hasil .= "<a href='".base_url().'pb/viewdetailpb/'.$hsl['id']."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'>".$hsl['nomor_dok']."</a>";
+            $hasil .= "</td>";
             $hasil .= "<td>".$jmlrec."</td>";
-            $hasil .= "<td style='line-height: 13px'>".datauser($hsl['user_ok'],'name')."<br><span style='font-size: 10px;'>".tglmysql($hsl['tgl_ok'])."</span></td>";
-            $hasil .= "<td></td>";
+            $hasil .= "<td style='line-height: 13px'>".substr(datauser($hsl['user_ok'],'name'),0,35)."<br><span style='font-size: 10px;'>".tglmysql($hsl['tgl_ok'])."</span></td>";
+            $hasil .= "<td style='line-height: 13px'>".substr(datauser($hsl['user_tuju'],'name'),0,35)."<br><span style='font-size: 10px;'>".tglmysql($hsl['tgl_tuju'])."</span></td>";
+            $hasil .= "<td>".$tunggukonfirmasi.$tungguoke."</td>";
             $hasil .= "<td>";
-            $hasil .= "<a href=".base_url().'pb/datapb/'.$hsl["id"]." class='btn btn-sm btn-primary btn-flat mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
-            $hasil .= "<a href='#' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini ?' data-href=".base_url() . 'pb/hapusdata/' . $hsl["id"]." title='Hapus data'><i class='fa fa-trash-o'></i></a>";
+            if($hsl['data_ok']==0){
+                $hasil .= "<a href=".base_url().'pb/datapb/'.$hsl["id"]." class='btn btn-sm btn-primary btn-flat mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
+                $hasil .= "<a href='#' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' data-href=".base_url() . 'pb/hapusdata/' . $hsl["id"]." title='Hapus data'><i class='fa fa-trash-o'></i></a>";
+            }else if($hsl['data_ok']==1 && $hsl['ok_tuju']==0 && $this->session->userdata('levelsekarang')==1){
+                $hasil .= "<a href='#' class='btn btn-sm btn-info btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit data ini' data-href=".base_url() . 'pb/editokpb/' . $hsl["id"]." title='Validasi data'><i class='fa fa-refresh mr-1'></i> Edit Validasi</a>";
+            }else if($hsl['data_ok']==1 && $hsl['ok_tuju']==0 && $this->session->userdata('levelsekarang')>1){
+                $hasil .= "<a href='#' class='btn btn-sm btn-success btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Validasi data ini' data-href=".base_url() . 'pb/validasipb/' . $hsl["id"]." title='Validasi data'><i class='fa fa-check'></i></a>";
+            }else if($hsl['data_ok']==1 && $hsl['ok_tuju']==1 && $hsl['ok_valid']==0 && $this->session->userdata('levelsekarang')==1 && $this->session->userdata('level_user')>=2){
+                $hasil .= "<a href='#' class='btn btn-sm btn-primary btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit Validasi data ini' data-href=".base_url() . 'pb/editvalidasipb/' . $hsl["id"]." title='Edit Validasi data'><i class='fa fa-refresh mr-1'></i> Edit Approver</a>";
+            }
             $hasil .= "</td>";
             $hasil .= "</tr>";
         }
@@ -123,6 +146,45 @@ class Pb extends CI_Controller {
             redirect($url);
         }
     }
+    public function validasipb($id){
+        $data = [
+            'ok_tuju' => 1,
+            'tgl_tuju' => date('Y-m-d'),
+            'user_tuju' => $this->session->userdata('id'),
+            'id' => $id
+        ];
+        $simpan = $this->pb_model->validasipb($data);
+        if($simpan){
+            $url = base_url().'pb';
+            redirect($url);
+        }
+    }
+    public function editvalidasipb($id){
+        $data = [
+            'ok_tuju' => 0,
+            'tgl_tuju' => null,
+            'user_tuju' => null,
+            'id' => $id
+        ];
+        $simpan = $this->pb_model->validasipb($data);
+        if($simpan){
+            $url = base_url().'pb';
+            redirect($url);
+        }
+    }
+    public function editokpb($id){
+        $data = [
+            'data_ok' => 0,
+            'tgl_ok' => null,
+            'user_ok' => null,
+            'id' => $id
+        ];
+        $simpan = $this->pb_model->validasipb($data);
+        if($simpan){
+            $url = base_url().'pb';
+            redirect($url);
+        }
+    }
     public function datapb($id){
         $header['header'] = 'transaksi';
         $data['data'] = $this->pb_model->getdatabyid($id);
@@ -188,5 +250,10 @@ class Pb extends CI_Controller {
             $url = base_url().'pb/datapb/'.$kode;
             redirect($url);
         }
+    }
+    public function viewdetailpb($id){
+        $data['header'] = $this->pb_model->getdatabyid($id);
+        $data['detail'] = $this->pb_model->getdatadetailpb($id);
+        $this->load->view('pb/viewdetailpb',$data);
     }
 }

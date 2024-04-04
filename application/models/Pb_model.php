@@ -23,7 +23,8 @@ class Pb_model extends CI_Model{
                 $this->db->where('dept_id',$kodex);
                 $gudang = $this->db->get('dept')->row_array();
                 if($gudang){
-                    $hasil .= "<option value='".$gudang['dept_id']."' rel='".$gudang['departemen']."'>".$gudang['departemen']."</option>";
+                    $selek = $this->session->userdata('tujusekarang')==$gudang['dept_id'] ? 'selected' : '';
+                    $hasil .= "<option value='".$gudang['dept_id']."' rel='".$gudang['departemen']."' ".$selek.">".$gudang['departemen']."</option>";
                 }
             }
         }
@@ -50,20 +51,29 @@ class Pb_model extends CI_Model{
         $query = $this->db->update('tb_header',$data);
         return $query;
     }
+    public function validasipb($data){
+        $this->db->where('id',$data['id']);
+        $query = $this->db->update('tb_header',$data);
+        return $query;
+    }
     public function getnomorpb($bl,$th,$asal,$tuju){
         $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,15,3)) AS maxkode FROM tb_header 
         WHERE kode_dok = 'PB' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
         return $hasil;
     }
     public function getdatapb($data){
-        $this->db->select('tb_header.*,user.name');
+        $this->db->select('tb_header.*,user.name,(select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
         $this->db->join('user','user.id=tb_header.user_ok','left');
         $this->db->where('dept_id',$data['dept_id']);
         $this->db->where('dept_tuju',$data['dept_tuju']);
+        if($data['level']==2){
+            $this->db->where('data_ok',1);
+            $this->db->where('ok_tuju',0);
+        }
         return $this->db->get('tb_header')->result_array();
     }
     public function getdatadetailpb($data){
-        $this->db->select("tb_detail.*,satuan.namasatuan,barang.kode,barang.nama_barang");
+        $this->db->select("tb_detail.*,satuan.namasatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
         $this->db->from('tb_detail');
         $this->db->join('satuan','satuan.id = tb_detail.id_satuan','left');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');

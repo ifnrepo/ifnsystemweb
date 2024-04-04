@@ -8,12 +8,15 @@ $(document).ready(function () {
 	var pisah = url.split("/");
 	// alert(pisah[5]);
 	if (pisah[2] == "localhost") {
-		if (pisah[5] == "datapb" || pisah[5] == "datapb") {
+		if (pisah[5] == "datapb") {
 			getdatadetailpb();
 		}
 	} else {
 		if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
 			// getdatainvoice();
+		}
+		if (pisah[5] == "datapb") {
+			getdatadetailpb();
 		}
 	}
 	$("#dept_kirim").change();
@@ -41,6 +44,13 @@ $("#dept_kirim").change(function () {
 });
 $("#dept_tuju").change(function () {
 	$("#adddatapb").removeClass("disabled");
+	$("#level").removeClass("bg-primary");
+	$("#level").removeClass("bg-success");
+	if ($("#level").val() <= 1) {
+		$("#level").addClass("bg-primary");
+	} else {
+		$("#level").addClass("bg-success");
+	}
 	var ix = $(this).val();
 	if (ix != null) {
 		getdatapb();
@@ -103,7 +113,18 @@ $(document).on("click", "#editdetailpb", function () {
 		},
 	});
 });
+$("#level").change(function () {
+	$(this).removeClass("bg-primary");
+	$(this).removeClass("bg-success");
+	if ($(this).val() <= 1) {
+		$(this).addClass("bg-primary");
+	} else {
+		$(this).addClass("bg-success");
+	}
+	getdatapb();
+});
 function getdatapb() {
+	// alert($("#level").val());
 	$.ajax({
 		dataType: "json",
 		type: "POST",
@@ -111,6 +132,7 @@ function getdatapb() {
 		data: {
 			dept_id: $("#dept_kirim").val(),
 			dept_tuju: $("#dept_tuju").val(),
+			levelsekarang: $("#level").val(),
 		},
 		success: function (data) {
 			// alert(data.datagroup);
