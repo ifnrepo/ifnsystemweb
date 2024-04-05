@@ -25,10 +25,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <a href="<?= base_url().'pb/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-            <?php $selek = $this->session->userdata('levelsekarang')== null ? 1 : $this->session->userdata('levelsekarang'); ?>
+              <?php $selek = $this->session->userdata('levelsekarang')== null ? $this->session->userdata('level_user') : $this->session->userdata('levelsekarang'); ?>
               <select class="form-control form-sm font-kecil font-bold bg-primary text-white" id="level" name="level" style="width: 150px;" <?= $levnow; ?>>
                 <option value="1" <?php if($selek==1){echo "selected"; } ?>>User Maker</option>
-                <option value="2" <?php if($levnow!='disabled' && $selek==2){ echo "selected"; } ?>>User Approver</option>
+                <option value="2" <?php if($levnow!='disabled' && $selek>=2){ echo "selected"; } ?>>User Approver</option>
+              </select>
+              <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
+              <select class="form-control form-sm font-kecil font-bold mr-1" id="bl" name="bl" style="width: 100px;" <?= $levnow; ?>>
+                <?php for($x=1;$x<=12;$x++): ?>
+                    <option value="<?= $x; ?>" <?php if($this->session->userdata('bl')==$x) echo "selected"; ?>><?= namabulan($x); ?></option>
+                <?php endfor; ?>
               </select>
             </div>
           </div>
@@ -58,10 +64,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-1 font-kecil">-</h4>
-                  <span class="font-kecil"></span>
+                  <h4 class="mb-1 font-kecil">.</h4>
+                  <span class="font-kecil">
+                    <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
+                  </span>
                 </div>
                 <div class="col-3">
+                  <h4 class="mb-1"></h4>
+                </div>
+                <div class="col-2">
                   <h4 class="mb-1"></h4>
                 </div>
               </div>

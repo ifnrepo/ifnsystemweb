@@ -76,6 +76,9 @@ $("#simpandetailbarang").click(function () {
 	}
 	document.formbarangpb.submit();
 });
+$("#butgo").click(function () {
+	$("#dept_tuju").change();
+});
 $("#resetdetailbarang").click(function () {
 	$("#id_barang").val("");
 	$("#nama_barang").val("");
@@ -123,6 +126,27 @@ $("#level").change(function () {
 	}
 	getdatapb();
 });
+$("#bl").change(function () {
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "pb/ubahperiode",
+		data: {
+			bl: $(this).val(),
+			th: $("#th").val(),
+		},
+		success: function (data) {
+			window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
+$("#th").change(function () {
+	$("#bl").change();
+});
 function getdatapb() {
 	// alert($("#level").val());
 	$.ajax({
@@ -154,9 +178,13 @@ function getdatadetailpb() {
 			id_header: $("#id_header").val(),
 		},
 		success: function (data) {
-			// alert(data.datagroup);
+			// alert(data.jmlrek);
 			// window.location.reload();
+			$("#jmlrek").val(data.jmlrek);
 			$("#body-table").html(data.datagroup).show();
+			if (data.jmlrek == 0) {
+				$("#simpanpb").addClass("disabled");
+			}
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
