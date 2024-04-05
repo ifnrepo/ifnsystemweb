@@ -45,18 +45,18 @@
     <script src="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.js"></script>
     <script src="<?= base_url(); ?>assets/vendor/select2/js/select2.min.js"></script>
 	<!-- Custom JS -->
-	<script src="<?= base_url(); ?>assets/js/myscript.js"></script>
+	<script src="<?= base_url(); ?>assets/js/myscript.js?1692870487"></script>
 	<?php if(isset($fungsi) && $fungsi=='userapps'){ ?>
-		<script src="<?= base_url(); ?>assets/js/own/userapps.js"></script>
+		<script src="<?= base_url(); ?>assets/js/own/userapps.js?1692870487"></script>
 	<?php } ?>
 	<?php if(isset($fungsi) && $fungsi=='barang'){ ?>
-		<script src="<?= base_url(); ?>assets/js/own/barang.js"></script>
+		<script src="<?= base_url(); ?>assets/js/own/barang.js?1692870487"></script>
 	<?php } ?>
 	<?php if(isset($fungsi) && $fungsi=='dept'){ ?>
-		<script src="<?= base_url(); ?>assets/js/own/dept.js"></script>
+		<script src="<?= base_url(); ?>assets/js/own/dept.js?1692870487"></script>
 	<?php } ?>
 	<?php if(isset($fungsi) && $fungsi=='pb'){ ?>
-		<script src="<?= base_url(); ?>assets/js/own/pb.js"></script>
+		<script src="<?= base_url(); ?>assets/js/own/pb.js?1692870487"></script>
 	<?php } ?>
 
     <script>

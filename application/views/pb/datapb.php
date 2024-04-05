@@ -46,7 +46,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-1"></h4>
+                  
                 </div>
               </div>
               <!-- <div class="hr m-1"></div> -->
@@ -66,22 +66,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <a href="<?= base_url().'pb/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
               </div>
             </div>
-            <!-- <div class="row font-kecil mb-1">
-              <label class="col-2 col-form-label">PO</label>
-              <div class="col">
-                <input type="email" class="form-control font-kecil" aria-describedby="emailHelp" placeholder="P/o">
-              </div>
-            </div>
-            <div class="row font-kecil mb-1">
-              <label class="col-2 col-form-label">Item</label>
-              <div class="col-4">
-                <input type="email" class="form-control font-kecil" aria-describedby="emailHelp" placeholder="Item">
-              </div>
-              <label class="col-2 col-form-label text-right">Dis</label>
-              <div class="col-4">
-                <input type="email" class="form-control font-kecil" aria-describedby="emailHelp" placeholder="Dis">
-              </div>
-            </div> -->
             <div class="row font-kecil mb-1">
               <label class="col-2 col-form-label">Satuan</label>
               <div class="col">
@@ -138,7 +122,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </div>
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">
-          <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url().'pb/simpanpb/'.$data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+          <input type="text" id="jmlrek" class="hilang">
+          <a href="#" class="btn btn-sm btn-primary" id="simpanpb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url().'pb/simpanpb/'.$data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
           <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
         </div>
       </div>

@@ -1,7 +1,9 @@
 <?php 
 class Pb_model extends CI_Model{
     public function getdatabyid($id){
-        $this->db->where('id',$id);
+        $this->db->select('tb_header.*,dept.departemen');
+        $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
+        $this->db->where('tb_header.id',$id);
         return $this->db->get('tb_header')->row_array();
     }
     public function depttujupb($kode){
@@ -70,10 +72,12 @@ class Pb_model extends CI_Model{
             $this->db->where('data_ok',1);
             $this->db->where('ok_tuju',0);
         }
+        $this->db->where('month(tgl)',$this->session->userdata('bl'));
+        $this->db->where('year(tgl)',$this->session->userdata('th'));
         return $this->db->get('tb_header')->result_array();
     }
     public function getdatadetailpb($data){
-        $this->db->select("tb_detail.*,satuan.namasatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
+        $this->db->select("tb_detail.*,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
         $this->db->from('tb_detail');
         $this->db->join('satuan','satuan.id = tb_detail.id_satuan','left');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
@@ -179,5 +183,9 @@ class Pb_model extends CI_Model{
             $que = $this->db->get('tb_header')->row_array();
         }
         return $que;
+    }
+    public function simpancancelpb($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_header',$data);
     }
 }

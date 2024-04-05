@@ -26,7 +26,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/select2/css/select2-bootstrap4.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
 
-  <link href=<?= base_url() . "assets/css/own-style.css" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/own-style.css?1692870487" ?> rel="stylesheet" />
   <style>
     /* @import url('https://rsms.me/inter/inter.css'); */
     :root {

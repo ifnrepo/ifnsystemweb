@@ -86,9 +86,14 @@ function tglmysql($tgl){
 }
 function tglmysql2($tgljam){
     $a = $tgljam;
-    $exp = explode('-',$a);
-    $exp2 = explode(' ',$exp[2]);
-    return $exp2[0].'-'.$exp[1].'-'.$exp[0].' '.$exp2[1];
+    if($a==null){
+        $hasil = '';
+    }else{
+        $exp = explode('-',$a);
+        $exp2 = explode(' ',$exp[2]);
+        $hasil = $exp2[0].'-'.$exp[1].'-'.$exp[0].' '.$exp2[1];
+    }
+    return $hasil;
 }
 function lastdate($bl,$th){
     $tgl = $th."-".$bl."-01";
