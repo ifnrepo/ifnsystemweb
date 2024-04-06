@@ -49,9 +49,11 @@
         <div class="col-4 text-primary font-bold">
             
         </div>
-        <div class="col-4 text-primary font-bold">
-            <span>Disetujui Oleh</span>
-            <h4 class="mb-1"><?= datauser($header['user_tuju'],'name').' ('.$header['tgl_tuju'].')' ?></h4>
+        <?php $bgr = $header['ketcancel']==null ? "text-primary" : "text-danger"; ?>
+        <div class="col-4 <?= $bgr; ?> font-bold">
+            <?php $cek = $header['ketcancel']==null ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
+            <span><?= $cek; ?></span>
+            <h4 class="mb-1"><?= datauser($header['user_tuju'],'name').' ('.$header['tgl_tuju'].')'."<br>".$header['ketcancel'] ?></h4>
         </div>
     </div>
     <hr class="m-1">
