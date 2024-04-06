@@ -55,6 +55,8 @@ class Pb extends CI_Controller {
             $tunggukonfirmasi = '';
             $cancel = '';
             $tekred = '';
+            $usersetuju = '';
+            $tglsetuju = '';
             if($hsl['data_ok']==0){
                 $tungguoke = 'Bon Belum divalidasi/disimpan';
             }
@@ -65,6 +67,10 @@ class Pb extends CI_Controller {
                 $cancel = '(CANCEL) '.$hsl['ketcancel'];
                 $tekred = 'text-red';
             }
+            if($hsl['ok_tuju']==1){
+                $usersetuju = substr(datauser($hsl['user_tuju'],'name'),0,35);
+                $tglsetuju = tglmysql2($hsl['tgl_tuju']);
+            }
             $hasil .= "<tr class=''>";
             $hasil .= "<td>".tglmysql($hsl['tgl'])."</td>";
             $hasil .= "<td class='font-bold'>";
@@ -72,7 +78,7 @@ class Pb extends CI_Controller {
             $hasil .= "</td>";
             $hasil .= "<td>".$jmlrec."</td>";
             $hasil .= "<td style='line-height: 14px'>".substr(datauser($hsl['user_ok'],'name'),0,35)."<br><span style='font-size: 10px;'>".tglmysql2($hsl['tgl_ok'])."</span></td>";
-            $hasil .= "<td style='line-height: 14px'>".substr(datauser($hsl['user_tuju'],'name'),0,35)."<br><span style='font-size: 10px;'>".tglmysql2($hsl['tgl_tuju'])."</span></td>";
+            $hasil .= "<td style='line-height: 14px'>".$usersetuju."<br><span style='font-size: 10px;'>".$tglsetuju."</span></td>";
             $hasil .= "<td class='".$tekred."'>".$tunggukonfirmasi.$tungguoke.$cancel."</td>";
             $hasil .= "<td>";
             if($hsl['data_ok']==0){
@@ -211,7 +217,9 @@ class Pb extends CI_Controller {
         $data = [
             'id'=>$_POST['id'],
             'ketcancel'=>$_POST['ketcancel'],
-            'ok_tuju'=>2
+            'ok_tuju'=>2,
+            'user_tuju'=>$this->session->userdata('id'),
+            'tgl_tuju' => date('Y-m-d H:i:s')
         ];
         $hasil = $this->pb_model->simpancancelpb($data);
         echo $hasil;
