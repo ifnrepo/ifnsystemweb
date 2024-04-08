@@ -1,4 +1,6 @@
 <?php
+define('IDPERUSAHAAN', 'IFN');
+
 function visibpass($kata){
     $hasil = '*****';
     if(strlen($kata)<=5){
@@ -71,6 +73,16 @@ function nomorpb($tgl,$asal,$tuju){
     $urut = (int) $kode['maxkode'];
     $urut++;
     return $asal."-".$tuju."/BP/".$bl.$th."/".sprintf("%03s",$urut);
+}
+function nomorout($tgl,$asal,$tuju){
+    $bl = date('m',strtotime($tgl));
+    $th = date('y',strtotime($tgl));
+    $thp = date('Y',strtotime($tgl));
+    $CI = &get_instance();
+    $kode = $CI->out_model->getnomorout($bl,$thp,$asal,$tuju);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return $asal."-".$tuju."/T/".$bl.$th."/".sprintf("%03s",$urut);
 }
 function tglmysql($tgl){
     if ($tgl == '') {
