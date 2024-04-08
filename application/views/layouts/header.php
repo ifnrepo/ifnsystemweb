@@ -123,7 +123,7 @@
           <h5 class="modal-title">Large modal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body fetched-data">
+        <div class="modal-body fetched-data p-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit tempora totam unde.
         </div>
         <!-- <div class="modal-footer">
@@ -140,7 +140,7 @@
           <h5 class="modal-title">Large modal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body fetched-data">
+        <div class="modal-body fetched-data p-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit tempora totam unde.
         </div>
         <div class="modal-footer">
@@ -375,13 +375,13 @@
                       BBL (Bon Pembelian Barang)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 3); ?>" href="<?= base_url('in'); ?>">
-                      IN (Bon Penerimaan Barang)
+                      IN (Bon Perpindahan)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 4); ?>" href="<?= base_url('out'); ?>">
-                      OUT (Bon Pengeluaran Barang)
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 4); ?>" href="<?= base_url('out/clear'); ?>">
+                      OUT (Bon Perpindahan)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj'); ?>">
-                      ADJ (Bon Adjustmen)
+                      ADJ (Bon Adjustment)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po'); ?>">
                       PO (Purchase Order)

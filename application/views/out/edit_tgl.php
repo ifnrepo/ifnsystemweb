@@ -34,7 +34,7 @@
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url+"pb/updatepb",
+            url: base_url+"out/updateout",
             data: {
                 id: $("#id_header").val(),
                 tgl: $("#tgl").val(), 
@@ -42,7 +42,7 @@
             },
             success: function(data){
                 // alert('berhasil');
-                window.location.href = base_url+"pb/datapb/"+$("#id_header").val();
+                window.location.href = base_url+"out/dataout/"+$("#id_header").val();
                 $("#butbatal").click();
             },
             error: function(xhr, ajaxOptions, thrownError){

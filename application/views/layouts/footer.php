@@ -58,6 +58,9 @@
 	<?php if(isset($fungsi) && $fungsi=='pb'){ ?>
 		<script src="<?= base_url(); ?>assets/js/own/pb.js?1692870487"></script>
 	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='out'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/out.js?1692870488"></script>
+	<?php } ?>
 
     <script>
       // @formatter:off
