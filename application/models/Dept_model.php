@@ -62,10 +62,15 @@ class Dept_model extends CI_Model
                 $penerimaan .= $dept['dept_id'];
                 unset($data['penerimaan' . $dept['dept_id']]);
             }
+            if(isset($data['permintaan' . $dept['dept_id']])) {
+                $permintaan .= $dept['dept_id'];
+                unset($data['permintaan' . $dept['dept_id']]);
+            }
         }
         
         $data['pengeluaran'] = $pengeluaran;
         $data['penerimaan'] = $penerimaan;
+        $data['permintaan'] = $permintaan;
         
         $this->db->where('dept_id', $data['dept_id']);
         $hasil = $this->db->update('dept', $data);
@@ -74,6 +79,7 @@ class Dept_model extends CI_Model
             $cek = $this->getdatabyid($data['dept_id'])->row_array();
             $this->session->set_userdata('pengeluaran', $cek['pengeluaran']);
             $this->session->set_userdata('penerimaan', $cek['penerimaan']);
+            $this->session->set_userdata('permintaan', $cek['permintaan']);
         }
          
         return $hasil; 
