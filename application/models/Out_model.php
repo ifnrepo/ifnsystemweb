@@ -9,11 +9,14 @@ class Out_model extends CI_Model{
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th')
         ];
+        $this->db->select('tb_header.*');
+        $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->where($arrkondisi);
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
     public function getdatabyid($kode){
+        $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
         $query = $this->db->get_where('tb_header',['id'=>$kode]);
         return $query->row_array();
     }
@@ -120,6 +123,33 @@ class Out_model extends CI_Model{
         $this->db->where('id',$id);
         $this->db->delete('tb_header');
         $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+    public function resetdetail($id){
+        $this->db->trans_start();
+        $que1 = $this->db->get_where('tb_detail',['id_header'=>$id])->result_array();
+        foreach($que1 as $data1){
+            $cek = $this->db->get_where('tb_detail',['id'=>$data1['id_minta']])->row_array();
+            $data = [
+                'pcs' => $cek['pcs'],
+                'kgs' => $cek['kgs']
+            ];
+            $this->db->where('id',$data1['id']);
+            $this->db->update('tb_detail',$data);
+        }
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+    public function simpanheaderout($id){
+        $jumlah = $this->db->get_where('tb_detail',['id_header'=>$id])->num_rows();
+        $data = [
+            'data_ok' => 1,
+            'user_ok' => $this->session->userdata('id'),
+            'tgl_ok' => date('Y-m-d H:i:s'),
+            'jumlah_barang' => $jumlah
+        ];
+        $this->db->where('id',$id);
+        $hasil = $this->db->update('tb_header',$data);
         return $hasil;
     }
 }

@@ -83,8 +83,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">   
           <input type="text" id="jmlrek" class="hilang">
-          <a href="#" class="btn btn-sm btn-primary" id="simpanout" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url().'out/simpanout/'.$data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
-          <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
+          <a href="#" class="btn btn-sm btn-primary" id="simpanout" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url().'out/simpanheaderout/'.$data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+          <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-tombol="Ya" data-message="Akan Reset data ini" data-href="<?= base_url().'out/resetdetail/'.$data['id']; ?>"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
         </div>
       </div>
     </div>
