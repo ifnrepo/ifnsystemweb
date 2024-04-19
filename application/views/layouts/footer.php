@@ -61,6 +61,9 @@
 	<?php if(isset($fungsi) && $fungsi=='out'){ ?>
 		<script src="<?= base_url(); ?>assets/js/own/out.js?1692870488"></script>
 	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='in'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/in.js?1692870488"></script>
+	<?php } ?>
 
     <script>
       // @formatter:off
