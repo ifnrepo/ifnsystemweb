@@ -10,7 +10,7 @@
         </div>
         <div class="col-4 text-primary font-bold">
         <span>Dibuat Oleh</span>
-        <h4 class="mb-1"><?= datauser($header['user_valid'],'name').' ('.$header['tgl_valid'].')' ?></h4>
+        <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4>
         </div>
     </div>
     <hr class='m-1'>

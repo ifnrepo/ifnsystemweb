@@ -45,7 +45,7 @@
     <script src="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.js"></script>
     <script src="<?= base_url(); ?>assets/vendor/select2/js/select2.min.js"></script>
 	<!-- Custom JS -->
-	<script src="<?= base_url(); ?>assets/js/myscript.js?1692870487"></script>
+	<script src="<?= base_url(); ?>assets/js/myscript.js?1692870491"></script>
 	<?php if(isset($fungsi) && $fungsi=='userapps'){ ?>
 		<script src="<?= base_url(); ?>assets/js/own/userapps.js?1692870487"></script>
 	<?php } ?>
