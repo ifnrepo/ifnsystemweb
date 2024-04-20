@@ -1,4 +1,5 @@
 <?php
+
 define('IDPERUSAHAAN', 'IFN');
 
 function visibpass($kata){

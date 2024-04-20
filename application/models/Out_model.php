@@ -141,6 +141,30 @@ class Out_model extends CI_Model{
         return $hasil;
     }
     public function simpanheaderout($id){
+        $iniquery = false;
+        $this->db->trans_begin();
+        $datadetail = $this->db->get_where('tb_detail',['id_header'=>$id])->result_array();
+        foreach ($datadetail as $datdet) {
+            $data = [
+                'pcs_keluar' => $datdet['pcs'],
+                'kgs_keluar' => $datdet['kgs']
+            ];
+            $kondisi = [
+                'id_barang' => $datdet['id_barang'],
+                'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
+                'dept_id' => $this->session->userdata('deptsekarang')
+            ];
+            $cekdata = $this->db->get_where('stokdept',$kondisi);
+            $jmll = $cekdata->num_rows();
+            $deta = $cekdata->row_array();
+            if($deta['pcs_akhir'] >= $datdet['pcs'] && $deta['pcs_akhir']!=null && $jmll > 0){
+                $this->db->where($kondisi);
+                $this->db->update('stokdept',$data);
+            }else{
+                break;
+                $iniquery = true;
+            }
+        }
         $jumlah = $this->db->get_where('tb_detail',['id_header'=>$id])->num_rows();
         $data = [
             'data_ok' => 1,
@@ -148,8 +172,13 @@ class Out_model extends CI_Model{
             'tgl_ok' => date('Y-m-d H:i:s'),
             'jumlah_barang' => $jumlah
         ];
-        $this->db->where('id',$id);
-        $hasil = $this->db->update('tb_header',$data);
-        return $hasil;
+        // if ($this->db->trans_status() === FALSE || $iniquery==true){
+            $this->db->trans_rollback();
+        // }else{
+        //     $this->db->where('id',$id);
+        //     $this->db->update('tb_header',$data);
+        //     $this->db->trans_commit();
+        // }
+        return $this->db->trans_status();
     }
 }
