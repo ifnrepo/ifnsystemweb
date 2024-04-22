@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          OUT (Bon Perpindahan)
+          OUT (Bon Perpindahan) <?= $this->session->userdata('bl').$this->session->userdata('th'); ?>
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
