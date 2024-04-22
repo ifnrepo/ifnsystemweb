@@ -1,128 +1,143 @@
 <?php
-function visibpass($kata){
+define('LOK_UPLOAD_USER', "./assets/image/personil/");
+
+function visibpass($kata)
+{
     $hasil = '*****';
-    if(strlen($kata)<=5){
-        $hasil = str_repeat('*',strlen($kata)-1).substr($kata,strlen($kata)-1,1);
-    }else{
-        $hasil = substr($kata,0,1).str_repeat('*',strlen($kata)-3).substr($kata,strlen($kata)-2,2);
+    if (strlen($kata) <= 5) {
+        $hasil = str_repeat('*', strlen($kata) - 1) . substr($kata, strlen($kata) - 1, 1);
+    } else {
+        $hasil = substr($kata, 0, 1) . str_repeat('*', strlen($kata) - 3) . substr($kata, strlen($kata) - 2, 2);
     }
     return $hasil;
 }
-function cekceklis($kata,$nomor){
+function cekceklis($kata, $nomor)
+{
     $hasil = '';
-    if(substr($kata,($nomor*2)-2,1)==1){
+    if (substr($kata, ($nomor * 2) - 2, 1) == 1) {
         $hasil = 'checked';
     }
     return $hasil;
 }
-function cekceklisdep($kata,$dept){
+function cekceklisdep($kata, $dept)
+{
     $hasil = '';
-    for($x=1;$x<=50;$x++){
-        if(substr($kata,($x*2)-2,2)==$dept){
+    for ($x = 1; $x <= 50; $x++) {
+        if (substr($kata, ($x * 2) - 2, 2) == $dept) {
             $hasil = 'checked';
-            $x=51;
+            $x = 51;
         }
     }
     return $hasil;
 }
-function cekmenuheader($kata){
+function cekmenuheader($kata)
+{
     $hasil = '';
-    $pos = strpos($kata,'1');
-    if($pos === false){
+    $pos = strpos($kata, '1');
+    if ($pos === false) {
         $hasil = 'hilang';
     }
     return $hasil;
 }
-function cekmenudetail($kata,$nomor){
+function cekmenudetail($kata, $nomor)
+{
     $hasil = '';
-    if(substr($kata,($nomor*2)-2,1)!=1){
+    if (substr($kata, ($nomor * 2) - 2, 1) != 1) {
         $hasil = 'hilang';
     }
     return $hasil;
 }
-function cekoth($key1,$key2,$key3){
+function cekoth($key1, $key2, $key3)
+{
     $hasil = '';
-    if($key1=='1'){
+    if ($key1 == '1') {
         $hasil .= 'PB; ';
     }
-    if($key2=='1'){
+    if ($key2 == '1') {
         $hasil .= 'BBL; ';
     }
-    if($key3=='1'){
+    if ($key3 == '1') {
         $hasil .= 'ADJ; ';
     }
     return $hasil;
 }
-function arrdep($dep){
+function arrdep($dep)
+{
     $arrdep = [];
-    if(strlen($dep)>0){
-        for($x=1;$x<=strlen($dep)/2;$x++){
-            array_push($arrdep,substr($dep,($x*2)-2,2));
+    if (strlen($dep) > 0) {
+        for ($x = 1; $x <= strlen($dep) / 2; $x++) {
+            array_push($arrdep, substr($dep, ($x * 2) - 2, 2));
         }
     }
     return $arrdep;
 }
-function nomorpb($tgl,$asal,$tuju){
-    $bl = date('m',strtotime($tgl));
-    $th = date('y',strtotime($tgl));
-    $thp = date('Y',strtotime($tgl));
+function nomorpb($tgl, $asal, $tuju)
+{
+    $bl = date('m', strtotime($tgl));
+    $th = date('y', strtotime($tgl));
+    $thp = date('Y', strtotime($tgl));
     $CI = &get_instance();
-    $kode = $CI->pb_model->getnomorpb($bl,$thp,$asal,$tuju);
+    $kode = $CI->pb_model->getnomorpb($bl, $thp, $asal, $tuju);
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return $asal."-".$tuju."/BP/".$bl.$th."/".sprintf("%03s",$urut);
+    return $asal . "-" . $tuju . "/BP/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
-function tglmysql($tgl){
+function tglmysql($tgl)
+{
     if ($tgl == '') {
         $rubah = '';
     } else {
         $x = explode('-', $tgl);
         $rubah = $x[2] . '-' . $x[1] . '-' . $x[0];
     }
-    if($rubah == '00-00-0000' || $rubah == '0000-00-00'){
+    if ($rubah == '00-00-0000' || $rubah == '0000-00-00') {
         $rubah = '';
     }
     return $rubah;
 }
-function tglmysql2($tgljam){
+function tglmysql2($tgljam)
+{
     $a = $tgljam;
-    if($a==null){
+    if ($a == null) {
         $hasil = '';
-    }else{
-        $exp = explode('-',$a);
-        $exp2 = explode(' ',$exp[2]);
-        $hasil = $exp2[0].'-'.$exp[1].'-'.$exp[0].' '.$exp2[1];
+    } else {
+        $exp = explode('-', $a);
+        $exp2 = explode(' ', $exp[2]);
+        $hasil = $exp2[0] . '-' . $exp[1] . '-' . $exp[0] . ' ' . $exp2[1];
     }
     return $hasil;
 }
-function lastdate($bl,$th){
-    $tgl = $th."-".$bl."-01";
+function lastdate($bl, $th)
+{
+    $tgl = $th . "-" . $bl . "-01";
     $a_date = $tgl;
     return date("Y-m-t", strtotime($a_date));
 }
-function rupiah($nomor, $dec){
+function rupiah($nomor, $dec)
+{
     if ($nomor == '0' || $nomor == '-6.821210263297E-13' || $nomor == '' || $nomor == NULL || is_null($nomor)) {
         $hasil = '-  ';
     } else {
         if ($nomor >= 0) {
             $hasil = number_format($nomor, $dec, '.', ',');
         } else {
-            if($nomor != '0.00'){
+            if ($nomor != '0.00') {
                 $nomor = $nomor * -1;
                 $hasil = number_format($nomor, $dec, '.', ',');
                 $hasil = '(' . $hasil . ')';
-            }else{
+            } else {
                 $hasil = '-  ';
             }
         }
     }
     return $hasil;
 }
-function tgl_indo($tanggal,$kode=0){
+function tgl_indo($tanggal, $kode = 0)
+{
     $namahari = '';
     $tanggal = is_null($tanggal) ? '0000-00-00' : $tanggal;
-    if($kode==1){
-        $hari = date("D",strtotime($tanggal));
+    if ($kode == 1) {
+        $hari = date("D", strtotime($tanggal));
         switch ($hari) {
             case 'Mon':
                 $namahari = 'Senin';
@@ -150,33 +165,34 @@ function tgl_indo($tanggal,$kode=0){
                 break;
         }
     }
-    if($tanggal != '0000-00-00'){
-        $bulan = array (
-        1 =>   'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'Mei',
-        'Jun',
-        'Jul',
-        'Agt',
-        'Sep',
-        'Okt',
-        'Nop',
-        'Des'
+    if ($tanggal != '0000-00-00') {
+        $bulan = array(
+            1 =>   'Jan',
+            'Feb',
+            'Mar',
+            'Apr',
+            'Mei',
+            'Jun',
+            'Jul',
+            'Agt',
+            'Sep',
+            'Okt',
+            'Nop',
+            'Des'
         );
         $pecahkan = explode('-', $tanggal);
-        if($kode==0){
-            return $pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
-        }else{
-            return $namahari.', '.$pecahkan[2] . ' ' . $bulan[ (int)$pecahkan[1] ] . ' ' . $pecahkan[0];
+        if ($kode == 0) {
+            return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+        } else {
+            return $namahari . ', ' . $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
         }
-    }else{
+    } else {
         return '';
     }
 }
-function namabulan($id){
-    $bulan = array (
+function namabulan($id)
+{
+    $bulan = array(
         1 =>   'Januari',
         'Februari',
         'Maret',
@@ -189,14 +205,15 @@ function namabulan($id){
         'Oktober',
         'November',
         'Desember'
-        );
-    if($id==null){
+    );
+    if ($id == null) {
         return '';
     }
     return $bulan[(int)$id];
 }
-function namabulanpendek($id){
-    $bulan = array (
+function namabulanpendek($id)
+{
+    $bulan = array(
         1 =>   'Jan',
         'Feb',
         'Mar',
@@ -209,13 +226,14 @@ function namabulanpendek($id){
         'Okt',
         'Nov',
         'Des'
-        );
+    );
     return $bulan[(int)$id];
 }
-function datauser($kode,$kolom){
-    if($kode!=''){
-    $CI = &get_instance();
-    $kode = $CI->usermodel->getdatabyid($kode)->row_array();
-    return $kode[$kolom];
+function datauser($kode, $kolom)
+{
+    if ($kode != '') {
+        $CI = &get_instance();
+        $kode = $CI->usermodel->getdatabyid($kode)->row_array();
+        return $kode[$kolom];
     }
 }

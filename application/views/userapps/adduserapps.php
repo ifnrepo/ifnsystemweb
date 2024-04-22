@@ -173,6 +173,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master9" name="master9" type="checkbox">
                                 <span class="form-check-label">Kategori Departemen</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master10" name="master10" type="checkbox">
+                                <span class="form-check-label">Personil</span>
+                              </label>
                               <!-- xx -->
                             </div>
                           </div>
