@@ -149,6 +149,10 @@ $("#editpersonil").click(function () {
 		return;
 	}
 	if ($("#foto_personil").val() == "") {
+		pesan(" Foto Harus dipilih !", "error");
+		return;
+	}
+	if ($("#foto_personil").val() == "") {
 		pesan("Sidik Jari tidak boleh kosong !", "error");
 		return;
 	}

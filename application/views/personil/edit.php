@@ -38,19 +38,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         </div>
                                         <div style="float: left;">
                                             <form action="<?= base_url('personil/update_foto/' . $personil['personil_id']); ?>" method="post" enctype="multipart/form-data" style="display: inline-block; margin-right: 10px;">
-                                                <input type="file" class="form-control" name="foto_personil" id="foto_perpersonil">
+                                                <input type="file" class="form-control" name="foto_personil" id="foto_personil" required>
                                                 <button type="submit" class="btn btn-primary mt-2"><i class="fa fa-file mr-1"> Perbarui Foto</i></button>
                                             </form>
-                                            <form action="<?= base_url('personil/delete_foto/' . $personil['personil_id']); ?>" method="post" style="display: inline-block;">
+                                            <form action="<?= base_url('personil/delete_foto/' . $personil['personil_id']); ?>" method="post" enctype="multipart/form-data" style="display: inline-block;">
                                                 <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Apakah Anda yakin ingin menghapus foto ini?');"> <i class="fa fa-trash-o"> Hapus Foto</i></button>
                                             </form>
                                         </div>
                                         <div style="clear: both;"></div>
                                     <?php else : ?>
-                                        <input type="file" class="form-control" name="foto_personil" id="foto_personil">
+                                        <form action="<?= base_url('personil/update_foto/' . $personil['personil_id']); ?>" method="post" enctype="multipart/form-data" style="display: inline-block; margin-right: 10px;">
+                                            <input type="file" class="form-control" name="foto_personil" id="foto_personil" required>
+                                            <button type="submit" class="btn btn-primary mt-2"><i class="fa fa-file mr-1"> Perbarui Foto</i></button>
+                                        </form>
+
                                     <?php endif; ?>
                                 </div>
                             </div>
+
                             <div class=" mb-1 row">
                                 <label class="col-3 col-form-label required">Nama</label>
                                 <div class="col">
