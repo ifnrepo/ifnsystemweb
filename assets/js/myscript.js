@@ -196,13 +196,19 @@ $(document).ready(function () {
 	});
 	$("#modal-danger").on("show.bs.modal", function (e) {
 		document.getElementById("message").innerHTML = $(e.relatedTarget).data(
-			"message"
+			"message",
 		);
+		document.getElementById("btn-ok").innerHTML = $(e.relatedTarget).data(
+			"tombol",
+		);
+		if ($(e.relatedTarget).data("tombol") == undefined) {
+			document.getElementById("btn-ok").innerHTML = "Hapus";
+		}
 		$(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
 	});
 	$("#modal-info").on("show.bs.modal", function (e) {
 		document.getElementById("message-info").innerHTML = $(e.relatedTarget).data(
-			"message"
+			"message",
 		);
 		$(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
 	});
@@ -211,7 +217,7 @@ $(document).ready(function () {
 		var string = document.getElementById("confirm-delete").innerHTML;
 		var hasil = string.replace(
 			"fa fa-text-width text-yellow",
-			"fa fa-exclamation-triangle text-red"
+			"fa fa-exclamation-triangle text-red",
 		);
 		document.getElementById("confirm-delete").innerHTML = hasil;
 
@@ -232,7 +238,7 @@ $(document).ready(function () {
 		var hasil2 = string2.replace("Konfirmasi", "&nbspKonfirmasi");
 		document.getElementById("confirm-delete").innerHTML = hasil2;
 		document.getElementById("testi").innerHTML = $(e.relatedTarget).data(
-			"news"
+			"news",
 		);
 		$(this).find(".btn-oke").attr("href", $(e.relatedTarget).data("href"));
 	});
@@ -394,7 +400,7 @@ function ceklamahari(tglawal, tglakhir, angka, elm1, elm2) {
 		var tgl1 = new Date(pisah1[2], pisah1[1], pisah1[0]);
 		var tgl2 = new Date(pisah2[2], pisah2[1], pisah2[0]);
 		var diffDays = Math.round(
-			Math.round((tgl1.getTime() - tgl2.getTime()) / satuhari) - 1
+			Math.round((tgl1.getTime() - tgl2.getTime()) / satuhari) - 1,
 		);
 		if (diffDays >= 0) {
 			// var x = $(elm1).val();
@@ -460,7 +466,7 @@ function rupiah(amount, decimalSeparator, thousandsSeparator, nDecimalDigits) {
 		var fixed = num.toFixed(nDecimalDigits); //limit or add decimal digits
 		//separate begin [$1], middle [$2] and decimal digits [$4]
 		var parts = new RegExp(
-			"^(-?\\d{1,3})((?:\\d{3})+)(\\.(\\d{" + nDecimalDigits + "}))?$"
+			"^(-?\\d{1,3})((?:\\d{3})+)(\\.(\\d{" + nDecimalDigits + "}))?$",
 		).exec(fixed);
 
 		if (parts) {

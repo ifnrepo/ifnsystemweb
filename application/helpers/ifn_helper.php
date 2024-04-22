@@ -1,8 +1,8 @@
 <?php
 define('LOK_UPLOAD_USER', "./assets/image/personil/");
+define('IDPERUSAHAAN', 'IFN');
 
-function visibpass($kata)
-{
+function visibpass($kata){
     $hasil = '*****';
     if (strlen($kata) <= 5) {
         $hasil = str_repeat('*', strlen($kata) - 1) . substr($kata, strlen($kata) - 1, 1);
@@ -82,8 +82,17 @@ function nomorpb($tgl, $asal, $tuju)
     $urut++;
     return $asal . "-" . $tuju . "/BP/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
-function tglmysql($tgl)
-{
+function nomorout($tgl,$asal,$tuju){
+    $bl = date('m',strtotime($tgl));
+    $th = date('y',strtotime($tgl));
+    $thp = date('Y',strtotime($tgl));
+    $CI = &get_instance();
+    $kode = $CI->out_model->getnomorout($bl,$thp,$asal,$tuju);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return $asal."-".$tuju."/T/".$bl.$th."/".sprintf("%03s",$urut);
+}
+function tglmysql($tgl){
     if ($tgl == '') {
         $rubah = '';
     } else {

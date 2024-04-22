@@ -123,7 +123,7 @@
           <h5 class="modal-title">Large modal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body fetched-data">
+        <div class="modal-body fetched-data p-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit tempora totam unde.
         </div>
         <!-- <div class="modal-footer">
@@ -140,7 +140,7 @@
           <h5 class="modal-title">Large modal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body fetched-data">
+        <div class="modal-body fetched-data p-1">
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit tempora totam unde.
         </div>
         <div class="modal-footer">
@@ -298,7 +298,7 @@
                                                     echo 'active';
                                                   } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                  <svg class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
                     <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
@@ -377,14 +377,14 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 2); ?>" href="<?= base_url('bbl'); ?>">
                       BBL (Bon Pembelian Barang)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 3); ?>" href="<?= base_url('in'); ?>">
-                      IN (Bon Penerimaan Barang)
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 3); ?>" href="<?= base_url('in/clear'); ?>">
+                      IN (Bon Perpindahan)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 4); ?>" href="<?= base_url('out'); ?>">
-                      OUT (Bon Pengeluaran Barang)
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 4); ?>" href="<?= base_url('out/clear'); ?>">
+                      OUT (Bon Perpindahan)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj'); ?>">
-                      ADJ (Bon Adjustmen)
+                      ADJ (Bon Adjustment)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po'); ?>">
                       PO (Purchase Order)

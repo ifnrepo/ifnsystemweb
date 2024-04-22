@@ -27,7 +27,7 @@
         $("#tgl").datepicker({
             autoclose: true,
             format : "dd-mm-yyyy",
-            todaHighlight: true
+            todayHighlight: true
         });
     })
     $("#buatpb").click(function() {

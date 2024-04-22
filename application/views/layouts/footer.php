@@ -835,5 +835,71 @@
 	// @formatter:on
 </script>
 </body>
+=======
+          <div class="container-xl">
+            <div class="row text-center align-items-center flex-row-reverse">
+              <div class="col-lg-auto ms-lg-auto">
+              </div>
+              <div class="col-12 col-lg-auto mt-3 mt-lg-0">
+                <ul class="list-inline list-inline-dots mb-0">
+                  <li class="list-inline-item">
+                    Copyright &copy; 2023
+                  </li>
+                  <li class="list-inline-item">
+					<a href="#" data-bs-toggle="modal" data-bs-target="#modal-success">
+						Tim IT IFN
+					</a>
+                  </li>
+                </ul>
+              </div>
+            </div>
+          </div>
+        </footer>
+      </div>
+    </div>
+	<!-- jquery latest version -->
+	<script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
+    <!-- Libs JS -->
+    <script src=<?= base_url()."assets/libs/apexcharts/dist/apexcharts.min.js" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/jsvectormap/dist/js/jsvectormap.min.js" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/jsvectormap/dist/maps/world.js" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/jsvectormap/dist/maps/world-merc.js" ?> defer></script>
+    <script src=<?= base_url()."assets/libs/tom-select/dist/js/tom-select.base.min.js" ?> defer></script>
+    <!-- Tabler Core -->
+	<script src=<?= base_url()."assets/js/demo-theme.min.js" ?>></script>
+    <script src=<?= base_url()."assets/js/tabler.min.js" ?> defer></script>
+    <script src=<?= base_url()."assets/js/demo.min.js" ?> defer></script>
+    <!-- bootstrap 4 js -->
+    <script src="<?= base_url(); ?>assets/js/popper.min.js"></script>
+    <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
+    <!-- dataTablses -->
+    <script src="<?= base_url(); ?>assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
+    <script src="<?= base_url(); ?>assets/vendor/datatables/js/dataTables.bootstrap4.min.js"></script>
+    <script src="<?= base_url(); ?>assets/vendor/datatables/js/dataTables.responsive.min.js"></script>
+    <script src="<?= base_url(); ?>assets/vendor/datatables/js/responsive.bootstrap.min.js"></script>
+    <script src="<?= base_url(); ?>assets/vendor/fixheader/js/dataTables.fixedheader.min.js"></script>
+    <script src="<?= base_url(); ?>assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
+    <script src="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.js"></script>
+    <script src="<?= base_url(); ?>assets/vendor/select2/js/select2.min.js"></script>
+	<!-- Custom JS -->
+	<script src="<?= base_url(); ?>assets/js/myscript.js?1692870491"></script>
+	<?php if(isset($fungsi) && $fungsi=='userapps'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/userapps.js?1692870487"></script>
+	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='barang'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/barang.js?1692870487"></script>
+	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='dept'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/dept.js?1692870487"></script>
+	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='pb'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/pb.js?1692870487"></script>
+	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='out'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/out.js?1692870488"></script>
+	<?php } ?>
+	<?php if(isset($fungsi) && $fungsi=='in'){ ?>
+		<script src="<?= base_url(); ?>assets/js/own/in.js?1692870488"></script>
+	<?php } ?>
 
 </html>

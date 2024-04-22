@@ -142,7 +142,7 @@ class Pb extends CI_Controller {
             'dept_tuju'=>$_POST['dept_tuju'],
             'tgl'=>tglmysql($_POST['tgl']),
             'kode_dok'=>'PB',
-            'id_perusahaan'=>'IFN',
+            'id_perusahaan'=>IDPERUSAHAAN,
             'nomor_dok'=>nomorpb(tglmysql($_POST['tgl']),$_POST['dept_id'],$_POST['dept_tuju'])
         ];
         $simpan = $this->pb_model->tambahpb($data);
