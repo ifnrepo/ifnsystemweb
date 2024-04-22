@@ -58,10 +58,16 @@ class Personil extends CI_Controller
 
     public function update_foto($personil_id)
     {
+
+        if (empty($_FILES['foto_personil']['name'])) {
+            echo "Mohon pilih file foto terlebih dahulu.";
+            return;
+        }
+
         $data['foto_personil'] = '';
         $foto_personil = $_FILES['foto_personil']['name'];
 
-        // Konfigurasi upload
+        // Konfigurasi 
         $config['upload_path']   = FCPATH . '/assets/image/personil';
         $config['allowed_types'] = 'gif|jpg|png|jpeg';
         $config['file_name']            = uniqid();
@@ -72,7 +78,7 @@ class Personil extends CI_Controller
 
         $this->load->library('upload', $config);
 
-        // Cek 
+        // Melakukan upload file
         if (!$this->upload->do_upload('foto_personil')) {
             echo "gagal";
             $error = $this->upload->display_errors();
@@ -81,12 +87,14 @@ class Personil extends CI_Controller
             $foto_personil = $this->upload->data('file_name');
             $data['foto_personil'] = $foto_personil;
 
+
             $this->db->where('personil_id', $personil_id);
             $this->db->update('personil', $data);
 
             redirect('personil/edit/' . $personil_id);
         }
     }
+
 
 
     public function delete_foto($personil_id)
