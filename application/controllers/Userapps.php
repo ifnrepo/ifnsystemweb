@@ -15,7 +15,7 @@ class Userapps extends CI_Controller
 				alert("OKE");
      		</script>';
 		$this->load->model('userappsmodel');
-		$this->load->model('dept_model','deptmodel');
+		$this->load->model('dept_model', 'deptmodel');
 	}
 	public function index()
 	{
@@ -46,7 +46,7 @@ class Userapps extends CI_Controller
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/adduserapps', $data);
 		$this->load->view('layouts/footer', $footer);
-	}  
+	}
 	public function editdata($id)
 	{
 		$header['header'] = 'manajemen';
