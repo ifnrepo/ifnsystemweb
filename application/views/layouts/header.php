@@ -342,6 +342,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 9); ?>" href="<?= base_url('kategori_dept'); ?>">
                       Kategori Departemen
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 10); ?>" href="<?= base_url('personil'); ?>">
+                      Personil
+                    </a>
                   </div>
                 </div>
               </div>
