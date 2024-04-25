@@ -26,7 +26,9 @@ class Out_model extends CI_Model{
         $query = $this->db->get_where('dept',['dept_id'=>$kode])->row_array();
         if($query){
             for($x=0;$x<=strlen($query['pengeluaran'])/2;$x++){
-                array_push($xkode,substr($query['pengeluaran'],($x*2)-2,2));
+                if(substr($query['pengeluaran'],($x*2)-2,2) != $kode){
+                    array_push($xkode,substr($query['pengeluaran'],($x*2)-2,2));
+                }
             }
             $this->db->where_in('dept_id',$xkode);
             $this->db->order_by('departemen','asc');
@@ -145,10 +147,6 @@ class Out_model extends CI_Model{
         $this->db->trans_begin();
         $datadetail = $this->db->get_where('tb_detail',['id_header'=>$id])->result_array();
         foreach ($datadetail as $datdet) {
-            $data = [
-                'pcs_keluar' => $datdet['pcs'],
-                'kgs_keluar' => $datdet['kgs']
-            ];
             $kondisi = [
                 'id_barang' => $datdet['id_barang'],
                 'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
@@ -157,12 +155,17 @@ class Out_model extends CI_Model{
             $cekdata = $this->db->get_where('stokdept',$kondisi);
             $jmll = $cekdata->num_rows();
             $deta = $cekdata->row_array();
-            if($deta['pcs_akhir'] >= $datdet['pcs'] && $deta['pcs_akhir']!=null && $jmll > 0){
+            if($deta['pcs_akhir'] >= $datdet['pcs'] && $deta['pcs_akhir'] > 0 && $jmll > 0){
+                $this->db->set('pcs_keluar','pcs_keluar + '.$datdet['pcs'],FALSE);
+                $this->db->set('kgs_keluar','kgs_keluar + '.$datdet['kgs'],FALSE);
+                $this->db->set('pcs_akhir','(pcs_akhir-pcs_masuk)-(pcs_keluar + '.$datdet['kgs'].')',FALSE);
+                $this->db->set('kgs_akhir','(kgs_akhir-kgs_masuk)-(kgs_keluar + '.$datdet['kgs'].')',FALSE);
                 $this->db->where($kondisi);
-                $this->db->update('stokdept',$data);
+                $this->db->update('stokdept');
             }else{
-                break;
                 $iniquery = true;
+                $this->session->set_flashdata('errornya',$datdet['pcs']);
+                break;
             }
         }
         $jumlah = $this->db->get_where('tb_detail',['id_header'=>$id])->num_rows();
@@ -172,13 +175,13 @@ class Out_model extends CI_Model{
             'tgl_ok' => date('Y-m-d H:i:s'),
             'jumlah_barang' => $jumlah
         ];
-        // if ($this->db->trans_status() === FALSE || $iniquery==true){
+        if ($this->db->trans_status() === FALSE || $iniquery){
             $this->db->trans_rollback();
-        // }else{
-        //     $this->db->where('id',$id);
-        //     $this->db->update('tb_header',$data);
-        //     $this->db->trans_commit();
-        // }
-        return $this->db->trans_status();
+        }else{
+            $this->db->where('id',$id);
+            $this->db->update('tb_header',$data);
+            $this->db->trans_commit();
+        }
+        return !$iniquery;
     }
 }
