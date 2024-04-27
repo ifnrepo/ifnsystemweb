@@ -38,16 +38,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Departemen </label>
                 <div class="col">
-                <select name="id_dept" id="id_dept" class="form-control">
+                  <select name="id_dept" id="id_dept" class="form-control">
                     <option value="">Departemen</option>
                     <?php foreach ($dept as $dep) : ?>
-                        <?php if ($dep['dept_id'] == $user['id_dept']) : ?>
+                      <?php if ($dep['dept_id'] == $user['id_dept']) : ?>
                         <option value="<?= $dep['dept_id']; ?>" selected><?= $dep['departemen']; ?></option>
-                        <?php else : ?>
+                      <?php else : ?>
                         <option value="<?= $dep['dept_id']; ?>"><?= $dep['departemen']; ?></option>
-                        <?php endif; ?>
+                      <?php endif; ?>
                     <?php endforeach; ?>
-                 </select>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">
@@ -163,12 +163,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master5" name="master5" type="checkbox" <?= cekceklis($user['master'], 5); ?>>
                                 <span class="form-check-label">Customer</span>
                               </label>
-                            </div>
-                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master6" name="master6" type="checkbox" <?= cekceklis($user['master'], 6); ?>>
                                 <span class="form-check-label">Nettype</span>
                               </label>
+                            </div>
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master7" name="master7" type="checkbox" <?= cekceklis($user['master'], 7); ?>>
                                 <span class="form-check-label">Departemen</span>
@@ -184,6 +184,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master10" name="master10" type="checkbox" <?= cekceklis($user['master'], 10); ?>>
                                 <span class="form-check-label">Personil</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master11" name="master11" type="checkbox" <?= cekceklis($user['master'], 11); ?>>
+                                <span class="form-check-label">Jabatan</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master12" name="master12" type="checkbox" <?= cekceklis($user['master'], 12); ?>>
+                                <span class="form-check-label">Grup</span>
                               </label>
                               <!-- xx -->
                             </div>
@@ -206,7 +214,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">IN (BON PENERIMAAN BARANG)</span>
                               </label>
                             </div>
-                            <div class="col-6"> 
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi4" name="transaksi4" type="checkbox" <?= cekceklis($user['transaksi'], 4); ?>>
                                 <span class="form-check-label">OUT (BON PENGELUARAN BARANG)</span>

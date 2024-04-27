@@ -49,7 +49,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Bagian</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="bagian" id="bagian" placeholder="bagian" style="text-transform:uppercase">
+                  <select name="bagian_id" id="bagian_id" class="form-control">
+                    <option value="Select Menu">Departemen</option>
+                    <?php foreach ($dept as $dep) : ?>
+                      <option value="<?= $dep['urut']; ?>"><?= $dep['departemen']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">
@@ -231,7 +236,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Jabatan</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan">
+                  <select name="jabatan_id" id="jabatan_id" class="form-control">
+                    <option value="Select Menu">Jabatan</option>
+                    <?php foreach ($jabatan as $jab) : ?>
+                      <option value="<?= $jab['id']; ?>"><?= $jab['nama_jabatan']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">
@@ -256,7 +266,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Grup</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="grup" id="grup" placeholder="Grup">
+                  <select name="grup_id" id="grup_id" class="form-control">
+                    <option value="Select Menu">Grup</option>
+                    <?php foreach ($grups as $grup) : ?>
+                      <option value="<?= $grup['id']; ?>"><?= $grup['nama_grup']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">

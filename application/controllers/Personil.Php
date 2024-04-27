@@ -28,6 +28,9 @@ class Personil extends CI_Controller
 
     {
         $header['header'] = 'master';
+        $data['jabatan'] = $this->db->get('jabatan')->result_array();
+        $data['grups'] = $this->db->get('grup')->result_array();
+        $data['dept'] = $this->db->get('dept')->result_array();
         $data['action'] = base_url() . 'personil/simpandata';
         $footer['fungsi'] = 'personil';
         $this->load->view('layouts/header', $header);
@@ -49,6 +52,9 @@ class Personil extends CI_Controller
     {
         $header['header'] = 'master';
         $data['action'] = base_url() . 'personil/updatedata';
+        $data['jabatan'] = $this->db->get('jabatan')->result_array();
+        $data['grups'] = $this->db->get('grup')->result_array();
+        $data['dept'] = $this->db->get('dept')->result_array();
         $data['personil'] = $this->Personilmodel->getdatabyid($personil_id);
         $footer['fungsi'] = 'personil';
         $this->load->view('layouts/header', $header);

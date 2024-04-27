@@ -47,8 +47,8 @@
               <h2 class="resume-name text-uppercase"><?= $personil['nama_personil']; ?></h2>
               <div class="resume-role-title text-uppercase">Sidik Jari : <?= $personil['sidikjari_personil']; ?></div>
               <div class="resume-role-title text-uppercase">NIP : <?= $personil['nip']; ?></div>
-              <div class="resume-role-title text-uppercase">Bagian : <?= $personil['bagian']; ?></div>
-              <div class="resume-role-title text-uppercase">Grup : <?= $personil['grup']; ?></div>
+              <div class="resume-role-title text-uppercase">Bagian : <?= $personil['departemen']; ?></div>
+              <div class="resume-role-title text-uppercase">Grup : <?= $personil['nama_grup']; ?></div>
               <br>
               <i class="resume-contact-icon bi bi-telephone-inbound me-2"></i><?= $personil['tlp']; ?></li>
               <!-- <div class="resume-contact mt-4">
@@ -242,7 +242,7 @@
                       <div class="mb-1 row">
                         <label class="col-3 col-form-label required">Jabatan</label>
                         <div class="col">
-                          <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $personil['jabatan']; ?>" readonly>
+                          <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $personil['nama_jabatan']; ?>" readonly>
                         </div>
                       </div>
                       <div class="mb-1 row">
@@ -262,12 +262,6 @@
                         <label class="col-3 col-form-label required">Sub Pekerjaan</label>
                         <div class="col">
                           <input type="text" class="form-control font-kecil" name="subpekerjaan" id="subpekerjaan" placeholder="Sub Pekerjaan" value="<?= $personil['subpekerjaan']; ?>" readonly>
-                        </div>
-                      </div>
-                      <div class="mb-1 row">
-                        <label class="col-3 col-form-label required">Grup</label>
-                        <div class="col">
-                          <input type="text" class="form-control font-kecil" name="grup" id="grup" placeholder="Grup" value="<?= $personil['grup']; ?>" readonly>
                         </div>
                       </div>
                       <div class="mb-1 row">
