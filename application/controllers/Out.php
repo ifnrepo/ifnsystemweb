@@ -36,6 +36,7 @@ class Out extends CI_Controller {
         redirect($url);
     }
     public function depttuju(){
+        $hasil = '';
         $kode = $_POST['kode'];
         $this->session->set_userdata('deptsekarang',$kode);
         $query = $this->out_model->getdepttuju($kode);
@@ -197,8 +198,10 @@ class Out extends CI_Controller {
         $query = $this->out_model->simpanheaderout($id);
         if($query){
             $url = base_url().'out';
-            redirect($url);
+        }else{
+            $url = base_url().'out/dataout/'.$id;
         }
+        redirect($url);
     }
     function cetakqr2($isi,$id)
 	{

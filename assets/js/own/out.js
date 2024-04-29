@@ -14,6 +14,9 @@ $(document).ready(function () {
 			getdatadetailout();
 		}
 	}
+	if ($("#errornya").innerhtml() != "") {
+		alert("Ayaaan");
+	}
 	$("#dept_kirim").change();
 });
 $("#dept_kirim").change(function () {

@@ -9,6 +9,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           OUT (Perpindahan Barang) # <?= $data['nomor_dok']; ?>
         </h2>
       </div>
+      <div class="hilang" id="errornya"><?= $this->session->flashdata('errornya'); ?></div>
       <div class="col-md-6" style="text-align: right;">
         <?php if($mode=='tambah'): ?>
         <a href="<?= base_url().'out/hapusdataout/'.$data['id']; ?>" class="btn btn-primary btn-sm" ><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
