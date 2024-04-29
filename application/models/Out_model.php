@@ -146,7 +146,9 @@ class Out_model extends CI_Model{
         $iniquery = false;
         $this->db->trans_begin();
         $datadetail = $this->db->get_where('tb_detail',['id_header'=>$id])->result_array();
+        $no=0;
         foreach ($datadetail as $datdet) {
+            $no++;
             $kondisi = [
                 'id_barang' => $datdet['id_barang'],
                 'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
@@ -164,7 +166,7 @@ class Out_model extends CI_Model{
                 $this->db->update('stokdept');
             }else{
                 $iniquery = true;
-                $this->session->set_flashdata('errornya',$datdet['pcs']);
+                $this->session->set_flashdata('errornya',$no);
                 break;
             }
         }

@@ -70,7 +70,7 @@ class Dept_model extends CI_Model
         
         $data['pengeluaran'] = $pengeluaran;
         $data['penerimaan'] = $penerimaan;
-        $data['permintaan'] = $permintaan;
+        // $data['permintaan'] = $permintaan;
         
         $this->db->where('dept_id', $data['dept_id']);
         $hasil = $this->db->update('dept', $data);
