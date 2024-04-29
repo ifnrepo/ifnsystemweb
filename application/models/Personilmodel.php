@@ -3,16 +3,26 @@ class Personilmodel extends CI_Model
 {
     public function getdata()
     {
-        $query = $this->db->get('personil')->result_array();
-        // $query = $this->db->query("Select * from satuan");  
+        $this->db->select('personil.*, dept.departemen, grup.nama_grup, jabatan.nama_jabatan');
+        $this->db->from('personil');
+        $this->db->join('dept', 'dept.urut = personil.bagian_id', 'left');
+        $this->db->join('jabatan', 'jabatan.id = personil.jabatan_id', 'left');
+        $this->db->join('grup', 'grup.id = personil.grup_id', 'left');
 
-        return $query;
+        return $this->db->get()->result_array();
     }
+
     public function getdatabyid($personil_id)
     {
-
-        return $this->db->get_where('personil', ['personil_id' => $personil_id])->row_array();
+        $this->db->select('personil.*, dept.departemen, grup.nama_grup, jabatan.nama_jabatan');
+        $this->db->from('personil');
+        $this->db->join('dept', 'dept.urut = personil.bagian_id', 'left');
+        $this->db->join('jabatan', 'jabatan.id = personil.jabatan_id', 'left');
+        $this->db->join('grup', 'grup.id = personil.grup_id', 'left');
+        $this->db->where('personil.personil_id', $personil_id);
+        return $this->db->get()->row_array();
     }
+
 
     public function hapus($personil_id)
     {

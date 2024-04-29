@@ -97,7 +97,12 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         <div class="modal-status bg-info"></div>
         <div class="modal-body text-center py-4">
-          <svg  class="icon mb-2 text-info icon-lg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>
+          <svg class="icon mb-2 text-info icon-lg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+            <path d="M12 8v4" />
+            <path d="M12 16h.01" />
+          </svg>
           <h3>Anda Yakin ?</h3>
           <div class="text-secondary" id="message-info"></div>
         </div>
@@ -144,9 +149,9 @@
           Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit tempora totam unde.
         </div>
         <div class="modal-footer">
-            <!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button> -->
-            <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Keluar</button>
-          </div>
+          <!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button> -->
+          <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Keluar</button>
+        </div>
       </div>
     </div>
   </div>
@@ -157,7 +162,11 @@
         <div class="modal-status bg-success"></div>
         <div class="modal-body text-center py-4">
           <!-- Download SVG icon from http://tabler-icons.io/i/circle-check -->
-          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" /><path d="M9 12l2 2l4 -4" /></svg>
+          <svg xmlns="http://www.w3.org/2000/svg" class="icon mb-2 text-green icon-lg" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
+            <path d="M9 12l2 2l4 -4" />
+          </svg>
           <h3>Coming Soon</h3>
           <div class="text-secondary">Permintaan anda sudah berhasil, halaman masih dalam tahap pembuatan oleh TIM</div>
         </div>
@@ -344,6 +353,12 @@
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 10); ?>" href="<?= base_url('personil'); ?>">
                       Personil
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 11); ?>" href="<?= base_url('jabatan'); ?>">
+                      Data Jabatan
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 12); ?>" href="<?= base_url('grup'); ?>">
+                      Data Grup
                     </a>
                   </div>
                 </div>

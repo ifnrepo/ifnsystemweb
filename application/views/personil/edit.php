@@ -71,7 +71,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">Bagian</label>
                                 <div class="col">
-                                    <input type="text" class="form-control font-kecil" name="bagian" id="bagian" placeholder="bagian" value="<?= $personil['bagian']; ?>">
+                                    <select name="bagian_id" id="bagian_id" class="form-control">
+                                        <option value="">Departemen</option>
+                                        <?php foreach ($dept as $dep) : ?>
+                                            <?php if ($dep['urut'] == $personil['bagian_id']) : ?>
+                                                <option value="<?= $dep['urut']; ?>" selected><?= $dep['departemen']; ?></option>
+                                            <?php else : ?>
+                                                <option value="<?= $dep['urut']; ?>"><?= $dep['departemen']; ?></option>
+                                            <?php endif; ?>
+                                        <?php endforeach; ?>
+                                    </select>
                                 </div>
                             </div>
                             <div class="mb-1 row">
@@ -295,7 +304,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Jabatan</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $personil['jabatan']; ?>">
+                                                                    <select name="jabatan_id" id="jabatan_id" class="form-control">
+                                                                        <option value="">Jabatan</option>
+                                                                        <?php foreach ($jabatan as $jab) : ?>
+                                                                            <?php if ($jab['id'] == $personil['jabatan_id']) : ?>
+                                                                                <option value="<?= $jab['id']; ?>" selected><?= $jab['nama_jabatan']; ?></option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?= $jab['id']; ?>"><?= $jab['nama_jabatan']; ?></option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
@@ -320,7 +338,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Grup</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="grup" id="grup" placeholder="Grup" value="<?= $personil['grup']; ?>">
+                                                                    <select name="grup_id" id="grup_id" class="form-control">
+                                                                        <option value="">Grup</option>
+                                                                        <?php foreach ($grups as $grup) : ?>
+                                                                            <?php if ($grup['id'] == $personil['grup_id']) : ?>
+                                                                                <option value="<?= $grup['id']; ?>" selected><?= $grup['nama_grup']; ?></option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?= $grup['id']; ?>"><?= $grup['nama_grup']; ?></option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">

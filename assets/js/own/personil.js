@@ -12,7 +12,7 @@ $("#tambahpersonil").click(function () {
 		pesan("NIP Personil tidak boleh kosong !", "error");
 		return;
 	}
-	if ($("#bagian").val() == "") {
+	if ($("#bagian_id").val() == "") {
 		pesan("Bagian tidak boleh kosong !", "error");
 		return;
 	}
