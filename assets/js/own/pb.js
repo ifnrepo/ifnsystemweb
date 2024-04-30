@@ -7,21 +7,23 @@ $(document).ready(function () {
 	var url = window.location.href;
 	var pisah = url.split("/");
 	// alert(pisah[5]);
-	if (pisah[2] == "localhost") {
-		if (pisah[5] == "datapb") {
-			getdatadetailpb();
-		}
-	} else {
-		if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
-			// getdatainvoice();
-		}
-		if (pisah[5] == "datapb") {
-			getdatadetailpb();
-		}
-	}
-	$("#dept_kirim").change();
-	// $("#tglpb").datepicker();
+	// if (pisah[2] == "localhost") {
+	// 	if (pisah[5] == "datapb") {
+	// 		getdatadetailpb();
+	// 	}
+	// } else {
+	// 	if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
+	// 		// getdatainvoice();
+	// 	}
+	// 	if (pisah[5] == "datapb") {
+	// 		getdatadetailpb();
+	// 	}
+	// }
+	// $("#dept_kirim").change();
+	// $("#level").change();
 });
+// $("#tglpb").datepicker();
+
 $("#dept_kirim").change(function () {
 	$.ajax({
 		// dataType: "json",
@@ -119,11 +121,16 @@ $(document).on("click", "#editdetailpb", function () {
 $("#level").change(function () {
 	$(this).removeClass("bg-primary");
 	$(this).removeClass("bg-success");
-	if ($(this).val() <= 1) {
-		$(this).addClass("bg-primary");
-	} else {
-		$(this).addClass("bg-success");
-	}
+	// alert($(this).val());
+	setTimeout(() => {
+		if ($(this).val() <= 1) {
+			$("#adddatapb").removeClass("disabled");
+			$(this).addClass("bg-primary");
+		} else {
+			$("#adddatapb").addClass("disabled");
+			$(this).addClass("bg-success");
+		}
+	}, 200);
 	getdatapb();
 });
 $("#bl").change(function () {

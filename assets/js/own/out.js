@@ -14,8 +14,12 @@ $(document).ready(function () {
 			getdatadetailout();
 		}
 	}
-	if ($("#errornya").innerhtml() != "") {
-		alert("Ayaaan");
+	if ($("#errornya").val() != "" && $("#errornya").length > 0) {
+		var ini = $("#errornya").val();
+		pesan(
+			"Stok Barang ke " + ini + " kurang Qty Real (Pengeluaran), cek data !",
+			"info",
+		);
 	}
 	$("#dept_kirim").change();
 });

@@ -19,7 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
-        <div id="sisipkan" class="sticky-top bg-white">
+        <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
               <a href="<?= base_url().'pb/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
@@ -106,21 +106,299 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           
         </div>
-        <div id="table-default" class="table-responsive">
-          <table class="table datatable6" id="cobasisip">
+        <div style="width: 100%;">
+          <table id="pbtabel" class="table" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Tgl</th>
-                <th>Nomor</th>
+                <th style="width: 150px;">Nomor</th>
                 <th>Jumlah Item</th>
                 <th>Dibuat Oleh</th>
                 <th>Disetujui Oleh</th>
                 <th>Keterangan</th>
-                <th>Aksi</th>
+                <th style="width: 100px;">Aksi</th>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
+                <tr>
+                <td>Tgl</td>
+                <td style="width: 150px;">Nomor</td>
+                <td>Jumlah Item</td>
+                <td>Dibuat Oleh</td>
+                <td>Disetujui Oleh</td>
+                <td>Keterangan</td>
+                <td style="width: 100px;">Aksi</td>
+              </tr>
             </tbody>
           </table>
         </div>

@@ -34,7 +34,7 @@
             <div class="row">
                 <div class="col-sm-6 mb-1">
                     <label class="form-label mb-0 font-kecil">Kgs Minta</label>
-                    <input type="text" class="form-control font-kecil mt-1 text-right font-bold" id="kgsminta" placeholder="Input placeholder" value="<?= rupiah($data['kgsminta'],0); ?>" disabled>
+                    <input type="text" class="form-control font-kecil mt-1 text-right font-bold" id="kgsminta" placeholder="Kgs Minta" value="<?= rupiah($data['kgsminta'],0); ?>" disabled>
                 </div>
                 <div class="col-sm-6 mb-1">
                     <label class="form-label mb-0 font-kecil">Kgs Real</label>
@@ -42,6 +42,10 @@
                 </div>
             </div>
             <hr class="m-1">
+            <label class="form-check mb-1 font-bold text-danger">
+                <input class="form-check-input" id="tempbbl" name="tempbbl" type="checkbox">
+                <span class="form-check-label">Sisanya Buat Bon Pembelian (BBL)</span>
+            </label>
         </div>
     </div>
 </div>
@@ -54,11 +58,11 @@
         // $("#departemenasal").val($("#dept_tuju option:selected").attr('rel'));
     })
     $("#updatedetail").click(function(){
-        // alert($("#pcsminta").val());
         var pcs1 = parseFloat($("#pcsminta").val());
         var pcs2 = parseFloat($("#pcsreal").val());
         var kgs1 = parseFloat($("#kgsminta").val());
         var kgs2 = parseFloat($("#kgsreal").val());
+        var bbl = $("#tempbbl").is(':checked') ? 1 : null;
         if(pcs1 < pcs2){
             pesan('Pcs Real tidak boleh lebih besar dari Pcs minta','error');
             return false;
@@ -74,7 +78,8 @@
             data: {
                 id: $("#id").val(),
                 pcs: $("#pcsreal").val(),
-                kgs: $("#kgsreal").val()
+                kgs: $("#kgsreal").val(),
+                tempbbl: bbl
             },
             success: function (data) {
                 // alert(data.jmlrek);

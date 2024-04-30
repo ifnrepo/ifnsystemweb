@@ -130,23 +130,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           </div>
                         </div>
 
-                        <div class="tab-pane " id="tabs-permintaan-1">
-                          <div class="row">
-                            <div class="col">
-                            <div class="col-6">
-                              <?php $no = 0;
-                              // $jml = $jmldept;
-                              foreach ($departemen as $dept) : $no++; ?>
-                               <label class="form-check mb-1">
-                                  <input class="form-check-input" id="penerimaan<?= $dept['dept_id']; ?>" name="permintaan<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($data['permintaan'], $dept['dept_id']); ?>>
-                                  <span class="form-check-label"><?= $dept['departemen']; ?></span>
-                              </label>
-                              <?php endforeach; ?>
-                            </div>
-                            </div>
-                          </div>
-                        </div>
-
 
                       </div>
                     </div>
