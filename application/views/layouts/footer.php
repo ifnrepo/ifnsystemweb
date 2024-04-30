@@ -36,16 +36,19 @@
 <script src="<?= base_url(); ?>assets/js/popper.min.js"></script>
 <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>
 <!-- dataTablses -->
-<script src="<?= base_url(); ?>assets/vendor/datatables/js/jquery.dataTables.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/datatables/datatables.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/datatables/js/dataTables.bootstrap4.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/datatables/js/dataTables.responsive.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/datatables/js/responsive.bootstrap.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/fixheader/js/dataTables.fixedheader.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/datatables/js/dataTables.fixedColumns.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/datatables/js/fixedColumns.bootstrap4.min.js"></script>
+
 <script src="<?= base_url(); ?>assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/select2/js/select2.min.js"></script>
 <!-- Custom JS -->
-<script src="<?= base_url(); ?>assets/js/myscript.js?1692870487"></script>
+<script src="<?= base_url(); ?>assets/js/myscript.js?1692870490"></script>
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1692870487"></script>
 <?php } ?>

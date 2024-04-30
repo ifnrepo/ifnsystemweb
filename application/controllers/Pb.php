@@ -91,7 +91,7 @@ class Pb extends CI_Controller {
                 $hasil .= "<a href='".base_url() . 'pb/cancelpb/'.$hsl['id']."' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Cancel data' title='Cancel data'><i class='fa fa-times mr-1'></i></a>";
             }else if($hsl['data_ok']==1 && $hsl['ok_tuju']==1 && $this->session->userdata('levelsekarang')==1 && $this->session->userdata('level_user')>=2){
                 $hasil .= "<a class='btn btn-sm btn-danger btn-flat mr-1' href=".base_url() . 'pb/cetakbon/' . $hsl["id"]." target='_blank' title='Cetak'><i class='fa fa-file-pdf-o mr-1'></i></a>";
-                if($hsl['ok_valid']==0){
+                if($hsl['ok_valid']==0 && $hsl['id_keluar']==null){
                     $hasil .= "<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-primary btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit Validasi data ini' data-href=".base_url() . 'pb/editvalidasipb/' . $hsl["id"]." title='Edit Validasi data'><i class='fa fa-refresh mr-1'></i> Edit</a>";
                 }
             }else if($hsl['data_ok']==1 && $hsl['ok_tuju']==1){

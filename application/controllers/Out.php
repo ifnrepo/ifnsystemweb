@@ -147,6 +147,7 @@ class Out extends CI_Controller {
             'id' => $_POST['id'],
             'kgs' => $_POST['kgs'],
             'pcs' => $_POST['pcs'],
+            'tempbbl' => $_POST['tempbbl']
         ];
         $query = $this->out_model->updatedetail($data);
         echo $query;

@@ -134,7 +134,8 @@ class Out_model extends CI_Model{
             $cek = $this->db->get_where('tb_detail',['id'=>$data1['id_minta']])->row_array();
             $data = [
                 'pcs' => $cek['pcs'],
-                'kgs' => $cek['kgs']
+                'kgs' => $cek['kgs'],
+                'tempbbl' => null
             ];
             $this->db->where('id',$data1['id']);
             $this->db->update('tb_detail',$data);
@@ -170,16 +171,37 @@ class Out_model extends CI_Model{
                 break;
             }
         }
-        $jumlah = $this->db->get_where('tb_detail',['id_header'=>$id])->num_rows();
-        $data = [
-            'data_ok' => 1,
-            'user_ok' => $this->session->userdata('id'),
-            'tgl_ok' => date('Y-m-d H:i:s'),
-            'jumlah_barang' => $jumlah
-        ];
+        // Cek data temp yang akan dibuat BBL
+        $datacekbbl = $this->db->get_where('tb_detail',['id_header'=>$id,'tempbbl'=>1]);
+        if($datacekbbl->num_rows() > 0){
+            $this->db->select('id_perusahaan,kode_dok,dept_id,dept_tuju,nomor_dok,tgl,data_ok,ok_tuju,ok_valid,tgl_ok,tgl_tuju,user_ok,user_tuju');
+            $this->db->from('tb_header');
+            $this->db->where('id_keluar',$id);  
+            $isiheader = $this->db->get();
+            $hasilheader = $this->db->insert_batch('tb_header',$isiheader->result_array());
+            $idheader = $this->db->insert_id();
+            $xisiheader = $isiheader->row_array();
+            $this->db->where('id',$idheader);
+            $this->db->update('tb_header',['nomor_dok' => $xisiheader['nomor_dok'].'-A']);
+            foreach ($datacekbbl->result_array() as $bbl) {
+                $isidetail = $this->db->get_where('tb_detail',['id' => $bbl['id_minta']])->row_array();
+                $bbl['id'] = null;
+                $this->db->insert('tb_detail',$bbl);
+                $iddetail = $this->db->insert_id();
+                $this->db->where('id',$iddetail);
+                $this->db->update('tb_detail',['id_header'=> $idheader,'pcs' => 'pcs - '.$isidetail['pcs'],'kgs' => 'kgs - '.$isidetail['pcs']]);
+            }
+        }
         if ($this->db->trans_status() === FALSE || $iniquery){
             $this->db->trans_rollback();
         }else{
+            $jumlah = $this->db->get_where('tb_detail',['id_header'=>$id])->num_rows();
+            $data = [
+                'data_ok' => 1,
+                'user_ok' => $this->session->userdata('id'),
+                'tgl_ok' => date('Y-m-d H:i:s'),
+                'jumlah_barang' => $jumlah
+            ];
             $this->db->where('id',$id);
             $this->db->update('tb_header',$data);
             $this->db->trans_commit();

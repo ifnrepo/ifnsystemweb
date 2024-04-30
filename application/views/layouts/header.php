@@ -16,7 +16,7 @@
   <link href=<?= base_url() . "assets/css/demo.min.css?1692870487" ?> rel="stylesheet" />
 
   <!-- datatables -->
-  <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/css/dataTables.bootstrap.min.css">
+  <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/datatables.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/css/responsive.bootstrap.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/fixheader/css/fixedHeader.bootstrap.min.css">
   <!-- amchart css -->

@@ -258,6 +258,19 @@ $(document).ready(function () {
 	$("#batal-xxx").click(function () {
 		document.location.reload();
 	});
+
+	new DataTable("#pbtabel", {
+		fixedColumns: {
+			// start: 2,
+			end: 1,
+		},
+		paging: false,
+		searching: false,
+		info: false,
+		scrollCollapse: true,
+		scrollX: true,
+		// scrollY: 500,
+	});
 });
 
 function cekcik() {
