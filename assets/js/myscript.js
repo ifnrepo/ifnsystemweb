@@ -267,7 +267,7 @@ $(document).ready(function () {
 		paging: false,
 		searching: false,
 		info: false,
-		scrollCollapse: true,
+		// scrollCollapse: true,
 		scrollX: true,
 		// scrollY: 500,
 	});
