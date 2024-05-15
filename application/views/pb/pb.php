@@ -106,299 +106,72 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           
         </div>
-        <div style="width: 100%;">
-          <table id="pbtabel" class="table" style="width: 100% !important;">
+        <div>
+          <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Tgl</th>
-                <th style="width: 150px;">Nomor</th>
+                <th>Nomor</th>
                 <th>Jumlah Item</th>
                 <th>Dibuat Oleh</th>
                 <th>Disetujui Oleh</th>
                 <th>Keterangan</th>
-                <th style="width: 100px;">Aksi</th>
+                <th>Aksi</th>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
+              <?php 
+                foreach($data as $datdet): 
+                $jmlrec = $datdet['jmlrex']==null ? '' : $datdet['jmlrex'].' Item ';
+                $tungguoke= '';
+                $tunggukonfirmasi = '';
+                $cancel = '';
+                $tekred = '';
+                $usersetuju = '';
+                $tglsetuju = '';
+                if($datdet['data_ok']==0){
+                    $tungguoke = 'Bon Belum divalidasi/disimpan';
+                }
+                if( $datdet['data_ok']==1 && $datdet['ok_valid']==0){
+                    $tunggukonfirmasi = 'Menunggu Konfirmasi Kepala Dept';
+                }
+                if($datdet['ok_valid']==2){
+                    $cancel = '(CANCEL) '.$datdet['ketcancel'];
+                    $tekred = 'text-red';
+                }
+                if($datdet['ok_valid']==1){
+                    $usersetuju = substr(datauser($datdet['user_valid'],'name'),0,35);
+                    $tglsetuju = tglmysql2($datdet['tgl_valid']);
+                }
+              ?>
                 <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
-                <tr>
-                <td>Tgl</td>
-                <td style="width: 150px;">Nomor</td>
-                <td>Jumlah Item</td>
-                <td>Dibuat Oleh</td>
-                <td>Disetujui Oleh</td>
-                <td>Keterangan</td>
-                <td style="width: 100px;">Aksi</td>
-              </tr>
+                <td><?= tglmysql($datdet['tgl']); ?></td>
+                <td><a href='<?= base_url().'pb/viewdetailpb/'.$datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a></td>
+                <td><?= $jmlrec; ?></td>
+                <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'],'name'),0,35)."<br><span style='font-size: 10px;'>".tglmysql2($datdet['tgl_ok'])."</span>" ?></td>
+                <td style="line-height: 14px;"><?= $usersetuju."<br><span style='font-size: 10px;'>".$tglsetuju."</span>" ?></td>
+                <td><?= $tunggukonfirmasi.$tungguoke.$cancel ?></td>
+                <td>
+                <?php 
+                  if($datdet['data_ok']==0){
+                      echo "<a href=".base_url().'pb/datapb/'.$datdet["id"]." class='btn btn-sm btn-primary btn-flat mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
+                      echo "<a href='#' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' data-href=".base_url() . 'pb/hapusdata/' . $datdet["id"]." title='Hapus data'><i class='fa fa-trash-o'></i></a>";
+                  }else if($datdet['data_ok']==1 && $datdet['ok_valid']==0 && $this->session->userdata('levelsekarang')==1){
+                      echo "<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-info btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit data ini' data-href=".base_url() . 'pb/editokpb/' . $datdet["id"]." title='Validasi data'><i class='fa fa-refresh mr-1'></i> Edit Validasi</a>";
+                  }else if($datdet['data_ok']==1 && $datdet['ok_valid']==0 && $this->session->userdata('levelsekarang')>1){
+                      echo "<a href='#' class='btn btn-sm btn-success btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Validasi data ini' data-href=".base_url() . 'pb/validasipb/' . $datdet["id"]." title='Validasi data'><i class='fa fa-check mr-1'></i></a>";
+                      echo "<a href='".base_url() . 'pb/cancelpb/'.$datdet['id']."' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Cancel data' title='Cancel data'><i class='fa fa-times mr-1'></i></a>";
+                  }else if($datdet['data_ok']==1 && $datdet['ok_valid']==1 && $this->session->userdata('levelsekarang')==1 && $this->session->userdata('level_user')>=2){
+                      echo "<a class='btn btn-sm btn-danger btn-flat mr-1' href=".base_url() . 'pb/cetakbon/' . $datdet["id"]." target='_blank' title='Cetak'><i class='fa fa-file-pdf-o mr-1'></i></a>";
+                      if($datdet['ok_tuju']==0 && $datdet['id_keluar']==null){
+                          echo"<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-primary btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit Validasi data ini' data-href=".base_url() . 'pb/editvalidasipb/' . $datdet["id"]." title='Edit Validasi data'><i class='fa fa-refresh mr-1'></i> Edit</a>";
+                      }
+                  }else if($hsl['data_ok']==1 && $hsl['ok_valid']==1){
+                  }
+                 ?>
+                </td>
+                </tr>
+              <?php endforeach; ?>
             </tbody>
           </table>
         </div>

@@ -70,7 +70,7 @@ class Pb_model extends CI_Model{
         $this->db->where('dept_tuju',$data['dept_tuju']);
         if($data['level']==2){
             $this->db->where('data_ok',1);
-            $this->db->where('ok_tuju',0);
+            $this->db->where('ok_valid',0);
         }
         $this->db->where('month(tgl)',$this->session->userdata('bl'));
         $this->db->where('year(tgl)',$this->session->userdata('th'));

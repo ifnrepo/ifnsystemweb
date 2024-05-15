@@ -261,7 +261,7 @@ $(document).ready(function () {
 
 	new DataTable("#pbtabel", {
 		fixedColumns: {
-			// start: 2,
+			start: 1,
 			end: 1,
 		},
 		paging: false,
@@ -269,7 +269,7 @@ $(document).ready(function () {
 		info: false,
 		scrollCollapse: true,
 		scrollX: true,
-		// scrollY: 500,
+		scrollY: 300,
 	});
 });
 
