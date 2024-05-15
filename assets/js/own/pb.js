@@ -7,19 +7,19 @@ $(document).ready(function () {
 	var url = window.location.href;
 	var pisah = url.split("/");
 	// alert(pisah[5]);
-	// if (pisah[2] == "localhost") {
-	// 	if (pisah[5] == "datapb") {
-	// 		getdatadetailpb();
-	// 	}
-	// } else {
-	// 	if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
-	// 		// getdatainvoice();
-	// 	}
-	// 	if (pisah[5] == "datapb") {
-	// 		getdatadetailpb();
-	// 	}
-	// }
-	// $("#dept_kirim").change();
+	if (pisah[2] == "localhost") {
+		if (pisah[5] == "datapb") {
+			getdatadetailpb();
+		}
+	} else {
+		if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
+			// getdatainvoice();
+		}
+		if (pisah[5] == "datapb") {
+			getdatadetailpb();
+		}
+	}
+	$("#dept_kirim").change();
 	// $("#level").change();
 });
 // $("#tglpb").datepicker();
@@ -36,7 +36,7 @@ $("#dept_kirim").change(function () {
 			// alert(data);
 			// window.location.reload();
 			$("#dept_tuju").html(data);
-			$("#dept_tuju").change();
+			// $("#dept_tuju").change();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -44,22 +44,22 @@ $("#dept_kirim").change(function () {
 		},
 	});
 });
-$("#dept_tuju").change(function () {
-	$("#adddatapb").removeClass("disabled");
-	$("#level").removeClass("bg-primary");
-	$("#level").removeClass("bg-success");
-	if ($("#level").val() <= 1) {
-		$("#level").addClass("bg-primary");
-	} else {
-		$("#level").addClass("bg-success");
-	}
-	var ix = $(this).val();
-	if (ix != null) {
-		getdatapb();
-	} else {
-		$("#adddatapb").addClass("disabled");
-	}
-});
+// $("#dept_tuju").change(function () {
+// 	$("#adddatapb").removeClass("disabled");
+// 	$("#level").removeClass("bg-primary");
+// 	$("#level").removeClass("bg-success");
+// 	if ($("#level").val() <= 1) {
+// 		$("#level").addClass("bg-primary");
+// 	} else {
+// 		$("#level").addClass("bg-success");
+// 	}
+// 	var ix = $(this).val();
+// 	if (ix != null) {
+// 		getdatapb();
+// 	} else {
+// 		$("#adddatapb").addClass("disabled");
+// 	}
+// });
 $("#simpandetailbarang").click(function () {
 	if ($("#id_barang").val() == "") {
 		pesan("Isi / Cari nama barang", "error");
@@ -79,7 +79,8 @@ $("#simpandetailbarang").click(function () {
 	document.formbarangpb.submit();
 });
 $("#butgo").click(function () {
-	$("#dept_tuju").change();
+	// $("#dept_tuju").change();
+	getdatapb();
 });
 $("#resetdetailbarang").click(function () {
 	$("#id_barang").val("");
@@ -131,7 +132,7 @@ $("#level").change(function () {
 			$(this).addClass("bg-success");
 		}
 	}, 200);
-	getdatapb();
+	$("#butgo").click();
 });
 $("#bl").change(function () {
 	$.ajax({
@@ -157,7 +158,7 @@ $("#th").change(function () {
 function getdatapb() {
 	// alert($("#level").val());
 	$.ajax({
-		dataType: "json",
+		// dataType: "json",
 		type: "POST",
 		url: base_url + "pb/getdatapb",
 		data: {
@@ -167,8 +168,8 @@ function getdatapb() {
 		},
 		success: function (data) {
 			// alert(data.datagroup);
-			// window.location.reload();
-			$("#body-table").html(data.datagroup).show();
+			window.location.reload();
+			// $("#body-table").html(data.datagroup).show();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
