@@ -32,6 +32,7 @@
 <script src=<?= base_url() . "assets/js/demo-theme.min.js" ?>></script>
 <script src=<?= base_url() . "assets/js/tabler.min.js" ?> defer></script>
 <script src=<?= base_url() . "assets/js/demo.min.js" ?> defer></script>
+<script src=<?= base_url() . "assets/js/refresh.js" ?>></script>
 <!-- bootstrap 4 js -->
 <script src="<?= base_url(); ?>assets/js/popper.min.js"></script>
 <script src="<?= base_url(); ?>assets/js/bootstrap.min.js"></script>

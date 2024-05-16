@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12">
             <div class="mb-1">
-                <label class="form-label mb-0 font-kecil">Dari Departemen</label>
+                <label class="form-label mb-0 font-kecil">Departemen</label>
                 <input type="text" class="form-control font-kecil mt-1" id="departemenasal" placeholder="Input placeholder">
             </div>
             <hr class="m-1">
@@ -43,6 +43,8 @@
 </div>
 <script>
     $(document).ready(function(){
-        $("#departemenasal").val($("#dept_tuju option:selected").attr('rel'));
+        var zi = $("#dept_tuju option:selected").attr('rel');
+        var zu = $("#dept_kirim option:selected").attr('rel');
+        $("#departemenasal").val(zu+' ~ '+zi);
     })
 </script>

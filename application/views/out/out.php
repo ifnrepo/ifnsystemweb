@@ -98,7 +98,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-
+                  <?php foreach ($data as $datdet) { ?>
+                    
+                  <?php } ?>
             </tbody>
           </table>
         </div>

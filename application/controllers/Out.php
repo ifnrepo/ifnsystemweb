@@ -24,6 +24,11 @@ class Out extends CI_Controller {
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
+        $kode = [
+            'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
+            'dept_tuju' => $this->session->userdata('tujusekarang') == null ? '' : $this->session->userdata('tujusekarang'),
+        ];
+        $data['data'] = $this->out_model->getdata($kode);
         $footer['fungsi'] = 'out';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('out/out',$data);
@@ -54,36 +59,40 @@ class Out extends CI_Controller {
         echo 1;
     }
     public function getdata(){
-        $hasil = '';
-        $kode = [
-            'dept_id' => $_POST['dept_id'],
-            'dept_tuju' => $_POST['dept_tuju']
-        ];
+        $this->session->set_userdata('deptsekarang',$_POST['dept_id']);
         $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
-        $query = $this->out_model->getdata($kode);
-        foreach ($query as $que) {
-            $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
-            $hasil .= "<tr>";
-            $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
-            if($que['data_ok']==1){
-                $hasil .= "<td class='font-bold'><a href='".base_url().'out/viewdetailout/'.$que['id']."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
-            }else{
-                $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
-            }
-            $hasil .= "<td>".$jmlrek."</td>";
-            $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
-            $hasil .= "<td>".$que['keterangan']."</td>";
-            $hasil .= "<td>";
-            if($que['data_ok']==0){
-                $hasil .= "<a href=".base_url().'out/dataout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>";
-            }else if($que['ok_tuju']==1){
-                $hasil .= "<a href=".base_url().'out/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
-            }
-            $hasil .= "</td>";
-            $hasil .= "</tr>";
-        }
-        $cocok = array('datagroup' => $hasil);
-        echo json_encode($cocok);
+        // $hasil = '';
+        // $kode = [
+        //     'dept_id' => $_POST['dept_id'],
+        //     'dept_tuju' => $_POST['dept_tuju']
+        // ];
+        // $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
+        // $query = $this->out_model->getdata($kode);
+        // foreach ($query as $que) {
+        //     $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
+        //     $hasil .= "<tr>";
+        //     $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
+        //     if($que['data_ok']==1){
+        //         $hasil .= "<td class='font-bold'><a href='".base_url().'out/viewdetailout/'.$que['id']."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
+        //     }else{
+        //         $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
+        //     }
+        //     $hasil .= "<td>".$jmlrek."</td>";
+        //     $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
+        //     $hasil .= "<td>".$que['keterangan']."</td>";
+        //     $hasil .= "<td>";
+        //     if($que['data_ok']==0){
+        //         $hasil .= "<a href=".base_url().'out/dataout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>";
+        //     }else if($que['ok_tuju']==1){
+        //         $hasil .= "<a href=".base_url().'out/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
+        //     }
+        //     $hasil .= "</td>";
+        //     $hasil .= "</tr>";
+        // }
+        // $cocok = array('datagroup' => $hasil);
+        // echo json_encode($cocok);
+        $url = base_url('Out');
+        redirect($url);
     }
     public function getdatadetailout(){
         $hasil = '';
@@ -113,8 +122,8 @@ class Out extends CI_Controller {
             'kode_dok' => 'PB',
             'id_keluar' => null,
             'data_ok' => 1,
-            'ok_tuju' => 1,
-            'ok_valid' => 0
+            'ok_valid' => 1,
+            'ok_tuju' => 0
         ];
         $data['bon'] = $this->out_model->getbon($kondisi);
         $this->load->view('out/add_out',$data);
@@ -163,11 +172,11 @@ class Out extends CI_Controller {
     }
     public function simpanout($id){
         $data = [
-            'ok_valid' => 1,
-            'user_valid' => $this->session->userdata('id'),
-            'data_ok' => 1,
             'ok_tuju' => 1,
-            'tgl_valid' => date('Y-m-d H:i:s'),
+            'user_tuju' => $this->session->userdata('id'),
+            'data_ok' => 1,
+            'ok_valid' => 1,
+            'tgl_tuju' => date('Y-m-d H:i:s'),
             'id' => $id
         ];
         $query = $this->out_model->simpanout($data);

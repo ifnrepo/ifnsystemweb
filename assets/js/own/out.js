@@ -35,7 +35,7 @@ $("#dept_kirim").change(function () {
 			// alert(data);
 			// window.location.reload();
 			$("#dept_tuju").html(data);
-			$("#dept_tuju").change();
+			// $("#dept_tuju").change();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -43,12 +43,12 @@ $("#dept_kirim").change(function () {
 		},
 	});
 });
-$("#dept_tuju").change(function () {
-	var ia = $(this).val();
-	if (ia != null) {
-		getdataout();
-	}
-});
+// $("#dept_tuju").change(function () {
+// 	var ia = $(this).val();
+// 	if (ia != null) {
+// 		getdataout();
+// 	}
+// });
 $("#bl").change(function () {
 	$.ajax({
 		// dataType: "json",
@@ -70,6 +70,9 @@ $("#bl").change(function () {
 $("#th").change(function () {
 	$("#bl").change();
 });
+$("#butgo").click(function () {
+	getdataout();
+});
 function getdataout() {
 	$.ajax({
 		dataType: "json",
@@ -81,8 +84,8 @@ function getdataout() {
 		},
 		success: function (data) {
 			// alert(data.datagroup);
-			// window.location.reload();
-			$("#body-table").html(data.datagroup).show();
+			window.location.reload();
+			// $("#body-table").html(data.datagroup).show();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
