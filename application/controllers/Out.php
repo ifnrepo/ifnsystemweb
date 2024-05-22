@@ -81,18 +81,19 @@ class Out extends CI_Controller {
         //     $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
         //     $hasil .= "<td>".$que['keterangan']."</td>";
         //     $hasil .= "<td>";
-        //     if($que['data_ok']==0){
-        //         $hasil .= "<a href=".base_url().'out/dataout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>";
-        //     }else if($que['ok_tuju']==1){
-        //         $hasil .= "<a href=".base_url().'out/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
-        //     }
+            // if($que['data_ok']==0){
+            //     $hasil .= "<a href=".base_url().'out/dataout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>";
+            // }else if($que['ok_tuju']==1){
+            //     $hasil .= "<a href=".base_url().'out/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
+            // }
         //     $hasil .= "</td>";
         //     $hasil .= "</tr>";
         // }
         // $cocok = array('datagroup' => $hasil);
         // echo json_encode($cocok);
-        $url = base_url('Out');
-        redirect($url);
+        // $url = base_url('Out');
+        // redirect($url);
+        echo 1;
     }
     public function getdatadetailout(){
         $hasil = '';
@@ -123,7 +124,9 @@ class Out extends CI_Controller {
             'id_keluar' => null,
             'data_ok' => 1,
             'ok_valid' => 1,
-            'ok_tuju' => 0
+            'ok_tuju' => 0,
+            'month(tgl) <=' => $this->session->userdata('bl'),
+            'year(tgl) <=' => $this->session->userdata('th')
         ];
         $data['bon'] = $this->out_model->getbon($kondisi);
         $this->load->view('out/add_out',$data);

@@ -83,7 +83,7 @@ function getdataout() {
 			dept_tuju: $("#dept_tuju").val(),
 		},
 		success: function (data) {
-			// alert(data.datagroup);
+			// alert(data);
 			window.location.reload();
 			// $("#body-table").html(data.datagroup).show();
 		},
