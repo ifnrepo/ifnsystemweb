@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          OUT (Perpindahan Barang) # <?= $data['nomor_dok']; ?>
+          OUT (Perpindahan Barang) # <?= $data['nomor_dok']
         </h2>
       </div>
       <input id="errornya" class="hilang" value="<?= $this->session->flashdata('errornya'); ?>">

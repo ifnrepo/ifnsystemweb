@@ -246,3 +246,10 @@ function datauser($kode, $kolom)
         return $kode[$kolom];
     }
 }
+function kodebulan($bl){
+    $hasil = $bl;
+    if($bl <= 9){
+        $hasil = '0'.$bl;
+    }
+    return $hasil;
+}

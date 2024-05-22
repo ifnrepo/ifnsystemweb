@@ -152,7 +152,7 @@ class Out_model extends CI_Model{
             $no++;
             $kondisi = [
                 'id_barang' => $datdet['id_barang'],
-                'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
+                'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
                 'dept_id' => $this->session->userdata('deptsekarang')
             ];
             $cekdata = $this->db->get_where('stokdept',$kondisi);

@@ -98,8 +98,25 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                  <?php foreach ($data as $datdet) { ?>
-                    
+                  <?php foreach ($data as $datdet) { $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'].' Item' : '0 Item'; ?>
+                  <tr>
+                    <td><?= tglmysql($datdet['tgl']); ?></td>
+                    <?php if($datdet['data_ok']==1){ ?>
+                      <td class='font-bold'><a href='<?= base_url().'out/viewdetailout/'.$datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="font-kecil"><?= $datdet['nodok'] ?></span></a></td>
+                    <?php }else{ ?>
+                      <td class='font-bold'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important"><?= $datdet['nodok'] ?></span></td>
+                    <?php } ?>
+                    <td><?= $jmlrek; ?></td>
+                    <td><?= datauser($datdet['user_ok'],'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
+                    <td><?= $datdet['keterangan']; ?></td>
+                    <td class="text-center"><span style="color: white;">.</span>
+                        <?php if($datdet['data_ok']==0){ ?>
+                            <a href= "<?= base_url().'out/dataout/'.$datdet['id'] ?>" class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
+                        <?php }else if($datdet['data_ok']==1){ ?>
+                            <a href= "<?= base_url().'out/cetakbon/'.$datdet['id'] ?>" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
+                        <?php } ?>
+                    </td>
+                  </tr>
                   <?php } ?>
             </tbody>
           </table>
