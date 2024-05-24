@@ -253,3 +253,9 @@ function kodebulan($bl){
     }
     return $hasil;
 }
+function firstday($tgl){
+    return date('Y-m-01', strtotime($tgl));
+}
+function lastday($tgl){
+    return date('Y-m-t', strtotime($tgl));
+}
