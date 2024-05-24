@@ -269,7 +269,9 @@ $(document).ready(function () {
 		info: false,
 		scrollCollapse: true,
 		scrollX: true,
-		scrollY: 300,
+		scrollY: 500,
+		ordering: false,
+		fixedHeader: true,
 	});
 });
 
