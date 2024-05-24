@@ -85,8 +85,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           
         </div>
-        <div id="table-default" class="table-responsive">
-          <table class="table datatable6" id="cobasisip">
+        <div>
+          <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Tgl</th>

@@ -48,6 +48,7 @@
 <script src="<?= base_url(); ?>assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/select2/js/select2.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/litepicker/dist/litepicker.js"></script>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?1692870490"></script>
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
@@ -67,6 +68,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'out') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/out.js?1692870487"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'inv') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/inv.js?1692870487"></script>
 <?php } ?>
 
 <script>
