@@ -271,7 +271,6 @@ $(document).ready(function () {
 		scrollX: true,
 		scrollY: 500,
 		ordering: false,
-		fixedHeader: true,
 	});
 });
 
