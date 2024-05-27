@@ -9,7 +9,7 @@ $(document.body).bind("mousemove keypress", function (e) {
 
 function refresh() {
 	//14400000 = 2 Jam
-	if (new Date().getTime() - time >= 14400000) window.location.reload(true);
+	if (new Date().getTime() - time >= 1800000) window.location.reload(true);
 	else setTimeout(refresh, 10000);
 }
 
