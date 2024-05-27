@@ -42,7 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
             </div>
           </div>
-          <div class="card card-active hilang" style="clear:both;" >
+          <div class="card card-active" style="clear:both;" >
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-2">
@@ -128,18 +128,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 }else{
                   $sak += $saldo+$in-$out;
                 }
-                $bgred = substr($det['mode'],0,1)=='S' ? 'text-red' : ''; 
+                $bgred = substr($det['mode'],0,1)=='S' ? 'text-teal' : ''; 
               ?>
-                <tr>
-                  <td><?= substr(tglmysql($det['tgl']),0,2); ?></td>
-                  <td><?= $det['nama_barang']; ?></td>
-                  <td><?= $det['id_barang']; ?></td>
-                  <td><?= $det['kodesatuan']; ?></td>
-                  <td><?= rupiah($saldo,0); ?></td>
-                  <td><?= rupiah($in,0); ?></td>
-                  <td><?= rupiah($out,0); ?></td>
-                  <td><?= rupiah($sak,0); ?></td>
-                  <td><?= $det['nomor_dok']; ?></td>
+                <tr class="<?= $bgred; ?>">
+                  <td style="border-bottom: red;" class="<?= $bgred; ?>"><?= substr(tglmysql($det['tgl']),0,2); ?></td>
+                  <td style="border-bottom: red;"><?= $det['nama_barang']; ?></td>
+                  <td style="border-bottom: red;"><?= $det['id_barang']; ?></td>
+                  <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
+                  <td style="border-bottom: red;"><?= rupiah($saldo,0); ?></td>
+                  <td style="border-bottom: red;"><?= rupiah($in,0); ?></td>
+                  <td style="border-bottom: red;"><?= rupiah($out,0); ?></td>
+                  <td style="border-bottom: red;"><?= rupiah($sak,0); ?></td>
+                  <td style="border-bottom: red;"><?= $det['nomor_dok']; ?></td>
                 </tr>
               <?php } endif; ?>
             </tbody>

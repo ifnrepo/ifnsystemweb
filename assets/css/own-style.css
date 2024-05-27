@@ -26,3 +26,6 @@
 .bg-gray {
 	background-color: #e6e6e6 !important;
 }
+#pbtabel .table-body td {
+	border-bottom: red;
+}
