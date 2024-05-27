@@ -50,7 +50,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <!-- <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-control form-sm font-kecil font-bold" id="dept_kirim"  name="dept_kirim">
-                        <?php foreach ($hakdep as $hak): $selek = $this->session->userdata('deptsekarang')== null ? 'IT' : $this->session->userdata('deptsekarang'); ?>
+                        <?php foreach ($hakdep as $hak): $selek = $this->session->userdata('deptsekarang')== null ? '' : $this->session->userdata('deptsekarang'); ?>
                           <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?php if($selek==$hak['dept_id']) echo "selected"; ?>><?= $hak['departemen']; ?></option>
                         <?php endforeach; ?>
                       </select>
@@ -106,35 +106,42 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
             <thead>
               <tr>
-                <th>I</th>
                 <th>Tgl</th>
                 <th>Spesifikasi</th>
                 <th>SKU</th>
+                <th>Satuan</th>
                 <th>Awal</th>
                 <th>Input</th>
                 <th>Output</th>
                 <th>Saldo</th>
-                <th>Aksi</th>
+                <th>Ket</th>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-              <?php foreach ($data->result_array() as $det) { 
+              <?php if($data!=null): $brg=''; $sak=0; foreach ($data->result_array() as $det) { 
                 $saldo = substr($det['mode'],0,1)=='S' ? $det['pcs'] : 0; 
                 $out = substr($det['mode'],0,1)=='O' ? $det['pcs'] : 0; 
+                $in = substr($det['mode'],0,1)=='I' ? $det['pcs'] : 0; 
+                if($brg != $det['id_barang']){
+                  $brg = $det['id_barang'];
+                  $sak = $saldo+$in-$out;
+                }else{
+                  $sak += $saldo+$in-$out;
+                }
                 $bgred = substr($det['mode'],0,1)=='S' ? 'text-red' : ''; 
               ?>
                 <tr>
-                  <td class="<?= $bgred; ?>"><?= substr($det['mode'],0,1); ?></td>
                   <td><?= substr(tglmysql($det['tgl']),0,2); ?></td>
                   <td><?= $det['nama_barang']; ?></td>
                   <td><?= $det['id_barang']; ?></td>
-                  <td><?= rupiah($saldo,2); ?></td>
-                  <td><?= rupiah($out,2); ?></td>
-                  <td><?= rupiah($out,2); ?></td>
-                  <td><?= rupiah($out,2); ?></td>
-                  <td></td>
+                  <td><?= $det['kodesatuan']; ?></td>
+                  <td><?= rupiah($saldo,0); ?></td>
+                  <td><?= rupiah($in,0); ?></td>
+                  <td><?= rupiah($out,0); ?></td>
+                  <td><?= rupiah($sak,0); ?></td>
+                  <td><?= $det['nomor_dok']; ?></td>
                 </tr>
-              <?php } ?>
+              <?php } endif; ?>
             </tbody>
           </table>
         </div>

@@ -53,3 +53,6 @@ $("#updateinv").click(function () {
 		},
 	});
 });
+$("#tglawal").change(function () {
+	// alert("CUY");
+});

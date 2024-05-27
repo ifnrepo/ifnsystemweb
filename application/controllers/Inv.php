@@ -23,7 +23,7 @@ class Inv extends CI_Controller {
     public function index(){
         $header['header'] = 'inventory';
         $data['level'] = $this->usermodel->getdatalevel();
-        $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
+        $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         if($this->session->userdata('tglawal')==null){
