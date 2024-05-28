@@ -29,7 +29,13 @@ $("#updateinv").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();
 	var currdept = $("#currdept").val();
-	if (new Date(tglawal) > new Date(tglakhir)) {
+	if ($("#gbg").is(":checked")) {
+		var gbg = 1;
+	} else {
+		var gbg = 0;
+	}
+	// alert(gbg);
+	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
 		pesan("Tanggal awal lebih besar dari tanggal akhir", "info");
 		return false;
 	}
@@ -41,6 +47,7 @@ $("#updateinv").click(function () {
 			tga: tglawal,
 			tgk: tglakhir,
 			dpt: currdept,
+			gbn: gbg,
 		},
 		success: function (data) {
 			// alert(data);
@@ -55,4 +62,10 @@ $("#updateinv").click(function () {
 });
 $("#tglawal").change(function () {
 	// alert("CUY");
+});
+$(document).on("click", "#namabarang", function () {
+	var xe = $(this).attr("rel");
+	var xa = $(this).attr("rel2");
+	let span = document.getElementById("spcbarang");
+	span.innerText = xe + " # " + xa;
 });

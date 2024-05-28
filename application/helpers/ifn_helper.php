@@ -261,12 +261,12 @@ function lastday($tgl){
 }
 function viewsku($po='',$no='',$dis='',$id=''){
     $hasil = '';
-    if($po==''){
+    if(trim($po)==''){
         $hasil = $id;
     }else{
-        $xdis = $dis=='' ? '' : ' dis '.$dis;
+        $xdis = $dis==0 ? '' : ' dis '.$dis;
         $xid = $id=='' ? '' : ' brg '.$id;
-        $hasil = $po.' # '.$no.$xdis.$xid;
+        $hasil = $po.' # '.$no.$xdis;
     }
     return $hasil;
 }
