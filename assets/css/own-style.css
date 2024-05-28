@@ -29,3 +29,6 @@
 #pbtabel .table-body td {
 	border-bottom: red;
 }
+.text-teal-green {
+	color: #175873 !important;
+}

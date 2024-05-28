@@ -30,11 +30,13 @@ class Inv extends CI_Controller {
             $data['tglawal'] = tglmysql(firstday($this->session->userdata('th').'-'.$this->session->userdata('bl').'-01'));
             $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th').'-'.$this->session->userdata('bl').'-01'));
             $data['data'] = null;
+            $data['gbg'] = '';
         }else{
             $data['tglawal'] = $this->session->userdata('tglawal');
             $data['tglakhir'] = $this->session->userdata('tglakhir');
             $data['data'] = $this->invmodel->getdata();
-        }
+            $data['gbg'] = $this->session->userdata('gbg')==1 ? 'checked' : '';
+        }   
         $footer['fungsi'] = 'inv';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('inv/inv',$data);
@@ -43,8 +45,10 @@ class Inv extends CI_Controller {
     public function clear(){
         $this->session->unset_userdata('tglawal',date('Y'));
         $this->session->unset_userdata('tglakhir',date('Y'));
+        // $this->session->unset_userdata('gbg');
         $this->session->set_userdata('bl',date('m'));
         $this->session->set_userdata('th',date('Y'));
+        $this->session->set_userdata('gbg',1);
         $url = base_url('Inv');
         redirect($url);
     }
@@ -52,6 +56,7 @@ class Inv extends CI_Controller {
         $this->session->set_userdata('tglawal',$_POST['tga']);
         $this->session->set_userdata('tglakhir',$_POST['tgk']);
         $this->session->set_userdata('currdept',$_POST['dpt']);
+        $this->session->set_userdata('gbg',$_POST['gbn']);
         echo 1;
     }
     public function getdatadetailpb(){

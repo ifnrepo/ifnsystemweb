@@ -22,7 +22,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 d-flex">
-              <select class="form-control form-sm font-kecil font-bold mr-1" id="currdept"  name="currdept">
+              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept"  name="currdept">
                   <?php 
                   // Mendapatkan nilai 'deptsekarang', jikla null nilai default jadi it
                   $selek = $this->session->userdata('currdept') ?? 'IT'; 
@@ -35,7 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <?php endforeach; ?>
               </select>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-1" id="tglawal" name="tglawal" style="width: 95px;" value="<?= $tglawal ?>">
-              <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="tglakhir" name="tglakhir" style="width: 95px;" value="<?= $tglakhir ?>">
+              <input type="text" class="form-control form-sm font-kecil font-bold mr-2 hilang" id="tglakhir" name="tglakhir" style="width: 95px;" value="<?= $tglakhir ?>">
               <a href="#" class="btn btn-success btn-sm font-bold" id="updateinv"><i class="fa fa-refresh"></i><span class="ml-1">Update</span></a>
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
@@ -45,50 +45,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <div class="card card-active" style="clear:both;" >
             <div class="card-body p-2 font-kecil">
               <div class="row">
-                <div class="col-2">
-                  <h4 class="mb-1 font-kecil">Dept Asal</h4>
-                  <!-- <span class="font-kecil">
-                    <div class="font-kecil">
-                      <select class="form-control form-sm font-kecil font-bold" id="dept_kirim"  name="dept_kirim">
-                        <?php foreach ($hakdep as $hak): $selek = $this->session->userdata('deptsekarang')== null ? '' : $this->session->userdata('deptsekarang'); ?>
-                          <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?php if($selek==$hak['dept_id']) echo "selected"; ?>><?= $hak['departemen']; ?></option>
-                        <?php endforeach; ?>
-                      </select>
-                    </div>
-                </span> -->
-
+                <div class="col-3">
+                  <h4 class="mb-1 font-kecil">Kategori Barang</h4>
                   <span class="font-kecil">
                     <div class="font-kecil">
-                      <select class="form-control form-sm font-kecil font-bold" id="dept_kirim"  name="dept_kirim">
-                          <?php 
-                          // Mendapatkan nilai 'deptsekarang', jikla null nilai default jadi it
-                          $selek = $this->session->userdata('deptsekarang') ?? 'IT'; 
-                          foreach ($hakdep as $hak): 
-                              $selected = ($selek == $hak['dept_id']) ? "selected" : ""; 
-                          ?>
-                              <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?= $selected ?>>
-                                  <?= $hak['departemen']; ?>
-                              </option>
-                          <?php endforeach; ?>
+                      <select class="form-control form-sm font-kecil font-bold" id="katbar"  name="katbar">
                       </select>
                     </div>
-                </span> 
+                  </span> 
                 </div>
-                <div class="col-2 ">
-                  <h4 class="mb-1 font-kecil">Dept Tujuan</h4>
-                  <span class="font-kecil">
-                    <div class="font-kecil">
-                      <select class="form-control form-sm font-kecil font-bold" id="dept_tuju" name="dept_tuju">
-                       
-                      </select>
-                    </div>
-                  </span>
+                <div class="col-3 ">
+                  <label class="form-check mt-1">
+                    <input class="form-check-input" type="checkbox" id="gbg" <?= $gbg; ?>>
+                    <span class="form-check-label font-bold">Gabung</span>
+                  </label>
+                  <label class="form-check mb-0">
+                    <input class="form-check-input" type="checkbox">
+                    <span class="form-check-label font-bold" id="spcbarang">Minus</span>
+                  </label>
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-1 font-kecil">.</h4>
+                  <!-- <h4 class="mb-3 font-kecil">Spesifikasi Barang</h4>
                   <span class="font-kecil">
-                    <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
-                  </span>
+                    <label class="form-check mb-0">
+                      <input class="form-check-input" type="checkbox">
+                      <span class="form-check-label font-bold">-</span>
+                    </label>
+                  </span> -->
                 </div>
                 <div class="col-3">
                   <h4 class="mb-1"></h4>
@@ -106,44 +89,50 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
             <thead>
               <tr>
-                <th>Tgl</th>
+                <!-- <th>Tgl</th> -->
                 <th>Spesifikasi</th>
                 <th>SKU</th>
+                <th>Nomor IB</th>
                 <th>Satuan</th>
-                <th>Awal</th>
+                <!-- <th>Awal</th>
                 <th>Input</th>
-                <th>Output</th>
-                <th>Saldo</th>
-                <th>Ket</th>
+                <th>Output</th> -->
+                <th>Qty</th>
+                <th>Kgs</th>
+                <!-- <th>Ket</th> -->
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-              <?php if($data!=null): $brg=''; $sak=0; foreach ($data->result_array() as $det) { 
-                $saldo = substr($det['mode'],0,1)=='S' ? $det['pcs'] : 0; 
-                $out = substr($det['mode'],0,1)=='O' ? $det['pcs'] : 0; 
-                $in = substr($det['mode'],0,1)=='I' ? $det['pcs'] : 0; 
+              <?php  $hasilsak=0;  if($data!=null): $brg=''; $sak=0;$sakkg=0; foreach ($data->result_array() as $det) {
+                $saldo = $det['pcs'];
+                $in = $det['pcsin'];
+                $out = $det['pcsout'];
+                $saldokg = $det['kgs'];
+                $inkg = $det['kgsin'];
+                $outkg = $det['kgsout'];
                 if($brg != $det['id_barang']){
                   $brg = $det['id_barang'];
                   $sak = $saldo+$in-$out;
+                  $sakkg = $saldokg+$inkg-$outkg;
                 }else{
                   $sak += $saldo+$in-$out;
+                  $sakkg = $saldokg+$inkg-$outkg;
                 }
-                $bgred = substr($det['mode'],0,1)=='S' ? 'text-teal' : ''; 
+                $bg = $sak >= 0 ? 'text-teal-green' : 'text-danger';
+                $hasilsak += $det['pcs'];
               ?>
-                <tr class="<?= $bgred; ?>">
-                  <td style="border-bottom: red;" class="<?= $bgred; ?>"><?= substr(tglmysql($det['tgl']),0,2); ?></td>
-                  <td style="border-bottom: red;"><?= $det['nama_barang']; ?></td>
-                  <td style="border-bottom: red;"><?= $det['id_barang']; ?></td>
+                <tr class="<?= $bg; ?>">
+                  <td style="border-bottom: red;"><a href="#" id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'],0,150); ?></a></td>
+                  <td style="border-bottom: red;"><?= viewsku(id: $det['kode'],po: $det['po'],no: $det['item'],dis: $det['dis']) ?></td>
+                  <td style="border-bottom: red;"><?= $det['nobontr']; ?></td>
                   <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
-                  <td style="border-bottom: red;"><?= rupiah($saldo,0); ?></td>
-                  <td style="border-bottom: red;"><?= rupiah($in,0); ?></td>
-                  <td style="border-bottom: red;"><?= rupiah($out,0); ?></td>
-                  <td style="border-bottom: red;"><?= rupiah($sak,0); ?></td>
-                  <td style="border-bottom: red;"><?= $det['nomor_dok']; ?></td>
+                  <td style="border-bottom: red;" class="text-right"><?= rupiah($sak,0); ?></td>
+                  <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg,2); ?></td>
                 </tr>
               <?php } endif; ?>
             </tbody>
           </table>
+          <?= $hasilsak; ?>
         </div>
       </div>
     </div>
