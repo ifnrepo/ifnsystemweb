@@ -133,12 +133,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <tr class="<?= $bgred; ?>">
                   <td style="border-bottom: red;" class="<?= $bgred; ?>"><?= substr(tglmysql($det['tgl']),0,2); ?></td>
                   <td style="border-bottom: red;"><?= $det['nama_barang']; ?></td>
-                  <td style="border-bottom: red;"><?= $det['id_barang']; ?></td>
+                  <td style="border-bottom: red;"><?= viewsku(id: $det['id_barang']) ?></td>
                   <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
-                  <td style="border-bottom: red;"><?= rupiah($saldo,0); ?></td>
-                  <td style="border-bottom: red;"><?= rupiah($in,0); ?></td>
-                  <td style="border-bottom: red;"><?= rupiah($out,0); ?></td>
-                  <td style="border-bottom: red;"><?= rupiah($sak,0); ?></td>
+                  <td style="border-bottom: red;" class="text-right"><?= rupiah($saldo,0); ?></td>
+                  <td style="border-bottom: red;" class="text-right"><?= rupiah($in,0); ?></td>
+                  <td style="border-bottom: red;" class="text-right"><?= rupiah($out,0); ?></td>
+                  <td style="border-bottom: red;" class="text-right"><?= rupiah($sak,0); ?></td>
                   <td style="border-bottom: red;"><?= $det['nomor_dok']; ?></td>
                 </tr>
               <?php } endif; ?>

@@ -259,3 +259,14 @@ function firstday($tgl){
 function lastday($tgl){
     return date('Y-m-t', strtotime($tgl));
 }
+function viewsku($po='',$no='',$dis='',$id=''){
+    $hasil = '';
+    if($po==''){
+        $hasil = $id;
+    }else{
+        $xdis = $dis=='' ? '' : ' dis '.$dis;
+        $xid = $id=='' ? '' : ' brg '.$id;
+        $hasil = $po.' # '.$no.$xdis.$xid;
+    }
+    return $hasil;
+}
