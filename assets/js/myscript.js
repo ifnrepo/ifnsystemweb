@@ -194,6 +194,14 @@ $(document).ready(function () {
 		scrollY: false,
 		pageLength: 50,
 	});
+	$(".datatable7").DataTable({
+		paging: false,
+		searching: false,
+		info: false,
+		scrollY: false,
+		pageLength: 50,
+		scrollY: 500,
+	});
 	$("#modal-danger").on("show.bs.modal", function (e) {
 		document.getElementById("message").innerHTML = $(e.relatedTarget).data(
 			"message",

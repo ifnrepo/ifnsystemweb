@@ -7,13 +7,9 @@ class inv_model extends CI_Model{
             $tglakhir = tglmysql($this->session->userdata('tglakhir'));
             $dpt = $this->session->userdata('currdept');
             $period = substr($tglx,5,2).substr($tglx,0,4);
-            // $tambah1 = '';
-            // $tambah2 = '';
-            // if($this->session->userdata('gbg')==1){
-            $tambah1 = "SELECT tgl,null as nomor_dok,mode,po,item,dis,id_barang,nama_barang,kode,nobontr,kodesatuan,SUM(pcs) AS pcs,SUM(kgs) AS kgs,SUM(pcsin) AS pcsin,
+            $tambah1 = "SELECT tgl,null as nomor_dok,mode,po,item,dis,id_barang,nama_barang,nama_kategori,kode,nobontr,insno,kodesatuan,SUM(pcs) AS pcs,SUM(kgs) AS kgs,SUM(pcsin) AS pcsin,
                         SUM(kgsin) AS kgsin,SUM(pcsout) AS pcsout,SUM(kgsout) AS kgsout FROM (";
-            $tambah2 = ") pt GROUP BY po,item,dis,id_barang";
-            // }
+            $tambah2 = ") pt GROUP BY po,item,dis,id_barang,nobontr,insno";
             $hasil = $this->db->query($tambah1."SELECT 'SALDO' AS mode,'SA' AS kode_dok,stokdept.id,NULL AS id_header,stokdept.id_barang,stokdept.po,stokdept.item,
                                         stokdept.dis, stokdept.insno,stokdept.nobontr,'SALDO' AS nomor_dok,'".$tglx."' AS tgl,
                                         barang.nama_barang,barang.kode,kategori.nama_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,

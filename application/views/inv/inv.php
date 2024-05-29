@@ -55,14 +55,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </span> 
                 </div>
                 <div class="col-3 ">
-                  <label class="form-check mt-1">
-                    <input class="form-check-input" type="checkbox" id="gbg" <?= $gbg; ?>>
+                  <!-- <label class="form-check mt-1">
+                    <input class="form-check-input" type="checkbox" id="gbg">
                     <span class="form-check-label font-bold">Gabung</span>
                   </label>
                   <label class="form-check mb-0">
                     <input class="form-check-input" type="checkbox">
                     <span class="form-check-label font-bold" id="spcbarang">Minus</span>
-                  </label>
+                  </label> -->
                 </div>
                 <div class="col-3">
                   <!-- <h4 class="mb-3 font-kecil">Spesifikasi Barang</h4>
@@ -86,17 +86,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           
         </div>
         <div>
-          <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
+          <table id="tabel" class="table nowrap order-column datatable7" style="width: 100% !important;">
             <thead>
               <tr>
                 <!-- <th>Tgl</th> -->
                 <th>Spesifikasi</th>
                 <th>SKU</th>
                 <th>Nomor IB</th>
+                <th>Insno</th>
                 <th>Satuan</th>
-                <!-- <th>Awal</th>
-                <th>Input</th>
-                <th>Output</th> -->
+                <th>Kategori</th>
+                <!-- <th>Output</th> -->
                 <th>Qty</th>
                 <th>Kgs</th>
                 <!-- <th>Ket</th> -->
@@ -122,17 +122,18 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 $hasilsak += $det['pcs'];
               ?>
                 <tr class="<?= $bg; ?>">
-                  <td style="border-bottom: red;"><a href="#" id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'],0,150); ?></a></td>
+                  <td style="border-bottom: red;"><a href='<?= base_url().'inv/viewdetail/'; ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'],0,75); ?></a></td>
                   <td style="border-bottom: red;"><?= viewsku(id: $det['kode'],po: $det['po'],no: $det['item'],dis: $det['dis']) ?></td>
                   <td style="border-bottom: red;"><?= $det['nobontr']; ?></td>
+                  <td style="border-bottom: red;"><?= $det['insno']; ?></td>
                   <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
+                  <td style="border-bottom: red; font-size: 9px;"><?= $det['nama_kategori']; ?></td>
                   <td style="border-bottom: red;" class="text-right"><?= rupiah($sak,0); ?></td>
                   <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg,2); ?></td>
                 </tr>
               <?php } endif; ?>
             </tbody>
           </table>
-          <?= $hasilsak; ?>
         </div>
       </div>
     </div>
