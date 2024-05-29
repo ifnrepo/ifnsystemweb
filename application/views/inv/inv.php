@@ -134,7 +134,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <?php } endif; ?>
             </tbody>
           </table>
-          <?= $hasilsak; ?>
         </div>
       </div>
     </div>
