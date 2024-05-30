@@ -217,9 +217,9 @@
   </div>
   <!-- End Modal -->
   <!-- Canvas -->
-  <div class="offcanvas offcanvas-end" tabindex="-1" id="canvasdet" aria-labelledby="offcanvasEndLabel" style="min-width:65% !important">
+  <div class="offcanvas offcanvas-end" tabindex="-1" id="canvasdet" aria-labelledby="offcanvasEndLabel" style="min-width:75% !important">
     <div class="offcanvas-header">
-      <div class="offcanvas-title" id="offcanvasEndLabel">Lorem Title</div>
+      <div class="offcanvas-title font-bold" id="offcanvasEndLabel">Lorem Title</div>
       <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
     </div>
     <div class="offcanvas-body">

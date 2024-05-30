@@ -24,7 +24,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="col-sm-6 d-flex">
               <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept"  name="currdept">
                   <?php 
-                  // Mendapatkan nilai 'deptsekarang', jikla null nilai default jadi it
+                  // Mendapatkan nilai 'deptsekarang', jika null nilai default jadi it
                   $selek = $this->session->userdata('currdept') ?? 'IT'; 
                   foreach ($hakdep as $hak): 
                       $selected = ($selek == $hak['dept_id']) ? "selected" : ""; 
@@ -83,10 +83,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <!-- <div class="hr m-1"></div> -->
             </div>
           </div>
-          
         </div>
         <div>
-          <table id="tabel" class="table nowrap order-column datatable7" style="width: 100% !important;">
+          <table id="tabel" class="table nowrap order-column table-hover datatable7" style="width: 100% !important;">
             <thead>
               <tr>
                 <!-- <th>Tgl</th> -->
@@ -103,7 +102,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-              <?php  $hasilsak=0;  if($data!=null): $brg=''; $sak=0;$sakkg=0; foreach ($data->result_array() as $det) {
+              <?php  $hasilsak=0;  if($data!=null): $cntbrg=0; $jmpcs=0; $jmkgs=0; $brg=''; $sak=0;$sakkg=0; foreach ($data->result_array() as $det) {
                 $saldo = $det['pcs'];
                 $in = $det['pcsin'];
                 $out = $det['pcsout'];
@@ -120,9 +119,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 }
                 $bg = $sak >= 0 ? 'text-teal-green' : 'text-danger';
                 $hasilsak += $det['pcs'];
+                $cntbrg += 1;
+                $jmkgs += $sakkg;
+                $jmpcs += $sak;
               ?>
                 <tr class="<?= $bg; ?>">
-                  <td style="border-bottom: red;"><a href='<?= base_url().'inv/viewdetail/'; ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'],0,75); ?></a></td>
+                  <td style="border-bottom: red;"><a href='<?= base_url().'inv/viewdetail/'.$det['po'].'/'.$det['item'].'/'.$det['dis'].'/'.$det['id_barang'].'/'.encrypto($det['nobontr']).'/'.encrypto($det['insno']); ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'],0,75); ?></a></td>
                   <td style="border-bottom: red;"><?= viewsku(id: $det['kode'],po: $det['po'],no: $det['item'],dis: $det['dis']) ?></td>
                   <td style="border-bottom: red;"><?= $det['nobontr']; ?></td>
                   <td style="border-bottom: red;"><?= $det['insno']; ?></td>
@@ -135,6 +137,37 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </tbody>
           </table>
         </div>
+        <div class="card card-active" style="clear:both;" >
+            <div class="card-body p-2 font-kecil">
+              <div class="row">
+                <div class="col-3"> 
+                  <h4 class="mb-0 font-kecil font-bold">Jumlah Rec</h4>
+                  <span class="font-kecil">
+                    <?= rupiah($cntbrg,0); ?>
+                  </span> 
+                </div>
+                <div class="col-3 ">
+                  <h4 class="mb-0 font-kecil font-bold">Pcs</h4>
+                  <span class="font-kecil">
+                    <?= rupiah($jmpcs,0); ?>
+                  </span>
+                </div>
+                <div class="col-3">
+                  <h4 class="mb-0 font-kecil font-bold">Kgs</h4>
+                  <span class="font-kecil">
+                    <?= rupiah($jmkgs,2); ?>
+                  </span>
+                </div>
+                <div class="col-3">
+                  <h4 class="mb-1"></h4>
+                </div>
+                <div class="col-2">
+                  <h4 class="mb-1"></h4>
+                </div>
+              </div>
+              <!-- <div class="hr m-1"></div> -->
+            </div>
+          </div>
       </div>
     </div>
   </div>

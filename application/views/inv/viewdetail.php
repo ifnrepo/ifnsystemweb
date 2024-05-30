@@ -23,11 +23,26 @@
                     <th>Specific</th>
                     <th>SKU</th>
                     <th>Satuan</th>
-                    <th>Qty</th>
-                    <th>Kgs</th>
+                    <th>Awal</th>
+                    <th>In</th>
+                    <th>Out</th>
+                    <th>Saldo</th>
+                    <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
+                    <?php foreach ($detail->result_array() as $det) { ?>
+                        <tr>
+                            <td><?= $det['nama_barang']; ?></td>
+                            <td><?= viewsku(id: $det['kode'],po: $det['po'],no: $det['item'],dis: $det['dis']) ?></td>
+                            <td><?= $det['kodesatuan']; ?></td>
+                            <td><?= $det['pcs']; ?></td>
+                            <td><?= $det['pcsin']; ?></td>
+                            <td><?= $det['pcsout']; ?></td>
+                            <td><?= $det['pcsout']; ?></td>
+                            <td><?= $det['nomor_dok']; ?></td>
+                        </tr>
+                    <?php } ?>
                 </tbody>
             </table>
         </div>
