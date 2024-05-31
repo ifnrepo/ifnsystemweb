@@ -247,17 +247,18 @@ class Inv extends CI_Controller {
             redirect($url);
         }
     }
-    public function viewdetail($po='',$no='',$dis=0,$id='',$bon='',$ins=''){
-        // $data['header'] = $this->pb_model->getdatabyid($id);
+    public function viewdetail($isi=''){
+        $split = explode('-',$isi);
         $array = [
-            'po'=>$po,
-            'item'=>$no,
-            'dis'=>$dis,
-            'id_barang'=>$id,
-            'nobontr'=>decrypto($bon),
-            'insno'=>decrypto($ins)
+            'po'=>$split[1],
+            'item'=>$split[2],
+            'dis'=>$split[3],
+            'id_barang'=>$split[4],
+            'nobontr'=>decrypto($split[5]),
+            'insno'=>decrypto($split[6])
         ];
         $data['detail'] = $this->invmodel->getdatadetail($array);
+        $data['isi'] = $array;
         $this->load->view('inv/viewdetail',$data);
     }
     public function ubahperiode(){

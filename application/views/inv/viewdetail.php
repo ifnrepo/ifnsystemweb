@@ -16,18 +16,27 @@
     <hr class='m-1'>
     <div class="card card-lg">
         <div class="card-body p-2">
-            <table class="table datatable6 table-hover" id="cobasisip">
+            <table class="table datatable6 table-hover table-bordered" id="cobasisip">
                 <thead style="background-color: blue !important">
+                    <tr class="text-center">
+                    <th rowspan="2">Specific</th>
+                    <th rowspan="2">SKU</th>
+                    <th rowspan="2">Satuan</th>
+                    <th colspan="2">Awal</th>
+                    <th colspan="2">In</th>
+                    <th colspan="2">Out</th>
+                    <th colspan="2">Saldo</th>
+                    <th rowspan="2">Keterangan</th>
+                    </tr>
                     <tr>
-                    <!-- <th>No</th> -->
-                    <th>Specific</th>
-                    <th>SKU</th>
-                    <th>Satuan</th>
-                    <th>Awal</th>
-                    <th>In</th>
-                    <th>Out</th>
-                    <th>Saldo</th>
-                    <th>Keterangan</th>
+                    <th >Pcs</th>
+                    <th >Kgs</th>
+                    <th >Pcs</th>
+                    <th >Kgs</th>
+                    <th >Pcs</th>
+                    <th >Kgs</th>
+                    <th >Pcs</th>
+                    <th >Kgs</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
@@ -36,10 +45,14 @@
                             <td><?= $det['nama_barang']; ?></td>
                             <td><?= viewsku(id: $det['kode'],po: $det['po'],no: $det['item'],dis: $det['dis']) ?></td>
                             <td><?= $det['kodesatuan']; ?></td>
-                            <td><?= $det['pcs']; ?></td>
-                            <td><?= $det['pcsin']; ?></td>
-                            <td><?= $det['pcsout']; ?></td>
-                            <td><?= $det['pcsout']; ?></td>
+                            <td><?= rupiah($det['pcs'],0); ?></td>
+                            <td><?= rupiah($det['kgs'],0); ?></td>
+                            <td><?= rupiah($det['pcsin'],0); ?></td>
+                            <td><?= rupiah($det['kgsin'],0); ?></td>
+                            <td><?= rupiah($det['pcsout'],0); ?></td>
+                            <td><?= rupiah($det['kgsout'],0); ?></td>
+                            <td><?= rupiah($det['pcs']+$det['pcsin']-$det['pcsout'],0); ?></td>
+                            <td><?= rupiah($det['kgs']+$det['kgsin']-$det['kgsout'],0); ?></td>
                             <td><?= $det['nomor_dok']; ?></td>
                         </tr>
                     <?php } ?>
