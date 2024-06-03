@@ -30,11 +30,13 @@ class Inv extends CI_Controller {
             $data['tglawal'] = tglmysql(firstday($this->session->userdata('th').'-'.$this->session->userdata('bl').'-01'));
             $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th').'-'.$this->session->userdata('bl').'-01'));
             $data['data'] = null;
+            $data['kat'] = null;
             $data['gbg'] = '';
         }else{
             $data['tglawal'] = $this->session->userdata('tglawal');
             $data['tglakhir'] = $this->session->userdata('tglakhir');
             $data['data'] = $this->invmodel->getdata();
+            $data['kat'] = $this->invmodel->getdatakategori();
             $data['gbg'] = $this->session->userdata('gbg')==1 ? 'checked' : '';
         }   
         $footer['fungsi'] = 'inv';
@@ -57,6 +59,7 @@ class Inv extends CI_Controller {
         $this->session->set_userdata('tglakhir',$_POST['tgk']);
         $this->session->set_userdata('currdept',$_POST['dpt']);
         $this->session->set_userdata('gbg',$_POST['gbn']);
+        $this->session->set_userdata('filterkat',$_POST['kat']);
         echo 1;
     }
     public function getdatadetailpb(){

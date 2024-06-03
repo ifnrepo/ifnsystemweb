@@ -19,24 +19,24 @@
             <table class="table datatable6 table-hover table-bordered" id="cobasisip">
                 <thead style="background-color: blue !important">
                     <tr class="text-center">
-                    <th rowspan="2">Specific</th>
-                    <th rowspan="2">SKU</th>
-                    <th rowspan="2">Satuan</th>
-                    <th colspan="2">Awal</th>
-                    <th colspan="2">In</th>
-                    <th colspan="2">Out</th>
-                    <th colspan="2">Saldo</th>
-                    <th rowspan="2">Keterangan</th>
+                        <th rowspan="2">Specific</th>
+                        <th rowspan="2">SKU</th>
+                        <th rowspan="2">Satuan</th>
+                        <th colspan="2">Awal</th>
+                        <th colspan="2">In</th>
+                        <th colspan="2">Out</th>
+                        <th colspan="2">Saldo</th>
+                        <th rowspan="2">Keterangan</th>
                     </tr>
                     <tr>
-                    <th >Pcs</th>
-                    <th >Kgs</th>
-                    <th >Pcs</th>
-                    <th >Kgs</th>
-                    <th >Pcs</th>
-                    <th >Kgs</th>
-                    <th >Pcs</th>
-                    <th >Kgs</th>
+                        <th >Pcs</th>
+                        <th >Kgs</th>
+                        <th >Pcs</th>
+                        <th >Kgs</th>
+                        <th >Pcs</th>
+                        <th >Kgs</th>
+                        <th >Pcs</th>
+                        <th >Kgs</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >

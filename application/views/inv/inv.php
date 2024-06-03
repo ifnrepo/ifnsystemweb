@@ -50,6 +50,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-control form-sm font-kecil font-bold" id="katbar"  name="katbar">
+                        <option value="">Semua Kategori</option>
+                        <?php if($kat != null): foreach ($kat->result_array() as $kate) { $selek = $this->session->userdata('filterkat') == $kate['id_kategori'] ? 'selected' : ''; ?>
+                          <option value="<?= $kate['id_kategori']; ?>" <?= $selek; ?>><?= $kate['nama_kategori']; ?></option>
+                        <?php } endif ?>
                       </select>
                     </div>
                   </span> 
@@ -102,7 +106,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-              <?php  $hasilsak=0;  if($data!=null): $cntbrg=0; $jmpcs=0; $jmkgs=0; $brg=''; $sak=0;$sakkg=0; foreach ($data->result_array() as $det) {
+              <?php  $hasilsak=0; $cntbrg=0; $jmpcs=0; $jmkgs=0;  if($data!=null): $brg=''; $sak=0;$sakkg=0; foreach ($data->result_array() as $det) {
                 $saldo = $det['pcs'];
                 $in = $det['pcsin'];
                 $out = $det['pcsout'];
