@@ -50,6 +50,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-control form-sm font-kecil font-bold" id="katbar"  name="katbar">
+                        <option value="">Semua Kategori</option>
+                        <?php if($kat != null): foreach ($kat->result_array() as $kate) { $selek = $this->session->userdata('filterkat') == $kate['id_kategori'] ? 'selected' : ''; ?>
+                          <option value="<?= $kate['id_kategori']; ?>" <?= $selek; ?>><?= $kate['nama_kategori']; ?></option>
+                        <?php } endif ?>
                       </select>
                     </div>
                   </span> 
@@ -102,7 +106,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-              <?php  $hasilsak=0;  if($data!=null): $cntbrg=0; $jmpcs=0; $jmkgs=0; $brg=''; $sak=0;$sakkg=0; foreach ($data->result_array() as $det) {
+              <?php  $hasilsak=0; $cntbrg=0; $jmpcs=0; $jmkgs=0;  if($data!=null): $brg=''; $sak=0;$sakkg=0; foreach ($data->result_array() as $det) {
                 $saldo = $det['pcs'];
                 $in = $det['pcsin'];
                 $out = $det['pcsout'];
@@ -122,9 +126,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 $cntbrg += 1;
                 $jmkgs += $sakkg;
                 $jmpcs += $sak;
+                $isi = 'OME-'.trim($det['po']).'-'.trim($det['item']).'-'.trim($det['dis']).'-'.trim($det['id_barang']).'-'.trim(encrypto($det['nobontr'])).'-'.trim(encrypto($det['insno'])).'-';
+                // $isi = 'XXX';
               ?>
                 <tr class="<?= $bg; ?>">
-                  <td style="border-bottom: red;"><a href='<?= base_url().'inv/viewdetail/'.$det['po'].'/'.$det['item'].'/'.$det['dis'].'/'.$det['id_barang'].'/'.encrypto($det['nobontr']).'/'.encrypto($det['insno']); ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'],0,75); ?></a></td>
+                  <td style="border-bottom: red;"><a href="<?= base_url().'inv/viewdetail/'.$isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'],0,75); ?></a></td>
                   <td style="border-bottom: red;"><?= viewsku(id: $det['kode'],po: $det['po'],no: $det['item'],dis: $det['dis']) ?></td>
                   <td style="border-bottom: red;"><?= $det['nobontr']; ?></td>
                   <td style="border-bottom: red;"><?= $det['insno']; ?></td>

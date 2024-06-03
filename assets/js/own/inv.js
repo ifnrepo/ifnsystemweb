@@ -29,6 +29,8 @@ $("#updateinv").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();
 	var currdept = $("#currdept").val();
+	var currdept = $("#currdept").val();
+	var katbar = $("#katbar").val();
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
 	} else {
@@ -48,6 +50,7 @@ $("#updateinv").click(function () {
 			tgk: tglakhir,
 			dpt: currdept,
 			gbn: gbg,
+			kat: katbar,
 		},
 		success: function (data) {
 			// alert(data);
