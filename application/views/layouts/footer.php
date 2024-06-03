@@ -73,6 +73,9 @@
 <?php if (isset($fungsi) && $fungsi == 'inv') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/inv.js?1692870487"></script>
 <?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'bbl') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1692870487"></script>
+<?php } ?>
 
 <script>
 	// @formatter:off
@@ -847,4 +850,5 @@
 	// @formatter:on
 </script>
 </body>
+
 </html>
