@@ -6,11 +6,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          PB (Permintaan Barang) # <?= $data['nomor_dok']; ?>
+          BBl (BON PEMBELIAN BARANG) # <?= $data['nomor_dok']; ?> <?= var_dump($data['id']); ?>
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
-        <a href="<?= base_url() . 'pb'; ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+        <a href="<?= base_url() . 'bbl'; ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
       </div>
     </div>
   </div>
@@ -30,7 +30,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <?= tglmysql($data['tgl']); ?>
-                    <a href="<?= base_url() . 'pb/edittgl'; ?>" title="Edit tanggal" id="tglpb" name="tglpb" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                    <a href="<?= base_url() . 'bbl/edittgl'; ?>" title="Edit tanggal" id="tglbbl" name="tglbbl" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
                       <i class="fa fa-edit"></i>
                     </a>
                   </span>
@@ -40,7 +40,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" id="catat" class="hilang" value="<?= $data['keterangan']; ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <?= $data['keterangan']; ?>
-                    <a href="<?= base_url() . 'pb/edittgl'; ?>" title="Edit tanggal" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                    <a href="<?= base_url() . 'bbl/edittgl'; ?>" title="Edit Catatan" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
                       <i class="fa fa-edit"></i>
                     </a>
                   </span>
@@ -55,15 +55,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
         <div class="row">
           <div class="col-sm-4 mt-2">
-            <form method="post" action="<?= base_url() . 'pb/simpandetailbarang'; ?>" name="formbarangpb" id="formbarangpb">
+
+            <form method="post" action="<?= base_url() . 'bbl/simpandetailbarang'; ?>" name="formbbl" id="formbbl">
               <input type="text" id="id" name="id" value="" class="hilang">
               <div class="row font-kecil mb-0">
-                <label class="col-2 col-form-label font-kecil required">Specific</label>
+                <label class="col-2 col-form-label font-kecil required">Dok</label>
                 <div class="col input-group mb-1">
                   <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
-                  <input type="text" id="id_barang" name="id_barang" class="hilang">
-                  <input type="text" class="form-control font-kecil" id="nama_barang" name="nama_barang" placeholder="Spec Barang">
-                  <a href="<?= base_url() . 'pb/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
+                  <!-- <input type="text" id="id_barang" name="id_barang" class="form-control"> -->
+                  <input type="text" class="form-control font-kecil" id="nomor_dok" name="nomor_dok" placeholder="Nomor Dokumen">
+                  <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Barang</label>
+                <div class="col">
+                  <select name="id_barang" id="id_barang" class="form-control font-kecil">
+                    <option value="">Barang</option>
+                    <?php foreach ($barang as $data) { ?>
+                      <option value="<?= $data['id']; ?>"><?= $data['nama_barang']; ?></option>
+                    <?php } ?>
+                  </select>
                 </div>
               </div>
               <div class="row font-kecil mb-1">
@@ -78,15 +90,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Qty</label>
+                <label class="col-2 col-form-label">Ket</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="pcs" name="pcs" aria-describedby="emailHelp" placeholder="Qty">
-                </div>
-              </div>
-              <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Kgs</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="kgs" name="kgs" aria-describedby="emailHelp" placeholder="Kgs">
+                  <input type="text" class="form-control font-kecil text-right" id="keteranagan" name="keterangan" aria-describedby="emailHelp" placeholder="Ket">
                 </div>
               </div>
             </form>
@@ -105,11 +111,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <thead style="background-color: blue !important">
                   <tr>
                     <!-- <th>No</th> -->
-                    <th>Specific</th>
-                    <th>SKU</th>
+                    <th>No Dok</th>
+                    <th>Nama Barang</th>
                     <th>Satuan</th>
-                    <th>Qty</th>
-                    <th>Kgs</th>
+                    <th>Ket</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -123,7 +128,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">
           <input type="text" id="jmlrek" class="hilang">
-          <a href="#" class="btn btn-sm btn-primary" id="simpanpb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'pb/simpanpb/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+          <a href="#" class="btn btn-sm btn-primary" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'pb/simpanpb/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
           <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
         </div>
       </div>
