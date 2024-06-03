@@ -276,15 +276,15 @@ function lastday($tgl)
 {
     return date('Y-m-t', strtotime($tgl));
 }
-function viewsku($po = '', $no = '', $dis = '', $id = '')
-{
+
+function viewsku($po='',$no='',$dis='',$id=''){
     $hasil = '';
-    if (trim($po) == '') {
+    if(trim($po)==''){
         $hasil = $id;
-    } else {
-        $xdis = $dis == 0 ? '' : ' dis ' . $dis;
-        $xid = $id == '' ? '' : ' brg ' . $id;
-        $hasil = $po . ' # ' . $no . $xdis;
+    }else{
+        $xdis = $dis==0 ? '' : ' dis '.$dis;
+        $xid = $id=='' ? '' : ' brg '.$id;
+        $hasil = $po.' # '.$no.$xdis;
     }
     return $hasil;
 }
