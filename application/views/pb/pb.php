@@ -33,7 +33,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $selek = $this->session->userdata('levelsekarang');
               }
               ?>
-              <select class="form-control form-sm font-kecil font-bold bg-primary text-white" id="level" name="level" style="width: 150px;" <?= $levnow; ?>>
+              <select class="form-select form-control form-sm font-kecil font-bold bg-primary text-white" id="level" name="level" style="width: 150px;" <?= $levnow; ?>>
                 <option value="1" <?php if ($selek == 1) {
                                     echo "selected";
                                   } ?>>User Maker</option>
@@ -57,7 +57,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                   <span class="font-kecil">
                     <div class="font-kecil">
-                      <select class="form-control form-sm font-kecil font-bold" id="dept_kirim" name="dept_kirim">
+                      <select class="form-select form-control form-sm font-kecil font-bold" id="dept_kirim" name="dept_kirim">
                         <?php
                         // Mendapatkan nilai 'deptsekarang', jikla null nilai default jadi it
                         $selek = $this->session->userdata('deptsekarang') ?? 'IT';
@@ -76,7 +76,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <h4 class="mb-1 font-kecil">Dept Tujuan</h4>
                   <span class="font-kecil">
                     <div class="font-kecil">
-                      <select class="form-control form-sm font-kecil font-bold" id="dept_tuju" name="dept_tuju">
+                      <select class="form-select form-control form-sm font-kecil font-bold" id="dept_tuju" name="dept_tuju">
 
                       </select>
                     </div>
