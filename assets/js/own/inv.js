@@ -36,7 +36,8 @@ $("#updateinv").click(function () {
 	var currdept = $("#currdept").val();
 	var currdept = $("#currdept").val();
 	var katbar = $("#katbar").val();
-	var katcari = document.getElementById("caribar").innerHTML;
+	// var katcari = document.getElementById("caribar").innerHTML;
+	var katcari = $("input:radio[name=radios-inline]:checked").val();
 	$("#textcari").val("");
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
@@ -81,7 +82,8 @@ $("#buttoncari").click(function () {
 	var currdept = $("#currdept").val();
 	var katbar = $("#katbar").val();
 	var textcari = $("#textcari").val();
-	var katcari = document.getElementById("caribar").innerHTML;
+	// var katcari = document.getElementById("caribar").innerHTML;
+	var katcari = $("input:radio[name=radios-inline]:checked").val();
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
 	} else {
@@ -116,11 +118,11 @@ $("#buttoncari").click(function () {
 		},
 	});
 });
-$("#caribar").click(function () {
-	var dok = document.getElementById("caribar");
-	if (dok.innerHTML == "Cari Barang") {
-		dok.innerHTML = "Cari SKU";
-	} else {
-		dok.innerHTML = "Cari Barang";
-	}
-});
+// $("#caribar").click(function () {
+// 	var dok = document.getElementById("caribar");
+// 	if (dok.innerHTML == "Cari Barang") {
+// 		dok.innerHTML = "Cari SKU";
+// 	} else {
+// 		dok.innerHTML = "Cari Barang";
+// 	}
+// });
