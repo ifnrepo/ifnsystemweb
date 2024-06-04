@@ -34,12 +34,14 @@ class Inv extends CI_Controller
             $data['data'] = null;
             $data['kat'] = null;
             $data['gbg'] = '';
+            $data['kategoricari'] = 'Cari Barang';
         } else {
             $data['tglawal'] = $this->session->userdata('tglawal');
             $data['tglakhir'] = $this->session->userdata('tglakhir');
             $data['data'] = $this->invmodel->getdata();
             $data['kat'] = $this->invmodel->getdatakategori();
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
+            $data['kategoricari'] = $this->session->userdata('kategoricari');
         }
         $footer['fungsi'] = 'inv';
         $this->load->view('layouts/header', $header);
@@ -64,6 +66,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('currdept', $_POST['dpt']);
         $this->session->set_userdata('gbg', $_POST['gbn']);
         $this->session->set_userdata('filterkat', $_POST['kat']);
+        $this->session->set_userdata('kategoricari', $_POST['kcari']);
         if (isset($_POST['cari'])) {
             $this->session->set_userdata('katcari', $_POST['cari']);
         } else {
