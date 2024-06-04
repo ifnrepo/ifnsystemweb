@@ -90,6 +90,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Qty</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil text-right" id="qty" name="qty" aria-describedby="emailHelp" placeholder="Qty">
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">Ket</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil text-right" id="keteranagan" name="keterangan" aria-describedby="emailHelp" placeholder="Ket">
@@ -110,16 +116,33 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <table class="table datatable6 table-hover" id="cobasisip">
                 <thead style="background-color: blue !important">
                   <tr>
-                    <!-- <th>No</th> -->
-                    <th>No Dok</th>
+                    <th>No</th>
                     <th>Nama Barang</th>
                     <th>Satuan</th>
+                    <th>Qty</th>
                     <th>Ket</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-
+                  <?php $no = 0;
+                  foreach ($detail as $key) : $no++; ?>
+                    <tr>
+                      <td><?= $no; ?></td>
+                      <td><?= $key['nama_barang']; ?></td>
+                      <td><?= $key['kodesatuan']; ?></td>
+                      <td><?= $key['qty']; ?></td>
+                      <td class="text-center"><?= $key['keterangan']; ?></td>
+                      <td>
+                        <a href="<?= base_url() . 'jabatan/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editjabatan" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Jabatan" rel="<?= $key['id']; ?>" title="Edit data">
+                          <i class="fa fa-edit"></i>
+                        </a>
+                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapusdetailbbl/' . $key['id']; ?>" title="Hapus data">
+                          <i class="fa fa-trash-o"></i>
+                        </a>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
                 </tbody>
               </table>
             </div>
