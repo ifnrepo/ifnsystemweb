@@ -1,4 +1,4 @@
-$(window).on('load', function () {
+$(window).on("load", function () {
 	NProgress.start();
 });
 $(document).ready(function () {
@@ -36,7 +36,8 @@ $("#updateinv").click(function () {
 	var currdept = $("#currdept").val();
 	var currdept = $("#currdept").val();
 	var katbar = $("#katbar").val();
-	$("#textcari").val('');
+	var katcari = document.getElementById("caribar").innerHTML;
+	$("#textcari").val("");
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
 	} else {
@@ -57,6 +58,7 @@ $("#updateinv").click(function () {
 			dpt: currdept,
 			gbn: gbg,
 			kat: katbar,
+			kcari: katcari,
 		},
 		success: function (data) {
 			// alert(data);
@@ -79,6 +81,7 @@ $("#buttoncari").click(function () {
 	var currdept = $("#currdept").val();
 	var katbar = $("#katbar").val();
 	var textcari = $("#textcari").val();
+	var katcari = document.getElementById("caribar").innerHTML;
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
 	} else {
@@ -99,7 +102,8 @@ $("#buttoncari").click(function () {
 			dpt: currdept,
 			gbn: gbg,
 			kat: katbar,
-			cari: textcari
+			cari: textcari,
+			kcari: katcari,
 		},
 		success: function (data) {
 			// alert(data);
@@ -111,4 +115,12 @@ $("#buttoncari").click(function () {
 			console.log(thrownError);
 		},
 	});
-})
+});
+$("#caribar").click(function () {
+	var dok = document.getElementById("caribar");
+	if (dok.innerHTML == "Cari Barang") {
+		dok.innerHTML = "Cari SKU";
+	} else {
+		dok.innerHTML = "Cari Barang";
+	}
+});

@@ -60,7 +60,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                   </span>
                 </div>
-                <div class="col-3 ">
+                <div class="col-5 ">
                   <!-- <label class="form-check mt-1">
                     <input class="form-check-input" type="checkbox" id="gbg">
                     <span class="form-check-label font-bold">Gabung</span>
@@ -70,22 +70,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <span class="form-check-label font-bold" id="spcbarang">Minus</span>
                   </label> -->
                 </div>
-                <div class="col-3">
-                  <!-- <h4 class="mb-3 font-kecil">Spesifikasi Barang</h4>
-                  <span class="font-kecil">
-                    <label class="form-check mb-0">
-                      <input class="form-check-input" type="checkbox">
-                      <span class="form-check-label font-bold">-</span>
-                    </label>
-                  </span> -->
+                <div class="col-1">
+
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-1 font-kecil">Cari Barang</h4>
+                  <h4 class="mb-1 font-kecil font-bold text-primary" id="caribar" style="cursor: hand;" title="ubah kondisi Pencarian"><?= $kategoricari; ?></h4>
                   <div class="input-group mb-0">
                     <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
-                    <input type="text" class="form-control form-sm font-kecil" placeholder="Cari…" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase">
-                    <button class="btn text-center" type="button" id="buttoncari">
-                      Go!
+                    <input type="text" class="form-control form-sm font-kecil" placeholder="Cari…" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
+                    <button class="btn text-center font-kecil" type="button" id="buttoncari" style="height: 38px;">
+                      Cari
                     </button>
                   </div>
                 </div>
