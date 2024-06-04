@@ -1,3 +1,4 @@
+<!doctype html>
 <html lang="en">
 
 <head>
@@ -25,6 +26,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/select2/css/select2.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/select2/css/select2-bootstrap4.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
+  <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 
   <link href=<?= base_url() . "assets/css/own-style.css?1692870487" ?> rel="stylesheet" />
   <style>
@@ -410,11 +412,12 @@
             </li>
             <li class="nav-item">
               <a class="nav-link <?php if (isset($header) && $header == 'inventory') {
-                                          echo 'active';
-                                        } ?>" href="<?= base_url('inv/clear'); ?>">
+                                    echo 'active';
+                                  } ?>" href="<?= base_url('inv/clear'); ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-building-warehouse">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 21v-13l9 -4l9 4v13" />
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-warehouse">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 21v-13l9 -4l9 4v13" />
                     <path d="M13 13h4v8h-10v-6h6" />
                     <path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3" />
                   </svg>
@@ -423,7 +426,7 @@
                   Inventory
                 </span>
               </a>
-            </li>                                  
+            </li>
             <li class="nav-item <?= cekmenuheader($this->session->userdata('manajemen')); ?>">
               <a class="nav-link <?php if (isset($header) && $header == 'manajemen') {
                                     echo 'active';
