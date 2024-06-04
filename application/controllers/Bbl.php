@@ -65,6 +65,7 @@ class Bbl extends CI_Controller
         $data['data'] = $this->bbl_model->getdatabyid($id);
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
         $data['barang'] = $this->db->get('barang')->result_array();
+        $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
         $footer['fungsi'] = 'bbl';
         $this->load->view('layouts/header', $header);
         $this->load->view('bbl/databbl', $data);
@@ -97,12 +98,13 @@ class Bbl extends CI_Controller
         $query = $this->bbl_model->getspecbarang($nomor_dok);
         foreach ($query as $que) {
             $html .= "<tr>";
+            $html .= "<td>" . $que['id'] . "</td>";
             $html .= "<td>" . $que['nomor_dok'] . "</td>";
             $html .= "<td>" . $que['nama_barang'] . "</td>";
             $html .= "<td>" . $que['kodesatuan'] . "</td>";
             $html .= "<td>";
 
-            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $que['nomor_dok'] . "' rel2='" . $que['id_barang'] . "' rel3='" . $que['id_satuan'] . "' >Pilih</a>";
+            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;'>Pilih</a>";
 
             $html .= "</td>";
             $html .= "</tr>";
@@ -110,42 +112,61 @@ class Bbl extends CI_Controller
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function simpandetailbarang()
+    public function simpandetailbarang($id)
     {
-        $hasil = $this->bbl_model->simpandetailbarang();
+
+        $hasil = $this->bbl_model->simpandetailbarang($id);
         if ($hasil) {
             $kode = $hasil['id'];
             $url = base_url() . 'bbl/databbl/' . $kode;
             redirect($url);
         }
     }
+
+
     public function getdatadetail_bbl()
     {
-        $kode = $_POST['id_header'];
+        $kode = $this->input->post('id_header');
         $data = $this->bbl_model->getdatadetail_bbl($kode);
         $hasil = '';
-        $no = 1;
         $jml = count($data);
+
         foreach ($data as $dt) {
             $hasil .= "<tr>";
             $hasil .= "<td>" . $dt['nomor_dok'] . "</td>";
             $hasil .= "<td>" . $dt['nama_barang'] . "</td>";
             $hasil .= "<td>" . $dt['kodesatuan'] . "</td>";
-            $hasil .= "<td>" . $dt['keterangan'] . "</td>";
+
             $hasil .= "<td class='text-center'>";
             $hasil .= "<a href='#' id='editdetailbbl' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
             $hasil .= "<a href='" . base_url() . 'bbl/hapusdetailpbbl/' . $dt['id'] . "' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
         }
+
         $cocok = array('datagroup' => $hasil, 'jmlrek' => $jml);
         echo json_encode($cocok);
     }
-
     public function viewdetailbbl($id)
     {
         $data['header'] = $this->bbl_model->getdatabyid($id);
         $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
         $this->load->view('pb/viewdetailpb', $data);
+    }
+
+    public function hapusdetailbbl($id)
+    {
+        $hasil = $this->bbl_model->hapusdetailbbl($id);
+        if ($hasil) {
+            $kode = $hasil['id'];
+            $url = base_url() . 'bbl/databbl/' . $kode;
+            redirect($url);
+        }
+    }
+    public function getdata_by_id()
+    {
+        $id = $this->input->post('id');
+        $data = $this->bbl_model->get_data_by_id($id);
+        echo json_encode($data);
     }
 }

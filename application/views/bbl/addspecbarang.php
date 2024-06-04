@@ -14,6 +14,7 @@
                 <table class="table datatable6" id="cobasisip">
                     <thead style="background-color: blue !important">
                         <tr>
+                            <th>id</th>
                             <th>No Dok</th>
                             <th>Nama barang</th>
                             <th>satuan</th>
@@ -81,4 +82,24 @@
         $("#id_satuan").val(z);
         $("#modal-scroll").modal('hide');
     })
+    // JavaScript untuk menangani klik pada tombol "Pilih"
+    $('.pilihbarang').click(function() {
+        var id = $(this).closest('tr').find('td:eq(0)').text(); // Mendapatkan id dari kolom pertama
+
+        // AJAX untuk mengambil data berdasarkan id
+        $.ajax({
+            type: 'POST',
+            url: 'bbl/getdata_by_id',
+            data: {
+                id: id
+            },
+            success: function(response) {
+                console.log(response); // Tampilkan data yang diperoleh
+            }
+        });
+
+        // Mengarahkan form untuk menyimpan detail barang
+        $('#form_detail_barang').attr('action', 'bbl/simpandetailbarang/' + id);
+        $('#form_detail_barang').submit(); // Submit form
+    });
 </script>
