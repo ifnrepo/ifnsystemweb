@@ -6,6 +6,7 @@
                 <label class="col-3 col-form-label required font-kecil">Keyword</label>
                 <div class="col input-group">
                     <input type="text" class="form-control font-kecil inputangka" name="keyw" id="keyw" placeholder="Cari..">
+
                     <a href="#" class="btn font-kecil bg-success text-white" id="getbarang">Get!</a>
                 </div>
             </div>
@@ -33,6 +34,8 @@
 </div>
 <div class="modal-footer">
 </div>
+
+<input type="text" id="id_header" value="<?= isset($data['id']) ? $data['id'] : ''; ?>">
 <script>
     $(document).ready(function() {
         $("#keyw").focus();
@@ -40,66 +43,86 @@
         if ($("#keyw").val() != '') {
             $("#getbarang").click();
         }
-    })
-    $("#keyw").on('keyup', function(e) {
-        if (e.key == 'Enter' || e.keycode === 13) {
-            $("#getbarang").click();
-        }
-    })
-    $("#getbarang").click(function() {
-        if ($("#keyw").val() == '') {
-            pesan('Isi dahulu keyword pencarian barang', 'info');
-            return;
-        }
-        $.ajax({
-            dataType: "json",
-            type: "POST",
-            url: base_url + 'bbl/getspecbarang',
-            data: {
-                data: $("#keyw").val(),
-            },
-            success: function(data) {
-                console.log(data); // Log data yang diterima
-                if (data.datagroup) {
-                    $("#body-table").html(data.datagroup).show();
-                } else {
-                    pesan('Tidak ada data yang ditemukan', 'info');
-                    $("#body-table").html('').hide();
-                }
-            },
-            error: function(xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status);
-                console.log(thrownError);
-            }
-        })
-    })
-    $(document).on('click', '.pilihbarang', function() {
-        var x = $(this).attr('rel1');
-        var y = $(this).attr('rel2');
-        var z = $(this).attr('rel3');
-        $("#nomor_dok").val(x);
-        $("#id_barang").val(y);
-        $("#id_satuan").val(z);
-        $("#modal-scroll").modal('hide');
-    })
-    // JavaScript untuk menangani klik pada tombol "Pilih"
-    $('.pilihbarang').click(function() {
-        var id = $(this).closest('tr').find('td:eq(0)').text(); // Mendapatkan id dari kolom pertama
 
-        // AJAX untuk mengambil data berdasarkan id
-        $.ajax({
-            type: 'POST',
-            url: 'bbl/getdata_by_id',
-            data: {
-                id: id
-            },
-            success: function(response) {
-                console.log(response); // Tampilkan data yang diperoleh
+        $("#keyw").on('keyup', function(e) {
+            if (e.key === 'Enter' || e.keyCode === 13) {
+                $("#getbarang").click();
             }
         });
 
-        // Mengarahkan form untuk menyimpan detail barang
-        $('#form_detail_barang').attr('action', 'bbl/simpandetailbarang/' + id);
-        $('#form_detail_barang').submit(); // Submit form
+        $("#getbarang").click(function() {
+            if ($("#keyw").val() == '') {
+                alert('Isi dahulu keyword pencarian barang');
+                return;
+            }
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: '<?= base_url('bbl/getspecbarang') ?>',
+                data: {
+                    data: $("#keyw").val()
+                },
+                success: function(data) {
+                    console.log(data); // Log data yang diterima
+                    if (data.datagroup) {
+                        $("#body-table").html(data.datagroup).show();
+                    } else {
+                        alert('Tidak ada data yang ditemukan');
+                        $("#body-table").html('').hide();
+                    }
+                },
+                error: function(xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                }
+            });
+        });
+
+
+        $(document).on('click', '.pilihbarang', function(event) {
+            event.preventDefault();
+
+            var id_header = $('#id_header').val();
+            var id = $(this).data('id');
+            var nama_barang = $(this).data('nama_barang');
+            var kodesatuan = $(this).data('kodesatuan');
+
+            $.ajax({
+                type: 'POST',
+                url: '<?= base_url('bbl/getdata_by_id') ?>',
+                data: {
+                    id: id
+                },
+                success: function(response) {
+                    try {
+                        var data = JSON.parse(response);
+                        data.id_header = id_header;
+                        data.id_barang = nama_barang;
+                        data.id_satuan = kodesatuan;
+
+                        $.ajax({
+                            type: 'POST',
+                            url: '<?= base_url('bbl/simpandetailbarang') ?>',
+                            data: data,
+                            success: function(saveResponse) {
+                                var saveResult = JSON.parse(saveResponse);
+                                if (saveResult.success) {
+                                    alert('Data berhasil disimpan');
+                                } else {
+                                    alert('Gagal menyimpan data');
+                                }
+                            },
+                        });
+                    } catch (e) {
+                        console.error('Error saat parsing:', e);
+                        alert('Terjadi kesalahan data.');
+                    }
+                },
+                error: function(xhr, status, error) {
+                    console.error('Error saat mengambil data:', error);
+                    alert('Terjadi kesalahan saat mengambil data.');
+                }
+            });
+        });
     });
 </script>
