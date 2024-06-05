@@ -67,49 +67,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
                 </div>
               </div>
-              <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Barang</label>
-                <div class="col">
-                  <select name="id_barang" id="id_barang" class="form-control font-kecil">
-                    <option value="">Barang</option>
-                    <?php foreach ($barang as $data) { ?>
-                      <option value="<?= $data['id']; ?>"><?= $data['nama_barang']; ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-              <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Satuan</label>
-                <div class="col">
-                  <select name="id_satuan" id="id_satuan" class="form-control font-kecil">
-                    <option value="">Pilih Satuan</option>
-                    <?php foreach ($satuan as $sat) { ?>
-                      <option value="<?= $sat['id']; ?>"><?= $sat['namasatuan']; ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-              <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Qty</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="qty" name="qty" aria-describedby="emailHelp" placeholder="Qty">
-                </div>
-              </div>
-              <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Ket</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="keteranagan" name="keterangan" aria-describedby="emailHelp" placeholder="Ket">
-                </div>
-              </div>
             </form>
-            <div class="row">
-              <div class="col-6">
-                <a href="#" class="btn btn-sm btn-primary" style="width:100%" id="simpandetailbarang">Simpan Barang</a>
-              </div>
-              <div class="col-6">
-                <a href="#" class="btn btn-sm btn-danger" style="width:100%" id="resetdetailbarang">Reset Detail</a>
-              </div>
-            </div>
+
           </div>
           <div class="col-sm-8">
             <div id="table-default" class="table-responsive">
@@ -132,12 +91,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <td><?= $key['nama_barang']; ?></td>
                       <td><?= $key['kodesatuan']; ?></td>
                       <td><?= $key['qty']; ?></td>
-                      <td class="text-center"><?= $key['keterangan']; ?></td>
+                      <td><?= $key['keterangan']; ?></td>
                       <td>
                         <a href="<?= base_url() . 'jabatan/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editjabatan" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Jabatan" rel="<?= $key['id']; ?>" title="Edit data">
                           <i class="fa fa-edit"></i>
                         </a>
-                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapusdetailbbl/' . $key['id']; ?>" title="Hapus data">
+                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'jabatan/hapus/' . $key['id']; ?>" title="Hapus data">
                           <i class="fa fa-trash-o"></i>
                         </a>
                       </td>

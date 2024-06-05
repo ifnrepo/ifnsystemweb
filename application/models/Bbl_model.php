@@ -35,12 +35,12 @@ class Bbl_model extends CI_Model
         return $hasil;
     }
 
-    public function update_bbl($data)
-    {
-        $this->db->where('id', $data['id']);
-        $query = $this->db->update('tb_header', $data);
-        return $query;
-    }
+    // public function update_bbl($data)
+    // {
+    //     $this->db->where('id', $data['id']);
+    //     $query = $this->db->update('tb_header', $data);
+    //     return $query;
+    // }
 
     public function getdatapb()
     {
@@ -73,18 +73,31 @@ class Bbl_model extends CI_Model
         $hasil = $this->pb_model->getdatadetailpbbyid($data);
         echo json_encode($hasil);
     }
-    public function simpandetailbarang()
+    // public function simpandetailbarang($data)
+    // {
+    //     $hasil = $this->db->insert('tb_detail', $data);
+
+    //     if ($hasil) {
+    //         $this->db->where('id', $data['id_header']);
+    //         $query = $this->db->get('tb_header')->row_array();
+    //         return $query;
+    //     }
+    //     return false;
+    // }
+    public function simpandetailbarang($data)
     {
-        $data = $this->input->post();
-        unset($data['nomor_dok']);
-        $hasil =  $this->db->insert('tb_detail', $data);
+
+        $hasil = $this->db->insert('tb_detail', $data);
         if ($hasil) {
-            $this->db->where('id', $data['id_header']);
-            $query = $this->db->get('tb_header')->row_array();
+            $insert_id = $this->db->insert_id();
+            $this->db->where('id', $insert_id);
+            $query = $this->db->get('tb_detail')->row_array();
             return $query;
         }
         return false;
     }
+
+
 
     public function getdatabyid($id)
     {
@@ -120,9 +133,10 @@ class Bbl_model extends CI_Model
         return $que;
     }
 
-    public function get_data_by_id($id)
+    public function getdata_byid($id)
     {
-        $query = $this->db->get_where('td_detail', array('id' => $id));
+        $this->db->where('id', $id);
+        $query = $this->db->get('tb_detail');
         return $query->result_array();
     }
 }

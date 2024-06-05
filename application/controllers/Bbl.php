@@ -63,6 +63,7 @@ class Bbl extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['data'] = $this->bbl_model->getdatabyid($id);
+        $this->session->set_userdata('data_databbl', $data['data']);
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
         $data['barang'] = $this->db->get('barang')->result_array();
         $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
@@ -76,19 +77,20 @@ class Bbl extends CI_Controller
         $this->load->view('bbl/edit_tgl');
     }
 
-    public function updatebbl()
-    {
-        $data = [
-            'tgl' => tglmysql($_POST['tgl']),
-            'keterangan' => $_POST['ket'],
-            'id' => $_POST['id']
-        ];
-        $simpan = $this->bbl_model->update_bbl($data);
-        echo $simpan;
-    }
+    // public function updatebbl()
+    // {
+    //     $data = [
+    //         'tgl' => tglmysql($_POST['tgl']),
+    //         'keterangan' => $_POST['ket'],
+    //         'id' => $_POST['id']
+    //     ];
+    //     $simpan = $this->bbl_model->update_bbl($data);
+    //     echo $simpan;
+    // }
     public function addspecbarang()
     {
-        $this->load->view('bbl/addspecbarang');
+        $data['data'] = $this->session->userdata('data_databbl');
+        $this->load->view('bbl/addspecbarang', $data);
     }
 
     public function getspecbarang()
@@ -96,6 +98,9 @@ class Bbl extends CI_Controller
         $nomor_dok = $_POST['data'];
         $html = '';
         $query = $this->bbl_model->getspecbarang($nomor_dok);
+
+        log_message('debug', 'Query result: ' . json_encode($query));
+
         foreach ($query as $que) {
             $html .= "<tr>";
             $html .= "<td>" . $que['id'] . "</td>";
@@ -104,7 +109,7 @@ class Bbl extends CI_Controller
             $html .= "<td>" . $que['kodesatuan'] . "</td>";
             $html .= "<td>";
 
-            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;'>Pilih</a>";
+            $html .= "<button class='btn btn-sm btn-success pilihbarang' data-id='" . $que['id'] . "' data-nomor_dok='" . $que['nomor_dok'] . "' data-nama_barang='" . $que['nama_barang'] . "' data-kodesatuan='" . $que['kodesatuan'] . "'>Pilih</button>";
 
             $html .= "</td>";
             $html .= "</tr>";
@@ -112,41 +117,19 @@ class Bbl extends CI_Controller
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function simpandetailbarang($id)
+    public function simpandetailbarang()
     {
+        // $data = $this->input->post();
+        $hasil = $this->bbl_model->simpandetailbarang($data);
 
-        $hasil = $this->bbl_model->simpandetailbarang($id);
         if ($hasil) {
-            $kode = $hasil['id'];
-            $url = base_url() . 'bbl/databbl/' . $kode;
+            $url = base_url() . 'bbl/databbl/' . $hasil['id'];
             redirect($url);
+        } else {
+            echo "Gagal menyimpan data.";
         }
     }
 
-
-    public function getdatadetail_bbl()
-    {
-        $kode = $this->input->post('id_header');
-        $data = $this->bbl_model->getdatadetail_bbl($kode);
-        $hasil = '';
-        $jml = count($data);
-
-        foreach ($data as $dt) {
-            $hasil .= "<tr>";
-            $hasil .= "<td>" . $dt['nomor_dok'] . "</td>";
-            $hasil .= "<td>" . $dt['nama_barang'] . "</td>";
-            $hasil .= "<td>" . $dt['kodesatuan'] . "</td>";
-
-            $hasil .= "<td class='text-center'>";
-            $hasil .= "<a href='#' id='editdetailbbl' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
-            $hasil .= "<a href='" . base_url() . 'bbl/hapusdetailpbbl/' . $dt['id'] . "' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
-            $hasil .= "</td>";
-            $hasil .= "</tr>";
-        }
-
-        $cocok = array('datagroup' => $hasil, 'jmlrek' => $jml);
-        echo json_encode($cocok);
-    }
     public function viewdetailbbl($id)
     {
         $data['header'] = $this->bbl_model->getdatabyid($id);
@@ -166,7 +149,7 @@ class Bbl extends CI_Controller
     public function getdata_by_id()
     {
         $id = $this->input->post('id');
-        $data = $this->bbl_model->get_data_by_id($id);
+        $data = $this->bbl_model->getdata_byid($id);
         echo json_encode($data);
     }
 }
