@@ -34,16 +34,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <span class="font-kecil">
                                         <div class="font-kecil">
                                             <select class="form-control form-sm font-kecil font-bold" id="dept_kirim" name="dept_kirim">
-                                                <?php
-                                                // Mendapatkan nilai 'deptsekarang', jikla null nilai default jadi it
-                                                $selek = $this->session->userdata('deptsekarang') ?? 'IT';
-                                                foreach ($hakdep as $hak) :
-                                                    $selected = ($selek == $hak['dept_id']) ? "selected" : "";
-                                                ?>
-                                                    <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?= $selected ?>>
-                                                        <?= $hak['departemen']; ?>
+                                                <?php foreach ($dept_bbl as $dept) : ?>
+                                                    <option value="<?= $dept['dept_id']; ?>" rel="<?= $dept['departemen']; ?>">
+                                                        <?= $dept['departemen']; ?>
                                                     </option>
                                                 <?php endforeach; ?>
+
                                             </select>
                                         </div>
                                     </span>

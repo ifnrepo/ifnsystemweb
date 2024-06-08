@@ -27,7 +27,7 @@ class Bbl extends CI_Controller
         $header['header'] = 'transaksi';
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
-        $data['dephak'] = $this->deptmodel->getdata();
+        $data['dept_bbl'] = $this->deptmodel->getdata_dept_bbl();
         $kode = [
             'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
             'dept_tuju' => $this->session->userdata('tujusekarang') == null ? '' : $this->session->userdata('tujusekarang'),
@@ -45,7 +45,7 @@ class Bbl extends CI_Controller
         $this->load->view('bbl/add_bbl');
     }
 
-    public function tambahpb()
+    public function tambahbbl()
     {
         $data = [
             'dept_id' => $_POST['dept_id'],
@@ -77,16 +77,6 @@ class Bbl extends CI_Controller
         $this->load->view('bbl/edit_tgl');
     }
 
-    // public function updatebbl()
-    // {
-    //     $data = [
-    //         'tgl' => tglmysql($_POST['tgl']),
-    //         'keterangan' => $_POST['ket'],
-    //         'id' => $_POST['id']
-    //     ];
-    //     $simpan = $this->bbl_model->update_bbl($data);
-    //     echo $simpan;
-    // }
     public function addspecbarang()
     {
         $data['data'] = $this->session->userdata('data_databbl');
@@ -95,7 +85,8 @@ class Bbl extends CI_Controller
 
     public function getspecbarang()
     {
-        $nomor_dok = $_POST['data'];
+        $data['data'] = $this->session->userdata('data_databbl');
+        $nomor_dok = $this->input->post('data'); // Mengambil data dari post
         $html = '';
         $query = $this->bbl_model->getspecbarang($nomor_dok);
 
@@ -103,53 +94,94 @@ class Bbl extends CI_Controller
 
         foreach ($query as $que) {
             $html .= "<tr>";
-            $html .= "<td>" . $que['id'] . "</td>";
+            $html .= "<td>" . $que['id_header'] . "</td>";
             $html .= "<td>" . $que['nomor_dok'] . "</td>";
             $html .= "<td>" . $que['nama_barang'] . "</td>";
             $html .= "<td>" . $que['kodesatuan'] . "</td>";
             $html .= "<td>";
-
-            $html .= "<button class='btn btn-sm btn-success pilihbarang' data-id='" . $que['id'] . "' data-nomor_dok='" . $que['nomor_dok'] . "' data-nama_barang='" . $que['nama_barang'] . "' data-kodesatuan='" . $que['kodesatuan'] . "'>Pilih</button>";
-
+            $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
+            $html .= '<input type="hidden" name="id_header" value="' . $que['id_header'] . '">';
+            $html .= '<input type="hidden" name="id_header_session" value="' . (isset($data['data']['id']) ? $data['data']['id'] : '') . '">';
+            $html .= '<button type="submit" class="btn btn-sm btn-success">Pilih</button>';
+            $html .= '</form>';
             $html .= "</td>";
             $html .= "</tr>";
         }
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function simpandetailbarang()
-    {
-        // $data = $this->input->post();
-        $hasil = $this->bbl_model->simpandetailbarang($data);
 
-        if ($hasil) {
-            $url = base_url() . 'bbl/databbl/' . $hasil['id'];
-            redirect($url);
+    public function pilih_barang()
+    {
+        $id_header = $this->input->post('id_header');
+        $id_header_session = $this->input->post('id_header_session');
+        $data_barang = $this->bbl_model->getdata_byid($id_header);
+        $url = base_url() . 'bbl/databbl/';
+
+        if ($data_barang) {
+            foreach ($data_barang as &$item) {
+                $item['id_header'] = $id_header_session;
+                unset($item['id']);
+            }
+
+            $hasil = $this->bbl_model->simpandetailbarang($data_barang);
+
+            if ($hasil) {
+                redirect($url . $id_header_session);
+            } else {
+                $this->session->set_flashdata('message', 'Gagal menyimpan data');
+                redirect($url . $id_header);
+            }
         } else {
-            echo "Gagal menyimpan data.";
+            $this->session->set_flashdata('message', 'Data tidak ditemukan');
+            redirect($url . $id_header);
         }
     }
-
-    public function viewdetailbbl($id)
+    public function edit($id)
     {
-        $data['header'] = $this->bbl_model->getdatabyid($id);
+        $data['data'] = $this->bbl_model->get_detail($id);
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $data['barang'] = $this->db->get('barang')->result_array();
         $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
-        $this->load->view('pb/viewdetailpb', $data);
+        $this->load->view('bbl/edit_detail', $data);
+    }
+    public function update()
+    {
+        $data = [
+            'id' => $_POST['id'],
+            'id_barang' => $_POST['id_barang'],
+            'id_satuan' => $_POST['id_satuan'],
+            'pcs' => $_POST['pcs'],
+            'keterangan' => $_POST['keterangan']
+        ];
+        $hasil = $this->bbl_model->updatedata($data);
+        echo $hasil;
     }
 
-    public function hapusdetailbbl($id)
+    public function hapus($id)
     {
-        $hasil = $this->bbl_model->hapusdetailbbl($id);
+        $hasil = $this->bbl_model->hapus($id);
         if ($hasil) {
             $kode = $hasil['id'];
             $url = base_url() . 'bbl/databbl/' . $kode;
             redirect($url);
         }
     }
-    public function getdata_by_id()
+
+    public function simpanbbl($id)
     {
-        $id = $this->input->post('id');
-        $data = $this->bbl_model->getdata_byid($id);
-        echo json_encode($data);
+        $data = [
+            'data_ok' => 1,
+            'tgl_ok' => date('Y-m-d H:i:s'),
+            'user_ok' => $this->session->userdata('id'),
+            'id' => $id
+        ];
+
+        $simpan = $this->bbl_model->simpanbbl($data);
+
+        if ($simpan) {
+            $url = base_url() . 'bbl';
+            redirect($url);
+        }
     }
 }

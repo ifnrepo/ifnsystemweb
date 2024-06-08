@@ -1,20 +1,20 @@
 <?php
 class Bbl_model extends CI_Model
 {
-    public function getdatabbl($data)
-    {
-        $this->db->select('tb_header.,user.name,(select count() from tb_detail where id_header = tb_header.id) as jmlrex');
-        $this->db->join('user', 'user.id=tb_header.user_ok', 'left');
-        $this->db->where('dept_id', $data['dept_id']);
-        $this->db->where('dept_tuju', $data['dept_tuju']);
-        if ($data['level'] == 2) {
-            $this->db->where('data_ok', 1);
-            $this->db->where('ok_valid', 0);
-        }
-        $this->db->where('month(tgl)', $this->session->userdata('bl'));
-        $this->db->where('year(tgl)', $this->session->userdata('th'));
-        return $this->db->get('tb_header')->result_array();
-    }
+    // public function getdatabbl($data)
+    // {
+    //     $this->db->select('tb_header.,user.name,(select count() from tb_detail where id_header = tb_header.id) as jmlrex');
+    //     $this->db->join('user', 'user.id=tb_header.user_ok', 'left');
+    //     $this->db->where('dept_id', $data['dept_id']);
+    //     $this->db->where('dept_tuju', $data['dept_tuju']);
+    //     if ($data['level'] == 2) {
+    //         $this->db->where('data_ok', 1);
+    //         $this->db->where('ok_valid', 0);
+    //     }
+    //     $this->db->where('month(tgl)', $this->session->userdata('bl'));
+    //     $this->db->where('year(tgl)', $this->session->userdata('th'));
+    //     return $this->db->get('tb_header')->result_array();
+    // }
 
     public function tambah_bbl($data)
     {
@@ -26,21 +26,31 @@ class Bbl_model extends CI_Model
         }
         return $kodex;
     }
+    // public function tambah_bbl($data)
+    // {
+    //     // Menyisipkan data ke tabel tb_header
+    //     $this->db->insert('tb_header', $data);
+
+
+    //     if ($this->db->affected_rows() > 0) {
+
+    //         $this->db->where('nomor_dok', $data['nomor_dok']);
+    //         $kodex = $this->db->get('tb_header')->row_array();
+    //         return $kodex;
+    //     } else {
+    //         //
+    //         return ['error' => 'Gagal menyisipkan data'];
+    //     }
+    // }
+
 
 
     public function getnomorbbl($bl, $th, $asal, $tuju)
     {
-        $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,15,3)) AS maxkode FROM tb_header 
+        $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,16,3)) AS maxkode FROM tb_header 
         WHERE kode_dok = 'BBL' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_id = '" . $asal . "' AND dept_tuju = '" . $tuju . "' ")->row_array();
         return $hasil;
     }
-
-    // public function update_bbl($data)
-    // {
-    //     $this->db->where('id', $data['id']);
-    //     $query = $this->db->update('tb_header', $data);
-    //     return $query;
-    // }
 
     public function getdatapb()
     {
@@ -49,7 +59,6 @@ class Bbl_model extends CI_Model
         $query = $this->db->get('tb_header')->result_array();
         return  $query;
     }
-
 
     public function getspecbarang($spec)
     {
@@ -73,30 +82,12 @@ class Bbl_model extends CI_Model
         $hasil = $this->pb_model->getdatadetailpbbyid($data);
         echo json_encode($hasil);
     }
-    // public function simpandetailbarang($data)
-    // {
-    //     $hasil = $this->db->insert('tb_detail', $data);
 
-    //     if ($hasil) {
-    //         $this->db->where('id', $data['id_header']);
-    //         $query = $this->db->get('tb_header')->row_array();
-    //         return $query;
-    //     }
-    //     return false;
-    // }
     public function simpandetailbarang($data)
     {
-
-        $hasil = $this->db->insert('tb_detail', $data);
-        if ($hasil) {
-            $insert_id = $this->db->insert_id();
-            $this->db->where('id', $insert_id);
-            $query = $this->db->get('tb_detail')->row_array();
-            return $query;
-        }
-        return false;
+        $query = $this->db->insert_batch('tb_detail', $data);
+        return $query;
     }
-
 
 
     public function getdatabyid($id)
@@ -117,7 +108,7 @@ class Bbl_model extends CI_Model
         return $this->db->get()->result_array();
     }
 
-    public function hapusdetailbbl($id)
+    public function hapus($id)
     {
         $this->db->trans_start();
         $cek = $this->db->get_where('tb_detail', ['id' => $id])->row_array();
@@ -133,10 +124,53 @@ class Bbl_model extends CI_Model
         return $que;
     }
 
-    public function getdata_byid($id)
+    public function getdata_byid($id_header)
     {
-        $this->db->where('id', $id);
+        $this->db->where('id_header', $id_header);
         $query = $this->db->get('tb_detail');
         return $query->result_array();
     }
+    public function get_detail($id)
+    {
+        $this->db->select("tb_detail.*, satuan.namasatuan, satuan.kodesatuan, barang.kode, barang.nama_barang");
+        $this->db->from('tb_detail');
+        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->where('tb_detail.id', $id);
+        return $this->db->get()->row_array();
+    }
+
+
+    public function updatedata($data)
+    {
+        $this->db->where('id', $data['id']);
+        return $this->db->update('tb_detail', $data);
+    }
+
+
+    public function simpanbbl($data)
+    {
+        $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
+        $data['jumlah_barang'] = $jmlrec['jml'];
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        return $query;
+    }
+
+    // public function simpanbbl($data)
+    // {
+
+    //     $this->db->select('count(id) as jml');
+    //     $this->db->where('id_header', $data['id']);
+    //     $query = $this->db->get('tb_detail');
+    //     $jmlrec = $query->row_array();
+
+
+    //     $data['jumlah_barang'] = $jmlrec['jml'];
+
+    //     $this->db->where('id', $data['id']);
+    //     $query = $this->db->update('tb_header', $data);
+
+    //     return $query;
+    // }
 }
