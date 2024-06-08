@@ -43,7 +43,7 @@
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url + "bbl/tambahpb",
+            url: base_url + "bbl/tambahbbl",
             data: {
                 dept_id: $("#dept_idy").val(),
                 dept_tuju: $("#id_depty").val(),

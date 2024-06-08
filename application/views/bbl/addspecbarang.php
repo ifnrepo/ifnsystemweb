@@ -35,7 +35,7 @@
 <div class="modal-footer">
 </div>
 
-<input type="text" id="id_header" value="<?= isset($data['id']) ? $data['id'] : ''; ?>">
+
 <script>
     $(document).ready(function() {
         $("#keyw").focus();
@@ -78,51 +78,5 @@
             });
         });
 
-
-        $(document).on('click', '.pilihbarang', function(event) {
-            event.preventDefault();
-
-            var id_header = $('#id_header').val();
-            var id = $(this).data('id');
-            var nama_barang = $(this).data('nama_barang');
-            var kodesatuan = $(this).data('kodesatuan');
-
-            $.ajax({
-                type: 'POST',
-                url: '<?= base_url('bbl/getdata_by_id') ?>',
-                data: {
-                    id: id
-                },
-                success: function(response) {
-                    try {
-                        var data = JSON.parse(response);
-                        data.id_header = id_header;
-                        data.id_barang = nama_barang;
-                        data.id_satuan = kodesatuan;
-
-                        $.ajax({
-                            type: 'POST',
-                            url: '<?= base_url('bbl/simpandetailbarang') ?>',
-                            data: data,
-                            success: function(saveResponse) {
-                                var saveResult = JSON.parse(saveResponse);
-                                if (saveResult.success) {
-                                    alert('Data berhasil disimpan');
-                                } else {
-                                    alert('Gagal menyimpan data');
-                                }
-                            },
-                        });
-                    } catch (e) {
-                        console.error('Error saat parsing:', e);
-                        alert('Terjadi kesalahan data.');
-                    }
-                },
-                error: function(xhr, status, error) {
-                    console.error('Error saat mengambil data:', error);
-                    alert('Terjadi kesalahan saat mengambil data.');
-                }
-            });
-        });
     });
 </script>

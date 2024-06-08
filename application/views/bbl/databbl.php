@@ -76,11 +76,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <thead style="background-color: blue !important">
                   <tr>
                     <th>No</th>
-                    <th>Nama Barang</th>
-                    <th>Satuan</th>
-                    <th>Qty</th>
-                    <th>Ket</th>
-                    <th>Aksi</th>
+                    <th class="text-center">Nama Barang</th>
+                    <th class="text-center">Satuan</th>
+                    <th class="text-center">Pcs</th>
+                    <th class="text-center">Ket</th>
+                    <th class="text-center">Aksi</th>
                   </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
@@ -88,15 +88,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   foreach ($detail as $key) : $no++; ?>
                     <tr>
                       <td><?= $no; ?></td>
-                      <td><?= $key['nama_barang']; ?></td>
-                      <td><?= $key['kodesatuan']; ?></td>
-                      <td><?= $key['qty']; ?></td>
-                      <td><?= $key['keterangan']; ?></td>
+                      <td class="text-center"><?= $key['nama_barang']; ?></td>
+                      <td class="text-center"><?= $key['kodesatuan']; ?></td>
+                      <td class="text-center"><?= $key['pcs']; ?></td>
+                      <td class="text-center"><?= $key['keterangan']; ?></td>
                       <td>
-                        <a href="<?= base_url() . 'jabatan/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editjabatan" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Jabatan" rel="<?= $key['id']; ?>" title="Edit data">
+                        <a href="<?= base_url() . 'bbl/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit detail Bbl" rel="<?= $key['id']; ?>" title="Edit data">
                           <i class="fa fa-edit"></i>
                         </a>
-                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'jabatan/hapus/' . $key['id']; ?>" title="Hapus data">
+                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus/' . $key['id']; ?>" title="Hapus data">
                           <i class="fa fa-trash-o"></i>
                         </a>
                       </td>
@@ -110,7 +110,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">
           <input type="text" id="jmlrek" class="hilang">
-          <a href="#" class="btn btn-sm btn-primary" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'pb/simpanpb/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+          <a href="#" class="btn btn-sm btn-primary" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'bbl/simpanbbl/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
           <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
         </div>
       </div>
