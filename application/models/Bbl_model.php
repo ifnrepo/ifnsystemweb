@@ -1,20 +1,33 @@
 <?php
 class Bbl_model extends CI_Model
 {
-    // public function getdatabbl($data)
-    // {
-    //     $this->db->select('tb_header.,user.name,(select count() from tb_detail where id_header = tb_header.id) as jmlrex');
-    //     $this->db->join('user', 'user.id=tb_header.user_ok', 'left');
-    //     $this->db->where('dept_id', $data['dept_id']);
-    //     $this->db->where('dept_tuju', $data['dept_tuju']);
-    //     if ($data['level'] == 2) {
-    //         $this->db->where('data_ok', 1);
-    //         $this->db->where('ok_valid', 0);
-    //     }
-    //     $this->db->where('month(tgl)', $this->session->userdata('bl'));
-    //     $this->db->where('year(tgl)', $this->session->userdata('th'));
-    //     return $this->db->get('tb_header')->result_array();
-    // }
+    public function getdatabbl($data)
+    {
+        $arrdep = $this->session->userdata('arrdep');
+        $this->db->select('tb_header.*, user.name, (select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
+        $this->db->from('tb_header');
+        $this->db->join('user', 'user.id = tb_header.user_ok', 'left');
+        if (!empty($data['dept_id'])) {
+            $this->db->where('dept_id', $data['dept_id']);
+        }
+
+        if (!empty($data['dept_tuju'])) {
+            $this->db->where('dept_tuju', $data['dept_tuju']);
+        }
+        $bl = $this->session->userdata('bl');
+        $th = $this->session->userdata('th');
+
+        if (!empty($bl)) {
+            $this->db->where('month(tgl)', $bl);
+        }
+
+        if (!empty($th)) {
+            $this->db->where('year(tgl)', $th);
+        }
+        $this->db->where('tb_header.kode_dok', 'bbl');
+        $this->db->where_in('dept_id', $arrdep);
+        return $this->db->get()->result_array();
+    }
 
     public function tambah_bbl($data)
     {
@@ -26,24 +39,6 @@ class Bbl_model extends CI_Model
         }
         return $kodex;
     }
-    // public function tambah_bbl($data)
-    // {
-    //     // Menyisipkan data ke tabel tb_header
-    //     $this->db->insert('tb_header', $data);
-
-
-    //     if ($this->db->affected_rows() > 0) {
-
-    //         $this->db->where('nomor_dok', $data['nomor_dok']);
-    //         $kodex = $this->db->get('tb_header')->row_array();
-    //         return $kodex;
-    //     } else {
-    //         //
-    //         return ['error' => 'Gagal menyisipkan data'];
-    //     }
-    // }
-
-
 
     public function getnomorbbl($bl, $th, $asal, $tuju)
     {
@@ -62,7 +57,6 @@ class Bbl_model extends CI_Model
 
     public function getspecbarang($spec)
     {
-
         $this->db->select('*');
         $this->db->from('tb_header');
         $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
@@ -98,6 +92,7 @@ class Bbl_model extends CI_Model
         return $this->db->get('tb_header')->row_array();
     }
 
+
     public function getdatadetail_bbl($data)
     {
         $this->db->select("tb_detail.*,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
@@ -124,6 +119,12 @@ class Bbl_model extends CI_Model
         return $que;
     }
 
+    public function hapusone_detail($id)
+    {
+        $this->db->where('id', $id);
+        return $this->db->delete('tb_detail');
+    }
+
     public function getdata_byid($id_header)
     {
         $this->db->where('id_header', $id_header);
@@ -146,8 +147,16 @@ class Bbl_model extends CI_Model
         $this->db->where('id', $data['id']);
         return $this->db->update('tb_detail', $data);
     }
+    public function updatedata_detail($data)
+    {
+        $this->db->where('id', $data['id']);
+        return $this->db->update('tb_detail', $data);
+    }
 
-
+    public function get_tbdetail_byid($id)
+    {
+        return $this->db->get_where('tb_detail', ['id' => $id])->row_array();
+    }
     public function simpanbbl($data)
     {
         $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
@@ -156,21 +165,9 @@ class Bbl_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
-
-    // public function simpanbbl($data)
-    // {
-
-    //     $this->db->select('count(id) as jml');
-    //     $this->db->where('id_header', $data['id']);
-    //     $query = $this->db->get('tb_detail');
-    //     $jmlrec = $query->row_array();
-
-
-    //     $data['jumlah_barang'] = $jmlrec['jml'];
-
-    //     $this->db->where('id', $data['id']);
-    //     $query = $this->db->update('tb_header', $data);
-
-    //     return $query;
-    // }
+    public function hapus_data($id)
+    {
+        $this->db->where('id', $id);
+        return $this->db->delete('tb_header');
+    }
 }

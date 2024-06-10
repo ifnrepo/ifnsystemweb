@@ -26,14 +26,13 @@ class Bbl extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['level'] = $this->usermodel->getdatalevel();
-        $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
+        $data['hakdep'] = $this->deptmodel->gethakdept_bbl($this->session->userdata('arrdep'));
         $data['dept_bbl'] = $this->deptmodel->getdata_dept_bbl();
         $kode = [
             'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
             'dept_tuju' => $this->session->userdata('tujusekarang') == null ? '' : $this->session->userdata('tujusekarang'),
-            'level' => $this->session->userdata('levelsekarang') == null ? '' : $this->session->userdata('levelsekarang'),
         ];
-        $data['data'] = $this->bbl_model->getdatapb($kode);
+        $data['data'] = $this->bbl_model->getdatabbl($kode);
         $footer['fungsi'] = 'bbl';
         $this->load->view('layouts/header', $header);
         $this->load->view('bbl/index', $data);
@@ -140,8 +139,7 @@ class Bbl extends CI_Controller
     public function edit($id)
     {
         $data['data'] = $this->bbl_model->get_detail($id);
-        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
-        $data['barang'] = $this->db->get('barang')->result_array();
+
         $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
         $this->load->view('bbl/edit_detail', $data);
     }
@@ -181,6 +179,58 @@ class Bbl extends CI_Controller
 
         if ($simpan) {
             $url = base_url() . 'bbl';
+            redirect($url);
+        }
+    }
+
+    public function viewdetail_bbl($id)
+    {
+        $data['header'] = $this->bbl_model->getdatabyid($id);
+        $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
+        $this->load->view('bbl/viewdetail_bbl', $data);
+    }
+    public function editdetail_bbl($id)
+    {
+        $data['header'] = $this->bbl_model->getdatabyid($id);
+        $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
+        $this->load->view('bbl/editdetail_bbl', $data);
+    }
+
+    public function editone_detail($id)
+    {
+        $data['data'] = $this->bbl_model->get_detail($id);
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $data['barang'] = $this->db->get('barang')->result_array();
+        $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
+        $this->load->view('bbl/editone_detail', $data);
+    }
+
+    public function update_detail()
+    {
+        $data = [
+            'id' => $_POST['id'],
+            'pcs' => $_POST['pcs'],
+            'kgs' => $_POST['kgs'],
+            'keterangan' => $_POST['keterangan']
+        ];
+        $hasil = $this->bbl_model->updatedata_detail($data);
+        echo $hasil;
+    }
+
+    public function hapusone_detail($id)
+    {
+        $hasil = $this->bbl_model->hapusone_detail($id);
+        if ($hasil) {
+            $url = base_url('bbl');
+            redirect($url);
+        }
+    }
+
+    public function hapus_detail($id)
+    {
+        $hasil = $this->bbl_model->hapus_data($id);
+        if ($hasil) {
+            $url = base_url('bbl');
             redirect($url);
         }
     }
