@@ -71,7 +71,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <h4 class="mb-1"></h4>
                                 </div>
                             </div>
-                            <!-- <div class="hr m-1"></div> -->
                         </div>
                     </div>
 
