@@ -49,7 +49,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                 </div>
               </div>
-              <!-- <div class="hr m-1"></div> -->
             </div>
           </div>
         </div>
@@ -62,7 +61,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-2 col-form-label font-kecil required">Dok</label>
                 <div class="col input-group mb-1">
                   <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
-                  <!-- <input type="text" id="id_barang" name="id_barang" class="form-control"> -->
                   <input type="text" class="form-control font-kecil" id="nomor_dok" name="nomor_dok" placeholder="Nomor Dokumen">
                   <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
                 </div>

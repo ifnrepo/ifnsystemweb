@@ -59,11 +59,6 @@
 
         </div>
         <?php $bgr = $header['ketcancel'] == null ? "text-primary" : "text-danger"; ?>
-        <!-- <div class="col-4 <?= $bgr; ?> font-bold">
-            <?php $cek = $header['ketcancel'] == null ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
-            <span><?= $cek; ?></span>
-            <h4 class="mb-1"><?= datauser($header['user_valid'], 'name') . ' (' . $header['tgl_valid'] . ')' . "<br>" . $header['ketcancel'] ?></h4>
-        </div> -->
     </div>
     <hr class="m-1">
 </div>

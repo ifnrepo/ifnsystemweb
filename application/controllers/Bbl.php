@@ -18,7 +18,6 @@ class Bbl extends CI_Controller
         $this->load->model('userappsmodel', 'usermodel');
 
         $this->load->library('Pdf');
-        // $this->load->library('Codeqr');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
     }
 
@@ -85,7 +84,7 @@ class Bbl extends CI_Controller
     public function getspecbarang()
     {
         $data['data'] = $this->session->userdata('data_databbl');
-        $nomor_dok = $this->input->post('data'); // Mengambil data dari post
+        $nomor_dok = $this->input->post('data');
         $html = '';
         $query = $this->bbl_model->getspecbarang($nomor_dok);
 
