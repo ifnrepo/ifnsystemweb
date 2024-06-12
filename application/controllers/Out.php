@@ -35,7 +35,7 @@ class Out extends CI_Controller {
 		$this->load->view('layouts/footer',$footer);
     }
     public function clear(){
-        $this->session->set_userdata('bl',date('m'));
+        $this->session->set_userdata('bl',(int)date('m'));
         $this->session->set_userdata('th',date('Y'));
         $url = base_url().'out';
         redirect($url);

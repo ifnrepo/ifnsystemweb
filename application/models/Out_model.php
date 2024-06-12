@@ -158,17 +158,19 @@ class Out_model extends CI_Model{
             $cekdata = $this->db->get_where('stokdept',$kondisi);
             $jmll = $cekdata->num_rows();
             $deta = $cekdata->row_array();
-            if($deta['pcs_akhir'] >= $datdet['pcs'] && $deta['pcs_akhir'] > 0 && $jmll > 0){
-                $this->db->set('pcs_keluar','pcs_keluar + '.$datdet['pcs'],FALSE);
-                $this->db->set('kgs_keluar','kgs_keluar + '.$datdet['kgs'],FALSE);
-                $this->db->set('pcs_akhir','(pcs_akhir-pcs_masuk)-(pcs_keluar + '.$datdet['kgs'].')',FALSE);
-                $this->db->set('kgs_akhir','(kgs_akhir-kgs_masuk)-(kgs_keluar + '.$datdet['kgs'].')',FALSE);
-                $this->db->where($kondisi);
-                $this->db->update('stokdept');
-            }else{
-                $iniquery = true;
-                $this->session->set_flashdata('errornya',$no);
-                break;
+            if($datdet['pcs'] > 0){
+                if($deta['pcs_akhir'] >= $datdet['pcs'] && $deta['pcs_akhir'] > 0 && $jmll > 0){
+                    $this->db->set('pcs_keluar','pcs_keluar + '.$datdet['pcs'],FALSE);
+                    $this->db->set('kgs_keluar','kgs_keluar + '.$datdet['kgs'],FALSE);
+                    $this->db->set('pcs_akhir','(pcs_akhir-pcs_masuk)-(pcs_keluar + '.$datdet['pcs'].')',FALSE);
+                    $this->db->set('kgs_akhir','(kgs_akhir-kgs_masuk)-(kgs_keluar + '.$datdet['kgs'].')',FALSE);
+                    $this->db->where($kondisi);
+                    $this->db->update('stokdept');
+                }else{
+                    $iniquery = true;
+                    $this->session->set_flashdata('errornya',$no);
+                    break;
+                }
             }
         }
         // Cek data temp yang akan dibuat BBL
@@ -188,10 +190,19 @@ class Out_model extends CI_Model{
                 $bbl['id'] = null;
                 $this->db->insert('tb_detail',$bbl);
                 $iddetail = $this->db->insert_id();
+                $this->db->set('id_header',$idheader);
+                $this->db->set('pcs',$isidetail['pcs'].'- pcs',FALSE);
+                $this->db->set('kgs',$isidetail['kgs'].'- kgs',FALSE);
                 $this->db->where('id',$iddetail);
-                $this->db->update('tb_detail',['id_header'=> $idheader,'pcs' => 'pcs - '.$isidetail['pcs'],'kgs' => 'kgs - '.$isidetail['pcs']]);
+                $this->db->update('tb_detail');
             }
         }
+        //Hapus data detail awal yang pcs nya 0 dan masuk ke A
+        $this->db->where('id_header',$id);
+        $this->db->where('pcs',0);
+        $this->db->where('kgs',0);
+        $this->db->delete('tb_detail');
+
         if ($this->db->trans_status() === FALSE || $iniquery){
             $this->db->trans_rollback();
         }else{

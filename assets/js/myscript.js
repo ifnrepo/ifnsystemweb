@@ -158,6 +158,7 @@ $(document).ready(function () {
 	$(".datatable").DataTable({
 		responsive: true,
 		pageLength: 50,
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 	$(".datatable2").DataTable({
 		paging: true,
@@ -267,19 +268,19 @@ $(document).ready(function () {
 		document.location.reload();
 	});
 
-	new DataTable("#pbtabel", {
-		fixedColumns: {
-			start: 1,
-			end: 1,
-		},
-		paging: false,
-		searching: false,
-		info: false,
-		scrollCollapse: true,
-		scrollX: true,
-		scrollY: 500,
-		ordering: false,
-	});
+	// 	new DataTable("#pbtabel", {
+	// 		fixedColumns: {
+	// 			start: 1,
+	// 			end: 1,
+	// 		},
+	// 		paging: false,
+	// 		searching: false,
+	// 		info: false,
+	// 		scrollCollapse: true,
+	// 		scrollX: true,
+	// 		scrollY: 500,
+	// 		ordering: false,
+	// 	});
 });
 
 function cekcik() {

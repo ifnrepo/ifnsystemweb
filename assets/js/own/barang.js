@@ -35,11 +35,10 @@
 // });
 var table;
 $(document).ready(function () {
-	$(".datatabledengandiv").DataTable({
-		dom: "<'extra'>frtip",
-	});
-	$("div.extra").html($("#sisipkan").html()).insertAfter(".dataTables_filter");
-	$(".dataTables_filter").css("float", "right");
+	// $(".datatabledengandiv").DataTable({
+	// 	dom: "<'extra'>frtip",
+	// });
+	// $("div.extra").html($("#sisipkan").html()).insertAfter(".dataTables_filter");
 
 	table = $("#tabelnya").DataTable({
 		processing: true,
@@ -56,5 +55,7 @@ $(document).ready(function () {
 			},
 		],
 		pageLength: 50,
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
+	// $(".dataTables_filter").css("float", "right !important");
 });

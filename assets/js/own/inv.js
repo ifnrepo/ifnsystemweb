@@ -4,31 +4,36 @@ $(window).on("load", function () {
 $(document).ready(function () {
 	NProgress.done();
 });
-document.addEventListener("DOMContentLoaded", function () {
-	window.Litepicker &&
-		new Litepicker({
-			element: document.getElementById("tglawal"),
-			format: "DD-MM-YYYY",
-			buttonText: {
-				previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-				<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
-				nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-				<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
-			},
-		});
-});
-document.addEventListener("DOMContentLoaded", function () {
-	window.Litepicker &&
-		new Litepicker({
-			element: document.getElementById("tglakhir"),
-			format: "DD-MM-YYYY",
-			buttonText: {
-				previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
-				<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
-				nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
-				<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
-			},
-		});
+// document.addEventListener("DOMContentLoaded", function () {
+// 	window.Litepicker &&
+// 		new Litepicker({
+// 			element: document.getElementById("tglawal"),
+// 			format: "DD-MM-YYYY",
+// 			buttonText: {
+// 				previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+// 				<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+// 				nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+// 				<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+// 			},
+// 		});
+// });
+// document.addEventListener("DOMContentLoaded", function () {
+// 	window.Litepicker &&
+// 		new Litepicker({
+// 			element: document.getElementById("tglakhir"),
+// 			format: "DD-MM-YYYY",
+// 			buttonText: {
+// 				previousMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
+// 				<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>`,
+// 				nextMonth: `<!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
+// 				<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>`,
+// 			},
+// 		});
+// });
+$("#tglawal").datepicker({
+	autoclose: true,
+	format: "dd-mm-yyyy",
+	todayHighlight: true,
 });
 $("#updateinv").click(function () {
 	var tglawal = $("#tglawal").val();
@@ -38,7 +43,8 @@ $("#updateinv").click(function () {
 	var katbar = $("#katbar").val();
 	// var katcari = document.getElementById("caribar").innerHTML;
 	var katcari = $("input:radio[name=radios-inline]:checked").val();
-	$("#textcari").val("");
+	// $("#textcari").val("");
+	var textcari = $("#textcari").val();
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
 	} else {
@@ -60,6 +66,7 @@ $("#updateinv").click(function () {
 			gbn: gbg,
 			kat: katbar,
 			kcari: katcari,
+			cari: textcari,
 		},
 		success: function (data) {
 			// alert(data);

@@ -19,9 +19,7 @@
             <table class="table datatable6 table-hover table-bordered" id="cobasisip">
                 <thead style="background-color: blue !important">
                     <tr class="text-center">
-                        <th rowspan="2">Specific</th>
-                        <th rowspan="2">SKU</th>
-                        <th rowspan="2">Satuan</th>
+                        <th rowspan="2">Tanggal</th>
                         <th colspan="2">Awal</th>
                         <th colspan="2">In</th>
                         <th colspan="2">Out</th>
@@ -40,18 +38,22 @@
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                    <?php foreach ($detail->result_array() as $det) { ?>
+                    <?php $saldoawal=0; $saldo=0; foreach ($detail->result_array() as $det) { $saldo += $det['pcs']+$det['pcsin']-$det['pcsout']; 
+                        if($det['nome']==1){
+                            $saldoawal = $det['pcs']+$det['pcsin']-$det['pcsout'];
+                        }else{
+                            $saldoawal = $saldo;
+                        }
+                        ?>
                         <tr>
-                            <td><?= $det['nama_barang']; ?></td>
-                            <td><?= viewsku(id: $det['kode'],po: $det['po'],no: $det['item'],dis: $det['dis']) ?></td>
-                            <td><?= $det['kodesatuan']; ?></td>
-                            <td><?= rupiah($det['pcs'],0); ?></td>
+                            <td class="font-italic text-primary"><?= tgl_indo($det['tgl'],1); ?></td>
+                            <td><?= rupiah($saldoawal,0); ?></td>
                             <td><?= rupiah($det['kgs'],0); ?></td>
                             <td><?= rupiah($det['pcsin'],0); ?></td>
                             <td><?= rupiah($det['kgsin'],0); ?></td>
                             <td><?= rupiah($det['pcsout'],0); ?></td>
                             <td><?= rupiah($det['kgsout'],0); ?></td>
-                            <td><?= rupiah($det['pcs']+$det['pcsin']-$det['pcsout'],0); ?></td>
+                            <td class="font-bold text-primary"><?= rupiah($saldo,0); ?></td>
                             <td><?= rupiah($det['kgs']+$det['kgsin']-$det['kgsout'],0); ?></td>
                             <td><?= $det['nomor_dok']; ?></td>
                         </tr>

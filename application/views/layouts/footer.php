@@ -52,7 +52,7 @@
 <script src="<?= base_url(); ?>assets/vendor/nprogress/nprogress.js"></script>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?1692870493"></script>
-<script src="<?= base_url(); ?>assets/js/refresh.js"></script>
+<!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1692870487"></script>
 <?php } ?>
@@ -77,7 +77,7 @@
 <?php if (isset($fungsi) && $fungsi == 'bbl') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1692870487"></script>
 <?php } ?>
-
+<?php if (isset($fungsi) && $fungsi == 'main') { ?>
 <script>
 	// @formatter:off
 	document.addEventListener("DOMContentLoaded", function() {
@@ -850,6 +850,7 @@
 	});
 	// @formatter:on
 </script>
+<?php } ?>
 </body>
 
 </html>

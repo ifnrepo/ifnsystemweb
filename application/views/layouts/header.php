@@ -28,7 +28,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 
-  <link href=<?= base_url() . "assets/css/own-style.css?1692870487" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/own-style.css?1692870493" ?> rel="stylesheet" />
   <style>
     /* @import url('https://rsms.me/inter/inter.css'); */
     :root {
