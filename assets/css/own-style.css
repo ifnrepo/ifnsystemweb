@@ -8,7 +8,10 @@
 	font-style: italic !important;
 }
 .dataTables_wrapper .dataTables_paginate {
-	float: right;
+	float: right !important;
+}
+.dataTables_wrapper .dataTables_filter {
+	float: right !important;
 }
 .btn-sm {
 	padding: 6px 8px !important;
@@ -26,9 +29,26 @@
 .bg-gray {
 	background-color: #e6e6e6 !important;
 }
-#pbtabel .table-body td {
+/* #pbtabel .table-body td {
 	border-bottom: red;
-}
+} */
 .text-teal-green {
 	color: #175873 !important;
+}
+.pull-left {
+	float: left !important;
+}
+.pull-left select {
+	width: 50px !important;
+	margin-bottom: 5px;
+}
+.pull-right {
+	float: right !important;
+}
+.bottom-left {
+	float: left !important;
+}
+.bottom-right {
+	float: right !important;
+	margin-top: 5px;
 }

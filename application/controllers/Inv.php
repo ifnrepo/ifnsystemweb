@@ -29,7 +29,7 @@ class Inv extends CI_Controller
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         if ($this->session->userdata('tglawal') == null) {
-            $data['tglawal'] = tglmysql(firstday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
+            $data['tglawal'] = tglmysql(date('Y-m-d'));
             $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
             $data['data'] = null;
             $data['kat'] = null;
@@ -56,6 +56,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
         $this->session->set_userdata('gbg', 1);
+        $this->session->unset_userdata('katcari');
         $url = base_url('Inv');
         redirect($url);
     }
@@ -68,7 +69,11 @@ class Inv extends CI_Controller
         $this->session->set_userdata('filterkat', $_POST['kat']);
         $this->session->set_userdata('kategoricari', $_POST['kcari']);
         if (isset($_POST['cari'])) {
-            $this->session->set_userdata('katcari', $_POST['cari']);
+            if($_POST['cari']==''){
+                $this->session->unset_userdata('katcari');
+            }else{
+                $this->session->set_userdata('katcari', $_POST['cari']);
+            }
         } else {
             $this->session->unset_userdata('katcari');
         }
