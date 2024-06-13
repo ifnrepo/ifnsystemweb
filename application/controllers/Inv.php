@@ -298,6 +298,7 @@ class Inv extends CI_Controller
             'nobontr' => decrypto($split[5]),
             'insno' => decrypto($split[6])
         ];
+        $data['header'] = $this->invmodel->getdatadetail($array)->row_array();
         $data['detail'] = $this->invmodel->getdatadetail($array);
         $data['isi'] = $array;
         $this->load->view('inv/viewdetail', $data);

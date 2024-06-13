@@ -1,12 +1,12 @@
 <div class="container-xl"> 
     <div class="row mb-1">
-        <div class="col-4 text-primary font-bold">
-        <span>Periode</span>
-        <h4 class="mb-1"></h4>
+        <div class="col-4 font-bold">
+        <span class="text-primary">Inventory per Tanggal</span>
+        <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal')),1); ?></h4>
         </div>
         <div class="col-8 text-primary font-bold">
         <span>SKU/Spesifikasi Barang</span>
-        <h4 class="mb-1"></h4>
+        <h4 class="mb-1 text-teal-green"><?= $header['idd']." # ".$header['nama_barang']; ?></h4>
         </div>
         <!-- <div class="col-4 text-primary font-bold">
         <span>Dibuat Oleh</span>
@@ -48,13 +48,13 @@
                         <tr>
                             <td class="font-italic text-primary"><?= tgl_indo($det['tgl'],1); ?></td>
                             <td><?= rupiah($saldoawal,0); ?></td>
-                            <td><?= rupiah($det['kgs'],0); ?></td>
+                            <td><?= rupiah($det['kgs'],2); ?></td>
                             <td><?= rupiah($det['pcsin'],0); ?></td>
-                            <td><?= rupiah($det['kgsin'],0); ?></td>
+                            <td><?= rupiah($det['kgsin'],2); ?></td>
                             <td><?= rupiah($det['pcsout'],0); ?></td>
-                            <td><?= rupiah($det['kgsout'],0); ?></td>
+                            <td><?= rupiah($det['kgsout'],2); ?></td>
                             <td class="font-bold text-primary"><?= rupiah($saldo,0); ?></td>
-                            <td><?= rupiah($det['kgs']+$det['kgsin']-$det['kgsout'],0); ?></td>
+                            <td><?= rupiah($det['kgs']+$det['kgsin']-$det['kgsout'],2); ?></td>
                             <td><?= $det['nomor_dok']; ?></td>
                         </tr>
                     <?php } ?>
