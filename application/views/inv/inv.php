@@ -152,12 +152,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $jmpcs += $sak;
                   $isi = 'OME-' . trim($det['po']) . '-' . trim($det['item']) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-';
                   // $isi = 'XXX';
+                  $insno = $this->session->userdata('currdept')=='GS' ? '' : $det['insno'];
+                  $nobontr = $this->session->userdata('currdept')=='GS' ? '' : $det['nobontr'];
               ?>
                   <tr class="<?= $bg; ?>">
                     <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'], 0, 75); ?></a></td>
                     <td style="border-bottom: red;"><?= viewsku(id: $det['kode'], po: $det['po'], no: $det['item'], dis: $det['dis']) ?></td>
-                    <td style="border-bottom: red;"><?= $det['nobontr']; ?></td>
-                    <td style="border-bottom: red;"><?= $det['insno']; ?></td>
+                    <td style="border-bottom: red;"><?= $nobontr; ?></td>
+                    <td style="border-bottom: red;"><?= $insno; ?></td>
                     <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
                     <td style="border-bottom: red; font-size: 9px;"><?= $det['nama_kategori']; ?></td>
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 0); ?></td>
