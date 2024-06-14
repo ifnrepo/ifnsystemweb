@@ -71,6 +71,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Kgs MINTA</th>
                     <th>Qty REAL</th>
                     <th>Kgs REAL</th>
+                    <?php if($this->session->userdata('deptsekarang')=='GM'){ ?>
+                    <th>Nobontr</th>
+                    <?php } ?>
                     <th>Aksi</th>
                   </tr>
                 </thead>
