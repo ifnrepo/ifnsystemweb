@@ -28,6 +28,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Kode</th>
                                 <th>ins</th>
                                 <th>Nama Dokumen</th>
+                                <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="table-tbody" style="font-size: 13px !important;">

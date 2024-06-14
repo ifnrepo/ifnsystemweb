@@ -108,6 +108,13 @@ class Out extends CI_Controller {
             $hasil .= "<td>".rupiah($que['kgsminta'],0)."</td>";
             $hasil .= "<td class='text-primary'>".rupiah($que['pcs'],0)."</td>";
             $hasil .= "<td class='text-primary'>".rupiah($que['kgs'],0)."</td>";
+            if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']!=''){
+                $hasil .= "<td class='text-primary'>".$que['nobontr']."</td>";
+            }else{
+                if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']==''){
+                    $hasil .= "<td class='text-primary'><a href='#'>Pilih Nobontr</a></td>";
+                }
+            }
             $hasil .= "<td>";
             $hasil .= "<a href=".base_url().'out/editdetailout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
             $hasil .= "</td>";
