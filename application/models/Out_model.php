@@ -169,7 +169,7 @@ class Out_model extends CI_Model{
             // $cekdata = $this->db->get_where('stokdept',$kondisi);
             $jmll = $cekdata->num_rows();
             $deta = $cekdata->row_array();
-            if($datdet['pcs'] > 0){
+            if($datdet['pcs'] > 0 || $datdet['kgs'] > 0){
                 if((($deta['xpcs_akhir'] >= $datdet['pcs']) || ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
                     $pcsnya = $datdet['pcs'] > 0 ? $datdet['pcs'] : $datdet['kgs'];
                     $pcsasli = $datdet['pcs'];
@@ -288,5 +288,27 @@ class Out_model extends CI_Model{
             $this->db->trans_commit();
         }
         return !$iniquery;
+    }
+    public function getdatagm($idbarang){
+        $kondisi = [
+            'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+            'dept_id' => 'GM',
+            'id_barang' => $idbarang
+        ];
+        $this->db->select('stokdept.*,barang.nama_barang,barang.kode',FALSE);
+        $this->db->from('stokdept');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->where($kondisi);
+        $hasil = $this->db->get();
+        return $hasil;
+    }
+    public function editnobontr($data){
+        $update = [
+            'id_stokdept' => $data['idstok'],
+            'nobontr' => $data['nobontr']
+        ];
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_detail',$update);
+        return $hasil;
     }
 }

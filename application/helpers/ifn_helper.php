@@ -263,8 +263,8 @@ function datauser($kode, $kolom)
 function kodebulan($bl)
 {
     $hasil = $bl;
-    if ($bl <= 9) {
-        $hasil = '0' . $bl;
+    if ((int)$bl <= 9) {
+        $hasil = '0' . (int)$bl;
     }
     return $hasil;
 }
