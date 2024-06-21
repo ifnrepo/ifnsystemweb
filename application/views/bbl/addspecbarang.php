@@ -17,8 +17,7 @@
                         <tr>
                             <th>id</th>
                             <th>No Dok</th>
-                            <th>Nama barang</th>
-                            <th>satuan</th>
+                            <th>Departemen</th>
                             <th>Pilih</th>
                         </tr>
                     </thead>

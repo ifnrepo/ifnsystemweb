@@ -62,7 +62,7 @@ class Bbl_model extends CI_Model
         $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
         $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
-        $this->db->like('tb_header.nomor_dok', $spec);
+        $this->db->where('tb_header.nomor_dok', $spec); // Use where instead of like for exact match
         $this->db->order_by('tb_header.nomor_dok', 'ASC');
         $this->db->where('tb_header.kode_dok', 'PB');
         $this->db->where('tb_header.id_keluar IS NULL');
@@ -70,6 +70,7 @@ class Bbl_model extends CI_Model
 
         return $query;
     }
+
     public function getdetailpbbyid()
     {
         $data = $_POST['id'];
@@ -95,8 +96,9 @@ class Bbl_model extends CI_Model
 
     public function getdatadetail_bbl($data)
     {
-        $this->db->select("tb_detail.*,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
+        $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
         $this->db->from('tb_detail');
+        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->where('id_header', $data);
