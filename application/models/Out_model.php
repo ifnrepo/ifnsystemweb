@@ -181,7 +181,7 @@ class Out_model extends CI_Model{
                         (pcs_akhir > 0 OR kgs_akhir > 0)";
                         $this->db->where($where);
                         $arrstokdept = $this->db->order_by('tgl,urut')->get('stokdept')->row_array();
-                        $stoknobontr= $this->session->userdata('currdept')=='GS' ? $arrstokdept['nobontr'] : $datdet['nobontr'];
+                        $nobontr= $this->session->userdata('currdept')=='GS' ? $arrstokdept['nobontr'] : $datdet['nobontr'];
                         $stokid=$arrstokdept['id'];
                         if(($pcsasli > $arrstokdept['pcs_akhir']) || ($kgsasli > $arrstokdept['kgs_akhir'])){
                             $kurangpcs = $arrstokdept['pcs_akhir'];
@@ -295,10 +295,17 @@ class Out_model extends CI_Model{
             'dept_id' => 'GM',
             'id_barang' => $idbarang
         ];
+        $kondisi2 = [
+            'pcs_akhir > ' => 0,
+            'kgs_akhir > ' => 0 
+        ];
         $this->db->select('stokdept.*,barang.nama_barang,barang.kode',FALSE);
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
         $this->db->where($kondisi);
+        $this->db->group_start();
+        $this->db->or_where($kondisi2);
+        $this->db->group_end();
         $hasil = $this->db->get();
         return $hasil;
     }
