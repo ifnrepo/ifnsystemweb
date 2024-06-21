@@ -81,6 +81,7 @@ class Bbl extends CI_Controller
         $this->load->view('bbl/addspecbarang', $data);
     }
 
+
     public function getspecbarang()
     {
         $data['data'] = $this->session->userdata('data_databbl');
@@ -90,24 +91,31 @@ class Bbl extends CI_Controller
 
         log_message('debug', 'Query result: ' . json_encode($query));
 
-        foreach ($query as $que) {
+
+        if (!empty($query)) {
+            $item = reset($query);
+
             $html .= "<tr>";
-            $html .= "<td>" . $que['id_header'] . "</td>";
-            $html .= "<td>" . $que['nomor_dok'] . "</td>";
-            $html .= "<td>" . $que['nama_barang'] . "</td>";
-            $html .= "<td>" . $que['kodesatuan'] . "</td>";
+            $html .= "<td>{$item['id_header']}</td>";
+            $html .= "<td>{$item['nomor_dok']}</td>";
+            $html .= "<td>{$item['keterangan']}</td>";
             $html .= "<td>";
             $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
-            $html .= '<input type="hidden" name="id_header" value="' . $que['id_header'] . '">';
+            $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
             $html .= '<input type="hidden" name="id_header_session" value="' . (isset($data['data']['id']) ? $data['data']['id'] : '') . '">';
             $html .= '<button type="submit" class="btn btn-sm btn-success">Pilih</button>';
             $html .= '</form>';
             $html .= "</td>";
             $html .= "</tr>";
+        } else {
+            $html .= "<tr><td colspan='5'>No data found</td></tr>";
         }
+
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
+
+
 
     public function pilih_barang()
     {
