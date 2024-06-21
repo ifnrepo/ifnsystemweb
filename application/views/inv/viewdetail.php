@@ -38,23 +38,28 @@
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                    <?php $saldoawal=0; $saldo=0; foreach ($detail->result_array() as $det) { $saldo += $det['pcs']+$det['pcsin']-$det['pcsout']; 
+                    <?php $saldoawal=0; $saldoawalkgs=0; $saldo=0; $saldokgs=0; foreach ($detail->result_array() as $det) { 
+                       
                         if($det['nome']==1){
                             $saldoawal = $det['pcs']+$det['pcsin']-$det['pcsout'];
+                            $saldoawalkgs = $det['kgs']+$det['kgsin']-$det['kgsout'];
                         }else{
                             $saldoawal = $saldo;
+                            $saldoawalkgs = $saldokgs;
                         }
+                         $saldo += $det['pcs']+$det['pcsin']-$det['pcsout']; 
+                        $saldokgs += $det['kgs']+$det['kgsin']-$det['kgsout']; 
                         ?>
                         <tr>
                             <td class="font-italic text-primary"><?= tgl_indo($det['tgl'],1); ?></td>
                             <td><?= rupiah($saldoawal,0); ?></td>
-                            <td><?= rupiah($det['kgs'],2); ?></td>
+                            <td><?= rupiah($saldoawalkgs,2); ?></td>
                             <td><?= rupiah($det['pcsin'],0); ?></td>
                             <td><?= rupiah($det['kgsin'],2); ?></td>
                             <td><?= rupiah($det['pcsout'],0); ?></td>
                             <td><?= rupiah($det['kgsout'],2); ?></td>
                             <td class="font-bold text-primary"><?= rupiah($saldo,0); ?></td>
-                            <td><?= rupiah($det['kgs']+$det['kgsin']-$det['kgsout'],2); ?></td>
+                            <td><?= rupiah($saldokgs,2); ?></td>
                             <td><?= $det['nomor_dok']; ?></td>
                         </tr>
                     <?php } ?>
