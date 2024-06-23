@@ -105,6 +105,19 @@ function nomorout($tgl, $asal, $tuju)
     $urut++;
     return $asal . "-" . $tuju . "/T/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
+function nomorpo()
+{
+    $CI = &get_instance();
+    $tgl = $CI->session->userdata('th') . '-' . kodebulan($CI->session->userdata('bl')) . '-01';
+    $bl = date('m', strtotime($tgl));
+    $th = date('Y', strtotime($tgl));
+    $thp = date('y', strtotime($tgl));
+    $jnpo =  $CI->session->userdata('jn_po');
+    $kode = $CI->pomodel->getnomorpo($bl, $th, $jnpo);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return "PO/" . $jnpo . "/BL/" . $bl . $thp . "/" . sprintf("%03s", $urut);
+}
 function tglmysql($tgl)
 {
     if ($tgl == '') {
@@ -277,14 +290,15 @@ function lastday($tgl)
     return date('Y-m-t', strtotime($tgl));
 }
 
-function viewsku($po='',$no='',$dis='',$id=''){
+function viewsku($po = '', $no = '', $dis = '', $id = '')
+{
     $hasil = '';
-    if(trim($po)==''){
+    if (trim($po) == '') {
         $hasil = $id;
-    }else{
-        $xdis = $dis==0 ? '' : ' dis '.$dis;
-        $xid = $id=='' ? '' : ' brg '.$id;
-        $hasil = $po.' # '.$no.$xdis;
+    } else {
+        $xdis = $dis == 0 ? '' : ' dis ' . $dis;
+        $xid = $id == '' ? '' : ' brg ' . $id;
+        $hasil = $po . ' # ' . $no . $xdis;
     }
     return $hasil;
 }

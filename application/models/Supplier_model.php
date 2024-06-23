@@ -13,6 +13,11 @@ class Supplier_model extends CI_Model
         // return $query;
         return $this->db->get_where('supplier', ['id' => $id])->row_array();
     }
+    public function getdatabyname($nama)
+    {
+        $this->db->like('nama_supplier', $nama);
+        return $this->db->get('supplier');
+    }
     public function simpansupplier($data)
     {
         // $query = $this->db->insert('kategori', $data);

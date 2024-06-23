@@ -8,8 +8,8 @@
   <title>SYSTEM PT. Indoneptune Net Mfg</title>
   <link href="<?= base_url(); ?>assets/favicon.ico" rel="icon">
   <!-- CSS files -->
-  <link href="<?= base_url(); ?>assets/css/bootstrap.min.css" rel="stylesheet">
-  <link href="<?= base_url(); ?>assets/css/font-awesome.min.css" rel="stylesheet">
+  <link href=<?= base_url() . "assets/css/bootstrap.min.css" ?> rel="stylesheet">
+  <link href=<?= base_url() . "assets/css/font-awesome.min.css" ?> rel="stylesheet">
   <link href=<?= base_url() . "assets/css/tabler.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/tabler-flags.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/tabler-payments.min.css?1692870487" ?> rel="stylesheet" />
@@ -31,6 +31,7 @@
   <link href=<?= base_url() . "assets/css/own-style.css?1692870493" ?> rel="stylesheet" />
   <style>
     /* @import url('https://rsms.me/inter/inter.css'); */
+
     :root {
       --tblr-font-sans-serif: 'Inter Var', -apple-system, BlinkMacSystemFont, San Francisco, Segoe UI, Roboto, Helvetica Neue, sans-serif;
     }
@@ -403,7 +404,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj'); ?>">
                       ADJ (Bon Adjustment)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po/clear'); ?>">
                       PO (Purchase Order)
                     </a>
                   </div>
