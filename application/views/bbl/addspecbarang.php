@@ -10,6 +10,23 @@
                     <a href="#" class="btn font-kecil bg-success text-white" id="getbarang">Get!</a>
                 </div>
             </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required font-kecil">Departemen</label>
+                <div class="col input-group">
+                    <select class="form-select" name="dept_id" id="dept_id">
+                        <?php
+                        $selek = $this->session->userdata('deptsekarang') ?? 'IT';
+                        foreach ($hakdep as $hak) :
+                            $selected = ($selek == $hak['dept_id']) ? "selected" : "";
+                        ?>
+                            <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?= $selected ?>>
+                                <?= $hak['departemen']; ?>
+                            </option>
+                        <?php endforeach; ?>
+
+                    </select>
+                </div>
+            </div>
             <div class="hr m-1"></div>
             <div id="table-default" class="table-responsive mb-1">
                 <table class="table datatable6" id="cobasisip">
@@ -59,7 +76,8 @@
                 type: "POST",
                 url: '<?= base_url('bbl/getspecbarang') ?>',
                 data: {
-                    data: $("#keyw").val()
+                    data: $("#keyw").val(),
+                    dept_id: $("#dept_id").val()
                 },
                 success: function(data) {
                     console.log(data); // Log data yang diterima
@@ -76,6 +94,5 @@
                 }
             });
         });
-
     });
 </script>

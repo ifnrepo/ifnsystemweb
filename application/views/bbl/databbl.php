@@ -74,8 +74,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <thead style="background-color: blue !important">
                   <tr>
                     <th>No</th>
-                    <th class="text-center">Nomor Dokumen</th>
-                    <th class="text-center">Departemen</th>
+                    <th>id</th>
+                    <th class="text-center">Nama Barang</th>
+                    <th class="text-center">Satuan</th>
                     <th class="text-center">Aksi</th>
                   </tr>
                 </thead>
@@ -84,8 +85,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   foreach ($detail as $key) : $no++; ?>
                     <tr>
                       <td><?= $no; ?></td>
-                      <td class="text-center"><?= $key['nomor_dok']; ?></td>
-                      <td class="text-center"><?= $key['keterangan']; ?></td>
+                      <td class="text-center"><?= $key['id']; ?></td>
+                      <td class="text-center"><?= $key['nama_barang']; ?></td>
+                      <td class="text-center"><?= $key['namasatuan']; ?></td>
                       <td>
                         <a href="<?= base_url() . 'bbl/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit detail Bbl" rel="<?= $key['id']; ?>" title="Edit data">
                           <i class="fa fa-edit"></i>

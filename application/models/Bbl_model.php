@@ -55,17 +55,19 @@ class Bbl_model extends CI_Model
         return  $query;
     }
 
-    public function getspecbarang($spec)
+    public function getspecbarang($spec, $dept_id)
     {
         $this->db->select('*');
         $this->db->from('tb_header');
         $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
         $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
-        $this->db->where('tb_header.nomor_dok', $spec); // Use where instead of like for exact match
-        $this->db->order_by('tb_header.nomor_dok', 'ASC');
+        $this->db->where('tb_header.nomor_dok', $spec);
         $this->db->where('tb_header.kode_dok', 'PB');
         $this->db->where('tb_header.id_keluar IS NULL');
+        $this->db->where('tb_header.dept_tuju', $dept_id);
+        $this->db->where('tb_detail.id_bbl', 0);
+        $this->db->order_by('tb_header.nomor_dok', 'ASC');
         $query = $this->db->get()->result_array();
 
         return $query;
@@ -78,11 +80,20 @@ class Bbl_model extends CI_Model
         echo json_encode($hasil);
     }
 
+
     public function simpandetailbarang($data)
     {
-        $query = $this->db->insert_batch('tb_detail', $data);
-        return $query;
+        $this->db->insert_batch('tb_detail', $data);
+        return $this->db->affected_rows();
     }
+    // public function simpandetailbarang($data)
+    // {
+    //     foreach ($data as &$item) {
+    //         $this->db->insert('tb_detail', $item);
+    //         $item['id'] = $this->db->insert_id();
+    //     }
+    //     return $data;
+    // }
 
 
     public function getdatabyid($id)
@@ -171,5 +182,17 @@ class Bbl_model extends CI_Model
     {
         $this->db->where('id', $id);
         return $this->db->delete('tb_header');
+    }
+
+
+    public function update_id_bbl($id_header, $new_id_bbl)
+    {
+        $this->db->where('id_header', $id_header);
+        $this->db->update('tb_detail', array('id_bbl' => $new_id_bbl));
+    }
+
+    public function get_last_insert_id()
+    {
+        return $this->db->insert_id();
     }
 }
