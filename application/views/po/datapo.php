@@ -26,11 +26,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-2 ">
-                  <h4 class="mb-0 font-kecil">Tgl</h4>
+                  <h4 class="mb-0 font-kecil">Tanggal PO</h4>
                   <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
                   <span class="font-bold" style="font-size:15px;">
-                    <a href="<?= base_url() . 'po/editsupplier'; ?>" title="Edit tanggal" id="tglpo" name="tglpo" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan"><?= tglmysql($data['tgl']); ?></a>
+                    <a href="<?= base_url() . 'po/edittgl'; ?>" title="Edit tanggal" id="tglpo" name="tglpo" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan"><?= tglmysql($data['tgl']); ?></a>
                   </span>
+                  <h4 class="mb-0 font-kecil mt-1">Tgl Rencana Datang</h4>
+                  <div class="input-icon">
+                    <input type="text" id="tgldt" class="form-control input-sm font-kecil" value="<?= tglmysql($data['tgl_dtb']); ?>">
+                    <span class="input-icon-addon" id="loadertgldt">
+                        
+                    </span>
+                  </div>
                 </div>
                 <div class="col-4">
                   <h4 class="mb-0 font-kecil">SUPPLIER</h4>
@@ -38,20 +45,33 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php $tekstitle = $data['id_pemasok'] == null ? 'Cari ' : 'Ganti '; ?>
                     <?php $tekstitle2 = $data['id_pemasok'] == null || $data['id_pemasok'] == 0 ? 'Cari ' : $data['id_pemasok']; ?>
                     <a href="<?= base_url() . 'po/editsupplier'; ?>" class="btn text-primary font-bold" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Cari Supplier" title="<?= $tekstitle; ?> Supplier"><?= $tekstitle2; ?></a>
-                    <input type="text" class="form-control" aria-label="Text input with dropdown button" placeholder="Nama Supplier" value="<?= $data['namasupplier']; ?>">
+                    <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown button" placeholder="Nama Supplier" value="<?= $data['namasupplier']; ?>">
                   </div>
                   <div class="mt-1">
-                    <textarea class="form-control form-sm" placeholder="Alamat"><?= $data['alamat']; ?></textarea>
+                    <textarea class="form-control form-sm font-kecil" placeholder="Alamat"><?= $data['alamat']; ?></textarea>
                   </div>
                   <div class="mt-1">
-                    <input type="text" class="form-control" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
+                    <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
                   </div>
                 </div>
                 <div class="col-3">
-
+                  <h4 class="mb-0 font-kecil">Jenis Pembayaran</h4>
+                  <div class="input-group">
+                    <select class="form-control form-select font-kecil font-bold text-primary">
+                      <option></option>
+                      <option>CASH</option>
+                      <option>KREDIT</option>
+                      <option>ADVANCE</option>
+                      <option>SAMPLE</option>
+                    </select>
+                    <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown button" placeholder="Tgl.." value="" disabled>
+                  </div>
+                </div>
+                <div class="col-3">
+                  x
                 </div>
               </div>
-              <!-- <div class="hr m-1"></div> -->
+              <div class="hr m-1"></div>
             </div>
           </div>
         </div>

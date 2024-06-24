@@ -92,6 +92,15 @@ class Po extends CI_Controller
         $simpan = $this->pomodel->updatepo($data);
         echo $simpan;
     }
+    public function updatebykolom($kolom){
+        $data = [
+            $kolom => $_POST['isinya'],
+            // 'keterangan' => $_POST['ket'],
+            'id' => $_POST['id']
+        ];
+        $simpan = $this->pomodel->updatepo($data);
+        echo $simpan;
+    }
 
     public function getdata()
     {
