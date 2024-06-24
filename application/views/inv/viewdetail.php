@@ -1,12 +1,13 @@
-<div class="container-xl"> 
+<div class="container-xl">
     <div class="row mb-1">
         <div class="col-4 font-bold">
-        <span class="text-primary">Inventory per Tanggal</span>
-        <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal')),1); ?></h4>
+            <span class="text-primary">Inventory per Tanggal</span>
+            <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal')), 1); ?></h4>
         </div>
         <div class="col-8 text-primary font-bold">
-        <span>SKU/Spesifikasi Barang</span>
-        <h4 class="mb-1 text-teal-green"><?= $header['idd']." # ".$header['nama_barang']; ?></h4>
+            <span>SKU/Spesifikasi Barang</span>
+            <?php $spekbarang = $header['nama_barang'] == null ? $header['spek'] : $header['nama_barang']; ?>
+            <h4 class="mb-1 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
         </div>
         <!-- <div class="col-4 text-primary font-bold">
         <span>Dibuat Oleh</span>
@@ -27,39 +28,43 @@
                         <th rowspan="2">Keterangan</th>
                     </tr>
                     <tr>
-                        <th >Pcs</th>
-                        <th >Kgs</th>
-                        <th >Pcs</th>
-                        <th >Kgs</th>
-                        <th >Pcs</th>
-                        <th >Kgs</th>
-                        <th >Pcs</th>
-                        <th >Kgs</th>
+                        <th>Pcs</th>
+                        <th>Kgs</th>
+                        <th>Pcs</th>
+                        <th>Kgs</th>
+                        <th>Pcs</th>
+                        <th>Kgs</th>
+                        <th>Pcs</th>
+                        <th>Kgs</th>
                     </tr>
                 </thead>
-                <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                    <?php $saldoawal=0; $saldoawalkgs=0; $saldo=0; $saldokgs=0; foreach ($detail->result_array() as $det) { 
-                       
-                        if($det['nome']==1){
-                            $saldoawal = $det['pcs']+$det['pcsin']-$det['pcsout'];
-                            $saldoawalkgs = $det['kgs']+$det['kgsin']-$det['kgsout'];
-                        }else{
+                <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
+                    <?php $saldoawal = 0;
+                    $saldoawalkgs = 0;
+                    $saldo = 0;
+                    $saldokgs = 0;
+                    foreach ($detail->result_array() as $det) {
+
+                        if ($det['nome'] == 1) {
+                            $saldoawal = $det['pcs'] + $det['pcsin'] - $det['pcsout'];
+                            $saldoawalkgs = $det['kgs'] + $det['kgsin'] - $det['kgsout'];
+                        } else {
                             $saldoawal = $saldo;
                             $saldoawalkgs = $saldokgs;
                         }
-                         $saldo += $det['pcs']+$det['pcsin']-$det['pcsout']; 
-                        $saldokgs += $det['kgs']+$det['kgsin']-$det['kgsout']; 
-                        ?>
+                        $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'];
+                        $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout'];
+                    ?>
                         <tr>
-                            <td class="font-italic text-primary"><?= tgl_indo($det['tgl'],1); ?></td>
-                            <td><?= rupiah($saldoawal,0); ?></td>
-                            <td><?= rupiah($saldoawalkgs,2); ?></td>
-                            <td><?= rupiah($det['pcsin'],0); ?></td>
-                            <td><?= rupiah($det['kgsin'],2); ?></td>
-                            <td><?= rupiah($det['pcsout'],0); ?></td>
-                            <td><?= rupiah($det['kgsout'],2); ?></td>
-                            <td class="font-bold text-primary"><?= rupiah($saldo,0); ?></td>
-                            <td><?= rupiah($saldokgs,2); ?></td>
+                            <td class="font-italic text-primary"><?= tgl_indo($det['tgl'], 1); ?></td>
+                            <td><?= rupiah($saldoawal, 0); ?></td>
+                            <td><?= rupiah($saldoawalkgs, 2); ?></td>
+                            <td><?= rupiah($det['pcsin'], 0); ?></td>
+                            <td><?= rupiah($det['kgsin'], 2); ?></td>
+                            <td><?= rupiah($det['pcsout'], 0); ?></td>
+                            <td><?= rupiah($det['kgsout'], 2); ?></td>
+                            <td class="font-bold text-primary"><?= rupiah($saldo, 0); ?></td>
+                            <td><?= rupiah($saldokgs, 2); ?></td>
                             <td><?= $det['nomor_dok']; ?></td>
                         </tr>
                     <?php } ?>
@@ -72,7 +77,7 @@
         <div class="col-4 text-primary font-bold">
         </div>
         <div class="col-4 text-primary font-bold">
-            
+
         </div>
         <div class="col-4 font-bold">
         </div>
@@ -80,7 +85,7 @@
     <hr class="m-1">
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         // $("#keyw").focus();
         // $("#keyw").val($("#nama_barang").val());
         // if($("#keyw").val() != ''){
@@ -124,30 +129,30 @@
     //     $("#modal-scroll").modal('hide');
     // })
     // $("#simpanbarang").click(function(){
-        // if($("#id_barang_bom").val() == ''){
-        //     pesan('Nama Barang harus di isi !','error');
-        //     return;
-        // }
-        // if($("#persen").val() == '' || $("#persen").val()==0){
-        //     pesan('Persem harus di isi !','error');
-        //     return;
-        // }
-        // $.ajax({
-        //     dataType: "json",
-        //     type: "POST",
-        //     url: base_url+'barang/simpanbombarang',
-        //     data: {
-        //         id_barang: $("#id_barang").val(),
-        //         id_bbom: $("#id_barang_bom").val(),
-        //         psn: toAngka($("#persen").val())
-        //     },
-        //     success: function(data){
-        //         window.location.reload();
-        //     },
-        //     error: function (xhr, ajaxOptions, thrownError) {
-        //         console.log(xhr.status);
-        //         console.log(thrownError);
-        //     }
-        // })
+    // if($("#id_barang_bom").val() == ''){
+    //     pesan('Nama Barang harus di isi !','error');
+    //     return;
+    // }
+    // if($("#persen").val() == '' || $("#persen").val()==0){
+    //     pesan('Persem harus di isi !','error');
+    //     return;
+    // }
+    // $.ajax({
+    //     dataType: "json",
+    //     type: "POST",
+    //     url: base_url+'barang/simpanbombarang',
+    //     data: {
+    //         id_barang: $("#id_barang").val(),
+    //         id_bbom: $("#id_barang_bom").val(),
+    //         psn: toAngka($("#persen").val())
+    //     },
+    //     success: function(data){
+    //         window.location.reload();
+    //     },
+    //     error: function (xhr, ajaxOptions, thrownError) {
+    //         console.log(xhr.status);
+    //         console.log(thrownError);
+    //     }
+    // })
     // })
 </script>
