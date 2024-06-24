@@ -41,6 +41,33 @@ $("#dept_kirim").change(function () {
 		},
 	});
 });
+$("#tgldt").datepicker({
+	autoclose: true,
+	format: "dd-mm-yyyy",
+	todayHighlight: true,
+});
+$("#tgldt").change(function () {
+	var isinya =
+		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
+	$("#loadertgldt").html(isinya);
+	alert(tglmysql($("#tgldt").val()));
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "po/updatebykolom/tgl_dtb",
+		data: {
+			isinya: tglmysql($("#tgldt").val()),
+			id: $("#id_header").val(),
+		},
+		success: function (data) {
+			$("#loadertgldt").html("");
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
 // $("#dept_tuju").change(function () {
 // 	$("#adddatapb").removeClass("disabled");
 // 	$("#level").removeClass("bg-primary");
@@ -155,7 +182,7 @@ $("#th").change(function () {
 $("#carisupplier").click(function () {
 	$("#tglpo").click();
 	// alert('OKE');
-})
+});
 
 function getdatapo() {
 	// alert($("#level").val());

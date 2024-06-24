@@ -33,7 +33,7 @@
     </div>
 </div>
 <div class="modal-footer font-kecil">
-    <button type="button" class="btn me-auto btn-sm btn-flat" id="kosongkansupplier">Kosongkan Supplier</button>
+    <button type="button" class="btn me-auto btn-sm btn-flat btn-danger" id="kosongkansupplier">Kosongkan Supplier</button>
     <button type="button" class="btn btn-sm btn-flat text-black" data-bs-dismiss="modal" id="butbatal">Batal</button>
 </div>
 <script>
