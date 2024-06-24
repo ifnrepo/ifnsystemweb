@@ -40,7 +40,8 @@ class Bbl extends CI_Controller
 
     public function tambahdata()
     {
-        $this->load->view('bbl/add_bbl');
+        $data['hakdep'] = $this->deptmodel->gethakdept_bbl($this->session->userdata('arrdep'));
+        $this->load->view('bbl/add_bbl', $data);
     }
 
     public function tambahbbl()
@@ -77,7 +78,7 @@ class Bbl extends CI_Controller
 
     public function addspecbarang()
     {
-        $data['data'] = $this->session->userdata('data_databbl');
+        $data['hakdep'] = $this->deptmodel->gethakdept_bbl($this->session->userdata('arrdep'));
         $this->load->view('bbl/addspecbarang', $data);
     }
 
@@ -86,19 +87,17 @@ class Bbl extends CI_Controller
     {
         $data['data'] = $this->session->userdata('data_databbl');
         $nomor_dok = $this->input->post('data');
+        $dept_id = $this->input->post('dept_id');
         $html = '';
-        $query = $this->bbl_model->getspecbarang($nomor_dok);
+        $query = $this->bbl_model->getspecbarang($nomor_dok, $dept_id);
 
-        log_message('debug', 'Query result: ' . json_encode($query));
-
-
-        if (!empty($query)) {
-            $item = reset($query);
-
+        foreach ($query as $item) {
             $html .= "<tr>";
+
             $html .= "<td>{$item['id_header']}</td>";
             $html .= "<td>{$item['nomor_dok']}</td>";
-            $html .= "<td>{$item['keterangan']}</td>";
+            $html .= "<td>{$item['nama_barang']}</td>";
+            $html .= "<td>{$item['kodesatuan']}</td>";
             $html .= "<td>";
             $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
             $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
@@ -107,13 +106,42 @@ class Bbl extends CI_Controller
             $html .= '</form>';
             $html .= "</td>";
             $html .= "</tr>";
-        } else {
-            $html .= "<tr><td colspan='5'>No data found</td></tr>";
         }
 
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
+
+    // public function getspecbarang()
+    // {
+    //     $data['data'] = $this->session->userdata('data_databbl');
+    //     $nomor_dok = $this->input->post('data');
+    //     $selected_dept = $this->input->post('dept_id');
+
+    //     $html = '';
+    //     $query = $this->bbl_model->getspecbarang($nomor_dok, $selected_dept);
+
+    //     log_message('debug', 'Query result: ' . json_encode($query));
+
+    //     if (!empty($query)) {
+    //         $item = $query[0];
+    //         $html .= "<tr>";
+    //         $html .= "<td>{$item['id_header']}</td>";
+    //         $html .= "<td>{$item['nomor_dok']}</td>";
+    //         $html .= "<td>{$item['keterangan']}</td>";
+    //         $html .= "<td>";
+    //         $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
+    //         $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
+    //         $html .= '<input type="hidden" name="id_header_session" value="' . (isset($data['data']['id']) ? $data['data']['id'] : '') . '">';
+    //         $html .= '<button type="submit" class="btn btn-sm btn-success">Pilih</button>';
+    //         $html .= '</form>';
+    //         $html .= "</td>";
+    //         $html .= "</tr>";
+    //     }
+
+    //     $cocok = array('datagroup' => $html);
+    //     echo json_encode($cocok);
+    // }
 
 
 
@@ -133,16 +161,20 @@ class Bbl extends CI_Controller
             $hasil = $this->bbl_model->simpandetailbarang($data_barang);
 
             if ($hasil) {
+                $inserted_ids = $this->bbl_model->get_last_insert_id();
+                $this->bbl_model->update_id_bbl($id_header, $inserted_ids);
                 redirect($url . $id_header_session);
             } else {
                 $this->session->set_flashdata('message', 'Gagal menyimpan data');
                 redirect($url . $id_header);
             }
         } else {
-            $this->session->set_flashdata('message', 'Data tidak ditemukan');
+            $this->session->set_flashdata('message', 'Data tidak di temukan');
             redirect($url . $id_header);
         }
     }
+
+
     public function edit($id)
     {
         $data['data'] = $this->bbl_model->get_detail($id);
