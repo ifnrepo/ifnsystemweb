@@ -83,52 +83,21 @@ class Bbl extends CI_Controller
     }
 
 
-    public function getspecbarang()
-    {
-        $data['data'] = $this->session->userdata('data_databbl');
-        $nomor_dok = $this->input->post('data');
-        $dept_id = $this->input->post('dept_id');
-        $html = '';
-        $query = $this->bbl_model->getspecbarang($nomor_dok, $dept_id);
-
-        foreach ($query as $item) {
-            $html .= "<tr>";
-
-            $html .= "<td>{$item['id_header']}</td>";
-            $html .= "<td>{$item['nomor_dok']}</td>";
-            $html .= "<td>{$item['nama_barang']}</td>";
-            $html .= "<td>{$item['kodesatuan']}</td>";
-            $html .= "<td>";
-            $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
-            $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
-            $html .= '<input type="hidden" name="id_header_session" value="' . (isset($data['data']['id']) ? $data['data']['id'] : '') . '">';
-            $html .= '<button type="submit" class="btn btn-sm btn-success">Pilih</button>';
-            $html .= '</form>';
-            $html .= "</td>";
-            $html .= "</tr>";
-        }
-
-        $cocok = array('datagroup' => $html);
-        echo json_encode($cocok);
-    }
-
     // public function getspecbarang()
     // {
     //     $data['data'] = $this->session->userdata('data_databbl');
     //     $nomor_dok = $this->input->post('data');
-    //     $selected_dept = $this->input->post('dept_id');
-
+    //     $dept_id = $this->input->post('dept_id');
     //     $html = '';
-    //     $query = $this->bbl_model->getspecbarang($nomor_dok, $selected_dept);
+    //     $query = $this->bbl_model->getspecbarang($nomor_dok, $dept_id);
 
-    //     log_message('debug', 'Query result: ' . json_encode($query));
-
-    //     if (!empty($query)) {
-    //         $item = $query[0];
+    //     foreach ($query as $item) {
     //         $html .= "<tr>";
+
     //         $html .= "<td>{$item['id_header']}</td>";
     //         $html .= "<td>{$item['nomor_dok']}</td>";
-    //         $html .= "<td>{$item['keterangan']}</td>";
+    //         $html .= "<td>{$item['nama_barang']}</td>";
+    //         $html .= "<td>{$item['kodesatuan']}</td>";
     //         $html .= "<td>";
     //         $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
     //         $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
@@ -142,6 +111,37 @@ class Bbl extends CI_Controller
     //     $cocok = array('datagroup' => $html);
     //     echo json_encode($cocok);
     // }
+
+    public function getspecbarang()
+    {
+        $data['data'] = $this->session->userdata('data_databbl');
+        $nomor_dok = $this->input->post('data');
+        $selected_dept = $this->input->post('dept_id');
+
+        $html = '';
+        $query = $this->bbl_model->getspecbarang($nomor_dok, $selected_dept);
+
+        log_message('debug', 'Query result: ' . json_encode($query));
+
+        if (!empty($query)) {
+            $item = $query[0];
+            $html .= "<tr>";
+            $html .= "<td>{$item['id_header']}</td>";
+            $html .= "<td>{$item['nomor_dok']}</td>";
+            $html .= "<td>{$item['keterangan']}</td>";
+            $html .= "<td>";
+            $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
+            $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
+            $html .= '<input type="hidden" name="id_header_session" value="' . (isset($data['data']['id']) ? $data['data']['id'] : '') . '">';
+            $html .= '<button type="submit" class="btn btn-sm btn-success">Pilih</button>';
+            $html .= '</form>';
+            $html .= "</td>";
+            $html .= "</tr>";
+        }
+
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
 
 
 
@@ -158,18 +158,19 @@ class Bbl extends CI_Controller
                 unset($item['id']);
             }
 
-            $hasil = $this->bbl_model->simpandetailbarang($data_barang);
+            $insert_data = $this->bbl_model->simpandetailbarang($data_barang);
 
-            if ($hasil) {
-                $inserted_ids = $this->bbl_model->get_last_insert_id();
-                $this->bbl_model->update_id_bbl($id_header, $inserted_ids);
+            if ($insert_data) {
+                foreach ($insert_data as $item) {
+                    $this->bbl_model->update_id_bbl($id_header, $item['id']);
+                }
                 redirect($url . $id_header_session);
             } else {
                 $this->session->set_flashdata('message', 'Gagal menyimpan data');
                 redirect($url . $id_header);
             }
         } else {
-            $this->session->set_flashdata('message', 'Data tidak di temukan');
+            $this->session->set_flashdata('message', 'Data sudah jadi BBL');
             redirect($url . $id_header);
         }
     }
