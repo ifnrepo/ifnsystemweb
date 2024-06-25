@@ -69,9 +69,9 @@ class Inv extends CI_Controller
         $this->session->set_userdata('filterkat', $_POST['kat']);
         $this->session->set_userdata('kategoricari', $_POST['kcari']);
         if (isset($_POST['cari'])) {
-            if($_POST['cari']==''){
+            if ($_POST['cari'] == '') {
                 $this->session->unset_userdata('katcari');
-            }else{
+            } else {
                 $this->session->set_userdata('katcari', $_POST['cari']);
             }
         } else {
@@ -291,8 +291,8 @@ class Inv extends CI_Controller
     {
         $split = explode('-', $isi);
         $array = [
-            'po' => $split[1],
-            'item' => $split[2],
+            'po' => decrypto($split[1]),
+            'item' => decrypto($split[2]),
             'dis' => $split[3],
             'id_barang' => $split[4],
             'nobontr' => decrypto($split[5]),

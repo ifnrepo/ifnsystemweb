@@ -302,3 +302,10 @@ function viewsku($po = '', $no = '', $dis = '', $id = '')
     }
     return $hasil;
 }
+
+function viewspek($po = '', $no = '', $dis = 0)
+{
+    $CI = &get_instance();
+    $hasil = $CI->invmodel->getspekjala($po . $no . $dis);
+    return $hasil;
+}

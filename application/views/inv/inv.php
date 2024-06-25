@@ -76,15 +76,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-3">
                   <!-- <h4 class="mb-1 font-kecil font-bold text-primary" id="caribar" style="cursor: hand;" title="ubah kondisi Pencarian"></h4> -->
                   <div class="">
-                      <label class="form-check form-check-inline mb-1">
-                        <input class="form-check-input" type="radio" name="radios-inline" value="Cari Barang" <?php if($kategoricari=='Cari Barang'){ echo "checked"; } ?> >
-                        <span class="form-check-label font-kecil">Barang</span>
-                      </label>
-                      <label class="form-check form-check-inline mb-1">
-                        <input class="form-check-input" type="radio" name="radios-inline" value="Cari SKU" <?php if($kategoricari=='Cari SKU'){ echo "checked"; } ?>>
-                        <span class="form-check-label font-kecil">SKU</span>
-                      </label>
-                      <!-- <label class="form-check form-check-inline">
+                    <label class="form-check form-check-inline mb-1">
+                      <input class="form-check-input" type="radio" name="radios-inline" value="Cari Barang" <?php if ($kategoricari == 'Cari Barang') {
+                                                                                                              echo "checked";
+                                                                                                            } ?>>
+                      <span class="form-check-label font-kecil">Barang</span>
+                    </label>
+                    <label class="form-check form-check-inline mb-1">
+                      <input class="form-check-input" type="radio" name="radios-inline" value="Cari SKU" <?php if ($kategoricari == 'Cari SKU') {
+                                                                                                            echo "checked";
+                                                                                                          } ?>>
+                      <span class="form-check-label font-kecil">SKU</span>
+                    </label>
+                    <!-- <label class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" name="radios-inline"  disabled>
                         <span class="form-check-label">Option 3</span>
                       </label> -->
@@ -150,13 +154,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $cntbrg += 1;
                   $jmkgs += $sakkg;
                   $jmpcs += $sak;
-                  $isi = 'OME-' . trim($det['po']) . '-' . trim($det['item']) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-';
+                  $isi = 'OME-' . trim(encrypto($det['po'])) . '-' . trim(encrypto($det['item'])) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-';
                   // $isi = 'XXX';
-                  $insno = $this->session->userdata('currdept')=='GS' ? '' : $det['insno'];
-                  $nobontr = $this->session->userdata('currdept')=='GS' ? '' : $det['nobontr'];
+                  $insno = $this->session->userdata('currdept') == 'GS' ? '' : $det['insno'];
+                  $nobontr = $this->session->userdata('currdept') == 'GS' ? '' : $det['nobontr'];
+                  $spekbarang = $det['nama_barang'] == null ? $det['spek'] : substr($det['nama_barang'], 0, 75);
               ?>
                   <tr class="<?= $bg; ?>">
-                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="text-teal-green"><?= substr($det['nama_barang'], 0, 75); ?></a></td>
+                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="text-teal-green"><?= $spekbarang; ?></a></td>
                     <td style="border-bottom: red;"><?= viewsku(id: $det['kode'], po: $det['po'], no: $det['item'], dis: $det['dis']) ?></td>
                     <td style="border-bottom: red;"><?= $nobontr; ?></td>
                     <td style="border-bottom: red;"><?= $insno; ?></td>

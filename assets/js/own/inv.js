@@ -1,9 +1,11 @@
 $(window).on("load", function () {
 	NProgress.start();
+	NProgress.inc(0.5);
 });
 $(document).ready(function () {
 	NProgress.done();
 });
+
 // document.addEventListener("DOMContentLoaded", function () {
 // 	window.Litepicker &&
 // 		new Litepicker({
