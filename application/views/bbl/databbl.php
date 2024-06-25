@@ -74,7 +74,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <thead style="background-color: blue !important">
                   <tr>
                     <th>No</th>
-                    <th>id</th>
                     <th class="text-center">Nama Barang</th>
                     <th class="text-center">Satuan</th>
                     <th class="text-center">Aksi</th>
@@ -85,7 +84,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   foreach ($detail as $key) : $no++; ?>
                     <tr>
                       <td><?= $no; ?></td>
-                      <td class="text-center"><?= $key['id']; ?></td>
                       <td class="text-center"><?= $key['nama_barang']; ?></td>
                       <td class="text-center"><?= $key['namasatuan']; ?></td>
                       <td>

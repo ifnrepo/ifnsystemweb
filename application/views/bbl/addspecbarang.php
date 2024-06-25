@@ -32,9 +32,9 @@
                 <table class="table datatable6" id="cobasisip">
                     <thead style="background-color: blue !important">
                         <tr>
-                            <th>id</th>
+                            <th>ID</th>
                             <th>No Dok</th>
-                            <th>Departemen</th>
+                            <th>Keterangan</th>
                             <th>Pilih</th>
                         </tr>
                     </thead>

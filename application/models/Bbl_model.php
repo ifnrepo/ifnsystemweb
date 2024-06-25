@@ -62,7 +62,7 @@ class Bbl_model extends CI_Model
         $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
         $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
-        $this->db->where('tb_header.nomor_dok', $spec);
+        $this->db->like('tb_header.nomor_dok', $spec);
         $this->db->where('tb_header.kode_dok', 'PB');
         $this->db->where('tb_header.id_keluar IS NULL');
         $this->db->where('tb_header.dept_tuju', $dept_id);
@@ -81,19 +81,19 @@ class Bbl_model extends CI_Model
     }
 
 
-    public function simpandetailbarang($data)
-    {
-        $this->db->insert_batch('tb_detail', $data);
-        return $this->db->affected_rows();
-    }
     // public function simpandetailbarang($data)
     // {
-    //     foreach ($data as &$item) {
-    //         $this->db->insert('tb_detail', $item);
-    //         $item['id'] = $this->db->insert_id();
-    //     }
-    //     return $data;
+    //     $this->db->insert_batch('tb_detail', $data);
+    //     return $this->db->affected_rows();
     // }
+    public function simpandetailbarang($data)
+    {
+        foreach ($data as &$item) {
+            $this->db->insert('tb_detail', $item);
+            $item['id'] = $this->db->insert_id();
+        }
+        return $data;
+    }
 
 
     public function getdatabyid($id)
