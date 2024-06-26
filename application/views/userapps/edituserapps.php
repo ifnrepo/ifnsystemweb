@@ -82,11 +82,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Password</label>
+                <label class="col-3 col-form-label required">Password </label>
                 <div class="col">
-                  <input type="password" class="form-control font-kecil" name="password" id="password" placeholder="Password" value="<?= decrypto($user['password']); ?>">
+                  <input type="password" class="form-control font-kecil" name="password" id="password" placeholder="Password" value="<?= decrypto($user['password']); ?> ">
+                  <div class="input-group-append">
+                    <span class="input-group-text" id="buka_password"><i class="fa fa-eye"></i></span>
+                  </div>
                 </div>
               </div>
+              <!-- <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Password</label>
+                <div class=" input-group input-group-flat">
+                  <input type="password" class="form-control" value="ultrastrongpassword" autocomplete="off">
+                  <span class="input-group-text">
+                    <a href="#" class="input-group-link">Show password</a>
+                  </span>
+                </div>
+              </div> -->
               <div class="mb-1 row">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
@@ -269,3 +281,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
+<script>
+  document.getElementById('buka_password').addEventListener('click', function() {
+    var passwordField = document.getElementById('password');
+    var icon = this.querySelector('i');
+    if (passwordField.type === 'password') {
+      passwordField.type = 'text';
+      icon.classList.remove('fa-eye-slash');
+      icon.classList.add('fa-eye');
+      // icon.classList.remove('fa-eye');
+      // icon.classList.add('fa-eye-slash');
+    } else {
+      passwordField.type = 'password';
+      // icon.classList.remove('fa-eye-slash');
+      // icon.classList.add('fa-eye');
+      icon.classList.remove('fa-eye');
+      icon.classList.add('fa-eye-slash');
+    }
+  });
+</script>

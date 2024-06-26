@@ -40,8 +40,7 @@ class Bbl extends CI_Controller
 
     public function tambahdata()
     {
-        $data['hakdep'] = $this->deptmodel->gethakdept_bbl($this->session->userdata('arrdep'));
-        $this->load->view('bbl/add_bbl', $data);
+        $this->load->view('bbl/add_bbl');
     }
 
     public function tambahbbl()
@@ -55,6 +54,7 @@ class Bbl extends CI_Controller
             'nomor_dok' => nomorbbl(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'])
         ];
         $simpan = $this->bbl_model->tambah_bbl($data);
+        $this->session->set_userdata('selected_dept', $_POST['dept_id']);
         echo $simpan['id'];
     }
 
@@ -83,52 +83,28 @@ class Bbl extends CI_Controller
     }
 
 
-    // public function getspecbarang()
-    // {
-    //     $data['data'] = $this->session->userdata('data_databbl');
-    //     $nomor_dok = $this->input->post('data');
-    //     $dept_id = $this->input->post('dept_id');
-    //     $html = '';
-    //     $query = $this->bbl_model->getspecbarang($nomor_dok, $dept_id);
-
-    //     foreach ($query as $item) {
-    //         $html .= "<tr>";
-
-    //         $html .= "<td>{$item['id_header']}</td>";
-    //         $html .= "<td>{$item['nomor_dok']}</td>";
-    //         $html .= "<td>{$item['nama_barang']}</td>";
-    //         $html .= "<td>{$item['kodesatuan']}</td>";
-    //         $html .= "<td>";
-    //         $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
-    //         $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
-    //         $html .= '<input type="hidden" name="id_header_session" value="' . (isset($data['data']['id']) ? $data['data']['id'] : '') . '">';
-    //         $html .= '<button type="submit" class="btn btn-sm btn-success">Pilih</button>';
-    //         $html .= '</form>';
-    //         $html .= "</td>";
-    //         $html .= "</tr>";
-    //     }
-
-    //     $cocok = array('datagroup' => $html);
-    //     echo json_encode($cocok);
-    // }
 
     public function getspecbarang()
     {
         $data['data'] = $this->session->userdata('data_databbl');
         $nomor_dok = $this->input->post('data');
-        $selected_dept = $this->input->post('dept_id');
-
+        $dept_id = $this->input->post('dept_id') ?: $this->session->userdata('selected_dept');
         $html = '';
-        $query = $this->bbl_model->getspecbarang($nomor_dok, $selected_dept);
+        $query = $this->bbl_model->getspecbarang($nomor_dok, $dept_id);
 
-        log_message('debug', 'Query result: ' . json_encode($query));
-
-        if (!empty($query)) {
-            $item = $query[0];
+        $grouping_data = [];
+        foreach ($query as $item) {
+            $id_header = $item['id_header'];
+            if (!isset($grouping_data[$id_header])) {
+                $grouping_data[$id_header] = $item;
+            }
+        }
+        foreach ($grouping_data as $item) {
             $html .= "<tr>";
             $html .= "<td>{$item['id_header']}</td>";
             $html .= "<td>{$item['nomor_dok']}</td>";
-            $html .= "<td>{$item['keterangan']}</td>";
+            $html .= "<td>{$item['nama_barang']}</td>";
+            $html .= "<td>{$item['kodesatuan']}</td>";
             $html .= "<td>";
             $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
             $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
