@@ -6,7 +6,6 @@
                 <label class="col-3 col-form-label required font-kecil">Keyword</label>
                 <div class="col input-group">
                     <input type="text" class="form-control font-kecil inputangka" name="keyw" id="keyw" placeholder="Cari..">
-
                     <a href="#" class="btn font-kecil bg-success text-white" id="getbarang">Get!</a>
                 </div>
             </div>
@@ -18,6 +17,7 @@
                             <th>ID</th>
                             <th>No Dok</th>
                             <th>Keterangan</th>
+                            <th>Item</th>
                             <th>Pilih</th>
                         </tr>
                     </thead>
@@ -37,12 +37,15 @@
 
 <script>
     $(document).ready(function() {
-        $("#keyw").focus();
-        $("#keyw").val($("#nomor_dok").val());
+        $('#modal-scroll').on('shown.bs.modal', function () {
+            // $('#textareaID').focus();
+            $("#keyw").focus();
+        }) 
+        // $("#keyw").val($("#nomor_dok").val());
         if ($("#keyw").val() != '') {
             $("#getbarang").click();
         }
-
+    });
         $("#keyw").on('keyup', function(e) {
             if (e.key === 'Enter' || e.keyCode === 13) {
                 $("#getbarang").click();
@@ -51,7 +54,8 @@
 
         $("#getbarang").click(function() {
             if ($("#keyw").val() == '') {
-                alert('Isi dahulu keyword pencarian barang');
+                // alert('Isi dahulu keyword pencarian barang');
+                pesan('Isi dahulu keyword pencarian barang','info');
                 return;
             }
             $.ajax({
@@ -77,5 +81,5 @@
                 }
             });
         });
-    });
+    
 </script>

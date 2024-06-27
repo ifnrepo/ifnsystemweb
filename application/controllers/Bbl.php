@@ -103,8 +103,8 @@ class Bbl extends CI_Controller
             $html .= "<tr>";
             $html .= "<td>{$item['id_header']}</td>";
             $html .= "<td>{$item['nomor_dok']}</td>";
-            $html .= "<td>{$item['nama_barang']}</td>";
-            $html .= "<td>{$item['kodesatuan']}</td>";
+            $html .= "<td>{$item['keterangan']}</td>";
+            $html .= "<td>{$item['jumlah_barang']} item</td>";
             $html .= "<td>";
             $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
             $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
