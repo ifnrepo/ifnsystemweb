@@ -45,47 +45,39 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </a>
                   </span>
                 </div>
+                <div class="col-3"></div>
                 <div class="col-3">
-
+                  <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" title="Cari Nomor PB" class="btn font-kecil bg-success text-white float-right" type="button">Get Permintaan!</a>
                 </div>
               </div>
             </div>
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-4 mt-2">
-
-            <form method="post" action="<?= base_url() . 'bbl/simpandetailbarang'; ?>" name="formbbl" id="formbbl">
-              <input type="text" id="id" name="id" value="" class="hilang">
-              <div class="row font-kecil mb-0">
-                <label class="col-2 col-form-label font-kecil required">Dok</label>
-                <div class="col input-group mb-1">
-                  <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
-                  <input type="text" class="form-control font-kecil" id="nomor_dok" name="nomor_dok" placeholder="Nomor Dokumen">
-                  <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
-                </div>
-              </div>
-            </form>
-
-          </div>
-          <div class="col-sm-8">
-            <div id="table-default" class="table-responsive">
+          <input type="text" id="id" name="id" value="" class="hilang">
+          <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
+          <div class="col-sm-12">
+            <div id="table-default" class="table-responsive font-kecil">
               <table class="table datatable6 table-hover" id="cobasisip">
                 <thead style="background-color: blue !important">
                   <tr>
-                    <th>No</th>
-                    <th class="text-center">Nama Barang</th>
-                    <th class="text-center">Satuan</th>
-                    <th class="text-center">Aksi</th>
+                    <th class="text-left">No</th>
+                    <th class="text-left">Nama Barang</th>
+                    <th class="text-left">Satuan</th>
+                    <th class="text-left">Jumlah</th>
+                    <th class="text-left">Kgs</th>
+                    <th class="text-left">Aksi</th>
                   </tr>
                 </thead>
-                <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
+                <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
                   <?php $no = 0;
                   foreach ($detail as $key) : $no++; ?>
                     <tr>
-                      <td><?= $no; ?></td>
-                      <td class="text-center"><?= $key['nama_barang']; ?></td>
-                      <td class="text-center"><?= $key['namasatuan']; ?></td>
+                      <td class="text-left"><?= $no; ?></td>
+                      <td class="text-left"><?= $key['nama_barang']; ?></td>
+                      <td class="text-left"><?= $key['namasatuan']; ?></td>
+                      <td class="text-right"><?= rupiah($key['pcs'],0); ?></td>
+                      <td class="text-right"><?= rupiah($key['kgs'],2); ?></td>
                       <td>
                         <a href="<?= base_url() . 'bbl/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit detail Bbl" rel="<?= $key['id']; ?>" title="Edit data">
                           <i class="fa fa-edit"></i>
