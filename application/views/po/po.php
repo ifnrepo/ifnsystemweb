@@ -49,7 +49,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             } ?>>IMPORT</option>
                         <option value="SV" <?php if ($this->session->userdata('jn_po') == 'SV') {
                                               echo "selected";
-                                            } ?>>SERVICE</option>
+                                            } ?>>SERVICE - SV</option>
+                        <option value="JA" <?php if ($this->session->userdata('jn_po') == 'JA') {
+                                              echo "selected";
+                                            } ?>>SERVICE - JA</option>
                       </select>
                     </div>
                   </span>
