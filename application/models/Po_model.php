@@ -3,9 +3,12 @@ class Po_model extends CI_Model
 {
     public function getdata($kode)
     {
+        $arrx = ['DO','IM'];
+        $xjno = in_array($kode['jnpo'],$arrx) ? $kode['jnpo'].'/BL' : 'DO/'.$kode['jnpo'];
+        unset($kode['jnpo']);
         $arrkondisi = [
             'id_perusahaan' => IDPERUSAHAAN,
-            'SUBSTR(nomor_dok,4,2)' => $kode['jnpo'],
+            'SUBSTR(nomor_dok,4,5)' => $xjno,
             'kode_dok' => 'PO',
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th')

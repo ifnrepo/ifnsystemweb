@@ -112,11 +112,15 @@ function nomorpo()
     $bl = date('m', strtotime($tgl));
     $th = date('Y', strtotime($tgl));
     $thp = date('y', strtotime($tgl));
-    $jnpo =  $CI->session->userdata('jn_po');
+    if($CI->session->userdata('jn_po')=='DO' || $CI->session->userdata('jn_po')=='IM'){
+        $jnpo =  $CI->session->userdata('jn_po').'/BL/';
+    }else{
+        $jnpo =  'DO/'.$CI->session->userdata('jn_po').'/';
+    }
     $kode = $CI->pomodel->getnomorpo($bl, $th, $jnpo);
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return "PO/" . $jnpo . "/BL/" . $bl . $thp . "/" . sprintf("%03s", $urut);
+    return "PO/" . $jnpo. $bl . $thp . "/" . sprintf("%03s", $urut);
 }
 function tglmysql($tgl)
 {
