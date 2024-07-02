@@ -8,9 +8,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <h2 class="page-title p-2">
           BBl (BON PEMBELIAN BARANG) # <?= $data['nomor_dok']; ?>
         </h2>
+        <br>
+        <?= $pesan = $this->session->flashdata('pesan'); ?>
       </div>
       <div class="col-md-6" style="text-align: right;">
-        <a href="<?= base_url() . 'bbl'; ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+        <a href="<?= base_url() . 'bbl/hapus_header/' . $data['nomor_dok']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+        <!-- <a href="<?= base_url() . 'bbl'; ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a> -->
       </div>
     </div>
   </div>
@@ -76,12 +79,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <td class="text-left"><?= $no; ?></td>
                       <td class="text-left"><?= $key['nama_barang']; ?></td>
                       <td class="text-left"><?= $key['namasatuan']; ?></td>
-                      <td class="text-right"><?= rupiah($key['pcs'],0); ?></td>
-                      <td class="text-right"><?= rupiah($key['kgs'],2); ?></td>
+                      <td class="text-right"><?= rupiah($key['pcs'], 0); ?></td>
+                      <td class="text-right"><?= rupiah($key['kgs'], 2); ?></td>
                       <td>
-                        <a href="<?= base_url() . 'bbl/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit detail Bbl" rel="<?= $key['id']; ?>" title="Edit data">
-                          <i class="fa fa-edit"></i>
-                        </a>
                         <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus/' . $key['id']; ?>" title="Hapus data">
                           <i class="fa fa-trash-o"></i>
                         </a>
@@ -97,7 +97,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="form-tombol mt-1 text-right">
           <input type="text" id="jmlrek" class="hilang">
           <a href="#" class="btn btn-sm btn-primary" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'bbl/simpanbbl/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
-          <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
+
         </div>
       </div>
     </div>

@@ -55,6 +55,23 @@ class Bbl_model extends CI_Model
         return  $query;
     }
 
+    // public function getspecbarang($spec, $dept_id)
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('tb_header');
+    //     $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
+    //     $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
+    //     $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
+    //     $this->db->like('tb_header.nomor_dok', $spec);
+    //     $this->db->where('tb_header.kode_dok', 'PB');
+    //     $this->db->where('tb_header.id_keluar IS NULL');
+    //     $this->db->where('tb_header.dept_tuju', $dept_id);
+    //     $this->db->where('tb_detail.id_bbl', 0);
+    //     $this->db->order_by('tb_header.nomor_dok', 'ASC');
+    //     $query = $this->db->get()->result_array();
+
+    //     return $query;
+    // }
     public function getspecbarang($spec, $dept_id)
     {
         $this->db->select('*');
@@ -62,7 +79,7 @@ class Bbl_model extends CI_Model
         $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
         $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
-        $this->db->like('tb_header.nomor_dok', $spec);
+        $this->db->like('barang.nama_barang', $spec);
         $this->db->where('tb_header.kode_dok', 'PB');
         $this->db->where('tb_header.id_keluar IS NULL');
         $this->db->where('tb_header.dept_tuju', $dept_id);
@@ -81,19 +98,14 @@ class Bbl_model extends CI_Model
     }
 
 
-    // public function simpandetailbarang($data)
-    // {
-    //     $this->db->insert_batch('tb_detail', $data);
-    //     return $this->db->affected_rows();
-    // }
-    public function simpandetailbarang($data)
+    public function update_tgl_ket($data)
     {
-        foreach ($data as &$item) {
-            $this->db->insert('tb_detail', $item);
-            $item['id'] = $this->db->insert_id();
-        }
-        return $data;
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        return $query;
     }
+
+
 
 
     public function getdatabyid($id)
@@ -116,20 +128,29 @@ class Bbl_model extends CI_Model
         return $this->db->get()->result_array();
     }
 
-    public function hapus($id)
+    public function hapus_detail($id)
     {
         $this->db->trans_start();
         $cek = $this->db->get_where('tb_detail', ['id' => $id])->row_array();
-        $this->db->where('id_detail', $id);
-        $hasil = $this->db->delete('tb_detmaterial');
-        $this->db->where('id', $id);
-        $this->db->delete('tb_detail');
-        $hasil = $this->db->trans_complete();
-        if ($hasil) {
-            $this->db->where('id', $cek['id_header']);
-            $que = $this->db->get('tb_header')->row_array();
+        if ($cek) {
+            $id_bbl = $cek['id'];
+            $this->db->where('id', $id);
+            $this->db->delete('tb_detail');
+            $this->db->where('id_bbl', $id_bbl);
+            $this->db->update('tb_detail', ['id_bbl' => 0]);
+            $this->db->trans_complete();
+
+            if ($this->db->trans_status() === FALSE) {
+                return null;
+            } else {
+                $this->db->where('id', $cek['id_header']);
+                $que = $this->db->get('tb_header')->row_array();
+                return $que;
+            }
+        } else {
+            $this->db->trans_complete();
+            return null;
         }
-        return $que;
     }
 
     public function hapusone_detail($id)
@@ -138,12 +159,6 @@ class Bbl_model extends CI_Model
         return $this->db->delete('tb_detail');
     }
 
-    public function getdata_byid($id_header)
-    {
-        $this->db->where('id_header', $id_header);
-        $query = $this->db->get('tb_detail');
-        return $query->result_array();
-    }
     public function get_detail($id)
     {
         $this->db->select("tb_detail.*, satuan.namasatuan, satuan.kodesatuan, barang.kode, barang.nama_barang");
@@ -160,6 +175,7 @@ class Bbl_model extends CI_Model
         $this->db->where('id', $data['id']);
         return $this->db->update('tb_detail', $data);
     }
+
     public function updatedata_detail($data)
     {
         $this->db->where('id', $data['id']);
@@ -183,11 +199,46 @@ class Bbl_model extends CI_Model
         $this->db->where('id', $id);
         return $this->db->delete('tb_header');
     }
+    public function hapus_header($nomor_dok)
+    {
+        $this->db->where('nomor_dok', $nomor_dok);
+        return $this->db->delete('tb_header');
+    }
 
 
-    public function update_id_bbl($id_header, $new_id_bbl)
+    // public function update_id_bbl($id_header, $new_id_bbl)
+    // {
+    //     $this->db->where('id_header', $id_header);
+    //     $this->db->update('tb_detail', array('id_bbl' => $new_id_bbl));
+    // }
+
+    // public function getdata_byid($id_header)
+    // {
+    //     $this->db->where('id_header', $id_header);
+    //     $query = $this->db->get('tb_detail');
+    //     return $query->result_array();
+    // }
+
+    public function getdata_byid($id_header, $id_barang)
     {
         $this->db->where('id_header', $id_header);
+        $this->db->where('id_barang', $id_barang);
+        $query = $this->db->get('tb_detail');
+        return $query->row_array();
+    }
+
+    public function simpandetailbarang($data)
+    {
+        foreach ($data as &$item) {
+            $this->db->insert('tb_detail', $item);
+            $item['id'] = $this->db->insert_id();
+        }
+        return $data;
+    }
+
+    public function update_id_bbl($id_barang, $new_id_bbl)
+    {
+        $this->db->where('id_barang', $id_barang);
         $this->db->update('tb_detail', array('id_bbl' => $new_id_bbl));
     }
 
