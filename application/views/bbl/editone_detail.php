@@ -2,8 +2,9 @@
     <div class="row">
         <div class="col-12">
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Qty</label>
+                <label class="col-3 col-form-label required">jumlah</label>
                 <div class="col">
+                    <input type="hidden" class="form-control font-kecil" name="id" id="id" value="<?= $data['id']; ?>">
                     <input type="text" class="form-control font-kecil" name="pcs" id="pcs" value="<?= $data['pcs']; ?>">
                 </div>
             </div>

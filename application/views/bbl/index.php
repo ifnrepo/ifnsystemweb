@@ -107,7 +107,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
                                     <td><?= $datdet['keterangan'] ?></td>
                                     <td>
-                                        <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
+                                        <!-- <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
+                                            <i class="fa fa-edit"></i>
+                                        </a> -->
+                                        <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus_detail/' . $datdet['id']; ?>" title="Hapus data">

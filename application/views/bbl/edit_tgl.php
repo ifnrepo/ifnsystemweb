@@ -34,7 +34,7 @@
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url + "bbl/updatebbl",
+            url: base_url + "bbl/tgl_keterangan",
             data: {
                 id: $("#id_header").val(),
                 tgl: $("#tgl").val(),

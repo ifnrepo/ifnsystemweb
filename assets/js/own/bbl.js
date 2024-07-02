@@ -21,6 +21,7 @@ $(document).ready(function () {
 	// }
 	// $("#dept_kirim").change();
 	
+	
 });
 $("#tglpb").datepicker();
 
@@ -43,6 +44,7 @@ $("#tglpb").datepicker();
 // 		},
 // 	});
 // });
+
 
 $("#simpandetailbarang").click(function () {
 	if ($("#nomor_dok").val() == "") {
@@ -166,3 +168,5 @@ function getdatadetail_bbl() {
 		},
 	});
 }
+
+
