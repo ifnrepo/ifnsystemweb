@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          BBl (BON PEMBELIAN BARANG) # <?= $data['nomor_dok']; ?>
+          BBL (BON PEMBELIAN BARANG) # <?= $data['nomor_dok']; ?>
         </h2>
         <br>
         <?= $pesan = $this->session->flashdata('pesan'); ?>
@@ -50,7 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <div class="col-3"></div>
                 <div class="col-3">
-                  <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" title="Cari Nomor PB" class="btn font-kecil bg-success text-white float-right" type="button">Get Permintaan!</a>
+                  <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" title="Cari Nomor PB" class="btn font-kecil bg-success text-white float-right" type="button">Get Permintaan!</a>
                 </div>
               </div>
             </div>
@@ -77,12 +77,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   foreach ($detail as $key) : $no++; ?>
                     <tr>
                       <td class="text-left"><?= $no; ?></td>
-                      <td class="text-left"><?= $key['nama_barang']; ?></td>
+                      <td class="text-left" style="line-height:12px;"><?= $key['nama_barang']; ?><br><span style="font-size: 10px"><?= $key['id']; ?></span></td>
                       <td class="text-left"><?= $key['namasatuan']; ?></td>
                       <td class="text-right"><?= rupiah($key['pcs'], 0); ?></td>
                       <td class="text-right"><?= rupiah($key['kgs'], 2); ?></td>
                       <td>
-                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus/' . $key['id']; ?>" title="Hapus data">
+                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus/' . $key['id']; ?>" title="Hapus data">
                           <i class="fa fa-trash-o"></i>
                         </a>
                       </td>
