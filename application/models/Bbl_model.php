@@ -55,23 +55,6 @@ class Bbl_model extends CI_Model
         return  $query;
     }
 
-    // public function getspecbarang($spec, $dept_id)
-    // {
-    //     $this->db->select('*');
-    //     $this->db->from('tb_header');
-    //     $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
-    //     $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
-    //     $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
-    //     $this->db->like('tb_header.nomor_dok', $spec);
-    //     $this->db->where('tb_header.kode_dok', 'PB');
-    //     $this->db->where('tb_header.id_keluar IS NULL');
-    //     $this->db->where('tb_header.dept_tuju', $dept_id);
-    //     $this->db->where('tb_detail.id_bbl', 0);
-    //     $this->db->order_by('tb_header.nomor_dok', 'ASC');
-    //     $query = $this->db->get()->result_array();
-
-    //     return $query;
-    // }
     public function getspecbarang($spec, $dept_id)
     {
         $this->db->select('*');
@@ -79,7 +62,9 @@ class Bbl_model extends CI_Model
         $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
         $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
-        $this->db->like('barang.nama_barang', $spec);
+        if($spec!=''){
+            $this->db->like('barang.nama_barang', $spec);
+        }
         $this->db->where('tb_header.kode_dok', 'PB');
         $this->db->where('tb_header.id_keluar IS NULL');
         $this->db->where('tb_header.dept_tuju', $dept_id);
@@ -204,20 +189,6 @@ class Bbl_model extends CI_Model
         $this->db->where('nomor_dok', $nomor_dok);
         return $this->db->delete('tb_header');
     }
-
-
-    // public function update_id_bbl($id_header, $new_id_bbl)
-    // {
-    //     $this->db->where('id_header', $id_header);
-    //     $this->db->update('tb_detail', array('id_bbl' => $new_id_bbl));
-    // }
-
-    // public function getdata_byid($id_header)
-    // {
-    //     $this->db->where('id_header', $id_header);
-    //     $query = $this->db->get('tb_detail');
-    //     return $query->result_array();
-    // }
 
     public function getdata_byid($id_header, $id_barang)
     {

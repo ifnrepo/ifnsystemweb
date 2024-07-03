@@ -16,8 +16,7 @@
                         <tr>
                             <th>No Dok</th>
                             <th>Nama Barang</th>
-                            <th>Keterangan</th>
-                            <th>Item</th>
+                            <!-- <th>Keterangan</th> -->
                             <th>Pilih</th>
                         </tr>
                     </thead>
@@ -37,14 +36,15 @@
 
 <script>
     $(document).ready(function() {
-        $('#modal-scroll').on('shown.bs.modal', function() {
-            // $('#textareaID').focus();
-            $("#keyw").focus();
-        })
+        // $('#modal-scroll').on('shown.bs.modal', function() {
+        //     // $('#textareaID').focus();
+        //     $("#keyw").focus();
+        // })
         // $("#keyw").val($("#nomor_dok").val());
-        if ($("#keyw").val() != '') {
-            $("#getbarang").click();
-        }
+        // if ($("#keyw").val() != '') {
+        //     $("#getbarang").click();
+        // }
+        $("#getbarang").click();
     });
     $("#keyw").on('keyup', function(e) {
         if (e.key === 'Enter' || e.keyCode === 13) {
@@ -53,11 +53,11 @@
     });
 
     $("#getbarang").click(function() {
-        if ($("#keyw").val() == '') {
-            // alert('Isi dahulu keyword pencarian barang');
-            pesan('Isi dahulu keyword pencarian barang', 'info');
-            return;
-        }
+        // if ($("#keyw").val() == '') {
+        //     // alert('Isi dahulu keyword pencarian barang');
+        //     pesan('Isi dahulu keyword pencarian barang', 'info');
+        //     return;
+        // }
         $.ajax({
             dataType: "json",
             type: "POST",
