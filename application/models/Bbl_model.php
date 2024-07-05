@@ -7,13 +7,13 @@ class Bbl_model extends CI_Model
         $this->db->select('tb_header.*, user.name, (select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
         $this->db->from('tb_header');
         $this->db->join('user', 'user.id = tb_header.user_ok', 'left');
-        if (!empty($data['dept_id'])) {
+        // if (!empty($data['dept_id'])) {
             $this->db->where('dept_id', $data['dept_id']);
-        }
+        // }
 
-        if (!empty($data['dept_tuju'])) {
+        // if (!empty($data['dept_tuju'])) {
             $this->db->where('dept_tuju', $data['dept_tuju']);
-        }
+        // }
         $bl = $this->session->userdata('bl');
         $th = $this->session->userdata('th');
 
@@ -57,7 +57,7 @@ class Bbl_model extends CI_Model
 
     public function getspecbarang($spec, $dept_id)
     {
-        $this->db->select('*');
+        $this->db->select('*,tb_detail.id as idx');
         $this->db->from('tb_header');
         $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
@@ -105,6 +105,7 @@ class Bbl_model extends CI_Model
     public function getdatadetail_bbl($data)
     {
         $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
+        $this->db->select("(select nomor_dok from tb_header where tb_header.id = (select id_header from tb_detail a where a.id_bbl = tb_detail.id)) as id_pb");
         $this->db->from('tb_detail');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
@@ -207,9 +208,10 @@ class Bbl_model extends CI_Model
         return $data;
     }
 
-    public function update_id_bbl($id_barang, $new_id_bbl)
+    public function update_id_bbl($id_barang, $new_id_bbl,$id_header)
     {
         $this->db->where('id_barang', $id_barang);
+        $this->db->where('id_header', $id_header);
         $this->db->update('tb_detail', array('id_bbl' => $new_id_bbl));
     }
 
