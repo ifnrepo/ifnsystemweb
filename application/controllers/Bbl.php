@@ -109,8 +109,9 @@ class Bbl extends CI_Controller
             $html .= '<form action="' . base_url('bbl/pilih_barang') . '" method="post">';
             $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
             $html .= '<input type="hidden" name="id_barang" value="' . $item['id_barang'] . '">';
+            $html .= '<input type="hidden" name="id_detail_barang" value="' . $item['idx'] . '">';
             $html .= '<input type="hidden" name="id_header_session" value="' . (isset($data['data']['id']) ? $data['data']['id'] : '') . '">';
-            $html .= '<button type="submit" class="btn btn-sm btn-success font-kecil">Pilih</button>';
+            $html .= '<button type="submit" class="btn btn-sm btn-success font-kecil" title="'.$item['idx'].'">Pilih</button>';
             $html .= '</form>';
             $html .= "</td>";
             $html .= "</tr>";
@@ -125,6 +126,7 @@ class Bbl extends CI_Controller
         $id_header = $this->input->post('id_header');
         $id_header_session = $this->input->post('id_header_session');
         $id_barang = $this->input->post('id_barang');
+        $iddetail = $this->input->post('id_detail_barang');
         $data_barang = $this->bbl_model->getdata_byid($id_header, $id_barang);
         $url = base_url() . 'bbl/databbl/';
 
@@ -136,7 +138,7 @@ class Bbl extends CI_Controller
 
             if ($insert_data) {
                 foreach ($insert_data as $item) {
-                    $this->bbl_model->update_id_bbl($id_barang, $item['id']);
+                    $this->bbl_model->update_id_bbl($id_barang, $item['id'],$id_header);
                 }
                 redirect($url . $id_header_session);
             } else {

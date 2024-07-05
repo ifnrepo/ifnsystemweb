@@ -50,7 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <div class="col-3"></div>
                 <div class="col-3">
-                  <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" title="Cari Nomor PB" class="btn font-kecil bg-success text-white float-right" type="button">Get Permintaan!</a>
+                  <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" title="Cari Nomor PB" class="btn font-kecil bg-success text-white float-right" type="button">Get Permintaan!</a>
                 </div>
               </div>
             </div>
@@ -77,7 +77,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   foreach ($detail as $key) : $no++; ?>
                     <tr>
                       <td class="text-left"><?= $no; ?></td>
-                      <td class="text-left" style="line-height:12px;"><?= $key['nama_barang']; ?><br><span style="font-size: 10px"><?= $key['id']; ?></span></td>
+                      <td class="text-left" style="line-height:12px;"><?= $key['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $key['id_pb']; ?></span></td>
                       <td class="text-left"><?= $key['namasatuan']; ?></td>
                       <td class="text-right"><?= rupiah($key['pcs'], 0); ?></td>
                       <td class="text-right"><?= rupiah($key['kgs'], 2); ?></td>
