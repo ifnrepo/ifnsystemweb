@@ -104,18 +104,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= tglmysql($datdet['tgl']); ?></td>
                                     <td><a href='<?= base_url() . 'bbl/viewdetail_bbl/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a></td>
                                     <td><?= $jmlrec; ?></td>
+                                    <?php if($datdet['data_ok']==1){ ?>
                                     <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
+                                    <?php }else{ ?>
+                                    <td></td>
+                                    <?php } ?>
                                     <td><?= $datdet['keterangan'] ?></td>
                                     <td>
-                                        <!-- <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
-                                            <i class="fa fa-edit"></i>
-                                        </a> -->
+                                        <?php if($datdet['data_ok']==1 && $datdet['ok_valid']==0){ ?>
+                                        <a href="#" data-href="<?= base_url() . 'bbl/editbbl/' . $datdet['id']; ?>" class="btn btn-sm btn-info btn-icon btn-flat mr-1" style="padding: 5px !important" id="Edit detail Bbl" data-message="Akan edit data ini" data-bs-toggle='modal' data-bs-target='#modal-info' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
+                                            <i class="fa fa-refresh mr-1"></i> Edit Transaksi
+                                        </a>
+                                        <?php }else if($datdet['data_ok']==0){ ?>
                                         <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus_detail/' . $datdet['id']; ?>" title="Hapus data">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
+                                        <?php }else{ ?>
+                                            Tunggu ...
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>

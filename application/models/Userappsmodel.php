@@ -8,7 +8,7 @@ class Userappsmodel extends CI_Model
         $this->db->join('level_user', 'level_user.id = user.id_level_user', 'left');
         $this->db->join('dept','dept.dept_id = user.id_dept', 'left');
 
-        return $this->db->get()->result_array();
+        return $this->db->order_by('user.id','DESC')->get()->result_array();
     }
 
     public function getdatabyid($id)
@@ -112,7 +112,16 @@ class Userappsmodel extends CI_Model
                 unset($data[$dept['dept_id']]);
             }
         }
-
+        // $ttd = $data['ttd'];
+        // switch ($ttd) {
+        //     case '1':
+        //         $data['ttd'] = 1;
+        //         break;
+            
+        //     default:
+        //         # code...
+        //         break;
+        // }
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
         $data['manajemen'] = $manajemen;

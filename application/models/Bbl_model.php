@@ -219,4 +219,16 @@ class Bbl_model extends CI_Model
     {
         return $this->db->insert_id();
     }
+
+    public function cekfield($id,$kolom,$nilai){
+        $this->db->where('id',$id);
+        $this->db->where($kolom,$nilai);
+        $hasil = $this->db->get('tb_header')->row_array();
+        return $hasil;
+    }
+    public function ubahdataok($id,$nilai){
+        $this->db->where('id',$id);
+        $hasil = $this->db->update('tb_header',['data_ok'=>$nilai]);
+        return $hasil;
+    }
 }
