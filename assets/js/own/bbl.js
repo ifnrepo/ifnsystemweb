@@ -6,37 +6,33 @@ $(document).ready(function () {
 	// $(".dataTables_filter").css("float", "right");
 	// var url = window.location.href;
 	// var pisah = url.split("/");
-	
 	// if (pisah[2] == "localhost") {
 	// 	if (pisah[5] == "databbl ") {
 	// 		getdatadetailpb();
 	// 	}
 	// } else {
 	// 	if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
-			
 	// 	}
 	// 	if (pisah[5] == "datapb") {
 	// 		getdatadetailpb();
 	// 	}
 	// }
 	// $("#dept_kirim").change();
-	
-	
 });
 $("#tglpb").datepicker();
 
 // $("#dept_kirim").change(function () {
 // 	$.ajax({
-		
+
 // 		type: "POST",
 // 		url: base_url + "pb/depttujupb",
 // 		data: {
 // 			kode: $(this).val(),
 // 		},
 // 		success: function (data) {
-			
+
 // 			$("#dept_tuju").html(data);
-			
+
 // 		},
 // 		error: function (xhr, ajaxOptions, thrownError) {
 // 			console.log(xhr.status);
@@ -44,7 +40,6 @@ $("#tglpb").datepicker();
 // 		},
 // 	});
 // });
-
 
 $("#simpandetailbarang").click(function () {
 	if ($("#nomor_dok").val() == "") {
@@ -63,7 +58,7 @@ $("#simpandetailbarang").click(function () {
 
 $("#butgo").click(function () {
 	// $("#dept_tuju").change();
-	getdatapb();
+	getdatabbl();
 });
 $("#resetdetailbarang").click(function () {
 	$("#nomor_dok").val("");
@@ -125,16 +120,15 @@ $("#bl").change(function () {
 $("#th").change(function () {
 	$("#bl").change();
 });
-function getdatapb() {
+function getdatabbl() {
 	// alert($("#level").val());
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
-		url: base_url + "pb/getdatapb",
+		url: base_url + "bbl/getdatabbl",
 		data: {
 			dept_id: $("#dept_kirim").val(),
 			dept_tuju: $("#dept_tuju").val(),
-			levelsekarang: $("#level").val(),
 		},
 		success: function (data) {
 			// alert(data.datagroup);
@@ -168,5 +162,3 @@ function getdatadetail_bbl() {
 		},
 	});
 }
-
-

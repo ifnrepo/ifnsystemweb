@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="row g-0 d-flex align-items-between">
             <div class="col-md-6">
                 <h2 class="page-title p-2">
-                    BBl (BON PEMBELIAN BARANG) # <?= $header['nomor_dok']; ?>
+                    BBL (BON PEMBELIAN BARANG) # <?= $header['nomor_dok']; ?>
                 </h2>
             </div>
             <div class="col-md-6" style="text-align: right;">
@@ -28,6 +28,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <div class="col-2 ">
                                     <h4 class="mb-0 font-kecil">Tgl</h4>
                                     <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($header['tgl']); ?>">
+                                    <input type="text" id="id_header" class="hilang" value="<?= $header['id']; ?>">
                                     <span class="font-bold" style="font-size:15px;">
                                         <?= tglmysql($header['tgl']); ?>
                                         <a href="<?= base_url() . 'bbl/edittgl'; ?>" title="Edit tanggal" id="tglbbl" name="tglbbl" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
@@ -78,7 +79,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <td class="text-left"><?= $key['namasatuan']; ?></td>
                                             <td class="text-right"><?= rupiah($key['pcs'], 0); ?></td>
                                             <td class="text-right"><?= rupiah($key['kgs'], 2); ?></td>
-                                            <td>
+                                            <td class="text-center">
                                                 <a href="<?= base_url() . 'bbl/editone_detail/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit detail Bbl" rel="<?= $key['id']; ?>" title="Edit data">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
@@ -94,10 +95,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                 </div>
                 <hr class="m-1">
-                <!-- <div class="form-tombol mt-1 text-right">
+                <div class="form-tombol mt-1 text-right">
                     <input type="text" id="jmlrek" class="hilang">
                     <a href="#" class="btn btn-sm btn-primary" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'bbl/simpanbbl/' . $header['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
-                </div> -->
+                </div>
             </div>
         </div>
     </div>

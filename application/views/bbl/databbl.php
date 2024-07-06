@@ -81,8 +81,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <td class="text-left"><?= $key['namasatuan']; ?></td>
                       <td class="text-right"><?= rupiah($key['pcs'], 0); ?></td>
                       <td class="text-right"><?= rupiah($key['kgs'], 2); ?></td>
-                      <td>
-                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus/' . $key['id']; ?>" title="Hapus data">
+                      <td class="text-center">
+                        <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini ?" data-href="<?= base_url() . 'bbl/hapus/' . $key['id']; ?>" title="Hapus data">
                           <i class="fa fa-trash-o"></i>
                         </a>
                       </td>

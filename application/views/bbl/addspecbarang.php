@@ -64,7 +64,7 @@
             url: '<?= base_url('bbl/getspecbarang') ?>',
             data: {
                 data: $("#keyw").val(),
-                dept_id: $("#dept_id").val()
+                header: $("#id_header").val()
             },
             success: function(data) {
                 console.log(data); // Log data yang diterima

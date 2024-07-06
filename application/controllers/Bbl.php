@@ -37,6 +37,13 @@ class Bbl extends CI_Controller
         $this->load->view('bbl/index', $data);
         $this->load->view('layouts/footer', $footer);
     }
+    public function getdatabbl(){
+        $dari = $_POST['dept_id'];
+        $ke = $_POST['dept_tuju'];
+        $this->session->set_userdata('deptsekarang',$dari);
+        $this->session->set_userdata('tujusekarang',$ke);
+        echo 1;
+    }
 
     public function tambahdata()
     {
@@ -97,7 +104,8 @@ class Bbl extends CI_Controller
     {
         $data['data'] = $this->session->userdata('data_databbl');
         $barang = $this->input->post('data');
-        $dept_id = $this->input->post('dept_id') ?: $this->session->userdata('selected_dept');
+        $header = $this->input->post('header');
+        $dept_id = $this->session->userdata('deptsekarang');
         $html = '';
         $query = $this->bbl_model->getspecbarang($barang, $dept_id);
         foreach ($query as $item) {
@@ -110,7 +118,7 @@ class Bbl extends CI_Controller
             $html .= '<input type="hidden" name="id_header" value="' . $item['id_header'] . '">';
             $html .= '<input type="hidden" name="id_barang" value="' . $item['id_barang'] . '">';
             $html .= '<input type="hidden" name="id_detail_barang" value="' . $item['idx'] . '">';
-            $html .= '<input type="hidden" name="id_header_session" value="' . (isset($data['data']['id']) ? $data['data']['id'] : '') . '">';
+            $html .= '<input type="hidden" name="id_header_session" value="' . $header . '">';
             $html .= '<button type="submit" class="btn btn-sm btn-success font-kecil" title="'.$item['idx'].'">Pilih</button>';
             $html .= '</form>';
             $html .= "</td>";
@@ -269,6 +277,14 @@ class Bbl extends CI_Controller
         $hasil = $this->bbl_model->hapus_header($nomor_dok);
         if ($hasil) {
             $url = base_url('bbl');
+            redirect($url);
+        }
+    }
+    public function editbbl($id){
+        $cek = $this->bbl_model->cekfield($id,'ok_valid',0);
+        if($cek){
+            $this->bbl_model->ubahdataok($id,0);
+            $url = base_url('bbl/editdetail_bbl/'.$id);
             redirect($url);
         }
     }
