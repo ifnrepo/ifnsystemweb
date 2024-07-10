@@ -37,12 +37,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <option value="1" <?php if ($selek == 1) {
                                     echo "selected";
                                   } ?>>User Maker</option>
-                <option value="2" <?php if ($levnow != 'disabled' && $selek >= 2) {
-                                    echo "selected";
-                                  } ?>>User Approver</option>
               </select>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
-              <select class="form-control form-sm font-kecil font-bold mr-1" id="bl" name="bl" style="width: 100px;" <?= $levnow; ?>>
+              <select class="form-control form-sm font-kecil font-bold mr-1" id="bl" name="bl" style="width: 100px;">
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
                 <?php endfor; ?>
@@ -150,17 +147,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     if ($datdet['data_ok'] == 0) {
                       echo "<a href=" . base_url() . 'pb/datapb/' . $datdet["id"] . " class='btn btn-sm btn-primary btn-flat mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
                       echo "<a href='#' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' data-href=" . base_url() . 'pb/hapusdata/' . $datdet["id"] . " title='Hapus data'><i class='fa fa-trash-o'></i></a>";
-                    } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0 && $this->session->userdata('levelsekarang') == 1) {
+                    } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0 && $this->session->userdata('levelsekarang') == 1 && $this->session->userdata('level_user') > 1) {
                       echo "<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-info btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit data ini' data-href=" . base_url() . 'pb/editokpb/' . $datdet["id"] . " title='Validasi data'><i class='fa fa-refresh mr-1'></i> Edit Validasi</a>";
                     } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0 && $this->session->userdata('levelsekarang') > 1) {
                       echo "<a href='#' class='btn btn-sm btn-success btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Validasi data ini' data-href=" . base_url() . 'pb/validasipb/' . $datdet["id"] . " title='Validasi data'><i class='fa fa-check mr-1'></i></a>";
                       echo "<a href='" . base_url() . 'pb/cancelpb/' . $datdet['id'] . "' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Cancel data' title='Cancel data'><i class='fa fa-times mr-1'></i></a>";
-                    } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 1 && $this->session->userdata('levelsekarang') == 1 && $this->session->userdata('level_user') >= 2) {
-                      echo "<a class='btn btn-sm btn-danger btn-flat mr-1' href=" . base_url() . 'pb/cetakbon/' . $datdet["id"] . " target='_blank' title='Cetak'><i class='fa fa-file-pdf-o mr-1'></i></a>";
+                    } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 1 && $this->session->userdata('levelsekarang') == 1) {
+                      echo "<a class='btn btn-sm btn-danger btn-flat mr-1' href=" . base_url() . 'pb/cetakbon/' . $datdet["id"] . " target='_blank' title='Cetak'><i class='fa fa-file-pdf-o mr-1'></i> PDF</a>";
                       if ($datdet['ok_tuju'] == 0 && $datdet['id_keluar'] == null) {
-                        echo "<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-primary btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit Validasi data ini' data-href=" . base_url() . 'pb/editvalidasipb/' . $datdet["id"] . " title='Edit Validasi data'><i class='fa fa-refresh mr-1'></i> Edit</a>";
+                        // echo "<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-primary btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit Validasi data ini' data-href=" . base_url() . 'pb/editvalidasipb/' . $datdet["id"] . " title='Edit Validasi data'><i class='fa fa-refresh mr-1'></i> Edit</a>";
                       }
-                    } else if ($hsl['data_ok'] == 1 && $hsl['ok_valid'] == 1) {
                     }
                     ?>
                   </td>

@@ -338,7 +338,7 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item <?php if($this->session->userdata('level_user') == 0) { echo "hilang";} ?>">
+            <li class="nav-item <?php if($this->session->userdata('level_user') <= 1) { echo "hilang";} ?>">
               <a class="nav-link <?php if (isset($header) && $header=='pendingtask') {
                                     echo 'active';
                                   } ?>" href="<?= base_url().'task'; ?>">

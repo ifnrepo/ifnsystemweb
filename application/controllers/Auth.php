@@ -62,6 +62,7 @@ class Auth extends CI_Controller
                     'hakdepartemen' => $user['hakdepartemen'],
                     'level_user' => $user['idlevel'],
                     'dept_user' => $user['id_dept'],
+                    'ttd' => $user['ttd'],
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);

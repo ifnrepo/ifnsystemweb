@@ -40,7 +40,59 @@ $("#tglpb").datepicker();
 // 		},
 // 	});
 // });
-
+$("#xdeptselect").change(function () {
+	// alert($(this).prop("checked"));
+	var isi = $(this).val();
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "bbl/editdeptpp",
+		data: {
+			id: $("#id_header").val(),
+			dept_bbl: isi,
+		},
+		success: function (data) {
+			window.location.reload();
+			// alert('berhasil');
+			// window.location.href = base_url + "bbl/databbl/" + $("#id_header").val();
+			// $("#butbatal").click();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+			pesan("ERROR " + xhr.status + " " + thrownError, "info");
+		},
+	});
+});
+$("#bbl_pp").change(function () {
+	// alert($(this).prop("checked"));
+	var isi = $(this).prop("checked") ? 1 : 0;
+	var xisi = $(this).prop("checked") ? 0 : 1;
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "bbl/editbblpp",
+		data: {
+			id: $("#id_header").val(),
+			bbl_pp: isi,
+		},
+		success: function (data) {
+			// alert('berhasil');
+			// window.location.href = base_url + "bbl/databbl/" + $("#id_header").val();
+			// $("#butbatal").click();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+			if (xisi == 0) {
+				$(this).attr("checked", false);
+			} else {
+				$(this).attr("checked", true);
+			}
+			pesan("ERROR " + xhr.status + " " + thrownError, "info");
+		},
+	});
+});
 $("#simpandetailbarang").click(function () {
 	if ($("#nomor_dok").val() == "") {
 		pesan("Isi / Cari no Dokumen", "error");

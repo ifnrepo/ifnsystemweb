@@ -22,7 +22,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="sticky-top bg-white">
                     <div class="row mb-1 d-flex align-items-between">
                         <div class="col-sm-6">
-                            <a href="<?= base_url() . 'bbl/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                            <!-- <a href="<?= base_url() . 'bbl/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
+                            <div class="dropdown">
+                                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
+                                </button>
+                                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                                <a class="dropdown-item font-kecil font-bold" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Data" href="<?= base_url() . 'bbl/tambahdata/0'; ?>" title="BBL Dari BON Permintaan">Dari BON Permintaan</a>
+                                <a class="dropdown-item font-kecil font-bold" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Data" href="<?= base_url() . 'bbl/tambahdata/1'; ?>" title="BBL Tanpa BON Permintaan">Tanpa BON Permintaan</a>
+                                </div>
+                            </div>
                         </div>
                         <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
                             <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
@@ -42,14 +51,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <div class="font-kecil">
                                             <select class="form-control form-sm font-kecil font-bold" id="dept_kirim" name="dept_kirim">
                                                 <?php
-                                                $selek = $this->session->userdata('deptsekarang') ?? 'IT';
+                                                $selek = $this->session->userdata('deptsekarang')==null ? $this->session->userdata('dept_user') : $this->session->userdata('deptsekarang');
                                                 foreach ($hakdep as $hak) :
                                                     $selected = ($selek == $hak['dept_id']) ? "selected" : "";
+                                                    $arrdepbbl = arrdep(deptbbl);
+                                                    if(in_array($hak['dept_id'],$arrdepbbl)):
                                                 ?>
                                                     <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?= $selected ?>>
                                                         <?= $hak['departemen']; ?>
                                                     </option>
-                                                <?php endforeach; ?>
+                                                <?php endif; endforeach; ?>
 
                                             </select>
                                         </div>
@@ -59,7 +70,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <h4 class="mb-1 font-kecil">Dept Tujuan</h4>
                                     <span class="font-kecil">
                                         <div class="font-kecil">
-                                            <select class="form-control form-sm font-kecil font-bold" id="dept_tuju" name="dept_tuju">
+                                            <select class="form-control form-sm font-kecil font-bold" id="dept_tuju" name="dept_tuju" disabled>
                                                 <option value="PC" rel="PURCHASING" selected>PURCHASING</option>
                                             </select>
                                         </div>
@@ -89,6 +100,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Tgl</th>
                                 <th>Nomor</th>
                                 <th>Jumlah Item</th>
+                                <th>P</th>
                                 <th>Dibuat Oleh</th>
                                 <th>Keterangan</th>
                                 <th>Aksi</th>
@@ -98,12 +110,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <?php
                             foreach ($data as $datdet) :
                                 $jmlrec = $datdet['jmlrex'] == null ? '' : $datdet['jmlrex'] . ' Item ';
-
+                                $jnbbl = $datdet['jn_bbl']==0 ? '' : 'text-danger';
                             ?>
                                 <tr>
-                                    <td><?= tglmysql($datdet['tgl']); ?></td>
+                                    <td class="<?= $jnbbl; ?>"><?= tglmysql($datdet['tgl']); ?></td>
                                     <td><a href='<?= base_url() . 'bbl/viewdetail_bbl/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a></td>
                                     <td><?= $jmlrec; ?></td>
+                                    <td class="font-bold text-success"><?php if($datdet['bbl_pp']==1){ echo "P"; }  ?></td>
                                     <?php if($datdet['data_ok']==1){ ?>
                                     <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
                                     <?php }else{ ?>
@@ -111,19 +124,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php } ?>
                                     <td><?= $datdet['keterangan'] ?></td>
                                     <td>
-                                        <?php if($datdet['data_ok']==1 && $datdet['ok_valid']==0){ ?>
+                                        <?php if($datdet['data_ok']==1 && $datdet['ok_valid']==0 && $this->session->userdata('level_user') > 1){ ?>
                                         <a href="#" data-href="<?= base_url() . 'bbl/editbbl/' . $datdet['id']; ?>" class="btn btn-sm btn-info btn-icon btn-flat mr-1" style="padding: 5px !important" id="Edit detail Bbl" data-message="Akan edit data ini" data-bs-toggle='modal' data-bs-target='#modal-info' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
                                             <i class="fa fa-refresh mr-1"></i> Edit Transaksi
                                         </a>
-                                        <?php }else if($datdet['data_ok']==0){ ?>
+                                        <?php }else if($datdet['data_ok']==0 && $datdet['ok_valid']==0){ ?>
                                         <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus_detail/' . $datdet['id']; ?>" title="Hapus data">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
-                                        <?php }else{ ?>
-                                            Tunggu ...
+                                        <?php }else{ $tungguvalid = tungguvalid($datdet['kodeunik']); ?>
+                                            Tunggu <?= $tungguvalid; ?>
                                         <?php } ?>
                                     </td>
                                 </tr>
