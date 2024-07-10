@@ -28,9 +28,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
               <div class="row">
-                <div class="col-2 ">
+                <div class="col-2">
                   <h4 class="mb-0 font-kecil">Tgl</h4>
                   <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
+                  <input type="text" id="id_header" class="hilang" value="<?= $data['id']; ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <?= tglmysql($data['tgl']); ?>
                     <a href="<?= base_url() . 'bbl/edittgl'; ?>" title="Edit tanggal" id="tglbbl" name="tglbbl" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
@@ -48,9 +49,33 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </a>
                   </span>
                 </div>
-                <div class="col-3"></div>
                 <div class="col-3">
-                  <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" title="Cari Nomor PB" class="btn font-kecil bg-success text-white float-right" type="button">Get Permintaan!</a>
+                  <div class="mb-1 <?php if($data['jn_bbl']==1){ echo "hilang"; } ?>">
+                    <div class="row">
+                      <div class="col-3 pt-2">Dept BBL</div>
+                      <div class="col-9">
+                        <select class="form-control form-select font-kecil" id="xdeptselect" <?php if((int)$numdetail > 0){echo "disabled"; } ?>>
+                          <option value="">Asal departemen</option>
+                          <?php foreach ($departemen as $dept) { $selek = $data['dept_bbl']==$dept['dept_id'] ? 'selected' : ''; ?>
+                            <option value="<?= $dept['dept_id']; ?>" <?= $selek; ?>><?= $dept['departemen']; ?></option>
+                          <?php } ?>
+                        </select>
+                      </div>
+                    </div>
+                  </div>
+                  <label class="form-check mb-0 <?php if($data['jn_bbl']==1){ echo "hilang"; } ?>">
+                    <input class="form-check-input" id="bbl_pp" type="checkbox" <?php if($data['bbl_pp']==1){echo "checked";} ?>>
+                    <span class="form-check-label">
+                      BBL Produksi (Persetujuan PPIC)
+                    </span>
+                  </label>
+                </div>
+                <div class="col-3">
+                  <?php if($data['jn_bbl']==0){  if($data['dept_bbl']!=''):  ?>
+                      <a href="<?= base_url() . 'bbl/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" title="Cari Nomor PB" class="btn font-kecil bg-success text-white float-right" type="button">Get Permintaan !</a>
+                  <?php endif; }else{ ?>
+                      <a href="<?= base_url() . 'bbl/addbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" title="Cari Nomor PB" class="btn font-kecil bg-info text-white float-right" type="button">Get Barang !</a>
+                  <?php } ?>
                 </div>
               </div>
             </div>

@@ -3,6 +3,16 @@ class Taskmodel extends CI_Model{
     public function getdatapb(){
         $this->db->where('id_perusahaan',IDPERUSAHAAN);
         $this->db->where('kode_dok','PB');
+        $this->db->where('data_ok',1);
+        $this->db->where('ok_valid',0);
+        $this->db->where_in('dept_id',arrdep($this->session->userdata('hakdepartemen')));
+        $query = $this->db->get('tb_header');
+        return $query;
+    }
+    public function getdatabbl(){
+        $this->db->where('id_perusahaan',IDPERUSAHAAN);
+        $this->db->where('kode_dok','BBL');
+        $this->db->where('data_ok',1);
         $this->db->where('ok_valid',0);
         $this->db->where_in('dept_id',arrdep($this->session->userdata('hakdepartemen')));
         $query = $this->db->get('tb_header');

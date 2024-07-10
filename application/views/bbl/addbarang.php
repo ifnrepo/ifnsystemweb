@@ -3,12 +3,6 @@
         <div class="col-12">
             <div class="mb-1 row">
                 <!-- <label class="col-3 col-form-label required font-kecil">Keyword</label> -->
-                <div class="col-3">
-                    <!-- <select class="form-control btn-flat form-select font-kecil bg-success text-white font-bold" id="deptselect">
-                        <option value="">All Dept</option>
-                    </select> -->
-                    <input type="text" class="form-control btn-flat bg-danger font-bold text-center text-white" id="deptselect" value="">
-                </div>
                 <div class="col input-group">
                     <input type="text" class="form-control font-kecil inputangka" name="keyw" id="keyw" placeholder="Cari Nama Barang..">
                     <a href="#" class="btn font-kecil bg-success text-white" id="getbarang">Get!</a>
@@ -19,7 +13,7 @@
                 <table class="table datatable6" id="cobasisip">
                     <thead style="background-color: blue !important">
                         <tr>
-                            <th>No Dok</th>
+                            <th>Kode / ID</th>
                             <th>Nama Barang</th>
                             <!-- <th>Keterangan</th> -->
                             <th>Pilih</th>
@@ -42,16 +36,16 @@
 
 <script>
     $(document).ready(function() {
-        // $('#modal-scroll').on('shown.bs.modal', function() {
-        //     // $('#textareaID').focus();
-        //     $("#keyw").focus();
-        // })
+        $('#modal-scroll').on('shown.bs.modal', function() {
+            // $('#textareaID').focus();
+            $("#keyw").focus();
+        })
         // $("#keyw").val($("#nomor_dok").val());
         // if ($("#keyw").val() != '') {
         //     $("#getbarang").click();
         // }
-        $("#getbarang").click();
-        $("#deptselect").val($("#xdeptselect").val());
+        // $("#getbarang").click();
+        // $("#deptselect").val($("#xdeptselect").val());
     });
     $("#deptselect").change(function(){
         $("#getbarang").click();
@@ -63,20 +57,22 @@
     });
 
     $("#getbarang").click(function() {
+        if($("#keyw").val()==''){
+            pesan('Isi dulu Keyword pencarian ','info');
+            return false;
+        }
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: '<?= base_url('bbl/getspecbarang') ?>',
+            url: '<?= base_url('bbl/getbarang') ?>',
             data: {
                 data: $("#keyw").val(),
-                header: $("#id_header").val(),
-                dept: $("#xdeptselect").val()
+                header: $("#id_header").val()
             },
             success: function(data) {
                 console.log(data); // Log data yang diterima
                 if (data.datagroup) {
                     $("#body-table").html(data.datagroup).show();
-                    // $("#deptselect").html(data.dataselect).show();
                 } else {
                     alert('Tidak ada data yang ditemukan');
                     $("#body-table").html('').hide();

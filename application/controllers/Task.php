@@ -17,11 +17,16 @@ class Task extends CI_Controller {
 	{  
         $header['header'] = 'pendingtask';
         $data['datapb'] = $this->taskmodel->getdatapb();
-        $footer['footer'] = 'satuan';
+        $data['databbl'] = $this->taskmodel->getdatabbl();
+        $footer['fungsi'] = 'pendingtask';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('task/index',$data);
 		$this->load->view('layouts/footer',$footer);
 	}
+    public function mode(){
+        $this->session->set_userdata('modetask',$_POST['id']);
+        echo 1;
+    }
     public function validasipb($id,$tab)
     {
         $data = [
