@@ -78,7 +78,7 @@
                     $("#body-table").html(data.datagroup).show();
                     // $("#deptselect").html(data.dataselect).show();
                 } else {
-                    alert('Tidak ada data yang ditemukan');
+                    pesan('Tidak ada data yang ditemukan','info');
                     $("#body-table").html('').hide();
                 }
             },
