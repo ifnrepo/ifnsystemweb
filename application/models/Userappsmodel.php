@@ -6,7 +6,7 @@ class Userappsmodel extends CI_Model
         $this->db->select('user.*, level_user.level, dept.departemen');
         $this->db->from('user');
         $this->db->join('level_user', 'level_user.id = user.id_level_user', 'left');
-        $this->db->join('dept','dept.dept_id = user.id_dept', 'left');
+        $this->db->join('dept', 'dept.dept_id = user.id_dept', 'left');
 
         return $this->db->get()->result_array();
     }
@@ -41,14 +41,14 @@ class Userappsmodel extends CI_Model
                 unset($data['master' . $x]);
             }
         }
-         // Set modul transaksi
-         $transaksi = str_repeat('0', 100);
-         for ($x = 1; $x <= 50; $x++) {
-             if (isset($data['transaksi' . $x])) {
-                 $transaksi = substr_replace($transaksi, '10', ($x * 2) - 2, 2);
-                 unset($data['transaksi' . $x]);
-             }
-         }
+        // Set modul transaksi
+        $transaksi = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['transaksi' . $x])) {
+                $transaksi = substr_replace($transaksi, '10', ($x * 2) - 2, 2);
+                unset($data['transaksi' . $x]);
+            }
+        }
         // Set modul manajemen
         $manajemen = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -57,15 +57,15 @@ class Userappsmodel extends CI_Model
                 unset($data['manajemen' . $x]);
             }
         }
-          // Set hak departemen
-          $hakdepartemen = '';
-          $datdept = $this->deptmodel->getdata();
-          foreach($datdept as $dept){
-              if(isset($data[$dept['dept_id']])){
-                  $hakdepartemen .= $dept['dept_id'];
-                  unset($data[$dept['dept_id']]);
-              }
-          }
+        // Set hak departemen
+        $hakdepartemen = '';
+        $datdept = $this->deptmodel->getdata();
+        foreach ($datdept as $dept) {
+            if (isset($data[$dept['dept_id']])) {
+                $hakdepartemen .= $dept['dept_id'];
+                unset($data[$dept['dept_id']]);
+            }
+        }
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
         $data['manajemen'] = $manajemen;
@@ -95,6 +95,16 @@ class Userappsmodel extends CI_Model
                 unset($data['transaksi' . $x]);
             }
         }
+
+        // Set Modul Other
+        $other = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['other' . $x])) {
+                $other = substr_replace($other, '10', ($x * 2) - 2, 2);
+                unset($data['other' . $x]);
+            }
+        }
+
         // Set modul manajemen
         $manajemen = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -106,8 +116,8 @@ class Userappsmodel extends CI_Model
         // Set hak departemen
         $hakdepartemen = '';
         $datdept = $this->deptmodel->getdata();
-        foreach($datdept as $dept){
-            if(isset($data[$dept['dept_id']])){
+        foreach ($datdept as $dept) {
+            if (isset($data[$dept['dept_id']])) {
                 $hakdepartemen .= $dept['dept_id'];
                 unset($data[$dept['dept_id']]);
             }
@@ -115,6 +125,7 @@ class Userappsmodel extends CI_Model
 
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
+        $data['other'] = $other;
         $data['manajemen'] = $manajemen;
         $data['hakdepartemen'] = $hakdepartemen;
 
@@ -124,14 +135,16 @@ class Userappsmodel extends CI_Model
             $cek = $this->getdatabyid($data['id'])->row_array();
             $this->session->set_userdata('master', $cek['master']);
             $this->session->set_userdata('transaksi', $cek['transaksi']);
+            $this->session->set_userdata('other', $cek['other']);
             $this->session->set_userdata('manajemen', $cek['manajemen']);
             $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
-            $this->session->set_userdata('arrdep',arrdep($cek['hakdepartemen']));
+            $this->session->set_userdata('arrdep', arrdep($cek['hakdepartemen']));
         }
 
         return $hasil;
     }
-    public function getdatalevel(){
+    public function getdatalevel()
+    {
         $query = $this->db->get('level_user')->result_array();
         return $query;
     }

@@ -143,6 +143,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <a href="#tabs-transaksi-1" class="nav-link" data-bs-toggle="tab">Transaksi</a>
                         </li>
                         <li class="nav-item">
+                          <a href="#tabs-other-1" class="nav-link" data-bs-toggle="tab">Other</a>
+                        </li>
+                        <li class="nav-item">
                           <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab">User Manajemen</a>
                         </li>
                         <li class="nav-item">
@@ -239,6 +242,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="transaksi6" name="transaksi6" type="checkbox" <?= cekceklis($user['transaksi'], 6); ?>>
                                 <span class="form-check-label">PO (PURCHASE ORDER)</span>
                               </label>
+                              <!-- xx -->
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane " id="tabs-other-1">
+                          <div class="row">
+                            <div class="col-6">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other1" name="other1" type="checkbox" <?= cekceklis($user['other'], 1); ?>>
+                                <span class="form-check-label">Ponet</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other2" name="other2" type="checkbox" <?= cekceklis($user['other'], 2); ?>>
+                                <span class="form-check-label">Inventory</span>
+                              </label>
+                            </div>
+                            <div class="col-6">
                               <!-- xx -->
                             </div>
                           </div>
