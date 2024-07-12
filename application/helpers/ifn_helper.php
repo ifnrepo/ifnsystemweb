@@ -1,6 +1,8 @@
 <?php
 define('LOK_UPLOAD_USER', "./assets/image/personil/");
 define('IDPERUSAHAAN', 'IFN');
+define('deptbbl','GMGSITPG');
+define('kodeunik','concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');
 
 function visibpass($kata)
 {
@@ -311,5 +313,30 @@ function viewspek($po = '', $no = '', $dis = 0)
 {
     $CI = &get_instance();
     $hasil = $CI->invmodel->getspekjala($po . $no . $dis);
+    return $hasil;
+}
+
+function tungguvalid($kode){
+    $hasil = '';
+    switch ($kode) {
+        case '10000':
+            $hasil = 'Validasi Manager Departemen';
+            break;
+        case '10100':
+            $hasil = 'Validasi Manager Departemen';
+            break;
+        case '11000':
+            $hasil = 'Validasi Manager PPIC';
+            break;
+        case '11100':
+            $hasil = 'Validasi General Manager';
+            break;
+        case '11110':
+            $hasil = 'Validasi Manager Purchasing';
+            break;
+        default:
+            $hasil = 'X';
+            break;
+    }
     return $hasil;
 }

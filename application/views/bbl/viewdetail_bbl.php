@@ -28,9 +28,9 @@
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                    <?php foreach ($detail as $val) { ?>
+                    <?php foreach ($detail->result_array() as $val) { ?>
                         <tr>
-                            <td><?= $val['nama_barang']; ?></td>
+                            <td class="line-12"><?= $val['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span></td>
                             <td><?= $val['brg_id']; ?></td>
                             <td><?= $val['namasatuan']; ?></td>
                             <td><?= rupiah($val['pcs'], 0); ?></td>
@@ -44,16 +44,48 @@
     </div>
     <hr class="m-1">
     <div class="row mb-1">
-        <div class="col-4 text-primary font-bold">
+        <div class="col-3">
+            <div class="<?php if($header['ok_pp']==1 && $header['bbl_pp']==0){ echo "hilang"; } ?>">
+            <span>Mengetahui :</span>
+            <h4 class="mb-1"><?= datauser($header['user_pp'], 'name') . ' ' . $header['tgl_pp'] . "<br>" . $header['ketcancel'] ?></h4>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="<?php if($header['ok_valid']==0){ echo "hilang"; } ?>">
+            <span>Diperiksa :</span>
+            <h4 class="mb-1"><?= datauser($header['user_valid'], 'name') . ' ' . $header['tgl_valid'] . "<br>" . $header['ketcancel'] ?></h4>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="<?php if($header['ok_tuju']==0){ echo "hilang"; } ?>">
+            <span>Disetujui :</span>
+            <h4 class="mb-1"><?= datauser($header['user_tuju'], 'name') . ' ' . $header['tgl_tuju'] . "<br>" . $header['ketcancel'] ?></h4>
+            </div>
+        </div>
+        <div class="col-3">
+            <div class="<?php if($header['ok_pc']==0){ echo "hilang"; } ?>">
+            <span>Diterima :</span>
+            <h4 class="mb-1"><?= datauser($header['user_pc'], 'name') . ' ' . $header['tgl_pc'] . "<br>" . $header['ketcancel'] ?></h4>
+            </div>
         </div>
         <div class="col-4 text-primary font-bold">
-
+            
+        </div>
+        <div class="col-4 text-primary font-bold">
+            <?php if($header['bbl_pp']==1){ echo "PRODUKSI";} ?>
         </div>
         <?php $bgr = $header['ketcancel'] == null ? "text-primary" : "text-danger"; ?>
         <div class="col-4 <?= $bgr; ?> font-bold">
             <?php $cek = $header['ketcancel'] == null ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
+            <div> 
             <span><?= $cek; ?></span>
             <h4 class="mb-1"><?= datauser($header['user_valid'], 'name') . ' (' . $header['tgl_valid'] . ')' . "<br>" . $header['ketcancel'] ?></h4>
+            </div>
+            <div class="<?php if($header['ok_tuju']==0){ echo "hilang"; } ?>">
+            <?php $cek = $header['ketcancel'] == null ? "Divalidasi Oleh" : "Dicancel Oleh"; ?>
+            <span><?= $cek; ?></span>
+            <h4 class="mb-1"><?= datauser($header['user_tuju'], 'name') . ' (' . $header['tgl_tuju'] . ')' . "<br>" . $header['ketcancel'] ?></h4>
+            </div>
         </div>
     </div>
     <hr class="m-1">

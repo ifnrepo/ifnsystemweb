@@ -1,6 +1,13 @@
 <?php
 class Pb_model extends CI_Model
 {
+    public function cekfield($id,$kolom,$nilai){
+        $this->db->where('id',$id);
+        $this->db->where($kolom,$nilai);
+        $hasil = $this->db->get('tb_header');
+        return $hasil;
+    }
+
     public function getdatabyid($id)
     {
         $this->db->select('tb_header.*,dept.departemen');
@@ -10,8 +17,6 @@ class Pb_model extends CI_Model
     }
     public function depttujupb($kode)
     {
-
-
         $hasil = '';
         $depo = '';
         if ($kode == 'GW') {

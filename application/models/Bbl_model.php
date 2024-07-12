@@ -5,6 +5,7 @@ class Bbl_model extends CI_Model
     {
         $arrdep = $this->session->userdata('arrdep');
         $this->db->select('tb_header.*, user.name, (select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
+        $this->db->select(kodeunik);
         $this->db->from('tb_header');
         $this->db->join('user', 'user.id = tb_header.user_ok', 'left');
         // if (!empty($data['dept_id'])) {
@@ -55,7 +56,7 @@ class Bbl_model extends CI_Model
         return  $query;
     }
 
-    public function getspecbarang($spec, $dept_id)
+    public function getspecbarang($spec, $dept_id, $dept)
     {
         $this->db->select('*,tb_detail.id as idx');
         $this->db->from('tb_header');
@@ -65,6 +66,9 @@ class Bbl_model extends CI_Model
         if($spec!=''){
             $this->db->like('barang.nama_barang', $spec);
         }
+        if($dept!=''){
+            $this->db->where('tb_header.dept_id', $dept);
+        }
         $this->db->where('tb_header.kode_dok', 'PB');
         $this->db->where('tb_header.id_keluar IS NULL');
         $this->db->where('tb_header.dept_tuju', $dept_id);
@@ -73,6 +77,42 @@ class Bbl_model extends CI_Model
         $query = $this->db->get()->result_array();
 
         return $query;
+    }
+    public function getbarang($spec, $dept_id)
+    {
+        $this->db->select('*,barang.id as idx');
+        $this->db->from('barang');
+        $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
+        if($spec!=''){
+            $this->db->like('barang.nama_barang', $spec);
+        }
+        $this->db->order_by('barang.nama_barang', 'ASC');
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+    public function getspecbarangbydept($spec, $dept_id)
+    {
+        $this->db->select('*,tb_detail.id as idx,concat_ws(" - ",tb_header.dept_id,dept.departemen) as depet');
+        $this->db->from('tb_header');
+        $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
+        $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
+        $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
+        $this->db->join('dept', 'tb_header.dept_id = dept.dept_id', 'left');
+        $this->db->where('tb_header.kode_dok', 'PB');
+        $this->db->where('tb_header.id_keluar IS NULL');
+        $this->db->where('tb_header.dept_tuju', $dept_id);
+        $this->db->where('tb_detail.id_bbl', 0);
+        $this->db->group_by('tb_header.dept_id');
+        $this->db->order_by('tb_header.nomor_dok', 'ASC');
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+
+    public function simpanbarang($data){
+        $simpan = $this->db->insert('tb_detail',$data);
+        return $simpan;
     }
 
     public function getdetailpbbyid()
@@ -90,13 +130,19 @@ class Bbl_model extends CI_Model
         return $query;
     }
 
+    public function updatebblpp($data){
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        return $query;
+    }
+
 
 
 
     public function getdatabyid($id)
     {
         $this->db->select('tb_header.*,dept.departemen');
-        $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
+        $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');        
         $this->db->where('tb_header.id', $id);
         return $this->db->get('tb_header')->row_array();
     }
@@ -111,7 +157,7 @@ class Bbl_model extends CI_Model
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->where('id_header', $data);
-        return $this->db->get()->result_array();
+        return $this->db->get();
     }
 
     public function hapus_detail($id)
@@ -176,6 +222,11 @@ class Bbl_model extends CI_Model
     {
         $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
         $data['jumlah_barang'] = $jmlrec['jml'];
+        $deptid = $this->db->query("Select dept_bbl from tb_header where id = ".$data['id'])->row_array();
+        // $ok_pp = 0;
+        if(trim($deptid['dept_bbl'])=='IT' || trim($deptid['dept_bbl'])=='PG'){
+            $data['ok_pp']=1;
+        }
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
         return $query;

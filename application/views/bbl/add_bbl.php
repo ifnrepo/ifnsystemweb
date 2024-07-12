@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12">
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Departemen Asal</label>
+                <label class="col-3 col-form-label required">Departemen Asal <?= $jns; ?></label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" name="dept_idx" id="dept_idx" placeholder="Id Departemen" disabled>
                     <input type="text" class="form-control font-kecil hilang" name="dept_idy" id="dept_idy">
@@ -47,6 +47,7 @@
             data: {
                 dept_id: $("#dept_idy").val(),
                 dept_tuju: $("#id_depty").val(),
+                jn_bbl: '<?= $jns ?>',
                 tgl: $("#tgl").val()
             },
             success: function(data) {

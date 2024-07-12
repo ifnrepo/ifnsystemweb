@@ -60,7 +60,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label required">Level User </label>
                 <div class="col">
                   <select name="id_level_user" id="id_level_user" class="form-control">
-                    <option value="Select Menu">Level User</option>
+                    <option value="">Level User</option>
                     <?php foreach ($level as $a) : ?>
                       <option value="<?= $a['id']; ?>" <?= ($user['id_level_user'] == $a['id']) ? 'selected' : ''; ?>>
                         <?= $a['level']; ?>
@@ -280,31 +280,31 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="row row-cards">
                 <div class="col">
                   <div class="card">
-                    <div class="mt-2 ml-3 text-center">
-                        <label class="form-check form-check-inline">
+                    <div class="mt-2 ml-3">
+                        <label class="form-check">
                           <input class="form-check-input" type="radio" 
     name="ttd" value="0" <?php if($user['ttd']==0){ echo "checked"; } ?>>
                           <span class="form-check-label">NO TTD</span>
                         </label>
-                        <label class="form-check form-check-inline">
+                        <label class="form-check">
                           <input class="form-check-input" type="radio" 
     name="ttd" value="1" <?php if($user['ttd']==1){ echo "checked"; } ?>>
-                          <span class="form-check-label">TTD 1</span>
+                          <span class="form-check-label">MANAGER PPIC (Mengetahui)</span>
                         </label>
-                        <label class="form-check form-check-inline">
+                        <label class="form-check">
                           <input class="form-check-input" type="radio" 
     name="ttd" value="2" <?php if($user['ttd']==2){ echo "checked"; } ?>>
-                          <span class="form-check-label">TTD 2</span>
+                          <span class="form-check-label">MANAGER PRODUKSI / NON (APPROVER)</span>
                         </label>
-                        <label class="form-check form-check-inline">
+                        <label class="form-check">
                           <input class="form-check-input" type="radio" 
     name="ttd" value="3" <?php if($user['ttd']==3){ echo "checked"; } ?>>
-                          <span class="form-check-label">TTD 3</span>
+                          <span class="form-check-label">GENERAL MANAGER PRODUKSI / NON (RELEASER)</span>
                         </label>
-                        <label class="form-check form-check-inline">
+                        <label class="form-check">
                           <input class="form-check-input" type="radio" 
     name="ttd" value="4" <?php if($user['ttd']==4){ echo "checked"; } ?>>
-                          <span class="form-check-label">TTD 4</span>
+                          <span class="form-check-label">MANAGER PURCHASING</span>
                         </label>
                       </div>
                     </div>

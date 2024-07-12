@@ -80,6 +80,9 @@
 <?php if (isset($fungsi) && $fungsi == 'po') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/po.js?1692870487"></script>
 <?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'pendingtask') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1692870487"></script>
+<?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
 	<script>
 		// @formatter:off

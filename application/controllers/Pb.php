@@ -45,6 +45,7 @@ class Pb extends CI_Controller
         $this->session->unset_userdata('levelsekarang');
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
+        $this->session->set_userdata('levelsekarang',1);
         $url = base_url('Pb');
         redirect($url);
     }
@@ -192,13 +193,18 @@ class Pb extends CI_Controller
     }
     public function validasipb($id)
     {
-        $data = [
-            'ok_valid' => 1,
-            'tgl_valid' => date('Y-m-d H:i:s'),
-            'user_valid' => $this->session->userdata('id'),
-            'id' => $id
-        ];
-        $simpan = $this->pb_model->validasipb($data);
+        $cek = $this->pb_model->cekfield($id,'data_ok',1)->num_rows();
+        if($cek==1){
+            $data = [
+                'ok_valid' => 1,
+                'tgl_valid' => date('Y-m-d H:i:s'),
+                'user_valid' => $this->session->userdata('id'),
+                'id' => $id
+            ];
+            $simpan = $this->pb_model->validasipb($data);
+        }else{
+            $simpan = 1;
+        }
         if ($simpan) {
             $url = base_url() . 'pb';
             redirect($url);
@@ -220,13 +226,19 @@ class Pb extends CI_Controller
     }
     public function editokpb($id)
     {
-        $data = [
-            'data_ok' => 0,
-            'tgl_ok' => null,
-            'user_ok' => null,
-            'id' => $id
-        ];
-        $simpan = $this->pb_model->validasipb($data);
+        $cek = $this->pb_model->cekfield($id,'ok_valid',0)->num_rows();
+        if($cek==1){
+            $data = [
+                'data_ok' => 0,
+                'tgl_ok' => null,
+                'user_ok' => null,
+                'id' => $id
+            ];
+            $simpan = $this->pb_model->validasipb($data);
+        }else{
+            $this->session->set_flashdata('pesanerror','Bon permintaan sudah divalidasi !');
+            $simpan = 1;
+        }
         if ($simpan) {
             $url = base_url() . 'pb';
             redirect($url);
