@@ -21,6 +21,15 @@
                     <input type="text" class="form-control font-kecil" name="tgl" id="tgl" placeholder="Tgl Transaksi" value="<?= date('d-m-Y'); ?>">
                 </div>
             </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Jenis</label>
+                <div class="col">
+                    <select class="form-control form-select font-kecil" id="bbl_sv" name="bbl_sv">
+                        <option value="0">BIASA</option>
+                        <option value="1">SERVICE</option>
+                    </select>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -48,6 +57,7 @@
                 dept_id: $("#dept_idy").val(),
                 dept_tuju: $("#id_depty").val(),
                 jn_bbl: '<?= $jns ?>',
+                jn: $("#bbl_sv").val(),
                 tgl: $("#tgl").val()
             },
             success: function(data) {

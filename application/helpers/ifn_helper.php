@@ -74,16 +74,17 @@ function arrdep($dep)
     }
     return $arrdep;
 }
-function nomorpb($tgl, $asal, $tuju)
+function nomorpb($tgl, $asal, $tuju, $jn)
 {
     $bl = date('m', strtotime($tgl));
     $th = date('y', strtotime($tgl));
     $thp = date('Y', strtotime($tgl));
+    $jne = $jn==0 ? 'BP' : 'SV';
     $CI = &get_instance();
     $kode = $CI->pb_model->getnomorpb($bl, $thp, $asal, $tuju);
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return $asal . "-" . $tuju . "/BP/" . $bl . $th . "/" . sprintf("%03s", $urut);
+    return $asal . "-" . $tuju . "/".$jne."/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
 function nomorbbl($tgl, $asal, $tuju)
 {

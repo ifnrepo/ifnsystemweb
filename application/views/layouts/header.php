@@ -82,11 +82,11 @@
         <div class="modal-footer">
           <div class="w-100">
             <div class="row">
-              <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
-                  Batal
-                </a></div>
               <div class="col"><a id="btn-ok" href="#" class="btn btn-danger w-100">
-                  Hapus
+                  Ya
+                </a></div>
+              <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                  Tidak
                 </a></div>
             </div>
           </div>
@@ -112,11 +112,11 @@
         <div class="modal-footer">
           <div class="w-100">
             <div class="row">
-              <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
-                  Batal
-                </a></div>
               <div class="col"><a id="btn-ok" href="#" class="btn btn-info w-100">
                   Ya
+                </a></div>
+              <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                  Tidak
                 </a></div>
             </div>
           </div>
