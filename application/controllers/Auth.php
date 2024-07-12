@@ -11,18 +11,21 @@ class Auth extends CI_Controller
         $this->load->model('userappsmodel');
     }
 
-    public function index(){
+    public function index()
+    {
         $data['title'] = 'Login Pengguna Aplikasi PT. Indoneptune Net';
-        $this->load->view('layouts/auth_header',$data);
+        $this->load->view('layouts/auth_header', $data);
         $this->load->view('auth/login');
         $this->load->view('layouts/auth_footer');
     }
 
-    public function cekAuth(){
-         $this->_login();
+    public function cekAuth()
+    {
+        $this->_login();
     }
 
-    private function _login(){
+    private function _login()
+    {
         $htmlsalahpassword = '<div class="alert alert-important alert-danger alert-dismissible font-kecil" role="alert">
                                         <div class="d-flex">
                                         <div>
@@ -50,7 +53,7 @@ class Auth extends CI_Controller
         // $user = $this->db->get_where('user', ['username' => $username])->row_array();
         $user = $this->userappsmodel->getdatabyuser($username)->row_array();
         if ($user) {
-            if (encrypto($password)==$user['password'] && $user['aktif']==1) {
+            if (encrypto($password) == $user['password'] && $user['aktif'] == 1) {
                 $user_data = [
                     'id' => $user['id'],
                     'name' => $user['name'],
@@ -59,6 +62,7 @@ class Auth extends CI_Controller
                     'master' => $user['master'],
                     'manajemen' => $user['manajemen'],
                     'transaksi' => $user['transaksi'],
+                    'other' => $user['other'],
                     'hakdepartemen' => $user['hakdepartemen'],
                     'level_user' => $user['idlevel'],
                     'dept_user' => $user['id_dept'],
@@ -66,9 +70,11 @@ class Auth extends CI_Controller
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);
+
                 $this->session->set_userdata('arrdep',arrdep($user['hakdepartemen']));
                 $this->session->set_userdata('bl',date('m'));
                 $this->session->set_userdata('th',date('Y'));
+
                 $url = base_url('Main');
                 redirect($url);
             } else {
@@ -83,7 +89,8 @@ class Auth extends CI_Controller
         }
     }
 
-    public function logout(){
+    public function logout()
+    {
         // $this->loginmodel->islogout($this->session->userdata('idprofil'));
         $this->session->sess_destroy();
         $url = base_url('Auth');
