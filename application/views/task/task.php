@@ -58,6 +58,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                       $btneditapprover = base_url().'task/editapprovebbl/'.$datpb['id'].'/'.$this->session->userdata('ttd');
                     }
                     ?>
+
+
+
                     <tr>
                       <td><?= tglmysql($datpb['tgl']); ?></td>
                       <td><a href="<?= $viewdetail ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail"><?= $datpb['nomor_dok']; ?></a></td>
