@@ -18,17 +18,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="page-body">
   <div class="container-xl">
     <div class="card">
-      <br>
       <div class="col-md-3">
-        <select name="filter" id="filter" class="form-select font-kecil">
+        <select name="filter" id="filter" class="form-select font-kecil mt-1">
           <option value="all">Semua Kategori</option>
           <?php foreach ($kategori_options as $option) : ?>
             <option value="<?= $option['id']; ?>"><?= $option['nama_kategori']; ?></option>
           <?php endforeach; ?>
         </select>
       </div>
-      <div class="card-body">
-        <div id="table-default" class="table-responsive">
+      <hr class="p-1 m-1">
+      <div class="card-body pt-1">
+        <div id="table-default" class="table-responsive font-kecil">
           <table class="table" id="tabelnya">
             <thead>
               <tr>
