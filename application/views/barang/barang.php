@@ -8,14 +8,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <h2 class="page-title p-2">
           Master Data Barang
         </h2>
-        <div class="col-md-4">
-          <select name="filter" id="filter" class="form-select">
-            <option value="all">Semua Kategori</option>
-            <?php foreach ($kategori_options as $option) : ?>
-              <option value="<?= $option['nama_kategori']; ?>"><?= $option['nama_kategori']; ?></option>
-            <?php endforeach; ?>
-          </select>
-        </div>
       </div>
       <div class="col-md-6" style="text-align: right;">
         <a href="<?= base_url() . 'barang/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Barang"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
@@ -26,6 +18,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="page-body">
   <div class="container-xl">
     <div class="card">
+      <br>
+      <div class="col-md-3">
+        <select name="filter" id="filter" class="form-select">
+          <option value="all">Semua Kategori</option>
+          <?php foreach ($kategori_options as $option) : ?>
+            <option value="<?= $option['id']; ?>"><?= $option['nama_kategori']; ?></option>
+          <?php endforeach; ?>
+        </select>
+      </div>
       <div class="card-body">
         <div id="table-default" class="table-responsive">
           <table class="table" id="tabelnya">
