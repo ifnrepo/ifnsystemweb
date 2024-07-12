@@ -412,7 +412,6 @@
                 </div>
               </div>
             </li>
-
             <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('transaksi')); ?>">
               <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'transaksi') {
                                                     echo 'active';
@@ -456,7 +455,38 @@
                 </div>
               </div>
             </li>
-            <li class="nav-item">
+            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('other')); ?>">
+              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'other') {
+                                                    echo 'active';
+                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-warehouse">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M3 21v-13l9 -4l9 4v13" />
+                    <path d="M13 13h4v8h-10v-6h6" />
+                    <path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3" />
+                  </svg>
+                </span>
+                <span class="nav-link-title ">
+                  Other
+                </span>
+              </a>
+              <div class="dropdown-menu <?php if (isset($header) && $header == 'other') {
+                                          echo 'show active';
+                                        } ?>">
+                <div class="dropdown-menu-columns">
+                  <div class="dropdown-menu-column">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 1); ?>" href="<?= base_url('ponet'); ?>">
+                      Ponet
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 2); ?>" href="<?= base_url('inv/clear'); ?>">
+                      Inventory
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+            <!-- <li class="nav-item">
               <a class="nav-link <?php if (isset($header) && $header == 'inventory') {
                                     echo 'active';
                                   } ?>" href="<?= base_url('inv/clear'); ?>">
@@ -472,7 +502,7 @@
                   Inventory
                 </span>
               </a>
-            </li>
+            </li> -->
             <li class="nav-item <?= cekmenuheader($this->session->userdata('manajemen')); ?>">
               <a class="nav-link <?php if (isset($header) && $header == 'manajemen') {
                                     echo 'active';
