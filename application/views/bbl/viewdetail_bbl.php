@@ -50,41 +50,22 @@
             <h4 class="mb-1"><?= datauser($header['user_pp'], 'name') . ' ' . $header['tgl_pp'] . "<br>" . $header['ketcancel'] ?></h4>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-3 <?php if($header['ok_valid']==2){ echo "text-danger"; } ?>">
             <div class="<?php if($header['ok_valid']==0){ echo "hilang"; } ?>">
-            <span>Diperiksa :</span>
+            <span><?php if($header['ok_valid']==2){ echo "Dicancel :"; }else{echo "Diperiksa :"; } ?></span>
             <h4 class="mb-1"><?= datauser($header['user_valid'], 'name') . ' ' . $header['tgl_valid'] . "<br>" . $header['ketcancel'] ?></h4>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-3 <?php if($header['ok_tuju']==2){ echo "text-danger"; } ?>">
             <div class="<?php if($header['ok_tuju']==0){ echo "hilang"; } ?>">
-            <span>Disetujui :</span>
+            <span><?php if($header['ok_tuju']==2){ echo "Dicancel :"; }else{echo "Disetujui :"; } ?></span>
             <h4 class="mb-1"><?= datauser($header['user_tuju'], 'name') . ' ' . $header['tgl_tuju'] . "<br>" . $header['ketcancel'] ?></h4>
             </div>
         </div>
-        <div class="col-3">
+        <div class="col-3 <?php if($header['ok_pc']==2){ echo "text-danger"; } ?>">
             <div class="<?php if($header['ok_pc']==0){ echo "hilang"; } ?>">
-            <span>Diterima :</span>
+            <span><?php if($header['ok_pc']==2){ echo "Dicancel :"; }else{echo "Diterima :"; } ?></span>
             <h4 class="mb-1"><?= datauser($header['user_pc'], 'name') . ' ' . $header['tgl_pc'] . "<br>" . $header['ketcancel'] ?></h4>
-            </div>
-        </div>
-        <div class="col-4 text-primary font-bold">
-            
-        </div>
-        <div class="col-4 text-primary font-bold">
-            <?php if($header['bbl_pp']==1){ echo "PRODUKSI";} ?>
-        </div>
-        <?php $bgr = $header['ketcancel'] == null ? "text-primary" : "text-danger"; ?>
-        <div class="col-4 <?= $bgr; ?> font-bold">
-            <?php $cek = $header['ketcancel'] == null ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
-            <div> 
-            <span><?= $cek; ?></span>
-            <h4 class="mb-1"><?= datauser($header['user_valid'], 'name') . ' (' . $header['tgl_valid'] . ')' . "<br>" . $header['ketcancel'] ?></h4>
-            </div>
-            <div class="<?php if($header['ok_tuju']==0){ echo "hilang"; } ?>">
-            <?php $cek = $header['ketcancel'] == null ? "Divalidasi Oleh" : "Dicancel Oleh"; ?>
-            <span><?= $cek; ?></span>
-            <h4 class="mb-1"><?= datauser($header['user_tuju'], 'name') . ' (' . $header['tgl_tuju'] . ')' . "<br>" . $header['ketcancel'] ?></h4>
             </div>
         </div>
     </div>

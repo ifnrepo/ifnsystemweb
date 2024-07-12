@@ -60,6 +60,7 @@ class Bbl extends CI_Controller
             'jn_bbl' => $_POST['jn_bbl'],
             'kode_dok' => 'BBL',
             'id_perusahaan' => IDPERUSAHAAN,
+            'bbl_sv' => $_POST['jn'],
             'bbl_pp' => $_POST['dept_id']=='GM' ? 1 : 0,
             'dept_bbl' => $_POST['jn_bbl']==1 ? $_POST['dept_id'] : NULL,
             'nomor_dok' => nomorbbl(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'])

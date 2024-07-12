@@ -98,12 +98,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         </div>
         <div>
-          <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
+          <table id="pbtabel" class="table nowrap order-column mt-1" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Tgl</th>
                 <th>Nomor</th>
                 <th>Jumlah Item</th>
+                <th>Sv</th>
                 <th>Dibuat Oleh</th>
                 <th>Disetujui Oleh</th>
                 <th>Keterangan</th>
@@ -139,6 +140,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= tglmysql($datdet['tgl']); ?></td>
                   <td><a href='<?= base_url() . 'pb/viewdetailpb/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $jmlrec; ?></td>
+                  <td class="font-bold text-danger"><?php if($datdet['pb_sv']==1){ echo "Sv"; } ?></td>
                   <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
                   <td style="line-height: 14px;"><?= $usersetuju . "<br><span style='font-size: 10px;'>" . $tglsetuju . "</span>" ?></td>
                   <td><?= $tunggukonfirmasi . $tungguoke . $cancel ?></td>

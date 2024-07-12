@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          PB (Permintaan Barang) # <?= $data['nomor_dok']; ?>
+          <div>PB (Permintaan Barang) <br><span class="title-dok"><?= $data['nomor_dok']; ?><?php if($data['pb_sv']==1){ echo " (SERVICE)"; } ?></span></div>
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -15,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-1">
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
