@@ -51,7 +51,7 @@
 <script src="<?= base_url(); ?>assets/vendor/litepicker/dist/litepicker.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/nprogress/nprogress.js"></script>
 <!-- Custom JS -->
-<script src="<?= base_url(); ?>assets/js/myscript.js?1692870493"></script>
+<script src="<?= base_url(); ?>assets/js/myscript.js?1720250390"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1692870487"></script>
@@ -75,10 +75,13 @@
 	<script src="<?= base_url(); ?>assets/js/own/inv.js?1692870490"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'bbl') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1692870487"></script>
+	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1720250390"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'po') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/po.js?1692870487"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'pendingtask') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1692870487"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
 	<script>

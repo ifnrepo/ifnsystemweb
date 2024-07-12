@@ -45,6 +45,7 @@ class Pb extends CI_Controller
         $this->session->unset_userdata('levelsekarang');
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
+        $this->session->set_userdata('levelsekarang',1);
         $url = base_url('Pb');
         redirect($url);
     }

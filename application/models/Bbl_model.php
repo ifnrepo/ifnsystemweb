@@ -5,15 +5,16 @@ class Bbl_model extends CI_Model
     {
         $arrdep = $this->session->userdata('arrdep');
         $this->db->select('tb_header.*, user.name, (select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
+        $this->db->select(kodeunik);
         $this->db->from('tb_header');
         $this->db->join('user', 'user.id = tb_header.user_ok', 'left');
-        if (!empty($data['dept_id'])) {
+        // if (!empty($data['dept_id'])) {
             $this->db->where('dept_id', $data['dept_id']);
-        }
+        // }
 
-        if (!empty($data['dept_tuju'])) {
+        // if (!empty($data['dept_tuju'])) {
             $this->db->where('dept_tuju', $data['dept_tuju']);
-        }
+        // }
         $bl = $this->session->userdata('bl');
         $th = $this->session->userdata('th');
 
@@ -55,31 +56,19 @@ class Bbl_model extends CI_Model
         return  $query;
     }
 
-    // public function getspecbarang($spec, $dept_id)
-    // {
-    //     $this->db->select('*');
-    //     $this->db->from('tb_header');
-    //     $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
-    //     $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
-    //     $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
-    //     $this->db->like('tb_header.nomor_dok', $spec);
-    //     $this->db->where('tb_header.kode_dok', 'PB');
-    //     $this->db->where('tb_header.id_keluar IS NULL');
-    //     $this->db->where('tb_header.dept_tuju', $dept_id);
-    //     $this->db->where('tb_detail.id_bbl', 0);
-    //     $this->db->order_by('tb_header.nomor_dok', 'ASC');
-    //     $query = $this->db->get()->result_array();
-
-    //     return $query;
-    // }
-    public function getspecbarang($spec, $dept_id)
+    public function getspecbarang($spec, $dept_id, $dept)
     {
-        $this->db->select('*');
+        $this->db->select('*,tb_detail.id as idx');
         $this->db->from('tb_header');
         $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
         $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
-        $this->db->like('barang.nama_barang', $spec);
+        if($spec!=''){
+            $this->db->like('barang.nama_barang', $spec);
+        }
+        if($dept!=''){
+            $this->db->where('tb_header.dept_id', $dept);
+        }
         $this->db->where('tb_header.kode_dok', 'PB');
         $this->db->where('tb_header.id_keluar IS NULL');
         $this->db->where('tb_header.dept_tuju', $dept_id);
@@ -88,6 +77,42 @@ class Bbl_model extends CI_Model
         $query = $this->db->get()->result_array();
 
         return $query;
+    }
+    public function getbarang($spec, $dept_id)
+    {
+        $this->db->select('*,barang.id as idx');
+        $this->db->from('barang');
+        $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
+        if($spec!=''){
+            $this->db->like('barang.nama_barang', $spec);
+        }
+        $this->db->order_by('barang.nama_barang', 'ASC');
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+    public function getspecbarangbydept($spec, $dept_id)
+    {
+        $this->db->select('*,tb_detail.id as idx,concat_ws(" - ",tb_header.dept_id,dept.departemen) as depet');
+        $this->db->from('tb_header');
+        $this->db->join('tb_detail', 'tb_header.id = tb_detail.id_header', 'left');
+        $this->db->join('barang', 'tb_detail.id_barang = barang.id', 'left');
+        $this->db->join('satuan', 'tb_detail.id_satuan = satuan.id', 'left');
+        $this->db->join('dept', 'tb_header.dept_id = dept.dept_id', 'left');
+        $this->db->where('tb_header.kode_dok', 'PB');
+        $this->db->where('tb_header.id_keluar IS NULL');
+        $this->db->where('tb_header.dept_tuju', $dept_id);
+        $this->db->where('tb_detail.id_bbl', 0);
+        $this->db->group_by('tb_header.dept_id');
+        $this->db->order_by('tb_header.nomor_dok', 'ASC');
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+
+    public function simpanbarang($data){
+        $simpan = $this->db->insert('tb_detail',$data);
+        return $simpan;
     }
 
     public function getdetailpbbyid()
@@ -105,13 +130,19 @@ class Bbl_model extends CI_Model
         return $query;
     }
 
+    public function updatebblpp($data){
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        return $query;
+    }
+
 
 
 
     public function getdatabyid($id)
     {
         $this->db->select('tb_header.*,dept.departemen');
-        $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
+        $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');        
         $this->db->where('tb_header.id', $id);
         return $this->db->get('tb_header')->row_array();
     }
@@ -120,12 +151,13 @@ class Bbl_model extends CI_Model
     public function getdatadetail_bbl($data)
     {
         $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
+        $this->db->select("(select nomor_dok from tb_header where tb_header.id = (select id_header from tb_detail a where a.id_bbl = tb_detail.id)) as id_pb");
         $this->db->from('tb_detail');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->where('id_header', $data);
-        return $this->db->get()->result_array();
+        return $this->db->get();
     }
 
     public function hapus_detail($id)
@@ -205,20 +237,6 @@ class Bbl_model extends CI_Model
         return $this->db->delete('tb_header');
     }
 
-
-    // public function update_id_bbl($id_header, $new_id_bbl)
-    // {
-    //     $this->db->where('id_header', $id_header);
-    //     $this->db->update('tb_detail', array('id_bbl' => $new_id_bbl));
-    // }
-
-    // public function getdata_byid($id_header)
-    // {
-    //     $this->db->where('id_header', $id_header);
-    //     $query = $this->db->get('tb_detail');
-    //     return $query->result_array();
-    // }
-
     public function getdata_byid($id_header, $id_barang)
     {
         $this->db->where('id_header', $id_header);
@@ -236,14 +254,27 @@ class Bbl_model extends CI_Model
         return $data;
     }
 
-    public function update_id_bbl($id_barang, $new_id_bbl)
+    public function update_id_bbl($id_barang, $new_id_bbl,$id_header)
     {
         $this->db->where('id_barang', $id_barang);
+        $this->db->where('id_header', $id_header);
         $this->db->update('tb_detail', array('id_bbl' => $new_id_bbl));
     }
 
     public function get_last_insert_id()
     {
         return $this->db->insert_id();
+    }
+
+    public function cekfield($id,$kolom,$nilai){
+        $this->db->where('id',$id);
+        $this->db->where($kolom,$nilai);
+        $hasil = $this->db->get('tb_header')->row_array();
+        return $hasil;
+    }
+    public function ubahdataok($id,$nilai){
+        $this->db->where('id',$id);
+        $hasil = $this->db->update('tb_header',['data_ok'=>$nilai]);
+        return $hasil;
     }
 }

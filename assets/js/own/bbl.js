@@ -6,37 +6,33 @@ $(document).ready(function () {
 	// $(".dataTables_filter").css("float", "right");
 	// var url = window.location.href;
 	// var pisah = url.split("/");
-	
 	// if (pisah[2] == "localhost") {
 	// 	if (pisah[5] == "databbl ") {
 	// 		getdatadetailpb();
 	// 	}
 	// } else {
 	// 	if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
-			
 	// 	}
 	// 	if (pisah[5] == "datapb") {
 	// 		getdatadetailpb();
 	// 	}
 	// }
 	// $("#dept_kirim").change();
-	
-	
 });
 $("#tglpb").datepicker();
 
 // $("#dept_kirim").change(function () {
 // 	$.ajax({
-		
+
 // 		type: "POST",
 // 		url: base_url + "pb/depttujupb",
 // 		data: {
 // 			kode: $(this).val(),
 // 		},
 // 		success: function (data) {
-			
+
 // 			$("#dept_tuju").html(data);
-			
+
 // 		},
 // 		error: function (xhr, ajaxOptions, thrownError) {
 // 			console.log(xhr.status);
@@ -44,8 +40,59 @@ $("#tglpb").datepicker();
 // 		},
 // 	});
 // });
-
-
+$("#xdeptselect").change(function () {
+	// alert($(this).prop("checked"));
+	var isi = $(this).val();
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "bbl/editdeptpp",
+		data: {
+			id: $("#id_header").val(),
+			dept_bbl: isi,
+		},
+		success: function (data) {
+			window.location.reload();
+			// alert('berhasil');
+			// window.location.href = base_url + "bbl/databbl/" + $("#id_header").val();
+			// $("#butbatal").click();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+			pesan("ERROR " + xhr.status + " " + thrownError, "info");
+		},
+	});
+});
+$("#bbl_pp").change(function () {
+	// alert($(this).prop("checked"));
+	var isi = $(this).prop("checked") ? 1 : 0;
+	var xisi = $(this).prop("checked") ? 0 : 1;
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "bbl/editbblpp",
+		data: {
+			id: $("#id_header").val(),
+			bbl_pp: isi,
+		},
+		success: function (data) {
+			// alert('berhasil');
+			// window.location.href = base_url + "bbl/databbl/" + $("#id_header").val();
+			// $("#butbatal").click();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+			if (xisi == 0) {
+				$(this).attr("checked", false);
+			} else {
+				$(this).attr("checked", true);
+			}
+			pesan("ERROR " + xhr.status + " " + thrownError, "info");
+		},
+	});
+});
 $("#simpandetailbarang").click(function () {
 	if ($("#nomor_dok").val() == "") {
 		pesan("Isi / Cari no Dokumen", "error");
@@ -63,7 +110,7 @@ $("#simpandetailbarang").click(function () {
 
 $("#butgo").click(function () {
 	// $("#dept_tuju").change();
-	getdatapb();
+	getdatabbl();
 });
 $("#resetdetailbarang").click(function () {
 	$("#nomor_dok").val("");
@@ -125,16 +172,15 @@ $("#bl").change(function () {
 $("#th").change(function () {
 	$("#bl").change();
 });
-function getdatapb() {
+function getdatabbl() {
 	// alert($("#level").val());
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
-		url: base_url + "pb/getdatapb",
+		url: base_url + "bbl/getdatabbl",
 		data: {
 			dept_id: $("#dept_kirim").val(),
 			dept_tuju: $("#dept_tuju").val(),
-			levelsekarang: $("#level").val(),
 		},
 		success: function (data) {
 			// alert(data.datagroup);
@@ -168,5 +214,3 @@ function getdatadetail_bbl() {
 		},
 	});
 }
-
-

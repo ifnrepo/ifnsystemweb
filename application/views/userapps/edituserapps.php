@@ -84,9 +84,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Password </label>
                 <div class="col">
-                  <input type="password" class="form-control font-kecil" name="password" id="password" placeholder="Password" value="<?= decrypto($user['password']); ?> ">
-                  <div class="input-group-append">
-                    <span class="input-group-text" id="buka_password"><i class="fa fa-eye"></i></span>
+                  <div class="input-group input-group-flat">
+                    <input type="password" class="form-control font-kecil" name="password" id="password" placeholder="Password" value="<?= decrypto($user['password']); ?> ">
+                    <span class="input-group-text">
+                      <a href="#" class="input-group-link" id="buka_password"><i class="fa fa-eye"></i></a>
+                    </span>
                   </div>
                 </div>
               </div>
@@ -290,6 +292,41 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                           </div>
                         </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <h4 class="m-1">Validator BBL (Bon Pembelian Barang)</h4>
+              <div class="row row-cards">
+                <div class="col">
+                  <div class="card">
+                    <div class="mt-2 ml-3">
+                        <label class="form-check">
+                          <input class="form-check-input" type="radio" 
+    name="ttd" value="0" <?php if($user['ttd']==0){ echo "checked"; } ?>>
+                          <span class="form-check-label">NO TTD</span>
+                        </label>
+                        <label class="form-check">
+                          <input class="form-check-input" type="radio" 
+    name="ttd" value="1" <?php if($user['ttd']==1){ echo "checked"; } ?>>
+                          <span class="form-check-label">MANAGER PPIC</span>
+                        </label>
+                        <label class="form-check">
+                          <input class="form-check-input" type="radio" 
+    name="ttd" value="2" <?php if($user['ttd']==2){ echo "checked"; } ?>>
+                          <span class="form-check-label">MANAGER PRODUKSI / NON</span>
+                        </label>
+                        <label class="form-check">
+                          <input class="form-check-input" type="radio" 
+    name="ttd" value="3" <?php if($user['ttd']==3){ echo "checked"; } ?>>
+                          <span class="form-check-label">GENERAL MANAGER PRODUKSI / NON</span>
+                        </label>
+                        <label class="form-check">
+                          <input class="form-check-input" type="radio" 
+    name="ttd" value="4" <?php if($user['ttd']==4){ echo "checked"; } ?>>
+                          <span class="form-check-label">MANAGER PURCHASING</span>
+                        </label>
                       </div>
                     </div>
                   </div>

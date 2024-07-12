@@ -7,7 +7,7 @@ class Dept_model extends CI_Model
         $this->db->from('dept');
         $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
 
-        return $this->db->get()->result_array();
+        return $this->db->order_by('departemen','ASC')->get()->result_array();
     }
     public function jmldept()
     {
@@ -118,6 +118,13 @@ class Dept_model extends CI_Model
         $this->db->select('*');
         $this->db->from('dept');
         $this->db->where('bbl', '1');
-        return $this->db->get()->result_array();
+        return $this->db->order_by('departemen','ASC')->get()->result_array();
+    }
+    public function getdata_dept_pb()
+    {
+        $this->db->select('*');
+        $this->db->from('dept');
+        $this->db->where('pb', '1');
+        return $this->db->order_by('departemen','ASC')->get()->result_array();
     }
 }

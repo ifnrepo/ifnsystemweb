@@ -221,6 +221,13 @@ $(document).ready(function () {
 		);
 		$(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
 	});
+	$("#modal-pilihan").on("show.bs.modal", function (e) {
+		document.getElementById("isipesan").innerHTML = $(e.relatedTarget).data(
+			"message",
+		);
+		$(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
+		$(this).find("#btn-no").attr("href", $(e.relatedTarget).data("hrefno"));
+	});
 
 	$("#confirm-delete").on("show.bs.modal", function (e) {
 		var string = document.getElementById("confirm-delete").innerHTML;

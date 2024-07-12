@@ -124,6 +124,39 @@
       </div>
     </div>
   </div>
+  <div class="modal modal-blur fade" id="modal-pilihan" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-status bg-info"></div>
+        <div class="modal-body text-center py-4">
+          <svg class="icon mb-2 text-info icon-lg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle">
+            <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+            <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
+            <path d="M12 8v4" />
+            <path d="M12 16h.01" />
+          </svg>
+          <h3 id="isipesan">Anda Yakin ?</h3>
+          <!-- <div class="text-secondary" id="message-info"></div> -->
+        </div>
+        <div class="modal-footer">
+          <div class="w-100">
+            <div class="row">
+              <div class="col"><a id="btn-ok" href="#" class="btn btn-info w-100">
+                Ya
+              </a></div>
+              <div class="col"><a id="btn-no" href="#" class="btn btn-danger w-100">
+                Tidak
+              </a></div>
+              <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
+                  Batal
+                </a></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
   <div class="modal modal-blur fade" id="modal-large" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
@@ -286,7 +319,7 @@
             </div>
           </div>
         </div>
-        <div class="collapse navbar-collapse" id="sidebar-menu">
+        <div class="collapse navbar-collapse pb-5" id="sidebar-menu">
           <ul class="navbar-nav pt-lg-3">
             <li class="nav-item">
               <a class="nav-link <?php if (!isset($header)) {
@@ -302,6 +335,18 @@
                 </span>
                 <span class="nav-link-title">
                   Home
+                </span>
+              </a>
+            </li>
+            <li class="nav-item <?php if($this->session->userdata('level_user') <= 1) { echo "hilang";} ?>">
+              <a class="nav-link <?php if (isset($header) && $header=='pendingtask') {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url().'task'; ?>">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checklist"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" /><path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                </span>
+                <span class="nav-link-title">
+                  Pending Task
                 </span>
               </a>
             </li>
