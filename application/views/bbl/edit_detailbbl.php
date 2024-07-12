@@ -62,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         </div>
                                     </div>
                                     <label class="form-check mb-0 <?php if($header['jn_bbl']==1){ echo "hilang"; } ?>">
-                                        <input class="form-check-input" id="bbl_pp" type="checkbox" <?php if($header['bbl_pp']==1){echo "checked";} ?>>
+                                        <input class="form-check-input" id="bbl_pp" type="checkbox" <?php if($header['bbl_pp']==1){echo "checked";} ?> <?php if($header['dept_id']=='GM'){echo "disabled"; } ?>>
                                         <span class="form-check-label">
                                         BBL Produksi (Persetujuan PPIC)
                                         </span>
@@ -122,7 +122,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <hr class="m-1">
                 <div class="form-tombol mt-1 text-right">
                     <input type="text" id="jmlrek" class="hilang">
-                    <a href="#" class="btn btn-sm btn-primary" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'bbl/simpanbbl/' . $header['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+                    <a href="#" class="btn btn-sm btn-primary <?php if((int)$numdetail == 0){echo "disabled"; } ?>" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'bbl/simpanbbl/' . $header['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
                 </div>
             </div>
         </div>

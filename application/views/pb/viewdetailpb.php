@@ -45,12 +45,13 @@
     <hr class="m-1">
     <div class="row mb-1">
         <div class="col-4 text-primary font-bold">
+            <span>KETERANGAN :</span>
+            <h4 class="mb-1"><?= $header['keterangan']; ?></h4>
         </div>
-        <div class="col-4 text-primary font-bold">
-            
-        </div>
+        <div class="col-4"></div>
         <?php $bgr = $header['ketcancel']==null ? "text-primary" : "text-danger"; ?>
-        <div class="col-4 <?= $bgr; ?> font-bold">
+        <?php $vld = $header['ok_valid']==0 ? "hilang" : ""; ?>
+        <div class="col-4 <?= $bgr.' '.$vld; ?> font-bold ">
             <?php $cek = $header['ketcancel']==null ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
             <span><?= $cek; ?></span>
             <h4 class="mb-1"><?= datauser($header['user_valid'],'name').' ('.$header['tgl_valid'].')'."<br>".$header['ketcancel'] ?></h4>

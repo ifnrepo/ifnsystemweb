@@ -1,4 +1,6 @@
-$(document).ready(function () {});
+$(document).ready(function () {
+	// $("#gettask").click();
+});
 
 $("#gettask").click(function () {
 	$.ajax({

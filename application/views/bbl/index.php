@@ -100,7 +100,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Tgl</th>
                                 <th>Nomor</th>
                                 <th>Jumlah Item</th>
-                                <th>P</th>
+                                <th>P</th> 
+                                <th>Dept</th> 
                                 <th>Dibuat Oleh</th>
                                 <th>Keterangan</th>
                                 <th>Aksi</th>
@@ -117,6 +118,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><a href='<?= base_url() . 'bbl/viewdetail_bbl/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a></td>
                                     <td><?= $jmlrec; ?></td>
                                     <td class="font-bold text-success"><?php if($datdet['bbl_pp']==1){ echo "P"; }  ?></td>
+                                    <td class="font-bold font-kecil"><?= $datdet['dept_bbl']  ?></td>
                                     <?php if($datdet['data_ok']==1){ ?>
                                     <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
                                     <?php }else{ ?>

@@ -60,6 +60,8 @@ class Bbl extends CI_Controller
             'jn_bbl' => $_POST['jn_bbl'],
             'kode_dok' => 'BBL',
             'id_perusahaan' => IDPERUSAHAAN,
+            'bbl_pp' => $_POST['dept_id']=='GM' ? 1 : 0,
+            'dept_bbl' => $_POST['jn_bbl']==1 ? $_POST['dept_id'] : NULL,
             'nomor_dok' => nomorbbl(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'])
         ];
         $simpan = $this->bbl_model->tambah_bbl($data);
@@ -405,6 +407,9 @@ class Bbl extends CI_Controller
         if($cek){
             $this->bbl_model->ubahdataok($id,0);
             $url = base_url('bbl/editdetail_bbl/'.$id);
+            redirect($url);
+        }else{
+            $url = base_url('bbl');
             redirect($url);
         }
     }

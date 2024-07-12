@@ -70,3 +70,7 @@ $("#edituser").click(function () {
 	}
 	document.formtambahuser.submit();
 });
+
+$("#id_level_user").change(function () {
+	// alert($(this).val());
+});

@@ -64,7 +64,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                   </div>
                   <label class="form-check mb-0 <?php if($data['jn_bbl']==1){ echo "hilang"; } ?>">
-                    <input class="form-check-input" id="bbl_pp" type="checkbox" <?php if($data['bbl_pp']==1){echo "checked";} ?>>
+                    <input class="form-check-input" id="bbl_pp" type="checkbox" <?php if($data['bbl_pp']==1){echo "checked";} ?> <?php if($data['dept_id']=='GM'){echo "disabled"; } ?>>
                     <span class="form-check-label">
                       BBL Produksi (Persetujuan PPIC)
                     </span>
@@ -102,7 +102,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   foreach ($detail as $key) : $no++; ?>
                     <tr>
                       <td class="text-left"><?= $no; ?></td>
-                      <td class="text-left" style="line-height:12px;"><?= $key['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $key['id_pb']; ?></span></td>
+                      <td class="text-left line-12"><?= $key['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $key['id_pb']; ?></span></td>
                       <td class="text-left"><?= $key['namasatuan']; ?></td>
                       <td class="text-right"><?= rupiah($key['pcs'], 0); ?></td>
                       <td class="text-right"><?= rupiah($key['kgs'], 2); ?></td>
@@ -121,7 +121,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">
           <input type="text" id="jmlrek" class="hilang">
-          <a href="#" class="btn btn-sm btn-primary" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'bbl/simpanbbl/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+          <a href="#" class="btn btn-sm btn-primary <?php if((int)$numdetail == 0){echo "disabled"; } ?>" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'bbl/simpanbbl/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
 
         </div>
       </div>

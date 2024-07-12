@@ -222,6 +222,11 @@ class Bbl_model extends CI_Model
     {
         $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
         $data['jumlah_barang'] = $jmlrec['jml'];
+        $deptid = $this->db->query("Select dept_bbl from tb_header where id = ".$data['id'])->row_array();
+        // $ok_pp = 0;
+        if(trim($deptid['dept_bbl'])=='IT' || trim($deptid['dept_bbl'])=='PG'){
+            $data['ok_pp']=1;
+        }
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
         return $query;
