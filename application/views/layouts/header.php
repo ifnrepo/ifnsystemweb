@@ -143,11 +143,11 @@
           <div class="w-100">
             <div class="row">
               <div class="col"><a id="btn-ok" href="#" class="btn btn-info w-100">
-                Ya
-              </a></div>
+                  Ya
+                </a></div>
               <div class="col"><a id="btn-no" href="#" class="btn btn-danger w-100">
-                Tidak
-              </a></div>
+                  Tidak
+                </a></div>
               <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
                   Batal
                 </a></div>
@@ -159,6 +159,23 @@
   </div>
   <div class="modal modal-blur fade" id="modal-large" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header">
+          <h5 class="modal-title">Large modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body fetched-data p-1">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit tempora totam unde.
+        </div>
+        <!-- <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+          </div> -->
+      </div>
+    </div>
+  </div>
+  <div class="modal modal-blur fade" id="modal-largescroll" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
         <div class="modal-header">
           <h5 class="modal-title">Large modal</h5>
@@ -338,12 +355,20 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item <?php if($this->session->userdata('level_user') <= 1) { echo "hilang";} ?>">
-              <a class="nav-link <?php if (isset($header) && $header=='pendingtask') {
+            <li class="nav-item <?php if ($this->session->userdata('level_user') <= 1) {
+                                  echo "hilang";
+                                } ?>">
+              <a class="nav-link <?php if (isset($header) && $header == 'pendingtask') {
                                     echo 'active';
-                                  } ?>" href="<?= base_url().'task'; ?>">
+                                  } ?>" href="<?= base_url() . 'task'; ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-checklist"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" /><path d="M14 19l2 2l4 -4" /><path d="M9 8h4" /><path d="M9 12h2" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-checklist">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
+                    <path d="M14 19l2 2l4 -4" />
+                    <path d="M9 8h4" />
+                    <path d="M9 12h2" />
+                  </svg>
                 </span>
                 <span class="nav-link-title">
                   Pending Task

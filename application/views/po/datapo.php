@@ -35,7 +35,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="input-icon">
                     <input type="text" id="tgldt" class="form-control input-sm font-kecil" value="<?= tglmysql($data['tgl_dtb']); ?>">
                     <span class="input-icon-addon" id="loadertgldt">
-                        
+
                     </span>
                   </div>
                 </div>
@@ -68,7 +68,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
                 <div class="col-3">
-                  x
+                  <div style="position:absolute;bottom:0px;right:10px;">
+                    <a href="<?= base_url() . 'po/getbarangpo'; ?>" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Get data Pembelian Barang" class="btn btn-sm btn-success">Get Bon Pembelian</a>
+                  </div>
                 </div>
               </div>
               <div class="hr m-1"></div>
@@ -76,62 +78,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-4 mt-2">
-            <form method="post" action="<?= base_url() . 'pb/simpandetailbarang'; ?>" name="formbarangpb" id="formbarangpb">
-              <input type="text" id="id" name="id" value="" class="hilang">
-              <div class="row font-kecil mb-0">
-                <label class="col-2 col-form-label font-kecil required">Specific</label>
-                <div class="col input-group mb-1">
-                  <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
-                  <input type="text" id="id_barang" name="id_barang" class="hilang">
-                  <input type="text" class="form-control font-kecil" id="nama_barang" name="nama_barang" placeholder="Spec Barang">
-                  <a href="<?= base_url() . 'pb/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
-                </div>
-              </div>
-              <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Satuan</label>
-                <div class="col">
-                  <select name="id_satuan" id="id_satuan" class="form-control font-kecil form-select">
-                    <option value="">Pilih Satuan</option>
-                    <?php foreach ($satuan as $sat) { ?>
-                      <option value="<?= $sat['id']; ?>"><?= $sat['namasatuan']; ?></option>
-                    <?php } ?>
-                  </select>
-                </div>
-              </div>
-              <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Qty</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="pcs" name="pcs" aria-describedby="emailHelp" placeholder="Qty">
-                </div>
-              </div>
-              <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Kgs</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="kgs" name="kgs" aria-describedby="emailHelp" placeholder="Kgs">
-                </div>
-              </div>
-            </form>
-            <div class="row">
-              <div class="col-6">
-                <a href="#" class="btn btn-sm btn-primary" style="width:100%" id="simpandetailbarang">Simpan Barang</a>
-              </div>
-              <div class="col-6">
-                <a href="#" class="btn btn-sm btn-danger" style="width:100%" id="resetdetailbarang">Reset Detail</a>
-              </div>
-            </div>
-          </div>
-          <div class="col-sm-8">
+          <div class="col-sm-12">
             <div id="table-default" class="table-responsive">
               <table class="table datatable6 table-hover" id="cobasisip">
                 <thead style="background-color: blue !important">
                   <tr>
-                    <!-- <th>No</th> -->
+                    <th>No</th>
                     <th>Specific</th>
                     <th>SKU</th>
-                    <th>Satuan</th>
                     <th>Qty</th>
-                    <th>Kgs</th>
+                    <th>Satuan</th>
+                    <th>Harga</th>
+                    <th>Total</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
