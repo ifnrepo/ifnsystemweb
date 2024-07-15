@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          PO (Purchase Order) # <?= $data['nomor_dok']; ?>
+          <div>PO (Purchase Order) <br><span class="title-dok"><?= $data['nomor_dok']; ?></span></div>
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -28,6 +28,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-2 ">
                   <h4 class="mb-0 font-kecil">Tanggal PO</h4>
                   <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
+                  <input type="text" id="id_header" class="hilang" value="<?= $data['id']; ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <a href="<?= base_url() . 'po/edittgl'; ?>" title="Edit tanggal" id="tglpo" name="tglpo" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan"><?= tglmysql($data['tgl']); ?></a>
                   </span>
