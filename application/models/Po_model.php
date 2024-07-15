@@ -74,7 +74,7 @@ class Po_model extends CI_Model
         $this->db->trans_complete();
         return $hasil;
     }
-    public function getdatadetailout($data)
+    public function getdatadetailpo($data)
     {
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
@@ -102,6 +102,57 @@ class Po_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
+    public function getbarangpo(){
+        $this->db->select('*,tb_detail.id as iddetbbl');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header a','a.id = tb_detail.id_header','left');
+        $this->db->join('barang b','b.id = tb_detail.id_barang','left');
+        $this->db->where('a.id_perusahaan',IDPERUSAHAAN);
+        $this->db->where('a.data_ok',1);
+        $this->db->where('a.ok_valid',1);
+        $this->db->where('a.ok_tuju',1);
+        $this->db->where('a.ok_pp',1);
+        $this->db->where('a.ok_pc',1);
+        $this->db->where('a.kode_dok','BBL');
+        $this->db->where('id_po',0);
+        return $this->db->get();
+    }
+
+    public function adddetailpo($data){
+        $jumlah = count($data['data']);
+        $id = $data['id'];
+        $this->db->trans_start();
+        for($x=0;$x<$jumlah;$x++){
+            $arrdat = $data['data'];
+            $detail = $this->db->where('id',$arrdat[$x])->get('tb_detail')->row_array();
+            $isi = [
+                'id_header' => $id,
+                'seri_barang' => $x,
+                'id_barang' => $detail['id_barang'],
+                'id_satuan' => $detail['id_satuan'],
+                'kgs' => $detail['kgs'],
+                'pcs' => $detail['pcs']
+            ];
+            $this->db->insert('tb_detail',$isi);
+            $idsimpan = $this->db->insert_id();
+            $this->db->where('id',$arrdat[$x])->update('tb_detail',['id_po'=>$idsimpan]);
+        }
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+
+    public function hapusdetailpo($id){
+        $detail = $this->db->where('id_po',$id)->get('tb_detail')->row_array();
+        $this->db->trans_start();
+        $this->db->where('id',$detail['id']);
+        $this->db->update('tb_detail',['id_po'=>0]);
+        $this->db->where('id',$id);
+        $this->db->delete('tb_detail');
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+
+
     public function updatedetail($data)
     {
         $this->db->where('id', $data['id']);

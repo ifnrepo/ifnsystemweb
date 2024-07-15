@@ -84,7 +84,18 @@ class Po extends CI_Controller
     }
     public function getbarangpo()
     {
-        $this->load->view('po/getbarangpo');
+        $data['datadetail'] = $this->pomodel->getbarangpo();
+        $this->load->view('po/getbarangpo',$data);
+    }
+    public function adddetailpo(){
+        $id = $_POST['id'];
+        $brg = $_POST['brg'];
+        $data = [
+            'id' => $id,
+            'data' => $brg
+        ];
+        $simpan = $this->pomodel->adddetailpo($data);
+        echo $simpan;
     }
 
     public function getdata()
@@ -125,34 +136,39 @@ class Po extends CI_Controller
         // redirect($url);
         echo 1;
     }
-    public function getdatadetailout()
+    public function getdatadetailpo()
     {
         $hasil = '';
         $id = $_POST['id_header'];
-        $query = $this->out_model->getdatadetailout($id);
+        $query = $this->pomodel->getdatadetailpo($id);
+        $no = 0;
         foreach ($query as $que) {
+            $no++;
+            $tampil = $que['pcs']==0 ? $que['kgs'] : $que['pcs'];
             $hasil .= "<tr>";
+            $hasil .= "<td>" . $no . "</td>";
             $hasil .= "<td>" . $que['nama_barang'] . "</td>";
             $hasil .= "<td>" . $que['brg_id'] . "</td>";
+            $hasil .= "<td>" . rupiah($tampil, 0) . "</td>";
             $hasil .= "<td>" . $que['namasatuan'] . "</td>";
-            $hasil .= "<td>" . rupiah($que['pcsminta'], 0) . "</td>";
-            $hasil .= "<td>" . rupiah($que['kgsminta'], 0) . "</td>";
-            $hasil .= "<td class='text-primary'>" . rupiah($que['pcs'], 0) . "</td>";
-            $hasil .= "<td class='text-primary'>" . rupiah($que['kgs'], 0) . "</td>";
-            if ($this->session->userdata('deptsekarang') == 'GM' && $que['nobontr'] != '') {
-                $hasil .= "<td class='text-primary'>" . $que['nobontr'] . "</td>";
-            } else {
-                if ($this->session->userdata('deptsekarang') == 'GM' && $que['nobontr'] == '') {
-                    $hasil .= "<td class='text-primary'><a href='" . base_url() . 'out/addnobontr/' . $que['id'] . '/' . $que['id_barang'] . "' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah Nobontr'>Pilih Nobontr</a></td>";
-                }
-            }
+            $hasil .= "<td>" . rupiah($que['harga'], 0) . "</td>";
+            $hasil .= "<td>" . rupiah($que['harga']*$tampil, 0) . "</td>";
             $hasil .= "<td>";
-            $hasil .= "<a href=" . base_url() . 'out/editdetailout/' . $que['id'] . " class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
+            $hasil .= "<a href=" . base_url() . 'out/editdetailpo/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
+            $hasil .= "<a href='#' data-href=" . base_url() . 'po/hapusdetailpo/' . $que['id'] .'/'.$que['id_header']. " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
         }
         $cocok = array('datagroup' => $hasil);
         echo json_encode($cocok);
+    }
+
+    public function hapusdetailpo($id,$detid){
+        $hasil = $this->pomodel->hapusdetailpo($id);
+        if($hasil){
+            $url = base_url().'po/datapo/'.$detid;
+            redirect($url);
+        }
     }
     public function tambahdata()
     {
