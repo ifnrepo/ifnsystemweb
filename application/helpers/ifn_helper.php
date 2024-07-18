@@ -79,7 +79,7 @@ function nomorpb($tgl, $asal, $tuju, $jn)
     $bl = date('m', strtotime($tgl));
     $th = date('y', strtotime($tgl));
     $thp = date('Y', strtotime($tgl));
-    $jne = $jn==0 ? 'BP' : 'SV';
+    $jne = $jn==0 ? 'BP' : 'PS';
     $CI = &get_instance();
     $kode = $CI->pb_model->getnomorpb($bl, $thp, $asal, $tuju);
     $urut = (int) $kode['maxkode'];
