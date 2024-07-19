@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          Pending Task <?= $this->session->userdata('ttd'); ?>
+          Pending Task <?= $this->session->userdata('ttd'); ?> <?= $this->session->userdata('bbl'); ?>
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -26,7 +26,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <option value="pb" <?php if ($this->session->userdata('modetask') == 'pb') {
                                     echo 'selected';
                                   } ?>>PB (Permintaan Barang)</option>
-              <?php if($this->session->userdata('bbl') >= 2): ?>
+              <?php if($this->session->userdata('ttd') >= 2): ?>
               <option value="bbl" <?php if ($this->session->userdata('modetask') == 'bbl') {
                                     echo 'selected';
                                   } ?>>BBL (Bon Permintaan Pembelian)</option>
@@ -79,7 +79,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <td class="text-center">
                   <?php if ($this->session->userdata('ttd') == 2 && $this->session->userdata('modetask') == 'bbl') { ?>
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btnedit ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit Qty</a>
-                  <?php } else if ($this->session->userdata('ttd') >= 3 && $this->session->userdata('modetask') == 'bbl') { ?>
+                  <?php } else if ($this->session->userdata('ttd') == 3 && $this->session->userdata('modetask') == 'bbl') { ?>
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit Approver bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btneditapprover ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit</a>
                   <?php } ?>
                   <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan validasi bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnok ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve</a>

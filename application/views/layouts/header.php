@@ -295,7 +295,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand">
-          <a href=".">
+          <a href="<?= base_url(); ?>">
             <img src=<?= base_url() . "assets/image/logodepan.png" ?> width="100" height="30" alt="IFN" class="navbar-brand-image">
           </a>
         </h1>

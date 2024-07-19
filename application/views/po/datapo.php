@@ -52,20 +52,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <textarea class="form-control form-sm font-kecil" placeholder="Alamat"><?= $data['alamat']; ?></textarea>
                   </div>
                   <div class="mt-1">
-                    <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
+                    <div class="input-icon">
+                       <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
+                    <span class="input-icon-addon" id="loadertgldtbt">
+
+                    </span>
+                  </div>
                   </div>
                 </div>
                 <div class="col-3">
                   <h4 class="mb-0 font-kecil">Jenis Pembayaran</h4>
                   <div class="input-group">
-                    <select class="form-control form-select font-kecil font-bold text-primary">
-                      <option></option>
-                      <option>CASH</option>
-                      <option>KREDIT</option>
-                      <option>ADVANCE</option>
-                      <option>SAMPLE</option>
+                    <select class="form-control form-select font-kecil font-bold text-primary" id="jn_pembayaran">
+                      <option value=""></option>
+                      <option value="CASH" <?php if($data['jenis_pembayaran']=='CASH'){ echo "Selected"; } ?>>CASH</option>
+                      <option value="KREDIT" <?php if($data['jenis_pembayaran']=='KREDIT'){ echo "Selected"; } ?>>KREDIT</option>
+                      <option value="ADVANCE" <?php if($data['jenis_pembayaran']=='ADVANCE'){ echo "Selected"; } ?>>ADVANCE</option>
+                      <option value="SAMPLE" <?php if($data['jenis_pembayaran']=='SAMPLE'){ echo "Selected"; } ?>>SAMPLE</option>
                     </select>
-                    <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown button" placeholder="Tgl.." value="" disabled>
+                    <input type="text" class="form-control font-kecil" id="tgldtbt" aria-label="Text input with dropdown button" placeholder="Tgl.." value="<?= tglmysql($data['tgl_rencana_bayar']); ?>" disabled>
+                  </div>
+                  <div class="row mt-1">
+                    <label class="col-3 col-form-label">Mt Uang</label>
+                    <div class="col">
+                      <select class="form-control form-select font-kecil font-bold text-primary" id="mt_uang">
+                        <option value=""></option>
+                        
+                      </select>
+                    </div>
                   </div>
                 </div>
                 <div class="col-3">
