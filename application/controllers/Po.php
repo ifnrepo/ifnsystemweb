@@ -17,6 +17,7 @@ class Po extends CI_Controller
         $this->load->model('satuanmodel');
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('mtuangmodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -246,6 +247,22 @@ class Po extends CI_Controller
         ];
         $query = $this->out_model->updatedetail($data);
         echo $query;
+    }
+    public function updatesupplier(){
+        $data = [
+            'id' => $_POST['id'],
+            'id_supplier' => $_POST['rel']
+        ];
+        $hasil = $this->pomodel->updatesupplier($data);
+        echo $hasil;
+    }
+    public function updatebykolom($kolom){
+        $data = [
+            'id' => $_POST['id'],
+            $kolom => $_POST['isinya']
+        ];
+        $hasil = $this->pomodel->updatebykolom($data);
+        echo $hasil;
     }
 
     public function simpanout($id)

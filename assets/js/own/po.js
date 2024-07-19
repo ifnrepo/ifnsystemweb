@@ -18,6 +18,12 @@ $(document).ready(function () {
 	}
 	// $("#dept_kirim").change();
 	// $("#level").change();
+	var jn_bayar = $("#jn_pembayaran").val();
+	if (jn_bayar == "CASH" || jn_bayar == "") {
+		$("#tgldtbt").attr("disabled", true);
+	} else {
+		$("#tgldtbt").attr("disabled", false);
+	}
 });
 // $("#tglpb").datepicker();
 
@@ -46,11 +52,15 @@ $("#tgldt").datepicker({
 	format: "dd-mm-yyyy",
 	todayHighlight: true,
 });
+$("#tgldtbt").datepicker({
+	autoclose: true,
+	format: "dd-mm-yyyy",
+	todayHighlight: true,
+});
 $("#tgldt").change(function () {
 	var isinya =
 		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
 	$("#loadertgldt").html(isinya);
-	alert(tglmysql($("#tgldt").val()));
 	$.ajax({
 		dataType: "json",
 		type: "POST",
@@ -68,22 +78,47 @@ $("#tgldt").change(function () {
 		},
 	});
 });
-// $("#dept_tuju").change(function () {
-// 	$("#adddatapb").removeClass("disabled");
-// 	$("#level").removeClass("bg-primary");
-// 	$("#level").removeClass("bg-success");
-// 	if ($("#level").val() <= 1) {
-// 		$("#level").addClass("bg-primary");
-// 	} else {
-// 		$("#level").addClass("bg-success");
-// 	}
-// 	var ix = $(this).val();
-// 	if (ix != null) {
-// 		getdatapb();
-// 	} else {
-// 		$("#adddatapb").addClass("disabled");
-// 	}
-// });
+$("#tgldtbt").change(function () {
+	var isinya =
+		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
+	$("#loadertgldbt").html(isinya);
+	alert(tglmysql($("#tgldtbt").val()));
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "po/updatebykolom/tgl_rencana_bayar",
+		data: {
+			isinya: tglmysql($("#tgldtbt").val()),
+			id: $("#id_header").val(),
+		},
+		success: function (data) {
+			$("#loadertgldtbt").html("");
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
+$("#jn_pembayaran").change(function () {
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "po/updatebykolom/jenis_pembayaran",
+		data: {
+			isinya: $(this).val(),
+			id: $("#id_header").val(),
+		},
+		success: function (data) {
+			// $("#loadertgldtbt").html("");
+			window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
 $("#simpandetailbarang").click(function () {
 	if ($("#id_barang").val() == "") {
 		pesan("Isi / Cari nama barang", "error");

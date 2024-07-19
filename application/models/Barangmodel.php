@@ -45,21 +45,6 @@ class Barangmodel extends CI_Model
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
-    // public function get_datatables()
-    // {
-    //     $this->getdata();
-    //     if ($_POST['length'] != -1)
-    //         $this->db->limit($_POST['length'], $_POST['start']);
-    //     $query = $this->db->get();
-    //     return $query->result();
-    // }
-    // function count_filtered()
-    // {
-    //     $this->getdata();
-    //     $query = $this->db->get();
-    //     return $query->num_rows();
-    // }
-
     public function get_datatables($filter_kategori)
     {
         $this->getdata($filter_kategori);
@@ -75,15 +60,11 @@ class Barangmodel extends CI_Model
         $query = $this->db->get();
         return $query->num_rows();
     }
-
     public function count_all()
     {
         $this->db->from('barang');
         return $this->db->count_all_results();
     }
-
-
-
     public function getdatabyid($id)
     {
         $query = $this->db->query("Select barang.*,

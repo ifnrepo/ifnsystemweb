@@ -159,6 +159,18 @@ class Po_model extends CI_Model
         $query = $this->db->update('tb_detail', $data);
         return $query;
     }
+    public function updatesupplier($data){
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_header',['id_pemasok' => $data['id_supplier']]);
+        return $hasil;
+    }
+    public function updatebykolom($data){
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_header',$data);
+        return $hasil;
+    }
+
+
     public function simpanout($data)
     {
         $jumlahrek = $this->db->get_where('tb_detail', ['id_header' => $data['id']])->num_rows();
