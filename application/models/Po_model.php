@@ -85,11 +85,9 @@ class Po_model extends CI_Model
         $this->db->where('a.id_header', $data);
         return $this->db->get()->result_array();
     }
-    public function getdatadetailoutbyid($data)
+    public function getdetailpobyid($data)
     {
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
-        $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
-        $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
         $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
         $this->db->join('barang c', 'c.id = a.id_barang', 'left');
@@ -169,8 +167,11 @@ class Po_model extends CI_Model
         $hasil = $this->db->update('tb_header',$data);
         return $hasil;
     }
-
-
+    public function updatehargadetail($data){
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_detail',$data);
+        return $hasil;
+    }
     public function simpanout($data)
     {
         $jumlahrek = $this->db->get_where('tb_detail', ['id_header' => $data['id']])->num_rows();

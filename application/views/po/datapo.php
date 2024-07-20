@@ -73,11 +73,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input type="text" class="form-control font-kecil" id="tgldtbt" aria-label="Text input with dropdown button" placeholder="Tgl.." value="<?= tglmysql($data['tgl_rencana_bayar']); ?>" disabled>
                   </div>
                   <div class="row mt-1">
-                    <label class="col-3 col-form-label">Mt Uang</label>
+                    <label class="col-6 col-form-label">Mata Uang</label>
                     <div class="col">
                       <select class="form-control form-select font-kecil font-bold text-primary" id="mt_uang">
                         <option value=""></option>
-                        
+                        <?php foreach ($mtuang->result_array() as $uang) { ?>
+                        <option value="<?= $uang['mt_uang']; ?>" <?php if($data['mt_uang']== $uang['mt_uang']){ echo "Selected"; } ?>><?= $uang['mt_uang']; ?></option>
+                        <?php } ?>
                       </select>
                     </div>
                   </div>
@@ -112,6 +114,51 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                 </tbody>
               </table>
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-4"></div>
+          <div class="col-4"></div>
+          <div class="col-4">
+            <div class="row mt-1">
+              <label class="col-3 col-form-label">Jumlah</label>
+              <div class="col">
+                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <label class="col-3 col-form-label">Diskon</label>
+              <div class="col">
+                <input type="text" class="form-control inputangka" id="diskonharga" placeholder="Diskon" value="" >
+              </div>
+            </div>
+            <div class="row mt-1">
+              <label class="col-3 col-form-label">Total</label>
+              <div class="col">
+                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <label class=" col-3 form-check font-kecil mt-2">
+                <input class="form-check-input" type="checkbox" >
+                <span class="form-check-label">PPN</span>
+              </label>
+              <div class="col">
+                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total PPN" value="" readonly>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <label class="col-3 col-form-label">PPH</label>
+              <div class="col">
+                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total PPH" value="">
+              </div>
+            </div>
+            <div class="row mt-1">
+              <label class="col-3 col-form-label">TOTAL</label>
+              <div class="col">
+                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
+              </div>
             </div>
           </div>
         </div>

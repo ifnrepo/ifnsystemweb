@@ -119,6 +119,25 @@ $("#jn_pembayaran").change(function () {
 		},
 	});
 });
+$("#mt_uang").change(function () {
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "po/updatebykolom/mt_uang",
+		data: {
+			isinya: $(this).val(),
+			id: $("#id_header").val(),
+		},
+		success: function (data) {
+			// $("#loadertgldtbt").html("");
+			window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
 $("#simpandetailbarang").click(function () {
 	if ($("#id_barang").val() == "") {
 		pesan("Isi / Cari nama barang", "error");
@@ -253,6 +272,7 @@ function getdatadetailpo() {
 			// window.location.reload();
 			$("#jmlrek").val(data.jmlrek);
 			$("#body-table").html(data.datagroup).show();
+			$("#totalharga").val(rupiah(data.totalharga, ".", ",", 2));
 			if (data.jmlrek == 0) {
 				$("#simpanpb").addClass("disabled");
 			}
