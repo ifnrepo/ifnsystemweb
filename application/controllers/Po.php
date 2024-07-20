@@ -68,6 +68,7 @@ class Po extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['data'] = $this->pomodel->getdatabyid($kode);
+        $data['mtuang'] = $this->mtuangmodel->getdata();
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
         $this->load->view('po/datapo', $data);
@@ -142,6 +143,7 @@ class Po extends CI_Controller
         $hasil = '';
         $id = $_POST['id_header'];
         $query = $this->pomodel->getdatadetailpo($id);
+        $totalharga = 0;
         $no = 0;
         foreach ($query as $que) {
             $no++;
@@ -155,15 +157,19 @@ class Po extends CI_Controller
             $hasil .= "<td>" . rupiah($que['harga'], 0) . "</td>";
             $hasil .= "<td>" . rupiah($que['harga']*$tampil, 0) . "</td>";
             $hasil .= "<td>";
-            $hasil .= "<a href=" . base_url() . 'out/editdetailpo/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
+            $hasil .= "<a href=" . base_url() . 'po/editdetailpo/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
             $hasil .= "<a href='#' data-href=" . base_url() . 'po/hapusdetailpo/' . $que['id'] .'/'.$que['id_header']. " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
+            $totalharga += $que['harga']*$tampil;
         }
-        $cocok = array('datagroup' => $hasil);
+        $cocok = array('datagroup' => $hasil,'totalharga' => $totalharga);
         echo json_encode($cocok);
     }
-
+    public function editdetailpo($id){
+        $data['data'] = $this->pomodel->getdetailpobyid($id);
+        $this->load->view('po/editdetailpo',$data);
+    }
     public function hapusdetailpo($id,$detid){
         $hasil = $this->pomodel->hapusdetailpo($id);
         if($hasil){
@@ -171,21 +177,14 @@ class Po extends CI_Controller
             redirect($url);
         }
     }
-    public function tambahdata()
+    public function updatehargadetail()
     {
         $kondisi = [
-            'dept_id' => $this->session->userdata('tujusekarang'),
-            'dept_tuju' => $this->session->userdata('deptsekarang'),
-            'kode_dok' => 'PB',
-            'id_keluar' => null,
-            'data_ok' => 1,
-            'ok_valid' => 1,
-            'ok_tuju' => 0,
-            'month(tgl) <=' => $this->session->userdata('bl'),
-            'year(tgl) <=' => $this->session->userdata('th')
+            'id' => $_POST['id'],
+            'harga' => $_POST['harga']
         ];
-        $data['bon'] = $this->out_model->getbon($kondisi);
-        $this->load->view('out/add_out', $data);
+        $hasil = $this->pomodel->updatehargadetail($kondisi);
+        echo $hasil;
     }
 
     public function edittgl()
