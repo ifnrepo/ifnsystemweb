@@ -264,19 +264,27 @@ class Po extends CI_Controller
         echo $hasil;
     }
 
-    public function simpanout($id)
+    public function simpanpo($id)
     {
-        $data = [
-            'ok_tuju' => 1,
-            'user_tuju' => $this->session->userdata('id'),
-            'data_ok' => 1,
-            'ok_valid' => 1,
-            'tgl_tuju' => date('Y-m-d H:i:s'),
-            'id' => $id
-        ];
-        $query = $this->out_model->simpanout($data);
-        if ($query) {
-            $url = base_url() . 'out';
+        $cekdetail = $this->pomodel->cekdetail($id);
+        if($cekdetail['xharga']==0){
+            $data = [
+                'user_ok' => $this->session->userdata('id'),
+                'data_ok' => 1,
+                'tgl_ok' => date('Y-m-d H:i:s'),
+                'id' => $id,
+                'totalharga' => $cekdetail['totalharga'],
+                'total' => 'totalharga - diskon',
+                'jumlah' => '((totalharga-diskon)+ppn)-pph'
+            ];
+            $query = $this->pomodel->simpanpo($data);
+            if ($query) {
+                $url = base_url() . 'po';
+                redirect($url);
+            }
+        }else{
+            $this->session->set_flashdata('errorsimpan',1);
+            $url = base_url() . 'po/datapo/'.$id;
             redirect($url);
         }
     }

@@ -134,6 +134,8 @@ class Po_model extends CI_Model
             $this->db->insert('tb_detail',$isi);
             $idsimpan = $this->db->insert_id();
             $this->db->where('id',$arrdat[$x])->update('tb_detail',['id_po'=>$idsimpan]);
+            $itembarang = $this->db->where('id_header',$id)->get('tb_detail')->num_rows();
+            $this->db->where('id',$id)->update('tb_header',['jumlah_barang'=>$itembarang]);
         }
         $hasil = $this->db->trans_complete();
         return $hasil;
@@ -141,11 +143,14 @@ class Po_model extends CI_Model
 
     public function hapusdetailpo($id){
         $detail = $this->db->where('id_po',$id)->get('tb_detail')->row_array();
+        $xdetail = $this->db->where('id',$id)->get('tb_detail')->row_array();
         $this->db->trans_start();
         $this->db->where('id',$detail['id']);
         $this->db->update('tb_detail',['id_po'=>0]);
         $this->db->where('id',$id);
         $this->db->delete('tb_detail');
+        $itembarang = $this->db->where('id_header',$xdetail['id_header'])->get('tb_detail')->num_rows();
+        $this->db->where('id',$xdetail['id_header'])->update('tb_header',['jumlah_barang'=>$itembarang]);
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -172,7 +177,13 @@ class Po_model extends CI_Model
         $hasil = $this->db->update('tb_detail',$data);
         return $hasil;
     }
-    public function simpanout($data)
+    public function cekdetail($id){
+        $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
+        $this->db->from('tb_detail');
+        $this->db->where('id_header',$id);
+        return $this->db->get()->row_array();
+    }
+    public function simpanpo($data)
     {
         $jumlahrek = $this->db->get_where('tb_detail', ['id_header' => $data['id']])->num_rows();
         $data['jumlah_barang'] = $jumlahrek;

@@ -26,13 +26,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-2 ">
-                  <h4 class="mb-0 font-kecil">Tanggal PO</h4>
+                  <h4 class="mb-0 font-kecil font-bold">Tanggal PO</h4>
                   <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
                   <input type="text" id="id_header" class="hilang" value="<?= $data['id']; ?>">
+                  <input type="text" id="errorsimpan" class="hilang" value="<?= $this->session->flashdata('errorsimpan'); ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <a href="<?= base_url() . 'po/edittgl'; ?>" title="Edit tanggal" id="tglpo" name="tglpo" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan"><?= tglmysql($data['tgl']); ?></a>
                   </span>
-                  <h4 class="mb-0 font-kecil mt-1">Tgl Rencana Datang</h4>
+                  <h4 class="mb-0 font-kecil mt-1 font-bold">Tgl Rencana Datang</h4>
                   <div class="input-icon">
                     <input type="text" id="tgldt" class="form-control input-sm font-kecil" value="<?= tglmysql($data['tgl_dtb']); ?>">
                     <span class="input-icon-addon" id="loadertgldt">
@@ -41,7 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
                 <div class="col-4">
-                  <h4 class="mb-0 font-kecil">SUPPLIER</h4>
+                  <h4 class="mb-0 font-kecil font-bold">SUPPLIER</h4>
                   <div class="input-group">
                     <?php $tekstitle = $data['id_pemasok'] == null ? 'Cari ' : 'Ganti '; ?>
                     <?php $tekstitle2 = $data['id_pemasok'] == null || $data['id_pemasok'] == 0 ? 'Cari ' : $data['id_pemasok']; ?>
@@ -61,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-0 font-kecil">Jenis Pembayaran</h4>
+                  <h4 class="mb-0 font-kecil font-bold">Jenis Pembayaran</h4>
                   <div class="input-group">
                     <select class="form-control form-select font-kecil font-bold text-primary" id="jn_pembayaran">
                       <option value=""></option>
@@ -73,7 +74,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input type="text" class="form-control font-kecil" id="tgldtbt" aria-label="Text input with dropdown button" placeholder="Tgl.." value="<?= tglmysql($data['tgl_rencana_bayar']); ?>" disabled>
                   </div>
                   <div class="row mt-1">
-                    <label class="col-6 col-form-label">Mata Uang</label>
+                    <label class="col-6 col-form-label font-bold">Mata Uang</label>
                     <div class="col">
                       <select class="form-control form-select font-kecil font-bold text-primary" id="mt_uang">
                         <option value=""></option>
@@ -124,40 +125,40 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="row mt-1">
               <label class="col-3 col-form-label">Jumlah</label>
               <div class="col">
-                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
+                <input type="text" class="form-control font-bold text-right" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
               </div>
             </div>
             <div class="row mt-1">
               <label class="col-3 col-form-label">Diskon</label>
               <div class="col">
-                <input type="text" class="form-control inputangka" id="diskonharga" placeholder="Diskon" value="" >
+                <input type="text" class="form-control inputangka text-right" id="diskon" placeholder="Diskon" value="<?= rupiah($data['diskon'],2); ?>" >
               </div>
             </div>
             <div class="row mt-1">
               <label class="col-3 col-form-label">Total</label>
               <div class="col">
-                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
+                <input type="text" class="form-control font-bold text-right" id="total" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
               </div>
             </div>
             <div class="row mt-1">
               <label class=" col-3 form-check font-kecil mt-2">
-                <input class="form-check-input" type="checkbox" >
-                <span class="form-check-label">PPN</span>
+                <input class="form-check-input" type="checkbox" id="cekppn" <?php if($data['cekppn']==1){ echo "checked"; } ?> >
+                <span class="form-check-label">PPN</span> 
               </label>
               <div class="col">
-                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total PPN" value="" readonly>
+                <input type="text" class="form-control font-bold text-right" id="hargappn" aria-label="Text input with dropdown button" placeholder="Total PPN" value="<?= rupiah($data['ppn'],2); ?>" readonly>
               </div>
             </div>
             <div class="row mt-1">
               <label class="col-3 col-form-label">PPH</label>
               <div class="col">
-                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total PPH" value="">
+                <input type="text" class="form-control inputangka text-right" id="pph" aria-label="Text input with dropdown button" placeholder="Total PPH" value="<?= rupiah($data['pph'],2); ?>">
               </div>
             </div>
             <div class="row mt-1">
               <label class="col-3 col-form-label">TOTAL</label>
               <div class="col">
-                <input type="text" class="form-control font-bold" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
+                <input type="text" class="form-control font-bold text-right" id="jumlah" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
               </div>
             </div>
           </div>
@@ -165,7 +166,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">
           <input type="text" id="jmlrek" class="hilang">
-          <a href="#" class="btn btn-sm btn-primary" id="simpanpb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'pb/simpanpb/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+          <button class="btn btn-sm btn-primary" id="xsimpanpo" ><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
+          <button class="btn btn-sm btn-primary hilang" id="carisimpanpo" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'po/simpanpo/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
           <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
         </div>
       </div>

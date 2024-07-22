@@ -24,6 +24,11 @@ $(document).ready(function () {
 	} else {
 		$("#tgldtbt").attr("disabled", false);
 	}
+	var value_old = 0;
+	var errosimpan = $("#errorsimpan").val();
+	if (errosimpan == 1) {
+		pesan("Data detail masih ada yang kosong !", "kosong");
+	}
 });
 // $("#tglpb").datepicker();
 
@@ -237,7 +242,137 @@ $("#carisupplier").click(function () {
 	$("#tglpo").click();
 	// alert('OKE');
 });
-
+$("#xsimpanpo").click(function () {
+	if ($("#jn_pembayaran").val() == "") {
+		pesan("Jenis pembayaran belum dipilih !", "info");
+		return false;
+	}
+	if ($("#mt_uang").val() == "") {
+		pesan("Mata Uang belum dipilih !", "info");
+		return false;
+	}
+	if ($("#totalharga").val() == "") {
+		pesan("Harga ada yang kosong !", "info");
+		return false;
+	}
+	$("#carisimpanpo").click();
+});
+$("#diskon").focus(function () {
+	value_old = toAngka($(this).val());
+});
+$("#pph").focus(function () {
+	value_old = toAngka($(this).val());
+});
+$("#diskon").blur(function () {
+	if (toAngka($("#diskon").val()) != value_old) {
+		hitunggrandtotal();
+		$.ajax({
+			dataType: "json",
+			type: "POST",
+			url: base_url + "po/updatebykolom/diskon",
+			data: {
+				isinya: toAngka($(this).val()),
+				id: $("#id_header").val(),
+			},
+			success: function (data) {
+				// $("#loadertgldtbt").html("");
+				// window.location.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(thrownError);
+			},
+		});
+	}
+});
+$("#pph").blur(function () {
+	if (toAngka($("#pph").val()) != value_old) {
+		hitunggrandtotal();
+		$.ajax({
+			dataType: "json",
+			type: "POST",
+			url: base_url + "po/updatebykolom/pph",
+			data: {
+				isinya: toAngka($(this).val()),
+				id: $("#id_header").val(),
+			},
+			success: function (data) {
+				// $("#loadertgldtbt").html("");
+				// window.location.reload();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(thrownError);
+			},
+		});
+	}
+});
+$("#cekppn").click(function () {
+	var xx = $(this).is(":checked");
+	var jumlah = toAngka($("#totalharga").val());
+	var diskon = toAngka($("#diskon").val());
+	var dpp = (jumlah - diskon) * 0.11;
+	if (xx) {
+		$("#hargappn").val(rupiah(dpp, ".", ",", 2));
+	} else {
+		$("#hargappn").val("");
+	}
+	hitunggrandtotal();
+	updatekolomcekppn(xx);
+	updatekolomppn(dpp);
+});
+function hitunggrandtotal() {
+	var jumlah = toAngka($("#totalharga").val());
+	var diskon = toAngka($("#diskon").val());
+	var ppn = toAngka($("#hargappn").val());
+	var pph = toAngka($("#pph").val());
+	// alert(jumlah);
+	var isi = jumlah - diskon;
+	$("#total").val(rupiah(isi, ".", ",", 2));
+	$("#jumlah").val(
+		rupiah(isi + parseFloat(ppn) - parseFloat(pph), ".", ",", 2),
+	);
+	// alert(jumlah - diskon);
+}
+function updatekolomcekppn(nil) {
+	var nol = nil == true ? 1 : 0;
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "po/updatebykolom/cekppn",
+		data: {
+			isinya: nol,
+			id: $("#id_header").val(),
+		},
+		success: function (data) {
+			// $("#loadertgldtbt").html("");
+			// window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
+function updatekolomppn(nil) {
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "po/updatebykolom/ppn",
+		data: {
+			isinya: nil,
+			id: $("#id_header").val(),
+		},
+		success: function (data) {
+			// $("#loadertgldtbt").html("");
+			// window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
 function getdatapo() {
 	// alert($("#level").val());
 	$.ajax({
@@ -276,6 +411,7 @@ function getdatadetailpo() {
 			if (data.jmlrek == 0) {
 				$("#simpanpb").addClass("disabled");
 			}
+			hitunggrandtotal();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
