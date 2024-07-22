@@ -525,7 +525,11 @@ function rupiah(amount, decimalSeparator, thousandsSeparator, nDecimalDigits) {
 }
 
 function toAngka(rp) {
-	return rp.replace(/,*|\D/g, "");
+	if (rp == "" || rp.trim() == "-") {
+		return 0;
+	} else {
+		return rp.replace(/,*|\D/g, "");
+	}
 }
 
 function adaspasi(str) {
