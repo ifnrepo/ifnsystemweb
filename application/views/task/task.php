@@ -57,10 +57,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $btnok = base_url() . 'task/validasipb/' . $datpb['id'];
                 $btnno = base_url() . 'task/cancelpb/' . $datpb['id'];
               } else {
+                $ttdke = $datpb['data_ok']+$datpb['ok_pp']+$datpb['ok_valid']+$datpb['ok_tuju']+$datpb['ok_pc']+1;
                 $viewdetail = base_url() . 'bbl/viewdetail_bbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
-                $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
+                $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $ttdke;
                 $btnedit = base_url() . 'task/editbbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
-                $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
+                $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $ttdke;
                 $btneditapprover = base_url() . 'task/editapprovebbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
               }
             ?>
@@ -76,8 +77,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <td class="font-bold font-kecil"><?= $datpb['dept_bbl']; ?></td>
                 <td><?= $datpb['keterangan']; ?></td>
                 <td style="line-height: 13px;"><?= datauser($datpb['user_ok'], 'name'); ?><br><span style="font-size: 10px;"><?= $datpb['tgl_ok'] ?></span></td>
-                <td class="text-center">
-                  <?php if ($this->session->userdata('ttd') == 2 && $this->session->userdata('modetask') == 'bbl') { ?>
+                <td class="text-right">
+                  <?php if ($this->session->userdata('ttd') == 2 && $this->session->userdata('modetask') == 'bbl' && $datpb['ok_pp']==1) { ?>
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btnedit ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit Qty</a>
                   <?php } else if ($this->session->userdata('ttd') == 3 && $this->session->userdata('modetask') == 'bbl') { ?>
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit Approver bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btneditapprover ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit</a>

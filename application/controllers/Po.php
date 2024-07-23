@@ -104,38 +104,6 @@ class Po extends CI_Controller
     {
         $this->session->set_userdata('deptsekarang', $_POST['dept_id']);
         $this->session->set_userdata('tujusekarang', $_POST['dept_tuju']);
-        // $hasil = '';
-        // $kode = [
-        //     'dept_id' => $_POST['dept_id'],
-        //     'dept_tuju' => $_POST['dept_tuju']
-        // ];
-        // $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
-        // $query = $this->out_model->getdata($kode);
-        // foreach ($query as $que) {
-        //     $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
-        //     $hasil .= "<tr>";
-        //     $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
-        //     if($que['data_ok']==1){
-        //         $hasil .= "<td class='font-bold'><a href='".base_url().'out/viewdetailout/'.$que['id']."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
-        //     }else{
-        //         $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
-        //     }
-        //     $hasil .= "<td>".$jmlrek."</td>";
-        //     $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
-        //     $hasil .= "<td>".$que['keterangan']."</td>";
-        //     $hasil .= "<td>";
-        // if($que['data_ok']==0){
-        //     $hasil .= "<a href=".base_url().'out/dataout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>";
-        // }else if($que['ok_tuju']==1){
-        //     $hasil .= "<a href=".base_url().'out/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
-        // }
-        //     $hasil .= "</td>";
-        //     $hasil .= "</tr>";
-        // }
-        // $cocok = array('datagroup' => $hasil);
-        // echo json_encode($cocok);
-        // $url = base_url('Out');
-        // redirect($url);
         echo 1;
     }
     public function getdatadetailpo()
@@ -219,6 +187,21 @@ class Po extends CI_Controller
         $data['data'] = $this->out_model->getdatadetailoutbyid($id);
         $this->load->view('out/editdetailout', $data);
     }
+    public function invoice($id)
+    {
+        $header['header'] = 'transaksi';
+        // $data['level'] = $this->usermodel->getdatalevel();
+        // $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
+        // $data['dephak'] = $this->deptmodel->getdata();
+        // $kode = [
+        //     'jnpo' => $this->session->userdata('jn_po') == null ? 'DO' : $this->session->userdata('jn_po'),
+        // ];
+        // $data['data'] = $this->pomodel->getdata($kode);
+        $footer['fungsi'] = 'po';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('po/invoice');
+        $this->load->view('layouts/footer', $footer);
+    }
     public function addnobontr($id, $idbarang)
     {
         $data['data'] = $this->out_model->getdatagm($idbarang);
@@ -288,19 +271,19 @@ class Po extends CI_Controller
             redirect($url);
         }
     }
-    public function hapusdataout($id)
+    public function hapuspo($id)
     {
-        $query = $this->out_model->hapusdataout($id);
+        $query = $this->pomodel->hapuspo($id);
         if ($query) {
-            $url = base_url() . 'out';
+            $url = base_url() . 'po';
             redirect($url);
         }
     }
-    public function viewdetailout($id)
+    public function viewdetail($id)
     {
-        $data['header'] = $this->out_model->getdatabyid($id);
-        $data['detail'] = $this->out_model->getdatadetailout($id);
-        $this->load->view('out/viewdetailout', $data);
+        $data['header'] = $this->pomodel->getdatabyid($id);
+        $data['detail'] = $this->pomodel->getdatadetailpo($id);
+        $this->load->view('po/viewdetailpo', $data);
     }
     public function resetdetail($id)
     {
