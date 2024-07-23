@@ -53,7 +53,7 @@ class Po_model extends CI_Model
     public function getnomorpo($bl, $th, $jnpo)
     {
         $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,15,3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'PO' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND SUBSTR(nomor_dok,4,2) = '" . $jnpo . "' ")->row_array();
+        WHERE kode_dok = 'PO' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND SUBSTR(nomor_dok,4,6) = '" . $jnpo . "' ")->row_array();
         return $hasil;
     }
     public function tambahdatapo()
@@ -191,20 +191,23 @@ class Po_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
-    public function hapusdataout($id)
+    public function hapuspo($id)
     {
         $this->db->trans_start();
         $this->db->where('id', $id);
         $query = $this->db->get('tb_header')->row_array();
-        if ($query) {
+        if($query){
+            $this->db->where('id_header',$id);
+            $cekdetail = $this->db->get('tb_detail')->result_array();
+            foreach ($cekdetail as $cekdata) {
+                $this->db->where('id_po',$cekdata['id']);
+                $this->db->update('tb_detail', ['id_po' => 0]);
+            }
             $this->db->where('id_header', $id);
             $this->db->delete('tb_detmaterial');
             $this->db->where('id_header', $id);
             $this->db->delete('tb_detail');
         }
-        $this->db->where('id_keluar', $id);
-        $this->db->update('tb_header', ['id_keluar' => null]);
-
         $this->db->where('id', $id);
         $this->db->delete('tb_header');
         $hasil = $this->db->trans_complete();

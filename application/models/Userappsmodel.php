@@ -122,21 +122,21 @@ class Userappsmodel extends CI_Model
                 unset($data[$dept['dept_id']]);
             }
         }
-        // $ttd = $data['ttd'];
-        // switch ($ttd) {
-        //     case '1':
-        //         $data['ttd'] = 1;
-        //         break;
-            
-        //     default:
-        //         # code...
-        //         break;
-        // }
+        // Set hak tandatangan PB
+        $cekpb = '';
+        $datdept = $this->deptmodel->getdata_dept_pb();
+        foreach ($datdept as $dept) {
+            if (isset($data['X'.$dept['dept_id']])) {
+                $cekpb .= $dept['dept_id'];
+                unset($data['X'.$dept['dept_id']]);
+            }
+        }
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
         $data['other'] = $other;
         $data['manajemen'] = $manajemen;
         $data['hakdepartemen'] = $hakdepartemen;
+        $data['cekpb'] = $cekpb;
 
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('user', $data);
@@ -148,8 +148,8 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('manajemen', $cek['manajemen']);
             $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
             $this->session->set_userdata('arrdep',arrdep($cek['hakdepartemen']));
+            $this->session->set_userdata('hak_ttd_pb',arrdep($cek['cekpb']));
             $this->session->set_userdata('ttd',$cek['ttd']);
-
         }
 
         return $hasil;

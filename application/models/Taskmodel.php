@@ -9,13 +9,23 @@ class Taskmodel extends CI_Model
             if ($this->session->userdata('level_user') >= 2) {
                 $this->db->where('data_ok', 1);
                 $this->db->where('ok_valid', 0);
-                $this->db->where_in('dept_id', arrdep($this->session->userdata('hakdepartemen')));
+                if(count($this->session->userdata('hak_ttd_pb')) > 0){
+                    $this->db->where_in('dept_id', $this->session->userdata('hak_ttd_pb'));
+                }else{
+                    $this->db->where('data_ok',99);
+                }
             } else {
                 $this->db->where('data_ok', 99);
             }
         } else if ($mode == 'bbl') {
             // $this->db->where('data_ok',3);
-            switch ($this->session->userdata('ttd')) {
+            $ttdppic = 0;
+            $masuk = $this->session->userdata('ttd'); 
+            if(strtoupper($this->session->userdata('jabatan'))=='MANAGER' && in_array('PP',$this->session->userdata('arrdep'))){
+                $ttdppic = 1;
+                // $masuk = 1;
+            }
+            switch ($masuk) {
                 case 1:
                     $this->db->where('data_ok', 1);
                     $this->db->where('ok_pp', 0);
@@ -27,7 +37,11 @@ class Taskmodel extends CI_Model
                     break;
                 case 2:
                     $this->db->where('data_ok', 1);
-                    $this->db->where('ok_pp', 1);
+                    if($ttdppic==0){
+                        $this->db->where('ok_pp', 1);
+                    }else{
+                        $this->db->where('ok_pp !=', 2);
+                    }
                     $this->db->where('ok_valid', 0);
                     $this->db->where('ok_tuju', 0);
                     $this->db->where('ok_pc', 0);
