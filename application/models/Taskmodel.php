@@ -70,7 +70,10 @@ class Taskmodel extends CI_Model
                     $this->db->where('data_ok', 99);
                     break;
             }
-        } else {
+        } else if($mode == 'po') {
+            $this->db->where('data_ok', 1);
+            $this->db->where('ok_valid', 0);
+        }else { 
             $this->db->where('data_ok', 99);
         }
         $query = $this->db->get('tb_header');

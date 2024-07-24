@@ -29,6 +29,12 @@ $(document).ready(function () {
 	if (errosimpan == 1) {
 		pesan("Data detail masih ada yang kosong !", "kosong");
 	}
+	if (errosimpan == 2) {
+		pesan("Tidak terjadi perubahan pada data !", "error");
+	}
+	if (errosimpan == 3) {
+		pesan("Tidak terjadi perubahan pada data X !", "error");
+	}
 });
 // $("#tglpb").datepicker();
 
@@ -87,7 +93,7 @@ $("#tgldtbt").change(function () {
 	var isinya =
 		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
 	$("#loadertgldbt").html(isinya);
-	alert(tglmysql($("#tgldtbt").val()));
+	// alert(tglmysql($("#tgldtbt").val()));
 	$.ajax({
 		dataType: "json",
 		type: "POST",
@@ -321,6 +327,51 @@ $("#cekppn").click(function () {
 	updatekolomcekppn(xx);
 	updatekolomppn(dpp);
 });
+
+$("#header_po").focus(function () {
+	value_old = $(this).val();
+});
+$("#catatan1").focus(function () {
+	value_old = $(this).val();
+});
+$("#catatan2").focus(function () {
+	value_old = $(this).val();
+});
+$("#catatan3").focus(function () {
+	value_old = $(this).val();
+});
+$("#header_po").blur(function () {
+	updatekolom($("#id_header").val(), "catatan_po", "header_po", $(this).val());
+});
+$("#catatan1").blur(function () {
+	updatekolom($("#id_header").val(), "catatan_po", "catatan1", $(this).val());
+});
+$("#catatan2").blur(function () {
+	updatekolom($("#id_header").val(), "catatan_po", "catatan2", $(this).val());
+});
+$("#catatan3").blur(function () {
+	updatekolom($("#id_header").val(), "catatan_po", "catatan3", $(this).val());
+});
+function updatekolom(idx, tabel, kolom, isi) {
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "po/updatekolom/" + kolom,
+		data: {
+			isinya: isi,
+			tbl: tabel,
+			id: idx,
+		},
+		success: function (data) {
+			$("#loadertgldtbt").html("");
+			// window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
 function hitunggrandtotal() {
 	var jumlah = toAngka($("#totalharga").val());
 	var diskon = toAngka($("#diskon").val());
