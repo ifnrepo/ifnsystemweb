@@ -19,6 +19,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
+        <input type="text" id="errorsimpan" class="hilang" value="<?= $this->session->flashdata('errorsimpan'); ?>">
         <div id="sisipkan" class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
@@ -99,13 +100,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $jmlrek; ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
                   <td><?= $datdet['keterangan']; ?></td>
-                  <td class="text-center"><span style="color: white;">.</span>
+                  <td class="text-right"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'po/datapo/' . $datdet['id'] ?>" class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
                       <a href="#" data-href="<?= base_url() . 'po/hapuspo/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus PO <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
-                    <?php } else if ($datdet['data_ok'] == 1) { ?>
-                      <a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
-                      <a href="<?= base_url().'po/invoice/'.$datdet['id']; ?>" target='_blank' class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-print mr-1'></i> Cetak PO</a>
+                    <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0) { ?>
+                      <a href="#" data-href="<?= base_url() . 'po/editpo' . $datdet['id'] ?>" class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit PO <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'><i class='fa fa-refresh mr-1'></i> Edit PO</a>
+                      <a href="<?= base_url().'po/invoice/'.$datdet['id']; ?>" class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-print mr-1'></i> Cetak PO</a>
+                    <?php }else{ ?>
+                      PO disetujui Oleh : 
                     <?php } ?>
                   </td>
                 </tr>

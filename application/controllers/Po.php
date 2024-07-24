@@ -190,16 +190,11 @@ class Po extends CI_Controller
     public function invoice($id)
     {
         $header['header'] = 'transaksi';
-        // $data['level'] = $this->usermodel->getdatalevel();
-        // $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
-        // $data['dephak'] = $this->deptmodel->getdata();
-        // $kode = [
-        //     'jnpo' => $this->session->userdata('jn_po') == null ? 'DO' : $this->session->userdata('jn_po'),
-        // ];
-        // $data['data'] = $this->pomodel->getdata($kode);
+        $data['header'] = $this->pomodel->getdatabyid($id);
+        $data['detail'] = $this->pomodel->getdatadetailpo($id);
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
-        $this->load->view('po/invoice');
+        $this->load->view('po/invoice',$data);
         $this->load->view('layouts/footer', $footer);
     }
     public function addnobontr($id, $idbarang)
@@ -246,6 +241,14 @@ class Po extends CI_Controller
         $hasil = $this->pomodel->updatebykolom($data);
         echo $hasil;
     }
+    public function updatekolom($kolom){
+        $data = [
+            'id_header' => $_POST['id'],
+            $kolom => $_POST['isinya']
+        ];
+        $hasil = $this->pomodel->updatekolom($_POST['tbl'],$data,'id_header');
+        echo $hasil;
+    }
 
     public function simpanpo($id)
     {
@@ -276,6 +279,30 @@ class Po extends CI_Controller
         $query = $this->pomodel->hapuspo($id);
         if ($query) {
             $url = base_url() . 'po';
+            redirect($url);
+        }
+    }
+    public function editpo($id){
+        $cek = $this->pomodel->cekfield($id,'ok_valid',0);
+        if($cek==1){
+            $data = [
+                'data_ok' => 0,
+                'user_ok' => null,
+                'tgl_ok' => null,
+                'id' => $id
+            ];
+            $hasil = $this->pomodel->editpo($data);
+            if($hasil){
+                $url = base_url().'po';
+                redirect($url);
+            }else{
+                $this->session->set_flashdata('errorsimpan',3);
+                $url = base_url().'po';
+                redirect($url);
+            }
+        }else{
+            $this->session->set_flashdata('errorsimpan',2);
+            $url = base_url().'po';
             redirect($url);
         }
     }

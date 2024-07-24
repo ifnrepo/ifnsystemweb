@@ -97,6 +97,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
         <div class="row">
           <div class="col-sm-12">
+            <div class="p-2">
+            <textarea class="form-control form-sm font-kecil btn-flat" id="header_po" style="font-size: 14px;"><?= $data['header_po']; ?></textarea>
+            </div>
             <div id="table-default" class="table-responsive">
               <table class="table datatable6 table-hover" id="cobasisip">
                 <thead style="background-color: blue !important">
@@ -119,8 +122,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div class="row">
-          <div class="col-4"></div>
-          <div class="col-4"></div>
+          <div class="col-8">
+            <p class="mb-1">Catatan :</p>
+            <input type="text" class="form-control" id="catatan1" aria-label="Text input with dropdown button" placeholder="Catatan 1" value="<?= $data['catatan1']; ?>">
+            <input type="text" class="form-control mt-1" id="catatan2" aria-label="Text input with dropdown button" placeholder="Catatan 2" value="<?= $data['catatan2']; ?>">
+            <input type="text" class="form-control mt-1" id="catatan3" aria-label="Text input with dropdown button" placeholder="Catatan 2" value="<?= $data['catatan3']; ?>">
+          </div>
+          <!-- <div class="col-4"></div> -->
           <div class="col-4">
             <div class="row mt-1">
               <label class="col-3 col-form-label">Jumlah</label>

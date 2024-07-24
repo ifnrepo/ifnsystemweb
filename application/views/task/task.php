@@ -31,6 +31,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     echo 'selected';
                                   } ?>>BBL (Bon Permintaan Pembelian)</option>
               <?php endif; ?>
+              <?php  ?>
+              <option value="po" <?php if ($this->session->userdata('modetask') == 'po') {
+                                    echo 'selected';
+                                  } ?>>PO (Purchase Order)</option>
+              <?php  ?>
             </select>
             <button class="btn font-kecil font-bold btn-flat" id="gettask" type="button">Get !</button>
           </div>
