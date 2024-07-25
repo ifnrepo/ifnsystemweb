@@ -31,6 +31,7 @@ class Userappsmodel extends CI_Model
     {
         $data = $_POST;
         $data['aktif'] = isset($data['aktif']) ? 1 : 0;
+        $data['cekpo'] = isset($data['cekpo']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
@@ -66,10 +67,20 @@ class Userappsmodel extends CI_Model
                 unset($data[$dept['dept_id']]);
             }
         }
+        // Set hak tandatangan PB
+        $cekpb = '';
+        $datdept = $this->deptmodel->getdata_dept_pb();
+        foreach ($datdept as $dept) {
+            if (isset($data['X'.$dept['dept_id']])) {
+                $cekpb .= $dept['dept_id'];
+                unset($data['X'.$dept['dept_id']]);
+            }
+        }
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
         $data['manajemen'] = $manajemen;
         $data['hakdepartemen'] = $hakdepartemen;
+        $data['cekpb'] = $cekpb;
         $hasil = $this->db->insert('user', $data);
         return $hasil;
     }
@@ -77,6 +88,7 @@ class Userappsmodel extends CI_Model
     {
         $data = $_POST;
         $data['aktif'] = isset($data['aktif']) ? 1 : 0;
+        $data['cekpo'] = isset($data['cekpo']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master

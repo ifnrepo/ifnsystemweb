@@ -92,4 +92,10 @@ class Taskmodel extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
+    public function validasipo($data)
+    {
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        return $query;
+    }
 }

@@ -21,7 +21,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="card-body font-kecil">
         <form method="POST" action="<?= $action; ?>" id="formtambahuser" name="formtambahuser">
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Nama</label>
                 <div class="col">
@@ -117,6 +117,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col">Validator Purchase Order</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <?php $poaktif = $user['cekpo'] == 1 ? 'checked' : ''; ?>
+                          <input class="form-check-input" name="cekpo" id="cekpo" type="checkbox" <?= $poaktif; ?>>
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="hr mt-2 mb-1"></div>
               <div class="card-body pt-2">
                 <div class="row">
@@ -131,7 +147,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-7">
               <h4>Akses Modul</h4>
               <div class="row row-cards">
                 <div class="col">
@@ -155,6 +171,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-ceklispb" class="nav-link" data-bs-toggle="tab">Validasi PB</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#tabs-ceklisbbl" class="nav-link" data-bs-toggle="tab">Validasi BBL</a>
                         </li>
                       </ul>
                     </div>
@@ -309,42 +328,37 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                           </div>
                         </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row row-cards mt-1">
-                <div class="col">
-                  <div class="card">
-                    <h4 class="m-1">Validator BBL (Bon Pembelian Barang)</h4>
-                    <hr class="m-2" style="border-color: red;">
-                    <div class="mt-2 ml-3">
-                        <label class="form-check">
-                          <input class="form-check-input" type="radio" 
-    name="ttd" value="0" <?php if($user['ttd']==0){ echo "checked"; } ?>>
-                          <span class="form-check-label">NO TTD</span>
-                        </label>
-                        <label class="form-check">
-                          <input class="form-check-input" type="radio" 
-    name="ttd" value="1" <?php if($user['ttd']==1){ echo "checked"; } ?>>
-                          <span class="form-check-label">MANAGER PPIC (Mengetahui)</span>
-                        </label>
-                        <label class="form-check">
-                          <input class="form-check-input" type="radio" 
-    name="ttd" value="2" <?php if($user['ttd']==2){ echo "checked"; } ?>>
-                          <span class="form-check-label">MANAGER PRODUKSI / NON (APPROVER)</span>
-                        </label>
-                        <label class="form-check">
-                          <input class="form-check-input" type="radio" 
-    name="ttd" value="3" <?php if($user['ttd']==3){ echo "checked"; } ?>>
-                          <span class="form-check-label">GM PRODUKSI / NON (RELEASER)</span>
-                        </label>
-                        <label class="form-check">
-                          <input class="form-check-input" type="radio" 
-    name="ttd" value="4" <?php if($user['ttd']==4){ echo "checked"; } ?>>
-                          <span class="form-check-label">MANAGER PURCHASING</span>
-                        </label>
+                        <div class="tab-pane" id="tabs-ceklisbbl">
+                          <div class="row">
+                            <div class="col-6">
+                             <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="0" <?php if($user['ttd']==0){ echo "checked"; } ?>>
+                                <span class="form-check-label">NO TTD</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="1" <?php if($user['ttd']==1){ echo "checked"; } ?>>
+                                <span class="form-check-label">MANAGER PPIC (Mengetahui)</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="2" <?php if($user['ttd']==2){ echo "checked"; } ?>>
+                                <span class="form-check-label">MANAGER PRODUKSI / NON (APPROVER)</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="3" <?php if($user['ttd']==3){ echo "checked"; } ?>>
+                                <span class="form-check-label">GM PRODUKSI / NON (RELEASER)</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="4" <?php if($user['ttd']==4){ echo "checked"; } ?>>
+                                <span class="form-check-label">MANAGER PURCHASING</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
