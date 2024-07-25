@@ -40,6 +40,7 @@ class Userapps extends CI_Controller
 		$data['data'] = $this->userappsmodel->getdata();
 		$data['daftardept'] = $this->deptmodel->getdata();
 		$data['jmldept'] = $this->deptmodel->jmldept();
+		$data['deptpb'] = $this->deptmodel->getdata_dept_pb();
 		$data['dept'] = $this->db->get('dept')->result_array();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$footer['fungsi'] = 'userapps';
