@@ -113,9 +113,13 @@ class Dept_model extends CI_Model
         return $this->db->delete('dept');
     }
 
-    public function getdata_dept_bbl()
+    public function getdata_dept_bbl($mode=0)
     {
-        $this->db->select('*');
+        if($mode==1){
+            $this->db->select('dept_id');
+        }else{
+            $this->db->select('*');
+        }
         $this->db->from('dept');
         $this->db->where('bbl', '1');
         return $this->db->order_by('departemen','ASC')->get()->result_array();

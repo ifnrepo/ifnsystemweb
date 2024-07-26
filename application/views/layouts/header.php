@@ -177,7 +177,7 @@
   <div class="modal modal-blur fade" id="modal-largescroll" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-info">
           <h5 class="modal-title">Large modal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -476,6 +476,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po/clear'); ?>">
                       PO (Purchase Order)
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 7); ?>" href="<?= base_url('ib/clear'); ?>">
+                      IB (Penerimaan Barang)
+                    </a>
                   </div>
                 </div>
               </div>
@@ -591,7 +594,9 @@
           </div>
         </div>
         <div class="collapse navbar-collapse" id="navbar-menu">
-
+          <div id="loadview">
+            <!-- <div class="spinner-border spinner-border-sm text-secondary" role="status"></div> -->
+          </div>
         </div>
       </div>
     </header>
