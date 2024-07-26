@@ -294,7 +294,7 @@
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
         </button>
-        <h1 class="navbar-brand">
+        <h1 class="navbar-brand d-print-none">
           <a href="<?= base_url(); ?>">
             <img src=<?= base_url() . "assets/image/logodepan.png" ?> width="100" height="30" alt="IFN" class="navbar-brand-image">
           </a>
@@ -323,7 +323,7 @@
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
-                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan'); ?></div>
+                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan').' / '.$this->session->userdata('dept_user') ?></div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -360,7 +360,7 @@
                                 } ?>">
               <a class="nav-link <?php if (isset($header) && $header == 'pendingtask') {
                                     echo 'active';
-                                  } ?>" href="<?= base_url() . 'task'; ?>">
+                                  } ?>" href="<?= base_url() . 'task/clear'; ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-checklist">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -577,7 +577,7 @@
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
-                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan'); ?></div>
+                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan').' / '.$this->session->userdata('dept_user'); ?></div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

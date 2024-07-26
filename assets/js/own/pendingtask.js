@@ -1,5 +1,6 @@
 $(document).ready(function () {
 	// $("#gettask").click();
+	// alert("OK");
 });
 
 $("#gettask").click(function () {

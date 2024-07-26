@@ -72,6 +72,7 @@ class Auth extends CI_Controller
                 $this->session->set_userdata($user_data);
 
                 $this->session->set_userdata('arrdep',arrdep($user['hakdepartemen']));
+                $this->session->set_userdata('hak_ttd_pb',arrdep($user['cekpb']));
                 $this->session->set_userdata('bl',date('m'));
                 $this->session->set_userdata('th',date('Y'));
 
