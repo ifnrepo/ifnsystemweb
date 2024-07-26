@@ -125,6 +125,19 @@ function nomorpo()
     $urut++;
     return "PO/" . $jnpo. $bl . $thp . "/" . sprintf("%03s", $urut);
 }
+function nomorib()
+{
+    $CI = &get_instance();
+    $tgl = $CI->session->userdata('th') . '-' . kodebulan($CI->session->userdata('bl')) . '-01';
+    $bl = date('m', strtotime($tgl));
+    $th = date('Y', strtotime($tgl));
+    $thp = date('y', strtotime($tgl));
+    $deptr = $CI->session->userdata('depttuju');
+    $kode = $CI->ibmodel->getnomorib($bl, $th);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return "SU-" . $deptr.'/P/'. $bl . $thp . "/" . sprintf("%03s", $urut);
+}
 function tglmysql($tgl)
 {
     if ($tgl == '') {
