@@ -89,11 +89,11 @@ class Ib_model extends CI_Model
         $this->db->trans_start();
         $this->db->where('id', $id);
         $query = $this->db->get('tb_header')->row_array();
-        if($query){
-            $this->db->where('id_header',$id);
+        if ($query) {
+            $this->db->where('id_header', $id);
             $cekdetail = $this->db->get('tb_detail')->result_array();
             foreach ($cekdetail as $cekdata) {
-                $this->db->where('id_ib',$cekdata['id']);
+                $this->db->where('id_ib', $cekdata['id']);
                 $this->db->update('tb_detail', ['id_ib' => 0]);
             }
             $this->db->where('id_header', $id);
@@ -106,56 +106,63 @@ class Ib_model extends CI_Model
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
-    public function updatebykolom($data){
-        $this->db->where('id',$data['id']);
-        $hasil = $this->db->update('tb_header',$data);
+    public function updatebykolom($data)
+    {
+        $this->db->where('id', $data['id']);
+        $hasil = $this->db->update('tb_header', $data);
         return $hasil;
     }
-    public function updatekolom($tabel,$data,$kolom){
-        $this->db->where($kolom,$data['id_header']);
+    public function updatekolom($tabel, $data, $kolom)
+    {
+        $this->db->where($kolom, $data['id_header']);
         unset($data['id_header']);
-        $hasil = $this->db->update($tabel,$data);
+        $hasil = $this->db->update($tabel, $data);
         return $hasil;
     }
-    public function getbarangib($sup=''){
+    public function getbarangib($sup = '')
+    {
         $this->db->select('*,tb_detail.id as iddetbbl');
         $this->db->from('tb_detail');
-        $this->db->join('tb_header a','a.id = tb_detail.id_header','left');
-        $this->db->join('barang b','b.id = tb_detail.id_barang','left');
-        $this->db->where('a.id_perusahaan',IDPERUSAHAAN);
-        $this->db->where('a.data_ok',1);
-        $this->db->where('a.ok_valid',1);
-        $this->db->where('a.ok_tuju',0);
-        $this->db->where('a.ok_pp',0);
-        $this->db->where('a.ok_pc',0);
-        $this->db->where('a.kode_dok','PO');
-        $this->db->where('id_ib',0);
-        $this->db->where('id_pemasok',$sup);
+        $this->db->join('tb_header a', 'a.id = tb_detail.id_header', 'left');
+        $this->db->join('barang b', 'b.id = tb_detail.id_barang', 'left');
+        $this->db->where('a.id_perusahaan', IDPERUSAHAAN);
+        $this->db->where('a.data_ok', 1);
+        $this->db->where('a.ok_valid', 1);
+        $this->db->where('a.ok_tuju', 0);
+        $this->db->where('a.ok_pp', 0);
+        $this->db->where('a.ok_pc', 0);
+        $this->db->where('a.kode_dok', 'PO');
+        $this->db->where('id_ib', 0);
+        // $this->db->where('dept_tuju', 0);
+        $this->db->where('id_pemasok', $sup);
         return $this->db->get();
     }
-    public function getbarangibl(){
+    public function getbarangibl()
+    {
         $this->db->select('*,tb_detail.id as iddetbbl');
         $this->db->from('tb_detail');
-        $this->db->join('tb_header a','a.id = tb_detail.id_header','left');
-        $this->db->join('barang b','b.id = tb_detail.id_barang','left');
-        $this->db->where('a.id_perusahaan',IDPERUSAHAAN);
-        $this->db->where('a.data_ok',1);
-        $this->db->where('a.ok_valid',1);
-        $this->db->where('a.ok_tuju',1);
-        $this->db->where('a.ok_pp',1);
-        $this->db->where('a.ok_pc',1);
-        $this->db->where('a.kode_dok','BBL');
-        $this->db->where('id_po',0);
+        $this->db->join('tb_header a', 'a.id = tb_detail.id_header', 'left');
+        $this->db->join('barang b', 'b.id = tb_detail.id_barang', 'left');
+        $this->db->where('a.id_perusahaan', IDPERUSAHAAN);
+        $this->db->where('a.data_ok', 1);
+        $this->db->where('a.ok_valid', 1);
+        $this->db->where('a.ok_tuju', 1);
+        $this->db->where('a.ok_pp', 1);
+        $this->db->where('a.ok_pc', 1);
+        $this->db->where('a.kode_dok', 'BBL');
+        $this->db->where('a.dept_id', $this->session->userdata('depttuju'));
+        $this->db->where('id_po', 0);
         return $this->db->get();
     }
 
-    public function adddetailib($data){
+    public function adddetailib($data)
+    {
         $jumlah = count($data['data']);
         $id = $data['id'];
         $this->db->trans_start();
-        for($x=0;$x<$jumlah;$x++){
+        for ($x = 0; $x < $jumlah; $x++) {
             $arrdat = $data['data'];
-            $detail = $this->db->where('id',$arrdat[$x])->get('tb_detail')->row_array();
+            $detail = $this->db->where('id', $arrdat[$x])->get('tb_detail')->row_array();
             $isi = [
                 'id_header' => $id,
                 'seri_barang' => $x,
@@ -164,32 +171,33 @@ class Ib_model extends CI_Model
                 'kgs' => $detail['kgs'],
                 'pcs' => $detail['pcs']
             ];
-            $this->db->insert('tb_detail',$isi);
+            $this->db->insert('tb_detail', $isi);
             $idsimpan = $this->db->insert_id();
-            $this->db->where('id',$arrdat[$x])->update('tb_detail',['id_ib'=>$idsimpan]);
-            $itembarang = $this->db->where('id_header',$id)->get('tb_detail')->num_rows();
-            $this->db->where('id',$id)->update('tb_header',['jumlah_barang'=>$itembarang]);
+            $this->db->where('id', $arrdat[$x])->update('tb_detail', ['id_ib' => $idsimpan]);
+            $itembarang = $this->db->where('id_header', $id)->get('tb_detail')->num_rows();
+            $this->db->where('id', $id)->update('tb_header', ['jumlah_barang' => $itembarang]);
         }
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
-    public function hapusdetailib($id){
-        $detail = $this->db->where('id_ib',$id)->get('tb_detail')->row_array();
-        $xdetail = $this->db->where('id',$id)->get('tb_detail')->row_array();
+    public function hapusdetailib($id)
+    {
+        $detail = $this->db->where('id_ib', $id)->get('tb_detail')->row_array();
+        $xdetail = $this->db->where('id', $id)->get('tb_detail')->row_array();
         $this->db->trans_start();
-        $this->db->where('id',$detail['id']);
-        $this->db->update('tb_detail',['id_ib'=>0]);
-        $this->db->where('id',$id);
+        $this->db->where('id', $detail['id']);
+        $this->db->update('tb_detail', ['id_ib' => 0]);
+        $this->db->where('id', $id);
         $this->db->delete('tb_detail');
-        $itembarang = $this->db->where('id_header',$xdetail['id_header'])->get('tb_detail')->num_rows();
-        $this->db->where('id',$xdetail['id_header'])->update('tb_header',['jumlah_barang'=>$itembarang]);
+        $itembarang = $this->db->where('id_header', $xdetail['id_header'])->get('tb_detail')->num_rows();
+        $this->db->where('id', $xdetail['id_header'])->update('tb_header', ['jumlah_barang' => $itembarang]);
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
     //End IB Models
 
 
-    
+
     public function getdetailpobyid($data)
     {
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
@@ -205,9 +213,9 @@ class Ib_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
-    
 
-    
+
+
 
 
 
@@ -218,22 +226,25 @@ class Ib_model extends CI_Model
         $query = $this->db->update('tb_detail', $data);
         return $query;
     }
-    public function updatesupplier($data){
-        $this->db->where('id',$data['id']);
-        $hasil = $this->db->update('tb_header',['id_pemasok' => $data['id_supplier']]);
+    public function updatesupplier($data)
+    {
+        $this->db->where('id', $data['id']);
+        $hasil = $this->db->update('tb_header', ['id_pemasok' => $data['id_supplier']]);
         return $hasil;
     }
-    
 
-    public function updatehargadetail($data){
-        $this->db->where('id',$data['id']);
-        $hasil = $this->db->update('tb_detail',$data);
+
+    public function updatehargadetail($data)
+    {
+        $this->db->where('id', $data['id']);
+        $hasil = $this->db->update('tb_detail', $data);
         return $hasil;
     }
-    public function cekdetail($id){
+    public function cekdetail($id)
+    {
         $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
         $this->db->from('tb_detail');
-        $this->db->where('id_header',$id);
+        $this->db->where('id_header', $id);
         return $this->db->get()->row_array();
     }
     public function simpanpo($data)
@@ -244,14 +255,16 @@ class Ib_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
-    public function editpo($data){
-        $this->db->where('id',$data['id']);
-        $hasil = $this->db->update('tb_header',$data);
+    public function editpo($data)
+    {
+        $this->db->where('id', $data['id']);
+        $hasil = $this->db->update('tb_header', $data);
         return $hasil;
     }
-    public function cekfield($id,$kolom,$nilai){
-        $this->db->where('id',$id);
-        $this->db->where($kolom,$nilai);
+    public function cekfield($id, $kolom, $nilai)
+    {
+        $this->db->where('id', $id);
+        $this->db->where($kolom, $nilai);
         $hasil = $this->db->get('tb_header');
         return $hasil;
     }
