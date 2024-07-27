@@ -96,11 +96,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <a href="<?= base_url() . 'ib/dataib/' . $datdet['id'] ?>" class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
                       <a href="#" data-href="<?= base_url() . 'ib/hapusib/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus IB <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0) { ?>
-                      <a href="#" data-href="<?= base_url() . 'po/editpo/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit PO <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'><i class='fa fa-refresh mr-1'></i> Edit PO</a>
-                      <a href="<?= base_url().'po/invoice/'.$datdet['id']; ?>" class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-print mr-1'></i> Cetak PO</a>
-                    <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Disetujui :'; ?>
+                      <a href="#" data-href="<?= base_url() . 'ib/editib/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' style='padding: 3px 8px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit IB <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'><i class='fa fa-refresh mr-1'></i> Edit Penerimaan</a>
+                    <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>
                       <?= $katakata.datauser($datdet['user_valid'], 'name') ?><br>
-                      <span style='font-size: 11px;'><?= ' on '.tglmysql2($datdet['tgl_ok']) ?></span>
+                      <span style='font-size: 11px;'><?= ' on '.tglmysql2($datdet['tgl_valid']) ?></span>
                     <?php } ?>
                   </td>
                 </tr>

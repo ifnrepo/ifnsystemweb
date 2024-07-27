@@ -16,6 +16,7 @@ class In extends CI_Controller {
         $this->load->model('dept_model','deptmodel');
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel','usermodel');
+        $this->load->model('helper_model','helpermodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';

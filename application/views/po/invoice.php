@@ -171,9 +171,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <?php for($x=1;$x<=3;$x++){ ?>
                 <?php if($x==2){ ?>
                   <li>Setiap Supplier wajib mentaati aturan K3LH dari PT. Indoneptune Net Manufacturing</li>
-                <?php }else{ $y = $x>2 ? $x-1 : $x; ?>
+                <?php }else{ $y = $x>2 ? $x-1 : $x; if($header['catatan'.$y]!=''): ?>
                   <li><?= $header['catatan'.$y]; ?></li>
-                <?php }} ?>
+                <?php endif; }} ?>
               </ul>
             </td>
           </tr>

@@ -109,7 +109,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <a href="<?= base_url().'po/invoice/'.$datdet['id']; ?>" class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-print mr-1'></i> Cetak PO</a>
                     <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Disetujui :'; ?>
                       <?= $katakata.datauser($datdet['user_valid'], 'name') ?><br>
-                      <span style='font-size: 11px;'><?= ' on '.tglmysql2($datdet['tgl_ok']) ?></span>
+                      <span style='font-size: 11px;'><?= ' on '.tglmysql2($datdet['tgl_valid']) ?></span>
                     <?php } ?>
                   </td>
                 </tr>
