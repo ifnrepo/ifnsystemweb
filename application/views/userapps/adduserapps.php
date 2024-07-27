@@ -243,6 +243,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="transaksi6" name="transaksi6" type="checkbox">
                                 <span class="form-check-label">PO (PURCHASE ORDER)</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi7" name="transaksi7" type="checkbox">
+                                <span class="form-check-label">IB (PENERIMAAN BARANG)</span>
+                              </label>
                               <!-- xx -->
                             </div>
                           </div>
