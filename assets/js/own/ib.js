@@ -33,7 +33,7 @@ $(document).ready(function () {
 		);
 	}
 	if (errosimpan == 2) {
-		pesan("Tidak terjadi perubahan pada data !", "error");
+		pesan("Ada Error Program, Hubungi Administrator Aplikasi !", "error");
 	}
 	if (errosimpan == 3) {
 		pesan("Tidak terjadi perubahan pada data X !", "error");
@@ -209,7 +209,8 @@ function getdatadetailib() {
 			$("#body-table").html(data.datagroup).show();
 			// $("#totalharga").val(rupiah(data.totalharga, ".", ",", 2));
 			if (data.jmlrek > 0) {
-				$("#jn_ib").addClass("disabled");
+				$("#jn_ib").attr("disabled", true);
+				$("#pilihsup").addClass("disabled");
 			}
 			// hitunggrandtotal();
 		},
@@ -219,6 +220,21 @@ function getdatadetailib() {
 		},
 	});
 }
+$("#xsimpanib").click(function () {
+	if ($("#nomor_sj").val() == "" || $("#tgl_sj").val() == "") {
+		pesan("Nomor/Tgl Surat jalan belum diisi !", "info");
+		return false;
+	}
+	if ($("#nomor_aju").val() == "" || $("#tgl_aju").val() == "") {
+		pesan("Nomor/Tgl AJU belum di isi !", "info");
+		return false;
+	}
+	if ($("#totalharga").val() == "") {
+		pesan("Harga ada yang kosong !", "info");
+		return false;
+	}
+	$("#carisimpanib").click();
+});
 //End IB JS
 $("#dept_kirim").change(function () {
 	$.ajax({
@@ -407,21 +423,7 @@ $("#carisupplier").click(function () {
 	$("#tglpo").click();
 	// alert('OKE');
 });
-$("#xsimpanpo").click(function () {
-	if ($("#jn_pembayaran").val() == "") {
-		pesan("Jenis pembayaran belum dipilih !", "info");
-		return false;
-	}
-	if ($("#mt_uang").val() == "") {
-		pesan("Mata Uang belum dipilih !", "info");
-		return false;
-	}
-	if ($("#totalharga").val() == "") {
-		pesan("Harga ada yang kosong !", "info");
-		return false;
-	}
-	$("#carisimpanpo").click();
-});
+
 $("#diskon").focus(function () {
 	value_old = toAngka($(this).val());
 });
