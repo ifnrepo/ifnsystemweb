@@ -63,6 +63,47 @@ $("#bl").change(function () {
 $("#th").change(function () {
 	$("#bl").change();
 });
+$(document).on("click", "#verifikasirekord", function () {
+	var rel = $(this).attr("rel");
+	var jmlverif = $("#jmlverif").val();
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "in/verifikasirekord",
+		data: {
+			id: rel,
+		},
+		success: function (data) {
+			// alert(data[0]["name"]);
+			$("#" + rel).html(
+				"<div class='text-primary line-12' style='font-size: 11px !important;'>Verifikasi :" +
+					data[0]["name"] +
+					"<br>" +
+					data["0"]["verif_tgl"] +
+					"</div>",
+			);
+			$("#jmlverif").val(parseFloat(jmlverif) + 1);
+			$("#infoverif").html(
+				"Verifikasi : " + $("#jmlverif").val() + "/" + $("#jmlrek").val(),
+			);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
+$("#xsimpanin").click(function () {
+	var rekord = $("#jmlrek").val();
+	var verif = $("#jmlverif").val();
+	if (rekord != verif) {
+		pesan("Semua rekord harus diverifikasi !", "error");
+		return false;
+	} else {
+		$("#carisimpanin").click();
+	}
+});
+//End JS
 function getdatain() {
 	$.ajax({
 		dataType: "json",

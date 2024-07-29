@@ -82,7 +82,7 @@ class Userappsmodel extends CI_Model
         $data['manajemen'] = $manajemen;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
-        $data['cekpc'] = $cekpc;
+        // $data['cekpc'] = $cekpc;
         $hasil = $this->db->insert('user', $data);
         return $hasil;
     }
@@ -152,7 +152,7 @@ class Userappsmodel extends CI_Model
         $data['manajemen'] = $manajemen;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
-        $data['cekpc'] = $cekpc;
+        // $data['cekpc'] = $cekpc;
 
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('user', $data);

@@ -25,6 +25,7 @@
                     <th>Satuan</th>
                     <th>Qty</th>
                     <th>Kgs</th>
+                    <th>Verifikasi</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
@@ -35,11 +36,24 @@
                         <td><?= $val['namasatuan']; ?></td>
                         <td><?= rupiah($val['pcs'],0); ?></td>
                         <td><?= rupiah($val['kgs'],2); ?></td>
+                        <td>
+                            <?php if($val['verif_oleh']!=null): ?>
+                                <i class="fa fa-check text-primary"></i>
+                                <?= substr(datauser($val['verif_oleh'],'name'),0,15); ?>
+                            <?php endif; ?>
+                        </td>
                     </tr>
                 <?php } ?>
                 </tbody>
             </table>
-            <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
+            <div class="row">
+                <div class="col-sm-6 font-bold bg-warning p-1">
+                    Dikonfirmasi oleh :<br> <?= datauser($header['user_valid'],'name'); ?><br><?= $header['tgl_valid']; ?>
+                </div>
+                <div class="col-sm-6">
+                    <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
+                </div>
+            </div>
         </div>
     </div>
     <hr class="m-1">
