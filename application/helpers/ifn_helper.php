@@ -286,12 +286,16 @@ function namabulanpendek($id)
     return $bulan[(int)$id];
 }
 function datauser($kode, $kolom)
-{
-    if ($kode != '') {
+{   
+    $kore = '';
+    if ($kode == '' || $kode == 0) {
+        $kore = '';
+    }else{
         $CI = &get_instance();
-        $kode = $CI->usermodel->getdatabyid($kode)->row_array();
-        return $kode[$kolom];
+        $kodex = $CI->usermodel->getdatabyid($kode)->row_array();
+        $kore = $kodex[$kolom];
     }
+    return $kore;
 }
 function kodebulan($bl)
 {

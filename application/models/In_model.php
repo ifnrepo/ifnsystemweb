@@ -5,26 +5,129 @@ class In_model extends CI_Model{
             'id_perusahaan'=>IDPERUSAHAAN,
             'dept_tuju' => $kode['dept_id'],
             'dept_id' => $kode['dept_tuju'],
-            'kode_dok' => 'T',
+            // 'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th')
+            'year(tgl)' => $this->session->userdata('th'),
+            'data_ok' => 1,
+            // 'ok_valid' => 0
         ];
+        $kondisi = " (kode_dok='T' OR kode_dok = 'IB')";
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->where($arrkondisi);
+        // $this->db->where('kode_dok','T');
+        $this->db->where($kondisi);
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
+    public function getdatabyid($kode){
+        $this->db->select('*,tb_header.id as xid');
+        $this->db->from('tb_header');
+        $this->db->join('dept a','a.dept_id=tb_header.dept_id','left');
+        $this->db->join('dept b','b.dept_id=tb_header.dept_tuju','left');
+        $this->db->join('supplier c','c.id=tb_header.id_pemasok','left');
+        $this->db->where('tb_header.id',$kode);
+        $query = $this->db->get()->row_array();
+        return $query;
+    }
+    public function getdatadetail($data){
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
+        $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
+        $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
+        $this->db->from('tb_detail a');
+        $this->db->join('satuan b','b.id = a.id_satuan','left');
+        $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->where('a.id_header',$data);
+        return $this->db->get()->result_array();
+    }
+    public function resetin($id){
+        $this->db->trans_start();
+        $this->db->where('id_header',$id);
+        $this->db->update('tb_detail',['verif_oleh'=>null,'verif_tgl'=>null]);
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+    public function verifikasirekord($id){
+        $cek = $this->helpermodel->cekkolom($id,'verif_oleh',null,'tb_detail')->row_array();
+        if($cek==0){
+            $this->session->set_flashdata('errorsimpan',1);
+            return false;
+        }else{
+            $data = [
+                'verif_oleh' => $this->session->userdata('id'),
+                'verif_tgl' => date('Y-m-d H:i:s')
+            ];
+            $this->db->where('id',$id);
+            $this->db->update('tb_detail',$data);
+            $this->db->select('tb_detail.*,user.name');
+            // $this->db->from('tb_detail');
+            $this->db->join('user','tb_detail.verif_oleh=user.id','left');
+            $query = $this->db->get_where('tb_detail',['tb_detail.id'=>$id]);
+            return $query->result();
+        }
+    }
+    public function simpanin($id){
+        $this->db->trans_start();
+        $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
+        if($cek==1){
+            $this->db->select('*');
+            $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
+            $this->db->where('id_header',$id);
+            $detail = $this->db->get('tb_detail')->result_array();
+            foreach($detail as $det){
+                $kondisistok = [
+                    'tgl' => $det['tgl'],
+                    'dept_id' => $det['dept_tuju'],
+                    'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
+                    'nobontr' => $det['nomor_dok'],
+                    'id_barang' => $det['id_barang'],
+                    'harga' => $det['harga'] 
+                ];
+                $this->db->where($kondisistok);
+                $adaisi = $this->db->get('stokdept');
+                if($adaisi->num_rows()==0){
+                    $kondisi = [
+                    'tgl' => $det['tgl'],
+                    'dept_id' => $det['dept_tuju'],
+                    'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
+                    'nobontr' => $det['nomor_dok'],
+                    'id_barang' => $det['id_barang'],
+                    'harga' => $det['harga'],
+                    'pcs_masuk' => $det['pcs'],
+                    'pcs_akhir' => $det['pcs'],
+                    'kgs_masuk' => $det['kgs'],
+                    'kgs_akhir' => $det['kgs'],
+                    ];
+                    $this->db->insert('stokdept',$kondisi);
+                    $cekid = $this->db->insert_id();
+                }else{
+                    $detil = $adaisi->row_array();
+                    $this->db->set('pcs_masuk','pcs_masuk +'.$det['pcs'],false);
+                    $this->db->set('kgs_masuk','kgs_masuk +'.$det['kgs'],false);
+                    $this->db->set('pcs_akhir','pcs_akhir +'.$det['pcs'],false);
+                    $this->db->set('kgs_akhir','kgs_akhir +'.$det['kgs'],false);
+                    $this->db->where('id',$detil['id']);
+                    $this->db->update('stokdept');
+                }
+            }
+            $dataubah = [
+                'ok_valid' => 1,
+                'user_valid' => $this->session->userdata('id'),
+                'tgl_valid' => date('Y-m-d H:i:s')
+            ];
+            $this->db->where('id',$id);
+            $this->db->update('tb_header',$dataubah);
+        }
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+    // END In Model
     public function konfirmasi($data){
         $this->db->where('id',$data['id']);
         $query = $this->db->update('tb_header',$data);
         return $query;
     }
-    public function getdatabyid($kode){
-        $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
-        $query = $this->db->get_where('tb_header',['id'=>$kode]);
-        return $query->row_array();
-    }
+
     public function getdepttuju($kode){
         $xkode = [];
         $hasil = [];
@@ -75,16 +178,7 @@ class In_model extends CI_Model{
         $this->db->trans_complete();
         return $dataheader['id'];
     }
-    public function getdatadetailout($data){
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
-        $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
-        $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
-        $this->db->from('tb_detail a');
-        $this->db->join('satuan b','b.id = a.id_satuan','left');
-        $this->db->join('barang c','c.id = a.id_barang','left');
-        $this->db->where('a.id_header',$data);
-        return $this->db->get()->result_array();
-    }
+    
     public function getdatadetailoutbyid($data){
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
