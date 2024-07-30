@@ -36,9 +36,25 @@ class Out_model extends CI_Model{
         }
         return $hasil;
     }
-    public function getbon($kode){
-        $this->db->where($kode);
-        $query = $this->db->get('tb_header');
+    public function getbon(){
+        $kondisi = [
+            'b.dept_id' => $this->session->userdata('tujusekarang'),
+            'b.dept_tuju' => $this->session->userdata('deptsekarang'),
+            'b.kode_dok' => 'PB',
+            'a.id_out' => 0,
+            'b.data_ok' => 1,
+            'b.ok_valid' => 1,
+            'b.ok_tuju' => 0,
+            'month(b.tgl) <=' => $this->session->userdata('bl'),
+            'year(b.tgl) <=' => $this->session->userdata('th')
+        ];
+        $this->db->select('*,a.id as idx');
+        $this->db->from('tb_detail a');
+        $this->db->join('tb_header b','b.id = a.id_header','left');
+        $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->where($kondisi);
+        $this->db->order_by('b.tgl','DESC');
+        $query = $this->db->get();
         return $query->result_array();
     }
     public function getnomorout($bl,$th,$asal,$tuju){
@@ -60,15 +76,21 @@ class Out_model extends CI_Model{
         ];
         $this->db->insert('tb_header',$tambah);
         $dataheader = $this->db->get_where('tb_header',['nomor_dok'=>$nomordok])->row_array();
-        $query = $this->db->get_where('tb_detail',['id_header'=>$kode])->result_array();
-        foreach($query as $que){
+        $jumlah = count($kode['data']);
+        for($x=0;$x<$jumlah;$x++){
+            $arrdat = $kode['data'];
+            $que = $this->db->get_where('tb_detail',['id'=>$arrdat[$x]])->row_array();
             $que['id_minta'] = $que['id']; 
             unset($que['id']);
             $que['id_header'] = $dataheader['id'];
             $this->db->insert('tb_detail',$que);
+            $idnya = $this->db->insert_id();
+
+            $this->db->where('id',$arrdat[$x]);
+            $this->db->update('tb_detail',['id_out'=>$idnya]);
         }
-        $this->db->where('id',$kode);
-        $this->db->update('tb_header',['id_keluar' => $dataheader['id']]);
+        // $this->db->where('id',$kode['id_header']);
+        // $this->db->update('tb_header',['id_keluar' => $dataheader['id']]);
         $this->db->trans_complete();
         return $dataheader['id'];
     }
@@ -157,11 +179,30 @@ class Out_model extends CI_Model{
                 }
             }
             $no++;
-            $kondisi = [
-                'id_barang' => $datdet['id_barang'],
-                'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
-                'dept_id' => $this->session->userdata('deptsekarang')
-            ];
+            if($this->session->userdata('deptsekarang')=='GS'){
+                $kondisi = [
+                    'po' => $datdet['po'],
+                    'item' => $datdet['item'],
+                    'dis' => $datdet['dis'],
+                    'id_barang' => $datdet['id_barang'],
+                    'dept_id' => $this->session->userdata('deptsekarang'),
+                    'dl' => $datdet['dl'],
+                    'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+                ];
+            }else{
+                $kondisi = [
+                    'po' => $datdet['po'],
+                    'item' => $datdet['item'],
+                    'dis' => $datdet['dis'],
+                    'id_barang' => $datdet['id_barang'],
+                    'dept_id' => $this->session->userdata('deptsekarang'),
+                    'insno' => $datdet['insno'],
+                    'nobontr' => $datdet['nobontr'],
+                    'dl' => $datdet['dl'],
+                    'nobale' => $datdet['nobale'],
+                    'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+                ];
+            }
             $this->db->select('stokdept.*,sum(stokdept.pcs_akhir) as xpcs_akhir,sum(stokdept.kgs_akhir) as xkgs_akhir');
             $this->db->from('stokdept');
             $this->db->where($kondisi);
@@ -169,19 +210,28 @@ class Out_model extends CI_Model{
             // $cekdata = $this->db->get_where('stokdept',$kondisi);
             $jmll = $cekdata->num_rows();
             $deta = $cekdata->row_array();
+            echo $deta['xpcs_akhir'];
+            echo $datdet['pcs'];
             if($datdet['pcs'] > 0 || $datdet['kgs'] > 0){
-                if((($deta['xpcs_akhir'] >= $datdet['pcs']) || ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
+                if((($deta['xpcs_akhir'] >= $datdet['pcs']) && ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
                     $pcsnya = $datdet['pcs'] > 0 ? $datdet['pcs'] : $datdet['kgs'];
                     $pcsasli = $datdet['pcs'];
                     $kgsasli = $datdet['kgs'];
                     $loopke = 0;
                     do {
                         $loopke += 1;
-                        $where = "id_barang = ".$datdet['id_barang']." AND periode = '".kodebulan($this->session->userdata('bl')).$this->session->userdata('th')."' AND 
-                        (pcs_akhir > 0 OR kgs_akhir > 0)";
-                        $this->db->where($where);
+                        $this->db->where($kondisi);
+                        $this->db->group_start();
+                        $this->db->where('pcs_akhir > ',0);
+                        $this->db->or_where('kgs_akhir > ',0);
+                        $this->db->group_end();
                         $arrstokdept = $this->db->order_by('tgl,urut')->get('stokdept')->row_array();
-                        $nobontr= $this->session->userdata('currdept')=='GS' ? $arrstokdept['nobontr'] : $datdet['nobontr'];
+                        if($this->session->userdata('deptsekarang')=='GS'){
+                            $nobontr = $arrstokdept['nobontr'];
+                        }else{
+                            $nobontr = $datdet['nobontr'];
+                        }
+                        // echo print_r($datdet);
                         $stokid=$arrstokdept['id'];
                         if(($pcsasli > $arrstokdept['pcs_akhir']) || ($kgsasli > $arrstokdept['kgs_akhir'])){
                             $kurangpcs = $arrstokdept['pcs_akhir'];

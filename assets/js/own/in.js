@@ -103,6 +103,9 @@ $("#xsimpanin").click(function () {
 		$("#carisimpanin").click();
 	}
 });
+$("#butgo").click(function () {
+	$("#dept_kirim").change();
+});
 //End JS
 function getdatain() {
 	$.ajax({

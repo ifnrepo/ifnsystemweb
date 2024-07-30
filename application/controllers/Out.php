@@ -124,26 +124,26 @@ class Out extends CI_Controller {
         echo json_encode($cocok);
     }
     public function tambahdata(){
-        $kondisi = [
-            'dept_id' => $this->session->userdata('tujusekarang'),
-            'dept_tuju' => $this->session->userdata('deptsekarang'),
-            'kode_dok' => 'PB',
-            'id_keluar' => null,
-            'data_ok' => 1,
-            'ok_valid' => 1,
-            'ok_tuju' => 0,
-            'month(tgl) <=' => $this->session->userdata('bl'),
-            'year(tgl) <=' => $this->session->userdata('th')
-        ];
-        $data['bon'] = $this->out_model->getbon($kondisi);
+        $data['bon'] = $this->out_model->getbon();
         $this->load->view('out/add_out',$data);
     }
-    public function tambahdataout($id){
-        $kode = $this->out_model->tambahdataout($id);
-        if($kode){
-            $url = base_url().'out/dataout/'.$kode;
-            redirect($url);
-        }
+    // public function tambahdataout($id){
+    //     $kode = $this->out_model->tambahdataout($id);
+    //     if($kode){
+    //         $url = base_url().'out/dataout/'.$kode;
+    //         redirect($url);
+    //     }
+    // }
+    public function tambahdataout(){
+        $arrgo = [
+            'data' => $_POST['out']
+        ];
+        $kode = $this->out_model->tambahdataout($arrgo);
+        // if($kode){
+        //     $url = base_url().'out/dataout/'.$kode;
+        //     redirect($url);
+        // }
+        echo $kode;
     }
     public function edit_tgl(){
         $this->load->view('out/edit_tgl');

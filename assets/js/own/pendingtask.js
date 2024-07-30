@@ -2,6 +2,9 @@ $(document).ready(function () {
 	// $("#gettask").click();
 	// alert("OK");
 });
+$("#taskmode").change(function () {
+	$("#gettask").click();
+});
 
 $("#gettask").click(function () {
 	$.ajax({

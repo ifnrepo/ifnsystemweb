@@ -27,7 +27,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item font-kecil" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Data" href="<?= base_url() . 'out/tambahdata' ?>">Dari BON Permintaan</a>
+                  <a class="dropdown-item font-kecil" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata' ?>">Dari BON Permintaan</a>
                   <a class="dropdown-item font-kecil disabled" href="#">Tanpa BON Permintaan</a>
                 </div>
               </div>

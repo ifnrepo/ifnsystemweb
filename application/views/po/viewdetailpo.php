@@ -1,14 +1,15 @@
 <div class="container-xl"> 
+    <?php $kensel = $header['ok_valid']==2 ? 'text-danger' : 'text-primary'; ?>
     <div class="row mb-1">
-        <div class="col-4 text-primary font-bold">
+        <div class="col-4 <?= $kensel; ?> font-bold">
         <span>Nomor</span>
         <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
         </div>
-        <div class="col-4 text-primary font-bold">
+        <div class="col-4 <?= $kensel; ?> font-bold">
         <span>Tanggal</span>
         <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
         </div>
-        <div class="col-4 text-primary font-bold">
+        <div class="col-4 <?= $kensel; ?> font-bold">
         <span>Dibuat Oleh</span>
         <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4>
         </div>
@@ -46,15 +47,15 @@
     </div>
     <hr class="m-1">
     <div class="row mb-1">
-        <div class="col-4 text-primary font-bold">
+        <div class="col-4 <?= $kensel; ?> font-bold">
             <span>KETERANGAN :</span>
             <h4 class="mb-1"><?= $header['keterangan']; ?></h4>
         </div>
         <div class="col-4"></div>
         <?php $bgr = $header['ketcancel']==null ? "text-primary" : "text-danger"; ?>
         <?php $vld = $header['ok_valid']==0 ? "hilang" : ""; ?>
-        <div class="col-4 <?= $bgr.' '.$vld; ?> font-bold ">
-            <?php $cek = $header['ketcancel']==null ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
+        <div class="col-4 <?= $kensel.' '.$vld; ?> font-bold ">
+            <?php $cek = $header['ok_valid']!=2 ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
             <span><?= $cek; ?></span>
             <h4 class="mb-1"><?= datauser($header['user_valid'],'name').' ('.$header['tgl_valid'].')'."<br>".$header['ketcancel'] ?></h4>
         </div>
