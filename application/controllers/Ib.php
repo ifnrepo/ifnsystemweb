@@ -18,6 +18,7 @@ class Ib extends CI_Controller
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('mtuangmodel');
+        $this->load->model('helper_model','helpermodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -145,13 +146,14 @@ class Ib extends CI_Controller
         foreach ($query as $que) {
             $no++;
             $tampil = $que['pcs']==0 ? $que['kgs'] : $que['pcs'];
+            $tampil2 = $que['pcsmintaa']==0 ? $que['kgsmintaa'] : $que['pcsmintaa'];
             $hasil .= "<tr>";
             $hasil .= "<td>" . $no . "</td>";
             $hasil .= "<td>" . $que['nama_barang'] . "</td>";
             $hasil .= "<td>" . $que['brg_id'] . "</td>";
             $hasil .= "<td>" . $que['namasatuan'] . "</td>";
+            $hasil .= "<td>" . rupiah($tampil2, 0) . "</td>";
             $hasil .= "<td>" . rupiah($tampil, 0) . "</td>";
-            $hasil .= "<td>" . rupiah($que['harga'], 0) . "</td>";
             $hasil .= "<td>";
             $hasil .= "<a href=" . base_url() . 'ib/editdetailib/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
             $hasil .= "<a href='#' data-href=" . base_url() . 'ib/hapusdetailib/' . $que['id'] .'/'.$que['id_header']. " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
@@ -159,13 +161,75 @@ class Ib extends CI_Controller
             $hasil .= "</tr>";
             $totalharga += $que['harga']*$tampil;
         }
-        $cocok = array('datagroup' => $hasil,'totalharga' => $totalharga);
+        $cocok = array('datagroup' => $hasil,'totalharga' => $totalharga,'jmlrek'=>$no);
         echo json_encode($cocok);
     }
     public function hapusdetailib($id,$detid){
         $hasil = $this->ibmodel->hapusdetailib($id);
         if($hasil){
             $url = base_url().'ib/dataib/'.$detid;
+            redirect($url);
+        }
+    }
+    public function editdetailib($id){
+        $data['data'] = $this->ibmodel->getdetailibbyid($id);
+        $this->load->view('ib/editdetailib',$data);
+    }
+    public function updatepcskgs()
+    {
+        $kondisi = [
+            'id' => $_POST['id'],
+            'pcs' => $_POST['pcs'],
+            'kgs' => $_POST['kgs']
+        ];
+        $hasil = $this->ibmodel->updatepcskgs($kondisi);
+        echo $hasil;
+    }
+    public function simpanib($id)
+    {
+        $cekdetail = $this->ibmodel->cekdetail($id);
+        if($cekdetail['xharga']==0){
+            $data = [
+                'user_ok' => $this->session->userdata('id'),
+                'data_ok' => 1,
+                'tgl_ok' => date('Y-m-d H:i:s'),
+                'id' => $id,
+                'totalharga' => $cekdetail['totalharga'],
+                'total' => 'totalharga - diskon',
+                'jumlah' => '((totalharga-diskon)+ppn)-pph'
+            ];
+            $query = $this->ibmodel->simpanib($data);
+            if ($query) {
+                $url = base_url() . 'ib';
+                redirect($url);
+            }
+        }else{
+            $this->session->set_flashdata('errorsimpan',1);
+            $url = base_url() . 'po/datapo/'.$id;
+            redirect($url);
+        }
+    }
+    public function editib($id){
+        $cek = $this->ibmodel->cekfield($id,'ok_valid',0)->num_rows();
+        if($cek==1){
+            $data = [
+                'data_ok' => 0,
+                'user_ok' => null,
+                'tgl_ok' => null,
+                'id' => $id
+            ];
+            $hasil = $this->ibmodel->editib($data);
+            if($hasil){
+                $url = base_url().'ib';
+                redirect($url);
+            }else{
+                $this->session->set_flashdata('errorsimpan',3);
+                $url = base_url().'po';
+                redirect($url);
+            }
+        }else{
+            $this->session->set_flashdata('errorsimpan',2);
+            $url = base_url().'po';
             redirect($url);
         }
     }
@@ -195,20 +259,9 @@ class Ib extends CI_Controller
         echo 1;
     }
     
-    public function editdetailpo($id){
-        $data['data'] = $this->pomodel->getdetailpobyid($id);
-        $this->load->view('po/editdetailpo',$data);
-    }
+    
 
-    public function updatehargadetail()
-    {
-        $kondisi = [
-            'id' => $_POST['id'],
-            'harga' => $_POST['harga']
-        ];
-        $hasil = $this->pomodel->updatehargadetail($kondisi);
-        echo $hasil;
-    }
+
 
     public function edittgl()
     {
@@ -286,30 +339,7 @@ class Ib extends CI_Controller
     }
     
 
-    public function simpanpo($id)
-    {
-        $cekdetail = $this->pomodel->cekdetail($id);
-        if($cekdetail['xharga']==0){
-            $data = [
-                'user_ok' => $this->session->userdata('id'),
-                'data_ok' => 1,
-                'tgl_ok' => date('Y-m-d H:i:s'),
-                'id' => $id,
-                'totalharga' => $cekdetail['totalharga'],
-                'total' => 'totalharga - diskon',
-                'jumlah' => '((totalharga-diskon)+ppn)-pph'
-            ];
-            $query = $this->pomodel->simpanpo($data);
-            if ($query) {
-                $url = base_url() . 'po';
-                redirect($url);
-            }
-        }else{
-            $this->session->set_flashdata('errorsimpan',1);
-            $url = base_url() . 'po/datapo/'.$id;
-            redirect($url);
-        }
-    }
+    
     public function hapuspo($id)
     {
         $query = $this->pomodel->hapuspo($id);
@@ -318,30 +348,7 @@ class Ib extends CI_Controller
             redirect($url);
         }
     }
-    public function editpo($id){
-        $cek = $this->pomodel->cekfield($id,'ok_valid',0);
-        if($cek==1){
-            $data = [
-                'data_ok' => 0,
-                'user_ok' => null,
-                'tgl_ok' => null,
-                'id' => $id
-            ];
-            $hasil = $this->pomodel->editpo($data);
-            if($hasil){
-                $url = base_url().'po';
-                redirect($url);
-            }else{
-                $this->session->set_flashdata('errorsimpan',3);
-                $url = base_url().'po';
-                redirect($url);
-            }
-        }else{
-            $this->session->set_flashdata('errorsimpan',2);
-            $url = base_url().'po';
-            redirect($url);
-        }
-    }
+    
     
     public function resetdetail($id)
     {

@@ -133,6 +133,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col">GM Purchasing</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <?php $pcaktif = $user['cekpc'] == 1 ? 'checked' : ''; ?>
+                          <input class="form-check-input" name="cekpc" id="cekpc" type="checkbox" <?= $pcaktif; ?>>
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="hr mt-2 mb-1"></div>
               <div class="card-body pt-2">
                 <div class="row">
@@ -354,11 +370,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" type="radio" 
           name="ttd" value="3" <?php if($user['ttd']==3){ echo "checked"; } ?>>
                                 <span class="form-check-label">GM PRODUKSI / NON (RELEASER)</span>
-                              </label>
-                              <label class="form-check">
-                                <input class="form-check-input" type="radio" 
-          name="ttd" value="4" <?php if($user['ttd']==4){ echo "checked"; } ?>>
-                                <span class="form-check-label">MANAGER PURCHASING</span>
                               </label>
                             </div>
                           </div>

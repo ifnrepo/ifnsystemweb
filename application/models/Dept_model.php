@@ -31,6 +31,7 @@ class Dept_model extends CI_Model
         $this->db->from('dept');
         $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
         $this->db->where_in('dept.dept_id', $arrdep);
+        $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
     public function gethakdept_bbl($arrdep)
@@ -40,6 +41,7 @@ class Dept_model extends CI_Model
         $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
         $this->db->where('bbl', '1');
         $this->db->where_in('dept.dept_id', $arrdep);
+        $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
     public function gethakdeptout($arrdep)
@@ -49,6 +51,7 @@ class Dept_model extends CI_Model
         $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
         $this->db->where_in('dept.dept_id', $arrdep);
         $this->db->where('dept.katedept_id !=', 4);
+        $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
 

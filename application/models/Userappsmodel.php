@@ -32,6 +32,7 @@ class Userappsmodel extends CI_Model
         $data = $_POST;
         $data['aktif'] = isset($data['aktif']) ? 1 : 0;
         $data['cekpo'] = isset($data['cekpo']) ? 1 : 0;
+        $data['cekpc'] = isset($data['cekpc']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
@@ -81,6 +82,7 @@ class Userappsmodel extends CI_Model
         $data['manajemen'] = $manajemen;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
+        // $data['cekpc'] = $cekpc;
         $hasil = $this->db->insert('user', $data);
         return $hasil;
     }
@@ -89,6 +91,7 @@ class Userappsmodel extends CI_Model
         $data = $_POST;
         $data['aktif'] = isset($data['aktif']) ? 1 : 0;
         $data['cekpo'] = isset($data['cekpo']) ? 1 : 0;
+        $data['cekpc'] = isset($data['cekpc']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
@@ -149,6 +152,7 @@ class Userappsmodel extends CI_Model
         $data['manajemen'] = $manajemen;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
+        // $data['cekpc'] = $cekpc;
 
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('user', $data);

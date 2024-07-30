@@ -46,7 +46,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                           //$arrjanganada = ['IT','PP','AK','MK','PG','BC','UT','RD','PC','EI']; 
                           $arrjanganada = [];
                         ?>
-                        <?php foreach ($hakdep as $hak): if(!in_array($hak['dept_id'],$arrjanganada)): $selek = $this->session->userdata('deptsekarang')== null ? '' : $this->session->userdata('deptsekarang'); ?>
+                        <?php foreach ($hakdep as $hak): if(!in_array($hak['dept_id'],$arrjanganada)): $selek = $this->session->userdata('curdept')== null ? '' : $this->session->userdata('curdept'); ?>
                           <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?php if($selek==$hak['dept_id']) echo "selected"; ?>><?= $hak['departemen']; ?></option>
                         <?php endif; endforeach; ?>
                       </select>

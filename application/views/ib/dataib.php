@@ -51,7 +51,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="input-group">
                     <?php $tekstitle = $data['id_pemasok'] == null ? 'Cari ' : 'Ganti '; ?>
                     <?php $tekstitle2 = $data['id_pemasok'] == null || $data['id_pemasok'] == 0 ? 'Cari ' : $data['id_pemasok']; ?>
-                    <a href="<?= base_url() . 'ib/editsupplier'; ?>" class="btn text-primary font-bold" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Cari Supplier" title="<?= $tekstitle; ?> Supplier"><?= $tekstitle2; ?></a>
+                    <a href="<?= base_url() . 'ib/editsupplier'; ?>" class="btn font-bold bg-success" id="pilihsup" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Cari Supplier" title="<?= $tekstitle; ?> Supplier"><?= $tekstitle2; ?></a>
                     <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown button" placeholder="Nama Supplier" value="<?= $data['namasupplier']; ?>">
                     <input type="hidden" id="id_pemasok" value="<?= $data['id_pemasok']; ?>">
                   </div>
@@ -60,8 +60,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                   <div class="mt-1">
                     <div class="input-icon">
-                      <input type="text" class="form-control font-kecil inputtgl" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
-                    </div>
+                       <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
+                  </div>
+
                   </div>
                 </div>
                 <div class="col-3">
@@ -152,8 +153,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">
           <input type="text" id="jmlrek" class="hilang">
-          <button class="btn btn-sm btn-primary" id="xsimpanpo"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
-          <button class="btn btn-sm btn-primary hilang" id="carisimpanpo" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'po/simpanpo/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
+          <button class="btn btn-sm btn-primary" id="xsimpanib" ><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
+          <button class="btn btn-sm btn-primary hilang" id="carisimpanib" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'ib/simpanib/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
+
           <a href="#" class="btn btn-sm btn-danger"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
         </div>
       </div>
