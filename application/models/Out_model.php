@@ -157,11 +157,30 @@ class Out_model extends CI_Model{
                 }
             }
             $no++;
-            $kondisi = [
-                'id_barang' => $datdet['id_barang'],
-                'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
-                'dept_id' => $this->session->userdata('deptsekarang')
-            ];
+            if($this->session->userdata('deptsekarang')=='GS'){
+                $kondisi = [
+                    'po' => $datdet['po'],
+                    'item' => $datdet['item'],
+                    'dis' => $datdet['dis'],
+                    'id_barang' => $datdet['id_barang'],
+                    'dept_id' => $this->session->userdata('deptsekarang'),
+                    'dl' => $datdet['dl'],
+                    'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+                ];
+            }else{
+                $kondisi = [
+                    'po' => $datdet['po'],
+                    'item' => $datdet['item'],
+                    'dis' => $datdet['dis'],
+                    'id_barang' => $datdet['id_barang'],
+                    'dept_id' => $this->session->userdata('deptsekarang'),
+                    'insno' => $datdet['insno'],
+                    'nobontr' => $datdet['nobontr'],
+                    'dl' => $datdet['dl'],
+                    'nobale' => $datdet['nobale'],
+                    'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+                ];
+            }
             $this->db->select('stokdept.*,sum(stokdept.pcs_akhir) as xpcs_akhir,sum(stokdept.kgs_akhir) as xkgs_akhir');
             $this->db->from('stokdept');
             $this->db->where($kondisi);
@@ -169,19 +188,28 @@ class Out_model extends CI_Model{
             // $cekdata = $this->db->get_where('stokdept',$kondisi);
             $jmll = $cekdata->num_rows();
             $deta = $cekdata->row_array();
+            echo $deta['xpcs_akhir'];
+            echo $datdet['pcs'];
             if($datdet['pcs'] > 0 || $datdet['kgs'] > 0){
-                if((($deta['xpcs_akhir'] >= $datdet['pcs']) || ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
+                if((($deta['xpcs_akhir'] >= $datdet['pcs']) && ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
                     $pcsnya = $datdet['pcs'] > 0 ? $datdet['pcs'] : $datdet['kgs'];
                     $pcsasli = $datdet['pcs'];
                     $kgsasli = $datdet['kgs'];
                     $loopke = 0;
                     do {
                         $loopke += 1;
-                        $where = "id_barang = ".$datdet['id_barang']." AND periode = '".kodebulan($this->session->userdata('bl')).$this->session->userdata('th')."' AND 
-                        (pcs_akhir > 0 OR kgs_akhir > 0)";
-                        $this->db->where($where);
+                        $this->db->where($kondisi);
+                        $this->db->group_start();
+                        $this->db->where('pcs_akhir > ',0);
+                        $this->db->or_where('kgs_akhir > ',0);
+                        $this->db->group_end();
                         $arrstokdept = $this->db->order_by('tgl,urut')->get('stokdept')->row_array();
-                        $nobontr= $this->session->userdata('currdept')=='GS' ? $arrstokdept['nobontr'] : $datdet['nobontr'];
+                        if($this->session->userdata('deptsekarang')=='GS'){
+                            $nobontr = $arrstokdept['nobontr'];
+                        }else{
+                            $nobontr = $datdet['nobontr'];
+                        }
+                        // echo print_r($datdet);
                         $stokid=$arrstokdept['id'];
                         if(($pcsasli > $arrstokdept['pcs_akhir']) || ($kgsasli > $arrstokdept['kgs_akhir'])){
                             $kurangpcs = $arrstokdept['pcs_akhir'];
