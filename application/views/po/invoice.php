@@ -150,7 +150,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <td class="text-end p-1"><?= rupiah($header['diskon'],2); ?></td>
           </tr>
           <tr>
-            <td class="strong text-end p-1">PPN(11%)</td>
+            <td class="strong text-end p-1">PPN(<?= rupiah($header['cekppn'],0); ?>%)</td>
             <td class="text-end p-1"><?= rupiah($header['ppn'],2); ?></td>
           </tr>
           <tr>

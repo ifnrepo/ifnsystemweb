@@ -92,10 +92,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php foreach ($data as $datdet) {
                 $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item';
-                $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set'; ?>
+                $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set'; 
+                $kensel = $datdet['ok_valid']==2 ? 'text-danger' : ''; ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
-                  <td class='font-bold'><a href="<?= base_url().'po/viewdetail/'.$datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail PO (Purchase Order)"><?= $datdet['nomor_dok'] ?></a></td>
+                  <td class='font-bold'><a href="<?= base_url().'po/viewdetail/'.$datdet['id']; ?>" class="<?= $kensel; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail PO (Purchase Order)"><?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $namasup ?></td>
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>

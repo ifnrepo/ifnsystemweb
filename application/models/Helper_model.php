@@ -7,4 +7,9 @@ class Helper_model extends CI_Model
         $hasil = $this->db->get($tabel);
         return $hasil;
     }
+    public function getterms($kode){
+        $this->db->where('lokal',$kode);
+        $hasil = $this->db->get('term_payment');
+        return $hasil;
+    }
 }

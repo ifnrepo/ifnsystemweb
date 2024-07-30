@@ -36,9 +36,25 @@ class Out_model extends CI_Model{
         }
         return $hasil;
     }
-    public function getbon($kode){
-        $this->db->where($kode);
-        $query = $this->db->get('tb_header');
+    public function getbon(){
+        $kondisi = [
+            'b.dept_id' => $this->session->userdata('tujusekarang'),
+            'b.dept_tuju' => $this->session->userdata('deptsekarang'),
+            'b.kode_dok' => 'PB',
+            'a.id_out' => 0,
+            'b.data_ok' => 1,
+            'b.ok_valid' => 1,
+            'b.ok_tuju' => 0,
+            'month(b.tgl) <=' => $this->session->userdata('bl'),
+            'year(b.tgl) <=' => $this->session->userdata('th')
+        ];
+        $this->db->select('*,a.id as idx');
+        $this->db->from('tb_detail a');
+        $this->db->join('tb_header b','b.id = a.id_header','left');
+        $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->where($kondisi);
+        $this->db->order_by('b.tgl','DESC');
+        $query = $this->db->get();
         return $query->result_array();
     }
     public function getnomorout($bl,$th,$asal,$tuju){
@@ -60,15 +76,21 @@ class Out_model extends CI_Model{
         ];
         $this->db->insert('tb_header',$tambah);
         $dataheader = $this->db->get_where('tb_header',['nomor_dok'=>$nomordok])->row_array();
-        $query = $this->db->get_where('tb_detail',['id_header'=>$kode])->result_array();
-        foreach($query as $que){
+        $jumlah = count($kode['data']);
+        for($x=0;$x<$jumlah;$x++){
+            $arrdat = $kode['data'];
+            $que = $this->db->get_where('tb_detail',['id'=>$arrdat[$x]])->row_array();
             $que['id_minta'] = $que['id']; 
             unset($que['id']);
             $que['id_header'] = $dataheader['id'];
             $this->db->insert('tb_detail',$que);
+            $idnya = $this->db->insert_id();
+
+            $this->db->where('id',$arrdat[$x]);
+            $this->db->update('tb_detail',['id_out'=>$idnya]);
         }
-        $this->db->where('id',$kode);
-        $this->db->update('tb_header',['id_keluar' => $dataheader['id']]);
+        // $this->db->where('id',$kode['id_header']);
+        // $this->db->update('tb_header',['id_keluar' => $dataheader['id']]);
         $this->db->trans_complete();
         return $dataheader['id'];
     }
