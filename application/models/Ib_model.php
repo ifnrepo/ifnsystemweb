@@ -196,12 +196,7 @@ class Ib_model extends CI_Model
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
-    //End IB Models
-
-
-
-    public function getdetailpobyid($data)
-
+    public function getdetailibbyid($data)
     {
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
         $this->db->from('tb_detail a');
@@ -210,6 +205,16 @@ class Ib_model extends CI_Model
         $this->db->where('a.id', $data);
         return $this->db->get()->row_array();
     }
+    public function getdokbcmasuk(){
+        $this->db->where('masuk',1);
+        $hasil = $this->db->get('ref_dok_bc');
+        return $hasil;
+    }
+    //End IB Models
+
+
+
+
     public function updatepcskgs($data){
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$data);

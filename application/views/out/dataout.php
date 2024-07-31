@@ -28,7 +28,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
               <div class="row">
-                <div class="col-2 ">
+                <div class="col-2">
                   <h4 class="mb-0 font-kecil">Tgl</h4>
                   <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
                   <input type="text" id="id_header" class="hilang" value="<?= $data['id']; ?>">
@@ -49,8 +49,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </a>
                   </span>
                 </div>
+                <div class="col-3"></div>
                 <div class="col-3">
-
+                  <div style="position:absolute;bottom:0px;right:10px;">
+                    <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>
+                  </div>
                 </div>
               </div>
               <!-- <div class="hr m-1"></div> -->
@@ -87,7 +90,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">
           <input type="text" id="jmlrek" class="hilang">
-          <a href="#" class="btn btn-sm btn-primary" id="simpanout" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'out/simpanheaderout/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+          <a href="#" class="btn btn-sm btn-primary" id="xsimpanout"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
+          <button href="#" class="btn btn-sm btn-primary hilang" id="simpanout" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'out/simpanheaderout/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
           <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-tombol="Ya" data-message="Akan Reset data ini" data-href="<?= base_url() . 'out/resetdetail/' . $data['id']; ?>"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
         </div>
       </div>

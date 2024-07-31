@@ -33,7 +33,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     echo 'selected';
                                   } ?>>BBL (Bon Permintaan Pembelian)</option>
               <?php endif; ?>
-              <?php if(datauser($this->session->userdata('id'),'cekpo') == 1): ?>
+              <?php if($this->session->userdata('cekpo') == 1): ?>
               <option value="po" <?php if ($this->session->userdata('modetask') == 'po') {
                                     echo 'selected';
                                   } ?>>PO (Purchase Order)</option>

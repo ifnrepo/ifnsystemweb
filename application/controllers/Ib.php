@@ -90,6 +90,7 @@ class Ib extends CI_Controller
         $header['header'] = 'transaksi';
         $data['data'] = $this->ibmodel->getdatabyid($kode);
         $data['mtuang'] = $this->mtuangmodel->getdata();
+        $data['jnsbc'] = $this->ibmodel->getdokbcmasuk();
         $footer['fungsi'] = 'ib';
         $this->load->view('layouts/header', $header);
         $this->load->view('ib/dataib', $data);

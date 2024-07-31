@@ -51,43 +51,43 @@
 <script src="<?= base_url(); ?>assets/vendor/litepicker/dist/litepicker.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/nprogress/nprogress.js"></script>
 <!-- Custom JS -->
-<script src="<?= base_url(); ?>assets/js/myscript.js?1722246516"></script>
+<script src="<?= base_url(); ?>assets/js/myscript.js?1722418555"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'barang') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/barang.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/barang.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'dept') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/dept.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/dept.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pb') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/pb.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/pb.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'personil') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/personil.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/personil.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'in') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/in.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/in.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'out') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/out.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/out.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'inv') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/inv.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/inv.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'bbl') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'po') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/po.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/po.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'ib') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/ib.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/ib.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pendingtask') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1722246516"></script>
+	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1722418555"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
 	<script>

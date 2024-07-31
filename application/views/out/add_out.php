@@ -7,7 +7,7 @@
                 <button type="button" class="btn btn-primary btn-sm font-kecil mt-1" style="height: 35px !important;" id="simpanout">Simpan Barang</button>
             </div>
             <hr class="m-1">
-            <table class="table datatable6">
+            <table class="table datatable6 nowrap">
                 <thead>
                 <tr>
                     <th>Spesifik</th>
@@ -17,13 +17,13 @@
                     <th>Pilih</th>
                 </tr>
                 </thead>
-                <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
+                <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;" >
                     <?php $no=1; foreach ($bon as $xbon) { $no++; ?>
                         <tr>
                             <td><?= $xbon['nama_barang']; ?></td>
-                            <td><?= $xbon['tgl']; ?></td>
+                            <td style="font-size: 10px !important"><?= tglmysql($xbon['tgl']); ?></td>
                             <td><?= $xbon['nomor_dok']; ?></td>
-                            <td><?= $xbon['keterangan']; ?></td>
+                            <td style="font-size: 10px !important"><?= $xbon['keterangan']; ?></td>
                             <td>
                                 <!-- <a href="<?= base_url().'out/tambahdataout/'.$xbon['id']; ?>" class="btn btn-sm btn-success" style='padding: 3px !important;'>Pilih</a> -->
                                  <label class="form-check">
@@ -68,11 +68,11 @@
                 type: "POST",
                 url: base_url + "out/tambahdataout",
                 data: {
-                    // id: $("#id_header").val(),
+                    id: $("#id_header").val(),
                     out: text
                 },
                 success: function(data) {
-                    alert(data);
+                    // alert(data);
                     window.location.href = base_url + "out/dataout/" + data;
                     // $("#butbatal").click();
                 },

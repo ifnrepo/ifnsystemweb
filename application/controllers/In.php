@@ -109,7 +109,7 @@ class In extends CI_Controller {
         $id = $_POST['id'];
         $hasil = $this->inmodel->verifikasirekord($id);
         if($hasil){
-            echo json_encode($hasil);
+            echo json_encode($hasil); 
         }else{
             $url = base_url().'in/cekkonfirmasi/'.$id;
             redirect($url);

@@ -62,6 +62,23 @@ class Out_model extends CI_Model{
         WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
         return $hasil;
     }
+    public function adddata(){
+        $this->db->trans_start();
+        $date = $this->session->userdata('th').'-'.$this->session->userdata('bl').'-'.date('d');
+        $nomordok = nomorout($date,$this->session->userdata('deptsekarang'),$this->session->userdata('tujusekarang'));
+        $tambah = [
+            'id_perusahaan' => IDPERUSAHAAN,
+            'kode_dok' => 'T',
+            'dept_id' => $this->session->userdata('deptsekarang'),
+            'dept_tuju' => $this->session->userdata('tujusekarang'),
+            'nomor_dok' => $nomordok,
+            'tgl' => $date
+        ];
+        $this->db->insert('tb_header',$tambah);
+        $idheader = $this->db->insert_id();
+        $this->db->trans_complete();
+        return $idheader;
+    }
     public function tambahdataout($kode){
         $this->db->trans_start();
         $date = $this->session->userdata('th').'-'.$this->session->userdata('bl').'-'.date('d');
@@ -75,6 +92,7 @@ class Out_model extends CI_Model{
             'tgl' => $date
         ];
         $this->db->insert('tb_header',$tambah);
+        $idheader = $this->db->insert_id();
         $dataheader = $this->db->get_where('tb_header',['nomor_dok'=>$nomordok])->row_array();
         $jumlah = count($kode['data']);
         for($x=0;$x<$jumlah;$x++){
@@ -91,16 +109,20 @@ class Out_model extends CI_Model{
         }
         // $this->db->where('id',$kode['id_header']);
         // $this->db->update('tb_header',['id_keluar' => $dataheader['id']]);
+        $this->db->where('id',$idheader);
+        $this->db->update('tb_header',['jumlah_barang'=>$jumlah]);
         $this->db->trans_complete();
         return $dataheader['id'];
     }
     public function getdatadetailout($data){
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
         $this->db->join('satuan b','b.id = a.id_satuan','left');
         $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->join('tb_detail d','a.id = d.id_out','left');
+        $this->db->join('tb_header e','e.id = d.id_header','left');
         $this->db->where('a.id_header',$data);
         return $this->db->get()->result_array();
     }
@@ -137,12 +159,18 @@ class Out_model extends CI_Model{
         $query = $this->db->get('tb_header')->row_array();
         if($query){
             $this->db->where('id_header',$id);
+            $detail = $this->db->get('tb_detail');
+            foreach ($detail->result_array() as $det) {
+                $this->db->where('id_out',$det['id']);
+                $this->db->update('tb_detail',['id_out'=>0]);
+            }
+            $this->db->where('id_header',$id);
             $this->db->delete('tb_detmaterial');
             $this->db->where('id_header',$id);
             $this->db->delete('tb_detail');
         }
         $this->db->where('id_keluar',$id);
-        $this->db->update('tb_header',['id_keluar' => null]);
+        $this->db->update('tb_header',['id_keluar' => 0]);
         
         $this->db->where('id',$id);
         $this->db->delete('tb_header');
@@ -151,17 +179,22 @@ class Out_model extends CI_Model{
     }
     public function resetdetail($id){
         $this->db->trans_start();
-        $que1 = $this->db->get_where('tb_detail',['id_header'=>$id])->result_array();
-        foreach($que1 as $data1){
-            $cek = $this->db->get_where('tb_detail',['id'=>$data1['id_minta']])->row_array();
-            $data = [
-                'pcs' => $cek['pcs'],
-                'kgs' => $cek['kgs'],
-                'tempbbl' => null
-            ];
-            $this->db->where('id',$data1['id']);
-            $this->db->update('tb_detail',$data);
+        $this->db->where('id',$id);
+        $query = $this->db->get('tb_header')->row_array();
+        if($query){
+            $this->db->where('id_header',$id);
+            $detail = $this->db->get('tb_detail');
+            foreach ($detail->result_array() as $det) {
+                $this->db->where('id_out',$det['id']);
+                $this->db->update('tb_detail',['id_out'=>0]);
+            }
+            $this->db->where('id_header',$id);
+            $this->db->delete('tb_detmaterial');
+            $this->db->where('id_header',$id);
+            $this->db->delete('tb_detail');
         }
+        $this->db->where('id_keluar',$id);
+        $this->db->update('tb_header',['id_keluar' => 0]);
         $hasil = $this->db->trans_complete();
         return $hasil;
     }

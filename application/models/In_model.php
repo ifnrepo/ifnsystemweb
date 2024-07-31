@@ -59,8 +59,8 @@ class In_model extends CI_Model{
             ];
             $this->db->where('id',$id);
             $this->db->update('tb_detail',$data);
+
             $this->db->select('tb_detail.*,user.name');
-            // $this->db->from('tb_detail');
             $this->db->join('user','tb_detail.verif_oleh=user.id','left');
             $query = $this->db->get_where('tb_detail',['tb_detail.id'=>$id]);
             return $query->result();

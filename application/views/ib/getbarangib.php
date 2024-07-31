@@ -24,6 +24,7 @@
                             <th>No PO</th>
                             <th>Nama Barang</th>
                             <th>Qty PO</th>
+                            <th>Kgs PO</th>
                             <th>Pilih</th>
                         </tr>
                     </thead>
@@ -32,7 +33,8 @@
                             <tr class="font-kecil">
                                 <td><?= $detail['nomor_dok']; ?></td>
                                 <td><?= $detail['nama_barang']; ?></td>
-                                <td><?= $detail['pcs']; ?></td>
+                                <td><?= rupiah($detail['pcs'],0); ?></td>
+                                <td><?= rupiah($detail['kgs'],2); ?></td>
                                 <td>
                                     <label class="form-check">
                                         <input class="form-check-input" name="cekpilihbarang" id="cekbok<?= $no; ?>" rel="<?= $detail['iddetbbl']; ?>" type="checkbox">
