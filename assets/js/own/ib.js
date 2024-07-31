@@ -16,6 +16,7 @@ $(document).ready(function () {
 			getdatadetailib();
 		}
 	}
+	generatekode();
 	// $("#dept_kirim").change();
 	// $("#level").change();
 	var jn_bayar = $("#jn_pembayaran").val();
@@ -104,6 +105,12 @@ $("#nomor_aju").focus(function () {
 $("#tgl_aju").focus(function () {
 	value_old = $(this).val();
 });
+$("#nomor_bc").focus(function () {
+	value_old = $(this).val();
+});
+$("#tgl_bc").focus(function () {
+	value_old = $(this).val();
+});
 $("#no_kendaraan").focus(function () {
 	value_old = $(this).val();
 });
@@ -140,6 +147,23 @@ $("#tgl_aju").change(function () {
 		);
 	}
 });
+$("#nomor_bc").blur(function () {
+	if ($("#nomor_bc").val() != value_old) {
+		updatekolom($("#id_header").val(), "tb_header", "nomor_bc", $(this).val());
+		generatekode();
+	}
+});
+$("#tgl_bc").change(function () {
+	if ($("#tgl_bc").val() != value_old) {
+		updatekolom(
+			$("#id_header").val(),
+			"tb_header",
+			"tgl_bc",
+			tglmysql($(this).val()),
+		);
+		generatekode();
+	}
+});
 $("#no_kendaraan").blur(function () {
 	if ($("#no_kendaraan").val() != value_old) {
 		updatekolom(
@@ -169,7 +193,24 @@ $("#cekbarang").click(function () {
 		$("#getbarang").click();
 	}
 });
-
+$("#jns_bc").change(function () {
+	updatekolom($("#id_header").val(), "tb_header", "jns_bc", $(this).val());
+	generatekode();
+});
+function generatekode() {
+	var nol = "0";
+	var jnsbc =
+		$("#jns_bc").val() == ""
+			? "000000"
+			: nol.repeat(6 - $("#jns_bc").val().length) + $("#jns_bc").val();
+	var tglbc =
+		$("#tgl_bc").val() == ""
+			? "00000000"
+			: tglmysql($("#tgl_bc").val()).replace(/-/g, "");
+	var nobc = $("#nomor_bc").val() == "" ? "000000" : $("#nomor_bc").val();
+	// alert(jnsbc + "-010017-" + tglbc + "-" + nobc);
+	$("#generatenobc").html(jnsbc + "-010017-" + tglbc + "-" + nobc);
+}
 function updatekolom(idx, tabel, kolom, isi) {
 	var isinya =
 		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
@@ -225,8 +266,16 @@ $("#xsimpanib").click(function () {
 		pesan("Nomor/Tgl Surat jalan belum diisi !", "info");
 		return false;
 	}
+	if ($("#jns_bc").val() == "") {
+		pesan("Jenis BC belum di isi !", "info");
+		return false;
+	}
 	if ($("#nomor_aju").val() == "" || $("#tgl_aju").val() == "") {
 		pesan("Nomor/Tgl AJU belum di isi !", "info");
+		return false;
+	}
+	if ($("#nomor_bc").val() == "" || $("#tgl_bc").val() == "") {
+		pesan("Nomor/Tgl BC belum di isi !", "info");
 		return false;
 	}
 	if ($("#totalharga").val() == "") {
