@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Inv extends CI_Controller
+class Adj extends CI_Controller
 {
     function __construct()
     {
@@ -15,7 +15,6 @@ class Inv extends CI_Controller
         $this->load->model('dept_model', 'deptmodel');
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel', 'usermodel');
-        $this->load->model('inv_model', 'invmodel');
 
         $this->load->library('Pdf');
         // $this->load->library('Codeqr');
@@ -23,71 +22,41 @@ class Inv extends CI_Controller
     }
     public function index()
     {
-        $header['header'] = 'inventory';
+        $header['header'] = 'transaksi';
         $data['level'] = $this->usermodel->getdatalevel();
-        $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
+        $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
-        if ($this->session->userdata('tglawal') == null) {
-            $data['tglawal'] = tglmysql(date('Y-m-d'));
-            $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
-            $data['data'] = null;
-            $data['kat'] = null;
-            $data['gbg'] = '';
-            $data['kategoricari'] = 'Cari Barang';
-        } else {
-            $data['tglawal'] = $this->session->userdata('tglawal');
-            $data['tglakhir'] = $this->session->userdata('tglakhir');
-            $data['data'] = $this->invmodel->getdata();
-            $data['kat'] = $this->invmodel->getdatakategori();
-            $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
-            $data['kategoricari'] = $this->session->userdata('kategoricari');
-        }
-        $footer['fungsi'] = 'inv';
+        $kode = [
+            'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
+            'dept_tuju' => $this->session->userdata('tujusekarang') == null ? '' : $this->session->userdata('tujusekarang'),
+            'level' => $this->session->userdata('levelsekarang') == null ? '' : $this->session->userdata('levelsekarang'),
+        ];
+        $data['data'] = $this->pb_model->getdatapb($kode);
+        $footer['fungsi'] = 'adj';
         $this->load->view('layouts/header', $header);
-        $this->load->view('inv/inv', $data);
+        $this->load->view('adj/adj', $data);
         $this->load->view('layouts/footer', $footer);
     }
     public function clear()
     {
-        $this->session->unset_userdata('tglawal', date('Y'));
-        $this->session->unset_userdata('tglakhir', date('Y'));
-        // $this->session->unset_userdata('gbg');
+        $this->session->unset_userdata('deptsekarang');
+        $this->session->unset_userdata('tujusekarang');
+        $this->session->unset_userdata('levelsekarang');
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
-        $this->session->set_userdata('gbg', 1);
-        $this->session->set_userdata('invharga', 0);
-        $this->session->unset_userdata('katcari');
-        $url = base_url('Inv');
+        $this->session->set_userdata('levelsekarang',1);
+        $url = base_url('Pb');
         redirect($url);
     }
-    public function getdata()
+    public function getdatapb()
     {
-        $this->session->set_userdata('tglawal', $_POST['tga']);
-        $this->session->set_userdata('tglakhir', $_POST['tgk']);
-        $this->session->set_userdata('currdept', $_POST['dpt']);
-        $this->session->set_userdata('gbg', $_POST['gbn']);
-        $this->session->set_userdata('filterkat', $_POST['kat']);
-        $this->session->set_userdata('kategoricari', $_POST['kcari']);
-        if (isset($_POST['cari'])) {
-            if ($_POST['cari'] == '') {
-                $this->session->unset_userdata('katcari');
-            } else {
-                $this->session->set_userdata('katcari', $_POST['cari']);
-            }
-        } else {
-            $this->session->unset_userdata('katcari');
-        }
-        echo 1;
+        $this->session->set_userdata('deptsekarang', $_POST['dept_id']);
+        $this->session->set_userdata('tujusekarang', $_POST['dept_tuju']);
+        $this->session->set_userdata('levelsekarang', $_POST['levelsekarang']);
+        $url = base_url('Pb');
+        redirect($url);
     }
-    public function viewharga(){
-        $isi = $_POST['cek'];
-        $this->session->set_userdata('invharga',$isi);
-        // $url = base_url().'Inv';
-        // redirect($url);
-        echo 1;
-    }
-    //END INV Controllers 
     public function getdatadetailpb()
     {
         $kode = $_POST['id_header'];
@@ -134,7 +103,8 @@ class Inv extends CI_Controller
             'tgl' => tglmysql($_POST['tgl']),
             'kode_dok' => 'PB',
             'id_perusahaan' => IDPERUSAHAAN,
-            'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'])
+            'pb_sv' => $_POST['jn'],
+            'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'],$_POST['jn'])
         ];
         $simpan = $this->pb_model->tambahpb($data);
         echo $simpan['id'];
@@ -165,13 +135,18 @@ class Inv extends CI_Controller
     }
     public function validasipb($id)
     {
-        $data = [
-            'ok_valid' => 1,
-            'tgl_valid' => date('Y-m-d H:i:s'),
-            'user_valid' => $this->session->userdata('id'),
-            'id' => $id
-        ];
-        $simpan = $this->pb_model->validasipb($data);
+        $cek = $this->pb_model->cekfield($id,'data_ok',1)->num_rows();
+        if($cek==1){
+            $data = [
+                'ok_valid' => 1,
+                'tgl_valid' => date('Y-m-d H:i:s'),
+                'user_valid' => $this->session->userdata('id'),
+                'id' => $id
+            ];
+            $simpan = $this->pb_model->validasipb($data);
+        }else{
+            $simpan = 1;
+        }
         if ($simpan) {
             $url = base_url() . 'pb';
             redirect($url);
@@ -193,13 +168,19 @@ class Inv extends CI_Controller
     }
     public function editokpb($id)
     {
-        $data = [
-            'data_ok' => 0,
-            'tgl_ok' => null,
-            'user_ok' => null,
-            'id' => $id
-        ];
-        $simpan = $this->pb_model->validasipb($data);
+        $cek = $this->pb_model->cekfield($id,'ok_valid',0)->num_rows();
+        if($cek==1){
+            $data = [
+                'data_ok' => 0,
+                'tgl_ok' => null,
+                'user_ok' => null,
+                'id' => $id
+            ];
+            $simpan = $this->pb_model->validasipb($data);
+        }else{
+            $this->session->set_flashdata('pesanerror','Bon permintaan sudah divalidasi !');
+            $simpan = 1;
+        }
         if ($simpan) {
             $url = base_url() . 'pb';
             redirect($url);
@@ -296,26 +277,16 @@ class Inv extends CI_Controller
             redirect($url);
         }
     }
-    public function viewdetail($isi = '')
+    public function viewdetailpb($id)
     {
-        $split = explode('-', $isi);
-        $array = [
-            'po' => decrypto($split[1]),
-            'item' => decrypto($split[2]),
-            'dis' => $split[3],
-            'id_barang' => $split[4],
-            'nobontr' => decrypto($split[5]),
-            'insno' => decrypto($split[6])
-        ];
-        $data['header'] = $this->invmodel->getdatadetail($array)->row_array();
-        $data['detail'] = $this->invmodel->getdatadetail($array);
-        $data['isi'] = $array;
-        $this->load->view('inv/viewdetail', $data);
+        $data['header'] = $this->pb_model->getdatabyid($id);
+        $data['detail'] = $this->pb_model->getdatadetailpb($id);
+        $this->load->view('pb/viewdetailpb', $data);
     }
     public function ubahperiode()
     {
-        $this->session->set_userdata('tglawal', $_POST['tga']);
-        $this->session->set_userdata('tglakhir', $_POST['tgk']);
+        $this->session->set_userdata('bl', $_POST['bl']);
+        $this->session->set_userdata('th', $_POST['th']);
         echo 1;
     }
     function cetakqr2($isi, $id)

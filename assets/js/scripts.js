@@ -2,8 +2,8 @@
 	"use strict";
 
 	// $(document).ready(function () {
-	// 	alert('data');
-	// })
+	// 	alert("data");
+	// });
 
 	/*================================
 	Preloader

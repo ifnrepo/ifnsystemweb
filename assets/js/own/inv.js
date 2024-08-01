@@ -32,6 +32,30 @@ $(document).ready(function () {
 // 			},
 // 		});
 // });
+$("#viewharga").click(function () {
+	// alert($(this).is(":checked"));
+	var load =
+		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
+	$("#loadview").html(load);
+	var kisi = $(this).is(":checked") ? 1 : 0;
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "inv/viewharga",
+		data: {
+			cek: kisi,
+		},
+		success: function (data) {
+			// alert(data);
+			window.location.reload();
+			// $("#body-table").html(data.datagroup).show();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
 $("#tglawal").datepicker({
 	autoclose: true,
 	format: "dd-mm-yyyy",

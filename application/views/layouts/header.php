@@ -277,12 +277,30 @@
     </div>
     <div class="offcanvas-body">
       <div class="fetched-data">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab assumenda ea est, eum exercitationem fugiat illum itaque laboriosam magni necessitatibus, nemo nisi numquam quae reiciendis repellat sit soluta unde. Aut!
+        <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab assumenda ea est, eum exercitationem fugiat illum itaque laboriosam magni necessitatibus, nemo nisi numquam quae reiciendis repellat sit soluta unde. Aut! -->
+         <div class="text-center p-5" style="font-size: 20px;">
+        <div class="spinner-border spinner-border text-teal text-center" role="status"></div> LOADING...
+        </div>
       </div>
       <div class="mt-3">
         <button class="btn btn-primary btn-sm btn-flat" type="button" data-bs-dismiss="offcanvas">
           Close
         </button>
+      </div>
+    </div>
+  </div>
+  <div id="preloader">
+    <div class="page page-center">
+    <div class="container container-slim py-4">
+        <div class="text-center">
+          <div class="mb-3">
+            <a href="." class="navbar-brand navbar-brand-autodark"><img src=<?= base_url() . "assets/image/logodepanK.png" ?> height="36" alt=""></a>
+          </div>
+          <div class="text-secondary mb-3">Preparing application</div>
+          <div class="progress progress-sm">
+            <div class="progress-bar progress-bar-indeterminate"></div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
