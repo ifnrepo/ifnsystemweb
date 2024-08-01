@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          Pending Task <?= $this->session->userdata('ttd'); ?> <?= $this->session->userdata('bbl'); ?>
+          Pending Task [<?= $this->session->userdata('ttd'); ?>]
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">

@@ -290,7 +290,14 @@ $(document).ready(function () {
 	// 		ordering: false,
 	// 	});
 });
-
+var preloader = $("#preloader");
+$(window).on("load", function () {
+	setTimeout(function () {
+		preloader.fadeOut("slow", function () {
+			$(this).remove();
+		});
+	}, 300);
+});
 function cekcik() {
 	var x = $(this).val();
 	alert("OKE");

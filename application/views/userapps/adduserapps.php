@@ -100,6 +100,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
+                      <span class="col">View Harga</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="view_harga" id="view_harga" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
                       <span class="col">Validator Purchase Order</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">

@@ -33,6 +33,7 @@ class Userappsmodel extends CI_Model
         $data['aktif'] = isset($data['aktif']) ? 1 : 0;
         $data['cekpo'] = isset($data['cekpo']) ? 1 : 0;
         $data['cekpc'] = isset($data['cekpc']) ? 1 : 0;
+        $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
@@ -92,6 +93,7 @@ class Userappsmodel extends CI_Model
         $data['aktif'] = isset($data['aktif']) ? 1 : 0;
         $data['cekpo'] = isset($data['cekpo']) ? 1 : 0;
         $data['cekpc'] = isset($data['cekpc']) ? 1 : 0;
+        $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
@@ -166,6 +168,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('arrdep',arrdep($cek['hakdepartemen']));
             $this->session->set_userdata('hak_ttd_pb',arrdep($cek['cekpb']));
             $this->session->set_userdata('ttd',$cek['ttd']);
+            $this->session->set_userdata('viewharga',$cek['view_harga']);
         }
 
         return $hasil;
@@ -174,5 +177,18 @@ class Userappsmodel extends CI_Model
     {
         $query = $this->db->get('level_user')->result_array();
         return $query;
+    }
+    public function refreshsess($id){
+        $cek = $this->getdatabyid($id)->row_array();
+        $this->session->set_userdata('master', $cek['master']);
+        $this->session->set_userdata('transaksi', $cek['transaksi']);
+        $this->session->set_userdata('other', $cek['other']);
+        $this->session->set_userdata('manajemen', $cek['manajemen']);
+        $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
+        $this->session->set_userdata('arrdep',arrdep($cek['hakdepartemen']));
+        $this->session->set_userdata('hak_ttd_pb',arrdep($cek['cekpb']));
+        $this->session->set_userdata('ttd',$cek['ttd']);
+        $this->session->set_userdata('viewharga',$cek['view_harga']);
+        return 1;
     }
 }
