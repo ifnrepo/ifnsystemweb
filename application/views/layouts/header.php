@@ -318,7 +318,7 @@
               </svg>
             </a>
           </div>
-          <div class="nav-item dropdown">
+          <div class="nav-item dropdown mr-2">
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
@@ -329,7 +329,9 @@
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
               <a class="dropdown-item">Status</a>
               <a class="dropdown-item">Profile</a>
-              <a class="dropdown-item">Feedback</a>
+              <a href="<?= base_url().'userapps/refreshsess/'.$this->session->userdata('id').'/'.uri_string(); ?>" class="dropdown-item">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" /><path d="M20 4v5h-5" /></svg>  
+              Refresh session</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item">Settings</a>
               <a href="<?= base_url() . 'Auth/logout'; ?>" class="dropdown-item">Logout</a>
@@ -340,7 +342,7 @@
           <ul class="navbar-nav pt-lg-3">
             <li class="nav-item">
               <a class="nav-link <?php if (!isset($header)) {
-                                    echo 'active';
+                                    echo 'active';  
                                   } ?>" href="<?= base_url(); ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -586,7 +588,9 @@
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
               <a class="dropdown-item">Status</a>
               <a class="dropdown-item">Profile</a>
-              <a class="dropdown-item">Feedback</a>
+              <a href="<?= base_url().'userapps/refreshsess/'.$this->session->userdata('id').'/'.uri_string(); ?>" class="dropdown-item">
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" /><path d="M20 4v5h-5" /></svg>
+                Refresh session</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item">Settings</a>
               <a href="<?= base_url() . 'Auth/logout'; ?>" class="dropdown-item">Logout</a>
