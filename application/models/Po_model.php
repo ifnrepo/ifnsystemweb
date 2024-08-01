@@ -82,14 +82,14 @@ class Po_model extends CI_Model
     }
     public function getdatadetailpo($data)
     {
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.keterangan as keter");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,d.keterangan as keter");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
         $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
         $this->db->join('barang c', 'c.id = a.id_barang', 'left');
         $this->db->join('tb_detail d', 'a.id = d.id_po', 'left');
-        $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
+        // $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
         $this->db->where('a.id_header', $data);
         return $this->db->get()->result_array();
     }
@@ -173,6 +173,15 @@ class Po_model extends CI_Model
     public function updatesupplier($data){
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_header',['id_pemasok' => $data['id_supplier']]);
+        if($data['id_supplier']!='NULL'){
+            $this->db->where('id',$data['id_supplier']);
+            $sup = $this->db->get('supplier')->row_array();
+
+            $kata = 'Berdasarkan surat penawaran dari '.trim($sup['nama_supplier']).' tanggal , maka kami memesan barang-barang sebagai berikut :';
+            $this->db->set('header_po',$kata);
+            $this->db->where('id_header',$data['id']);
+            $this->db->update('catatan_po');
+        }
         return $hasil;
     }
     public function updatebykolom($data){

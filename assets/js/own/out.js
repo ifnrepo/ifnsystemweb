@@ -75,6 +75,9 @@ $("#th").change(function () {
 $("#butgo").click(function () {
 	getdataout();
 });
+$("#xsimpanout").click(function () {
+	$("#simpanout").click();
+});
 function getdataout() {
 	$.ajax({
 		dataType: "json",
@@ -107,8 +110,9 @@ function getdatadetailout() {
 			// alert(data.jmlrek);
 			// window.location.reload();
 			$("#body-table").html(data.datagroup).show();
+			$("#jmlrek").val(data.jmlrek);
 			if (data.jmlrek == 0) {
-				$("#simpanout").addClass("disabled");
+				$("#xsimpanout").addClass("disabled");
 			}
 		},
 		error: function (xhr, ajaxOptions, thrownError) {

@@ -63,6 +63,7 @@ $("#bl").change(function () {
 $("#th").change(function () {
 	$("#bl").change();
 });
+
 $(document).on("click", "#verifikasirekord", function () {
 	var rel = $(this).attr("rel");
 	var jmlverif = $("#jmlverif").val();
@@ -93,6 +94,7 @@ $(document).on("click", "#verifikasirekord", function () {
 		},
 	});
 });
+
 $("#xsimpanin").click(function () {
 	var rekord = $("#jmlrek").val();
 	var verif = $("#jmlverif").val();
@@ -102,6 +104,9 @@ $("#xsimpanin").click(function () {
 	} else {
 		$("#carisimpanin").click();
 	}
+});
+$("#butgo").click(function () {
+	$("#dept_kirim").change();
 });
 //End JS
 function getdatain() {

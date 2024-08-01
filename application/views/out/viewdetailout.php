@@ -25,6 +25,7 @@
                     <th>Satuan</th>
                     <th>Qty</th>
                     <th>Kgs</th>
+                    <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
@@ -35,6 +36,7 @@
                         <td><?= $val['namasatuan']; ?></td>
                         <td><?= rupiah($val['pcs'],0); ?></td>
                         <td><?= rupiah($val['kgs'],2); ?></td>
+                        <td><?= $val['nodok']; ?></td>
                     </tr>
                 <?php } ?>
                 </tbody>

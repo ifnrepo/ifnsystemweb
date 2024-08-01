@@ -99,6 +99,7 @@ class Out extends CI_Controller {
         $hasil = '';
         $id = $_POST['id_header'];
         $query = $this->out_model->getdatadetailout($id);
+        $jumlah=0;
         foreach ($query as $que) {
             $hasil .= "<tr>";
             $hasil .= "<td>".$que['nama_barang']."</td>";
@@ -119,31 +120,29 @@ class Out extends CI_Controller {
             $hasil .= "<a href=".base_url().'out/editdetailout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
+            $jumlah++;
         }
-        $cocok = array('datagroup' => $hasil);
+        $cocok = array('datagroup' => $hasil,'jmlrek' => $jumlah);
         echo json_encode($cocok);
     }
     public function tambahdata(){
-        $kondisi = [
-            'dept_id' => $this->session->userdata('tujusekarang'),
-            'dept_tuju' => $this->session->userdata('deptsekarang'),
-            'kode_dok' => 'PB',
-            'id_keluar' => null,
-            'data_ok' => 1,
-            'ok_valid' => 1,
-            'ok_tuju' => 0,
-            'month(tgl) <=' => $this->session->userdata('bl'),
-            'year(tgl) <=' => $this->session->userdata('th')
-        ];
-        $data['bon'] = $this->out_model->getbon($kondisi);
+        $data['bon'] = $this->out_model->getbon();
         $this->load->view('out/add_out',$data);
     }
-    public function tambahdataout($id){
-        $kode = $this->out_model->tambahdataout($id);
-        if($kode){
-            $url = base_url().'out/dataout/'.$kode;
+    public function adddata(){
+        $hasil = $this->out_model->adddata();
+        if($hasil){
+            $url = base_url().'out/dataout/'.$hasil;
             redirect($url);
         }
+    }
+    public function tambahdataout(){
+        $arrgo = [
+            'id' => $_POST['id'],
+            'data' => $_POST['out']
+        ];
+        $kode = $this->out_model->tambahdataout($arrgo);
+        echo $kode;
     }
     public function edit_tgl(){
         $this->load->view('out/edit_tgl');

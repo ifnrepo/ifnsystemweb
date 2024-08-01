@@ -59,8 +59,8 @@ class In_model extends CI_Model{
             ];
             $this->db->where('id',$id);
             $this->db->update('tb_detail',$data);
+
             $this->db->select('tb_detail.*,user.name');
-            // $this->db->from('tb_detail');
             $this->db->join('user','tb_detail.verif_oleh=user.id','left');
             $query = $this->db->get_where('tb_detail',['tb_detail.id'=>$id]);
             return $query->result();
@@ -80,7 +80,13 @@ class In_model extends CI_Model{
                     'dept_id' => $det['dept_tuju'],
                     'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
                     'nobontr' => $det['nomor_dok'],
+                    'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],
+                    'po' => $det['po'],
+                    'item' => $det['item'],
+                    'dis' => $det['dis'],
+                    'dl' => $det['dl'],
+                    'nobale' => $det['nobale'],
                     'harga' => $det['harga'] 
                 ];
                 $this->db->where($kondisistok);
@@ -91,7 +97,13 @@ class In_model extends CI_Model{
                     'dept_id' => $det['dept_tuju'],
                     'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
                     'nobontr' => $det['nomor_dok'],
+                    'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],
+                    'po' => $det['po'],
+                    'item' => $det['item'],
+                    'dis' => $det['dis'],
+                    'dl' => $det['dl'],
+                    'nobale' => $det['nobale'],
                     'harga' => $det['harga'],
                     'pcs_masuk' => $det['pcs'],
                     'pcs_akhir' => $det['pcs'],

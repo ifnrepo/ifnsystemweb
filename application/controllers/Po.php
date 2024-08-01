@@ -18,6 +18,7 @@ class Po extends CI_Controller
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('mtuangmodel');
+        $this->load->model('helper_model','helpermodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -69,6 +70,8 @@ class Po extends CI_Controller
         $header['header'] = 'transaksi';
         $data['data'] = $this->pomodel->getdatabyid($kode);
         $data['mtuang'] = $this->mtuangmodel->getdata();
+        $jne = $this->session->userdata('jn_po')=='DO' ? 0 : 1;
+        $data['termspay'] = $this->helpermodel->getterms($jne);
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
         $this->load->view('po/datapo', $data);

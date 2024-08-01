@@ -52,7 +52,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="mt-1">
                     <textarea class="form-control form-sm font-kecil" placeholder="Alamat"><?= $data['alamat']; ?></textarea>
                   </div>
-                  <div class="mt-1">
+                  <div class="mt-0" style="margin-top: 1px !important;">
                     <div class="input-icon">
                        <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
                     <span class="input-icon-addon" id="loadertgldtbt">
@@ -83,6 +83,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <?php } ?>
                       </select>
                     </div>
+                  </div>
+                  <h4 class="mb-0 font-kecil font-bold">Terms Of Payment</h4>
+                  <div class="input-group">
+                    <select class="form-control form-select font-kecil font-bold text-primary" id="term_payment">
+                      <option value=""></option>
+                      <?php foreach ($termspay->result_array() as $terms) { ?>
+                        <option value="<?= $terms['id']; ?>" <?php if($data['id_term_payment']== $terms['id']){ echo "Selected"; } ?>><?= $terms['detail']; ?></option>
+                      <?php } ?>
+                    </select>
                   </div>
                 </div>
                 <div class="col-3">
@@ -133,7 +142,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="row mt-1">
               <label class="col-3 col-form-label">Jumlah</label>
               <div class="col">
-                <input type="text" class="form-control font-bold text-right" id="totalharga" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
+                <input type="text" class="form-control font-bold text-right" id="totalharga" aria-label="Text input with dropdown button" placeholder="Jumlah" value="" readonly>
               </div>
             </div>
             <div class="row mt-1">
@@ -143,16 +152,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </div>
             </div>
             <div class="row mt-1">
-              <label class="col-3 col-form-label">Total</label>
+              <label class="col-3 col-form-label">DPP</label>
               <div class="col">
-                <input type="text" class="form-control font-bold text-right" id="total" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
+                <input type="text" class="form-control font-bold text-right" id="total" aria-label="Text input with dropdown button" placeholder="DPP" value="" readonly>
               </div>
             </div>
             <div class="row mt-1">
-              <label class=" col-3 form-check font-kecil mt-2">
-                <input class="form-check-input" type="checkbox" id="cekppn" <?php if($data['cekppn']==1){ echo "checked"; } ?> >
-                <span class="form-check-label">PPN</span> 
-              </label>
+              <label class="col-3 col-form-label">% PPN</label>
+              <div class="col">
+                <input type="text" class="form-control inputangka text-right" id="cekppn" aria-label="Text input with dropdown button" placeholder="Persentase PPN" value="<?= rupiah($data['cekppn'],2); ?>">
+              </div>
+            </div>
+            <div class="row mt-1">
+              <label class="col-3 col-form-label">Nilai PPN</label>
               <div class="col">
                 <input type="text" class="form-control font-bold text-right" id="hargappn" aria-label="Text input with dropdown button" placeholder="Total PPN" value="<?= rupiah($data['ppn'],2); ?>" readonly>
               </div>

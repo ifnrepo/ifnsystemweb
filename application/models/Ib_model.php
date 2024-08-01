@@ -196,12 +196,7 @@ class Ib_model extends CI_Model
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
-    //End IB Models
-
-
-
-    public function getdetailpobyid($data)
-
+    public function getdetailibbyid($data)
     {
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
         $this->db->from('tb_detail a');
@@ -210,6 +205,16 @@ class Ib_model extends CI_Model
         $this->db->where('a.id', $data);
         return $this->db->get()->row_array();
     }
+    public function getdokbcmasuk(){
+        $this->db->where('masuk',1);
+        $hasil = $this->db->get('ref_dok_bc');
+        return $hasil;
+    }
+    //End IB Models
+
+
+
+
     public function updatepcskgs($data){
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$data);
@@ -274,13 +279,6 @@ class Ib_model extends CI_Model
         $hasil = $this->db->update('tb_detail', $data);
         return $hasil;
     }
-    public function cekdetail($id)
-    {
-        $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
-        $this->db->from('tb_detail');
-        $this->db->where('id_header', $id);
-        return $this->db->get()->row_array();
-    }
     public function simpanpo($data)
     {
         $jumlahrek = $this->db->get_where('tb_detail', ['id_header' => $data['id']])->num_rows();
@@ -293,13 +291,6 @@ class Ib_model extends CI_Model
     {
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('tb_header', $data);
-        return $hasil;
-    }
-    public function cekfield($id, $kolom, $nilai)
-    {
-        $this->db->where('id', $id);
-        $this->db->where($kolom, $nilai);
-        $hasil = $this->db->get('tb_header');
         return $hasil;
     }
     public function resetdetail($id)
