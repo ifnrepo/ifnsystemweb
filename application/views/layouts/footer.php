@@ -86,6 +86,9 @@
 <?php if (isset($fungsi) && $fungsi == 'ib') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/ib.js?1722504860"></script>
 <?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'adj') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/adj.js?1722504860"></script>
+<?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pendingtask') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1722504860"></script>
 <?php } ?>

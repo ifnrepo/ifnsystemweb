@@ -289,21 +289,21 @@
       </div>
     </div>
   </div>
-  <div id="preloader">
+  <!-- <div id="preloader">
     <div class="page page-center">
     <div class="container container-slim py-4">
         <div class="text-center">
           <div class="mb-3">
             <a href="." class="navbar-brand navbar-brand-autodark"><img src=<?= base_url() . "assets/image/logodepanK.png" ?> height="36" alt=""></a>
           </div>
-          <div class="text-secondary mb-3">Preparing application</div>
+          <div class="text-secondary mb-3">Preparing page</div>
           <div class="progress progress-sm">
             <div class="progress-bar progress-bar-indeterminate"></div>
           </div>
         </div>
       </div>
     </div>
-  </div>
+  </div> -->
   <!-- End Canvas -->
   <div class="page">
     <!-- Sidebar -->
@@ -490,7 +490,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 4); ?>" href="<?= base_url('out/clear'); ?>">
                       OUT (Bon Perpindahan)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj/clear'); ?>">
                       ADJ (Bon Adjustment)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po/clear'); ?>">

@@ -22,7 +22,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
-              <a href="<?= base_url() . 'pb/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <a href="<?= base_url() . 'adj/tambahdata'; ?>" class="btn btn-primary btn-sm" id="adddataadj"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
@@ -38,7 +38,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="row">
                 <div class="col-2">
                   <h4 class="mb-1 font-kecil">Dept Adjustment</h4>
-
+                  <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>" >
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="dept_kirim" name="dept_kirim">
@@ -81,7 +81,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Tgl</th>
                 <th>Nomor</th>
                 <th>Jumlah Item</th>
-                <th>Sv</th>
                 <th>Dibuat Oleh</th>
                 <th>Disetujui Oleh</th>
                 <th>Keterangan</th>
@@ -102,7 +101,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $tungguoke = 'Bon Belum divalidasi/disimpan';
                 }
                 if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0) {
-                  $tunggukonfirmasi = 'Menunggu Konfirmasi Kepala Dept';
+                  $tunggukonfirmasi = 'Menunggu Konfirmasi Manager';
                 }
                 if ($datdet['ok_valid'] == 2) {
                   $cancel = '(CANCEL) ' . $datdet['ketcancel'];
@@ -117,20 +116,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= tglmysql($datdet['tgl']); ?></td>
                   <td><a href='<?= base_url() . 'pb/viewdetailpb/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $jmlrec; ?></td>
-                  <td class="font-bold text-danger"><?php if($datdet['pb_sv']==1){ echo "Sv"; } ?></td>
                   <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
                   <td style="line-height: 14px;"><?= $usersetuju . "<br><span style='font-size: 10px;'>" . $tglsetuju . "</span>" ?></td>
                   <td><?= $tunggukonfirmasi . $tungguoke . $cancel ?></td>
-                  <td>
+                  <td class="text-right">
                     <?php
                     if ($datdet['data_ok'] == 0) {
-                      echo "<a href=" . base_url() . 'pb/datapb/' . $datdet["id"] . " class='btn btn-sm btn-primary btn-flat mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
-                      echo "<a href='#' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' data-href=" . base_url() . 'pb/hapusdata/' . $datdet["id"] . " title='Hapus data'><i class='fa fa-trash-o'></i></a>";
-                    } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0 && $this->session->userdata('levelsekarang') == 1 && $this->session->userdata('level_user') > 1) {
-                      echo "<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-info btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit data ini' data-href=" . base_url() . 'pb/editokpb/' . $datdet["id"] . " title='Validasi data'><i class='fa fa-refresh mr-1'></i> Edit Validasi</a>";
-                    } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0 && $this->session->userdata('levelsekarang') > 1) {
-                      echo "<a href='#' class='btn btn-sm btn-success btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Validasi data ini' data-href=" . base_url() . 'pb/validasipb/' . $datdet["id"] . " title='Validasi data'><i class='fa fa-check mr-1'></i></a>";
-                      echo "<a href='" . base_url() . 'pb/cancelpb/' . $datdet['id'] . "' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Cancel data' title='Cancel data'><i class='fa fa-times mr-1'></i></a>";
+                      echo "<a href=" . base_url() . 'adj/dataadj/' . $datdet["id"] . " class='btn btn-sm btn-primary btn-flat mr-1' title='Edit data'><i class='fa fa-edit mr-1'></i> Lanjutkan transaksi</a>";
+                      echo "<a href='#' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' data-href=" . base_url() . 'adj/hapusdataadj/' . $datdet["id"] . " title='Hapus data'><i class='fa fa-trash-o'></i></a>";
+                    } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0) {
+                      echo "<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-info btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit data ini' data-href=" . base_url() . 'adj/editokadj/' . $datdet["id"] . " title='Validasi data'><i class='fa fa-refresh mr-1'></i> Edit ADJ</a>";
                     } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 1 && $this->session->userdata('levelsekarang') == 1) {
                       echo "<a class='btn btn-sm btn-danger btn-flat mr-1' href=" . base_url() . 'pb/cetakbon/' . $datdet["id"] . " target='_blank' title='Cetak'><i class='fa fa-file-pdf-o mr-1'></i> PDF</a>";
                       if ($datdet['ok_tuju'] == 0 && $datdet['id_keluar'] == null) {
