@@ -530,6 +530,15 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 2); ?>" href="<?= base_url('inv/clear'); ?>">
                       Inventory
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 3); ?>" href="<?= base_url('invmesin'); ?>">
+                      Inventory Mesin
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 4); ?>" href="<?= base_url('bcmasuk'); ?>">
+                      BC Masuk
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 5); ?>" href="<?= base_url('bckeluar'); ?>">
+                      BC Keluar
+                    </a>
                   </div>
                 </div>
               </div>

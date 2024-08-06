@@ -97,17 +97,22 @@ class Pb extends CI_Controller
     }
     public function tambahpb()
     {
-        $data = [
-            'dept_id' => $_POST['dept_id'],
-            'dept_tuju' => $_POST['dept_tuju'],
-            'tgl' => tglmysql($_POST['tgl']),
-            'kode_dok' => 'PB',
-            'id_perusahaan' => IDPERUSAHAAN,
-            'pb_sv' => $_POST['jn'],
-            'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'],$_POST['jn'])
-        ];
-        $simpan = $this->pb_model->tambahpb($data);
-        echo $simpan['id'];
+        if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null ){
+            $this->session->set_flashdata('errorparam',1);
+            echo 0;
+        }else{
+            $data = [
+                'dept_id' => $_POST['dept_id'],
+                'dept_tuju' => $_POST['dept_tuju'],
+                'tgl' => tglmysql($_POST['tgl']),
+                'kode_dok' => 'PB',
+                'id_perusahaan' => IDPERUSAHAAN,
+                'pb_sv' => $_POST['jn'],
+                'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'],$_POST['jn'])
+            ];
+            $simpan = $this->pb_model->tambahpb($data);
+            echo $simpan['id'];
+        }
     }
     public function updatepb()
     {

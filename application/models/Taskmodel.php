@@ -5,7 +5,10 @@ class Taskmodel extends CI_Model
     {
         $this->db->where('id_perusahaan', IDPERUSAHAAN);
         $this->db->where('kode_dok', $mode);
-        if ($mode == 'pb') {
+        if ($mode == 'adj') {
+                $this->db->where('data_ok', 1);
+                $this->db->where('ok_valid', 0);
+        } else if ($mode == 'pb') {
             if ($this->session->userdata('level_user') >= 2) {
                 $this->db->where('data_ok', 1);
                 $this->db->where('ok_valid', 0);

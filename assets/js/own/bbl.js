@@ -18,6 +18,10 @@ $(document).ready(function () {
 	// 	}
 	// }
 	// $("#dept_kirim").change();
+	var errosimpan = $("#errorparam").val();
+	if (errosimpan == 1) {
+		pesan("Departemen Pembuat/Asal BBL belum diset !", "info");
+	}
 });
 $("#tglpb").datepicker();
 

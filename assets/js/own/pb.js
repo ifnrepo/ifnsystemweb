@@ -21,6 +21,10 @@ $(document).ready(function () {
 	}
 	$("#dept_kirim").change();
 	// $("#level").change();
+	var errosimpan = $("#errorparam").val();
+	if (errosimpan == 1) {
+		pesan("Departemen Asal dan Departemen Tujuan harus di isi !", "info");
+	}
 });
 // $("#tglpb").datepicker();
 

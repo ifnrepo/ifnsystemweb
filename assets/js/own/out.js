@@ -23,6 +23,10 @@ $(document).ready(function () {
 		}
 		pesan(isipesan, "info");
 	}
+	var errosimpan = $("#errorparam").val();
+	if (errosimpan == 1) {
+		pesan("Dept Asal & Dept Tujuan harus diset terlebih dahulu !", "info");
+	}
 	$("#dept_kirim").change();
 });
 $("#dept_kirim").change(function () {

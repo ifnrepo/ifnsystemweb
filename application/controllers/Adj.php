@@ -168,16 +168,23 @@ class Adj extends CI_Controller
     }
     public function simpanadj($id)
     {
-        $data = [
-            'data_ok' => 1,
-            'tgl_ok' => date('Y-m-d H:i:s'),
-            'user_ok' => $this->session->userdata('id'),
-            'id' => $id
-        ];
-        $simpan = $this->adjmodel->simpanadj($data);
-        if ($simpan) {
-            $url = base_url() . 'adj';
+        $cek = $this->adjmodel->cekfield($id,'keterangan','');
+        if($cek->num_rows() > 0){
+            $this->session->set_flashdata('errorparam',4);
+            $url = base_url() . 'adj/dataadj/'.$id;
             redirect($url);
+        }else{
+            $data = [
+                'data_ok' => 1,
+                'tgl_ok' => date('Y-m-d H:i:s'),
+                'user_ok' => $this->session->userdata('id'),
+                'id' => $id
+            ];
+            $simpan = $this->adjmodel->simpanadj($data);
+            if ($simpan) {
+                $url = base_url() . 'adj';
+                redirect($url);
+            }
         }
     }
     public function editokadj($id)
@@ -199,6 +206,12 @@ class Adj extends CI_Controller
             $url = base_url() . 'adj';
             redirect($url);
         }
+    }
+    public function viewdetailadj($id)
+    {
+        $data['header'] = $this->adjmodel->getdatabyid($id);
+        $data['detail'] = $this->adjmodel->getdatadetailadj($id);
+        $this->load->view('adj/viewdetailadj', $data);
     }
     //END ADJ Controllers
     public function edittgl()
@@ -298,12 +311,7 @@ class Adj extends CI_Controller
 
 
 
-    public function viewdetailpb($id)
-    {
-        $data['header'] = $this->pb_model->getdatabyid($id);
-        $data['detail'] = $this->pb_model->getdatadetailpb($id);
-        $this->load->view('pb/viewdetailpb', $data);
-    }
+
     public function ubahperiode()
     {
         $this->session->set_userdata('bl', $_POST['bl']);

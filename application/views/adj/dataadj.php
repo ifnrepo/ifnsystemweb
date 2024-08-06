@@ -11,6 +11,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       </div>
       <div class="col-md-6" style="text-align: right;">
         <a href="<?= base_url() . 'adj'; ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+        <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
       </div>
     </div>
   </div>
@@ -43,6 +44,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a href="<?= base_url() . 'pb/edittgl'; ?>" title="Edit tanggal" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
                       <i class="fa fa-edit"></i>
                     </a>
+                    <input type="hidden" id="ketbon" value="<?= $data['keterangan']; ?>">
                   </span>
                 </div>
                 <div class="col-3">

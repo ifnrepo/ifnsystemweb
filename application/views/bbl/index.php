@@ -6,11 +6,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="row g-0 d-flex align-items-between">
             <div class="col-md-6">
                 <h2 class="page-title p-2">
-                    BBL (Bon Pembelian Barang)
+                    BBL (Bon Pembelian Barang) <?= $this->session->userdata('deptsekarang'); ?>
                 </h2>
             </div>
             <div class="col-md-6" style="text-align: right;">
                 <a href="<?= base_url(); ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+                <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
         </div>
     </div>

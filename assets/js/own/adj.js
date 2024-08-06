@@ -31,6 +31,9 @@ $(document).ready(function () {
 	if (errosimpan == 3) {
 		pesan("Data sudah divalidasi !", "info");
 	}
+	if (errosimpan == 4) {
+		pesan("Data keterangan/catatan ADJ harus di isi !", "info");
+	}
 });
 // $("#tglpb").datepicker();
 

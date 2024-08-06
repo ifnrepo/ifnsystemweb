@@ -170,6 +170,11 @@ class Adj_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
+    public function simpancanceladj($data)
+    {
+        $this->db->where('id', $data['id']);
+        return $this->db->update('tb_header', $data);
+    }
     //End Adj Model
     public function depttujupb($kode)
     {
@@ -215,9 +220,5 @@ class Adj_model extends CI_Model
     
    
 
-    public function simpancancelpb($data)
-    {
-        $this->db->where('id', $data['id']);
-        return $this->db->update('tb_header', $data);
-    }
+
 }

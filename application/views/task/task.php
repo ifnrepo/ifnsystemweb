@@ -6,7 +6,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          Pending Task [<?= $this->session->userdata('ttd'); ?>]
+          <?php $hasil = $this->session->userdata('modetask')=='' ? '' : 'Validasi '.strtoupper($this->session->userdata('modetask')) ?>
+          <div>Pending Task [<?= $this->session->userdata('ttd'); ?>] <br><span class="title-dok"><?= $hasil; ?></span></div>
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -26,17 +27,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php if(count($this->session->userdata('hak_ttd_pb')) > 0): ?>
               <option value="pb" <?php if ($this->session->userdata('modetask') == 'pb') {
                                     echo 'selected';
-                                  } ?>>PB (Permintaan Barang)</option>
+                                  } ?>>Validasi PB (Permintaan Barang)</option>
               <?php endif; ?>
               <?php if($this->session->userdata('ttd') >= 2): ?>
               <option value="bbl" <?php if ($this->session->userdata('modetask') == 'bbl') {
                                     echo 'selected';
-                                  } ?>>BBL (Bon Permintaan Pembelian)</option>
+                                  } ?>>Validasi BBL (Bon Permintaan Pembelian)</option>
               <?php endif; ?>
               <?php if($this->session->userdata('cekpo') == 1): ?>
               <option value="po" <?php if ($this->session->userdata('modetask') == 'po') {
                                     echo 'selected';
-                                  } ?>>PO (Purchase Order)</option>
+                                  } ?>>Validasi PO (Purchase Order)</option>
+              <?php endif; ?>
+              <?php if($this->session->userdata('cekadj') == 1): ?>
+              <option value="adj" <?php if ($this->session->userdata('modetask') == 'adj') {
+                                    echo 'selected';
+                                  } ?>>Validasi ADJ (Adjustment)</option>
               <?php endif; ?>
             </select>
             <button class="btn font-kecil font-bold btn-flat" id="gettask" type="button">Get !</button>
@@ -59,23 +65,29 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </thead>
           <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
             <?php foreach ($data->result_array() as $datpb) {
-              if ($this->session->userdata('modetask') == 'pb') {
-                $viewdetail = base_url() . 'pb/viewdetailpb/' . $datpb['id'];
-                $btnok = base_url() . 'task/validasipb/' . $datpb['id'];
-                $btnno = base_url() . 'task/cancelpb/' . $datpb['id'];
-              } else {
-                $ttdke = $datpb['data_ok']+$datpb['ok_pp']+$datpb['ok_valid']+$datpb['ok_tuju']+$datpb['ok_pc']+1;
-                if($this->session->userdata('modetask')=='po'){
-                  $viewdetail = base_url() . 'po/viewdetail/' . $datpb['id'];
-                  $btnok = base_url() . 'task/validasipo/' . $datpb['id'] . '/3';
-                  $btnno = base_url() . 'task/cancelpo/' . $datpb['id'] . '/3';
-                }else{
-                  $viewdetail = base_url() . 'bbl/viewdetail_bbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
-                  $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $ttdke;
-                  $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $ttdke;
+              if($this->session->userdata('modetask') == 'adj'){
+                $viewdetail = base_url() . 'adj/viewdetailadj/' . $datpb['id'];
+                $btnok = base_url() . 'task/validasiadj/' . $datpb['id'];
+                $btnno = base_url() . 'task/canceladj/' . $datpb['id'];
+              }else {
+                if ($this->session->userdata('modetask') == 'pb') {
+                  $viewdetail = base_url() . 'pb/viewdetailpb/' . $datpb['id'];
+                  $btnok = base_url() . 'task/validasipb/' . $datpb['id'];
+                  $btnno = base_url() . 'task/cancelpb/' . $datpb['id'];
+                } else {
+                  $ttdke = $datpb['data_ok']+$datpb['ok_pp']+$datpb['ok_valid']+$datpb['ok_tuju']+$datpb['ok_pc']+1;
+                  if($this->session->userdata('modetask')=='po'){
+                    $viewdetail = base_url() . 'po/viewdetail/' . $datpb['id'];
+                    $btnok = base_url() . 'task/validasipo/' . $datpb['id'] . '/3';
+                    $btnno = base_url() . 'task/cancelpo/' . $datpb['id'] . '/3';
+                  }else{
+                    $viewdetail = base_url() . 'bbl/viewdetail_bbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
+                    $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $ttdke;
+                    $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $ttdke;
+                  }
+                  $btnedit = base_url() . 'task/editbbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
+                  $btneditapprover = base_url() . 'task/editapprovebbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
                 }
-                $btnedit = base_url() . 'task/editbbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
-                $btneditapprover = base_url() . 'task/editapprovebbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
               }
             ?>
               <tr>

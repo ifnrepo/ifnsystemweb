@@ -14,6 +14,7 @@ class Task extends CI_Controller {
         $this->load->model('pb_model');
         $this->load->model('bbl_model');
         $this->load->model('dept_model', 'deptmodel');
+        $this->load->model('adj_model', 'adjmodel');
     }
 	public function index()
 	{  
@@ -182,6 +183,41 @@ class Task extends CI_Controller {
             $simpan =1;
         }
         if ($simpan) {
+            $url = base_url() . 'task';
+            redirect($url);
+        }
+    }
+    public function validasiadj($id)
+    {
+        $cek = $this->pb_model->cekfield($id,'data_ok',1)->num_rows();
+        if($cek==1){
+            $data = [
+                'ok_valid' => 1,
+                'tgl_valid' => date('Y-m-d H:i:s'),
+                'user_valid' => $this->session->userdata('id'),
+                'id' => $id
+            ];
+            $simpan = $this->adjmodel->validasiadj($data);
+        }else{
+            $simpan = 1;
+        }
+        if ($simpan) {
+            $url = base_url() . 'task';
+            redirect($url);
+        }
+    }
+    public function canceladj($id,$tab)
+    {
+         $data = [
+            'id' => $id,
+            // 'ketcancel' => $_POST['ketcancel'],
+            'ok_valid' => 2,
+            'user_valid' => $this->session->userdata('id'),
+            'tgl_valid' => date('Y-m-d H:i:s')
+        ];
+        $simpan = $this->adjmodel->simpancanceladj($data);
+        if ($simpan) {
+            $this->session->set_flashdata('tabdef',$tab);
             $url = base_url() . 'task';
             redirect($url);
         }
