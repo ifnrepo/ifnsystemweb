@@ -8,22 +8,31 @@ $(document).ready(function () {
 	var pisah = url.split("/");
 	// alert(pisah[5]);
 	if (pisah[2] == "localhost") {
-		if (pisah[5] == "datapb") {
-			getdatadetailpb();
+		if (pisah[5] == "dataadj") {
+			getdatadetailadj();
 		}
 	} else {
 		if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
 			// getdatainvoice();
 		}
-		if (pisah[5] == "datapb") {
-			getdatadetailpb();
+		if (pisah[5] == "dataadj") {
+			getdatadetailadj();
 		}
 	}
-	$("#dept_kirim").change();
+	// $("#dept_kirim").change();
 	// $("#level").change();
 	var errosimpan = $("#errorparam").val();
 	if (errosimpan == 1) {
-		pesan("Departemen Asal dan Departemen Tujuan harus di isi !", "info");
+		pesan("Set dahulu Dept Adjustment dengan klik tombol GO !", "info");
+	}
+	if (errosimpan == 2) {
+		pesan("Data Adjustment berhasil dihapus !", "info");
+	}
+	if (errosimpan == 3) {
+		pesan("Data sudah divalidasi !", "info");
+	}
+	if (errosimpan == 4) {
+		pesan("Data keterangan/catatan ADJ harus di isi !", "info");
 	}
 });
 // $("#tglpb").datepicker();
@@ -32,14 +41,14 @@ $("#dept_kirim").change(function () {
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
-		url: base_url + "pb/depttujupb",
+		url: base_url + "adj/depttujuadj",
 		data: {
 			kode: $(this).val(),
 		},
 		success: function (data) {
 			// alert(data);
 			// window.location.reload();
-			$("#dept_tuju").html(data);
+			// $("#dept_tuju").html(data);
 			// $("#dept_tuju").change();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
@@ -84,7 +93,8 @@ $("#simpandetailbarang").click(function () {
 });
 $("#butgo").click(function () {
 	// $("#dept_tuju").change();
-	getdatapb();
+	getdataadj();
+	// alert("XXX");
 });
 $("#resetdetailbarang").click(function () {
 	$("#id_barang").val("");
@@ -95,16 +105,17 @@ $("#resetdetailbarang").click(function () {
 	$("#id").val("");
 });
 $("#nama_barang").on("keyup", function (e) {
-	if (e.key == "Enter" || e.keycode === 13) {
+	// alert("INI");
+	if (e.key == "enter" || e.keycode === 13) {
 		$("#caribarang").click();
 	}
 });
-$(document).on("click", "#editdetailpb", function () {
+$(document).on("click", "#editdetailadj", function () {
 	var noid = $(this).attr("rel");
 	$.ajax({
 		dataType: "json",
 		type: "POST",
-		url: base_url + "pb/getdetailpbbyid",
+		url: base_url + "adj/getdetailadjbyid",
 		data: {
 			id: noid,
 		},
@@ -115,7 +126,7 @@ $(document).on("click", "#editdetailpb", function () {
 			$("#id_satuan").val(data[0].id_satuan);
 			$("#pcs").val(data[0].pcs);
 			$("#kgs").val(data[0].kgs);
-			$("#formbarangpb").attr("action", base_url + "pb/updatedetailbarang");
+			$("#formbarangpb").attr("action", base_url + "adj/updatedetailbarang");
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -140,7 +151,6 @@ $("#level").change(function () {
 });
 $("#bl").change(function () {
 	$.ajax({
-		// dataType: "json",
 		type: "POST",
 		url: base_url + "pb/ubahperiode",
 		data: {
@@ -159,16 +169,14 @@ $("#bl").change(function () {
 $("#th").change(function () {
 	$("#bl").change();
 });
-function getdatapb() {
+function getdataadj() {
 	// alert($("#level").val());
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
-		url: base_url + "pb/getdatapb",
+		url: base_url + "adj/getdataadj",
 		data: {
 			dept_id: $("#dept_kirim").val(),
-			dept_tuju: $("#dept_tuju").val(),
-			levelsekarang: $("#level").val(),
 		},
 		success: function (data) {
 			// alert(data.datagroup);
@@ -181,18 +189,19 @@ function getdatapb() {
 		},
 	});
 }
-function getdatadetailpb() {
+function getdatadetailadj() {
 	$.ajax({
 		dataType: "json",
 		type: "POST",
-		url: base_url + "pb/getdatadetailpb",
+		url: base_url + "adj/getdatadetailadj",
 		data: {
 			id_header: $("#id_header").val(),
 		},
 		success: function (data) {
-			// alert(data.jmlrek);
+			// alert(data.jmlpcs);
 			// window.location.reload();
 			$("#jmlrek").val(data.jmlrek);
+			// $("#jmlpcs").innerText(data.jmlpcs);
 			$("#body-table").html(data.datagroup).show();
 			if (data.jmlrek == 0) {
 				$("#simpanpb").addClass("disabled");

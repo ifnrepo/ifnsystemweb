@@ -61,8 +61,13 @@
             },
             success: function(data){
                 // alert('berhasil');
-                window.location.href = base_url+"pb/datapb/"+data;
-                $("#butbatal").click();
+                if(data==0){
+                    window.location.href = base_url+"pb";
+                    $("#butbatal").click();
+                }else{
+                    window.location.href = base_url+"pb/datapb/"+data;
+                    $("#butbatal").click();
+                }
             },
             error: function(xhr, ajaxOptions, thrownError){
                 console.log(xhr.status);

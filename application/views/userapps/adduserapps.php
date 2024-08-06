@@ -100,10 +100,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col">View Harga</span>
+                      <span class="col font-bold">View Harga</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="view_harga" id="view_harga" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col">Validator ADJ</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekadj" id="cekadj" type="checkbox">
                         </label>
                       </span>
                     </label>
@@ -292,6 +307,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="other2" name="other2" type="checkbox">
                                 <span class="form-check-label">Inventory</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other3" name="other3" type="checkbox">
+                                <span class="form-check-label">Inventory Mesin</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other4" name="other4" type="checkbox">
+                                <span class="form-check-label">BC Masuk</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other5" name="other5" type="checkbox">
+                                <span class="form-check-label">BC Keluar</span>
                               </label>
                             </div>
                             <div class="col-6">
