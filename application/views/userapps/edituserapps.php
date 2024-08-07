@@ -38,7 +38,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Departemen </label>
                 <div class="col">
-                  <select name="id_dept" id="id_dept" class="form-control">
+                  <select name="id_dept" id="id_dept" class="form-control form-select">
                     <option value="">Departemen</option>
                     <?php foreach ($dept as $dep) : ?>
                       <?php if ($dep['dept_id'] == $user['id_dept']) : ?>
@@ -53,13 +53,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">jabatan</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $user['jabatan']; ?>">
+                  <!-- <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $user['jabatan']; ?>"> -->
+                   <select name="jabatan" id="jabatan" class="form-control form-select">
+                    <option value="">Jabatan</option>
+                    <?php foreach ($jabat as $jbt) : $selek = $jbt['nama_jabatan']==strtoupper($user['jabatan']) ? 'selected' : ''; ?>
+                      <option value="<?= $jbt['nama_jabatan']; ?>" <?= $selek; ?>><?= $jbt['nama_jabatan']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Level User </label>
                 <div class="col">
-                  <select name="id_level_user" id="id_level_user" class="form-control">
+                  <select name="id_level_user" id="id_level_user" class="form-control form-select">
                     <option value="">Level User</option>
                     <?php foreach ($level as $a) : ?>
                       <option value="<?= $a['id']; ?>" <?= ($user['id_level_user'] == $a['id']) ? 'selected' : ''; ?>>

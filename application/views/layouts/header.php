@@ -516,7 +516,7 @@
                   </svg>
                 </span>
                 <span class="nav-link-title ">
-                  Other
+                  Report
                 </span>
               </a>
               <div class="dropdown-menu <?php if (isset($header) && $header == 'other') {

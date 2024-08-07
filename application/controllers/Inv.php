@@ -23,7 +23,7 @@ class Inv extends CI_Controller
     }
     public function index()
     {
-        $header['header'] = 'inventory';
+        $header['header'] = 'other';
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();

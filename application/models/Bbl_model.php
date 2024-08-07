@@ -73,6 +73,7 @@ class Bbl_model extends CI_Model
         $this->db->where('tb_header.id_keluar IS NULL');
         $this->db->where('tb_header.dept_tuju', $dept_id);
         $this->db->where('tb_detail.id_bbl', 0);
+        $this->db->order_by('tb_header.tgl', 'DESC');
         $this->db->order_by('tb_header.nomor_dok', 'ASC');
         $query = $this->db->get()->result_array();
 

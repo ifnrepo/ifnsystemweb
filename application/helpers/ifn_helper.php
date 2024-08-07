@@ -364,7 +364,7 @@ function tungguvalid($kode){
             $hasil = 'Validasi Manager Purchasing';
             break;
         default:
-            $hasil = 'X';
+            $hasil = 'Validasi Kepala Departemen';
             break;
     }
     return $hasil;

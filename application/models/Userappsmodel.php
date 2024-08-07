@@ -53,6 +53,14 @@ class Userappsmodel extends CI_Model
                 unset($data['transaksi' . $x]);
             }
         }
+        // Set Modul Other
+        $other = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['other' . $x])) {
+                $other = substr_replace($other, '10', ($x * 2) - 2, 2);
+                unset($data['other' . $x]);
+            }
+        }
         // Set modul manajemen
         $manajemen = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
