@@ -277,7 +277,10 @@
     </div>
     <div class="offcanvas-body">
       <div class="fetched-data">
-        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab assumenda ea est, eum exercitationem fugiat illum itaque laboriosam magni necessitatibus, nemo nisi numquam quae reiciendis repellat sit soluta unde. Aut!
+        <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab assumenda ea est, eum exercitationem fugiat illum itaque laboriosam magni necessitatibus, nemo nisi numquam quae reiciendis repellat sit soluta unde. Aut! -->
+         <div class="text-center p-5" style="font-size: 20px;">
+        <div class="spinner-border spinner-border text-teal text-center" role="status"></div> LOADING...
+        </div>
       </div>
       <div class="mt-3">
         <button class="btn btn-primary btn-sm btn-flat" type="button" data-bs-dismiss="offcanvas">
@@ -286,6 +289,21 @@
       </div>
     </div>
   </div>
+  <!-- <div id="preloader">
+    <div class="page page-center">
+    <div class="container container-slim py-4">
+        <div class="text-center">
+          <div class="mb-3">
+            <a href="." class="navbar-brand navbar-brand-autodark"><img src=<?= base_url() . "assets/image/logodepanK.png" ?> height="36" alt=""></a>
+          </div>
+          <div class="text-secondary mb-3">Preparing page</div>
+          <div class="progress progress-sm">
+            <div class="progress-bar progress-bar-indeterminate"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div> -->
   <!-- End Canvas -->
   <div class="page">
     <!-- Sidebar -->
@@ -318,7 +336,7 @@
               </svg>
             </a>
           </div>
-          <div class="nav-item dropdown">
+          <div class="nav-item dropdown mr-2">
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
@@ -329,7 +347,9 @@
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
               <a class="dropdown-item">Status</a>
               <a class="dropdown-item">Profile</a>
-              <a class="dropdown-item">Feedback</a>
+              <a href="<?= base_url().'userapps/refreshsess/'.$this->session->userdata('id').'/'.uri_string(); ?>" class="dropdown-item">
+              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" /><path d="M20 4v5h-5" /></svg>  
+              Refresh session</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item">Settings</a>
               <a href="<?= base_url() . 'Auth/logout'; ?>" class="dropdown-item">Logout</a>
@@ -340,7 +360,7 @@
           <ul class="navbar-nav pt-lg-3">
             <li class="nav-item">
               <a class="nav-link <?php if (!isset($header)) {
-                                    echo 'active';
+                                    echo 'active';  
                                   } ?>" href="<?= base_url(); ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -470,7 +490,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 4); ?>" href="<?= base_url('out/clear'); ?>">
                       OUT (Bon Perpindahan)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj/clear'); ?>">
                       ADJ (Bon Adjustment)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po/clear'); ?>">
@@ -496,7 +516,7 @@
                   </svg>
                 </span>
                 <span class="nav-link-title ">
-                  Other
+                  Report
                 </span>
               </a>
               <div class="dropdown-menu <?php if (isset($header) && $header == 'other') {
@@ -509,6 +529,15 @@
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 2); ?>" href="<?= base_url('inv/clear'); ?>">
                       Inventory
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 3); ?>" href="<?= base_url('invmesin'); ?>">
+                      Inventory Mesin
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 4); ?>" href="<?= base_url('bcmasuk'); ?>">
+                      BC Masuk
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 5); ?>" href="<?= base_url('bckeluar'); ?>">
+                      BC Keluar
                     </a>
                   </div>
                 </div>
@@ -586,7 +615,9 @@
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
               <a class="dropdown-item">Status</a>
               <a class="dropdown-item">Profile</a>
-              <a class="dropdown-item">Feedback</a>
+              <a href="<?= base_url().'userapps/refreshsess/'.$this->session->userdata('id').'/'.uri_string(); ?>" class="dropdown-item">
+                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" /><path d="M20 4v5h-5" /></svg>
+                Refresh session</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item">Settings</a>
               <a href="<?= base_url() . 'Auth/logout'; ?>" class="dropdown-item">Logout</a>

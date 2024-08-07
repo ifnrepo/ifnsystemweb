@@ -138,6 +138,17 @@ function nomorib()
     $urut++;
     return "SU-" . $deptr.'/P/'. $bl . $thp . "/" . sprintf("%03s", $urut);
 }
+function nomoradj($tgl, $asal)
+{
+    $bl = date('m', strtotime($tgl));
+    $th = date('y', strtotime($tgl));
+    $thp = date('Y', strtotime($tgl));
+    $CI = &get_instance();
+    $kode = $CI->adjmodel->getnomoradj($bl, $thp, $asal);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return $asal . "/A/" . $bl . $th . "/" . sprintf("%03s", $urut);
+}
 function tglmysql($tgl)
 {
     if ($tgl == '') {
@@ -353,7 +364,7 @@ function tungguvalid($kode){
             $hasil = 'Validasi Manager Purchasing';
             break;
         default:
-            $hasil = 'X';
+            $hasil = 'Validasi Kepala Departemen';
             break;
     }
     return $hasil;

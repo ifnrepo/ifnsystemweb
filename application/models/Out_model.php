@@ -233,6 +233,7 @@ class Out_model extends CI_Model{
                     'nobontr' => $datdet['nobontr'],
                     'dl' => $datdet['dl'],
                     'nobale' => $datdet['nobale'],
+                    'stok' => $datdet['stok'],
                     'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
                 ];
             }
@@ -293,6 +294,7 @@ class Out_model extends CI_Model{
                             $this->db->set('nobontr',$nobontr);
                             $this->db->set('pcs',$kurangpcs);
                             $this->db->set('kgs',$kurangkgs);
+                            $this->db->set('harga',$deta['harga']);
                             $this->db->where('id',$idinsert);
                             $this->db->update('tb_detail');
                         }else{
@@ -301,6 +303,7 @@ class Out_model extends CI_Model{
                             $this->db->set('nobontr',$nobontr);
                             $this->db->set('pcs',$kurangpcs);
                             $this->db->set('kgs',$kurangkgs);
+                            $this->db->set('harga',$deta['harga']);
                             $this->db->where('id',$datdet['id']);
                             $this->db->update('tb_detail');
                         }

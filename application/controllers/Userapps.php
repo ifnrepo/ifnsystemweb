@@ -41,8 +41,9 @@ class Userapps extends CI_Controller
 		$data['daftardept'] = $this->deptmodel->getdata();
 		$data['jmldept'] = $this->deptmodel->jmldept();
 		$data['deptpb'] = $this->deptmodel->getdata_dept_pb();
-		$data['dept'] = $this->db->get('dept')->result_array();
+		$data['dept'] = $this->db->order_by('departemen')->get('dept')->result_array();
 		$data['level'] = $this->db->get('level_user')->result_array();
+		$data['jabat'] = $this->db->get('jabatan')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/adduserapps', $data);
@@ -57,7 +58,8 @@ class Userapps extends CI_Controller
 		$data['jmldept'] = $this->deptmodel->jmldept();
 		$data['deptpb'] = $this->deptmodel->getdata_dept_pb();
 		$data['level'] = $this->db->get('level_user')->result_array();
-		$data['dept'] = $this->db->get('dept')->result_array();
+		$data['dept'] = $this->db->order_by('departemen')->get('dept')->result_array();
+		$data['jabat'] = $this->db->get('jabatan')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/edituserapps', $data);
@@ -83,5 +85,12 @@ class Userapps extends CI_Controller
 	{
 		$data['user'] = $this->userappsmodel->getdatabyid($id)->row_array();
 		$this->load->view('userapps/viewuser', $data);
+	}
+	public function refreshsess($id,$urrl){
+		$hasil = $this->userappsmodel->refreshsess($id);
+		if($hasil){
+			$url  = base_url($urrl);
+			redirect($url);
+		}
 	}
 }

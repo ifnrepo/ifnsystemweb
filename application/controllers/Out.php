@@ -130,10 +130,16 @@ class Out extends CI_Controller {
         $this->load->view('out/add_out',$data);
     }
     public function adddata(){
-        $hasil = $this->out_model->adddata();
-        if($hasil){
-            $url = base_url().'out/dataout/'.$hasil;
+        if(($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null) && ($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null)){
+            $this->session->set_flashdata('errorparam',1);
+            $url = base_url().'out';
             redirect($url);
+        }else{
+            $hasil = $this->out_model->adddata();
+            if($hasil){
+                $url = base_url().'out/dataout/'.$hasil;
+                redirect($url);
+            }
         }
     }
     public function tambahdataout(){

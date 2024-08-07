@@ -134,4 +134,14 @@ class Dept_model extends CI_Model
         $this->db->where('pb', '1');
         return $this->db->order_by('departemen','ASC')->get()->result_array();
     }
+    public function getdata_dept_adj($dept='')
+    {
+        $this->db->select('*');
+        $this->db->from('dept');
+        $this->db->where('adj', '1');
+        if($dept != ''){
+            $this->db->where_in('dept_id',$dept);
+        }
+        return $this->db->order_by('departemen','ASC')->get()->result_array();
+    }
 }

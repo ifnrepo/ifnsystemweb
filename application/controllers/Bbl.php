@@ -53,21 +53,26 @@ class Bbl extends CI_Controller
 
     public function tambahbbl()
     {
-        $data = [
-            'dept_id' => $_POST['dept_id'],
-            'dept_tuju' => $_POST['dept_tuju'],
-            'tgl' => tglmysql($_POST['tgl']),
-            'jn_bbl' => $_POST['jn_bbl'],
-            'kode_dok' => 'BBL',
-            'id_perusahaan' => IDPERUSAHAAN,
-            'bbl_sv' => $_POST['jn'],
-            'bbl_pp' => $_POST['dept_id']=='GM' ? 1 : 0,
-            'dept_bbl' => $_POST['jn_bbl']==1 ? $_POST['dept_id'] : NULL,
-            'nomor_dok' => nomorbbl(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'])
-        ];
-        $simpan = $this->bbl_model->tambah_bbl($data);
-        $this->session->set_userdata('selected_dept', $_POST['dept_id']);
-        echo $simpan['id'];
+        if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null){
+            $this->session->set_flashdata('errorparam',1);
+            echo 0;
+        }else{
+            $data = [
+                'dept_id' => $_POST['dept_id'],
+                'dept_tuju' => $_POST['dept_tuju'],
+                'tgl' => tglmysql($_POST['tgl']),
+                'jn_bbl' => $_POST['jn_bbl'],
+                'kode_dok' => 'BBL',
+                'id_perusahaan' => IDPERUSAHAAN,
+                'bbl_sv' => $_POST['jn'],
+                'bbl_pp' => $_POST['dept_id']=='GM' ? 1 : 0,
+                'dept_bbl' => $_POST['jn_bbl']==1 ? $_POST['dept_id'] : NULL,
+                'nomor_dok' => nomorbbl(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'])
+            ];
+            $simpan = $this->bbl_model->tambah_bbl($data);
+            $this->session->set_userdata('selected_dept', $_POST['dept_id']);
+            echo $simpan['id'];
+        }
     }
 
     public function databbl($id)

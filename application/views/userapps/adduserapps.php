@@ -37,7 +37,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Departemen</label>
                 <div class="col">
-                  <select name="id_dept" id="id_dept" class="form-control">
+                  <select name="id_dept" id="id_dept" class="form-control form-select">
                     <option value="Select Menu">Departemen</option>
                     <?php foreach ($dept as $dep) : ?>
                       <option value="<?= $dep['dept_id']; ?>"><?= $dep['departemen']; ?></option>
@@ -48,13 +48,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Jabatan</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan">
+                  <!-- <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan"> -->
+                  <select name="jabatan" id="jabatan" class="form-control form-select">
+                    <option value="">Jabatan</option>
+                    <?php foreach ($jabat as $jbt) : ?>
+                      <option value="<?= $jbt['nama_jabatan']; ?>"><?= $jbt['nama_jabatan']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Level User</label>
                 <div class="col">
-                  <select name="id_level_user" id="id_level_user" class="form-control">
+                  <select name="id_level_user" id="id_level_user" class="form-control form-select">
                     <option value="Select Menu">Level User</option>
                     <?php foreach ($level as $a) : ?>
                       <option value="<?= $a['id']; ?>"><?= $a['level']; ?></option>
@@ -89,6 +95,36 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="aktif" id="aktif" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col font-bold">View Harga</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="view_harga" id="view_harga" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col">Validator ADJ</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekadj" id="cekadj" type="checkbox">
                         </label>
                       </span>
                     </label>
@@ -277,6 +313,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="other2" name="other2" type="checkbox">
                                 <span class="form-check-label">Inventory</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other3" name="other3" type="checkbox">
+                                <span class="form-check-label">Inventory Mesin</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other4" name="other4" type="checkbox">
+                                <span class="form-check-label">BC Masuk</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other5" name="other5" type="checkbox">
+                                <span class="form-check-label">BC Keluar</span>
                               </label>
                             </div>
                             <div class="col-6">

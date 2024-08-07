@@ -32,6 +32,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div> -->
               <a href="<?= base_url() . 'out/adddata'; ?>" class="btn btn-primary btn-sm" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 mb-0 d-flex flex-row-reverse" style="text-align: right;">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
