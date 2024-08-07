@@ -96,8 +96,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <td class="font-bold font-kecil"><?php if ($datpb['bbl_pp'] == 1) {
                                                     echo "P";
                                                   } ?></td>
-                <td class="font-bold font-kecil"><?php if ($datpb['bbl_sv'] == 1) {
-                                                    echo "Sv";
+                <td class="font-bold font-kecil"><?php if ($datpb['pb_sv'] == 1 || $datpb['bbl_sv'] == 1) {
+                                                    echo "<span class='text-danger'>Sv</span>";
                                                   } ?></td>
                 <td class="font-bold font-kecil"><?= $datpb['dept_bbl']; ?></td>
                 <td><?= $datpb['keterangan']; ?></td>

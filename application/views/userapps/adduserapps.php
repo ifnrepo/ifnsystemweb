@@ -37,7 +37,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Departemen</label>
                 <div class="col">
-                  <select name="id_dept" id="id_dept" class="form-control">
+                  <select name="id_dept" id="id_dept" class="form-control form-select">
                     <option value="Select Menu">Departemen</option>
                     <?php foreach ($dept as $dep) : ?>
                       <option value="<?= $dep['dept_id']; ?>"><?= $dep['departemen']; ?></option>
@@ -48,13 +48,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Jabatan</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan">
+                  <!-- <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan"> -->
+                  <select name="jabatan" id="jabatan" class="form-control form-select">
+                    <option value="">Jabatan</option>
+                    <?php foreach ($jabat as $jbt) : ?>
+                      <option value="<?= $jbt['nama_jabatan']; ?>"><?= $jbt['nama_jabatan']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Level User</label>
                 <div class="col">
-                  <select name="id_level_user" id="id_level_user" class="form-control">
+                  <select name="id_level_user" id="id_level_user" class="form-control form-select">
                     <option value="Select Menu">Level User</option>
                     <?php foreach ($level as $a) : ?>
                       <option value="<?= $a['id']; ?>"><?= $a['level']; ?></option>

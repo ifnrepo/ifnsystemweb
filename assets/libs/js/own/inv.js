@@ -60,7 +60,7 @@ $("#tglawal").datepicker({
 	autoclose: true,
 	format: "dd-mm-yyyy",
 	todayHighlight: true,
-	maxDate: 0,
+	maxDate: "01-08-2024",
 });
 $("#updateinv").click(function () {
 	var tglawal = $("#tglawal").val();

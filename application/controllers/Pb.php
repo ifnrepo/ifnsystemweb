@@ -376,7 +376,7 @@ class Pb extends CI_Controller
         $detail = $this->pb_model->getdatadetailpb($id);
         $no = 1;
         foreach ($detail as $det) {
-            $jumlah = $det['pcs'] == null ? $det['kgs'] : $det['pcs'];
+            $jumlah = $det['pcs'] == 0 ? $det['kgs'] : $det['pcs'];
             $pdf->Cell(8, 6, $no++, 'LRB', 0);
             $pdf->Cell(97, 6, $det['nama_barang'], 'LBR', 0);
             $pdf->Cell(45, 6, '', 'LRB', 0);

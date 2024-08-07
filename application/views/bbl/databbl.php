@@ -120,7 +120,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="form-tombol mt-1 text-right">
           <input type="text" id="jmlrek" class="hilang">
           <a href="#" class="btn btn-sm btn-primary <?php if((int)$numdetail == 0){echo "disabled"; } ?>" id="simpanbbl" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'bbl/simpanbbl/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
-
+          <input type="hidden" id="numdetail" value="<?= $numdetail; ?>" >
         </div>
       </div>
     </div>

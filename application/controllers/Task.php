@@ -189,7 +189,7 @@ class Task extends CI_Controller {
     }
     public function validasiadj($id)
     {
-        $cek = $this->pb_model->cekfield($id,'data_ok',1)->num_rows();
+        $cek = $this->taskmodel->cekfield($id,'data_ok',1)->num_rows();
         if($cek==1){
             $data = [
                 'ok_valid' => 1,
@@ -197,7 +197,7 @@ class Task extends CI_Controller {
                 'user_valid' => $this->session->userdata('id'),
                 'id' => $id
             ];
-            $simpan = $this->adjmodel->validasiadj($data);
+            $simpan = $this->taskmodel->validasiadj($data);
         }else{
             $simpan = 1;
         }
@@ -215,7 +215,7 @@ class Task extends CI_Controller {
             'user_valid' => $this->session->userdata('id'),
             'tgl_valid' => date('Y-m-d H:i:s')
         ];
-        $simpan = $this->adjmodel->simpancanceladj($data);
+        $simpan = $this->taskmodel->simpancanceladj($data);
         if ($simpan) {
             $this->session->set_flashdata('tabdef',$tab);
             $url = base_url() . 'task';

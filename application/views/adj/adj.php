@@ -44,9 +44,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <select class="form-select form-control form-sm font-kecil font-bold" id="dept_kirim" name="dept_kirim">
                         <?php
                         // Mendapatkan nilai 'deptsekarang', jikla null nilai default jadi it
-                        $selek = $this->session->userdata('deptsekarang') ?? 'IT';
+                        $selek = $this->session->userdata('currdept') ?? 'IT';
                         foreach ($hakdep as $hak) :
-                          $selected = ($selek == $hak['dept_id']) ? "selected" : "";
+                          $selected = ($this->session->userdata('currdept') == $hak['dept_id']) ? "selected" : "";
                         ?>
                           <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?= $selected ?>>
                             <?= $hak['departemen']; ?>
