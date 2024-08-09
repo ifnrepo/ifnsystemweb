@@ -22,15 +22,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div id="sisipkan" class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
-              <div class="dropdown">
+              <!-- <div class="dropdown">
                 <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
                 </button>
                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item font-kecil" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Data" href="<?= base_url() . 'out/tambahdata' ?>">Dari BON Permintaan</a>
+                  <a class="dropdown-item font-kecil" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata' ?>">Dari BON Permintaan</a>
                   <a class="dropdown-item font-kecil disabled" href="#">Tanpa BON Permintaan</a>
                 </div>
-              </div>
+              </div> -->
+              <a href="<?= base_url() . 'out/adddata'; ?>" class="btn btn-primary btn-sm" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 mb-0 d-flex flex-row-reverse" style="text-align: right;">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
@@ -106,7 +108,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php if ($datdet['data_ok'] == 1) { ?>
                     <td class='font-bold'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="font-kecil"><?= $datdet['nodok'] ?></span></a></td>
                   <?php } else { ?>
-                    <td class='font-bold'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important"><?= $datdet['nodok'] ?></span></td>
+                    <td class='font-bold'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important"><?= $datdet['nodok'] ?></span></a></td>
                   <?php } ?>
                   <td><?= $jmlrek; ?></td>
                   <td><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>

@@ -21,9 +21,10 @@ class Po_model extends CI_Model
     }
     public function getdatabyid($kode)
     {
-        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak');
+        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,catatan_po.header_po,catatan_po.catatan1,catatan_po.catatan2,catatan_po.catatan3');
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
         $this->db->join('supplier', 'supplier.id=tb_header.id_pemasok', 'left');
+        $this->db->join('catatan_po', 'catatan_po.id_header=tb_header.id', 'left');
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
@@ -53,7 +54,7 @@ class Po_model extends CI_Model
     public function getnomorpo($bl, $th, $jnpo)
     {
         $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,15,3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'PO' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND SUBSTR(nomor_dok,4,2) = '" . $jnpo . "' ")->row_array();
+        WHERE kode_dok = 'PO' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND SUBSTR(nomor_dok,4,6) = '" . $jnpo . "' ")->row_array();
         return $hasil;
     }
     public function tambahdatapo()
@@ -71,25 +72,30 @@ class Po_model extends CI_Model
         ];
         $this->db->insert('tb_header', $tambah);
         $hasil = $this->db->insert_id();
+        $catatan = [
+         'id_header' => $hasil,
+         'header_po' => 'Berdasarkan surat penawaran dari [namasupplier] tanggal [tgl], maka kami memesan barang-barang sebagai berikut :'
+        ];
+        $this->db->insert('catatan_po', $catatan);
         $this->db->trans_complete();
         return $hasil;
     }
-    public function getdatadetailout($data)
+    public function getdatadetailpo($data)
     {
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,d.keterangan as keter");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
         $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
         $this->db->join('barang c', 'c.id = a.id_barang', 'left');
+        $this->db->join('tb_detail d', 'a.id = d.id_po', 'left');
+        // $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
         $this->db->where('a.id_header', $data);
         return $this->db->get()->result_array();
     }
-    public function getdatadetailoutbyid($data)
+    public function getdetailpobyid($data)
     {
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
-        $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
-        $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
         $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
         $this->db->join('barang c', 'c.id = a.id_barang', 'left');
@@ -102,13 +108,104 @@ class Po_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
+    public function getbarangpo(){
+        $this->db->select('*,tb_detail.id as iddetbbl');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header a','a.id = tb_detail.id_header','left');
+        $this->db->join('barang b','b.id = tb_detail.id_barang','left');
+        $this->db->where('a.id_perusahaan',IDPERUSAHAAN);
+        $this->db->where('a.data_ok',1);
+        $this->db->where('a.ok_valid',1);
+        $this->db->where('a.ok_tuju',1);
+        $this->db->where('a.ok_pp',1);
+        $this->db->where('a.ok_pc',1);
+        $this->db->where('a.kode_dok','BBL');
+        $this->db->where('id_po',0);
+        return $this->db->get();
+    }
+
+    public function adddetailpo($data){
+        $jumlah = count($data['data']);
+        $id = $data['id'];
+        $this->db->trans_start();
+        for($x=0;$x<$jumlah;$x++){
+            $arrdat = $data['data'];
+            $detail = $this->db->where('id',$arrdat[$x])->get('tb_detail')->row_array();
+            $isi = [
+                'id_header' => $id,
+                'seri_barang' => $x,
+                'id_barang' => $detail['id_barang'],
+                'id_satuan' => $detail['id_satuan'],
+                'kgs' => $detail['kgs'],
+                'pcs' => $detail['pcs']
+            ];
+            $this->db->insert('tb_detail',$isi);
+            $idsimpan = $this->db->insert_id();
+            $this->db->where('id',$arrdat[$x])->update('tb_detail',['id_po'=>$idsimpan]);
+            $itembarang = $this->db->where('id_header',$id)->get('tb_detail')->num_rows();
+            $this->db->where('id',$id)->update('tb_header',['jumlah_barang'=>$itembarang]);
+        }
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+
+    public function hapusdetailpo($id){
+        $detail = $this->db->where('id_po',$id)->get('tb_detail')->row_array();
+        $xdetail = $this->db->where('id',$id)->get('tb_detail')->row_array();
+        $this->db->trans_start();
+        $this->db->where('id',$detail['id']);
+        $this->db->update('tb_detail',['id_po'=>0]);
+        $this->db->where('id',$id);
+        $this->db->delete('tb_detail');
+        $itembarang = $this->db->where('id_header',$xdetail['id_header'])->get('tb_detail')->num_rows();
+        $this->db->where('id',$xdetail['id_header'])->update('tb_header',['jumlah_barang'=>$itembarang]);
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+
+
     public function updatedetail($data)
     {
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_detail', $data);
         return $query;
     }
-    public function simpanout($data)
+    public function updatesupplier($data){
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_header',['id_pemasok' => $data['id_supplier']]);
+        if($data['id_supplier']!='NULL'){
+            $this->db->where('id',$data['id_supplier']);
+            $sup = $this->db->get('supplier')->row_array();
+
+            $kata = 'Berdasarkan surat penawaran dari '.trim($sup['nama_supplier']).' tanggal , maka kami memesan barang-barang sebagai berikut :';
+            $this->db->set('header_po',$kata);
+            $this->db->where('id_header',$data['id']);
+            $this->db->update('catatan_po');
+        }
+        return $hasil;
+    }
+    public function updatebykolom($data){
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_header',$data);
+        return $hasil;
+    }
+    public function updatekolom($tabel,$data,$kolom){
+        $this->db->where($kolom,$data['id_header']);
+        $hasil = $this->db->update($tabel,$data);
+        return $hasil;
+    }
+    public function updatehargadetail($data){
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_detail',$data);
+        return $hasil;
+    }
+    public function cekdetail($id){
+        $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
+        $this->db->from('tb_detail');
+        $this->db->where('id_header',$id);
+        return $this->db->get()->row_array();
+    }
+    public function simpanpo($data)
     {
         $jumlahrek = $this->db->get_where('tb_detail', ['id_header' => $data['id']])->num_rows();
         $data['jumlah_barang'] = $jumlahrek;
@@ -116,23 +213,39 @@ class Po_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         return $query;
     }
-    public function hapusdataout($id)
+    public function hapuspo($id)
     {
         $this->db->trans_start();
         $this->db->where('id', $id);
         $query = $this->db->get('tb_header')->row_array();
-        if ($query) {
+        if($query){
+            $this->db->where('id_header',$id);
+            $cekdetail = $this->db->get('tb_detail')->result_array();
+            foreach ($cekdetail as $cekdata) {
+                $this->db->where('id_po',$cekdata['id']);
+                $this->db->update('tb_detail', ['id_po' => 0]);
+            }
             $this->db->where('id_header', $id);
             $this->db->delete('tb_detmaterial');
             $this->db->where('id_header', $id);
             $this->db->delete('tb_detail');
+            $this->db->where('id_header', $id);
+            $this->db->delete('catatan_po');
         }
-        $this->db->where('id_keluar', $id);
-        $this->db->update('tb_header', ['id_keluar' => null]);
-
         $this->db->where('id', $id);
         $this->db->delete('tb_header');
         $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+    public function editpo($data){
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_header',$data);
+        return $hasil;
+    }
+    public function cekfield($id,$kolom,$nilai){
+        $this->db->where('id',$id);
+        $this->db->where($kolom,$nilai);
+        $hasil = $this->db->get('tb_header');
         return $hasil;
     }
     public function resetdetail($id)

@@ -23,7 +23,7 @@ class Inv extends CI_Controller
     }
     public function index()
     {
-        $header['header'] = 'inventory';
+        $header['header'] = 'other';
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
@@ -56,6 +56,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
         $this->session->set_userdata('gbg', 1);
+        $this->session->set_userdata('invharga', 0);
         $this->session->unset_userdata('katcari');
         $url = base_url('Inv');
         redirect($url);
@@ -79,6 +80,14 @@ class Inv extends CI_Controller
         }
         echo 1;
     }
+    public function viewharga(){
+        $isi = $_POST['cek'];
+        $this->session->set_userdata('invharga',$isi);
+        // $url = base_url().'Inv';
+        // redirect($url);
+        echo 1;
+    }
+    //END INV Controllers 
     public function getdatadetailpb()
     {
         $kode = $_POST['id_header'];

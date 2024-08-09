@@ -61,9 +61,14 @@
                 tgl: $("#tgl").val()
             },
             success: function(data) {
-                // alert('berhasil');
-                window.location.href = base_url + "bbl/databbl/" + data;
-                $("#butbatal").click();
+                // alert(data);
+                if(data==0){
+                    window.location.href = base_url + "bbl";
+                    $("#butbatal").click();
+                }else{
+                    window.location.href = base_url + "bbl/databbl/" + data;
+                    $("#butbatal").click();
+                }
             },
             error: function(xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

@@ -58,7 +58,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <form method="post" action="<?= base_url() . 'pb/simpandetailbarang'; ?>" name="formbarangpb" id="formbarangpb">
               <input type="text" id="id" name="id" value="" class="hilang">
               <div class="row font-kecil mb-0">
-                <label class="col-2 col-form-label font-kecil required">Specific</label>
+                <label class="col-2 col-form-label font-kecil required">Spec</label>
                 <div class="col input-group mb-1">
                   <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
                   <input type="text" id="id_barang" name="id_barang" class="hilang">
@@ -67,9 +67,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Satuan</label>
+                <label class="col-2 col-form-label required">Satuan</label>
                 <div class="col">
-                  <select name="id_satuan" id="id_satuan" class="form-control font-kecil">
+                  <select name="id_satuan" id="id_satuan" class="form-control font-kecil form-select">
                     <option value="">Pilih Satuan</option>
                     <?php foreach ($satuan as $sat) { ?>
                       <option value="<?= $sat['id']; ?>"><?= $sat['namasatuan']; ?></option>
@@ -77,16 +77,44 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </select>
                 </div>
               </div>
+              <?php 
+                $hilang = 'hilang';
+                $daftardepsublok = ['FN','FG'];
+                if (in_array($this->session->userdata('deptsekarang'),$daftardepsublok) && $this->session->userdata('tujusekarang')=='GS'){
+                  $hilang = '';
+                }
+               ?>
+              <div class="row font-kecil mb-1 <?= $hilang; ?>" id="bloksublok">
+                <label class="col-2 col-form-label required">Sublok</label>
+                <div class="col">
+                  <select name="sublok" id="sublok" class="form-control font-kecil form-select">
+                    <?php if($this->session->userdata('tujusekarang')=='GS'){ ?>
+                      <?php $deptprod = ['NT','SP','RR']; if(in_array($this->session->userdata('deptsekarang'),$deptprod)){ ?>
+                        <option value="<?= $this->session->userdata('deptsekarang'); ?>">Pilih <?= $this->session->userdata('deptsekarang'); ?></option>
+                      <?php } else if(in_array($this->session->userdata('deptsekarang'),$daftardepsublok)){ ?>
+                        <option value="">Pilih Sublok</option>
+                        <?php foreach ($sublok as $sat) { ?>
+                          <option value="<?= $sat['sublok']; ?>"><?= $sat['sublok'].' / '.$sat['nama_sublok']; ?></option>
+                        <?php } ?>
+                      <?php }else{ ?>
+                        <option value="OT">Pilih OT</option>
+                      <?php } ?>
+                    <?php }else{ ?>
+                      <option value="">Pilih</option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
               <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">Qty</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="pcs" name="pcs" aria-describedby="emailHelp" placeholder="Qty">
+                  <input type="text" class="form-control font-kecil text-right" id="pcs" name="pcs" autocomplete="off" aria-describedby="emailHelp" placeholder="Qty">
                 </div>
               </div>
               <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">Kgs</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="kgs" name="kgs" aria-describedby="emailHelp" placeholder="Kgs">
+                  <input type="text" class="form-control font-kecil text-right" id="kgs" name="kgs"  autocomplete="off" aria-describedby="emailHelp" placeholder="Kgs">
                 </div>
               </div>
             </form>
@@ -110,6 +138,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Satuan</th>
                     <th>Qty</th>
                     <th>Kgs</th>
+                    <th>SBL</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>

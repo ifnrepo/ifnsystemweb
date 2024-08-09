@@ -21,7 +21,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="card-body font-kecil">
         <form method="POST" action="<?= $action; ?>" id="formtambahuser" name="formtambahuser">
           <div class="row">
-            <div class="col-sm-6">
+            <div class="col-sm-5">
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Nama</label>
                 <div class="col">
@@ -37,7 +37,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Departemen</label>
                 <div class="col">
-                  <select name="id_dept" id="id_dept" class="form-control">
+                  <select name="id_dept" id="id_dept" class="form-control form-select">
                     <option value="Select Menu">Departemen</option>
                     <?php foreach ($dept as $dep) : ?>
                       <option value="<?= $dep['dept_id']; ?>"><?= $dep['departemen']; ?></option>
@@ -48,13 +48,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Jabatan</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan">
+                  <!-- <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan"> -->
+                  <select name="jabatan" id="jabatan" class="form-control form-select">
+                    <option value="">Jabatan</option>
+                    <?php foreach ($jabat as $jbt) : ?>
+                      <option value="<?= $jbt['nama_jabatan']; ?>"><?= $jbt['nama_jabatan']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Level User</label>
                 <div class="col">
-                  <select name="id_level_user" id="id_level_user" class="form-control">
+                  <select name="id_level_user" id="id_level_user" class="form-control form-select">
                     <option value="Select Menu">Level User</option>
                     <?php foreach ($level as $a) : ?>
                       <option value="<?= $a['id']; ?>"><?= $a['level']; ?></option>
@@ -95,6 +101,66 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col font-bold">View Harga</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="view_harga" id="view_harga" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col">Validator ADJ</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekadj" id="cekadj" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col">Validator Purchase Order</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekpo" id="cekpo" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col">GM Purchasing</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekpc" id="cekpc" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="hr mt-2 mb-1"></div>
               <div class="card-body pt-2">
                 <div class="row">
@@ -109,7 +175,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
             </div>
-            <div class="col-sm-6">
+            <div class="col-sm-7">
               <h4>Akses Modul</h4>
               <div class="row row-cards">
                 <div class="col">
@@ -117,22 +183,31 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="card-header">
                       <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                         <li class="nav-item">
-                          <a href="#tabs-home-1" class="nav-link active" data-bs-toggle="tab">Master Data</a>
+                          <a href="#tabs-departemen-1" class="nav-link active" data-bs-toggle="tab">Hak Departemen</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#tabs-home-1" class="nav-link" data-bs-toggle="tab">Master Data</a>
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-transaksi-1" class="nav-link" data-bs-toggle="tab">Transaksi</a>
                         </li>
                         <li class="nav-item">
+                          <a href="#tabs-other-1" class="nav-link" data-bs-toggle="tab">Other</a>
+                        </li>
+                        <li class="nav-item">
                           <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab">User Manajemen</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-departemen-1" class="nav-link" data-bs-toggle="tab">Hak Departemen</a>
+                          <a href="#tabs-ceklispb" class="nav-link" data-bs-toggle="tab">Validasi PB</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#tabs-ceklisbbl" class="nav-link" data-bs-toggle="tab">Validasi BBL</a>
                         </li>
                       </ul>
                     </div>
                     <div class="card-body">
                       <div class="tab-content">
-                        <div class="tab-pane active show" id="tabs-home-1">
+                        <div class="tab-pane" id="tabs-home-1">
                           <div class="row">
                             <div class="col-6">
                               <label class="form-check mb-1">
@@ -219,6 +294,40 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="transaksi6" name="transaksi6" type="checkbox">
                                 <span class="form-check-label">PO (PURCHASE ORDER)</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi7" name="transaksi7" type="checkbox">
+                                <span class="form-check-label">IB (PENERIMAAN BARANG)</span>
+                              </label>
+                              <!-- xx -->
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane " id="tabs-other-1">
+                          <div class="row">
+                            <div class="col-6">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other1" name="other1" type="checkbox">
+                                <span class="form-check-label">Ponet</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other2" name="other2" type="checkbox">
+                                <span class="form-check-label">Inventory</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other3" name="other3" type="checkbox">
+                                <span class="form-check-label">Inventory Mesin</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other4" name="other4" type="checkbox">
+                                <span class="form-check-label">BC Masuk</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other5" name="other5" type="checkbox">
+                                <span class="form-check-label">BC Keluar</span>
+                              </label>
+                            </div>
+                            <div class="col-6">
                               <!-- xx -->
                             </div>
                           </div>
@@ -235,7 +344,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                           </div>
                         </div>
-                        <div class="tab-pane" id="tabs-departemen-1">
+
+                        <div class="tab-pane active show" id="tabs-departemen-1">
                           <div class="row">
                             <div class="col-6">
                               <?php $no = 0;
@@ -246,6 +356,53 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                   <span class="form-check-label"><?= $dept['departemen']; ?></span>
                                 </label>
                               <?php endforeach; ?>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane" id="tabs-ceklispb">
+                          <div class="row">
+                            <div class="col-6">
+                              <?php $no = 0;
+                              $jml = $jmldept;
+                              foreach ($deptpb as $dept) : $no++; ?>
+                                <label class="form-check mb-1">
+                                  <input class="form-check-input" id="<?= 'X'.$dept['dept_id']; ?>" name="<?= 'X'.$dept['dept_id']; ?>" type="checkbox">
+                                  <span class="form-check-label"><?= $dept['departemen']; ?></span>
+                                </label>
+                              <?php endforeach; ?>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane" id="tabs-ceklisbbl">
+                          <div class="row">
+                            <div class="col-6">
+                             <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="0" >
+                                <span class="form-check-label">NO TTD</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="1" >
+                                <span class="form-check-label">MANAGER PPIC (Mengetahui)</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="2" >
+                                <span class="form-check-label">MANAGER PRODUKSI / NON (APPROVER)</span>
+                              </label>
+                              <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="3" >
+                                <span class="form-check-label">GM PRODUKSI / NON (RELEASER)</span>
+                              </label>
+                              <!-- <label class="form-check">
+                                <input class="form-check-input" type="radio" 
+          name="ttd" value="4">
+                                <span class="form-check-label">MANAGER PURCHASING</span>
+                              </label> -->
                             </div>
                           </div>
                         </div>

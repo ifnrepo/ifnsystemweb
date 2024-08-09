@@ -14,6 +14,7 @@ class Task extends CI_Controller {
         $this->load->model('pb_model');
         $this->load->model('bbl_model');
         $this->load->model('dept_model', 'deptmodel');
+        $this->load->model('adj_model', 'adjmodel');
     }
 	public function index()
 	{  
@@ -28,6 +29,11 @@ class Task extends CI_Controller {
     public function mode(){
         $this->session->set_userdata('modetask',$_POST['id']);
         echo 1;
+    }
+    public function clear(){
+        $this->session->unset_userdata('modetask');
+        $url = base_url().'task';
+        redirect($url);
     }
     public function validasipb($id)
     {
@@ -69,12 +75,12 @@ class Task extends CI_Controller {
         $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
         $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];
         $arrayuser=['user_ok','user_pp','user_valid','user_tuju','user_pc'];
-        $cek = $this->taskmodel->cekfield($id,$arraykolom[$kolom-1],1)->num_rows();
+        $cek = $this->taskmodel->cekfield($id,$arraykolom[$kolom-1],0)->num_rows();
         if($cek==1){
             $data = [
-                $arraykolom[$kolom] => 1,
-                $arraytgl[$kolom] => date('Y-m-d H:i:s'),
-                $arrayuser[$kolom] => $this->session->userdata('id'),
+                $arraykolom[$kolom-1] => 1,
+                $arraytgl[$kolom-1] => date('Y-m-d H:i:s'),
+                $arrayuser[$kolom-1] => $this->session->userdata('id'),
                 'id' => $id
             ];
             $simpan = $this->taskmodel->validasibbl($data);
@@ -91,15 +97,59 @@ class Task extends CI_Controller {
         $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
         $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];
         $arrayuser=['user_ok','user_pp','user_valid','user_tuju','user_pc'];
-        $cek = $this->taskmodel->cekfield($id,$arraykolom[$kolom-1],1)->num_rows();
+        $cek = $this->taskmodel->cekfield($id,$arraykolom[$kolom-1],0)->num_rows();
         if($cek==1){
             $data = [
-                $arraykolom[$kolom] => 2,
-                $arraytgl[$kolom] => date('Y-m-d H:i:s'),
-                $arrayuser[$kolom] => $this->session->userdata('id'),
+                $arraykolom[$kolom-1] => 2,
+                $arraytgl[$kolom-1] => date('Y-m-d H:i:s'),
+                $arrayuser[$kolom-1] => $this->session->userdata('id'),
                 'id' => $id
             ];
             $simpan = $this->taskmodel->validasibbl($data);
+        }else{
+            $simpan = 1;
+        }
+        if ($simpan) {
+            $url = base_url() . 'task';
+            redirect($url);
+        }
+    }
+    public function validasipo($id,$kolom)
+    {
+        $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
+        $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];
+        $arrayuser=['user_ok','user_pp','user_valid','user_tuju','user_pc'];
+        $cek = $this->taskmodel->cekfield($id,$arraykolom[$kolom-1],0)->num_rows();
+        if($cek==1){
+            $data = [
+                $arraykolom[$kolom-1] => 1,
+                $arraytgl[$kolom-1] => date('Y-m-d H:i:s'),
+                $arrayuser[$kolom-1] => $this->session->userdata('id'),
+                'id' => $id
+            ];
+            $simpan = $this->taskmodel->validasipo($data);
+        }else{
+            $simpan = 1;
+        }
+        if ($simpan) {
+            $url = base_url() . 'task';
+            redirect($url);
+        }
+    }
+    public function cancelpo($id,$kolom)
+    {
+        $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
+        $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];
+        $arrayuser=['user_ok','user_pp','user_valid','user_tuju','user_pc'];
+        $cek = $this->taskmodel->cekfield($id,$arraykolom[$kolom-1],0)->num_rows();
+        if($cek==1){
+            $data = [
+                $arraykolom[$kolom-1] => 2,
+                $arraytgl[$kolom-1] => date('Y-m-d H:i:s'),
+                $arrayuser[$kolom-1] => $this->session->userdata('id'),
+                'id' => $id
+            ];
+            $simpan = $this->taskmodel->validasipo($data);
         }else{
             $simpan = 1;
         }
@@ -133,6 +183,41 @@ class Task extends CI_Controller {
             $simpan =1;
         }
         if ($simpan) {
+            $url = base_url() . 'task';
+            redirect($url);
+        }
+    }
+    public function validasiadj($id)
+    {
+        $cek = $this->taskmodel->cekfield($id,'data_ok',1)->num_rows();
+        if($cek==1){
+            $data = [
+                'ok_valid' => 1,
+                'tgl_valid' => date('Y-m-d H:i:s'),
+                'user_valid' => $this->session->userdata('id'),
+                'id' => $id
+            ];
+            $simpan = $this->taskmodel->validasiadj($data);
+        }else{
+            $simpan = 1;
+        }
+        if ($simpan) {
+            $url = base_url() . 'task';
+            redirect($url);
+        }
+    }
+    public function canceladj($id,$tab)
+    {
+         $data = [
+            'id' => $id,
+            // 'ketcancel' => $_POST['ketcancel'],
+            'ok_valid' => 2,
+            'user_valid' => $this->session->userdata('id'),
+            'tgl_valid' => date('Y-m-d H:i:s')
+        ];
+        $simpan = $this->taskmodel->simpancanceladj($data);
+        if ($simpan) {
+            $this->session->set_flashdata('tabdef',$tab);
             $url = base_url() . 'task';
             redirect($url);
         }

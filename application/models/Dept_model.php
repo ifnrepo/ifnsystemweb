@@ -31,6 +31,7 @@ class Dept_model extends CI_Model
         $this->db->from('dept');
         $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
         $this->db->where_in('dept.dept_id', $arrdep);
+        $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
     public function gethakdept_bbl($arrdep)
@@ -40,6 +41,7 @@ class Dept_model extends CI_Model
         $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
         $this->db->where('bbl', '1');
         $this->db->where_in('dept.dept_id', $arrdep);
+        $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
     public function gethakdeptout($arrdep)
@@ -49,6 +51,7 @@ class Dept_model extends CI_Model
         $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
         $this->db->where_in('dept.dept_id', $arrdep);
         $this->db->where('dept.katedept_id !=', 4);
+        $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
 
@@ -113,9 +116,13 @@ class Dept_model extends CI_Model
         return $this->db->delete('dept');
     }
 
-    public function getdata_dept_bbl()
+    public function getdata_dept_bbl($mode=0)
     {
-        $this->db->select('*');
+        if($mode==1){
+            $this->db->select('dept_id');
+        }else{
+            $this->db->select('*');
+        }
         $this->db->from('dept');
         $this->db->where('bbl', '1');
         return $this->db->order_by('departemen','ASC')->get()->result_array();
@@ -125,6 +132,16 @@ class Dept_model extends CI_Model
         $this->db->select('*');
         $this->db->from('dept');
         $this->db->where('pb', '1');
+        return $this->db->order_by('departemen','ASC')->get()->result_array();
+    }
+    public function getdata_dept_adj($dept='')
+    {
+        $this->db->select('*');
+        $this->db->from('dept');
+        $this->db->where('adj', '1');
+        if($dept != ''){
+            $this->db->where_in('dept_id',$dept);
+        }
         return $this->db->order_by('departemen','ASC')->get()->result_array();
     }
 }

@@ -25,6 +25,10 @@
                         <th colspan="2">In</th>
                         <th colspan="2">Out</th>
                         <th colspan="2">Saldo</th>
+                        <?php if($this->session->userdata('invharga')): ?>
+                        <th rowspan="2">Harga</th>
+                        <th rowspan="2">Total</th>
+                        <?php endif; ?>
                         <th rowspan="2">Keterangan</th>
                     </tr>
                     <tr>
@@ -54,6 +58,7 @@
                         }
                         $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'];
                         $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout'];
+                        $pilihtampil = $saldo==0 ? $saldokgs : $saldo;
                     ?>
                         <tr>
                             <td class="font-italic text-primary"><?= tgl_indo($det['tgl'], 1); ?></td>
@@ -65,6 +70,10 @@
                             <td><?= rupiah($det['kgsout'], 2); ?></td>
                             <td class="font-bold text-primary"><?= rupiah($saldo, 0); ?></td>
                             <td><?= rupiah($saldokgs, 2); ?></td>
+                            <?php if($this->session->userdata('invharga')): ?>
+                            <td class="text-right"><?= rupiah($det['harga'], 2); ?></td>
+                            <td class="text-right"><?= rupiah($det['harga']*$pilihtampil, 2); ?></td>
+                            <?php endif; ?>
                             <td><?= $det['nomor_dok']; ?></td>
                         </tr>
                     <?php } ?>

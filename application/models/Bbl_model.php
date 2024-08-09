@@ -73,6 +73,7 @@ class Bbl_model extends CI_Model
         $this->db->where('tb_header.id_keluar IS NULL');
         $this->db->where('tb_header.dept_tuju', $dept_id);
         $this->db->where('tb_detail.id_bbl', 0);
+        $this->db->order_by('tb_header.tgl', 'DESC');
         $this->db->order_by('tb_header.nomor_dok', 'ASC');
         $query = $this->db->get()->result_array();
 
@@ -222,9 +223,9 @@ class Bbl_model extends CI_Model
     {
         $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
         $data['jumlah_barang'] = $jmlrec['jml'];
-        $deptid = $this->db->query("Select dept_bbl from tb_header where id = ".$data['id'])->row_array();
+        $deptid = $this->db->query("Select dept_bbl,bbl_pp from tb_header where id = ".$data['id'])->row_array();
         // $ok_pp = 0;
-        if(trim($deptid['dept_bbl'])=='IT' || trim($deptid['dept_bbl'])=='PG'){
+        if(trim($deptid['dept_bbl'])=='IT' || trim($deptid['dept_bbl'])=='PG' || $deptid['bbl_pp']==0){
             $data['ok_pp']=1;
         }
         $this->db->where('id', $data['id']);

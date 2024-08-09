@@ -79,7 +79,7 @@ function nomorpb($tgl, $asal, $tuju, $jn)
     $bl = date('m', strtotime($tgl));
     $th = date('y', strtotime($tgl));
     $thp = date('Y', strtotime($tgl));
-    $jne = $jn==0 ? 'BP' : 'SV';
+    $jne = $jn==0 ? 'BP' : 'PS';
     $CI = &get_instance();
     $kode = $CI->pb_model->getnomorpb($bl, $thp, $asal, $tuju);
     $urut = (int) $kode['maxkode'];
@@ -124,6 +124,30 @@ function nomorpo()
     $urut = (int) $kode['maxkode'];
     $urut++;
     return "PO/" . $jnpo. $bl . $thp . "/" . sprintf("%03s", $urut);
+}
+function nomorib()
+{
+    $CI = &get_instance();
+    $tgl = $CI->session->userdata('th') . '-' . kodebulan($CI->session->userdata('bl')) . '-01';
+    $bl = date('m', strtotime($tgl));
+    $th = date('Y', strtotime($tgl));
+    $thp = date('y', strtotime($tgl));
+    $deptr = $CI->session->userdata('depttuju');
+    $kode = $CI->ibmodel->getnomorib($bl, $th);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return "SU-" . $deptr.'/P/'. $bl . $thp . "/" . sprintf("%03s", $urut);
+}
+function nomoradj($tgl, $asal)
+{
+    $bl = date('m', strtotime($tgl));
+    $th = date('y', strtotime($tgl));
+    $thp = date('Y', strtotime($tgl));
+    $CI = &get_instance();
+    $kode = $CI->adjmodel->getnomoradj($bl, $thp, $asal);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return $asal . "/A/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
 function tglmysql($tgl)
 {
@@ -273,12 +297,16 @@ function namabulanpendek($id)
     return $bulan[(int)$id];
 }
 function datauser($kode, $kolom)
-{
-    if ($kode != '') {
+{   
+    $kore = '';
+    if ($kode == '' || $kode == 0) {
+        $kore = '';
+    }else{
         $CI = &get_instance();
-        $kode = $CI->usermodel->getdatabyid($kode)->row_array();
-        return $kode[$kolom];
+        $kodex = $CI->usermodel->getdatabyid($kode)->row_array();
+        $kore = $kodex[$kolom];
     }
+    return $kore;
 }
 function kodebulan($bl)
 {
@@ -336,8 +364,28 @@ function tungguvalid($kode){
             $hasil = 'Validasi Manager Purchasing';
             break;
         default:
-            $hasil = 'X';
+            $hasil = 'Validasi Kepala Departemen';
             break;
     }
     return $hasil;
+}
+function terbilang($x) {
+  $angka = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+
+  if ($x < 12)
+    return " " . $angka[$x];
+  elseif ($x < 20)
+    return terbilang($x - 10) . " Belas";
+  elseif ($x < 100)
+    return terbilang($x / 10) . " Puluh" . terbilang($x % 10);
+  elseif ($x < 200)
+    return "Seratus" . terbilang($x - 100);
+  elseif ($x < 1000)
+    return terbilang($x / 100) . " Ratus" . terbilang($x % 100);
+  elseif ($x < 2000)
+    return "Seribu" . terbilang($x - 1000);
+  elseif ($x < 1000000)
+    return terbilang($x / 1000) . " Ribu" . terbilang($x % 1000);
+  elseif ($x < 1000000000)
+    return terbilang($x / 1000000) . " Juta" . terbilang($x % 1000000);
 }

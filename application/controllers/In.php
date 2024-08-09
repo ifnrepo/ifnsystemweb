@@ -11,11 +11,12 @@ class In extends CI_Controller {
         }
         $this->load->model('pb_model');
         $this->load->model('out_model');
-        $this->load->model('in_model');
+        $this->load->model('in_model','inmodel');
         $this->load->model('barangmodel');
         $this->load->model('dept_model','deptmodel');
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel','usermodel');
+        $this->load->model('helper_model','helpermodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -25,6 +26,7 @@ class In extends CI_Controller {
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
+        $data['data'] = $this->inmodel->getdata(['dept_id'=>$this->session->userdata('curdept'),'dept_tuju'=>$this->session->userdata('todept')]);
         $footer['fungsi'] = 'in';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('in/in',$data);
@@ -38,18 +40,18 @@ class In extends CI_Controller {
     }
     public function depttuju(){
         $kode = $_POST['kode'];
-        $this->session->set_userdata('deptsekarang',$kode);
-        $query = $this->in_model->getdepttuju($kode);
+        $this->session->set_userdata('curdept',$kode);
+        $query = $this->inmodel->getdepttuju($kode);
         $hasil = '';
         foreach ($query->result_array() as $que) {
-            $selek = $this->session->userdata('tujusekarang')==$que['dept_id'] ? 'selected' : '';
+            $selek = $this->session->userdata('todept')==$que['dept_id'] ? 'selected' : '';
             $hasil .= "<option value='".$que['dept_id']."' rel='".$que['departemen']."' ".$selek.">".$que['departemen']."</option>";
         }
         echo $hasil;
     }
     public function ubahperiode(){
-        $this->session->unset_userdata('deptsekarang');
-        $this->session->unset_userdata('tujusekarang');
+        $this->session->unset_userdata('curdept');
+        $this->session->unset_userdata('todept');
         $this->session->set_userdata('bl',$_POST['bl']);
         $this->session->set_userdata('th',$_POST['th']);
         echo 1;
@@ -60,11 +62,11 @@ class In extends CI_Controller {
             'dept_id' => $_POST['dept_id'],
             'dept_tuju' => $_POST['dept_tuju']
         ];
-        $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
-        $query = $this->in_model->getdata($kode);
+        $this->session->set_userdata('todept',$_POST['dept_tuju']);
+        $query = $this->inmodel->getdata($kode);
         foreach ($query as $que) {
             $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
-            $kete = $que['ok_tuju']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('deptsekarang') : 'Konfirmasi Oleh : '.datauser($que['user_tuju'],'name').'@'.tglmysql2($que['tgl_tuju']);
+            $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('curdept') : 'diKonfirmasi Oleh : '.datauser($que['user_valid'],'name').'@'.tglmysql2($que['tgl_valid']);
             $hasil .= "<tr>";
             $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
             if($que['data_ok']==1){
@@ -76,9 +78,9 @@ class In extends CI_Controller {
             $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
             $hasil .= "<td class='font-kecil'>".$kete."</td>";
             $hasil .= "<td>";
-            if($que['ok_tuju']==0){
-                $hasil .= "<a href='#' data-href=".base_url().'in/konfirmasi/'.$que['id']." data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Konfirmasi Penerimaan Barang' class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Konfirmasi Data'><i class='fa fa-check mr-1'></i> Konfirmasi</a>";
-            }else if($que['ok_tuju']==1){
+            if($que['ok_valid']==0){
+                $hasil .= "<a href='#' data-href=".base_url().'in/cekkonfirmasi/'.$que['id']." data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Konfirmasi Penerimaan Barang,<br> data tidak dapat dirubah kembali' class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Konfirmasi Data'><i class='fa fa-check mr-1'></i> Konfirmasi</a>";
+            }else if($que['ok_valid']==1){
                 $hasil .= "<a href=".base_url().'in/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
             }
             $hasil .= "</td>";
@@ -87,6 +89,45 @@ class In extends CI_Controller {
         $cocok = array('datagroup' => $hasil);
         echo json_encode($cocok);
     }
+    public function cekkonfirmasi($id){
+        $header['header'] = 'transaksi';
+        $data['header'] = $this->inmodel->getdatabyid($id);
+        $data['detail'] = $this->inmodel->getdatadetail($id);
+        $footer['fungsi'] = 'in';
+        $this->load->view('layouts/header',$header);
+        $this->load->view('in/cekkonfirmasi',$data);
+        $this->load->view('layouts/footer',$footer);
+    }
+    public function resetin($id){
+        $hasil = $this->inmodel->resetin($id);
+        if($hasil){
+            $url = base_url().'in/cekkonfirmasi/'.$id;
+            redirect($url);
+        }
+    }
+    public function verifikasirekord(){
+        $id = $_POST['id'];
+        $hasil = $this->inmodel->verifikasirekord($id);
+        if($hasil){
+            echo json_encode($hasil); 
+        }else{
+            $url = base_url().'in/cekkonfirmasi/'.$id;
+            redirect($url);
+        }
+    }
+    public function simpanin($id){
+        $hasil = $this->inmodel->simpanin($id);
+        if($hasil){
+            $url = base_url().'in';
+            redirect($url);
+        }
+    }
+    public function viewdetailin($id){
+        $data['header'] = $this->inmodel->getdatabyid($id);
+        $data['detail'] = $this->inmodel->getdatadetail($id);
+        $this->load->view('in/viewdetailin',$data);
+    }
+    // End In Controller
     public function getdatadetailout(){
         $hasil = '';
         $id = $_POST['id_header'];
@@ -108,24 +149,21 @@ class In extends CI_Controller {
         $cocok = array('datagroup' => $hasil);
         echo json_encode($cocok);
     }
-    public function konfirmasi($id){
-        $data = [
-            'id' => $id,
-            'ok_tuju' => 1,
-            'tgl_tuju' => date('Y-m-d H:i:s'),
-            'user_tuju' => $this->session->userdata('id')
-        ];
-        $hasil = $this->in_model->konfirmasi($data);
-        if($hasil){
-            $url = base_url().'in';
-            redirect($url);
-        }
-    }
-    public function viewdetailin($id){
-        $data['header'] = $this->in_model->getdatabyid($id);
-        $data['detail'] = $this->in_model->getdatadetailout($id);
-        $this->load->view('in/viewdetailin',$data);
-    }
+
+    // public function konfirmasi($id){
+    //     $data = [
+    //         'id' => $id,
+    //         'ok_tuju' => 1,
+    //         'tgl_tuju' => date('Y-m-d H:i:s'),
+    //         'user_tuju' => $this->session->userdata('id')
+    //     ];
+    //     $hasil = $this->in_model->konfirmasi($data);
+    //     if($hasil){
+    //         $url = base_url().'in';
+    //         redirect($url);
+    //     }
+    // }
+    
     function cetakqr2($isi,$id)
 	{
 		$tempdir = "temp/";

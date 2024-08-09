@@ -17,6 +17,8 @@ class Po extends CI_Controller
         $this->load->model('satuanmodel');
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('mtuangmodel');
+        $this->load->model('helper_model','helpermodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -67,6 +69,9 @@ class Po extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['data'] = $this->pomodel->getdatabyid($kode);
+        $data['mtuang'] = $this->mtuangmodel->getdata();
+        $jne = $this->session->userdata('jn_po')=='DO' ? 0 : 1;
+        $data['termspay'] = $this->helpermodel->getterms($jne);
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
         $this->load->view('po/datapo', $data);
@@ -82,23 +87,19 @@ class Po extends CI_Controller
         $simpan = $this->pomodel->updatepo($data);
         echo $simpan;
     }
-    public function updatesupplier()
+    public function getbarangpo()
     {
-        $data = [
-            'id_pemasok' => $_POST['rel'],
-            // 'keterangan' => $_POST['ket'],
-            'id' => $_POST['id']
-        ];
-        $simpan = $this->pomodel->updatepo($data);
-        echo $simpan;
+        $data['datadetail'] = $this->pomodel->getbarangpo();
+        $this->load->view('po/getbarangpo',$data);
     }
-    public function updatebykolom($kolom){
+    public function adddetailpo(){
+        $id = $_POST['id'];
+        $brg = $_POST['brg'];
         $data = [
-            $kolom => $_POST['isinya'],
-            // 'keterangan' => $_POST['ket'],
-            'id' => $_POST['id']
+            'id' => $id,
+            'data' => $brg
         ];
-        $simpan = $this->pomodel->updatepo($data);
+        $simpan = $this->pomodel->adddetailpo($data);
         echo $simpan;
     }
 
@@ -106,84 +107,55 @@ class Po extends CI_Controller
     {
         $this->session->set_userdata('deptsekarang', $_POST['dept_id']);
         $this->session->set_userdata('tujusekarang', $_POST['dept_tuju']);
-        // $hasil = '';
-        // $kode = [
-        //     'dept_id' => $_POST['dept_id'],
-        //     'dept_tuju' => $_POST['dept_tuju']
-        // ];
-        // $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
-        // $query = $this->out_model->getdata($kode);
-        // foreach ($query as $que) {
-        //     $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
-        //     $hasil .= "<tr>";
-        //     $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
-        //     if($que['data_ok']==1){
-        //         $hasil .= "<td class='font-bold'><a href='".base_url().'out/viewdetailout/'.$que['id']."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
-        //     }else{
-        //         $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
-        //     }
-        //     $hasil .= "<td>".$jmlrek."</td>";
-        //     $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
-        //     $hasil .= "<td>".$que['keterangan']."</td>";
-        //     $hasil .= "<td>";
-        // if($que['data_ok']==0){
-        //     $hasil .= "<a href=".base_url().'out/dataout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>";
-        // }else if($que['ok_tuju']==1){
-        //     $hasil .= "<a href=".base_url().'out/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
-        // }
-        //     $hasil .= "</td>";
-        //     $hasil .= "</tr>";
-        // }
-        // $cocok = array('datagroup' => $hasil);
-        // echo json_encode($cocok);
-        // $url = base_url('Out');
-        // redirect($url);
         echo 1;
     }
-    public function getdatadetailout()
+    public function getdatadetailpo()
     {
         $hasil = '';
         $id = $_POST['id_header'];
-        $query = $this->out_model->getdatadetailout($id);
+        $query = $this->pomodel->getdatadetailpo($id);
+        $totalharga = 0;
+        $no = 0;
         foreach ($query as $que) {
+            $no++;
+            $tampil = $que['pcs']==0 ? $que['kgs'] : $que['pcs'];
             $hasil .= "<tr>";
+            $hasil .= "<td>" . $no . "</td>";
             $hasil .= "<td>" . $que['nama_barang'] . "</td>";
             $hasil .= "<td>" . $que['brg_id'] . "</td>";
+            $hasil .= "<td>" . rupiah($tampil, 0) . "</td>";
             $hasil .= "<td>" . $que['namasatuan'] . "</td>";
-            $hasil .= "<td>" . rupiah($que['pcsminta'], 0) . "</td>";
-            $hasil .= "<td>" . rupiah($que['kgsminta'], 0) . "</td>";
-            $hasil .= "<td class='text-primary'>" . rupiah($que['pcs'], 0) . "</td>";
-            $hasil .= "<td class='text-primary'>" . rupiah($que['kgs'], 0) . "</td>";
-            if ($this->session->userdata('deptsekarang') == 'GM' && $que['nobontr'] != '') {
-                $hasil .= "<td class='text-primary'>" . $que['nobontr'] . "</td>";
-            } else {
-                if ($this->session->userdata('deptsekarang') == 'GM' && $que['nobontr'] == '') {
-                    $hasil .= "<td class='text-primary'><a href='" . base_url() . 'out/addnobontr/' . $que['id'] . '/' . $que['id_barang'] . "' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah Nobontr'>Pilih Nobontr</a></td>";
-                }
-            }
+            $hasil .= "<td>" . rupiah($que['harga'], 0) . "</td>";
+            $hasil .= "<td>" . rupiah($que['harga']*$tampil, 0) . "</td>";
             $hasil .= "<td>";
-            $hasil .= "<a href=" . base_url() . 'out/editdetailout/' . $que['id'] . " class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
+            $hasil .= "<a href=" . base_url() . 'po/editdetailpo/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
+            $hasil .= "<a href='#' data-href=" . base_url() . 'po/hapusdetailpo/' . $que['id'] .'/'.$que['id_header']. " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
+            $totalharga += $que['harga']*$tampil;
         }
-        $cocok = array('datagroup' => $hasil);
+        $cocok = array('datagroup' => $hasil,'totalharga' => $totalharga);
         echo json_encode($cocok);
     }
-    public function tambahdata()
+    public function editdetailpo($id){
+        $data['data'] = $this->pomodel->getdetailpobyid($id);
+        $this->load->view('po/editdetailpo',$data);
+    }
+    public function hapusdetailpo($id,$detid){
+        $hasil = $this->pomodel->hapusdetailpo($id);
+        if($hasil){
+            $url = base_url().'po/datapo/'.$detid;
+            redirect($url);
+        }
+    }
+    public function updatehargadetail()
     {
         $kondisi = [
-            'dept_id' => $this->session->userdata('tujusekarang'),
-            'dept_tuju' => $this->session->userdata('deptsekarang'),
-            'kode_dok' => 'PB',
-            'id_keluar' => null,
-            'data_ok' => 1,
-            'ok_valid' => 1,
-            'ok_tuju' => 0,
-            'month(tgl) <=' => $this->session->userdata('bl'),
-            'year(tgl) <=' => $this->session->userdata('th')
+            'id' => $_POST['id'],
+            'harga' => $_POST['harga']
         ];
-        $data['bon'] = $this->out_model->getbon($kondisi);
-        $this->load->view('out/add_out', $data);
+        $hasil = $this->pomodel->updatehargadetail($kondisi);
+        echo $hasil;
     }
 
     public function edittgl()
@@ -218,6 +190,16 @@ class Po extends CI_Controller
         $data['data'] = $this->out_model->getdatadetailoutbyid($id);
         $this->load->view('out/editdetailout', $data);
     }
+    public function invoice($id)
+    {
+        $header['header'] = 'transaksi';
+        $data['header'] = $this->pomodel->getdatabyid($id);
+        $data['detail'] = $this->pomodel->getdatadetailpo($id);
+        $footer['fungsi'] = 'po';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('po/invoice',$data);
+        $this->load->view('layouts/footer', $footer);
+    }
     public function addnobontr($id, $idbarang)
     {
         $data['data'] = $this->out_model->getdatagm($idbarang);
@@ -246,36 +228,92 @@ class Po extends CI_Controller
         $query = $this->out_model->updatedetail($data);
         echo $query;
     }
-
-    public function simpanout($id)
-    {
+    public function updatesupplier(){
         $data = [
-            'ok_tuju' => 1,
-            'user_tuju' => $this->session->userdata('id'),
-            'data_ok' => 1,
-            'ok_valid' => 1,
-            'tgl_tuju' => date('Y-m-d H:i:s'),
-            'id' => $id
+            'id' => $_POST['id'],
+            'id_supplier' => $_POST['rel']
         ];
-        $query = $this->out_model->simpanout($data);
-        if ($query) {
-            $url = base_url() . 'out';
+        $hasil = $this->pomodel->updatesupplier($data);
+        echo $hasil;
+    }
+    public function updatebykolom($kolom){
+        $data = [
+            'id' => $_POST['id'],
+            $kolom => $_POST['isinya']
+        ];
+        $hasil = $this->pomodel->updatebykolom($data);
+        echo $hasil;
+    }
+    public function updatekolom($kolom){
+        $data = [
+            'id_header' => $_POST['id'],
+            $kolom => $_POST['isinya']
+        ];
+        $hasil = $this->pomodel->updatekolom($_POST['tbl'],$data,'id_header');
+        echo $hasil;
+    }
+
+    public function simpanpo($id)
+    {
+        $cekdetail = $this->pomodel->cekdetail($id);
+        if($cekdetail['xharga']==0){
+            $data = [
+                'user_ok' => $this->session->userdata('id'),
+                'data_ok' => 1,
+                'tgl_ok' => date('Y-m-d H:i:s'),
+                'id' => $id,
+                'totalharga' => $cekdetail['totalharga'],
+                'total' => 'totalharga - diskon',
+                'jumlah' => '((totalharga-diskon)+ppn)-pph'
+            ];
+            $query = $this->pomodel->simpanpo($data);
+            if ($query) {
+                $url = base_url() . 'po';
+                redirect($url);
+            }
+        }else{
+            $this->session->set_flashdata('errorsimpan',1);
+            $url = base_url() . 'po/datapo/'.$id;
             redirect($url);
         }
     }
-    public function hapusdataout($id)
+    public function hapuspo($id)
     {
-        $query = $this->out_model->hapusdataout($id);
+        $query = $this->pomodel->hapuspo($id);
         if ($query) {
-            $url = base_url() . 'out';
+            $url = base_url() . 'po';
             redirect($url);
         }
     }
-    public function viewdetailout($id)
+    public function editpo($id){
+        $cek = $this->pomodel->cekfield($id,'ok_valid',0);
+        if($cek==1){
+            $data = [
+                'data_ok' => 0,
+                'user_ok' => null,
+                'tgl_ok' => null,
+                'id' => $id
+            ];
+            $hasil = $this->pomodel->editpo($data);
+            if($hasil){
+                $url = base_url().'po';
+                redirect($url);
+            }else{
+                $this->session->set_flashdata('errorsimpan',3);
+                $url = base_url().'po';
+                redirect($url);
+            }
+        }else{
+            $this->session->set_flashdata('errorsimpan',2);
+            $url = base_url().'po';
+            redirect($url);
+        }
+    }
+    public function viewdetail($id)
     {
-        $data['header'] = $this->out_model->getdatabyid($id);
-        $data['detail'] = $this->out_model->getdatadetailout($id);
-        $this->load->view('out/viewdetailout', $data);
+        $data['header'] = $this->pomodel->getdatabyid($id);
+        $data['detail'] = $this->pomodel->getdatadetailpo($id);
+        $this->load->view('po/viewdetailpo', $data);
     }
     public function resetdetail($id)
     {

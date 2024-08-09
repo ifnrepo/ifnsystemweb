@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          Inventory Barang
+          Inventory Barang <?= $this->session->userdata('currdept'); ?>
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -59,8 +59,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </select>
                     </div>
                   </span>
+                       
                 </div>
-                <div class="col-5 ">
+                <div class="col-3 ">
                   <!-- <label class="form-check mt-1">
                     <input class="form-check-input" type="checkbox" id="gbg">
                     <span class="form-check-label font-bold">Gabung</span>
@@ -69,8 +70,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input class="form-check-input" type="checkbox">
                     <span class="form-check-label font-bold" id="spcbarang">Minus</span>
                   </label> -->
+                  <label class="form-check mt-1 mb-1 bg-teal-lt <?php if($this->session->userdata('viewharga')!=1){ echo "hilang"; } ?>">
+                    <input class="form-check-input" type="checkbox" id="viewharga" <?php if($this->session->userdata('invharga')==1){ echo "checked"; } ?> >
+                    <span class="form-check-label font-bold">Tampilkan Harga</span>
+                  </label>   
                 </div>
-                <div class="col-1">
+                <div class="col-3">
 
                 </div>
                 <div class="col-3">
@@ -123,7 +128,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <!-- <th>Output</th> -->
                 <th>Qty</th>
                 <th>Kgs</th>
-                <!-- <th>Ket</th> -->
+                <?php if($this->session->userdata('invharga')==1): ?>
+                <th>Harga</th>
+                <th>Total</th>
+                <?php endif; ?>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
@@ -131,6 +139,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               $cntbrg = 0;
               $jmpcs = 0;
               $jmkgs = 0;
+              $grandtotal = 0;
               if ($data != null) : $brg = '';
                 $sak = 0;
                 $sakkg = 0;
@@ -156,9 +165,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $jmpcs += $sak;
                   $isi = 'OME-' . trim(encrypto($det['po'])) . '-' . trim(encrypto($det['item'])) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-';
                   // $isi = 'XXX';
-                  $insno = $this->session->userdata('currdept') == 'GS' ? '' : $det['insno'];
-                  $nobontr = $this->session->userdata('currdept') == 'GS' ? '' : $det['nobontr'];
+                  $insno = $this->session->userdata('currdept') == 'GS' ? $det['insno'] : $det['insno'];
+                  $nobontr = $this->session->userdata('currdept') == 'GS' ? $det['nobontr'] : $det['nobontr'];
                   $spekbarang = $det['nama_barang'] == null ? $det['spek'] : substr($det['nama_barang'], 0, 75);
+                  $pilihtampil = $sak==0 ? $sakkg : $sak;
+                  $totalharga = $pilihtampil * $det['harga'];
+                  $grandtotal += $totalharga;
               ?>
                   <tr class="<?= $bg; ?>">
                     <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="text-teal-green"><?= $spekbarang; ?></a></td>
@@ -169,6 +181,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td style="border-bottom: red; font-size: 9px;"><?= $det['nama_kategori']; ?></td>
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 0); ?></td>
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg, 2); ?></td>
+                    <?php if($this->session->userdata('invharga')==1): ?>
+                      <td style="border-bottom: red;" class="text-right"><?= rupiah($det['harga'], 2); ?></td>
+                      <td style="border-bottom: red;" class="text-right"><?= rupiah($totalharga, 2); ?></td>
+                    <?php endif; ?>
                   </tr>
               <?php }
               endif; ?>
@@ -196,8 +212,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?= rupiah($jmkgs, 2); ?>
                 </span>
               </div>
-              <div class="col-3">
-                <h4 class="mb-1"></h4>
+              <div class="col-3" style="line-height: 5px !important;">
+                <?php if($this->session->userdata('invharga')): ?>
+                <h4 class="mb-0 font-kecil font-bold">Grand Total</h4>
+                <span class="font-kecil text-green font-bold">
+                  Rp. <?= rupiah($grandtotal, 2); ?>
+                </span>
+                <?php endif; ?>
               </div>
               <div class="col-2">
                 <h4 class="mb-1"></h4>

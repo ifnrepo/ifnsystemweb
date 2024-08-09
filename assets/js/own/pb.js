@@ -21,6 +21,10 @@ $(document).ready(function () {
 	}
 	$("#dept_kirim").change();
 	// $("#level").change();
+	var errosimpan = $("#errorparam").val();
+	if (errosimpan == 1) {
+		pesan("Departemen Asal dan Departemen Tujuan harus di isi !", "info");
+	}
 });
 // $("#tglpb").datepicker();
 
@@ -67,6 +71,10 @@ $("#simpandetailbarang").click(function () {
 	}
 	if ($("#id_satuan").val() == "") {
 		pesan("Isi Satuan barang", "error");
+		return;
+	}
+	if ($("#sublok").val() == "" && !$("#bloksublok").hasClass("hilang")) {
+		pesan("Sublok belum dipilih", "error");
 		return;
 	}
 	if (
