@@ -116,6 +116,9 @@ class Out extends CI_Controller {
                     $hasil .= "<td class='text-primary'><a href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah Nobontr'>Pilih Nobontr</a></td>";
                 }
             }
+            if($this->session->userdata('deptsekarang')=='GS'){
+                $hasil .= "<td class='text-primary font-bold'>".$que['sublok']."</td>";
+            }
             $hasil .= "<td>";
             $hasil .= "<a href=".base_url().'out/editdetailout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
             $hasil .= "</td>";

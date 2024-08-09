@@ -77,6 +77,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php if($this->session->userdata('deptsekarang')=='GM'){ ?>
                     <th>Nobontr</th>
                     <?php } ?>
+                    <?php if($this->session->userdata('deptsekarang')=='GS'){ ?>
+                    <th>SBL</th>
+                    <?php } ?>
                     <th>Aksi</th>
                   </tr>
                 </thead>

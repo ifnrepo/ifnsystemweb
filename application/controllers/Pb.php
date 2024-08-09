@@ -15,6 +15,7 @@ class Pb extends CI_Controller
         $this->load->model('dept_model', 'deptmodel');
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
 
         $this->load->library('Pdf');
         // $this->load->library('Codeqr');
@@ -71,6 +72,7 @@ class Pb extends CI_Controller
             $hasil .= "<td>" . $dt['namasatuan'] . "</td>";
             $hasil .= "<td class='text-center'>" . rupiah($dt['pcs'], 0) . "</td>";
             $hasil .= "<td>" . rupiah($dt['kgs'], 0) . "</td>";
+            $hasil .= "<td class='text-center font-bold'>".$dt['sublok']."</td>";
             $hasil .= "<td class='text-center'>";
             $hasil .= "<a href='#' id='editdetailpb' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
             $hasil .= "<a href='" . base_url() . 'pb/hapusdetailpb/' . $dt['id'] . "' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
@@ -213,6 +215,7 @@ class Pb extends CI_Controller
         $header['header'] = 'transaksi';
         $data['data'] = $this->pb_model->getdatabyid($id);
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $data['sublok'] = $this->helpermodel->getdatasublok()->result_array();
         $footer['fungsi'] = 'pb';
         $this->load->view('layouts/header', $header);
         $this->load->view('pb/datapb', $data);
