@@ -12,4 +12,17 @@ class Helper_model extends CI_Model
         $hasil = $this->db->get('term_payment');
         return $hasil;
     }
+    public function getdatasublok(){
+        $dp = $this->session->userdata('deptsekarang');
+        switch ($dp) {
+            case 'FG':
+                $this->db->where('kode',1);
+                break;
+            default:
+                # code...
+                break;
+        }
+        $hasil = $this->db->get('tb_sublok');
+        return $hasil;
+    }
 }

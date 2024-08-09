@@ -28,6 +28,7 @@ $(document).ready(function () {
 	modalBoxXl();
 	modalBoxSc();
 	modalBoxlgSc();
+	modaldeletecustom();
 	canvasoff();
 
 	$(".tglpilih").datepicker({
@@ -370,6 +371,23 @@ function modalBoxXl() {
 		var modal = $(this);
 		modal.find(".modal-title").text(title);
 		$(this).find(".fetched-data").load(link.attr("href"));
+	});
+	return false;
+}
+function modaldeletecustom() {
+	$("#confirm-delete-custom").on("show.bs.modal", function (e) {
+		var link = $(e.relatedTarget);
+		var title = link.data("title");
+		var modal = $(this);
+		modal.find(".modal-title").text(title);
+		document.getElementById("message").innerHTML = $(e.relatedTarget).data(
+			"message",
+		);
+		document.getElementById("btn-ok").innerHTML = $(e.relatedTarget).data(
+			"tombol",
+		);
+		// modal.find(".modal-body").text("QWEWEWRE");
+		// $(this).find(".fetched-data").load(link.attr("href"));
 	});
 	return false;
 }

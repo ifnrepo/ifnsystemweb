@@ -73,6 +73,10 @@ $("#simpandetailbarang").click(function () {
 		pesan("Isi Satuan barang", "error");
 		return;
 	}
+	if ($("#sublok").val() == "" && !$("#bloksublok").hasClass("hilang")) {
+		pesan("Sublok belum dipilih", "error");
+		return;
+	}
 	if (
 		($("#pcs").val() == "" || $("#pcs").val() == "0") &&
 		($("#kgs").val() == "" || $("#kgs").val() == "0")

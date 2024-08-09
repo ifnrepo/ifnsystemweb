@@ -151,13 +151,21 @@ class Bbl_model extends CI_Model
 
     public function getdatadetail_bbl($data)
     {
-        $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
-        $this->db->select("(select nomor_dok from tb_header where tb_header.id = (select id_header from tb_detail a where a.id_bbl = tb_detail.id)) as id_pb");
-        $this->db->from('tb_detail');
-        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
-        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
-        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-        $this->db->where('id_header', $data);
+        $this->db->select("max(e.tgl) as tgmax,d.harga");
+        $this->db->from("tb_detail d");
+        $this->db->join('tb_header e','e.id = d.id_header','left');
+        $this->db->where('e.kode_dok = "IB" and a.id_barang = d.id_barang and a.nobontr = d.nobontr');
+        $kueri = $this->db->get_compiled_select();
+
+        $this->db->select("a.*,tb_header.id AS id_header_bbl,c.nomor_dok as id_pb,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
+        $this->db->select('0 as hrgtrh');
+        $this->db->from('tb_detail a');
+        $this->db->join('tb_header', 'tb_header.id = a.id_header', 'left');
+        $this->db->join('satuan', 'satuan.id = a.id_satuan', 'left');
+        $this->db->join('barang', 'barang.id = a.id_barang', 'left');
+        $this->db->join('tb_detail b','b.id_bbl = a.id','left');
+        $this->db->join('tb_header c','c.id = b.id_header','left');
+        $this->db->where('a.id_header', $data);
         return $this->db->get();
     }
 
@@ -282,5 +290,21 @@ class Bbl_model extends CI_Model
         $this->db->where('id',$id);
         $hasil = $this->db->update('tb_header',['data_ok'=>$nilai]);
         return $hasil;
+    }
+    public function gethrg($idbarang,$nobontr){
+        $this->db->select("*");
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id=tb_detail.id_header','left');
+        $this->db->where('id_barang',$idbarang);
+        $this->db->where('nobontr',$nobontr);
+        $this->db->where('kode_dok','IB');
+        $hasil = $this->db->order_by('tgl','DESC')->get();
+        if($hasil->num_rows() > 0){
+            $xhasil = $hasil->row_array();
+            return $xhasil['harga'];
+        }else{
+            return 0;
+        }
+
     }
 }
