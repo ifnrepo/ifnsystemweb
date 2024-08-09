@@ -109,7 +109,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit Approver bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btneditapprover ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit</a>
                   <?php } ?>
                   <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan validasi bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnok ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve</a>
-                  <a href="#" style="padding: 5px !important" data-bs-target="#modal-danger" data-message="Anda yakin akan membatalkan bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnno ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-danger">Cancel</a>
+                  <a href="#" style="padding: 5px !important" data-bs-target="#confirm-delete-custom" data-message="Anda yakin akan membatalkan bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnno ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-danger">Cancel</a>
                 </td>
               </tr>
             <?php } ?>

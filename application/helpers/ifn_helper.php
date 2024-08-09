@@ -389,3 +389,9 @@ function terbilang($x) {
   elseif ($x < 1000000000)
     return terbilang($x / 1000000) . " Juta" . terbilang($x % 1000000);
 }
+
+function gethrg($idb,$nobo){
+    $CI = &get_instance();
+    $hasil = $CI->bbl_model->gethrg($idb,$nobo);
+    return $hasil;
+}

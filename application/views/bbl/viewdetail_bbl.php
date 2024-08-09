@@ -25,16 +25,24 @@
                         <th>Satuan</th>
                         <th>Qty</th>
                         <th>Kgs</th>
+                        <?php if($this->session->userdata('viewharga')==1): ?>
+                            <th>Harga terakhir</th>
+                            <th>Total</th>
+                        <?php endif; ?>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                    <?php foreach ($detail->result_array() as $val) { ?>
+                    <?php foreach ($detail->result_array() as $val) { $tampil = $val['pcs']!=0 ? $val['pcs'] : $val['kgs']; ?>
                         <tr>
                             <td class="line-12"><?= $val['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span></td>
                             <td><?= $val['brg_id']; ?></td>
                             <td><?= $val['namasatuan']; ?></td>
                             <td><?= rupiah($val['pcs'], 0); ?></td>
                             <td><?= rupiah($val['kgs'], 2); ?></td>
+                            <?php if($this->session->userdata('viewharga')==1): ?>
+                                <td class="text-danger"><?= rupiah(gethrg($val['id_barang'], $val['nobontr']),2); ?></td>
+                                <td class="text-danger"><?= rupiah(gethrg($val['id_barang'], $val['nobontr'])*$tampil,2); ?></td>
+                            <?php endif; ?>
                         </tr>
                     <?php } ?>
                 </tbody>
