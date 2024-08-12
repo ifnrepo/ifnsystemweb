@@ -119,7 +119,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td class="<?= $jnbbl; ?>"><?= tglmysql($datdet['tgl']); ?></td>
                                     <td><a href='<?= base_url() . 'bbl/viewdetail_bbl/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'><?= $datdet['nomor_dok'] ?></a></td>
                                     <td><?= $jmlrec; ?></td>
-                                    <td class="font-bold text-success"><?php if($datdet['bbl_pp']==1){ echo "P"; }  ?></td>
+                                    <td class="font-bold text-success"><?php if($datdet['bbl_pp']==1){ echo "P"; }  ?> <?php if($datdet['bbl_pp']==2){ echo "Ut"; }  ?></td>
                                     <td class="font-bold text-danger"><?php if($datdet['bbl_sv']==1){ echo "Sv"; }  ?></td>
                                     <td class="font-bold font-kecil"><?= $datdet['dept_bbl']  ?></td>
                                     <?php if($datdet['data_ok']==1){ ?>

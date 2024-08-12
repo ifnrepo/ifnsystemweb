@@ -54,21 +54,22 @@ class Task extends CI_Controller {
             redirect($url);
         }
     }
-    public function cancelpb($id,$tab)
+    public function cancelpb()
     {
          $data = [
-            'id' => $id,
-            // 'ketcancel' => $_POST['ketcancel'],
+            'id' => $_POST['id'],
+            'ketcancel' => $_POST['ketcancel'],
             'ok_valid' => 2,
             'user_valid' => $this->session->userdata('id'),
             'tgl_valid' => date('Y-m-d H:i:s')
         ];
         $simpan = $this->pb_model->simpancancelpb($data);
-        if ($simpan) {
-            $this->session->set_flashdata('tabdef',$tab);
-            $url = base_url() . 'task';
-            redirect($url);
-        }
+        // if ($simpan) {
+        //     // $this->session->set_flashdata('tabdef',$tab);
+        //     $url = base_url() . 'task';
+        //     redirect($url);
+        // }
+        echo $simpan;
     }
     public function validasibbl($id,$kolom)
     {
@@ -92,8 +93,11 @@ class Task extends CI_Controller {
             redirect($url);
         }
     }
-    public function cancelbbl($id,$kolom)
+    public function cancelbbl()
     {
+        $id = $_POST['id'];
+        $kolom = $_POST['ke'];
+        $ketcancel = $_POST['ketcancel'];
         $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
         $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];
         $arrayuser=['user_ok','user_pp','user_valid','user_tuju','user_pc'];
@@ -103,16 +107,18 @@ class Task extends CI_Controller {
                 $arraykolom[$kolom-1] => 2,
                 $arraytgl[$kolom-1] => date('Y-m-d H:i:s'),
                 $arrayuser[$kolom-1] => $this->session->userdata('id'),
+                'ketcancel' => $_POST['ketcancel'],
                 'id' => $id
             ];
             $simpan = $this->taskmodel->validasibbl($data);
         }else{
             $simpan = 1;
         }
-        if ($simpan) {
-            $url = base_url() . 'task';
-            redirect($url);
-        }
+        // if ($simpan) {
+        //     $url = base_url() . 'task';
+        //     redirect($url);
+        // }
+        echo $simpan;
     }
     public function validasipo($id,$kolom)
     {
@@ -136,8 +142,11 @@ class Task extends CI_Controller {
             redirect($url);
         }
     }
-    public function cancelpo($id,$kolom)
+    public function cancelpo()
     {
+        $id = $_POST['id'];
+        $kolom = $_POST['ke'];
+        $ketcancel = $_POST['ketcancel'];
         $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
         $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];
         $arrayuser=['user_ok','user_pp','user_valid','user_tuju','user_pc'];
@@ -153,10 +162,11 @@ class Task extends CI_Controller {
         }else{
             $simpan = 1;
         }
-        if ($simpan) {
-            $url = base_url() . 'task';
-            redirect($url);
-        }
+        // if ($simpan) {
+        //     $url = base_url() . 'task';
+        //     redirect($url);
+        // }
+        echo $simpan;
     }
     public function editbbl($id){
         $header['header'] = 'pendingtask';
@@ -206,20 +216,26 @@ class Task extends CI_Controller {
             redirect($url);
         }
     }
-    public function canceladj($id,$tab)
+    public function canceladj()
     {
          $data = [
-            'id' => $id,
-            // 'ketcancel' => $_POST['ketcancel'],
+            'id' => $_POST['id'],
+            'ketcancel' => $_POST['ketcancel'],
             'ok_valid' => 2,
             'user_valid' => $this->session->userdata('id'),
             'tgl_valid' => date('Y-m-d H:i:s')
         ];
         $simpan = $this->taskmodel->simpancanceladj($data);
-        if ($simpan) {
-            $this->session->set_flashdata('tabdef',$tab);
-            $url = base_url() . 'task';
-            redirect($url);
-        }
+        // if ($simpan) {
+        //     $this->session->set_flashdata('tabdef',$tab);
+        //     $url = base_url() . 'task';
+        //     redirect($url);
+        // }
+        echo $simpan;
+    }
+    public function canceltask($id=0,$ke=0){
+        $data['ke'] = $ke;
+        $data['data'] = $this->taskmodel->getdatabyid($id);
+        $this->load->view('task/canceltask',$data);
     }
 }

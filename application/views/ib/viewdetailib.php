@@ -1,16 +1,60 @@
 <div class="container-xl"> 
     <div class="row mb-1">
         <div class="col-4 text-primary font-bold">
-        <span>Nomor</span>
-        <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
+            <span>Nomor</span>
+            <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
+            <hr class="m-0">
+            <div class="font-kecil">
+                Supplier : <br>
+                <div style="font-weight: normal !important;">
+                    <?= $header['id_pemasok'].' - '.$header['namasupplier']; ?><br>
+                    <?= $header['alamat']; ?><br>
+                    Attn. <?= $header['kontak']; ?>
+                </div>
+            </div>
+        </div>
+        <div class="col text-primary font-bold">
+            <span>Tanggal</span>
+            <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
+            <hr class="m-0">
+            <div class="font-kecil bg-green-lt p-1">
+                Informasi : <br>
+                <div style="font-weight: normal !important;">
+                    <?php 
+                        $notgljalan =  '';
+                        $notgljalan .= $header['nomor_sj'];
+                        $notgljalan .= $header['tgl_sj']==null ? "" : ' ('.$header['tgl_sj'].')';
+                    ?>
+                    Surat Jalan No. <?= $notgljalan; ?><br>
+                    Nomor Mobil. <?= $header['no_kendaraan']; ?><br>
+                    No Faktur Pajak. <?= $header['no_faktur_pajak']; ?><br>
+                    .
+                </div>
+            </div>
         </div>
         <div class="col-4 text-primary font-bold">
-        <span>Tanggal</span>
-        <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
-        </div>
-        <div class="col-4 text-primary font-bold">
-        <span>Dibuat Oleh</span>
-        <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4>
+            <span>Dibuat Oleh</span>
+            <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4>
+            <hr class="m-0">
+            <div class="font-kecil bg-teal-lt p-1">
+                Informasi BC <br>
+                <div style="font-weight: normal !important;">
+                    <?php 
+                        $notglaju =  '';
+                        $notglaju .= $header['nomor_aju'];
+                        $notglaju .= $header['tgl_aju']==null ? "" : ' ('.$header['tgl_aju'].')';
+                        $notglbc =  '';
+                        $notglbc .= $header['nomor_bc'];
+                        $notglbc .= $header['tgl_bc']==null ? "" : ' ('.$header['tgl_bc'].')';
+                    ?>
+                    Jenis BC : <?= $header['jns_bc']; ?><br>
+                    Nomor Aju : <?= $notglaju ?><br>
+                    No BC : <?= $notglbc; ?>
+                    <div class="bg-red-lt text-center p-1 font-bold">
+                        <?= generatekodebc($header['jns_bc'],$header['tgl_bc'],$header['nomor_bc']) ?>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
     <hr class='m-1'>
@@ -54,7 +98,7 @@
         <?php $bgr = $header['ketcancel']==null ? "text-primary" : "text-danger"; ?>
         <?php $vld = $header['ok_valid']==0 ? "hilang" : ""; ?>
         <div class="col-4 <?= $bgr.' '.$vld; ?> font-bold ">
-            <?php $cek = $header['ketcancel']==null ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
+            <?php $cek = $header['ketcancel']==null ? "Diverifikasi Oleh" : "Dicancel Oleh"; ?>
             <span><?= $cek; ?></span>
             <h4 class="mb-1"><?= datauser($header['user_valid'],'name').' ('.$header['tgl_valid'].')'."<br>".$header['ketcancel'] ?></h4>
         </div>

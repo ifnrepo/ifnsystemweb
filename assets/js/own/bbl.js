@@ -69,9 +69,13 @@ $("#xdeptselect").change(function () {
 	});
 });
 $("#bbl_pp").change(function () {
-	// alert($(this).prop("checked"));
-	var isi = $(this).prop("checked") ? 1 : 0;
-	var xisi = $(this).prop("checked") ? 0 : 1;
+	// alert($(this).val());
+	// var isi = $(this).prop("checked") ? 1 : 0;
+	// var xisi = $(this).prop("checked") ? 0 : 1;
+	var isinya =
+		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
+	$("#loadview").html(isinya);
+	var isi = $(this).val();
 	$.ajax({
 		dataType: "json",
 		type: "POST",
@@ -84,6 +88,7 @@ $("#bbl_pp").change(function () {
 			// alert('berhasil');
 			// window.location.href = base_url + "bbl/databbl/" + $("#id_header").val();
 			// $("#butbatal").click();
+			$("#loadview").html("");
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
