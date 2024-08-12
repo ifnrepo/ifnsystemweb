@@ -29,7 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     echo 'selected';
                                   } ?>>Validasi PB (Permintaan Barang)</option>
               <?php endif; ?>
-              <?php if($this->session->userdata('ttd') >= 2): ?>
+              <?php if($this->session->userdata('ttd') >= 2 || datauser($this->session->userdata('id'),'cekpp')==1 || datauser($this->session->userdata('id'),'cekut')==1  ): ?>
               <option value="bbl" <?php if ($this->session->userdata('modetask') == 'bbl') {
                                     echo 'selected';
                                   } ?>>Validasi BBL (Bon Permintaan Pembelian)</option>
@@ -68,22 +68,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
               if($this->session->userdata('modetask') == 'adj'){
                 $viewdetail = base_url() . 'adj/viewdetailadj/' . $datpb['id'];
                 $btnok = base_url() . 'task/validasiadj/' . $datpb['id'];
-                $btnno = base_url() . 'task/canceladj/' . $datpb['id'];
+                // $btnno = base_url() . 'task/canceladj/' . $datpb['id'];
+                $btnno = base_url() . 'task/canceltask/' . $datpb['id'];
               }else {
                 if ($this->session->userdata('modetask') == 'pb') {
                   $viewdetail = base_url() . 'pb/viewdetailpb/' . $datpb['id'];
                   $btnok = base_url() . 'task/validasipb/' . $datpb['id'];
-                  $btnno = base_url() . 'task/cancelpb/' . $datpb['id'];
+                  // $btnno = base_url() . 'task/cancelpb/' . $datpb['id'];
+                  $btnno = base_url().'task/canceltask/'.$datpb['id'];
                 } else {
                   $ttdke = $datpb['data_ok']+$datpb['ok_pp']+$datpb['ok_valid']+$datpb['ok_tuju']+$datpb['ok_pc']+1;
                   if($this->session->userdata('modetask')=='po'){
                     $viewdetail = base_url() . 'po/viewdetail/' . $datpb['id'];
                     $btnok = base_url() . 'task/validasipo/' . $datpb['id'] . '/3';
-                    $btnno = base_url() . 'task/cancelpo/' . $datpb['id'] . '/3';
+                    // $btnno = base_url() . 'task/cancelpo/' . $datpb['id'] . '/3';
+                    $btnno = base_url() . 'task/canceltask/' . $datpb['id'] . '/3';
                   }else{
                     $viewdetail = base_url() . 'bbl/viewdetail_bbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
                     $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $ttdke;
-                    $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $ttdke;
+                    // $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $ttdke;
+                    $btnno = base_url() . 'task/canceltask/' . $datpb['id'] . '/' . $ttdke;
                   }
                   $btnedit = base_url() . 'task/editbbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
                   $btneditapprover = base_url() . 'task/editapprovebbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
@@ -93,8 +97,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <tr>
                 <td><?= tglmysql($datpb['tgl']); ?></td>
                 <td><a href="<?= $viewdetail ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail"><?= $datpb['nomor_dok']; ?></a></td>
-                <td class="font-bold font-kecil"><?php if ($datpb['bbl_pp'] == 1) {
+                <td class="font-bold font-kecil text-success"><?php if ($datpb['bbl_pp'] == 1) {
                                                     echo "P";
+                                                  } ?><?php if ($datpb['bbl_pp'] == 2) {
+                                                    echo "Ut";
                                                   } ?></td>
                 <td class="font-bold font-kecil"><?php if ($datpb['pb_sv'] == 1 || $datpb['bbl_sv'] == 1) {
                                                     echo "<span class='text-danger'>Sv</span>";
@@ -107,9 +113,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btnedit ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit Qty</a>
                   <?php } else if ($this->session->userdata('ttd') == 3 && $this->session->userdata('modetask') == 'bbl') { ?>
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit Approver bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btneditapprover ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit</a>
-                  <?php } ?>
+                  <?php } $hilang = datauser($this->session->userdata('id'),'cekpc')==1 ? "hilang" : ""; ?>
                   <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan validasi bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnok ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve</a>
-                  <a href="#" style="padding: 5px !important" data-bs-target="#confirm-delete-custom" data-message="Anda yakin akan membatalkan bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnno ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-danger">Cancel</a>
+                  <a href="<?= $btnno; ?>" style="padding: 5px !important" data-bs-target="#canceltask" data-message="Anda yakin akan membatalkan bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnno ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-danger <?= $hilang; ?>">Cancel</a>
                 </td>
               </tr>
             <?php } ?>

@@ -74,3 +74,16 @@ $("#edituser").click(function () {
 $("#id_level_user").change(function () {
 	// alert($(this).val());
 });
+
+$("#cekpp").change(function () {
+	// alert($(this).props("checked", true));
+	if ($(this).is(":checked") && $("#cekut").is(":checked")) {
+		$("#cekut").prop("checked", false);
+	}
+});
+$("#cekut").change(function () {
+	// alert($(this).props("checked", true));
+	if ($(this).is(":checked") && $("#cekpp").is(":checked")) {
+		$("#cekpp").prop("checked", false);
+	}
+});

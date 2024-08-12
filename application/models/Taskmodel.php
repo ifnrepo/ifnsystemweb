@@ -23,12 +23,17 @@ class Taskmodel extends CI_Model
         } else if ($mode == 'bbl') {
             // $this->db->where('data_ok',3);
             $masuk = $this->session->userdata('ttd'); 
-            if(strtoupper($this->session->userdata('jabatan'))=='MANAGER' && in_array('PP',$this->session->userdata('arrdep'))){
+            $ttdppic = 0;
+            $ttdutl = 0;
+            if(datauser($this->session->userdata('id'),'cekpp')==1){
                 $ttdppic = 1;
                 // $masuk = 1;
                 // echo $ttdppic;
-            }else{
-                $ttdppic = 0;
+            }
+            if(datauser($this->session->userdata('id'),'cekut')==1){
+                $ttdutl = 1;
+                // $masuk = 1;
+                // echo $ttdppic;
             }
             if(datauser($this->session->userdata('id'),'cekpc')==1){
                 $masuk = 4;
@@ -45,16 +50,22 @@ class Taskmodel extends CI_Model
                     break;
                 case 2:
                     $this->db->where('data_ok', 1);
-                    if($ttdppic==0){
+                    if($ttdppic==0 && $ttdutl==0){
                         $this->db->where('ok_pp', 1);
+                        $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
                     }else{
-                        $this->db->where('ok_pp', 0);
-                        $this->db->where('bbl_pp',1);
+                        if($ttdppic==1){
+                            $this->db->where('ok_pp', 0);
+                            $this->db->where('bbl_pp',1);
+                        }
+                        if($ttdutl==1){
+                            $this->db->where('ok_pp', 0);
+                            $this->db->where('bbl_pp',2);
+                        }
                     }
                     $this->db->where('ok_valid', 0);
                     $this->db->where('ok_tuju', 0);
                     $this->db->where('ok_pc', 0);
-                    $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
                     break;
                 case 3:
                     $this->db->where('data_ok', 1);
@@ -163,5 +174,9 @@ class Taskmodel extends CI_Model
     {
         $this->db->where('id', $data['id']);
         return $this->db->update('tb_header', $data);
+    }
+    public function getdatabyid($id){
+        $this->db->where('id',$id);
+        return $this->db->get('tb_header')->row_array();
     }
 }

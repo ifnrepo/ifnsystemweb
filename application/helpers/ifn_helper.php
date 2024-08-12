@@ -395,3 +395,24 @@ function gethrg($idb,$nobo){
     $hasil = $CI->bbl_model->gethrg($idb,$nobo);
     return $hasil;
 }
+function generatekodebc($jnsbc,$tglbc,$nobc){
+    $kode = '000000-010017-00000000-000000';
+    if($jnsbc!=''){
+        $kode1 = str_repeat('0',6-strlen($jnsbc)).$jnsbc;
+    }else{
+        $kode1 = '000000';
+    }
+    if($tglbc!=null){
+        $kode2 = str_replace('-','',$tglbc);
+    }else{
+        $kode2 = '00000000';
+    }
+    if($nobc != ''){
+        $kode3 = str_repeat('0',6-strlen($nobc)).$nobc;
+    }else{
+        $kode3 = '000000';
+    }
+    $kode = $kode1.'-010017-'.$kode2.'-'.$kode3;
+    return $kode;
+    
+}

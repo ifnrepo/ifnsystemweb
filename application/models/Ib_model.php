@@ -34,6 +34,7 @@ class Ib_model extends CI_Model
         $this->db->join('barang c', 'c.id = a.id_barang', 'left');
         $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
         $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
+        
         $this->db->where('a.id_header', $data);
         return $this->db->get()->result_array();
     }
