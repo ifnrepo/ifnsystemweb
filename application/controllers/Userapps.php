@@ -86,7 +86,7 @@ class Userapps extends CI_Controller
 		$data['user'] = $this->userappsmodel->getdatabyid($id)->row_array();
 		$this->load->view('userapps/viewuser', $data);
 	}
-	public function refreshsess($id,$urrl){
+	public function refreshsess($id,$urrl=''){
 		$hasil = $this->userappsmodel->refreshsess($id);
 		if($hasil){
 			$url  = base_url($urrl);

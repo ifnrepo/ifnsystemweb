@@ -2,12 +2,30 @@
     <?php $kensel = $header['ok_valid']==2 ? 'text-danger' : 'text-primary'; ?>
     <div class="row mb-1">
         <div class="col-4 <?= $kensel; ?> font-bold">
-        <span>Nomor</span>
-        <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
+            <span>Nomor</span>
+            <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
+            <hr class="m-0">
+            <div class="font-kecil p-1 bg-teal-lt">
+                Supplier <br>
+                <div style="font-weight: normal;">
+                    <?= $header['id_pemasok'].' - '.$header['namasupplier']; ?><br>
+                    <?= $header['alamat']; ?><br>
+                    Attn. <?= $header['kontak']; ?>
+                </div>
+            </div>
         </div>
         <div class="col-4 <?= $kensel; ?> font-bold">
-        <span>Tanggal</span>
-        <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
+            <span>Tanggal</span>
+            <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
+            <hr class="m-0">
+            <div class="font-kecil p-1 bg-red-lt">
+                Informasi <br>
+                <div style="font-weight: normal;">
+                    Tgl rencana datang : <?= $header['tgl_dtb']; ?><br>
+                    Jenis Bayar : <?= $header['jenis_pembayaran']; ?><br>
+                    <?= $header['mt_uang'].' - '.$header['detterm']; ?>
+                </div>
+            </div>
         </div>
         <div class="col-4 <?= $kensel; ?> font-bold">
         <span>Dibuat Oleh</span>
@@ -17,6 +35,9 @@
     <hr class='m-1'>
     <div class="card card-lg">
         <div class="card-body p-2">
+            <div class="font-kecil mb-1">
+                <?= $header['header_po']; ?>
+            </div>
             <table class="table datatable6 table-hover" id="cobasisip">
                 <thead style="background-color: blue !important">
                     <tr>
@@ -26,17 +47,21 @@
                     <th>Satuan</th>
                     <th>Qty</th>
                     <th>Kgs</th>
+                    <th>Harga</th>
+                    <th>Total</th>
                     <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                <?php foreach ($detail as $val) { ?>
+                <?php foreach ($detail as $val) { $tampil = $val['pcs']==0 ? $val['kgs'] : $val['pcs']; ?>
                     <tr>
                         <td><?= $val['nama_barang']; ?></td>
                         <td><?= $val['brg_id']; ?></td>
                         <td><?= $val['namasatuan']; ?></td>
                         <td><?= rupiah($val['pcs'],0); ?></td>
                         <td><?= rupiah($val['kgs'],2); ?></td>
+                        <td><?= rupiah($val['harga'],2); ?></td>
+                        <td><?= rupiah($val['harga']*$tampil,2); ?></td>
                         <td><?= $val['keter']; ?></td>
                     </tr>
                 <?php } ?>
@@ -46,10 +71,37 @@
         </div>
     </div>
     <hr class="m-1">
+    <div class="row">
+        <div class="col-sm-6">
+            Catatan :
+            <ul>
+                <li> <?= $header['catatan1']; ?></li>
+                <li> <?= $header['catatan2']; ?></li>
+                <li> <?= $header['catatan3']; ?></li>
+            </ul>
+        </div>
+        <div class="col-sm-3 text-right">
+            Harga Total :<br>
+            Diskon :<br>
+            Total :<br>
+            PPN <?= rupiah($header['cekppn'],0).'%'; ?>:<br>
+            PPh :<br>
+            Jumlah :
+        </div>
+        <div class="col-sm-3 text-right">
+            <strong><?= rupiah($header['totalharga'],2); ?></strong><br>
+            <strong><?= rupiah($header['diskon'],2); ?></strong><br>
+            <strong><?= rupiah($header['totalharga']-$header['diskon'],2); ?></strong><br>
+            <strong><?= rupiah($header['ppn'],2); ?></strong><br>
+            <strong><?= rupiah($header['pph'],2); ?></strong><br>
+            <strong><?= rupiah(($header['totalharga']-$header['diskon'])+$header['ppn']-$header['pph'],2); ?></strong>
+        </div>
+    </div>
+    <hr class="m-1">
     <div class="row mb-1">
         <div class="col-4 <?= $kensel; ?> font-bold">
             <span>KETERANGAN :</span>
-            <h4 class="mb-1"><?= $header['keterangan']; ?></h4>
+            <h4 class="mb-1"><?= $header['keterangan'].'-'.$header['ketcancel']; ?></h4>
         </div>
         <div class="col-4"></div>
         <?php $bgr = $header['ketcancel']==null ? "text-primary" : "text-danger"; ?>

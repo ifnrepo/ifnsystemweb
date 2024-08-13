@@ -395,6 +395,10 @@ class Out_model extends CI_Model{
         $hasil = $this->db->get();
         return $hasil;
     }
+    public function getdatabarang($id){
+        $this->db->where('id',$id);
+        return $this->db->get('barang');
+    }
     public function editnobontr($data){
         $update = [
             'id_stokdept' => $data['idstok'],

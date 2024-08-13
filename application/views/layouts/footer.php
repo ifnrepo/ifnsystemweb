@@ -6,7 +6,7 @@
 			<div class="col-12 col-lg-auto mt-3 mt-lg-0">
 				<ul class="list-inline list-inline-dots mb-0">
 					<li class="list-inline-item">
-						Copyright &copy; 2023
+						Copyright &copy; <?= date('Y'); ?>
 					</li>
 					<li class="list-inline-item">
 						<a href="#" data-bs-toggle="modal" data-bs-target="#modal-success">
@@ -51,48 +51,49 @@
 <script src="<?= base_url(); ?>assets/vendor/litepicker/dist/litepicker.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/nprogress/nprogress.js"></script>
 <!-- Custom JS -->
-<script src="<?= base_url(); ?>assets/js/myscript.js?1723002686"></script>
+<script src="<?= base_url(); ?>assets/js/myscript.js?1723520986"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'barang') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/barang.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/barang.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'dept') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/dept.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/dept.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pb') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/pb.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/pb.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'personil') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/personil.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/personil.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'in') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/in.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/in.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'out') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/out.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/out.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'inv') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/inv.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/inv.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'bbl') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'po') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/po.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/po.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'ib') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/ib.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/ib.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'adj') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/adj.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/adj.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pendingtask') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1723002686"></script>
+	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
+	<?php echo json_encode($dataproduksi['data_tgl']) ?>
 	<script>
 		// @formatter:off
 		document.addEventListener("DOMContentLoaded", function() {
@@ -121,8 +122,9 @@
 					curve: "smooth",
 				},
 				series: [{
-					name: "Profits",
-					data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 19, 46, 39, 62, 51, 35, 41, 67]
+					name: "Kgs",
+					// data: [37.2, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 19, 46, 39, 62, 51, 35, 41, 67]
+					data: <?php echo json_encode($dataproduksi['data_isi']) ?>
 				}],
 				tooltip: {
 					theme: 'dark'
@@ -140,17 +142,18 @@
 					axisBorder: {
 						show: false,
 					},
-					type: 'datetime',
+					type: 'number',
 				},
 				yaxis: {
 					labels: {
 						padding: 4
 					},
 				},
-				labels: [
-					'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
-				],
-				colors: [tabler.getColor("primary")],
+				// labels: [
+				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+				// ],
+				labels: <?php echo json_encode($dataproduksi['data_tgl']) ?>,
+				colors: [tabler.getColor("success")],
 				legend: {
 					show: false,
 				},

@@ -113,7 +113,7 @@ class Out extends CI_Controller {
                 $hasil .= "<td class='text-primary'>".$que['nobontr']."</td>";
             }else{
                 if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']==''){
-                    $hasil .= "<td class='text-primary'><a href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah Nobontr'>Pilih Nobontr</a></td>";
+                    $hasil .= "<td class='text-primary'><a href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
                 }
             }
             if($this->session->userdata('deptsekarang')=='GS'){
@@ -172,7 +172,7 @@ class Out extends CI_Controller {
     public function addnobontr($id,$idbarang){
         $data['data'] = $this->out_model->getdatagm($idbarang);
         $data['iddetail'] = $id;
-        $data['header'] = $this->out_model->getdatagm($idbarang)->row_array();
+        $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
         $this->load->view('out/addnobontr',$data);
     }
     public function editnobontr(){

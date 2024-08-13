@@ -279,14 +279,21 @@ class Po extends CI_Controller
     }
     public function hapuspo($id)
     {
-        $query = $this->pomodel->hapuspo($id);
-        if ($query) {
-            $url = base_url() . 'po';
+        $cek = $this->pomodel->cekfield($id,'data_ok',0)->num_rows();
+        if($cek==1){
+            $query = $this->pomodel->hapuspo($id);
+            if ($query) {
+                $url = base_url() . 'po';
+                redirect($url);
+            }
+        }else{
+            $this->session->set_flashdata('errorsimpan',2);
+            $url = base_url().'po';
             redirect($url);
         }
     }
     public function editpo($id){
-        $cek = $this->pomodel->cekfield($id,'ok_valid',0);
+        $cek = $this->pomodel->cekfield($id,'ok_valid',0)->num_rows();
         if($cek==1){
             $data = [
                 'data_ok' => 0,

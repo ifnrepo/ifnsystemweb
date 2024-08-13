@@ -158,8 +158,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <td class="text-end p-1"><?= rupiah($header['pph'],2); ?></td>
           </tr>
           <tr>
-            <td class="font-weight-bold text-uppercase text-end">Total</td>
-            <td class="font-weight-bold text-end"><?= rupiah(($header['totalharga']-$header['diskon'])+$header['ppn']-$header['pph'],2); ?></td>
+            <td class="font-weight-bold text-uppercase text-end p-1">Total</td>
+            <td class="font-weight-bold text-end p-1"><?= rupiah(($header['totalharga']-$header['diskon'])+$header['ppn']-$header['pph'],2); ?></td>
           </tr>
           <tr>
             <td colspan="8" class="p-1">Catatan :</td>
@@ -178,8 +178,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </td>
           </tr>
         </table>
-        <p class="text-secondary text-center mt-5">Thank you very much for doing business with us. We look forward to working with
-          you again!</p>
+        <!-- <p class="text-secondary text-center mt-5">Thank you very much for doing business with us. We look forward to working with
+          you again!</p> -->
+        <p class="text-secondary font-kecil mt-5">Printed On : <?= date('d-m-Y H:i:s'); ?>, oleh <?= datauser($this->session->userdata('id'),'name'); ?></p>
       </div>
     </div>
   </div>

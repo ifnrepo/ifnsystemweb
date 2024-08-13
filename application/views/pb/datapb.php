@@ -114,7 +114,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">Kgs</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil text-right" id="kgs" name="kgs"  autocomplete="off" aria-describedby="emailHelp" placeholder="Kgs">
+                  <input type="text" class="form-control font-kecil" id="kgs" name="kgs"  autocomplete="off" aria-describedby="emailHelp" placeholder="Kgs">
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Ket</label>
+                <div class="col">
+                  <textarea class="form-control font-kecil" id="keterangan" name="keterangan" placeholder="Keterangan"></textarea>
                 </div>
               </div>
             </form>

@@ -72,7 +72,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <div class="col-3 pt-2">Jenis BBL</div>
                                         <div class="col-9">
                                             <select class="form-control form-select font-kecil" id="bbl_pp">
-                                            <option value="0">Jenis BBL</option>
+                                            <option value="0">Biasa</option>
                                             <option value="1" <?php if($header['bbl_pp']==1){ echo "selected"; } ?>>BBL Produksi</option>
                                             <option value="2" <?php if($header['bbl_pp']==2){ echo "selected"; } ?>>BBL Perbaikan Mesin</option>
                                             </select>

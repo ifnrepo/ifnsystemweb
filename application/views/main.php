@@ -42,20 +42,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-center">
-              <div class="subheader">Revenue</div>
+              <div class="subheader">Produksi 08-2024</div>
               <div class="ms-auto lh-1">
-                <div class="dropdown">
+                <!-- <div class="dropdown">
                   <a class="dropdown-toggle text-secondary" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 7 days</a>
                   <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item active" href="#">Last 7 days</a>
                     <a class="dropdown-item" href="#">Last 30 days</a>
                     <a class="dropdown-item" href="#">Last 3 months</a>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="d-flex align-items-baseline">
-              <div class="h1 mb-0 me-2">$4,300</div>
+              <div class="h1 mb-0 me-2">300,000 Kgs</div>
               <div class="me-auto">
                 <span class="text-green d-inline-flex align-items-center lh-1">
                   8% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
