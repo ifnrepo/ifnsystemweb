@@ -8,6 +8,8 @@
             <span>SKU/Spesifikasi Barang</span>
             <?php $spekbarang = $header['nama_barang'] == null ? $header['spek'] : $header['nama_barang']; ?>
             <h4 class="mb-1 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
+            <hr class="m-0">
+            <span class="font-12 text-red">KATEGORI : <?= $header['nama_kategori']; ?></span>
         </div>
         <!-- <div class="col-4 text-primary font-bold">
         <span>Dibuat Oleh</span>

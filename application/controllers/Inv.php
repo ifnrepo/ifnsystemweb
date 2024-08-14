@@ -87,6 +87,24 @@ class Inv extends CI_Controller
         // redirect($url);
         echo 1;
     }
+    public function confirmverifikasidata($id){
+        $data['data'] = $this->invmodel->getdatasaldo($id);
+        $this->load->view('inv/konfirmasisaldo',$data);
+    }
+    public function batalverifikasidata($id){
+        $data['data'] = $this->invmodel->getdatasaldo($id);
+        $this->load->view('inv/ubahkonfirmasisaldo',$data);
+    }
+    public function verifikasidata(){
+        $id = $_POST['id'];
+        $simpan = $this->invmodel->verifikasidata($id);
+        echo json_encode($simpan);
+    }
+    public function cancelverifikasidata(){
+        $id = $_POST['id'];
+        $simpan = $this->invmodel->cancelverifikasidata($id);
+        echo json_encode($simpan);
+    }
     //END INV Controllers 
     public function getdatadetailpb()
     {

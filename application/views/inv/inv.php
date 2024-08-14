@@ -7,6 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="col-md-6">
         <h2 class="page-title p-2">
           Inventory Barang <?= $this->session->userdata('currdept'); ?>
+          <input type="hidden" id="bukavalid" value="<?= datauser($this->session->userdata('id'),'cekbatalstok'); ?>">
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -115,7 +116,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div>
-          <table id="tabel" class="table nowrap order-column table-hover datatable7" style="width: 100% !important;">
+          <table id="tabel" class="table order-column table-hover datatable7" style="width: 100% !important;">
             <thead>
               <tr>
                 <!-- <th>Tgl</th> -->
@@ -124,7 +125,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Nomor IB</th>
                 <th>Insno</th>
                 <th>Satuan</th>
-                <th>Kategori</th>
+                <!-- <th>Kategori</th> -->
                 <!-- <th>Output</th> -->
                 <th>Qty</th>
                 <th>Kgs</th>
@@ -132,6 +133,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Harga</th>
                 <th>Total</th>
                 <?php endif; ?>
+                <th>Verified</th>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
@@ -178,13 +180,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td style="border-bottom: red;"><?= $nobontr; ?></td>
                     <td style="border-bottom: red;"><?= $insno; ?></td>
                     <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
-                    <td style="border-bottom: red; font-size: 9px;"><?= $det['nama_kategori']; ?></td>
+                    <!-- <td style="border-bottom: red; font-size: 9px;"></td> -->
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 0); ?></td>
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg, 2); ?></td>
                     <?php if($this->session->userdata('invharga')==1): ?>
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($det['harga'], 2); ?></td>
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($totalharga, 2); ?></td>
                     <?php endif; ?>
+                    <td style="border-bottom: red;" class="text-center line-12" id="row<?= $det['idu'] ?>">
+                    <?php if($det['user_verif']==0){ ?>
+                      <a href="<?= base_url() . 'inv/confirmverifikasidata/'.$det['idu']; ?>" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>"><span>Verify</span></a>
+                    <?php }else{ if(datauser($this->session->userdata('id'),'cekbatalstok')==1){  ?>
+                      <a href="<?= base_url() . 'inv/batalverifikasidata/'.$det['idu']; ?>" data-bs-toggle="modal" data-bs-target="#canceltask" data-tombol="Ya" data-message="Akan membatalkan verifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>">
+                        verified : <?= substr(datauser($det['user_verif'],'username'),0,9); ?><br>
+                        <span class="font-10"><?= $det['tgl_verif']; ?></span>
+                      </a>
+                    <?php }else{  ?>
+                        verified : <?= substr(datauser($det['user_verif'],'username'),0,9); ?><br>
+                        <span class="font-10"><?= $det['tgl_verif']; ?></span>
+                    <?php }} ?>
+                    </td>
                   </tr>
               <?php }
               endif; ?>

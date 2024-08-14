@@ -22,17 +22,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
             <div class="h1 mb-3"><?= phpversion() ?></div>
             <div class="d-flex mb-2">
-              <div>Conversion rate</div>
+              <!-- <div>Conversion rate</div> -->
               <div class="ms-auto">
-                <span class="text-green d-inline-flex align-items-center lh-1">
-                  7% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
-                </span>
+                <!-- <span class="text-green d-inline-flex align-items-center lh-1"> -->
+                  - <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                  <!-- <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg> -->
+                <!-- </span> -->
               </div>
             </div>
             <div class="progress progress-sm">
-              <div class="progress-bar bg-primary" style="width: 75%" role="progressbar" aria-valuenow="75" aria-valuemin="0" aria-valuemax="100" aria-label="75% Complete">
-                <span class="visually-hidden">75% Complete</span>
+              <div class="progress-bar bg-primary" style="width: 80%" role="progressbar" aria-valuenow="80" aria-valuemin="0" aria-valuemax="100" aria-label="80% Complete">
+                <span class="visually-hidden">80% Complete</span>
               </div>
             </div>
           </div>
@@ -42,7 +42,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-center">
-              <div class="subheader">Produksi 08-2024</div>
+              <div class="subheader">Produksi <?= date('m').' - '.date('Y'); ?></div>
               <div class="ms-auto lh-1">
                 <!-- <div class="dropdown">
                   <a class="dropdown-toggle text-secondary" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 7 days</a>
@@ -55,11 +55,19 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
             </div>
             <div class="d-flex align-items-baseline">
-              <div class="h1 mb-0 me-2">300,000 Kgs</div>
+              <div class="h1 mb-0 me-2"><?= rupiah($dataproduksi['data_prod_bulan_ini'],0); ?> Kgs</div>
               <div class="me-auto">
-                <span class="text-green d-inline-flex align-items-center lh-1">
-                  8% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                <?php 
+                  $persenproduksi = (($dataproduksi['data_prod_bulan_ini']-$dataproduksi['data_prod_bulan_lalu'])/$dataproduksi['data_prod_bulan_lalu'])*100;
+                  $naikturun = $persenproduksi < 0 ? 'text-red' : 'text-green';
+                 ?>
+                <span class="<?= $naikturun; ?> d-inline-flex align-items-center lh-1">
+                  <?= rupiah(abs($persenproduksi),0); ?>% <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                  <?php if($persenproduksi < 0){ ?>
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-trending-down"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 7l6 6l4 -4l8 8" /><path d="M21 10l0 7l-7 0" /></svg>
+                  <?php }else{ ?>
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
+                  <?php } ?>
                 </span>
               </div>
             </div>

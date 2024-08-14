@@ -46,15 +46,25 @@ class Helper_model extends CI_Model
         return $hasil;
     }
     public function dataproduksi(){
+        $bulan = 'janfebmaraprmeijunjulagtsepoktnopdes';
+        $fieldd = substr($bulan,((int)date('m')*3)-3,3);
+        $fielde = substr($bulan,(((int)date('m')-1)*3)-3,3);
         $array1 = [];
         $array2 = [];
-        $this->db->select('tgl,jan');
+        $this->db->select("SUM(jan) AS jan,SUM(feb) AS feb,SUM(mar) AS mar,SUM(apr) AS apr,SUM(mei) AS mei,SUM(jun) AS jun,SUM(jul) AS jul,SUM(agt) AS agt,SUM(sep) AS sep,SUM(okt) AS okt,SUM(nop) AS nop,SUM(des) AS des");
         $this->db->where('tahun',date('Y'));
-        $cek = $this->db->get('monitoringprd')->result_array();
-        foreach ($cek as $kec) {
-            array_push($array1,$kec['tgl']);
-            array_push($array2,$kec['jan']);
+        $cek = $this->db->get('monitoringprd')->row_array();
+        for($x=0;$x<12;$x++){
+            $field = substr($bulan,(($x+1)*3)-3,3);
+            $cik = $x+1;
+            $cok = $field;
+            array_push($array1,$field.' - '.date('Y'));
+            array_push($array2,$cek[$field]);
         }
-        return array('data_tgl' => $array1, 'data_isi' => $array2);
+        // foreach ($cek as $kec) {
+        //     array_push($array1,$kec['tgl']);
+        //     array_push($array2,$kec[$field]);
+        // }
+        return array('data_tgl' => $array1, 'data_isi' => $array2,'data_prod_bulan_ini' => $cek[$fieldd],'data_prod_bulan_lalu' => $cek[$fielde]);
     }
 }

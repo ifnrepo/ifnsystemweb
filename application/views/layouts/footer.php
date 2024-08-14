@@ -93,7 +93,24 @@
 	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1723520986"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
-	<?php echo json_encode($dataproduksi['data_tgl']) ?>
+<?php 
+	// Untuk Warna Chart Produksi 
+	$persenproduksi = (($dataproduksi['data_prod_bulan_ini']-$dataproduksi['data_prod_bulan_lalu'])/$dataproduksi['data_prod_bulan_lalu'])*100;
+	switch (true) {
+		case $persenproduksi < 0 :
+			$warna = "danger";
+			break;
+		case $persenproduksi = 0 :
+			$warna = "primary";
+			break;
+		case $persenproduksi > 0 :
+			$warna = "success";
+			break;
+		default:
+			$warna = "teal";
+			break;
+	}
+?>
 	<script>
 		// @formatter:off
 		document.addEventListener("DOMContentLoaded", function() {
@@ -153,7 +170,7 @@
 				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
 				// ],
 				labels: <?php echo json_encode($dataproduksi['data_tgl']) ?>,
-				colors: [tabler.getColor("success")],
+				colors: [tabler.getColor('<?= $warna; ?>')],
 				legend: {
 					show: false,
 				},
