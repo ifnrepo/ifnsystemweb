@@ -156,7 +156,8 @@ class Task extends CI_Controller {
                 $arraykolom[$kolom-1] => 2,
                 $arraytgl[$kolom-1] => date('Y-m-d H:i:s'),
                 $arrayuser[$kolom-1] => $this->session->userdata('id'),
-                'id' => $id
+                'id' => $id,
+                'ketcancel' => $ketcancel,
             ];
             $simpan = $this->taskmodel->validasipo($data);
         }else{

@@ -127,6 +127,8 @@ class Pb_model extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('id_header', $id);
+        $this->db->delete('catatan_po');
+        $this->db->where('id_header', $id);
         $this->db->delete('tb_detmaterial');
         $this->db->where('id_header', $id);
         $this->db->delete('tb_detail');

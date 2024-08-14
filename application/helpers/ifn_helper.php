@@ -413,6 +413,10 @@ function generatekodebc($jnsbc,$tglbc,$nobc){
         $kode3 = '000000';
     }
     $kode = $kode1.'-010017-'.$kode2.'-'.$kode3;
-    return $kode;
-    
+    return $kode;   
+}
+function riwayatdok($id){
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->riwayatdok($id);
+    return $hasil;
 }

@@ -29,6 +29,7 @@ $(document).ready(function () {
 	modalBoxSc();
 	modalBoxlgSc();
 	cancelTask();
+	verifTask();
 	canvasoff();
 
 	$(".tglpilih").datepicker({
@@ -377,6 +378,16 @@ function modalBoxXl() {
 
 function cancelTask() {
 	$("#canceltask").on("show.bs.modal", function (e) {
+		var link = $(e.relatedTarget);
+		var title = link.data("title");
+		var modal = $(this);
+		modal.find(".modal-title").text(title);
+		$(this).find(".fetched-data").load(link.attr("href"));
+	});
+	return false;
+}
+function verifTask() {
+	$("#veriftask").on("show.bs.modal", function (e) {
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);

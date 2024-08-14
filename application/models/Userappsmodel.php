@@ -36,6 +36,7 @@ class Userappsmodel extends CI_Model
         $data['cekadj'] = isset($data['cekadj']) ? 1 : 0;
         $data['cekpp'] = isset($data['cekpp']) ? 1 : 0;
         $data['cekut'] = isset($data['cekut']) ? 1 : 0;
+        $data['cekbatalstok'] = isset($data['cekbatalstok']) ? 1 : 0;
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -107,6 +108,7 @@ class Userappsmodel extends CI_Model
         $data['cekadj'] = isset($data['cekadj']) ? 1 : 0;
         $data['cekpp'] = isset($data['cekpp']) ? 1 : 0;
         $data['cekut'] = isset($data['cekut']) ? 1 : 0;
+        $data['cekbatalstok'] = isset($data['cekbatalstok']) ? 1 : 0;
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);

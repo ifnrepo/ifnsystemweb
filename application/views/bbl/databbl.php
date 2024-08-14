@@ -61,12 +61,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </div>
                     </div>
                   </div>
-                  <label class="form-check mb-0 <?php if($data['jn_bbl']==1){ echo "hilang"; } ?>">
+                  <!-- <label class="form-check mb-0 <?php if($data['jn_bbl']==1){ echo "hilang"; } ?>">
                     <input class="form-check-input" id="bbl_pp" type="checkbox" <?php if($data['bbl_pp']==1){echo "checked";} ?> <?php if($data['dept_id']=='GM'){echo "disabled"; } ?>>
                     <span class="form-check-label">
                       BBL Produksi (Persetujuan PPIC)
                     </span>
-                  </label>
+                  </label> -->
+                  <div class="mb-1 <?php if($data['jn_bbl']==1){ echo "hilang"; } ?>">
+                      <div class="row">
+                      <div class="col-3 pt-2">Jenis BBL</div>
+                      <div class="col-9">
+                          <select class="form-control form-select font-kecil" id="bbl_pp">
+                          <option value="0">Biasa</option>
+                          <option value="1" <?php if($data['bbl_pp']==1){ echo "selected"; } ?>>BBL Produksi</option>
+                          <option value="2" <?php if($data['bbl_pp']==2){ echo "selected"; } ?>>BBL Perbaikan Mesin</option>
+                          </select>
+                      </div>
+                      </div>
+                  </div>
                 </div>
                 <div class="col-3">
                   <?php if($data['jn_bbl']==0){  if($data['dept_bbl']!=''):  ?>

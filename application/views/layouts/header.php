@@ -160,7 +160,7 @@
   <div class="modal modal-blur fade" id="modal-large" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-info">
           <h5 class="modal-title">Large modal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -278,6 +278,16 @@
       </div>
     </div>
   </div>
+  <div class="modal modal-blur fade" id="veriftask" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <div class="modal-status bg-info"></div>
+        <div class="fetched-data" id="isitask">
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- End Modal -->
   <!-- Canvas -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="canvasdet" aria-labelledby="offcanvasEndLabel" style="min-width:75% !important">
@@ -299,6 +309,7 @@
       </div>
     </div>
   </div>
+  <!-- End Canvas -->
   <!-- <div id="preloader">
     <div class="page page-center">
     <div class="container container-slim py-4">
@@ -314,7 +325,6 @@
       </div>
     </div>
   </div> -->
-  <!-- End Canvas -->
   <div class="page">
     <!-- Sidebar -->
     <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">

@@ -71,7 +71,7 @@ class Pb extends CI_Controller
             $hasil .= "<td>" . $dt['kode'] . "</td>";
             $hasil .= "<td>" . $dt['namasatuan'] . "</td>";
             $hasil .= "<td class='text-center'>" . rupiah($dt['pcs'], 0) . "</td>";
-            $hasil .= "<td>" . rupiah($dt['kgs'], 0) . "</td>";
+            $hasil .= "<td>" . rupiah($dt['kgs'], 2) . "</td>";
             $hasil .= "<td class='text-center font-bold'>".$dt['sublok']."</td>";
             $hasil .= "<td class='text-center'>";
             $hasil .= "<a href='#' id='editdetailpb' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
@@ -289,6 +289,7 @@ class Pb extends CI_Controller
     {
         $data['header'] = $this->pb_model->getdatabyid($id);
         $data['detail'] = $this->pb_model->getdatadetailpb($id);
+        $data['riwayat'] = riwayatdok($id);
         $this->load->view('pb/viewdetailpb', $data);
     }
     public function ubahperiode()

@@ -56,6 +56,9 @@ $("#viewharga").click(function () {
 		},
 	});
 });
+$("#katbar").change(function () {
+	$("#updateinv").click();
+});
 $("#tglawal").datepicker({
 	autoclose: true,
 	format: "dd-mm-yyyy",

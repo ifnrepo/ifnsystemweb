@@ -10,13 +10,16 @@ class Main extends CI_Controller {
             redirect($url);
         }
         // $this->load->model('personilmodel');
-        // $this->load->model('usermodel');
+        $this->load->model('helper_model','helpermodel');
     }
 	public function index()
 	{
+        $dataproduksi = $this->helpermodel->dataproduksi();
 		$this->load->view('layouts/header');
-		$this->load->view('main');
+        $data['dataproduksi'] = $dataproduksi;
+		$this->load->view('main',$data);
         $footer['fungsi'] = 'main';
+        $footer['dataproduksi'] = $dataproduksi;
 		$this->load->view('layouts/footer',$footer);
 	}
 }

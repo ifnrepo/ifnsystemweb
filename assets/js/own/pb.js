@@ -97,6 +97,7 @@ $("#resetdetailbarang").click(function () {
 	$("#pcs").val("");
 	$("#kgs").val("");
 	$("#id").val("");
+	$("#keterangan").val("");
 });
 $("#nama_barang").on("keyup", function (e) {
 	if (e.key == "Enter" || e.keycode === 13) {
@@ -119,6 +120,7 @@ $(document).on("click", "#editdetailpb", function () {
 			$("#id_satuan").val(data[0].id_satuan);
 			$("#pcs").val(data[0].pcs);
 			$("#kgs").val(data[0].kgs);
+			$("#keterangan").val(data[0].keterangan);
 			$("#formbarangpb").attr("action", base_url + "pb/updatedetailbarang");
 		},
 		error: function (xhr, ajaxOptions, thrownError) {

@@ -165,6 +165,7 @@ class Ib_model extends CI_Model
         for ($x = 0; $x < $jumlah; $x++) {
             $arrdat = $data['data'];
             $detail = $this->db->where('id', $arrdat[$x])->get('tb_detail')->row_array();
+            $header = $this->db->where('id',$detail['id_header'])->get('tb_header')->row_array();
             $isi = [
                 'id_header' => $id,
                 'seri_barang' => $x,
@@ -173,6 +174,7 @@ class Ib_model extends CI_Model
                 'kgs' => $detail['kgs'],
                 'pcs' => $detail['pcs'],
                 'harga' => $detail['harga'],
+                'nobontr' => $header['nomor_dok']
             ];
             $this->db->insert('tb_detail', $isi);
             $idsimpan = $this->db->insert_id();
