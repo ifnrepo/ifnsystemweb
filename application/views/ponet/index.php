@@ -459,7 +459,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         border: none;
     }
 
-    /* Responsive adjustments */
+    /* responsif tabel  */
     @media (min-width: 768px) {
         .header {
             flex-direction: row;
