@@ -11,6 +11,8 @@ class Supplier extends CI_Controller
             redirect($url);
         }
         $this->load->model('supplier_model');
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
 
     public function index()
@@ -46,6 +48,7 @@ class Supplier extends CI_Controller
             'keterangan' => $_POST['keterangan']
         ];
         $hasil = $this->supplier_model->simpansupplier($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function editsupplier($id)
@@ -77,6 +80,7 @@ class Supplier extends CI_Controller
             'keterangan' => $_POST['keterangan']
         ];
         $hasil = $this->supplier_model->updatesupplier($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
 
@@ -84,6 +88,7 @@ class Supplier extends CI_Controller
     {
         $hasil = $this->supplier_model->hapussupplier($id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url() . 'supplier';
             redirect($url);
         }

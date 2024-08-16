@@ -12,6 +12,8 @@ class Ref_dokumen extends CI_Controller
         }
         $this->load->model('refdokumen_model');
         // $this-load->model('refdokumen_model)
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
 
     public function index()
@@ -36,6 +38,7 @@ class Ref_dokumen extends CI_Controller
             'nama_dokumen' => $_POST['nama_dokumen'],
         ];
         $hasil = $this->refdokumen_model->simpanrefdok($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function editrefdok($kode)
@@ -51,12 +54,14 @@ class Ref_dokumen extends CI_Controller
             'nama_dokumen' => $_POST['nama_dokumen']
         ];
         $hasil = $this->refdokumen_model->updaterefdok($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapusrefdok($kode)
     {
         $hasil = $this->refdokumen_model->hapusrefdok($kode);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url('ref_dokumen');
             redirect($url);
         }

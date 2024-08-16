@@ -11,6 +11,8 @@ class Kategori_dept extends CI_Controller
             redirect($url);
         }
         $this->load->model('kategori_dept_model');
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
 
     public function index()
@@ -33,6 +35,7 @@ class Kategori_dept extends CI_Controller
             'nama' => $_POST['nama']
         ];
         $hasil = $this->kategori_dept_model->simpan_kategdept($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function edit($id)
@@ -47,12 +50,14 @@ class Kategori_dept extends CI_Controller
             'nama' => $_POST['nama']
         ];
         $hasil = $this->kategori_dept_model->update_kategdept($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapus($id)
     {
         $hasil = $this->kategori_dept_model->hapus($id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url('kategori_dept');
             redirect($url);
         }
