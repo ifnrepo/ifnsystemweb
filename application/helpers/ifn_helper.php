@@ -438,3 +438,13 @@ function get_client_ip() {
         $ipaddress = 'UNKNOWN';
     return $ipaddress;
 }
+function getdevice($str){
+    $tart = substr($str,0,strpos($str,' '));
+    $device = 'DESKTOP';
+    if(strpos($str,'Lin')){
+        $device = 'ANDROID';
+    }else if(strpos($str,'Mac')){
+        $device = 'APPLE MACINTOSH';
+    }
+    return $tart.' on '.$device;
+}

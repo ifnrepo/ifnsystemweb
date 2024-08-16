@@ -58,7 +58,7 @@ class Helper_model extends CI_Model
             $field = substr($bulan,(($x+1)*3)-3,3);
             $cik = $x+1;
             $cok = $field;
-            array_push($array1,$field.' - '.date('Y'));
+            array_push($array1,strtoupper($field).' - '.date('Y'));
             array_push($array2,$cek[$field]);
         }
         // foreach ($cek as $kec) {

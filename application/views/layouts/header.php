@@ -559,6 +559,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 5); ?>" href="<?= base_url('bckeluar'); ?>">
                       BC Keluar
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 6); ?>" href="<?= base_url('logact/clear'); ?>">
+                      Log Activity
+                    </a>
                   </div>
                 </div>
               </div>
