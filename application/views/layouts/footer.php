@@ -92,7 +92,10 @@
 <?php if (isset($fungsi) && $fungsi == 'pendingtask') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1723520986"></script>
 <?php } ?>
-<?php if (isset($fungsi) && $fungsi == 'main') { ?>
+<?php if (isset($fungsi) && $fungsi == 'logact') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/logact.js?1723520986"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'main') {  print_r(json_encode($dataproduksi['data_isi'])); ?>
 <?php 
 	// Untuk Warna Chart Produksi 
 	$persenproduksi = (($dataproduksi['data_prod_bulan_ini']-$dataproduksi['data_prod_bulan_lalu'])/$dataproduksi['data_prod_bulan_lalu'])*100;
