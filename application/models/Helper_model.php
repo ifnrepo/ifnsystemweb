@@ -67,4 +67,14 @@ class Helper_model extends CI_Model
         // }
         return array('data_tgl' => $array1, 'data_isi' => $array2,'data_prod_bulan_ini' => $cek[$fieldd],'data_prod_bulan_lalu' => $cek[$fielde]);
     }
+    public function isilog($isilog){
+        $useragent=$_SERVER['HTTP_USER_AGENT'];
+        $data = [
+            'activitylog' => str_replace('`','',$isilog),
+            'userlog' => datauser($this->session->userdata('id'),'name'),
+            'iduserlog' => $this->session->userdata('id'),
+            'devicelog' => get_client_ip().' on '.$useragent
+        ];
+        $this->db->insert('tb_logactivity',$data);
+    }
 }

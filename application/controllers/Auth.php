@@ -9,6 +9,8 @@ class Auth extends CI_Controller
         $this->load->library('form_validation');
         // $this->load->library('session');
         $this->load->model('userappsmodel');
+        $this->load->model('userappsmodel','usermodel');
+        $this->load->model('helper_model','helpermodel');
     }
 
     public function index()
@@ -78,6 +80,7 @@ class Auth extends CI_Controller
                 $this->session->set_userdata('hak_ttd_pb',arrdep($user['cekpb']));
                 $this->session->set_userdata('bl',date('m'));
                 $this->session->set_userdata('th',date('Y'));
+                $this->helpermodel->isilog('LOGIN Aplikasi momois');
 
                 $url = base_url('Main');
                 redirect($url);
@@ -96,6 +99,7 @@ class Auth extends CI_Controller
     public function logout()
     {
         // $this->loginmodel->islogout($this->session->userdata('idprofil'));
+        $this->helpermodel->isilog('LOGOUT Aplikasi momois');
         $this->session->sess_destroy();
         $url = base_url('Auth');
         redirect($url);

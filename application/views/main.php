@@ -241,7 +241,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
+      <!-- <div class="col-lg-6">
         <div class="row row-cards">
           <div class="col-12">
             <div class="card">
@@ -532,8 +532,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-lg-6">
+      </div> -->
+      <!-- <div class="col-lg-6">
         <div class="card">
           <div class="card-header border-0">
             <div class="card-title">Development activity</div>
@@ -546,7 +546,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
                 <div class="col">
                   <div>Today's Earning: $4,262.40</div>
-                  <div class="text-secondary"><!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
+                  <div class="text-secondary">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline text-green" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
                     +5% more than yesterday</div>
                 </div>
@@ -623,12 +623,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </table>
           </div>
         </div>
-      </div>
-      <div class="col-12">
+      </div> -->
+      <!-- <div class="col-12">
         <div class="card card-md">
           <div class="card-stamp card-stamp-lg">
             <div class="card-stamp-icon bg-primary">
-              <!-- Download SVG icon from http://tabler-icons.io/i/ghost -->
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 11a7 7 0 0 1 14 0v7a1.78 1.78 0 0 1 -3.1 1.4a1.65 1.65 0 0 0 -2.6 0a1.65 1.65 0 0 1 -2.6 0a1.65 1.65 0 0 0 -2.6 0a1.78 1.78 0 0 1 -3.1 -1.4v-7" /><path d="M10 10l.01 0" /><path d="M14 10l.01 0" /><path d="M10 14a3.5 3.5 0 0 0 4 0" /></svg>
             </div>
           </div>
@@ -648,8 +647,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
           </div>
         </div>
-      </div>
-      <div class="col-md-12 col-lg-8">
+      </div> -->
+      <!-- <div class="col-md-12 col-lg-8">
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Most Visited Pages</h3>
@@ -667,7 +666,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <tr>
                 <td>
                   /
-                  <a href="#" class="ms-1" aria-label="Open website"><!-- Download SVG icon from http://tabler-icons.io/i/link -->
+                  <a href="#" class="ms-1" aria-label="Open website">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
                   </a>
                 </td>
@@ -681,7 +680,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <tr>
                 <td>
                   /form-elements.html
-                  <a href="#" class="ms-1" aria-label="Open website"><!-- Download SVG icon from http://tabler-icons.io/i/link -->
+                  <a href="#" class="ms-1" aria-label="Open website">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
                   </a>
                 </td>
@@ -695,7 +694,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <tr>
                 <td>
                   /index.html
-                  <a href="#" class="ms-1" aria-label="Open website"><!-- Download SVG icon from http://tabler-icons.io/i/link -->
+                  <a href="#" class="ms-1" aria-label="Open website">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
                   </a>
                 </td>
@@ -709,7 +708,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <tr>
                 <td>
                   /icons.html
-                  <a href="#" class="ms-1" aria-label="Open website"><!-- Download SVG icon from http://tabler-icons.io/i/link -->
+                  <a href="#" class="ms-1" aria-label="Open website">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
                   </a>
                 </td>
@@ -723,7 +722,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <tr>
                 <td>
                   /docs/
-                  <a href="#" class="ms-1" aria-label="Open website"><!-- Download SVG icon from http://tabler-icons.io/i/link -->
+                  <a href="#" class="ms-1" aria-label="Open website">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
                   </a>
                 </td>
@@ -737,7 +736,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <tr>
                 <td>
                   /accordion.html
-                  <a href="#" class="ms-1" aria-label="Open website"><!-- Download SVG icon from http://tabler-icons.io/i/link -->
+                  <a href="#" class="ms-1" aria-label="Open website">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 15l6 -6" /><path d="M11 6l.463 -.536a5 5 0 0 1 7.071 7.072l-.534 .464" /><path d="M13 18l-.397 .534a5.068 5.068 0 0 1 -7.127 0a4.972 4.972 0 0 1 0 -7.071l.524 -.463" /></svg>
                   </a>
                 </td>
@@ -751,13 +750,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </table>
           </div>
         </div>
-      </div>
-      <div class="col-md-6 col-lg-4">
+      </div> -->
+      <!-- <div class="col-md-6 col-lg-4">
         <a href="https://github.com/sponsors/codecalm" class="card card-sponsor" target="_blank" rel="noopener" style="background-image: url(./static/sponsor-banner-homepage.svg)" aria-label="Sponsor Tabler!">
           <div class="card-body"></div>
         </a>
-      </div>
-      <div class="col-md-6 col-lg-4">
+      </div> -->
+      <!-- <div class="col-md-6 col-lg-4">
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Social Media Traffic</h3>
@@ -836,8 +835,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </tbody>
           </table>
         </div>
-      </div>
-      <div class="col-md-12 col-lg-8">
+      </div> -->
+      <!-- <div class="col-md-12 col-lg-8">
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Tasks</h3>
@@ -852,20 +851,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="#" class="text-reset">Extend the data model.</a>
                 </td>
                 <td class="text-nowrap text-secondary">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
                   August 04, 2021
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
                     2/7
                   </a>
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/message -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>
                     3</a>
                 </td>
@@ -881,20 +877,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="#" class="text-reset">Verify the event flow.</a>
                 </td>
                 <td class="text-nowrap text-secondary">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
                   January 03, 2019
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
                     3/10
                   </a>
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/message -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>
                     6</a>
                 </td>
@@ -910,20 +903,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="#" class="text-reset">Database backup and maintenance</a>
                 </td>
                 <td class="text-nowrap text-secondary">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
                   December 28, 2018
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
                     0/6
                   </a>
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/message -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>
                     1</a>
                 </td>
@@ -939,20 +929,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="#" class="text-reset">Identify the implementation team.</a>
                 </td>
                 <td class="text-nowrap text-secondary">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
                   November 07, 2020
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
                     6/10
                   </a>
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/message -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>
                     12</a>
                 </td>
@@ -968,20 +955,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="#" class="text-reset">Define users and workflow</a>
                 </td>
                 <td class="text-nowrap text-secondary">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
                   November 23, 2021
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
                     3/7
                   </a>
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/message -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>
                     5</a>
                 </td>
@@ -997,20 +981,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <a href="#" class="text-reset">Check Pull Requests</a>
                 </td>
                 <td class="text-nowrap text-secondary">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/calendar -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 7a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12z" /><path d="M16 3v4" /><path d="M8 3v4" /><path d="M4 11h16" /><path d="M11 15h1" /><path d="M12 15v3" /></svg>
                   January 14, 2021
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/check -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l5 5l10 -10" /></svg>
                     2/9
                   </a>
                 </td>
                 <td class="text-nowrap">
                   <a href="#" class="text-secondary">
-                    <!-- Download SVG icon from http://tabler-icons.io/i/message -->
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M8 9h8" /><path d="M8 13h6" /><path d="M18 4a3 3 0 0 1 3 3v8a3 3 0 0 1 -3 3h-5l-5 3v-3h-2a3 3 0 0 1 -3 -3v-8a3 3 0 0 1 3 -3h12z" /></svg>
                     3</a>
                 </td>
@@ -1021,8 +1002,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </table>
           </div>
         </div>
-      </div>
-      <div class="col-12">
+      </div> -->
+      <!-- <div class="col-12">
         <div class="card">
           <div class="card-header">
             <h3 class="card-title">Invoices</h3>
@@ -1049,7 +1030,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <thead>
                 <tr>
                   <th class="w-1"><input class="form-check-input m-0 align-middle" type="checkbox" aria-label="Select all invoices"></th>
-                  <th class="w-1">No. <!-- Download SVG icon from http://tabler-icons.io/i/chevron-up -->
+                  <th class="w-1">No. 
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-sm icon-thick" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 15l6 -6l6 6" /></svg>
                   </th>
                   <th>Invoice Subject</th>
@@ -1326,7 +1307,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <ul class="pagination m-0 ms-auto">
               <li class="page-item disabled">
                 <a class="page-link" href="#" tabindex="-1" aria-disabled="true">
-                  <!-- Download SVG icon from http://tabler-icons.io/i/chevron-left -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>
                   prev
                 </a>
@@ -1338,14 +1318,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <li class="page-item"><a class="page-link" href="#">5</a></li>
               <li class="page-item">
                 <a class="page-link" href="#">
-                  next <!-- Download SVG icon from http://tabler-icons.io/i/chevron-right -->
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>
                 </a>
               </li>
             </ul>
           </div>
         </div>
-      </div>
+      </div> -->
     </div>
   </div>
 </div>

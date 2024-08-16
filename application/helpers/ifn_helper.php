@@ -335,7 +335,7 @@ function viewsku($po = '', $no = '', $dis = '', $id = '')
         $xid = $id == '' ? '' : ' brg ' . $id;
         $hasil = $po . ' # ' . $no . $xdis;
     }
-    return $hasil;
+    return trim($hasil);
 }
 
 function viewspek($po = '', $no = '', $dis = 0)
@@ -419,4 +419,22 @@ function riwayatdok($id){
     $CI = &get_instance();
     $hasil = $CI->helpermodel->riwayatdok($id);
     return $hasil;
+}
+function get_client_ip() {
+    $ipaddress = '';
+    if (getenv('HTTP_CLIENT_IP'))
+        $ipaddress = getenv('HTTP_CLIENT_IP');
+    else if(getenv('HTTP_X_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
+    else if(getenv('HTTP_X_FORWARDED'))
+        $ipaddress = getenv('HTTP_X_FORWARDED');
+    else if(getenv('HTTP_FORWARDED_FOR'))
+        $ipaddress = getenv('HTTP_FORWARDED_FOR');
+    else if(getenv('HTTP_FORWARDED'))
+       $ipaddress = getenv('HTTP_FORWARDED');
+    else if(getenv('REMOTE_ADDR'))
+        $ipaddress = getenv('REMOTE_ADDR');
+    else
+        $ipaddress = 'UNKNOWN';
+    return $ipaddress;
 }

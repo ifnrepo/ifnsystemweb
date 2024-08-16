@@ -155,6 +155,30 @@ $("#buttoncari").click(function () {
 		},
 	});
 });
+$("#viewinv").change(function () {
+	var load =
+		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
+	$("#loadview").html(load);
+	var kisi = $(this).is(":checked") ? 1 : 0;
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "inv/viewinv",
+		data: {
+			cek: kisi,
+		},
+		success: function (data) {
+			// alert(data);
+			window.location.reload();
+			$("#loadview").html("");
+			// $("#body-table").html(data.datagroup).show();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
 // $("#caribar").click(function () {
 // 	var dok = document.getElementById("caribar");
 // 	if (dok.innerHTML == "Cari Barang") {

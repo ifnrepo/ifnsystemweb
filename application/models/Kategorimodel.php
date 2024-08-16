@@ -28,7 +28,9 @@ class Kategorimodel extends CI_Model
     }
     public function hapuskategori($id)
     {
-        $query = $this->db->query("Delete from kategori where id =" . $id);
+        $this->db->where('id',$id);
+        $query = $this->db->delete('kategori');
+        // $query = $this->db->query("Delete from kategori where id =" . $id);
         return $query;
     }
 }

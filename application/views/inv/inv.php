@@ -75,9 +75,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input class="form-check-input" type="checkbox" id="viewharga" <?php if($this->session->userdata('invharga')==1){ echo "checked"; } ?> >
                     <span class="form-check-label font-bold">Tampilkan Harga</span>
                   </label>   
+                  <label class="form-check mt-1 mb-1 bg-red-lt">
+                    <input class="form-check-input" type="checkbox" id="viewinv" <?php if($this->session->userdata('viewinv')==1){ echo "checked"; } ?> >
+                    <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
+                  </label>
                 </div>
                 <div class="col-3">
-
+                    
                 </div>
                 <div class="col-3">
                   <!-- <h4 class="mb-1 font-kecil font-bold text-primary" id="caribar" style="cursor: hand;" title="ubah kondisi Pencarian"></h4> -->

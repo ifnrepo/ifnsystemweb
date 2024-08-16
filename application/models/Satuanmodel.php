@@ -18,7 +18,8 @@ class Satuanmodel extends CI_Model{
         return $query;
     }
     public function hapussatuan($id){
-        $query = $this->db->query("Delete from satuan where id =".$id);
+        $this->db->where('id',$id);
+        $query = $this->db->delete('satuan');
         return $query;
     }
 }

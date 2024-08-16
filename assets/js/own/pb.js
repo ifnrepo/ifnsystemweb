@@ -88,6 +88,7 @@ $("#simpandetailbarang").click(function () {
 });
 $("#butgo").click(function () {
 	// $("#dept_tuju").change();
+	// alert($("#dept_tuju").text());
 	getdatapb();
 });
 $("#resetdetailbarang").click(function () {

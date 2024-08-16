@@ -38,7 +38,8 @@ class Barang extends CI_Controller
             'nama_barang' => $_POST['nama'],
             'id_satuan' => $_POST['sat'],
             'id_kategori' => $_POST['kat'],
-            'dln' => $_POST['dln']
+            'dln' => $_POST['dln'],
+            'noinv' => $_POST['noinv']
         ];
         $hasil = $this->barangmodel->simpanbarang($data);
         echo $hasil;
@@ -58,7 +59,8 @@ class Barang extends CI_Controller
             'nama_barang' => $_POST['nama'],
             'id_satuan' => $_POST['sat'],
             'id_kategori' => $_POST['kat'],
-            'dln' => $_POST['dln']
+            'dln' => $_POST['dln'],
+            'noinv' => $_POST['noinv']
         ];
         $hasil = $this->barangmodel->updatebarang($data);
         echo $hasil;
@@ -175,6 +177,11 @@ class Barang extends CI_Controller
             $row[] = $field->nama_kategori;
             $row[] = $field->namasatuan;
             if ($field->dln == 1) {
+                $row[] = '<i class="fa fa-check text-success"></i>';
+            } else {
+                $row[] = '-';
+            }
+            if ($field->noinv == 1) {
                 $row[] = '<i class="fa fa-check text-success"></i>';
             } else {
                 $row[] = '-';
