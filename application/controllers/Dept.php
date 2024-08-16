@@ -11,6 +11,8 @@ class Dept extends CI_Controller
             redirect($url);
         }
         $this->load->model('dept_model');
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
 
     public function index()
@@ -25,7 +27,7 @@ class Dept extends CI_Controller
     public function tambahdata()
     {
         $data['katedept'] = $this->dept_model->getdatakatedept();
-        $this->load->view('dept/add_dept',$data);
+        $this->load->view('dept/add_dept', $data);
     }
 
     public function simpandept()
@@ -39,6 +41,7 @@ class Dept extends CI_Controller
             'adj' => $_POST['adj']
         ];
         $hasil = $this->dept_model->simpandept($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     // public function editdept($dept_id)
@@ -56,11 +59,10 @@ class Dept extends CI_Controller
         $data['departemen'] = $this->dept_model->getdata();
         $data['katedept'] = $this->dept_model->getdatakatedept();
         $footer['fungsi'] = 'dept';
-        
+
         $this->load->view('layouts/header', $header);
         $this->load->view('dept/edit_new', $data);
         $this->load->view('layouts/footer', $footer);
-
     }
     // public function updatedept()
     // {
@@ -77,25 +79,27 @@ class Dept extends CI_Controller
     // }
 
     public function updatedata()
-	{
-		$query = $this->dept_model->updatedata();
-		if ($query) {
-			$url = base_url('dept');
-			redirect($url);
-		}
-	}
+    {
+        $query = $this->dept_model->updatedata();
+        $this->helpermodel->isilog($this->db->last_query());
+        if ($query) {
+            $url = base_url('dept');
+            redirect($url);
+        }
+    }
     public function hapusdept($dept_id)
     {
         $hasil = $this->dept_model->hapusdept($dept_id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url('dept');
             redirect($url);
         }
     }
 
     public function view($dept_id)
-	{
+    {
         $data['dept'] = $this->dept_model->getdatabyid($dept_id);
-		$this->load->view('dept/view', $data);
-	}
+        $this->load->view('dept/view', $data);
+    }
 }

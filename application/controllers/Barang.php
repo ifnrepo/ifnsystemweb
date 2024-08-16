@@ -13,6 +13,8 @@ class Barang extends CI_Controller
         $this->load->model('barangmodel');
         $this->load->model('satuanmodel');
         $this->load->model('kategorimodel');
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
     public function index()
     {
@@ -42,6 +44,7 @@ class Barang extends CI_Controller
             'noinv' => $_POST['noinv']
         ];
         $hasil = $this->barangmodel->simpanbarang($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function editbarang($id)
@@ -63,12 +66,14 @@ class Barang extends CI_Controller
             'noinv' => $_POST['noinv']
         ];
         $hasil = $this->barangmodel->updatebarang($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapusbarang($id)
     {
         $hasil = $this->barangmodel->hapusbarang($id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url() . 'barang';
             redirect($url);
         }
@@ -97,6 +102,7 @@ class Barang extends CI_Controller
             'persen' => $_POST['psn']
         ];
         $hasil = $this->barangmodel->simpanbombarang($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function editbombarang($id)
@@ -114,12 +120,14 @@ class Barang extends CI_Controller
             'id' => $_POST['id']
         ];
         $hasil = $this->barangmodel->updatebombarang($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapusbombarang($id, $idb)
     {
         $hasil = $this->barangmodel->hapusbombarang($id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url() . 'barang/bombarang/' . $idb;
             redirect($url);
         }
