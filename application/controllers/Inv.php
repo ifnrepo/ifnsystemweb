@@ -28,6 +28,9 @@ class Inv extends CI_Controller
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
+        if($this->session->userdata('viewinv')==null){
+            $this->session->set_userdata('viewinv',1);
+        }
         if ($this->session->userdata('tglawal') == null) {
             $data['tglawal'] = tglmysql(date('Y-m-d'));
             $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
@@ -83,6 +86,13 @@ class Inv extends CI_Controller
     public function viewharga(){
         $isi = $_POST['cek'];
         $this->session->set_userdata('invharga',$isi);
+        // $url = base_url().'Inv';
+        // redirect($url);
+        echo 1;
+    }
+    public function viewinv(){
+        $isi = $_POST['cek'];
+        $this->session->set_userdata('viewinv',$isi);
         // $url = base_url().'Inv';
         // redirect($url);
         echo 1;

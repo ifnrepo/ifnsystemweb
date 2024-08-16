@@ -44,6 +44,15 @@
                     </label>
                 </div>
             </div>
+            <div class="row mt-2">
+                <label class="col-3 col-form-label pt-0"></label>
+                <div class="col">
+                    <label class="form-check">
+                        <input class="form-check-input" id="noinv" name="noinv" type="checkbox">
+                        <span class="form-check-label">No INV</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -57,6 +66,7 @@
     })
     $("#simpanbarang").click(function(){
         var x = $("#dln").prop('checked') ? 1 : 0;
+        var y = $("#noinv").prop('checked') ? 1 : 0;
         if($("#kode").val() == ''){
             pesan('Kode harus di isi !','error');
             return;
@@ -82,6 +92,7 @@
                 nama: $("#nama_barang").val(),
                 sat: $("#id_satuan").val(),
                 kat: $("#id_kategori").val(),
+                noinv: y,
                 dln: x
             },
             success: function(data){

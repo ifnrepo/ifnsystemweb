@@ -10,7 +10,8 @@ class Satuan extends CI_Controller {
             redirect($url);
         }
         $this->load->model('satuanmodel');
-        // $this->load->model('usermodel');
+        $this->load->model('userappsmodel','usermodel');
+        $this->load->model('helper_model','helpermodel');
     }
 	public function index()
 	{  
@@ -30,6 +31,7 @@ class Satuan extends CI_Controller {
             'namasatuan'=>$_POST['nama']
         ];
         $hasil = $this->satuanmodel->simpansatuan($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function editsatuan($id){
@@ -43,11 +45,13 @@ class Satuan extends CI_Controller {
             'namasatuan'=>$_POST['nama']
         ];
         $hasil = $this->satuanmodel->updatesatuan($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapussatuan($id){
         $hasil = $this->satuanmodel->hapussatuan($id);
         if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url().'satuan';
             redirect($url);
         }

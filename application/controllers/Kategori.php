@@ -11,6 +11,8 @@ class Kategori extends CI_Controller
             redirect($url);
         }
         $this->load->model('kategorimodel');
+        $this->load->model('userappsmodel','usermodel');
+        $this->load->model('helper_model','helpermodel');
     }
 
     public function index()
@@ -34,6 +36,7 @@ class Kategori extends CI_Controller
             'nama_kategori' => $_POST['nama_kategori']
         ];
         $hasil = $this->kategorimodel->simpankategori($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function editkategori($id)
@@ -50,12 +53,14 @@ class Kategori extends CI_Controller
             'nama_kategori' => $_POST['nama_kategori']
         ];
         $hasil = $this->kategorimodel->updatekategori($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapuskategori($id)
     {
         $hasil = $this->kategorimodel->hapuskategori($id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url() . 'kategori';
             redirect($url);
         }

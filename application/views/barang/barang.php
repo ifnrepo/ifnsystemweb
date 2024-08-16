@@ -38,6 +38,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Kategori</th>
                 <th>Satuan</th>
                 <th>DLN</th>
+                <th>No INV</th>
                 <th>Aksi</th>
               </tr>
             </thead>

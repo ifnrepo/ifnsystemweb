@@ -25,7 +25,7 @@ class Pb extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['level'] = $this->usermodel->getdatalevel();
-        $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
+        $data['hakdep'] = $this->deptmodel->gethakdept_pb($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         $kode = [
