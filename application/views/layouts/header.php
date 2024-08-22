@@ -566,6 +566,35 @@
                 </div>
               </div>
             </li>
+            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('manajemen')); ?>">
+              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'manajemen') {
+                                                    echo 'active';
+                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-command">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                    <path d="M7 9a2 2 0 1 1 2 -2v10a2 2 0 1 1 -2 -2h10a2 2 0 1 1 -2 2v-10a2 2 0 1 1 2 2h-10" />
+                  </svg>
+                </span>
+                <span class="nav-link-title ">
+                  User Manajemen
+                </span>
+              </a>
+              <div class="dropdown-menu <?php if (isset($header) && $header == 'manajemen') {
+                                          echo 'show active';
+                                        } ?>">
+                <div class="dropdown-menu-columns">
+                  <div class="dropdown-menu-column">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 1); ?>" href="<?= base_url('userapps'); ?>">
+                      User Manajemen
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 2); ?>" href="<?= base_url('lockinv'); ?>">
+                      Close Book Inventory
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
             <!-- <li class="nav-item">
               <a class="nav-link <?php if (isset($header) && $header == 'inventory') {
                                     echo 'active';
@@ -583,24 +612,6 @@
                 </span>
               </a>
             </li> -->
-            <li class="nav-item <?= cekmenuheader($this->session->userdata('manajemen')); ?>">
-              <a class="nav-link <?php if (isset($header) && $header == 'manajemen') {
-                                    echo 'active';
-                                  } ?>" href="<?= base_url() . 'userapps'; ?>">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg class="icon icon-tabler icon-tabler-users" width="24" height="24" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M9 7m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
-                    <path d="M3 21v-2a4 4 0 0 1 4 -4h4a4 4 0 0 1 4 4v2" />
-                    <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-                    <path d="M21 21v-2a4 4 0 0 0 -3 -3.85" />
-                  </svg>
-                </span>
-                <span class="nav-link-title">
-                  User Manajemen
-                </span>
-              </a>
-            </li>
           </ul>
         </div>
       </div>

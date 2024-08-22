@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
-class Adj extends CI_Controller
+class Pb extends CI_Controller
 {
     function __construct()
     {
@@ -15,8 +15,7 @@ class Adj extends CI_Controller
         $this->load->model('dept_model', 'deptmodel');
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel', 'usermodel');
-        $this->load->model('adj_model', 'adjmodel');
-        $this->load->model('helper_model','helpermodel');
+        $this->load->model('helper_model', 'helpermodel');
 
         $this->load->library('Pdf');
         // $this->load->library('Codeqr');
@@ -25,213 +24,97 @@ class Adj extends CI_Controller
     public function index()
     {
         $header['header'] = 'transaksi';
-        $data['hakdep'] = $this->deptmodel->getdata_dept_adj($this->session->userdata('arrdep'));
-        $data['data'] = $this->adjmodel->getdataadj();
-        $footer['fungsi'] = 'adj';
+        $data['level'] = $this->usermodel->getdatalevel();
+        $data['hakdep'] = $this->deptmodel->gethakdept_pb($this->session->userdata('arrdep'));
+        $data['dephak'] = $this->deptmodel->getdata();
+        $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
+        $kode = [
+            'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
+            'dept_tuju' => $this->session->userdata('tujusekarang') == null ? '' : $this->session->userdata('tujusekarang'),
+            'level' => $this->session->userdata('levelsekarang') == null ? '' : $this->session->userdata('levelsekarang'),
+        ];
+        $data['data'] = $this->pb_model->getdatapb($kode);
+        $footer['fungsi'] = 'pb';
         $this->load->view('layouts/header', $header);
-        $this->load->view('adj/adj', $data);
+        $this->load->view('pb/pb', $data);
         $this->load->view('layouts/footer', $footer);
     }
     public function clear()
     {
-        $this->session->unset_userdata('currdept');
+        $this->session->unset_userdata('deptsekarang');
+        $this->session->unset_userdata('tujusekarang');
+        $this->session->unset_userdata('levelsekarang');
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
-        $url = base_url('Adj');
+        $this->session->set_userdata('levelsekarang',1);
+        $url = base_url('Pb');
         redirect($url);
     }
-    public function getdataadj()
+    public function getdatapb()
     {
-        $this->session->set_userdata('currdept', $_POST['dept_id']);
-        $url = base_url('adj');
+        $this->session->set_userdata('deptsekarang', $_POST['dept_id']);
+        $this->session->set_userdata('tujusekarang', $_POST['dept_tuju']);
+        $this->session->set_userdata('levelsekarang', $_POST['levelsekarang']);
+        $url = base_url('Pb');
         redirect($url);
     }
-    public function getdatadetailadj()
+    public function getdatadetailpb()
     {
         $kode = $_POST['id_header'];
-        $data = $this->adjmodel->getdatadetailadj($kode);
+        $data = $this->pb_model->getdatadetailpb($kode);
         $hasil = '';
         $no = 1;
         $jml = count($data);
-        $jmlkgs = 0;$jmlpcs=0;
         foreach ($data as $dt) {
             $hasil .= "<tr>";
             $hasil .= "<td>" . $dt['nama_barang'] . "</td>";
             $hasil .= "<td>" . $dt['kode'] . "</td>";
             $hasil .= "<td>" . $dt['namasatuan'] . "</td>";
             $hasil .= "<td class='text-center'>" . rupiah($dt['pcs'], 0) . "</td>";
-            $hasil .= "<td>" . rupiah($dt['kgs'],2) . "</td>";
+            $hasil .= "<td>" . rupiah($dt['kgs'], 2) . "</td>";
+            $hasil .= "<td class='text-center font-bold'>".$dt['sublok']."</td>";
             $hasil .= "<td class='text-center'>";
-            $hasil .= "<a href='#' id='editdetailadj' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
-            $hasil .= "<a href='" . base_url() . 'adj/hapusdetailadj/' . $dt['id'] . "' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
+            $hasil .= "<a href='#' id='editdetailpb' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
+            $hasil .= "<a href='" . base_url() . 'pb/hapusdetailpb/' . $dt['id'] . "' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
-            $jmlpcs += $dt['pcs'];
-            $jmlkgs += $dt['kgs'];
         }
-        $cocok = array('datagroup' => $hasil, 'jmlrek' => $jml, 'jmlpcs' => $jmlpcs,'jmlkgs'=>$jmlkgs);
+        $cocok = array('datagroup' => $hasil, 'jmlrek' => $jml);
         echo json_encode($cocok);
     }
     public function tambahdata()
     {
-        // $this->load->view('pb/add_pb');
-        if($this->session->userdata('currdept')!=''){
-            $data = [
-                'dept_id' => $this->session->userdata('currdept'),
-                'dept_tuju' => $this->session->userdata('currdept'),
-                'tgl' => date('Y-m-d'),
-                'kode_dok' => 'ADJ',
-                'id_perusahaan' => IDPERUSAHAAN,
-                'nomor_dok' => nomoradj(date('Y-m-d'), $this->session->userdata('currdept'))
-            ];
-            $simpan = $this->adjmodel->tambahadj($data);
-            if($simpan){
-                $url = base_url().'adj/dataadj/'.$simpan;
-                redirect($url);
-            }
-        }else{
-            $this->session->set_flashdata('errorparam',1);
-            $url = base_url().'adj';
-            redirect($url);
-        }
+        $this->load->view('pb/add_pb');
     }
-    public function depttujuadj()
-    {
-        $kode = $_POST['kode'];
-        $this->session->set_userdata('currdept', $kode);
-        // $cekdata = $this->adjmodel->depttujupb($kode);
-        echo 1;
-    }
-    public function hapusdataadj($id)
-    {
-        $hasil = $this->adjmodel->hapusdataadj($id);
-        if ($hasil) {
-            $this->session->set_flashdata('errorparam',2);
-            $url = base_url() . 'adj';
-            redirect($url);
-        }
-    }
-    public function addspecbarang()
-    {
-        $this->load->view('adj/addspecbarang');
-    }
-    public function getspecbarang()
-    {
-        $mode = $_POST['mode'];
-        $brg = $_POST['data'];
-        $html = '';
-        $query = $this->adjmodel->getspecbarang($mode, $brg);
-        foreach ($query as $que) {
-            $html .= "<tr>";
-            $html .= "<td>" . $que['nama_barang'] . "</td>";
-            $html .= "<td>" . $que['kode'] . "</td>";
-            $html .= "<td>".$que['kodesatuan']."</td>";
-            $html .= "<td>";
-            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $que['nama_barang'] . "' rel2='" . $que['idx'] . "' rel3=" . $que['id_satuan'] . ">Pilih</a>";
-            $html .= "</td>";
-            $html .= "</tr>";
-        }
-        $cocok = array('datagroup' => $html);
-        echo json_encode($cocok);
-    }
-    public function simpandetailbarang()
-    {
-        $hasil = $this->adjmodel->simpandetailbarang();
-        if ($hasil) {
-            $kode = $hasil['id'];
-            $url = base_url() . 'adj/dataadj/' . $kode;
-            redirect($url);
-        }
-    }
-    public function getdetailadjbyid()
-    {
-        $data = $_POST['id'];
-        $hasil = $this->adjmodel->getdatadetailadjbyid($data);
-        echo json_encode($hasil);
-    }
-    public function updatedetailbarang()
-    {
-        $hasil = $this->adjmodel->updatedetailbarang();
-        if ($hasil) {
-            $kode = $hasil['id'];
-            $url = base_url() . 'adj/dataadj/' . $kode;
-            redirect($url);
-        }
-    }
-    public function hapusdetailadj($id)
-    {
-        $hasil = $this->adjmodel->hapusdetailadj($id);
-        if ($hasil) {
-            $kode = $hasil['id'];
-            $url = base_url() . 'adj/dataadj/' . $kode;
-            redirect($url);
-        }
-    }
-    public function simpanadj($id)
-    {
-        $cek = $this->adjmodel->cekfield($id,'keterangan','');
-        if($cek->num_rows() > 0){
-            $this->session->set_flashdata('errorparam',4);
-            $url = base_url() . 'adj/dataadj/'.$id;
-            redirect($url);
-        }else{
-            $data = [
-                'data_ok' => 1,
-                'tgl_ok' => date('Y-m-d H:i:s'),
-                'user_ok' => $this->session->userdata('id'),
-                'id' => $id
-            ];
-            $simpan = $this->adjmodel->simpanadj($data);
-            if ($simpan) {
-                $url = base_url() . 'adj';
-                redirect($url);
-            }
-        }
-    }
-    public function editokadj($id)
-    {
-        $cek = $this->adjmodel->cekfield($id,'ok_valid',0)->num_rows();
-        if($cek==1){
-            $data = [
-                'data_ok' => 0,
-                'tgl_ok' => null,
-                'user_ok' => null,
-                'id' => $id
-            ];
-            $simpan = $this->adjmodel->validasiadj($data);
-        }else{
-            $this->session->set_flashdata('errorparam',3);
-            $simpan = 1;
-        }
-        if ($simpan) {
-            $url = base_url() . 'adj';
-            redirect($url);
-        }
-    }
-    public function viewdetailadj($id)
-    {
-        $data['header'] = $this->adjmodel->getdatabyid($id);
-        $data['detail'] = $this->adjmodel->getdatadetailadj($id);
-        $this->load->view('adj/viewdetailadj', $data);
-    }
-    //END ADJ Controllers
     public function edittgl()
     {
         $this->load->view('pb/edit_tgl');
     }
+    public function depttujupb()
+    {
+        $kode = $_POST['kode'];
+        $this->session->set_userdata('deptsekarang', $kode);
+        $cekdata = $this->pb_model->depttujupb($kode);
+        echo $cekdata;
+    }
     public function tambahpb()
     {
-        $data = [
-            'dept_id' => $_POST['dept_id'],
-            'dept_tuju' => $_POST['dept_tuju'],
-            'tgl' => tglmysql($_POST['tgl']),
-            'kode_dok' => 'ADJ',
-            'id_perusahaan' => IDPERUSAHAAN,
-            'pb_sv' => $_POST['jn'],
-            'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'],$_POST['jn'])
-        ];
-        $simpan = $this->pb_model->tambahpb($data);
-        echo $simpan['id'];
+        if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null ){
+            $this->session->set_flashdata('errorparam',1);
+            echo 0;
+        }else{
+            $data = [
+                'dept_id' => $_POST['dept_id'],
+                'dept_tuju' => $_POST['dept_tuju'],
+                'tgl' => tglmysql($_POST['tgl']),
+                'kode_dok' => 'PB',
+                'id_perusahaan' => IDPERUSAHAAN,
+                'pb_sv' => $_POST['jn'],
+                'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'],$_POST['jn'])
+            ];
+            $simpan = $this->pb_model->tambahpb($data);
+            echo $simpan['id'];
+        }
     }
     public function updatepb()
     {
@@ -243,7 +126,20 @@ class Adj extends CI_Controller
         $simpan = $this->pb_model->updatepb($data);
         echo $simpan;
     }
-
+    public function simpanpb($id)
+    {
+        $data = [
+            'data_ok' => 1,
+            'tgl_ok' => date('Y-m-d H:i:s'),
+            'user_ok' => $this->session->userdata('id'),
+            'id' => $id
+        ];
+        $simpan = $this->pb_model->simpanpb($data);
+        if ($simpan) {
+            $url = base_url() . 'pb';
+            redirect($url);
+        }
+    }
     public function validasipb($id)
     {
         $cek = $this->pb_model->cekfield($id,'data_ok',1)->num_rows();
@@ -277,7 +173,26 @@ class Adj extends CI_Controller
             redirect($url);
         }
     }
-    
+    public function editokpb($id)
+    {
+        $cek = $this->pb_model->cekfield($id,'ok_valid',0)->num_rows();
+        if($cek==1){
+            $data = [
+                'data_ok' => 0,
+                'tgl_ok' => null,
+                'user_ok' => null,
+                'id' => $id
+            ];
+            $simpan = $this->pb_model->validasipb($data);
+        }else{
+            $this->session->set_flashdata('pesanerror','Bon permintaan sudah divalidasi !');
+            $simpan = 1;
+        }
+        if ($simpan) {
+            $url = base_url() . 'pb';
+            redirect($url);
+        }
+    }
     public function cancelpb($id)
     {
         $data['id'] = $id;
@@ -295,24 +210,88 @@ class Adj extends CI_Controller
         $hasil = $this->pb_model->simpancancelpb($data);
         echo $hasil;
     }
-    public function dataadj($id)
+    public function datapb($id)
     {
         $header['header'] = 'transaksi';
-        $data['data'] = $this->adjmodel->getdatabyid($id);
+        $data['data'] = $this->pb_model->getdatabyid($id);
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
-        $footer['fungsi'] = 'adj';
+        $data['sublok'] = $this->helpermodel->getdatasublok()->result_array();
+        $footer['fungsi'] = 'pb';
         $this->load->view('layouts/header', $header);
-        $this->load->view('adj/dataadj', $data);
+        $this->load->view('pb/datapb', $data);
         $this->load->view('layouts/footer', $footer);
     }
-    
-
-
-
-
-
-
-
+    public function hapusdata($id)
+    {
+        $hasil = $this->pb_model->hapusdata($id);
+        if ($hasil) {
+            $url = base_url() . 'pb';
+            redirect($url);
+        }
+    }
+    public function addspecbarang()
+    {
+        $this->load->view('pb/addspecbarang');
+    }
+    public function getspecbarang()
+    {
+        $mode = $_POST['mode'];
+        $brg = $_POST['data'];
+        $html = '';
+        $query = $this->pb_model->getspecbarang($mode, $brg);
+        foreach ($query as $que) {
+            $html .= "<tr>";
+            $html .= "<td>" . $que['nama_barang'] . "</td>";
+            $html .= "<td>" . $que['kode'] . "</td>";
+            $html .= "<td>Satuan</td>";
+            $html .= "<td>";
+            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $que['nama_barang'] . "' rel2='" . $que['id'] . "' rel3=" . $que['id_satuan'] . ">Pilih</a>";
+            $html .= "</td>";
+            $html .= "</tr>";
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function getdetailpbbyid()
+    {
+        $data = $_POST['id'];
+        $hasil = $this->pb_model->getdatadetailpbbyid($data);
+        echo json_encode($hasil);
+    }
+    public function simpandetailbarang()
+    {
+        $hasil = $this->pb_model->simpandetailbarang();
+        if ($hasil) {
+            $kode = $hasil['id'];
+            $url = base_url() . 'pb/datapb/' . $kode;
+            redirect($url);
+        }
+    }
+    public function updatedetailbarang()
+    {
+        $hasil = $this->pb_model->updatedetailbarang();
+        if ($hasil) {
+            $kode = $hasil['id'];
+            $url = base_url() . 'pb/datapb/' . $kode;
+            redirect($url);
+        }
+    }
+    public function hapusdetailpb($id)
+    {
+        $hasil = $this->pb_model->hapusdetailpb($id);
+        if ($hasil) {
+            $kode = $hasil['id'];
+            $url = base_url() . 'pb/datapb/' . $kode;
+            redirect($url);
+        }
+    }
+    public function viewdetailpb($id)
+    {
+        $data['header'] = $this->pb_model->getdatabyid($id);
+        $data['detail'] = $this->pb_model->getdatadetailpb($id);
+        $data['riwayat'] = riwayatdok($id);
+        $this->load->view('pb/viewdetailpb', $data);
+    }
     public function ubahperiode()
     {
         $this->session->set_userdata('bl', $_POST['bl']);
@@ -401,7 +380,7 @@ class Adj extends CI_Controller
         $detail = $this->pb_model->getdatadetailpb($id);
         $no = 1;
         foreach ($detail as $det) {
-            $jumlah = $det['pcs'] == null ? $det['kgs'] : $det['pcs'];
+            $jumlah = $det['pcs'] == 0 ? $det['kgs'] : $det['pcs'];
             $pdf->Cell(8, 6, $no++, 'LRB', 0);
             $pdf->Cell(97, 6, $det['nama_barang'], 'LBR', 0);
             $pdf->Cell(45, 6, '', 'LRB', 0);

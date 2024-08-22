@@ -22,16 +22,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div id="sisipkan" class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
-              <!-- <div class="dropdown">
-                <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
-                </button>
-                <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item font-kecil" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata' ?>">Dari BON Permintaan</a>
-                  <a class="dropdown-item font-kecil disabled" href="#">Tanpa BON Permintaan</a>
-                </div>
-              </div> -->
-              <a href="<?= base_url() . 'out/adddata'; ?>" class="btn btn-primary btn-sm" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <a href="<?= base_url() . 'out/adddata'; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 mb-0 d-flex flex-row-reverse" style="text-align: right;">
@@ -115,7 +106,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $datdet['keterangan']; ?></td>
                   <td class="text-center"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
-                      <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
+                      <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
                     <?php } else if ($datdet['data_ok'] == 1) { ?>
                       <a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
                     <?php } ?>

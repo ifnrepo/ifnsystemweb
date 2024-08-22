@@ -22,7 +22,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
-              <a href="<?= base_url() . 'adj/tambahdata'; ?>" class="btn btn-primary btn-sm" id="adddataadj"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <a href="<?= base_url() . 'adj/tambahdata'; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?>" id="adddataadj"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">

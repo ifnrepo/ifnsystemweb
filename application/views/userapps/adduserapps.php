@@ -390,6 +390,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="manajemen1" name="manajemen1" type="checkbox">
                                 <span class="form-check-label">User Manajemen</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="manajemen2" name="manajemen2" type="checkbox">
+                                <span class="form-check-label">Close Book inventory</span>
+                              </label>
                             </div>
                           </div>
                         </div>

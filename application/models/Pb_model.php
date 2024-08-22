@@ -46,6 +46,7 @@ class Pb_model extends CI_Model
     {
         $kode = $data['nomor_dok'];
         $query = $this->db->insert('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         if ($query) {
             $this->db->where('nomor_dok', $kode);
             $kodex = $this->db->get('tb_header')->row_array();
@@ -56,6 +57,7 @@ class Pb_model extends CI_Model
     {
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function simpanpb($data)
@@ -64,12 +66,14 @@ class Pb_model extends CI_Model
         $data['jumlah_barang'] = $jmlrec['jml'];
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function validasipb($data)
     {
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function getnomorpb($bl, $th, $asal, $tuju)
@@ -134,6 +138,7 @@ class Pb_model extends CI_Model
         $this->db->delete('tb_detail');
         $this->db->where('id', $id);
         $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -142,6 +147,7 @@ class Pb_model extends CI_Model
         $data = $_POST;
         unset($data['nama_barang']);
         $hasil =  $this->db->insert('tb_detail', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
         // Isi data detmaterial
         $cek = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
@@ -155,6 +161,7 @@ class Pb_model extends CI_Model
                     'kgs' => ($kec['persen'] / 100) * $data['kgs']
                 ];
                 $this->db->insert('tb_detmaterial', $xdata);
+                $this->helpermodel->isilog($this->db->last_query());
             }
         }
         if ($hasil) {
@@ -169,10 +176,12 @@ class Pb_model extends CI_Model
         unset($data['nama_barang']);
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_detail', $data);
+        $this->helpermodel->isilog($this->db->last_query());
 
         $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
         $this->db->where('id_header', $data['id_header']);
         $this->db->delete('tb_detmaterial');
+        $this->helpermodel->isilog($this->db->last_query());
         // Isi data detmaterial
         $cek = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
         if ($cek->num_rows() > 0) {
@@ -185,6 +194,7 @@ class Pb_model extends CI_Model
                     'kgs' => ($kec['persen'] / 100) * $data['kgs']
                 ];
                 $this->db->insert('tb_detmaterial', $xdata);
+                $this->helpermodel->isilog($this->db->last_query());
             }
         }
         if ($query) {
@@ -201,6 +211,7 @@ class Pb_model extends CI_Model
         $hasil = $this->db->delete('tb_detmaterial');
         $this->db->where('id', $id);
         $this->db->delete('tb_detail');
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         if ($hasil) {
             $this->db->where('id', $cek['id_header']);
@@ -212,5 +223,6 @@ class Pb_model extends CI_Model
     {
         $this->db->where('id', $data['id']);
         return $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
     }
 }

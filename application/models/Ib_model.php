@@ -81,6 +81,7 @@ class Ib_model extends CI_Model
             'tgl' => $date
         ];
         $this->db->insert('tb_header', $tambah);
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->insert_id();
         $this->db->trans_complete();
         return $hasil;
@@ -104,6 +105,7 @@ class Ib_model extends CI_Model
         }
         $this->db->where('id', $id);
         $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -177,6 +179,7 @@ class Ib_model extends CI_Model
                 'nobontr' => $header['nomor_dok']
             ];
             $this->db->insert('tb_detail', $isi);
+            $this->helpermodel->isilog($this->db->last_query());
             $idsimpan = $this->db->insert_id();
             $this->db->where('id', $arrdat[$x])->update('tb_detail', ['id_ib' => $idsimpan]);
             $itembarang = $this->db->where('id_header', $id)->get('tb_detail')->num_rows();
@@ -194,6 +197,7 @@ class Ib_model extends CI_Model
         $this->db->update('tb_detail', ['id_ib' => 0]);
         $this->db->where('id', $id);
         $this->db->delete('tb_detail');
+        $this->helpermodel->isilog($this->db->last_query());
         $itembarang = $this->db->where('id_header', $xdetail['id_header'])->get('tb_detail')->num_rows();
         $this->db->where('id', $xdetail['id_header'])->update('tb_header', ['jumlah_barang' => $itembarang]);
         $hasil = $this->db->trans_complete();

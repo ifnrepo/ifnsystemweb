@@ -77,4 +77,9 @@ class Helper_model extends CI_Model
         ];
         $this->db->insert('tb_logactivity',$data);
     }
+    public function cekclosebook($periode){
+        $this->db->where('periode',$periode);
+        $hasil = $this->db->get('tb_lockinv')->num_rows();
+        return $hasil;
+    }
 }

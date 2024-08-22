@@ -20,6 +20,7 @@ class Adj_model extends CI_Model
         $kode = $data['nomor_dok'];
         $query = $this->db->insert('tb_header', $data);
         $kodex = $this->db->insert_id();
+        $this->helpermodel->isilog($this->db->last_query());
         return $kodex;
     }
     public function getnomoradj($bl, $th, $asal)
@@ -47,6 +48,7 @@ class Adj_model extends CI_Model
         $this->db->delete('tb_detail');
         $this->db->where('id', $id);
         $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -72,6 +74,7 @@ class Adj_model extends CI_Model
         $data = $_POST;
         unset($data['nama_barang']);
         $hasil =  $this->db->insert('tb_detail', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
         // Isi data detmaterial
         $cek = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
@@ -117,6 +120,7 @@ class Adj_model extends CI_Model
         unset($data['nama_barang']);
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_detail', $data);
+        $this->helpermodel->isilog($this->db->last_query());
 
         $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
         $this->db->where('id_header', $data['id_header']);
@@ -149,6 +153,7 @@ class Adj_model extends CI_Model
         $hasil = $this->db->delete('tb_detmaterial');
         $this->db->where('id', $id);
         $this->db->delete('tb_detail');
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         if ($hasil) {
             $this->db->where('id', $cek['id_header']);
@@ -162,6 +167,7 @@ class Adj_model extends CI_Model
         $data['jumlah_barang'] = $jmlrec['jml'];
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     //End Adj Model

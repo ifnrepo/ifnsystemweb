@@ -75,6 +75,7 @@ class Out_model extends CI_Model{
             'tgl' => $date
         ];
         $this->db->insert('tb_header',$tambah);
+        $this->helpermodel->isilog($this->db->last_query());
         $idheader = $this->db->insert_id();
         $this->db->trans_complete();
         return $idheader;
@@ -92,6 +93,7 @@ class Out_model extends CI_Model{
             'tgl' => $date
         ];
         $this->db->insert('tb_header',$tambah);
+        $this->helpermodel->isilog($this->db->last_query());
         $idheader = $this->db->insert_id();
         $dataheader = $this->db->get_where('tb_header',['nomor_dok'=>$nomordok])->row_array();
         $jumlah = count($kode['data']);
@@ -174,6 +176,7 @@ class Out_model extends CI_Model{
         
         $this->db->where('id',$id);
         $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -371,6 +374,7 @@ class Out_model extends CI_Model{
             ];
             $this->db->where('id',$id);
             $this->db->update('tb_header',$data);
+            $this->helpermodel->isilog($this->db->last_query());
             $this->db->trans_commit();
         }
         return !$iniquery;
@@ -406,6 +410,7 @@ class Out_model extends CI_Model{
         ];
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$update);
+        $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
 }
