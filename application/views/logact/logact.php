@@ -73,7 +73,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Datetime Log</th>
                 <th>Activity Log</th>
                 <th>User Log</th>
-                <th>PC Log</th>
+                <th>Device Log</th>
               </tr>
             </thead>
             <tbody class="table-tbody" style="font-size: 13px !important;">
