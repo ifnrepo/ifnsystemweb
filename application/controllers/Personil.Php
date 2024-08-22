@@ -11,6 +11,8 @@ class Personil extends CI_Controller
             redirect($url);
         }
         $this->load->model('Personilmodel');
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
         $this->load->library('upload');
     }
 
@@ -42,6 +44,7 @@ class Personil extends CI_Controller
     {
 
         $query = $this->Personilmodel->simpandata();
+        $this->helpermodel->isilog($this->db->last_query());
         if ($query) {
             $url = base_url('personil');
             redirect($url);
@@ -121,6 +124,7 @@ class Personil extends CI_Controller
     public function updatedata()
     {
         $query = $this->Personilmodel->updatedata();
+        $this->helpermodel->isilog($this->db->last_query());
         if ($query) {
             $url = base_url('personil');
             redirect($url);
@@ -130,6 +134,7 @@ class Personil extends CI_Controller
     {
         $hasil = $this->Personilmodel->hapus($personil_id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url('personil');
             redirect($url);
         }

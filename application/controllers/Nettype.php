@@ -11,6 +11,8 @@ class Nettype extends CI_Controller
             redirect($url);
         }
         $this->load->model('nettype_model');
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
 
     public function index()
@@ -35,6 +37,7 @@ class Nettype extends CI_Controller
             'id_kategori' => $_POST['id_kategori'],
         ];
         $hasil = $this->nettype_model->simpannettype($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function editnettype($id)
@@ -50,12 +53,14 @@ class Nettype extends CI_Controller
             'name_nettype' => $_POST['name_nettype'],
         ];
         $hasil = $this->nettype_model->updatenettype($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapusnettype($id)
     {
         $hasil = $this->nettype_model->hapusnettype($id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url('nettype');
             redirect($url);
         }

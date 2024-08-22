@@ -12,6 +12,8 @@ class Customer extends CI_Controller
         }
 
         $this->load->model('customer_model');
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
 
     public function index()
@@ -49,6 +51,7 @@ class Customer extends CI_Controller
             'keterangan' => $_POST['keterangan']
         ];
         $hasil = $this->customer_model->simpancustomer($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
 
@@ -89,6 +92,7 @@ class Customer extends CI_Controller
         //     $this->session->set_flashdata('pesan', ' <div class="alert alert-danger" role="alert"> Gagal memperbarui data ');
         // }
         //redirect('customer');
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
 
@@ -96,6 +100,7 @@ class Customer extends CI_Controller
     {
         $hasil = $this->customer_model->hapuscustomer($id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url() . 'customer';
             redirect($url);
         }

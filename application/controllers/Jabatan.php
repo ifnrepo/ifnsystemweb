@@ -11,6 +11,8 @@ class jabatan extends CI_Controller
             redirect($url);
         }
         $this->load->model('jabatanmodel');
+        $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
 
     public function index()
@@ -33,6 +35,7 @@ class jabatan extends CI_Controller
             'nama_jabatan' => $_POST['nama_jabatan'],
         ];
         $hasil = $this->jabatanmodel->simpan($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function edit($id)
@@ -47,12 +50,14 @@ class jabatan extends CI_Controller
             'nama_jabatan' => $_POST['nama_jabatan'],
         ];
         $hasil = $this->jabatanmodel->updatedata($data);
+        $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapus($id)
     {
         $hasil = $this->jabatanmodel->hapus($id);
         if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
             $url = base_url('jabatan');
             redirect($url);
         }
