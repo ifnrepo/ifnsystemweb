@@ -34,6 +34,7 @@ class Bbl_model extends CI_Model
     {
         $kode = $data['nomor_dok'];
         $query = $this->db->insert('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         if ($query) {
             $this->db->where('nomor_dok', $kode);
             $kodex = $this->db->get('tb_header')->row_array();
@@ -113,6 +114,7 @@ class Bbl_model extends CI_Model
 
     public function simpanbarang($data){
         $simpan = $this->db->insert('tb_detail',$data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $simpan;
     }
 
@@ -128,12 +130,14 @@ class Bbl_model extends CI_Model
     {
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
 
     public function updatebblpp($data){
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
 
@@ -177,6 +181,7 @@ class Bbl_model extends CI_Model
             $id_bbl = $cek['id'];
             $this->db->where('id', $id);
             $this->db->delete('tb_detail');
+            $this->helpermodel->isilog($this->db->last_query());
             $this->db->where('id_bbl', $id_bbl);
             $this->db->update('tb_detail', ['id_bbl' => 0]);
             $this->db->trans_complete();
@@ -198,6 +203,7 @@ class Bbl_model extends CI_Model
     {
         $this->db->where('id', $id);
         return $this->db->delete('tb_detail');
+        $this->helpermodel->isilog($this->db->last_query());
     }
 
     public function get_detail($id)
@@ -238,12 +244,14 @@ class Bbl_model extends CI_Model
         }
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function hapus_data($id)
     {
         $this->db->where('id', $id);
         return $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
     }
     public function hapus_header($nomor_dok)
     {

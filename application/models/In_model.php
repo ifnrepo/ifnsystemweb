@@ -44,6 +44,7 @@ class In_model extends CI_Model{
         $this->db->trans_start();
         $this->db->where('id_header',$id);
         $this->db->update('tb_detail',['verif_oleh'=>null,'verif_tgl'=>null]);
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -59,6 +60,7 @@ class In_model extends CI_Model{
             ];
             $this->db->where('id',$id);
             $this->db->update('tb_detail',$data);
+            $this->helpermodel->isilog($this->db->last_query());
 
             $this->db->select('tb_detail.*,user.name');
             $this->db->join('user','tb_detail.verif_oleh=user.id','left');
@@ -129,6 +131,7 @@ class In_model extends CI_Model{
             ];
             $this->db->where('id',$id);
             $this->db->update('tb_header',$dataubah);
+            $this->helpermodel->isilog($this->db->last_query());
         }
         $hasil = $this->db->trans_complete();
         return $hasil;
@@ -137,6 +140,7 @@ class In_model extends CI_Model{
     public function konfirmasi($data){
         $this->db->where('id',$data['id']);
         $query = $this->db->update('tb_header',$data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
 
@@ -177,6 +181,7 @@ class In_model extends CI_Model{
             'tgl' => $date
         ];
         $this->db->insert('tb_header',$tambah);
+        $this->helpermodel->isilog($this->db->last_query());
         $dataheader = $this->db->get_where('tb_header',['nomor_dok'=>$nomordok])->row_array();
         $query = $this->db->get_where('tb_detail',['id_header'=>$kode])->result_array();
         foreach($query as $que){
@@ -187,6 +192,7 @@ class In_model extends CI_Model{
         }
         $this->db->where('id',$kode);
         $this->db->update('tb_header',['id_keluar' => $dataheader['id']]);
+        $this->helpermodel->isilog($this->db->last_query());
         $this->db->trans_complete();
         return $dataheader['id'];
     }
@@ -216,6 +222,7 @@ class In_model extends CI_Model{
         $data['jumlah_barang'] = $jumlahrek;
         $this->db->where('id',$data['id']);
         $query = $this->db->update('tb_header',$data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function hapusdataout($id){
@@ -233,6 +240,7 @@ class In_model extends CI_Model{
         
         $this->db->where('id',$id);
         $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -261,6 +269,7 @@ class In_model extends CI_Model{
         ];
         $this->db->where('id',$id);
         $hasil = $this->db->update('tb_header',$data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
 }

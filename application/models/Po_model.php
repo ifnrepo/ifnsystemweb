@@ -72,6 +72,7 @@ class Po_model extends CI_Model
             'tgl' => $date
         ];
         $this->db->insert('tb_header', $tambah);
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->insert_id();
         $catatan = [
          'id_header' => $hasil,
@@ -107,6 +108,7 @@ class Po_model extends CI_Model
     {
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function getbarangpo(){
@@ -141,6 +143,7 @@ class Po_model extends CI_Model
                 'pcs' => $detail['pcs']
             ];
             $this->db->insert('tb_detail',$isi);
+            $this->helpermodel->isilog($this->db->last_query());
             $idsimpan = $this->db->insert_id();
             $this->db->where('id',$arrdat[$x])->update('tb_detail',['id_po'=>$idsimpan]);
             $itembarang = $this->db->where('id_header',$id)->get('tb_detail')->num_rows();
@@ -158,6 +161,7 @@ class Po_model extends CI_Model
         $this->db->update('tb_detail',['id_po'=>0]);
         $this->db->where('id',$id);
         $this->db->delete('tb_detail');
+        $this->helpermodel->isilog($this->db->last_query());
         $itembarang = $this->db->where('id_header',$xdetail['id_header'])->get('tb_detail')->num_rows();
         $this->db->where('id',$xdetail['id_header'])->update('tb_header',['jumlah_barang'=>$itembarang]);
         $hasil = $this->db->trans_complete();
@@ -198,6 +202,7 @@ class Po_model extends CI_Model
     public function updatehargadetail($data){
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
     public function cekdetail($id){
@@ -212,6 +217,7 @@ class Po_model extends CI_Model
         $data['jumlah_barang'] = $jumlahrek;
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function hapuspo($id)
@@ -235,6 +241,7 @@ class Po_model extends CI_Model
         }
         $this->db->where('id', $id);
         $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -442,6 +449,7 @@ class Po_model extends CI_Model
         ];
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('tb_detail', $update);
+        $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
 }
