@@ -67,7 +67,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <hr class="p-1 m-1">
       <div class="card-body pt-1">
         <div id="table-default" class="table-responsive font-kecil">
-          <table class="table datatable">
+          <table class="table datatablex">
             <thead>
               <tr>
                 <th>Datetime Log</th>

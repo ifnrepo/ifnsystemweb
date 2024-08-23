@@ -16,6 +16,8 @@ class Userapps extends CI_Controller
      		</script>';
 		$this->load->model('userappsmodel');
 		$this->load->model('dept_model', 'deptmodel');
+		$this->load->model('userappsmodel','usermodel');
+		$this->load->model('helper_model', 'helpermodel');
 	}
 	public function index()
 	{
