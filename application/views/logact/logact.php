@@ -67,11 +67,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <hr class="p-1 m-1">
       <div class="card-body pt-1">
         <div id="table-default" class="table-responsive font-kecil">
-          <table class="table datatable">
+          <table class="table datatable8">
             <thead>
               <tr>
                 <th>Datetime Log</th>
                 <th>Activity Log</th>
+                <th>Modul</th>
                 <th>User Log</th>
                 <th>Device Log</th>
               </tr>
@@ -81,6 +82,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <tr>
                   <td><?= tglmysql2($det['datetimelog']); ?></td>
                   <td><?= $det['activitylog']; ?></td>
+                  <td class="text-blue"><?= $det['modul']; ?></td>
                   <td><?= $det['userlog']; ?></td>
                   <td><?= getdevice($det['devicelog']); ?></td>
                 </tr>
