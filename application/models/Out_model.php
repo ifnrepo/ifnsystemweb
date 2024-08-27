@@ -75,8 +75,8 @@ class Out_model extends CI_Model{
             'tgl' => $date
         ];
         $this->db->insert('tb_header',$tambah);
-        $this->helpermodel->isilog($this->db->last_query());
         $idheader = $this->db->insert_id();
+        $this->helpermodel->isilog($this->db->last_query());
         $this->db->trans_complete();
         return $idheader;
     }

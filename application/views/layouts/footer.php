@@ -22,6 +22,7 @@
 </div>
 <!-- jquery latest version -->
 <script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/jquery.min.js"></script>
 <!-- Libs JS -->
 <script src=<?= base_url() . "assets/libs/apexcharts/dist/apexcharts.min.js" ?> defer></script>
 <script src=<?= base_url() . "assets/libs/jsvectormap/dist/js/jsvectormap.min.js" ?> defer></script>
@@ -51,69 +52,70 @@
 <script src="<?= base_url(); ?>assets/vendor/litepicker/dist/litepicker.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/nprogress/nprogress.js"></script>
 <!-- Custom JS -->
-<script src="<?= base_url(); ?>assets/js/myscript.js?1723520986"></script>
+<script src="<?= base_url(); ?>assets/js/myscript.js?1724750323"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'barang') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/barang.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/barang.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'dept') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/dept.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/dept.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pb') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/pb.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/pb.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'personil') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/personil.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/personil.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'in') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/in.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/in.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'out') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/out.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/out.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'inv') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/inv.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/inv.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'bbl') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'po') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/po.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/po.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'ib') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/ib.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/ib.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'adj') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/adj.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/adj.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pendingtask') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/pendingtask.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'logact') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/logact.js?1723520986"></script>
+	<script src="<?= base_url(); ?>assets/js/own/logact.js?1724750323"></script>
 <?php } ?>
-<?php if (isset($fungsi) && $fungsi == 'main') {  print_r(json_encode($dataproduksi['data_isi'])); ?>
-<?php 
+<?php if (isset($fungsi) && $fungsi == 'main') {
+	print_r(json_encode($dataproduksi['data_isi'])); ?>
+	<?php
 	// Untuk Warna Chart Produksi 
-	$persenproduksi = (($dataproduksi['data_prod_bulan_ini']-$dataproduksi['data_prod_bulan_lalu'])/$dataproduksi['data_prod_bulan_lalu'])*100;
+	$persenproduksi = (($dataproduksi['data_prod_bulan_ini'] - $dataproduksi['data_prod_bulan_lalu']) / $dataproduksi['data_prod_bulan_lalu']) * 100;
 	switch (true) {
-		case $persenproduksi < 0 :
+		case $persenproduksi < 0:
 			$warna = "danger";
 			break;
-		case $persenproduksi = 0 :
+		case $persenproduksi = 0:
 			$warna = "primary";
 			break;
-		case $persenproduksi > 0 :
+		case $persenproduksi > 0:
 			$warna = "success";
 			break;
 		default:
 			$warna = "teal";
 			break;
 	}
-?>
+	?>
 	<script>
 		// @formatter:off
 		document.addEventListener("DOMContentLoaded", function() {

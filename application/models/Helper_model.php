@@ -73,7 +73,8 @@ class Helper_model extends CI_Model
             'activitylog' => str_replace('`','',$isilog),
             'userlog' => datauser($this->session->userdata('id'),'name'),
             'iduserlog' => $this->session->userdata('id'),
-            'devicelog' => get_client_ip().' on '.$useragent
+            'devicelog' => get_client_ip().' on '.$useragent,
+            'modul' => strtoupper($this->uri->segment(1))
         ];
         $this->db->insert('tb_logactivity',$data);
     }

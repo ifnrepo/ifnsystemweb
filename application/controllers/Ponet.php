@@ -10,16 +10,29 @@ class Ponet extends CI_Controller
             $url = base_url('Auth');
             redirect($url);
         }
-        '<script type="text/JavaScript">  
-     			pesan("Test","error"); 
-				alert("OKE");
-     		</script>';
+        $this->load->model('Ponet_model');
     }
+
     public function index()
     {
         $header['header'] = 'manajemen';
+        $po = trim($this->input->post('keyword'));
+        $data['po'] = [];
+
+        if (!empty($po)) {
+            $data['po'] = $this->Ponet_model->cariData($po);
+        }
+
         $this->load->view('layouts/header', $header);
-        $this->load->view('ponet/index');
+        $this->load->view('ponet/index', $data);
         $this->load->view('layouts/footer');
+    }
+
+    public function view($id)
+    {
+        $header['header'] = 'manajemen';
+        $data['detail'] = $this->Ponet_model->GetDataByid($id);
+
+        $this->load->view('ponet/detail', $data);
     }
 }

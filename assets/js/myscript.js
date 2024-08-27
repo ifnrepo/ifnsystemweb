@@ -206,11 +206,11 @@ $(document).ready(function () {
 		pageLength: 50,
 		scrollY: 500,
 	});
-	$(".datatablex").DataTable({
+	$(".datatable8").DataTable({
 		responsive: true,
 		pageLength: 50,
-		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 		order: [[0, "desc"]],
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 	$("#modal-danger").on("show.bs.modal", function (e) {
 		document.getElementById("message").innerHTML = $(e.relatedTarget).data(
