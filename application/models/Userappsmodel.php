@@ -24,7 +24,10 @@ class Userappsmodel extends CI_Model
     }
     public function hapusdata($id)
     {
-        $query = $this->db->query("Delete from user where id = " . $id);
+        $this->db->where('id',$id);
+        $query = $this->db->delete('user');
+        // $query = $this->db->query("Delete from user where id = " . $id);
+        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function simpandata()
@@ -97,6 +100,7 @@ class Userappsmodel extends CI_Model
         $data['cekpb'] = $cekpb;
         // $data['cekpc'] = $cekpc;
         $hasil = $this->db->insert('user', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
     public function updatedata()
@@ -174,6 +178,7 @@ class Userappsmodel extends CI_Model
 
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('user', $data);
+        $this->helpermodel->isilog($this->db->last_query());
         if ($data['id'] == $this->session->userdata('id')) {
             $cek = $this->getdatabyid($data['id'])->row_array();
             $this->session->set_userdata('master', $cek['master']);

@@ -15,6 +15,7 @@ class Task extends CI_Controller {
         $this->load->model('bbl_model');
         $this->load->model('dept_model', 'deptmodel');
         $this->load->model('adj_model', 'adjmodel');
+        $this->load->model('helper_model', 'helpermodel');
     }
 	public function index()
 	{  
@@ -46,6 +47,7 @@ class Task extends CI_Controller {
                 'id' => $id
             ];
             $simpan = $this->pb_model->validasipb($data);
+            $this->helpermodel->isilog($this->db->last_query());
         }else{
             $simpan = 1;
         }
@@ -64,6 +66,7 @@ class Task extends CI_Controller {
             'tgl_valid' => date('Y-m-d H:i:s')
         ];
         $simpan = $this->pb_model->simpancancelpb($data);
+        $this->helpermodel->isilog($this->db->last_query());
         // if ($simpan) {
         //     // $this->session->set_flashdata('tabdef',$tab);
         //     $url = base_url() . 'task';
@@ -85,6 +88,7 @@ class Task extends CI_Controller {
                 'id' => $id
             ];
             $simpan = $this->taskmodel->validasibbl($data);
+            $this->helpermodel->isilog($this->db->last_query());
         }else{
             $simpan = 1;
         }
@@ -111,6 +115,7 @@ class Task extends CI_Controller {
                 'id' => $id
             ];
             $simpan = $this->taskmodel->validasibbl($data);
+            $this->helpermodel->isilog($this->db->last_query());
         }else{
             $simpan = 1;
         }
@@ -134,6 +139,7 @@ class Task extends CI_Controller {
                 'id' => $id
             ];
             $simpan = $this->taskmodel->validasipo($data);
+            $this->helpermodel->isilog($this->db->last_query());
         }else{
             $simpan = 1;
         }
@@ -160,6 +166,7 @@ class Task extends CI_Controller {
                 'ketcancel' => $ketcancel,
             ];
             $simpan = $this->taskmodel->validasipo($data);
+            $this->helpermodel->isilog($this->db->last_query());
         }else{
             $simpan = 1;
         }
@@ -190,6 +197,7 @@ class Task extends CI_Controller {
                 'id' => $id
             ];
             $simpan = $this->taskmodel->validasibbl($data);
+            $this->helpermodel->isilog($this->db->last_query());
         }else{
             $simpan =1;
         }
@@ -209,6 +217,7 @@ class Task extends CI_Controller {
                 'id' => $id
             ];
             $simpan = $this->taskmodel->validasiadj($data);
+            $this->helpermodel->isilog($this->db->last_query());
         }else{
             $simpan = 1;
         }
@@ -227,6 +236,7 @@ class Task extends CI_Controller {
             'tgl_valid' => date('Y-m-d H:i:s')
         ];
         $simpan = $this->taskmodel->simpancanceladj($data);
+        $this->helpermodel->isilog($this->db->last_query());
         // if ($simpan) {
         //     $this->session->set_flashdata('tabdef',$tab);
         //     $url = base_url() . 'task';

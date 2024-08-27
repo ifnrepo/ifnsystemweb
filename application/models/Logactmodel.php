@@ -6,6 +6,7 @@ class Logactmodel extends CI_Model{
         if($this->session->userdata('userlogact')!=null || $this->session->userdata('userlogact')!=''){
             $this->db->where('iduserlog',$this->session->userdata('userlogact'));
         }
+        $this->db->order_by('id','ASC');
         $query = $this->db->get("tb_logactivity");
         return $query;
     }

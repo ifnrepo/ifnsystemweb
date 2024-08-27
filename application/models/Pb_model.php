@@ -73,7 +73,6 @@ class Pb_model extends CI_Model
     {
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
-        $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
     public function getnomorpb($bl, $th, $asal, $tuju)
