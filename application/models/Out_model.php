@@ -48,7 +48,7 @@ class Out_model extends CI_Model{
             'month(b.tgl) <=' => $this->session->userdata('bl'),
             'year(b.tgl) <=' => $this->session->userdata('th')
         ];
-        $this->db->select('*,a.id as idx');
+        $this->db->select('*,a.keterangan as keteranganx,a.id as idx');
         $this->db->from('tb_detail a');
         $this->db->join('tb_header b','b.id = a.id_header','left');
         $this->db->join('barang c','c.id = a.id_barang','left');
@@ -82,20 +82,20 @@ class Out_model extends CI_Model{
     }
     public function tambahdataout($kode){
         $this->db->trans_start();
-        $date = $this->session->userdata('th').'-'.$this->session->userdata('bl').'-'.date('d');
-        $nomordok = nomorout($date,$this->session->userdata('deptsekarang'),$this->session->userdata('tujusekarang'));
-        $tambah = [
-            'id_perusahaan' => IDPERUSAHAAN,
-            'kode_dok' => 'T',
-            'dept_id' => $this->session->userdata('deptsekarang'),
-            'dept_tuju' => $this->session->userdata('tujusekarang'),
-            'nomor_dok' => $nomordok,
-            'tgl' => $date
-        ];
-        $this->db->insert('tb_header',$tambah);
-        $this->helpermodel->isilog($this->db->last_query());
-        $idheader = $this->db->insert_id();
-        $dataheader = $this->db->get_where('tb_header',['nomor_dok'=>$nomordok])->row_array();
+        // $date = $this->session->userdata('th').'-'.$this->session->userdata('bl').'-'.date('d');
+        // $nomordok = nomorout($date,$this->session->userdata('deptsekarang'),$this->session->userdata('tujusekarang'));
+        // $tambah = [
+        //     'id_perusahaan' => IDPERUSAHAAN,
+        //     'kode_dok' => 'T',
+        //     'dept_id' => $this->session->userdata('deptsekarang'),
+        //     'dept_tuju' => $this->session->userdata('tujusekarang'),
+        //     'nomor_dok' => $nomordok,
+        //     'tgl' => $date
+        // ];
+        // $this->db->insert('tb_header',$tambah);
+        // $this->helpermodel->isilog($this->db->last_query());
+        // $idheader = $this->db->insert_id();
+        $dataheader = $this->db->get_where('tb_header',['id'=>$kode['id']])->row_array();
         $jumlah = count($kode['data']);
         for($x=0;$x<$jumlah;$x++){
             $arrdat = $kode['data'];
@@ -105,13 +105,14 @@ class Out_model extends CI_Model{
             $que['id_header'] = $dataheader['id'];
             $this->db->insert('tb_detail',$que);
             $idnya = $this->db->insert_id();
+            $this->helpermodel->isilog($this->db->last_query());
 
             $this->db->where('id',$arrdat[$x]);
             $this->db->update('tb_detail',['id_out'=>$idnya]);
         }
         // $this->db->where('id',$kode['id_header']);
         // $this->db->update('tb_header',['id_keluar' => $dataheader['id']]);
-        $this->db->where('id',$idheader);
+        $this->db->where('id',$kode['id']);
         $this->db->update('tb_header',['jumlah_barang'=>$jumlah]);
         $this->db->trans_complete();
         return $dataheader['id'];

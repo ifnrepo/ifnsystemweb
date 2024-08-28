@@ -60,7 +60,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
           </div>
         </div>
-        <div class="col-md-4">
+        <div class="col-md-4 bg-blue-lt">
         
         </div>
       </div>

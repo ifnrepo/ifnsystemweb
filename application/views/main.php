@@ -58,7 +58,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <div class="h1 mb-0 me-2"><?= rupiah($dataproduksi['data_prod_bulan_ini'],0); ?> Kgs</div>
               <div class="me-auto">
                 <?php 
-                  $persenproduksi = (($dataproduksi['data_prod_bulan_ini']-$dataproduksi['data_prod_bulan_lalu'])/$dataproduksi['data_prod_bulan_lalu'])*100;
+                  $produksibulanlalu = $dataproduksi['data_prod_bulan_lalu']==0 ? 1 : $dataproduksi['data_prod_bulan_lalu'];
+                  $persenproduksi = (($dataproduksi['data_prod_bulan_ini']-$dataproduksi['data_prod_bulan_lalu'])/$produksibulanlalu)*100;
                   $naikturun = $persenproduksi < 0 ? 'text-red' : 'text-green';
                  ?>
                 <span class="<?= $naikturun; ?> d-inline-flex align-items-center lh-1">

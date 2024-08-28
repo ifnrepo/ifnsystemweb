@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="mb-1 input-group">
                 <!-- <label class="form-label mb-0 font-kecil">Departemen</label> -->
-                <input type="text" class="form-control font-kecil mt-1 mr-2" id="departemenasal" placeholder="Input placeholder">
+                <input type="text" class="form-control font-kecil mt-1 mr-2" id="departemenasal" placeholder="Input data">
                 <button type="button" class="btn btn-primary btn-sm font-kecil mt-1" style="height: 35px !important;" id="simpanout">Simpan Barang</button>
             </div>
             <hr class="m-1">
@@ -23,7 +23,7 @@
                             <td><?= $xbon['nama_barang']; ?></td>
                             <td style="font-size: 10px !important"><?= tglmysql($xbon['tgl']); ?></td>
                             <td><?= $xbon['nomor_dok']; ?></td>
-                            <td style="font-size: 10px !important"><?= $xbon['keterangan']; ?></td>
+                            <td style="font-size: 10px !important"><?= $xbon['keteranganx']; ?></td>
                             <td>
                                 <!-- <a href="<?= base_url().'out/tambahdataout/'.$xbon['id']; ?>" class="btn btn-sm btn-success" style='padding: 3px !important;'>Pilih</a> -->
                                  <label class="form-check">
