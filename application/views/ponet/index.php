@@ -211,6 +211,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                 <th class=" tp-3 mb-2 bg-primary text-center text-white">ITEM</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">DIS</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">BUYER</th>
+                                                <th class="tp-3 mb-2 bg-primary text-center text-white">Outs</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">DT</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">AKSI</th>
                                             </tr>
@@ -224,6 +225,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     <td class="text-center"><?= $key['item']; ?></td>
                                                     <td class="text-center"><?= $key['dis']; ?></td>
                                                     <td class="text-center"><?= $key['nama_customer']; ?></td>
+                                                    <td class="text-center"><?= $key['outstand']; ?></td>
                                                     <td class="text-center" style="color: red;"><?= $key['lim']; ?></td>
                                                     <td class="text-center">
                                                         <!-- <a href="<?= base_url() . 'ponet/view/' . $key['id']; ?>" class="btn btn-sm btn-secondary btn-icon text-white btn-view-detail" rel="<?= $key['id']; ?>" title="Detail data">
