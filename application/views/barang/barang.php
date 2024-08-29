@@ -18,13 +18,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="page-body">
   <div class="container-xl">
     <div class="card">
-      <div class="col-md-3">
-        <select name="filter" id="filter" class="form-select font-kecil mt-1">
-          <option value="all">Semua Kategori</option>
-          <?php foreach ($kategori_options as $option) : ?>
-            <option value="<?= $option['id']; ?>"><?= $option['nama_kategori']; ?></option>
-          <?php endforeach; ?>
-        </select>
+      <div class="row m-1">
+        <div class="col-md-3">
+          <label class="mb-0 font-kecil font-bold text-azure">Kategori Barang</label>
+          <select name="filter" id="filter" class="form-select font-kecil mt-0">
+            <option value="all">Semua Kategori</option>
+            <?php foreach ($kategori_options as $option) : ?>
+              <option value="<?= $option['id']; ?>"><?= $option['nama_kategori']; ?></option>
+            <?php endforeach; ?>
+          </select>
+        </div>
+        <div class="col-md-3" style="border-left: 1px solid !important;">
+          <label class="mb-0 font-kecil font-bold text-azure">Barang Inv</label>
+          <select name="filterinv" id="filterinv" class="form-select font-kecil mt-0">
+            <option value="all">Semua</option>
+            <option value="x">Barang INV</option>
+            <option value="y">Barang NO INV</option>
+          </select>
+        </div>
       </div>
       <hr class="p-1 m-1">
       <div class="card-body pt-1">
@@ -39,6 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Satuan</th>
                 <th>DLN</th>
                 <th>No INV</th>
+                <th class="text-red">Safety</th>
                 <th>Aksi</th>
               </tr>
             </thead>

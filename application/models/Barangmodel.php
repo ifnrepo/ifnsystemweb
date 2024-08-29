@@ -14,7 +14,7 @@ class Barangmodel extends CI_Model
         left join satuan on satuan.id = barang.id_satuan");
         return $query;
     }
-    public function getdata($filter_kategori)
+    public function getdata($filter_kategori,$filter_inv)
     {
         $this->db->select('barang.*,satuan.namasatuan,kategori.nama_kategori,(select count(*) from bom_barang where id_barang = barang.id) as jmbom', FALSE);
         $this->db->from($this->table);
@@ -23,6 +23,10 @@ class Barangmodel extends CI_Model
 
         if ($filter_kategori && $filter_kategori != 'all') {
             $this->db->where('kategori.id', $filter_kategori);
+        }
+        if ($filter_inv && $filter_inv != 'all') {
+            $isi = $filter_inv=='x' ? 0 : 1;
+            $this->db->where('barang.noinv', $isi);
         }
         $i = 0;
         foreach ($this->column_search as $item) {
@@ -45,18 +49,18 @@ class Barangmodel extends CI_Model
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
-    public function get_datatables($filter_kategori)
+    public function get_datatables($filter_kategori,$filter_inv)
     {
-        $this->getdata($filter_kategori);
+        $this->getdata($filter_kategori,$filter_inv);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function count_filtered($filter_kategori)
+    public function count_filtered($filter_kategori,$filter_inv)
     {
-        $this->getdata($filter_kategori);
+        $this->getdata($filter_kategori,$filter_inv);
         $query = $this->db->get();
         return $query->num_rows();
     }
