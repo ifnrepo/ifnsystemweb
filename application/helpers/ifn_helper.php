@@ -1,8 +1,8 @@
 <?php
 define('LOK_UPLOAD_USER', "./assets/image/personil/");
 define('IDPERUSAHAAN', 'IFN');
-define('deptbbl','GMGSITPG');
-define('kodeunik','concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');
+define('deptbbl', 'GMGSITPG');
+define('kodeunik', 'concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');
 
 function visibpass($kata)
 {
@@ -79,12 +79,12 @@ function nomorpb($tgl, $asal, $tuju, $jn)
     $bl = date('m', strtotime($tgl));
     $th = date('y', strtotime($tgl));
     $thp = date('Y', strtotime($tgl));
-    $jne = $jn==0 ? 'BP' : 'PS';
+    $jne = $jn == 0 ? 'BP' : 'PS';
     $CI = &get_instance();
     $kode = $CI->pb_model->getnomorpb($bl, $thp, $asal, $tuju);
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return $asal . "-" . $tuju . "/".$jne."/" . $bl . $th . "/" . sprintf("%03s", $urut);
+    return $asal . "-" . $tuju . "/" . $jne . "/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
 function nomorbbl($tgl, $asal, $tuju)
 {
@@ -115,15 +115,15 @@ function nomorpo()
     $bl = date('m', strtotime($tgl));
     $th = date('Y', strtotime($tgl));
     $thp = date('y', strtotime($tgl));
-    if($CI->session->userdata('jn_po')=='DO' || $CI->session->userdata('jn_po')=='IM'){
-        $jnpo =  $CI->session->userdata('jn_po').'/BL/';
-    }else{
-        $jnpo =  'DO/'.$CI->session->userdata('jn_po').'/';
+    if ($CI->session->userdata('jn_po') == 'DO' || $CI->session->userdata('jn_po') == 'IM') {
+        $jnpo =  $CI->session->userdata('jn_po') . '/BL/';
+    } else {
+        $jnpo =  'DO/' . $CI->session->userdata('jn_po') . '/';
     }
     $kode = $CI->pomodel->getnomorpo($bl, $th, $jnpo);
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return "PO/" . $jnpo. $bl . $thp . "/" . sprintf("%03s", $urut);
+    return "PO/" . $jnpo . $bl . $thp . "/" . sprintf("%03s", $urut);
 }
 function nomorib()
 {
@@ -136,7 +136,7 @@ function nomorib()
     $kode = $CI->ibmodel->getnomorib($bl, $th);
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return "SU-" . $deptr.'/P/'. $bl . $thp . "/" . sprintf("%03s", $urut);
+    return "SU-" . $deptr . '/P/' . $bl . $thp . "/" . sprintf("%03s", $urut);
 }
 function nomoradj($tgl, $asal)
 {
@@ -297,11 +297,11 @@ function namabulanpendek($id)
     return $bulan[(int)$id];
 }
 function datauser($kode, $kolom)
-{   
+{
     $kore = '';
     if ($kode == '' || $kode == 0) {
         $kore = '';
-    }else{
+    } else {
         $CI = &get_instance();
         $kodex = $CI->usermodel->getdatabyid($kode)->row_array();
         $kore = $kodex[$kolom];
@@ -345,7 +345,8 @@ function viewspek($po = '', $no = '', $dis = 0)
     return $hasil;
 }
 
-function tungguvalid($kode){
+function tungguvalid($kode)
+{
     $hasil = '';
     switch ($kode) {
         case '10000':
@@ -369,92 +370,120 @@ function tungguvalid($kode){
     }
     return $hasil;
 }
-function terbilang($x) {
-  $angka = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
+function terbilang($x)
+{
+    $angka = ["", "Satu", "Dua", "Tiga", "Empat", "Lima", "Enam", "Tujuh", "Delapan", "Sembilan", "Sepuluh", "Sebelas"];
 
-  if ($x < 12)
-    return " " . $angka[$x];
-  elseif ($x < 20)
-    return terbilang($x - 10) . " Belas";
-  elseif ($x < 100)
-    return terbilang($x / 10) . " Puluh" . terbilang($x % 10);
-  elseif ($x < 200)
-    return "Seratus" . terbilang($x - 100);
-  elseif ($x < 1000)
-    return terbilang($x / 100) . " Ratus" . terbilang($x % 100);
-  elseif ($x < 2000)
-    return "Seribu" . terbilang($x - 1000);
-  elseif ($x < 1000000)
-    return terbilang($x / 1000) . " Ribu" . terbilang($x % 1000);
-  elseif ($x < 1000000000)
-    return terbilang($x / 1000000) . " Juta" . terbilang($x % 1000000);
+    if ($x < 12)
+        return " " . $angka[$x];
+    elseif ($x < 20)
+        return terbilang($x - 10) . " Belas";
+    elseif ($x < 100)
+        return terbilang($x / 10) . " Puluh" . terbilang($x % 10);
+    elseif ($x < 200)
+        return "Seratus" . terbilang($x - 100);
+    elseif ($x < 1000)
+        return terbilang($x / 100) . " Ratus" . terbilang($x % 100);
+    elseif ($x < 2000)
+        return "Seribu" . terbilang($x - 1000);
+    elseif ($x < 1000000)
+        return terbilang($x / 1000) . " Ribu" . terbilang($x % 1000);
+    elseif ($x < 1000000000)
+        return terbilang($x / 1000000) . " Juta" . terbilang($x % 1000000);
 }
 
-function gethrg($idb,$nobo){
+function gethrg($idb, $nobo)
+{
     $CI = &get_instance();
-    $hasil = $CI->bbl_model->gethrg($idb,$nobo);
+    $hasil = $CI->bbl_model->gethrg($idb, $nobo);
     return $hasil;
 }
-function generatekodebc($jnsbc,$tglbc,$nobc){
+function generatekodebc($jnsbc, $tglbc, $nobc)
+{
     $kode = '000000-010017-00000000-000000';
-    if($jnsbc!=''){
-        $kode1 = str_repeat('0',6-strlen($jnsbc)).$jnsbc;
-    }else{
+    if ($jnsbc != '') {
+        $kode1 = str_repeat('0', 6 - strlen($jnsbc)) . $jnsbc;
+    } else {
         $kode1 = '000000';
     }
-    if($tglbc!=null){
-        $kode2 = str_replace('-','',$tglbc);
-    }else{
+    if ($tglbc != null) {
+        $kode2 = str_replace('-', '', $tglbc);
+    } else {
         $kode2 = '00000000';
     }
-    if($nobc != ''){
-        $kode3 = str_repeat('0',6-strlen($nobc)).$nobc;
-    }else{
+    if ($nobc != '') {
+        $kode3 = str_repeat('0', 6 - strlen($nobc)) . $nobc;
+    } else {
         $kode3 = '000000';
     }
-    $kode = $kode1.'-010017-'.$kode2.'-'.$kode3;
-    return $kode;   
+    $kode = $kode1 . '-010017-' . $kode2 . '-' . $kode3;
+    return $kode;
 }
-function riwayatdok($id){
+function riwayatdok($id)
+{
     $CI = &get_instance();
     $hasil = $CI->helpermodel->riwayatdok($id);
     return $hasil;
 }
-function get_client_ip() {
+function get_client_ip()
+{
     $ipaddress = '';
     if (getenv('HTTP_CLIENT_IP'))
         $ipaddress = getenv('HTTP_CLIENT_IP');
-    else if(getenv('HTTP_X_FORWARDED_FOR'))
+    else if (getenv('HTTP_X_FORWARDED_FOR'))
         $ipaddress = getenv('HTTP_X_FORWARDED_FOR');
-    else if(getenv('HTTP_X_FORWARDED'))
+    else if (getenv('HTTP_X_FORWARDED'))
         $ipaddress = getenv('HTTP_X_FORWARDED');
-    else if(getenv('HTTP_FORWARDED_FOR'))
+    else if (getenv('HTTP_FORWARDED_FOR'))
         $ipaddress = getenv('HTTP_FORWARDED_FOR');
-    else if(getenv('HTTP_FORWARDED'))
-       $ipaddress = getenv('HTTP_FORWARDED');
-    else if(getenv('REMOTE_ADDR'))
+    else if (getenv('HTTP_FORWARDED'))
+        $ipaddress = getenv('HTTP_FORWARDED');
+    else if (getenv('REMOTE_ADDR'))
         $ipaddress = getenv('REMOTE_ADDR');
     else
         $ipaddress = 'UNKNOWN';
     return $ipaddress;
 }
-function getdevice($str){
-    $tart = substr($str,0,strpos($str,' '));
+function getdevice($str)
+{
+    $tart = substr($str, 0, strpos($str, ' '));
     $device = 'DESKTOP';
-    if(strpos($str,'Lin')){
+    if (strpos($str, 'Lin')) {
         $device = 'ANDROID';
-    }else if(strpos($str,'Mac')){
+    } else if (strpos($str, 'Mac')) {
         $device = 'APPLE MACINTOSH';
     }
-    return $tart.' on '.$device;
+    return $tart . ' on ' . $device;
 }
-function cekclosebook(){
+function cekclosebook()
+{
     $isi = '';
     $CI = &get_instance();
-    $periode = kodebulan($CI->session->userdata('bl')).$CI->session->userdata('th');
+    $periode = kodebulan($CI->session->userdata('bl')) . $CI->session->userdata('th');
     $hasil = $CI->helpermodel->cekclosebook($periode);
-    if($hasil!=0){
+    if ($hasil != 0) {
         $isi = 'disabled';
     }
     return $isi;
+}
+
+function limit_date($date)
+{
+    $cektgl = DateTime::createFromFormat('Y-m-d', $date);
+    if (!$cektgl) {
+        return $date;
+    }
+    $hari = (int)$cektgl->format('d');
+    $bulan = strtoupper($cektgl->format('M'));
+    $tahun = $cektgl->format('Y');
+
+    if ($hari >= 1 && $hari <= 10) {
+        $kodena = 'EAR';
+    } elseif ($hari >= 11 && $hari <= 20) {
+        $kodena = 'MID';
+    } else {
+        $kodena = 'END';
+    }
+
+    return "$kodena $bulan $tahun";
 }

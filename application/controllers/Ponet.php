@@ -11,16 +11,27 @@ class Ponet extends CI_Controller
             redirect($url);
         }
         $this->load->model('Ponet_model');
+        $this->load->helper('ifn_helper');
     }
 
     public function index()
     {
         $header['header'] = 'manajemen';
         $po = trim($this->input->post('keyword'));
+        $buy = $this->input->post('kategori');
         $data['po'] = [];
 
-        if (!empty($po)) {
-            $data['po'] = $this->Ponet_model->cariData($po);
+        if (!empty($po) && !empty($buy)) {
+            $results = $this->Ponet_model->cariData($po, $buy);
+
+            if ($results) {
+                foreach ($results as &$result) {
+                    $result['lim'] = limit_date($result['lim']);
+                }
+                $data['po'] = $results;
+            } else {
+                $data['message'] = 'Data tidak ditemukan.';
+            }
         }
 
         $this->load->view('layouts/header', $header);
@@ -28,10 +39,16 @@ class Ponet extends CI_Controller
         $this->load->view('layouts/footer');
     }
 
+
+
     public function view($id)
     {
         $header['header'] = 'manajemen';
         $data['detail'] = $this->Ponet_model->GetDataByid($id);
+
+        if ($data['detail']) {
+            $data['detail']['lim'] = limit_date($data['detail']['lim']);
+        }
 
         $this->load->view('ponet/detail', $data);
     }
