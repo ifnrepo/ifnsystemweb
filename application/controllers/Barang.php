@@ -139,6 +139,14 @@ class Barang extends CI_Controller
             redirect($url);
         }
     }
+    public function updatestock(){
+        $data = [
+            'id' => $_POST['id'],
+            'safety_stock' => $_POST['safety']
+        ];
+        $hasil = $this->barangmodel->updatestock($data);
+        echo $hasil;
+    }
 
     public function get_data_barang()
     {
@@ -171,7 +179,7 @@ class Barang extends CI_Controller
             if($field->safety_stock == 0){
                 $row[] = '-';
             }else{
-                $row[] = rupiah($field->safety_stock);
+                $row[] = rupiah($field->safety_stock,2);
             }
             $jmbon = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg badge-notification badge-pill'>" . $field->jmbom . "</span>" : "";
             $buton = "<a href=" . base_url() . 'barang/editbarang/' . $field->id . " class='btn btn-sm btn-primary btn-icon text-white mr-1' rel=" . $field->id . " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";

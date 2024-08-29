@@ -100,7 +100,8 @@
 	print_r(json_encode($dataproduksi['data_isi'])); ?>
 	<?php
 	// Untuk Warna Chart Produksi 
-	$persenproduksi = (($dataproduksi['data_prod_bulan_ini'] - $dataproduksi['data_prod_bulan_lalu']) / $dataproduksi['data_prod_bulan_lalu']) * 100;
+	$pembagi = $dataproduksi['data_prod_bulan_lalu']==0 ? 1 : $dataproduksi['data_prod_bulan_lalu'];
+	$persenproduksi = (($dataproduksi['data_prod_bulan_ini'] - $dataproduksi['data_prod_bulan_lalu']) / $pembagi) * 100;
 	switch (true) {
 		case $persenproduksi < 0:
 			$warna = "danger";
