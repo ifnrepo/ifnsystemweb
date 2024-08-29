@@ -122,6 +122,12 @@ class Barangmodel extends CI_Model
         $query = $this->db->query("Delete from bom_barang where id =" . $id);
         return $query;
     }
+    public function updatestock($data){
+        $this->db->where('id',$data['id']);
+        $query = $this->db->update('barang',['safety_stock'=>$data['safety_stock']]);
+        $this->helper_model->isilog($this->db->last_query());
+        return $query;
+    }
 
     public function getFilter()
     {
