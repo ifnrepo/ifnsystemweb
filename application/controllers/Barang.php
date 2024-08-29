@@ -54,6 +54,13 @@ class Barang extends CI_Controller
         $data['itemkategori'] = $this->kategorimodel->getdata();
         $this->load->view('barang/editbarang', $data);
     }
+    public function isistock($id)
+    {
+        $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
+        $data['itemsatuan'] = $this->satuanmodel->getdata();
+        $data['itemkategori'] = $this->kategorimodel->getdata();
+        $this->load->view('barang/isistock', $data);
+    }
     public function updatebarang()
     {
         $data = [
@@ -132,40 +139,6 @@ class Barang extends CI_Controller
             redirect($url);
         }
     }
-    // public function get_data_barang()
-    // {
-    //     $list = $this->barangmodel->get_datatables();
-    //     $data = array();
-    //     $no = $_POST['start'];
-    //     foreach ($list as $field) {
-    //         $no++;
-    //         $row = array();
-    //         $row[] = $no;
-    //         $row[] = $field->kode;
-    //         $row[] = $field->nama_barang;
-    //         $row[] = $field->nama_kategori;
-    //         $row[] = $field->namasatuan;
-    //         if ($field->dln == 1) {
-    //             $row[] = '<i class="fa fa-check text-success"></i>';
-    //         } else {
-    //             $row[] = '-';
-    //         }
-    //         $jmbon = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg badge-notification badge-pill'>" . $field->jmbom . "</span>" : "";
-    //         $buton = "<a href=" . base_url() . 'barang/editbarang/' . $field->id . " class='btn btn-sm btn-primary btn-icon text-white mr-1' rel=" . $field->id . " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
-    //         $buton .= "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=" . base_url() . 'barang/hapusbarang/' . $field->id . "><i class='fa fa-trash-o'></i></a>";
-    //         $buton .= "<a href=" . base_url() . 'barang/bombarang/' . $field->id . " class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM" . $jmbon . "</a>";
-    //         $row[] = $buton;
-
-    //         $data[] = $row;
-    //     }
-    //     $output = array(
-    //         "draw" => $_POST['draw'],
-    //         "recordsTotal" => $this->barangmodel->count_all(),
-    //         "recordsFiltered" => $this->barangmodel->count_filtered(),
-    //         "data" => $data,
-    //     );
-    //     echo json_encode($output);
-    // }
 
     public function get_data_barang()
     {
@@ -173,7 +146,8 @@ class Barang extends CI_Controller
         header('Content-Type: application/json');
 
         $filter_kategori = $this->input->post('filter_kategori');
-        $list = $this->barangmodel->get_datatables($filter_kategori);
+        $filter_inv = $this->input->post('filter_inv');
+        $list = $this->barangmodel->get_datatables($filter_kategori,$filter_inv);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $field) {
@@ -194,9 +168,15 @@ class Barang extends CI_Controller
             } else {
                 $row[] = '-';
             }
+            if($field->safety_stock == 0){
+                $row[] = '-';
+            }else{
+                $row[] = rupiah($field->safety_stock);
+            }
             $jmbon = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg badge-notification badge-pill'>" . $field->jmbom . "</span>" : "";
             $buton = "<a href=" . base_url() . 'barang/editbarang/' . $field->id . " class='btn btn-sm btn-primary btn-icon text-white mr-1' rel=" . $field->id . " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
             $buton .= "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=" . base_url() . 'barang/hapusbarang/' . $field->id . "><i class='fa fa-trash-o'></i></a>";
+            $buton .= "<a href=" . base_url() . 'barang/isistock/' . $field->id . " class='btn btn-sm btn-info btn-icon mr-1' id='stockbarang' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Isi Safety Stock' title='Isi Safety Stock' ><i class='fa fa-info pl-1 pr-1'></i></a>";
             $buton .= "<a href=" . base_url() . 'barang/bombarang/' . $field->id . " class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM" . $jmbon . "</a>";
             $row[] = $buton;
 
@@ -205,7 +185,7 @@ class Barang extends CI_Controller
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->barangmodel->count_all(),
-            "recordsFiltered" => $this->barangmodel->count_filtered($filter_kategori),
+            "recordsFiltered" => $this->barangmodel->count_filtered($filter_kategori,$filter_inv),
             "data" => $data,
         );
 

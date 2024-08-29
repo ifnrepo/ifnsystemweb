@@ -8,7 +8,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="card">
           <div class="card-body">
             <div class="d-flex align-items-center">
-              <div class="subheader">Php Info</div>
+              <div class="subheader">Php Info </div>
               <div class="ms-auto lh-1">
                 <!-- <div class="dropdown">
                   <a class="dropdown-toggle text-secondary" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 7 days</a>

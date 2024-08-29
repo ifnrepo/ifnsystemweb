@@ -1,4 +1,10 @@
-$(document).ready(function () {});
+$(document).ready(function () {
+	if ($("#master3").is(":checked")) {
+		$("#master13").attr("disabled", false);
+	} else {
+		$("#master13").attr("disabled", true);
+	}
+});
 $("#tambahuser").click(function () {
 	if ($("#name").val() == "") {
 		pesan("Nama tidak boleh kosong !", "error");
@@ -85,5 +91,13 @@ $("#cekut").change(function () {
 	// alert($(this).props("checked", true));
 	if ($(this).is(":checked") && $("#cekpp").is(":checked")) {
 		$("#cekpp").prop("checked", false);
+	}
+});
+$("#master3").change(function () {
+	if ($(this).is(":checked")) {
+		$("#master13").attr("disabled", false);
+	} else {
+		$("#master13").prop("checked", false);
+		$("#master13").attr("disabled", true);
 	}
 });

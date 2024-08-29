@@ -39,7 +39,7 @@
             <!-- <input type="checkbox" class="form-check-input" />
             <span class="form-check-label">Ingat saya</span> -->
             <label class="form-label">
-              <input type="checkbox" class="form-check-input" />Ingat saya
+              <input type="checkbox" name="ingatsaya" id="ingatsaya" class="form-check-input" />Ingat saya
               <span class="form-label-description">
                 <a href="./">Lupa password !</a>
               </span>

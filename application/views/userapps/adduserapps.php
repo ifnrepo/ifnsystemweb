@@ -268,6 +268,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">Barang</span>
                               </label>
                               <label class="form-check mb-1">
+                                <input class="form-check-input" id="master13" name="master13" type="checkbox">
+                                <span class="form-check-label text-cyan">Input Safety Stok</span>
+                              </label>
+                              <label class="form-check mb-1">
                                 <input class="form-check-input" id="master4" name="master4" type="checkbox">
                                 <span class="form-check-label">Supplier</span>
                               </label>

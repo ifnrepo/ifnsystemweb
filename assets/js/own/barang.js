@@ -66,7 +66,9 @@ $(document).ready(function () {
 			type: "POST",
 			data: function (d) {
 				d.filter_kategori = $("#filter").val();
+				d.filter_inv = $("#filterinv").val();
 				console.log("Filter kategori:", d.filter_kategori);
+				console.log("Filter kategori:", d.filter_inv);
 			},
 		},
 		columnDefs: [
@@ -80,6 +82,9 @@ $(document).ready(function () {
 	});
 
 	$("#filter").on("change", function () {
+		table.ajax.reload();
+	});
+	$("#filterinv").on("change", function () {
 		table.ajax.reload();
 	});
 });
