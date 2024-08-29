@@ -1,62 +1,52 @@
-<ol class="list-group list-group-numbered " style="border: 1px solid grey;">
-    <?php if (!empty($detail)) : ?>
-        <li class="list-group-item d-flex justify-content-between align-items-start ">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Buyer</div>
-                <?= $detail['nama_customer']; ?>
-            </div>
-            <span class="badge text-bg-primary"> <i class="fa fa-edit"></i></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">PO</div>
-                <?= $detail['po']; ?>#<?= $detail['item']; ?>
-            </div>
-            <span class="badge text-bg-primary"> <i class="fa fa-edit"></i></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Hikiai</div>
-                <?= $detail['ord']; ?>#<?= $detail['ordno']; ?>
-            </div>
-            <span class="badge text-bg-primary"> <i class="fa fa-edit"></i></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Spek</div>
-                <?= $detail['spek']; ?>
-            </div>
-            <span class="badge text-bg-primary"> <i class="fa fa-edit"></i></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">LIMIT</div>
-                <?= date('d/M/Y', strtotime($detail['lim'])); ?>
-            </div>
-            <span class="badge text-bg-primary"> <i class="fa fa-edit"></i></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">Nettype</div>
-                <?= $detail['name_nettype']; ?>
-            </div>
-            <span class="badge text-bg-primary"> <i class=" fa fa-edit"></i></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">COLOR</div>
-                <?= $detail['color']; ?>
-            </div>
-            <span class="badge text-bg-primary"> <i class=" fa fa-edit"></i></span>
-        </li>
-        <li class="list-group-item d-flex justify-content-between align-items-start">
-            <div class="ms-2 me-auto">
-                <div class="fw-bold">JUMLAH ORDER</div>
-                <?= $detail['piece']; ?>.<?= $detail['st_piece']; ?>
-            </div>
-            <span class="badge text-bg-primary"> <i class="fa fa-edit"></i></span>
-        </li>
-    <?php else : ?>
-        <p>Tidak ada detail yang dipilih.</p>
-    <?php endif; ?>
-</ol>
+<table class="table table-striped">
+    <tbody>
+        <tr>
+            <th scope="row">1</th>
+            <td><b>BUYYER</b></td>
+            <td>:</td>
+            <td><?= $detail['nama_customer']; ?></td>
+        </tr>
+        <tr>
+            <th scope="row">2</th>
+            <td><b>PO</b></td>
+            <td>:</td>
+            <td> <?= $detail['po']; ?>#<?= $detail['item']; ?></td>
+        </tr>
+        <tr>
+            <th scope="row">3</th>
+            <td>HIKIAI</td>
+            <td>:</td>
+            <td> <?= $detail['ord']; ?>#<?= $detail['ordno']; ?></td>
+        </tr>
+        <tr>
+            <th scope="row">4</th>
+            <td>SPEK</td>
+            <td>:</td>
+            <td> <?= $detail['spek']; ?></td>
+        </tr>
+        <tr>
+            <th scope="row">5</th>
+            <td>LIMIT</td>
+            <td>:</td>
+            <td style="color: red;"> <?= $detail['lim']; ?></td>
+        </tr>
+        <tr>
+            <th scope="row">6</th>
+            <td>NETTYPE</td>
+            <td>:</td>
+            <td> <?= $detail['name_nettype']; ?></td>
+        </tr>
+        <tr>
+            <th scope="row">7</th>
+            <td>COLOR</td>
+            <td>:</td>
+            <td> <?= $detail['color']; ?></td>
+        </tr>
+        <tr>
+            <th scope="row">8</th>
+            <td>PIECE</td>
+            <td>:</td>
+            <td> <?= $detail['piece']; ?>.<?= $detail['st_piece']; ?></td>
+        </tr>
+    </tbody>
+</table>
