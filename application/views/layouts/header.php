@@ -565,6 +565,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 6); ?>" href="<?= base_url('logact/clear'); ?>">
                       Log Activity
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 8); ?>" href="<?= base_url('hargamat'); ?>">
+                      Harga Material
+                    </a>
                   </div>
                 </div>
               </div>

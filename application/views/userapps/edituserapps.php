@@ -266,7 +266,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <a href="#tabs-transaksi-1" class="nav-link" data-bs-toggle="tab">Transaksi</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-other-1" class="nav-link" data-bs-toggle="tab">Other</a>
+                          <a href="#tabs-other-1" class="nav-link" data-bs-toggle="tab">Report</a>
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab">User Manajemen</a>
@@ -411,6 +411,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="other6" name="other6" type="checkbox" <?= cekceklis($user['other'], 6); ?>>
                                 <span class="form-check-label">Log Activity</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other8" name="other8" type="checkbox" <?= cekceklis($user['other'], 8); ?>>
+                                <span class="form-check-label">Harga Material</span>
                               </label>
                             </div>
                             <div class="col-6">

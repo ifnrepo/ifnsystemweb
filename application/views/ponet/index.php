@@ -215,6 +215,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">ITEM</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">DIS</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">BUYER</th>
+                                                <th class="tp-3 mb-2 bg-primary text-center text-white">Outs</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">DT</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">OUTS</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">KG</th>
@@ -233,6 +234,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     <td class="text-center"><?= $key['item']; ?></td>
                                                     <td class="text-center"><?= $key['dis']; ?></td>
                                                     <td class="text-center"><?= $key['nama_customer']; ?></td>
+                                                    <td class="text-center"><?= $key['outstand']; ?></td>
                                                     <td class="text-center" style="color: red;"><?= $key['lim']; ?></td>
                                                     <td class="text-center"><?= $key['outstand']; ?>.<?= $key['st_piece']; ?></td>
                                                     <td class="text-center"><?= $key['weight']; ?></td>

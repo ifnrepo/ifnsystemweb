@@ -88,7 +88,7 @@
         });
     })
     $("#updatebarang").click(function(){
-        alert(toAngka($("#safety_stock").val()));
+        // alert(toAngka($("#safety_stock").val()));
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -98,7 +98,7 @@
                 safety: toAngka($("#safety_stock").val())
             },
             success: function(data){
-                // window.location.reload();
+                window.location.reload();
                 $("#tutupmodal").click();
             },
             error: function (xhr, ajaxOptions, thrownError) {
