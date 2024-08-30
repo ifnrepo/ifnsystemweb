@@ -2,7 +2,7 @@
     <tbody>
         <tr>
             <th scope="row">1</th>
-            <td><b>BUYYER</b></td>
+            <td><b>BUYER</b></td>
             <td>:</td>
             <td><?= $detail['nama_customer']; ?></td>
         </tr>
@@ -20,9 +20,9 @@
         </tr>
         <tr>
             <th scope="row">4</th>
-            <td>SPEK</td>
+            <td>SPEC</td>
             <td>:</td>
-            <td> <?= $detail['spek']; ?></td>
+            <td> <?= $detail['spek']; ?>#<?= $detail['color']; ?></td>
         </tr>
         <tr>
             <th scope="row">5</th>
@@ -38,15 +38,9 @@
         </tr>
         <tr>
             <th scope="row">7</th>
-            <td>COLOR</td>
+            <td>OUTSTAND</td>
             <td>:</td>
-            <td> <?= $detail['color']; ?></td>
-        </tr>
-        <tr>
-            <th scope="row">8</th>
-            <td>PIECE</td>
-            <td>:</td>
-            <td> <?= $detail['piece']; ?>.<?= $detail['st_piece']; ?></td>
+            <td> <?= $detail['outstand']; ?>.<?= $detail['st_piece']; ?></td>
         </tr>
     </tbody>
 </table>
