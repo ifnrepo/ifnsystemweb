@@ -487,3 +487,7 @@ function limit_date($date)
 
     return "$kodena $bulan $tahun";
 }
+function toAngka($rp)
+{
+    return str_replace(',', '', $rp);
+}

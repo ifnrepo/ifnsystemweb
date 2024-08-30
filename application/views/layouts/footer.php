@@ -96,6 +96,9 @@
 <?php if (isset($fungsi) && $fungsi == 'logact') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/logact.js?1724750323"></script>
 <?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'hargamat') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/hargamat.js?1724750323"></script>
+<?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
 	print_r(json_encode($dataproduksi['data_isi'])); ?>
 	<?php
