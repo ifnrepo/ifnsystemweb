@@ -22,6 +22,8 @@ class Hargamat extends CI_Controller {
 	{  
         $header['header'] = 'other';
         $data['data'] = $this->hargamatmodel->getdata();
+        $data['kategori'] = $this->hargamatmodel->getdatakategori();
+        $data['artikel'] = $this->hargamatmodel->getdataartikel();
         // $data['databbl'] = $this->taskmodel->getdatabbl();
         $footer['fungsi'] = 'hargamat';
 		$this->load->view('layouts/header',$header);
@@ -38,6 +40,26 @@ class Hargamat extends CI_Controller {
         ];
         $kode = $this->hargamatmodel->simpanbarang($arrgo);
         echo $kode;
+    }
+    public function addkondisi(){
+        if($_POST['kate']!='all'){
+            $this->session->set_flashdata('katehargamat',$_POST['kate']);
+        }
+        if($_POST['arti']!='all'){
+            $this->session->set_flashdata('artihargamat',$_POST['arti']);
+        }
+        echo 1;
+    }
+    public function edithamat($id){
+        $data['data'] = $this->hargamatmodel->getdatabyid($id)->row_array();
+        $this->load->view('hargamat/edithamat',$data);
+    }
+    public function updatehamat(){
+        $query = $this->hargamatmodel->updatehamat();
+        if($query){
+            $url = base_url().'hargamat';
+            redirect($url);
+        }
     }
     //End Controller
     public function mode(){

@@ -35,8 +35,8 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="simpanbarang" >Simpan</button>
+    <button type="button btn-sm" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+    <button type="button btn-sm" class="btn btn-primary" id="simpanbarang" >Simpan</button>
 </div>
 <script>
     $(document).ready(function(){
