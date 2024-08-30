@@ -136,7 +136,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
         color: black;
         text-align: center;
         font-style: italic;
-        /* text-shadow: 1px 1px 1px black; */
     }
 
     .filter,
@@ -185,10 +184,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                             <div class="mb-3">
                                 <label class="form-label">Pilih Kategori</label>
-                                <select class="form-select" name="kategori" aria-label="Default select example" style="color: blue;">
+                                <select class="form-select" name="kategori" aria-label="Default select example">
                                     <option value="1" <?= isset($_POST['kategori']) && $_POST['kategori'] == '1' ? 'selected' : '' ?>><b>PO</b></option>
                                     <option value="2" <?= isset($_POST['kategori']) && $_POST['kategori'] == '2' ? 'selected' : '' ?>><b>BUYER</b></option>
                                 </select>
+                                <div class="mb-2" style=" margin-top: 10px ; margin-right: 350px; width : 100px ; ">
+                                    <label class="form-check">
+                                        <label class="form-label" style="color: #1877f2; ">
+                                            <input class="form-check-input" type="checkbox" name="checked" value="1" <?= isset($_POST['checked']) ? 'checked' : '' ?>>po aktiv
+                                        </label>
+                                    </label>
+                                </div>
                             </div>
                             <div class="button-group">
                                 <button type="submit" class="btn btn-info">Cari Data</button>
@@ -197,7 +203,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </a>
                             </div>
                         </form>
-
                     </div>
                     <div class="content-header">
                         <div class="card-body">
@@ -206,31 +211,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <table class="table datatable">
                                         <thead>
                                             <tr>
-                                                <th class="tp-3 mb-2 bg-primary text-white">No</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">PO</th>
-                                                <th class=" tp-3 mb-2 bg-primary text-center text-white">ITEM</th>
+                                                <th class="tp-3 mb-2 bg-primary text-center text-white">ITEM</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">DIS</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">BUYER</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">Outs</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">DT</th>
+                                                <th class="tp-3 mb-2 bg-primary text-center text-white">OUTS</th>
+                                                <th class="tp-3 mb-2 bg-primary text-center text-white">KG</th>
                                                 <th class="tp-3 mb-2 bg-primary text-center text-white">AKSI</th>
                                             </tr>
                                         </thead>
                                         <tbody class="table-tbody" style="font-size: 13px !important;">
-                                            <?php $no = 0;
-                                            foreach ($po as $key) : $no++; ?>
+                                            <?php
+                                            $totalWeight = 0;
+
+                                            foreach ($po as $key) :
+                                                $totalWeight += $key['weight'];
+                                            ?>
                                                 <tr>
-                                                    <td class="text-center"><?= $no; ?></td>
                                                     <td class="text-center"><?= $key['po']; ?></td>
                                                     <td class="text-center"><?= $key['item']; ?></td>
                                                     <td class="text-center"><?= $key['dis']; ?></td>
                                                     <td class="text-center"><?= $key['nama_customer']; ?></td>
                                                     <td class="text-center"><?= $key['outstand']; ?></td>
                                                     <td class="text-center" style="color: red;"><?= $key['lim']; ?></td>
+                                                    <td class="text-center"><?= $key['outstand']; ?>.<?= $key['st_piece']; ?></td>
+                                                    <td class="text-center"><?= $key['weight']; ?></td>
                                                     <td class="text-center">
-                                                        <!-- <a href="<?= base_url() . 'ponet/view/' . $key['id']; ?>" class="btn btn-sm btn-secondary btn-icon text-white btn-view-detail" rel="<?= $key['id']; ?>" title="Detail data">
-                                                            <i class="fa fa-search"></i>
-                                                        </a> -->
                                                         <a href="<?= base_url() . 'ponet/view/' . $key['po_id']; ?>" class="btn btn-sm btn-secondary btn-icon" id="edituser" rel="<?= $key['po_id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Detail Data PO">
                                                             <i class="fa fa-search"></i>
                                                         </a>
@@ -238,7 +246,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                 </tr>
                                             <?php endforeach; ?>
                                         </tbody>
+                                        <tfoot>
+                                            <tr>
+                                                <td colspan="6" style="color: #0054a6;"><strong>TOTAL</strong></td>
+                                                <td class="tp-3 mb-2 bg-primary text-center"><b style="color: white;"><?= $totalWeight; ?>.KG</b></td>
+                                                <td></td>
+                                            </tr>
+                                        </tfoot>
                                     </table>
+
                                 <?php else : ?>
                                     <center>
                                         <p style="font-style: italic; color:red; font-size:25px; text-shadow: 1px 1px 1px black ;">

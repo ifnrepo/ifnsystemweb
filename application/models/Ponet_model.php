@@ -1,19 +1,27 @@
 <?php
 class Ponet_model extends CI_Model
 {
-    public function cariData($po, $buy, $limit = 100)
+    public function cariData($po, $buy, $checked = null)
     {
-        $this->db->select('tb_po.id as po_id, tb_po.po, tb_po.item, tb_po.dis, tb_po.id_buyer, tb_po.lim, tb_po.outstand, customer.nama_customer, nettype.name_nettype');
+        $this->db->select('tb_po.id as po_id, tb_po.po, tb_po.item, tb_po.dis, tb_po.id_buyer, 
+        tb_po.lim, tb_po.outstand, tb_po.st_piece, tb_po.weight, customer.nama_customer, nettype.name_nettype');
         $this->db->from('tb_po');
         $this->db->join('customer', 'customer.id = tb_po.id_buyer', 'left');
         $this->db->join('nettype', 'nettype.id = tb_po.id_nettype', 'left');
         $this->db->order_by('tb_po.lim', 'DESC');
-        $this->db->limit($limit);
+
         if ($buy == '1') {
             $this->db->like('tb_po.po', $po);
         } elseif ($buy == '2') {
             $this->db->like('customer.nama_customer', $po);
         }
+
+        if (!empty($checked)) {
+            $this->db->where('tb_po.stat_po =', 1);
+            $this->db->where('tb_po.outstand >', 0);
+            $this->db->where('YEAR(tb_po.lim) >=', date('Y'));
+        }
+
         $result = $this->db->get()->result_array();
 
         if ($result) {
@@ -23,6 +31,8 @@ class Ponet_model extends CI_Model
             return null;
         }
     }
+
+
 
     public function GetDataByid($id)
     {
