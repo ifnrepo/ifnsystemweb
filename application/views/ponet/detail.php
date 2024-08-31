@@ -40,7 +40,13 @@
             <th scope="row">7</th>
             <td>OUTSTAND</td>
             <td>:</td>
-            <td> <?= $detail['outstand']; ?>.<?= $detail['st_piece']; ?></td>
+            <td> <?= $detail['outstand']; ?></td>
+        </tr>
+        <tr>
+            <th scope="row">8</th>
+            <td>WEIGHT/PIECE</td>
+            <td>:</td>
+            <td> <?= $detail['weight']; ?> <?= $detail['st_piece']; ?></td>
         </tr>
     </tbody>
 </table>
