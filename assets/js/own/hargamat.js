@@ -1,29 +1,34 @@
 $(document).ready(function () {
 	// alert("SIAP");
-});
-
-$("#filter").change(function () {
-	$.ajax({
-		dataType: "json",
-		type: "POST",
-		url: base_url + "hargamat/addkondisi",
-		data: {
-			kate: $("#filter").val(),
-			arti: $("#filterinv").val(),
+	var table = $("#tabelnya").DataTable({
+		processing: true,
+		serverSide: true,
+		order: [],
+		ajax: {
+			url: base_url + "hargamat/get_data_hargamat",
+			type: "POST",
+			data: function (d) {
+				d.filter_kategori = $("#filter").val();
+				d.filter_inv = $("#filterinv").val();
+				console.log("Filter kategori:", d.filter_kategori);
+				console.log("Filter kategori:", d.filter_inv);
+			},
 		},
-		success: function (data) {
-			window.location.reload();
-			// alert(data);
-			// window.location.reload();
-			// $("#dept_tuju").html(data);
-			// $("#dept_tuju").change();
-		},
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.log(xhr.status);
-			console.log(thrownError);
-		},
+		columnDefs: [
+			{
+				// className: "dt-nowrap",
+				targets: [0],
+				orderable: false,
+			},
+		],
+		pageLength: 50,
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
-});
-$("#filterinv").change(function () {
-	$("#filter").change();
+	$("#filter").change(function () {
+		// alert("ADA");
+		table.ajax.reload();
+	});
+	$("#filterinv").change(function () {
+		table.ajax.reload();
+	});
 });

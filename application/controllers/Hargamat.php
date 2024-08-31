@@ -21,7 +21,7 @@ class Hargamat extends CI_Controller {
 	public function index()
 	{  
         $header['header'] = 'other';
-        $data['data'] = $this->hargamatmodel->getdata();
+        // $data['data'] = $this->hargamatmodel->getdata();
         $data['kategori'] = $this->hargamatmodel->getdatakategori();
         $data['artikel'] = $this->hargamatmodel->getdataartikel();
         // $data['databbl'] = $this->taskmodel->getdatabbl();
@@ -60,6 +60,49 @@ class Hargamat extends CI_Controller {
             $url = base_url().'hargamat';
             redirect($url);
         }
+    }
+    public function get_data_hargamat()
+    {
+        ob_start(); // buffer output
+        header('Content-Type: application/json');
+
+        $filter_kategori = $this->input->post('filter_kategori');
+        $filter_inv = $this->input->post('filter_inv');
+        $list = $this->hargamatmodel->get_datatables($filter_kategori,$filter_inv);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $field) {
+            $tampil = $field->weight==0 ? $field->qty : $field->weight;
+            $barang = $field->id_barang==0 ? $field->remark.' (ID not found)' : $field->nama_barang; 
+            $no++;
+            $row = array();
+            $row[] = $barang;
+            $row[] = tglmysql($field->tgl);
+            $row[] = $field->nobontr;
+            $row[] = rupiah($field->qty,0);
+            $row[] = rupiah($field->weight,2);
+            $row[] = rupiah($field->price,2);
+            $row[] = rupiah($tampil*$field->price,2);
+            $row[] = $field->nama_supplier;
+            $row[] = $field->mt_uang;
+            $row[] = rupiah($field->oth_amount,2);
+            $row[] = rupiah($field->kurs,2);
+            $buton = "<a href=".base_url().'hargamat/edithamat/'.$field->idx ." class='btn btn-sm btn-info' style='padding: 2px 5px !important;' data-bs-target='#modal-large' data-bs-toggle='modal' data-title='Edit HAMAT' title='EDIT ".trim($field->nama_barang)."><i class='fa fa-pencil mr-1'></i> Edit</a>";
+            $row[] = $buton;
+
+            $data[] = $row;
+        }
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->hargamatmodel->count_all(),
+            "recordsFiltered" => $this->hargamatmodel->count_filtered($filter_kategori,$filter_inv),
+            "data" => $data,
+        );
+        $this->session->set_userdata('jmlrek',$this->hargamatmodel->hitungrec($filter_kategori,$filter_inv));
+        ob_clean();
+        echo json_encode($output);
+        ob_end_flush();
+        error_log("Finished fetching data");
     }
     //End Controller
     public function mode(){
