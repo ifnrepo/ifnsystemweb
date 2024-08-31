@@ -27,6 +27,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php foreach ($kategori->result_array() as $kate) { $selek = $this->session->flashdata('katehargamat')==$kate['kategori_id'] ? 'selected' : ''; ?>
                 <option value="<?= $kate['kategori_id']; ?>" <?= $selek; ?>><?= $kate['nama_kategori']; ?></option>
               <?php } ?>
+              <option value="kosong" class="text-danger">KOSONG</option>
             </select>
           </div>
           <div class="col-md-3" style="border-left: 1px solid !important;">
@@ -39,50 +40,41 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </select>
           </div>
           <div class="col-md-7 bg-cyan-lt">
+            <div style="line-height: 8px !important">
+              <label class="font-kecil font-bold mt-1">Kgs : XX</label><br>
+              <label class="font-kecil font-bold">Pcs : XX</label><br>
+              <label class="font-kecil font-bold">Total : XX</label><br>
+              <!-- <label class="font-kecil font-bold">Jumlah Record : <?= $this->session->userdata('jmlrek'); ?></label><br> -->
+            </div>
             <a href="<?= base_url().'hargamat/getbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get data IB" class="btn btn-success btn-sm" style="position: absolute; bottom:5px; right:5px;"><i class="fa fa-plus"></i><span class="ml-1">Get Barang</span></a>
           </div>
         </div>
       <!-- </div> -->
        <hr class="m-1">
       <div class="card-body pt-1">
-        <table id="tabel" class="table nowrap order-column table-hover datatable7" style="width: 100% !important;">
-          <thead>
-            <tr>
-              <th>Article</th>
-              <th>Tgl</th>
-              <th>Nomor IB</th>
-              <th>Qty</th>
-              <th>Weight</th>
-              <th>Price (IDR)</th>
-              <th>Total</th>
-              <th>Supplier</th>
-              <th>Cur</th>
-              <th>Amount</th>
-              <th>Kurs (Idr)</th>
-              <th>Edit</th>
-            </tr>
-          </thead>
-          <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-            <?php foreach ($data->result_array() as $key ) { $tampil = $key['weight']==0 ? $key['qty'] : $key['weight']; ?>
+        <div id="table-default" class="table-responsive font-kecil">
+          <table id="tabelnya" class="table nowrap order-column table-hover" style="width: 100% !important;">
+            <thead>
               <tr>
-                <td><?= $key['nama_barang']; ?></td>
-                <td><?= tglmysql($key['tgl']); ?></td>
-                <td><?= $key['nobontr']; ?></td>
-                <td><?= rupiah($key['qty'],0); ?></td>
-                <td><?= rupiah($key['weight'],2); ?></td>
-                <td><?= rupiah($key['oth_amount'],2); ?></td>
-                <td><?= rupiah($tampil*$key['oth_amount'],2); ?></td>
-                <td><?= $key['nama_supplier']; ?></td>
-                <td><?= $key['mt_uang']; ?></td>
-                <td><?= rupiah($key['price'],2); ?></td>
-                <td><?= rupiah($key['kurs'],2); ?></td>
-                <td class="text-center">
-                  <a href="<?= base_url().'hargamat/edithamat/'.$key['idx']; ?>" class="btn btn-sm btn-info" style="padding: 2px 5px !important;" data-bs-target="#modal-large" data-bs-toggle="modal" data-title="Edit HAMAT" title="EDIT <?= trim($key['nama_barang']); ?>"><i class="fa fa-pencil mr-1"></i> Edit</a>
-                </td>
+                <th>Article</th>
+                <th>Tgl</th>
+                <th>Nomor IB</th>
+                <th>Qty</th>
+                <th>Weight</th>
+                <th>Price (IDR)</th>
+                <th>Total</th>
+                <th>Supplier</th>
+                <th>Cur</th>
+                <th>Amount</th>
+                <th>Kurs (Idr)</th>
+                <th>Edit</th>
               </tr>
-            <?php } ?>
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
+            
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>

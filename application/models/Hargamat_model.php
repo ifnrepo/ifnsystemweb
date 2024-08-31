@@ -1,19 +1,47 @@
 <?php
 class Hargamat_model extends CI_Model
 {
-    public function getdata(){
-        $this->db->select('*,tb_hargamaterial.id as idx');
+    var $column_search = array('nama_barang', 'nama_supplier','remark');
+    var $column_order = array(null, 'nama_barang', 'nama_supplier','remark');
+    var $order = array('nama_barang' => 'asc');
+    // var $table = 'barang';
+    public function getdata($filter_kategori,$filter_inv){
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang');
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang','barang.id = tb_hargamaterial.id_barang','left');
         $this->db->join('supplier','supplier.id = tb_hargamaterial.id_supplier','left');
         $this->db->join('satuan','satuan.id = tb_hargamaterial.id_satuan','left');
-        if($this->session->flashdata('katehargamat')!=null){
-            $this->db->where('barang.id_kategori',$this->session->flashdata('katehargamat'));
+        if ($filter_kategori && $filter_kategori != 'all') {
+            if($filter_kategori != 'kosong'){
+                $this->db->where('barang.id_kategori',$filter_kategori);
+            }else{
+                $this->db->where('barang.id_kategori is null');
+            }
         }
-        if($this->session->flashdata('artihargamat')!=null){
-            $this->db->where('barang.id',$this->session->flashdata('artihargamat'));
+        if ($filter_inv && $filter_inv != 'all') {
+            $this->db->where('barang.id',$filter_inv);
         }
-        return $this->db->get();
+        $i = 0;
+        foreach ($this->column_search as $item) {
+            if ($_POST['search']['value']) {
+                if ($i === 0) {
+                    $this->db->group_start();
+                    $this->db->like($item, $_POST['search']['value']);
+                } else {
+                    $this->db->or_like($item, $_POST['search']['value']);
+                }
+                if (count($this->column_search) - 1 == $i)
+                    $this->db->group_end();
+            }
+            $i++;
+        }
+        if (isset($_POST['order'])) {
+            $this->db->order_by($this->column_order[$_POST['order']['0']['column']], $_POST['order']['0']['dir']);
+        } elseif (isset($this->order)) {
+            $order = $this->order;
+            $this->db->order_by(key($order), $order[key($order)]);
+        }
+        // return $this->db->get();
     }
     public function getdatabyid($id){
         $this->db->select('*,tb_hargamaterial.id as idx');
@@ -30,6 +58,7 @@ class Hargamat_model extends CI_Model
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang','barang.id = tb_hargamaterial.id_barang','left');
         $this->db->join('kategori','kategori.kategori_id = barang.id_kategori','left');
+        $this->db->where('kategori.kategori_id is not null');
         $this->db->group_by('kategori.kategori_id');
         $this->db->order_by('kategori.nama_kategori','ASC');
         return $this->db->get();
@@ -107,5 +136,32 @@ class Hargamat_model extends CI_Model
         $query = $this->db->update('tb_hargamaterial',$data);
         $this->helpermodel->isilog($this->db->last_query());
         return $query;
+    }
+    public function get_datatables($filter_kategori,$filter_inv)
+    {
+        $this->getdata($filter_kategori,$filter_inv);
+        // $this->getdata();
+        if ($_POST['length'] != -1)
+            $this->db->limit($_POST['length'], $_POST['start']);
+        $query = $this->db->get();
+        return $query->result();
+    }
+    public function count_filtered($filter_kategori,$filter_inv)
+    {
+        $this->getdata($filter_kategori,$filter_inv);
+        // $this->getdata();
+        $query = $this->db->get();
+        return $query->num_rows();
+    }
+    public function count_all()
+    {
+        $this->db->from('tb_hargamaterial');
+        return $this->db->count_all_results();
+    }
+    public function hitungrec($filter_kategori,$filter_inv)
+    {
+        $this->getdata($filter_kategori,$filter_inv);
+        $query = $this->db->get();
+        return $query->num_rows();
     }
 }
