@@ -243,7 +243,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     <td class="text-center"><?= $key['dis']; ?></td>
                                                     <td class="text-center"><?= $key['nama_customer']; ?></td>
                                                     <td class="text-center" style="color: red;"><?= $key['lim']; ?></td>
-                                                    <td class="text-center"><?= $key['outstand']; ?>.<?= $key['st_piece']; ?></td>
+                                                    <td class="text-center"><?= rupiah($key['outstand'], 2); ?><?= $key['st_piece']; ?></td>
                                                     <td class="text-right"><?= $kgs; ?></td>
                                                     <td class="text-center">
                                                         <a href="<?= base_url() . 'ponet/view/' . $key['po_id']; ?>" class="btn btn-sm btn-secondary btn-icon" id="edituser" rel="<?= $key['po_id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Detail Data PO">
@@ -256,7 +256,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <tfoot>
                                             <tr>
                                                 <td colspan="6" style="color: #0054a6;"><strong>TOTAL</strong></td>
-                                                <td class="tp-3 mb-2 bg-secondary text-right "><b style="color: white;"><?= $total; ?> KGS</b></td>
+                                                <td class="tp-3 mb-2 bg-secondary text-right">
+                                                    <b style="color: white;">
+                                                        <?= rupiah($total, 2); ?> KGS
+                                                    </b>
+                                                </td>
                                                 <td></td>
                                             </tr>
                                         </tfoot>
