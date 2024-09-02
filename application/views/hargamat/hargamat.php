@@ -44,7 +44,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <label class="font-kecil font-bold mt-1">Kgs : XX</label><br>
               <label class="font-kecil font-bold">Pcs : XX</label><br>
               <label class="font-kecil font-bold">Total : XX</label><br>
-              <!-- <label class="font-kecil font-bold">Jumlah Record : <?= $this->session->userdata('jmlrek'); ?></label><br> -->
+              <label class="font-kecil font-bold">Jumlah Record : <span id="jumlahrekod"><?= $this->session->userdata('jmlrek'); ?></span></label><br>
             </div>
             <a href="<?= base_url().'hargamat/getbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get data IB" class="btn btn-success btn-sm" style="position: absolute; bottom:5px; right:5px;"><i class="fa fa-plus"></i><span class="ml-1">Get Barang</span></a>
           </div>

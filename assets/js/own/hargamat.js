@@ -12,6 +12,8 @@ $(document).ready(function () {
 				d.filter_inv = $("#filterinv").val();
 				console.log("Filter kategori:", d.filter_kategori);
 				console.log("Filter kategori:", d.filter_inv);
+				// alert('<?php echo $this->session->userdata("jmlrek);  ?>');
+				// $("#jumlahrekod").innerHtml(d.filter_inv);
 			},
 		},
 		columnDefs: [
@@ -25,8 +27,10 @@ $(document).ready(function () {
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 	$("#filter").change(function () {
-		// alert("ADA");
 		table.ajax.reload();
+		var htmlnya = "";
+		// alert($("#jumlahrekod").text());
+		$("#jumlahrekod").innerHtml("OKOKOK");
 	});
 	$("#filterinv").change(function () {
 		table.ajax.reload();

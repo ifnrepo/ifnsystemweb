@@ -99,6 +99,7 @@ class Hargamat extends CI_Controller {
             "data" => $data,
         );
         $this->session->set_userdata('jmlrek',$this->hargamatmodel->hitungrec($filter_kategori,$filter_inv));
+        echo "<script>alert('OCIW'); </script>";
         ob_clean();
         echo json_encode($output);
         ob_end_flush();

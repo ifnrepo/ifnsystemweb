@@ -142,7 +142,7 @@ class Hargamat_model extends CI_Model
         $this->getdata($filter_kategori,$filter_inv);
         // $this->getdata();
         if ($_POST['length'] != -1)
-            $this->db->limit($_POST['length'], $_POST['start']);
+        $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
