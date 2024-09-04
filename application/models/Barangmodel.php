@@ -14,7 +14,7 @@ class Barangmodel extends CI_Model
         left join satuan on satuan.id = barang.id_satuan");
         return $query;
     }
-    public function getdata($filter_kategori,$filter_inv)
+    public function getdata($filter_kategori,$filter_inv,$filter_act)
     {
         $this->db->select('barang.*,satuan.namasatuan,kategori.nama_kategori,(select count(*) from bom_barang where id_barang = barang.id) as jmbom', FALSE);
         $this->db->from($this->table);
@@ -27,6 +27,10 @@ class Barangmodel extends CI_Model
         if ($filter_inv && $filter_inv != 'all') {
             $isi = $filter_inv=='x' ? 0 : 1;
             $this->db->where('barang.noinv', $isi);
+        }
+        if ($filter_act && $filter_act != 'all') {
+            $isi = $filter_act=='x' ? 0 : 1;
+            $this->db->where('barang.act', $isi);
         }
         $i = 0;
         foreach ($this->column_search as $item) {
@@ -49,18 +53,18 @@ class Barangmodel extends CI_Model
             $this->db->order_by(key($order), $order[key($order)]);
         }
     }
-    public function get_datatables($filter_kategori,$filter_inv)
+    public function get_datatables($filter_kategori,$filter_inv,$filter_act)
     {
-        $this->getdata($filter_kategori,$filter_inv);
+        $this->getdata($filter_kategori,$filter_inv,$filter_act);
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
 
-    public function count_filtered($filter_kategori,$filter_inv)
+    public function count_filtered($filter_kategori,$filter_inv,$filter_act)
     {
-        $this->getdata($filter_kategori,$filter_inv);
+        $this->getdata($filter_kategori,$filter_inv,$filter_act);
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -85,7 +89,15 @@ class Barangmodel extends CI_Model
     {
         $this->db->where('id', $data['id']);
         $query = $this->db->update('barang', $data);
-        return $query;
+        $this->helpermodel->isilog($this->db->last_query());
+
+        $this->db->select('barang.*,kategori.nama_kategori,satuan.namasatuan');
+        $this->db->from('barang');
+        $this->db->join('kategori','kategori.kategori_id = barang.id_kategori','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->where('barang.id',$data['id']);
+        $query2 = $this->db->get();
+        return $query2;
     }
     public function hapusbarang($id)
     {
@@ -125,8 +137,15 @@ class Barangmodel extends CI_Model
     public function updatestock($data){
         $this->db->where('id',$data['id']);
         $query = $this->db->update('barang',['safety_stock'=>$data['safety_stock']]);
-        $this->helper_model->isilog($this->db->last_query());
-        return $query;
+        $this->helpermodel->isilog($this->db->last_query());
+
+        $this->db->select('barang.*,kategori.nama_kategori,satuan.namasatuan');
+        $this->db->from('barang');
+        $this->db->join('kategori','kategori.kategori_id = barang.id_kategori','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->where('barang.id',$data['id']);
+        $query2 = $this->db->get();
+        return $query2;
     }
 
     public function getFilter()

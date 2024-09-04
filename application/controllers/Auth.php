@@ -192,9 +192,9 @@ class Auth extends CI_Controller
     public function logout()
     {
         // $this->loginmodel->islogout($this->session->userdata('idprofil'));
-        delete_cookie('bantuMasukMomois');
-        delete_cookie('usernameMasukMomois');
-        delete_cookie('passwordMasukMomois');
+        // delete_cookie('bantuMasukMomois');
+        // delete_cookie('usernameMasukMomois');
+        // delete_cookie('passwordMasukMomois');
         $this->helpermodel->isilog('LOGOUT Aplikasi momois');
         $this->session->sess_destroy();
         $url = base_url('Auth');

@@ -83,8 +83,8 @@ class Hargamat_model extends CI_Model
         $this->db->join('supplier','supplier.id = tb_header.id_pemasok','left');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
         $this->db->join('kategori','kategori.kategori_id = barang.id_kategori','left');
-        $this->db->where(['tb_header.kode_dok'=>'IB','tb_header.data_ok'=>1,'tb_header.ok_valid'=>1]);
-        $this->db->where_not_in('tb_detail.id',array_column($strkondisi, 'id_detail'));
+        $this->db->where(['tb_header.kode_dok'=>'IB','tb_header.data_ok'=>1,'tb_header.ok_valid'=>1,'id_hamat'=>0]);
+        // $this->db->where_not_in('tb_detail.id',array_column($strkondisi, 'id_detail'));
         return $this->db->get();
     }
     public function simpanbarang($kode){
@@ -120,7 +120,12 @@ class Hargamat_model extends CI_Model
                 'oth_amount' => $othamount
             ];
             $this->db->insert('tb_hargamaterial',$datafield);
+            $idnya = $this->db->insert_id();
             $this->helpermodel->isilog($this->db->last_query());
+
+            // isi id Data Detail 
+            $this->db->where('id',$arrdat[$x]);
+            $this->db->update('tb_detail',['id_hamat'=>$idnya]);
         }
         return true;
     }
@@ -142,7 +147,7 @@ class Hargamat_model extends CI_Model
         $this->getdata($filter_kategori,$filter_inv);
         // $this->getdata();
         if ($_POST['length'] != -1)
-            $this->db->limit($_POST['length'], $_POST['start']);
+        $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
