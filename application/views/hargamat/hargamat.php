@@ -40,12 +40,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </select>
           </div>
           <div class="col-md-7 bg-cyan-lt">
-            <div style="line-height: 8px !important">
-              <label class="font-kecil font-bold mt-1">Kgs : XX</label><br>
-              <label class="font-kecil font-bold">Pcs : XX</label><br>
-              <label class="font-kecil font-bold">Total : XX</label><br>
-              <label class="font-kecil font-bold">Jumlah Record : <span id="jumlahrekod"><?= $this->session->userdata('jmlrek'); ?></span></label><br>
+            <div style="line-height: 10px !important">
+              <label class="font-kecil font-bold mt-1">Unit : <span id="reko3" style="font-size: 14px !important"></span></label><br>
+              <label class="font-kecil font-bold">Weight : <span id="reko2" style="font-size: 14px !important"></span></label><br>
+              <label class="font-kecil font-bold">Rp : <span id="reko4" style="font-size: 14px !important"></span></label><br>
             </div>
+            <label class="font-kecil font-bold">Jumlah Record : <span id="reko1" style="font-size: 14px !important"></span></label><br>
             <a href="<?= base_url().'hargamat/getbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get data IB" class="btn btn-success btn-sm" style="position: absolute; bottom:5px; right:5px;"><i class="fa fa-plus"></i><span class="ml-1">Get Barang</span></a>
           </div>
         </div>

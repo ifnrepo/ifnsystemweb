@@ -1,6 +1,7 @@
 <div class="container-xl"> 
     <div class="row">
         <div class="col-12">
+            <input type="hidden" name="rekrow" id="rekrow" value="<?= $rekrow; ?>">
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kode</label>
                 <div class="col">
@@ -54,6 +55,15 @@
                     </label>
                 </div>
             </div>
+            <div class="row mt-2">
+                <label class="col-3 col-form-label pt-0"></label>
+                <div class="col">
+                    <label class="form-check">
+                        <input class="form-check-input" id="act" name="act" type="checkbox" <?php if($data['act']==1){ echo 'checked'; } ?>>
+                        <span class="form-check-label">Aktif</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -68,6 +78,7 @@
     $("#updatebarang").click(function(){
         var x = $("#dln").prop('checked') ? 1 : 0;
         var y = $("#noinv").prop('checked') ? 1 : 0;
+        var z = $("#act").prop('checked') ? 1 : 0;
         if($("#kode").val() == ''){
             pesan('Kode harus di isi !','error');
             return;
@@ -84,6 +95,7 @@
             pesan('Kategori harus di isi !','error');
             return;
         }
+        var noe = $("#currentrow").val();
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -95,10 +107,32 @@
                 kat: $("#id_kategori").val(),
                 id: $("#id").val(),
                 dln: x,
-                noinv: y
+                noinv: y,
+                act: z
             },
             success: function(data){
-                window.location.reload();
+                var temp = $("#tabelnya").DataTable().row(noe).data();
+                // alert(temp);
+                let buton = '';
+                let aktif = (data[0]['act'] == 1) ? '<i class="fa fa-check text-success"></i>' : '<i class="fa fa-times text-danger"></i>';
+                let dln = (data[0]['dln'] == 1) ? '<i class="fa fa-check text-success"></i>' : '-';
+                let noinv = (data[0]['noinv'] == 1) ? '<i class="fa fa-check text-success"></i>' : '-';
+                temp[1] = data[0]['kode'];
+                temp[2] = data[0]['nama_barang'];
+                temp[3] = data[0]['nama_kategori'];
+                temp[4] = data[0]['namasatuan'];
+                temp[5] = dln;
+                temp[6] = noinv;
+                temp[7] = aktif;
+                buton = "<a href=" + base_url + 'barang/editbarang/' + data[0]['id'] +'/'+noe+" class='btn btn-sm btn-primary btn-icon text-white mr-1' rel="+data[0]['id']+ " rel2=" +noe+ " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
+                buton += "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=" + base_url + 'barang/hapusbarang/' +data[0]['id']+ "><i class='fa fa-trash-o'></i></a>";
+                buton += "<a href=" + base_url + 'barang/isistock/' +data[0]['id']+ " class='btn btn-sm btn-info btn-icon mr-1' id='stockbarang' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Isi Safety Stock' title='Isi Safety Stock' ><i class='fa fa-info pl-1 pr-1'></i></a>";
+                buton += "<a href=" + base_url + 'barang/bombarang/' +data[0]['id']+ " class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM</a>";
+                // temp[9] = buton;
+                $("#tabelnya").DataTable().row(noe).data(temp).invalidate();
+                // $("#tabelnya").DataTable().row(noe).addClass('text-red').draw();
+                // $(row).addClass("text-red");
+                $("#modal-simple").modal('hide');
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

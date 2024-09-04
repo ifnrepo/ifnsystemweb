@@ -71,6 +71,7 @@ class Hargamat extends CI_Controller {
         $list = $this->hargamatmodel->get_datatables($filter_kategori,$filter_inv);
         $data = array();
         $no = $_POST['start'];
+        $total = 0;$kgs=0;$pcs=0;
         foreach ($list as $field) {
             $tampil = $field->weight==0 ? $field->qty : $field->weight;
             $barang = $field->id_barang==0 ? $field->remark.' (ID not found)' : $field->nama_barang; 
@@ -91,19 +92,32 @@ class Hargamat extends CI_Controller {
             $row[] = $buton;
 
             $data[] = $row;
+            $total += $tampil*$field->price;
+            $pcs += $field->qty;
+            $kgs += $field->weight;
         }
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->hargamatmodel->count_all(),
             "recordsFiltered" => $this->hargamatmodel->count_filtered($filter_kategori,$filter_inv),
+            "jumlahTotal" => $total,
+            "jumlahPcs" => $pcs,
+            "jumlahKgs" => $kgs,
             "data" => $data,
         );
         $this->session->set_userdata('jmlrek',$this->hargamatmodel->hitungrec($filter_kategori,$filter_inv));
-        echo "<script>alert('OCIW'); </script>";
+        // $isinya = $this->session->userdata('jmlrek');
+        echo "<script type='text/javascript'>
+                isirekod = '<?= base_url() ?>';
+            </script>";
+        $this->kedepan();
         ob_clean();
         echo json_encode($output);
         ob_end_flush();
         error_log("Finished fetching data");
+    }
+    function kedepan(){
+        return 0;
     }
     //End Controller
     public function mode(){

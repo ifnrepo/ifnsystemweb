@@ -67,8 +67,10 @@ $(document).ready(function () {
 			data: function (d) {
 				d.filter_kategori = $("#filter").val();
 				d.filter_inv = $("#filterinv").val();
+				d.filter_act = $("#filteract").val();
 				console.log("Filter kategori:", d.filter_kategori);
 				console.log("Filter kategori:", d.filter_inv);
+				console.log("Filter aktif:", d.filter_act);
 			},
 		},
 		columnDefs: [
@@ -77,6 +79,12 @@ $(document).ready(function () {
 				orderable: false,
 			},
 		],
+		createdRow: function (row, data, dataIndex) {
+			if (data[7] == '<i class="fa fa-times text-danger"></i>') {
+				$(row).addClass("text-red");
+				// $(row).addClass("font-strike");
+			}
+		},
 		pageLength: 50,
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
@@ -87,4 +95,14 @@ $(document).ready(function () {
 	$("#filterinv").on("change", function () {
 		table.ajax.reload();
 	});
+	$("#filteract").on("change", function () {
+		table.ajax.reload();
+	});
+});
+$("#tabelnya tbody").on("click", "td", function () {
+	var tr = $(this).closest("tr");
+	var rowindex = tr.index();
+	// alert(rowindex);
+	$("#currentrow").val(rowindex);
+	// table.row(this).data(d).draw();
 });

@@ -1,6 +1,7 @@
 <div class="container-xl"> 
     <div class="row">
         <div class="col-12">
+            <input type="hidden" name="rekrow" id="rekrow" value="<?= $rekrow; ?>">
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kode</label>
                 <div class="col">
@@ -53,8 +54,17 @@
                             <label class="col-3 col-form-label pt-0"></label>
                             <div class="col">
                                 <label class="form-check">
-                                    <input class="form-check-input" id="noinv" name="noinv" type="checkbox" <?php if($data['noinv']==1){ echo 'checked'; } ?>>
+                                    <input class="form-check-input" id="noinv" name="noinv" type="checkbox" <?php if($data['noinv']==1){ echo 'checked'; } ?> disabled>
                                     <span class="form-check-label">No INV</span>
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <label class="col-3 col-form-label pt-0"></label>
+                            <div class="col">
+                                <label class="form-check">
+                                    <input class="form-check-input" id="act" name="act" type="checkbox" <?php if($data['act']==1){ echo 'checked'; } ?> disabled>
+                                    <span class="form-check-label">Aktif</span>
                                 </label>
                             </div>
                         </div>
@@ -89,6 +99,7 @@
     })
     $("#updatebarang").click(function(){
         // alert(toAngka($("#safety_stock").val()));
+        var noe = $("#currentrow").val();
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -98,7 +109,11 @@
                 safety: toAngka($("#safety_stock").val())
             },
             success: function(data){
-                window.location.reload();
+                // window.location.reload();
+                // alert(data);
+                var temp = $("#tabelnya").DataTable().row(noe).data();
+                temp[8] = rupiah(data[0]['safety_stock'],'.',',',2);
+                $("#tabelnya").DataTable().row(noe).data(temp).invalidate();
                 $("#tutupmodal").click();
             },
             error: function (xhr, ajaxOptions, thrownError) {

@@ -53,6 +53,15 @@
                     </label>
                 </div>
             </div>
+            <div class="row mt-2">
+                <label class="col-3 col-form-label pt-0"></label>
+                <div class="col">
+                    <label class="form-check">
+                        <input class="form-check-input" id="act" name="act" type="checkbox">
+                        <span class="form-check-label">Aktif</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -67,6 +76,7 @@
     $("#simpanbarang").click(function(){
         var x = $("#dln").prop('checked') ? 1 : 0;
         var y = $("#noinv").prop('checked') ? 1 : 0;
+        var z = $("#act").prop('checked') ? 1 : 0;
         if($("#kode").val() == ''){
             pesan('Kode harus di isi !','error');
             return;
@@ -93,10 +103,12 @@
                 sat: $("#id_satuan").val(),
                 kat: $("#id_kategori").val(),
                 noinv: y,
-                dln: x
+                dln: x,
+                act: z,
             },
             success: function(data){
                 window.location.reload();
+                // $("#tabelnya").DataTable.ajax.reload();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

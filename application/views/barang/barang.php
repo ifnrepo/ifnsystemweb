@@ -36,10 +36,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <option value="y">Barang NO INV</option>
           </select>
         </div>
+        <div class="col-md-2" style="border-left: 1px solid !important;">
+          <label class="mb-0 font-kecil font-bold text-azure">Aktif</label>
+          <select name="filteract" id="filteract" class="form-select font-kecil mt-0">
+            <option value="all">Semua</option>
+            <option value="y">Aktif</option>
+            <option value="x">Tidak Aktif</option>
+          </select>
+        </div>
       </div>
       <hr class="p-1 m-1">
       <div class="card-body pt-1">
         <div id="table-default" class="table-responsive font-kecil">
+          <input type="hidden" id="currentrow">
           <table class="table" id="tabelnya">
             <thead>
               <tr>
@@ -50,6 +59,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Satuan</th>
                 <th>DLN</th>
                 <th>No INV</th>
+                <th>Act</th>
                 <th class="text-red">Safety</th>
                 <th>Aksi</th>
               </tr>
