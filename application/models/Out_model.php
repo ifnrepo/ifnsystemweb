@@ -117,6 +117,16 @@ class Out_model extends CI_Model{
         $this->db->trans_complete();
         return $dataheader['id'];
     }
+    public function getdatadetail($data){
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok");
+        $this->db->from('tb_detailgen a');
+        $this->db->join('satuan b','b.id = a.id_satuan','left');
+        $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->join('tb_detail d','a.id = d.id_out','left');
+        $this->db->join('tb_header e','e.id = d.id_header','left');
+        $this->db->where('a.id_header',$data);
+        return $this->db->get()->result_array();
+    }
     public function getdatadetailout($data){
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
@@ -205,7 +215,7 @@ class Out_model extends CI_Model{
     public function simpanheaderout($id){
         $iniquery = false;
         $this->db->trans_begin();
-        $datadetail = $this->db->get_where('tb_detail',['id_header'=>$id])->result_array();
+        $datadetail = $this->db->get_where('tb_detailgen',['id_header'=>$id])->result_array();
         $no=0;
         foreach ($datadetail as $datdet) {
             if($this->session->userdata('deptsekarang')=='GM'){
@@ -235,14 +245,15 @@ class Out_model extends CI_Model{
                     'dept_id' => $this->session->userdata('deptsekarang'),
                     'insno' => $datdet['insno'],
                     'nobontr' => $datdet['nobontr'],
-                    'dl' => $datdet['dl'],
+                    'dl' => $datdet['dln'],
                     'nobale' => $datdet['nobale'],
                     'stok' => $datdet['stok'],
                     'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
                 ];
             }
-            $this->db->select('stokdept.*,sum(stokdept.pcs_akhir) as xpcs_akhir,sum(stokdept.kgs_akhir) as xkgs_akhir');
+            $this->db->select('stokdept.*,sum(stokdept.pcs_akhir) as xpcs_akhir,sum(stokdept.kgs_akhir) as xkgs_akhir,barang.nama_barang');
             $this->db->from('stokdept');
+            $this->db->join('barang','barang.id = stokdept.id_barang','left');
             $this->db->where($kondisi);
             $cekdata = $this->db->get();
             // $cekdata = $this->db->get_where('stokdept',$kondisi);
@@ -253,8 +264,8 @@ class Out_model extends CI_Model{
             if($datdet['pcs'] > 0 || $datdet['kgs'] > 0){
                 if((($deta['xpcs_akhir'] >= $datdet['pcs']) && ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
                     $pcsnya = $datdet['pcs'] > 0 ? $datdet['pcs'] : $datdet['kgs'];
-                    $pcsasli = $datdet['pcs'];
-                    $kgsasli = $datdet['kgs'];
+                    $pcsasli = $datdet['pcs']==NULL ? 0 : $datdet['pcs'];
+                    $kgsasli = $datdet['kgs']==NULL ? 0 : $datdet['kgs'];
                     $loopke = 0;
                     do {
                         $loopke += 1;
@@ -316,7 +327,8 @@ class Out_model extends CI_Model{
                     } while ($pcsnya > 0);
                 }else{
                     $iniquery = true;
-                    $this->session->set_flashdata('errornya',$no);
+                    $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
+                    $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. '('.$hasilnya['kode'].')');
                     break;
                 }
                 // if($deta['pcs_akhir'] >= $datdet['pcs'] && $deta['pcs_akhir'] > 0 && $jmll > 0){

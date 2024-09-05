@@ -63,7 +63,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="row">
           <div class="col-sm-12">
             <div id="table-default" class="table-responsive">
-              <table class="table datatable6 table-hover" id="cobasisip">
+              <table class="table table-hover datatable6" id="cobasisip">
                 <thead style="background-color: blue !important">
                   <tr>
                     <!-- <th>No</th> -->
