@@ -81,8 +81,8 @@ class Ib_model extends CI_Model
             'tgl' => $date
         ];
         $this->db->insert('tb_header', $tambah);
-        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->insert_id();
+        $this->helpermodel->isilog($this->db->last_query());
         $this->db->trans_complete();
         return $hasil;
     }

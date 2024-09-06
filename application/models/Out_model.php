@@ -26,9 +26,9 @@ class Out_model extends CI_Model{
         $query = $this->db->get_where('dept',['dept_id'=>$kode])->row_array();
         if($query){
             for($x=0;$x<=strlen($query['pengeluaran'])/2;$x++){
-                if(substr($query['pengeluaran'],($x*2)-2,2) != $kode){
+                // if(substr($query['pengeluaran'],($x*2)-2,2) != $kode){
                     array_push($xkode,substr($query['pengeluaran'],($x*2)-2,2));
-                }
+                // }
             }
             $this->db->where_in('dept_id',$xkode);
             $this->db->order_by('departemen','asc');
@@ -82,19 +82,6 @@ class Out_model extends CI_Model{
     }
     public function tambahdataout($kode){
         $this->db->trans_start();
-        // $date = $this->session->userdata('th').'-'.$this->session->userdata('bl').'-'.date('d');
-        // $nomordok = nomorout($date,$this->session->userdata('deptsekarang'),$this->session->userdata('tujusekarang'));
-        // $tambah = [
-        //     'id_perusahaan' => IDPERUSAHAAN,
-        //     'kode_dok' => 'T',
-        //     'dept_id' => $this->session->userdata('deptsekarang'),
-        //     'dept_tuju' => $this->session->userdata('tujusekarang'),
-        //     'nomor_dok' => $nomordok,
-        //     'tgl' => $date
-        // ];
-        // $this->db->insert('tb_header',$tambah);
-        // $this->helpermodel->isilog($this->db->last_query());
-        // $idheader = $this->db->insert_id();
         $dataheader = $this->db->get_where('tb_header',['id'=>$kode['id']])->row_array();
         $jumlah = count($kode['data']);
         for($x=0;$x<$jumlah;$x++){
@@ -106,12 +93,11 @@ class Out_model extends CI_Model{
             $this->db->insert('tb_detail',$que);
             $idnya = $this->db->insert_id();
             $this->helpermodel->isilog($this->db->last_query());
+            $this->db->insert('tb_detailgen',$que);
 
             $this->db->where('id',$arrdat[$x]);
             $this->db->update('tb_detail',['id_out'=>$idnya]);
         }
-        // $this->db->where('id',$kode['id_header']);
-        // $this->db->update('tb_header',['id_keluar' => $dataheader['id']]);
         $this->db->where('id',$kode['id']);
         $this->db->update('tb_header',['jumlah_barang'=>$jumlah]);
         $this->db->trans_complete();
@@ -206,6 +192,8 @@ class Out_model extends CI_Model{
             $this->db->delete('tb_detmaterial');
             $this->db->where('id_header',$id);
             $this->db->delete('tb_detail');
+            $this->db->where('id_header',$id);
+            $this->db->delete('tb_detailgen');
         }
         $this->db->where('id_keluar',$id);
         $this->db->update('tb_header',['id_keluar' => 0]);
@@ -215,135 +203,128 @@ class Out_model extends CI_Model{
     public function simpanheaderout($id){
         $iniquery = false;
         $this->db->trans_begin();
-        $datadetail = $this->db->get_where('tb_detailgen',['id_header'=>$id])->result_array();
+        $datadetail = $this->db->get_where('tb_detailgen',['id_header'=>$id]);
         $no=0;
-        foreach ($datadetail as $datdet) {
-            if($this->session->userdata('deptsekarang')=='GM'){
-                if($datdet['nobontr']==''){
-                    $iniquery = true;
-                    $this->session->set_flashdata('errornya','Nobontr Kosong');
-                    break;
+        if($datadetail->num_rows() > 0){
+            foreach ($datadetail->result_array() as $datdet) {
+                if($this->session->userdata('deptsekarang')=='GM'){
+                    if($datdet['nobontr']==''){
+                        $iniquery = true;
+                        $this->session->set_flashdata('errornya','Nobontr Kosong');
+                        break;
+                    }
                 }
-            }
-            $no++;
-            if($this->session->userdata('deptsekarang')=='GS'){
-                $kondisi = [
-                    'po' => $datdet['po'],
-                    'item' => $datdet['item'],
-                    'dis' => $datdet['dis'],
-                    'id_barang' => $datdet['id_barang'],
-                    'dept_id' => $this->session->userdata('deptsekarang'),
-                    'dl' => $datdet['dl'],
-                    'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
-                ];
-            }else{
-                $kondisi = [
-                    'po' => $datdet['po'],
-                    'item' => $datdet['item'],
-                    'dis' => $datdet['dis'],
-                    'id_barang' => $datdet['id_barang'],
-                    'dept_id' => $this->session->userdata('deptsekarang'),
-                    'insno' => $datdet['insno'],
-                    'nobontr' => $datdet['nobontr'],
-                    'dl' => $datdet['dln'],
-                    'nobale' => $datdet['nobale'],
-                    'stok' => $datdet['stok'],
-                    'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
-                ];
-            }
-            $this->db->select('stokdept.*,sum(stokdept.pcs_akhir) as xpcs_akhir,sum(stokdept.kgs_akhir) as xkgs_akhir,barang.nama_barang');
-            $this->db->from('stokdept');
-            $this->db->join('barang','barang.id = stokdept.id_barang','left');
-            $this->db->where($kondisi);
-            $cekdata = $this->db->get();
-            // $cekdata = $this->db->get_where('stokdept',$kondisi);
-            $jmll = $cekdata->num_rows();
-            $deta = $cekdata->row_array();
-            echo $deta['xpcs_akhir'];
-            echo $datdet['pcs'];
-            if($datdet['pcs'] > 0 || $datdet['kgs'] > 0){
-                if((($deta['xpcs_akhir'] >= $datdet['pcs']) && ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
-                    $pcsnya = $datdet['pcs'] > 0 ? $datdet['pcs'] : $datdet['kgs'];
-                    $pcsasli = $datdet['pcs']==NULL ? 0 : $datdet['pcs'];
-                    $kgsasli = $datdet['kgs']==NULL ? 0 : $datdet['kgs'];
-                    $loopke = 0;
-                    do {
-                        $loopke += 1;
-                        $this->db->where($kondisi);
-                        $this->db->group_start();
-                        $this->db->where('pcs_akhir > ',0);
-                        $this->db->or_where('kgs_akhir > ',0);
-                        $this->db->group_end();
-                        $arrstokdept = $this->db->order_by('tgl,urut')->get('stokdept')->row_array();
-                        if($this->session->userdata('deptsekarang')=='GS'){
-                            $nobontr = $arrstokdept['nobontr'];
-                        }else{
-                            $nobontr = $datdet['nobontr'];
-                        }
-                        // echo print_r($datdet);
-                        $stokid=$arrstokdept['id'];
-                        if(($pcsasli > $arrstokdept['pcs_akhir']) || ($kgsasli > $arrstokdept['kgs_akhir'])){
-                            $kurangpcs = $arrstokdept['pcs_akhir'];
-                            $kurangkgs = $arrstokdept['kgs_akhir'];
-                        }else{
-                            $kurangpcs = $pcsasli;
-                            $kurangkgs = $kgsasli;
-                        }
-                        // update kgs_akhir di tabel stokdept
-                        $this->db->set('pcs_keluar','pcs_keluar + '.$kurangpcs,FALSE);
-                        $this->db->set('kgs_keluar','kgs_keluar + '.$kurangkgs,FALSE);
-                        $this->db->set('pcs_akhir','pcs_akhir-'.$kurangpcs,FALSE);
-                        $this->db->set('kgs_akhir','kgs_akhir-'.$kurangkgs,FALSE);
-                        $this->db->where('id',$stokid);
-                        $this->db->update('stokdept');
-
-                        $pcsasli -= $kurangpcs;
-                        $kgsasli -= $kurangkgs;
-                        
-                        if($loopke > 1){
-                            // insert ke tabel detail apabila stokdept menguragi 2 rekord
-                            unset($datdet['id']);
-                            $this->db->insert('tb_detail',$datdet);
-                            $idinsert = $this->db->insert_id();
-                            $this->db->set('id_stokdept',$stokid);
-                            $this->db->set('nobontr',$nobontr);
-                            $this->db->set('pcs',$kurangpcs);
-                            $this->db->set('kgs',$kurangkgs);
-                            $this->db->set('harga',$deta['harga']);
-                            $this->db->where('id',$idinsert);
-                            $this->db->update('tb_detail');
-                        }else{
-                            // update id_stokdept di tabel detail 
-                            $this->db->set('id_stokdept',$stokid);
-                            $this->db->set('nobontr',$nobontr);
-                            $this->db->set('pcs',$kurangpcs);
-                            $this->db->set('kgs',$kurangkgs);
-                            $this->db->set('harga',$deta['harga']);
-                            $this->db->where('id',$datdet['id']);
-                            $this->db->update('tb_detail');
-                        }
-                        $pcskurangi = $datdet['pcs'] > 0 ? $kurangpcs : $kurangkgs;
-                        $pcsnya -= $pcskurangi;
-                    } while ($pcsnya > 0);
+                $no++;
+                if($this->session->userdata('deptsekarang')=='GS'){
+                    $kondisi = [
+                        'po' => $datdet['po'],
+                        'item' => $datdet['item'],
+                        'dis' => $datdet['dis'],
+                        'id_barang' => $datdet['id_barang'],
+                        'dept_id' => $this->session->userdata('deptsekarang'),
+                        'dl' => $datdet['dln'],
+                        'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+                    ];
                 }else{
-                    $iniquery = true;
-                    $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
-                    $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. '('.$hasilnya['kode'].')');
-                    break;
+                    $kondisi = [
+                        'po' => $datdet['po'],
+                        'item' => $datdet['item'],
+                        'dis' => $datdet['dis'],
+                        'id_barang' => $datdet['id_barang'],
+                        'dept_id' => $this->session->userdata('deptsekarang'),
+                        'insno' => $datdet['insno'],
+                        'nobontr' => $datdet['nobontr'],
+                        'dl' => $datdet['dln'],
+                        'nobale' => $datdet['nobale'],
+                        'stok' => $datdet['stok'],
+                        'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+                    ];
                 }
-                // if($deta['pcs_akhir'] >= $datdet['pcs'] && $deta['pcs_akhir'] > 0 && $jmll > 0){
-                //     $this->db->set('pcs_keluar','pcs_keluar + '.$datdet['pcs'],FALSE);
-                //     $this->db->set('kgs_keluar','kgs_keluar + '.$datdet['kgs'],FALSE);
-                //     $this->db->set('pcs_akhir','(pcs_akhir-pcs_masuk)-(pcs_keluar + '.$datdet['pcs'].')',FALSE);
-                //     $this->db->set('kgs_akhir','(kgs_akhir-kgs_masuk)-(kgs_keluar + '.$datdet['kgs'].')',FALSE);
-                //     $this->db->where($kondisi);
-                //     $this->db->update('stokdept');
-                // }else{
-                //     $iniquery = true;
-                //     $this->session->set_flashdata('errornya',$no);
-                //     break;
-                // }
+                $this->db->select('stokdept.*,sum(stokdept.pcs_akhir) as xpcs_akhir,sum(stokdept.kgs_akhir) as xkgs_akhir,barang.nama_barang');
+                $this->db->from('stokdept');
+                $this->db->join('barang','barang.id = stokdept.id_barang','left');
+                $this->db->where($kondisi);
+                $cekdata = $this->db->get();
+                // $cekdata = $this->db->get_where('stokdept',$kondisi);
+                $jmll = $cekdata->num_rows();
+                $deta = $cekdata->row_array();
+                // echo $deta['xpcs_akhir'];
+                // echo $datdet['pcs'];
+                if($datdet['pcs'] > 0 || $datdet['kgs'] > 0){
+                    if((($deta['xpcs_akhir'] >= $datdet['pcs']) && ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
+                        $pcsnya = $datdet['pcs'] > 0 ? $datdet['pcs'] : $datdet['kgs'];
+                        $pcsasli = $datdet['pcs']==NULL ? 0 : $datdet['pcs'];
+                        $kgsasli = $datdet['kgs']==NULL ? 0 : $datdet['kgs'];
+                        $loopke = 0;
+                        do {
+                            $loopke += 1;
+                            $this->db->where($kondisi);
+                            $this->db->group_start();
+                            $this->db->where('pcs_akhir > ',0);
+                            $this->db->or_where('kgs_akhir > ',0);
+                            $this->db->group_end();
+                            $arrstokdept = $this->db->order_by('tgl,urut')->get('stokdept')->row_array();
+                            if($this->session->userdata('deptsekarang')=='GS'){
+                                $nobontr = $arrstokdept['nobontr'];
+                            }else{
+                                $nobontr = $datdet['nobontr'];
+                            }
+                            // echo print_r($datdet);
+                            $stokid=$arrstokdept['id'];
+                            if(($pcsasli > $arrstokdept['pcs_akhir']) || ($kgsasli > $arrstokdept['kgs_akhir'])){
+                                $kurangpcs = $arrstokdept['pcs_akhir'];
+                                $kurangkgs = $arrstokdept['kgs_akhir'];
+                            }else{
+                                $kurangpcs = $pcsasli;
+                                $kurangkgs = $kgsasli;
+                            }
+                            // update kgs_akhir di tabel stokdept
+                            $this->db->set('pcs_keluar','pcs_keluar + '.$kurangpcs,FALSE);
+                            $this->db->set('kgs_keluar','kgs_keluar + '.$kurangkgs,FALSE);
+                            $this->db->set('pcs_akhir','pcs_akhir-'.$kurangpcs,FALSE);
+                            $this->db->set('kgs_akhir','kgs_akhir-'.$kurangkgs,FALSE);
+                            $this->db->where('id',$stokid);
+                            $this->db->update('stokdept');
+
+                            $pcsasli -= $kurangpcs;
+                            $kgsasli -= $kurangkgs;
+                            
+                            if($loopke > 1){
+                                // insert ke tabel detail apabila stokdept menguragi 2 rekord
+                                unset($datdet['id']);
+                                $this->db->insert('tb_detail',$datdet);
+                                $idinsert = $this->db->insert_id();
+                                $this->db->set('id_stokdept',$stokid);
+                                $this->db->set('nobontr',$nobontr);
+                                $this->db->set('pcs',$kurangpcs);
+                                $this->db->set('kgs',$kurangkgs);
+                                $this->db->set('harga',$deta['harga']);
+                                $this->db->where('id',$idinsert);
+                                $this->db->update('tb_detail');
+                            }else{
+                                // update id_stokdept di tabel detail 
+                                $this->db->set('id_stokdept',$stokid);
+                                $this->db->set('nobontr',$nobontr);
+                                $this->db->set('pcs',$kurangpcs);
+                                $this->db->set('kgs',$kurangkgs);
+                                $this->db->set('harga',$deta['harga']);
+                                $this->db->where('id',$datdet['id']);
+                                $this->db->update('tb_detail');
+                            }
+                            $pcskurangi = $datdet['pcs'] > 0 ? $kurangpcs : $kurangkgs;
+                            $pcsnya -= $pcskurangi;
+                        } while ($pcsnya > 0);
+                    }else{
+                        $iniquery = true;
+                        $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
+                        $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. '('.$hasilnya['kode'].')');
+                        break;
+                    }
+                }
             }
+        }else{
+            $iniquery = true;
+            $this->session->set_flashdata('errornya','Data detail atau detailgen kosong, HUBUNGI PROGRAMMER !');
         }
         // Cek data temp yang akan dibuat BBL
         $datacekbbl = $this->db->get_where('tb_detail',['id_header'=>$id,'tempbbl'=>1]);

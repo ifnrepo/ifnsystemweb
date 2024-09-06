@@ -11,16 +11,24 @@ class Auth extends CI_Controller
         $this->load->model('userappsmodel');
         $this->load->model('userappsmodel','usermodel');
         $this->load->model('helper_model','helpermodel');
-        if(get_cookie('bantuMasukMomois')=='YES'){
-            $this->_loginwithcookie(get_cookie('usernameMasukMomois'),get_cookie('passwordMasukMomois'));
-        }
+        // if(get_cookie('bantuMasukMomois')=='YES'){
+        //     $this->_loginwithcookie(get_cookie('usernameMasukMomois'),get_cookie('passwordMasukMomois'));
+        // }
     }
 
     public function index()
     {
         $data['title'] = 'Login Pengguna Aplikasi PT. Indoneptune Net';
+        if(get_cookie('bantuMasukMomois')=='YES'){
+            // $this->_loginwithcookie(get_cookie('usernameMasukMomois'),get_cookie('passwordMasukMomois'));
+            $data['usercok'] = get_cookie('usernameMasukMomois');
+            $data['passcok'] = get_cookie('passwordMasukMomois');
+        }else{
+            $data['usercok'] = null;
+            $data['passcok'] = null;
+        }
         $this->load->view('layouts/auth_header', $data);
-        $this->load->view('auth/login');
+        $this->load->view('auth/login',$data);
         $this->load->view('layouts/auth_footer');
     }
 
@@ -172,6 +180,11 @@ class Auth extends CI_Controller
                     set_cookie($cookie);
                     set_cookie($cookie2);
                     set_cookie($cookie3);
+                }
+                if($this->input->post('lupasaya')){
+                    delete_cookie('bantuMasukMomois');
+                    delete_cookie('usernameMasukMomois');
+                    delete_cookie('passwordMasukMomois');
                 }
                 $this->helpermodel->isilog('LOGIN Aplikasi momois DG USERNAME PASSWORD');
 

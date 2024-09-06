@@ -42,7 +42,7 @@
                 </tbody>
             </table>
             <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
-            <a href="#teskolap" data-toggle="collapse" aria-expanded="false" class="link link-secondary">View Detail BOM</a>
+            <a href="#teskolap" data-toggle="collapse" aria-expanded="false" class="link text-orange">View Detail BOM</a>
             <div class="collapse" id="teskolap">
                 <table class="table datatable6 table-hover" id="cobasisip">
                 <thead style="background-color: blue !important">
@@ -59,7 +59,7 @@
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
                 <?php foreach ($detail2 as $val) { ?>
                     <tr>
-                        <td><?= $val['nama_barang']; ?></td>
+                        <td><?= $val['nama_barang'].' # <span class="text-teal">'.$val['nobontr'].'</span>'; ?></td>
                         <td><?= $val['brg_id']; ?></td>
                         <td><?= $val['namasatuan']; ?></td>
                         <td class="text-right"><?= rupiah($val['pcs'],0); ?></td>

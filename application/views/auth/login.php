@@ -11,7 +11,7 @@
       <form action="<?= base_url() . 'Auth/cekauth'; ?>" method="POST" autocomplete="off" novalidate>
         <div class="mb-3">
           <label class="form-label">Email / Username</label>
-          <input type="input" name="username" class="form-control" placeholder="Your username" autocomplete="off">
+          <input type="input" name="username" class="form-control" placeholder="Your username" value="<?= $usercok; ?>" autocomplete="off">
         </div>
         <div class="mb-2">
           <label class="form-label">
@@ -21,7 +21,7 @@
             </span> -->
           </label>
           <div class="input-group input-group-flat">
-            <input type="password" class="form-control" name="password" id="password" placeholder="Your password" autocomplete="off">
+            <input type="password" class="form-control" name="password" id="password" value="<?= $passcok; ?>" placeholder="Your password" autocomplete="off">
             <span class="input-group-text">
               <a href="#" id="showpass" class="link-secondary" title="Show password" data-bs-toggle="tooltip">
                 <svg class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -39,7 +39,11 @@
             <!-- <input type="checkbox" class="form-check-input" />
             <span class="form-check-label">Ingat saya</span> -->
             <label class="form-label">
-              <input type="checkbox" name="ingatsaya" id="ingatsaya" class="form-check-input" />Ingat saya
+              <?php if($usercok!=null){ ?>
+                <input type="checkbox" name="lupasaya" id="lupasaya" class="form-check-input" />Lupakan saya
+              <?php }else{ ?>
+                <input type="checkbox" name="ingatsaya" id="ingatsaya" class="form-check-input" />Ingat saya
+              <?php } ?>
               <span class="form-label-description">
                 <a href="./">Lupa password !</a>
               </span>
