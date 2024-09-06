@@ -62,38 +62,6 @@ class Out extends CI_Controller {
     public function getdata(){
         $this->session->set_userdata('deptsekarang',$_POST['dept_id']);
         $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
-        // $hasil = '';
-        // $kode = [
-        //     'dept_id' => $_POST['dept_id'],
-        //     'dept_tuju' => $_POST['dept_tuju']
-        // ];
-        // $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
-        // $query = $this->out_model->getdata($kode);
-        // foreach ($query as $que) {
-        //     $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
-        //     $hasil .= "<tr>";
-        //     $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
-        //     if($que['data_ok']==1){
-        //         $hasil .= "<td class='font-bold'><a href='".base_url().'out/viewdetailout/'.$que['id']."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
-        //     }else{
-        //         $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
-        //     }
-        //     $hasil .= "<td>".$jmlrek."</td>";
-        //     $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
-        //     $hasil .= "<td>".$que['keterangan']."</td>";
-        //     $hasil .= "<td>";
-            // if($que['data_ok']==0){
-            //     $hasil .= "<a href=".base_url().'out/dataout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>";
-            // }else if($que['ok_tuju']==1){
-            //     $hasil .= "<a href=".base_url().'out/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
-            // }
-        //     $hasil .= "</td>";
-        //     $hasil .= "</tr>";
-        // }
-        // $cocok = array('datagroup' => $hasil);
-        // echo json_encode($cocok);
-        // $url = base_url('Out');
-        // redirect($url);
         echo 1;
     }
     public function getdatadetailout(){
@@ -103,13 +71,13 @@ class Out extends CI_Controller {
         $jumlah=0;
         foreach ($query as $que) {
             $hasil .= "<tr>";
-            $hasil .= "<td>".$que['nama_barang']."</td>";
+            $hasil .= "<td><a href='".base_url().'out/getdatadetail/'.$que['id_header']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Detail Barang'>".$que['nama_barang']."</a></td>";
             $hasil .= "<td>".$que['brg_id']."</td>";
             $hasil .= "<td>".$que['namasatuan']."</td>";
             $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
-            $hasil .= "<td>".rupiah($que['kgsminta'],0)."</td>";
+            $hasil .= "<td>".rupiah($que['kgsminta'],2)."</td>";
             $hasil .= "<td class='text-primary'>".rupiah($que['pcs'],0)."</td>";
-            $hasil .= "<td class='text-primary'>".rupiah($que['kgs'],0)."</td>";
+            $hasil .= "<td class='text-primary'>".rupiah($que['kgs'],2)."</td>";
             if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']!=''){
                 $hasil .= "<td class='text-primary'>".$que['nobontr']."</td>";
             }else{
@@ -128,6 +96,11 @@ class Out extends CI_Controller {
         }
         $cocok = array('datagroup' => $hasil,'jmlrek' => $jumlah);
         echo json_encode($cocok);
+    }
+    public function getdatadetail($id){
+        $data['header'] = $this->out_model->getdatabyid($id);
+        $data['detail'] = $this->out_model->getdatadetail($id);
+        $this->load->view('out/viewdetailout2',$data);
     }
     public function tambahdata(){
         $data['bon'] = $this->out_model->getbon();
@@ -229,6 +202,7 @@ class Out extends CI_Controller {
     public function viewdetailout($id){
         $data['header'] = $this->out_model->getdatabyid($id);
         $data['detail'] = $this->out_model->getdatadetailout($id);
+        $data['detail2'] = $this->out_model->getdatadetail($id);
         $this->load->view('out/viewdetailout',$data);
     }
     public function resetdetail($id){

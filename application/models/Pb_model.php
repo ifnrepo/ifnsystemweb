@@ -67,6 +67,16 @@ class Pb_model extends CI_Model
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
         $this->helpermodel->isilog($this->db->last_query());
+
+        //Isi data ke detailgen 
+        if($this->session->userdata('tujusekarang')=='GS' || $this->session->userdata('tujusekarang')=='GM'){
+            $datadet = $this->db->get_where('tb_detail',['id_header'=>$data['id']]);
+            foreach ($datadet->result_array() as $keydet) {
+                $keydet['id_detail'] = $keydet['id'];
+                unset($keydet['id']);
+                $this->db->insert('tb_detailgen',$keydet);
+            }
+        }
         return $query;
     }
     public function validasipb($data)

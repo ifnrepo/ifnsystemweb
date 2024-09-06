@@ -20,6 +20,36 @@ $(document).ready(function () {
 				targets: [0],
 				orderable: false,
 			},
+			{
+				className: "text-right",
+				targets: [3],
+				orderable: false,
+			},
+			{
+				className: "text-right",
+				targets: [4],
+				orderable: false,
+			},
+			{
+				className: "text-right",
+				targets: [5],
+				orderable: false,
+			},
+			{
+				className: "text-right",
+				targets: [6],
+				orderable: false,
+			},
+			{
+				className: "text-right",
+				targets: [9],
+				orderable: false,
+			},
+			{
+				className: "text-right",
+				targets: [10],
+				orderable: false,
+			},
 		],
 		drawCallback: function (response) {
 			// var api = this.api();
