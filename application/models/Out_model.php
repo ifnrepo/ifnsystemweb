@@ -15,6 +15,24 @@ class Out_model extends CI_Model{
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
+    public function getdatapcskgs($kode){
+        $arrkondisi = [
+            'id_perusahaan'=>IDPERUSAHAAN,
+            'dept_id' => $kode['dept_id'],
+            'dept_tuju' => $kode['dept_tuju'],
+            'kode_dok' => 'T',
+            'month(tgl)' => $this->session->userdata('bl'),
+            'year(tgl)' => $this->session->userdata('th')
+        ];
+        $this->db->select('sum(tb_detail.pcs) as pcs, sum(tb_detail.kgs) as kgs');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->where($arrkondisi);
+        $this->db->where('tb_header.data_ok',1);
+        // $this->db->where('tb_header.ok_valid',1);
+        $hasil = $this->db->get();
+        return $hasil->row_array();
+    }
     public function getdatabyid($kode){
         $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
         $query = $this->db->get_where('tb_header',['id'=>$kode]);
@@ -62,7 +80,7 @@ class Out_model extends CI_Model{
         WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
         return $hasil;
     }
-    public function adddata(){
+    public function adddata($jn){
         $this->db->trans_start();
         $date = $this->session->userdata('th').'-'.$this->session->userdata('bl').'-'.date('d');
         $nomordok = nomorout($date,$this->session->userdata('deptsekarang'),$this->session->userdata('tujusekarang'));
@@ -72,7 +90,8 @@ class Out_model extends CI_Model{
             'dept_id' => $this->session->userdata('deptsekarang'),
             'dept_tuju' => $this->session->userdata('tujusekarang'),
             'nomor_dok' => $nomordok,
-            'tgl' => $date
+            'tgl' => $date,
+            'jn_bbl' => $jn
         ];
         $this->db->insert('tb_header',$tambah);
         $idheader = $this->db->insert_id();
@@ -93,6 +112,7 @@ class Out_model extends CI_Model{
             $this->db->insert('tb_detail',$que);
             $idnya = $this->db->insert_id();
             $this->helpermodel->isilog($this->db->last_query());
+            $que['id_detail'] = $idnya;
             $this->db->insert('tb_detailgen',$que);
 
             $this->db->where('id',$arrdat[$x]);
@@ -197,6 +217,17 @@ class Out_model extends CI_Model{
         }
         $this->db->where('id_keluar',$id);
         $this->db->update('tb_header',['id_keluar' => 0]);
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+    public function hapusdetailout($id){
+        $this->db->trans_start();
+            $this->db->where('id_detail',$id);
+            $this->db->delete('tb_detmaterial');
+            $this->db->where('id_detail',$id);
+            $this->db->delete('tb_detailgen');
+            $this->db->where('id',$id);
+            $this->db->delete('tb_detail');
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -309,6 +340,14 @@ class Out_model extends CI_Model{
                                 $this->db->set('kgs',$kurangkgs);
                                 $this->db->set('harga',$deta['harga']);
                                 $this->db->where('id',$datdet['id']);
+                                $this->db->update('tb_detailgen');
+
+                                $this->db->set('id_stokdept',$stokid);
+                                $this->db->set('nobontr',$nobontr);
+                                $this->db->set('pcs',$kurangpcs);
+                                $this->db->set('kgs',$kurangkgs);
+                                $this->db->set('harga',$deta['harga']);
+                                $this->db->where('id',$datdet['id_detail']);
                                 $this->db->update('tb_detail');
                             }
                             $pcskurangi = $datdet['pcs'] > 0 ? $kurangpcs : $kurangkgs;
@@ -406,5 +445,36 @@ class Out_model extends CI_Model{
         $hasil = $this->db->update('tb_detail',$update);
         $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
+    }
+    public function simpandetailbarang()
+    {
+        $data = $_POST;
+        unset($data['nama_barang']);
+        $hasil =  $this->db->insert('tb_detail', $data);
+        $idnya = $this->db->insert_id();
+        $this->helpermodel->isilog($this->db->last_query());
+        $data['id_detail'] = $idnya;
+        $hasil =  $this->db->insert('tb_detailgen', $data);
+        $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
+        // Isi data detmaterial
+        $cek = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
+        if ($cek->num_rows() > 0) {
+            foreach ($cek->result_array() as $kec) {
+                $xdata = [
+                    'id_header' => $data['id_header'],
+                    'id_detail' => $idnya['id'],
+                    'id_barang' => $kec['id_barang_bom'],
+                    'persen' => $kec['persen'],
+                    'kgs' => ($kec['persen'] / 100) * $data['kgs']
+                ];
+                $this->db->insert('tb_detmaterial', $xdata);
+                $this->helpermodel->isilog($this->db->last_query());
+            }
+        }
+        if ($hasil) {
+            $this->db->where('id', $data['id_header']);
+            $que = $this->db->get('tb_header')->row_array();
+        }
+        return $que;
     }
 }

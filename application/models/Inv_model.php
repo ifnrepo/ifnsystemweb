@@ -32,13 +32,22 @@ class inv_model extends CI_Model
                     $xcari3 = " AND if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) LIKE '%" . $this->session->userdata('katcari') . "%'";
                 }
             }
+            if($dpt == 'GS'){
+                $noeb1 = " '' as Nobontr";
+                $noeb2 = " '' as Nobontr";
+                $noeb3 = " '' as Nobontr";
+            }else{
+                $noeb1 = "stokdept.nobontr";
+                $noeb2 = "tb_detailgen.nobontr";
+                $noeb3 = "tb_detail.nobontr";
+            }
             $period = substr($tglx, 5, 2) . substr($tglx, 0, 4);
             $tambah1 = "SELECT tgl,null as nomor_dok,mode,po,item,dis,id_barang,nama_barang,spek,nama_kategori,kode,nobontr,insno,harga,kodesatuan,SUM(pcs) AS pcs,SUM(kgs) AS kgs,SUM(pcsin) AS pcsin,
                         SUM(kgsin) AS kgsin,SUM(pcsout) AS pcsout,SUM(kgsout) AS kgsout,idd,idu,user_verif,tgl_verif FROM (";
             $tambah2 = ") pt GROUP BY po,item,dis,id_barang,nobontr,insno";
             $tambah2 .= $dpt == 'GS' ? '' : ",nobontr,insno";
             $hasil = $this->db->query($tambah1 . "SELECT 'SALDO' AS mode,'SA' AS kode_dok,stokdept.id,NULL AS id_header,stokdept.id_barang,stokdept.po,stokdept.item,
-                                        stokdept.dis, stokdept.insno,stokdept.nobontr,stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
+                                        stokdept.dis, stokdept.insno,".$noeb1.",stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
                                         barang.nama_barang,barang.kode,kategori.nama_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,
                                         satuan.kodesatuan,1 AS nome,if(stokdept.po!='',concat(stokdept.po,stokdept.item),barang.kode) AS idd,tb_po.spek,stokdept.id as idu,stokdept.user_verif,stokdept.tgl_verif
                                         FROM stokdept 
@@ -49,7 +58,7 @@ class inv_model extends CI_Model
                                         WHERE periode = '" . $period . "' AND dept_id = '" . $dpt . "'" .$xinv. $xkat . $xcari . "
                                         UNION ALL 
                                         SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detailgen.id,tb_detailgen.id_barang,tb_detailgen.po,
-                                        tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno,tb_detailgen.nobontr,tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,
+                                        tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno,".$noeb2.",tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,
                                         0 AS pcs,0 AS pcsin,tb_detailgen.pcs AS pcsout,0 as kgs,0 as kgsin,tb_detailgen.kgs AS kgsout, satuan.kodesatuan,
                                         3 AS nome,if(tb_detailgen.po!='',concat(tb_detailgen.po,tb_detailgen.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif
                                         FROM tb_detailgen 
@@ -61,7 +70,7 @@ class inv_model extends CI_Model
                                         WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " .$xinv. $xkat . $xcari2 . "
                                         UNION ALL 
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
-                                        tb_detail.insno,tb_detail.nobontr,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
+                                        tb_detail.insno,".$noeb3.",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,2 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif
                                         FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
@@ -69,10 +78,10 @@ class inv_model extends CI_Model
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'IB' AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" .$xinv. $xkat . $xcari3 . "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" .$xinv. $xkat . $xcari3 . "
                                         UNION ALL 
                                         SELECT 'ADJ' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
-                                        tb_detail.insno,tb_detail.nobontr,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
+                                        tb_detail.insno,".$noeb3.",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,3 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif
                                         FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
@@ -139,7 +148,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'IB' AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 
                                         AND tb_header.ok_valid = 1 and tb_detail.id_barang = " . $array['id_barang'] . " and tb_detail.po = '" . $array['po'] . "' and tb_detail.item = '" . $array['item'] . "' and tb_detail.dis = " . $array['dis'] . "
                                         " . $tambah3 . "
                                         UNION ALL 
@@ -158,7 +167,7 @@ class inv_model extends CI_Model
                                         WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 
                                         AND tb_header.ok_valid = 1 and tb_detail.id_barang = " . $array['id_barang'] . " and tb_detail.po = '" . $array['po'] . "' and tb_detail.item = '" . $array['item'] . "' and tb_detail.dis = " . $array['dis'] . "
                                         " . $tambah3 . "
-                                        ORDER BY nome,tgl");
+                                        ORDER BY po,item,dis,nobontr,nome,tgl");
             return $hasil;
         }
     }

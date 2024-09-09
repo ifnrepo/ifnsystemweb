@@ -144,6 +144,8 @@ class Pb_model extends CI_Model
         $this->db->where('id_header', $id);
         $this->db->delete('tb_detmaterial');
         $this->db->where('id_header', $id);
+        $this->db->delete('tb_detailgen');
+        $this->db->where('id_header', $id);
         $this->db->delete('tb_detail');
         $this->db->where('id', $id);
         $this->db->delete('tb_header');
@@ -218,6 +220,8 @@ class Pb_model extends CI_Model
         $cek = $this->db->get_where('tb_detail', ['id' => $id])->row_array();
         $this->db->where('id_detail', $id);
         $hasil = $this->db->delete('tb_detmaterial');
+        $this->db->where('id', $id);
+        $this->db->delete('tb_detailgen');
         $this->db->where('id', $id);
         $this->db->delete('tb_detail');
         $this->helpermodel->isilog($this->db->last_query());

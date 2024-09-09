@@ -22,7 +22,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div id="sisipkan" class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
-              <a href="<?= base_url() . 'out/adddata'; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <!-- <a href="<?= base_url() . 'out/adddata'; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
+              <div class="dropdown">
+                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                  <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
+                  </button>
+                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                  <a class="dropdown-item font-kecil font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/0'; ?>" title="Dari BON Permintaan">Dari BON Permintaan</a>
+                  <a class="dropdown-item font-kecil font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/1'; ?>" title="Tanpa BON Permintaan">Tanpa BON Permintaan</a>
+                  </div>
+              </div>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 mb-0 d-flex flex-row-reverse" style="text-align: right;">
@@ -67,8 +76,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
                 </div>
-                <div class="col-3">
-                  <h4 class="mb-1"></h4>
+                <div class="col-3" style="font-size: 14px;">
+                  <div class="text-pink font-bold mt-2 ">Jumlah Pcs : <?= rupiah($jumlahpcskgs['pcs'],0); ?></div>
+                  <div class="text-pink font-bold">Jumlah Kgs : <?= rupiah($jumlahpcskgs['kgs'],2); ?></div>
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1"></h4>

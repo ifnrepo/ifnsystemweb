@@ -23,6 +23,7 @@
                 <thead style="background-color: blue !important">
                     <tr class="text-center">
                         <th rowspan="2">Tanggal</th>
+                        <th rowspan="2">Nomor IB</th>
                         <th colspan="2">Awal</th>
                         <th colspan="2">In</th>
                         <th colspan="2">Out</th>
@@ -64,6 +65,7 @@
                     ?>
                         <tr>
                             <td class="font-italic text-primary"><?= tgl_indo($det['tgl'], 1); ?></td>
+                            <td><?= $det['nobontr']; ?></td>
                             <td><?= rupiah($saldoawal, 0); ?></td>
                             <td><?= rupiah($saldoawalkgs, 2); ?></td>
                             <td><?= rupiah($det['pcsin'], 0); ?></td>
