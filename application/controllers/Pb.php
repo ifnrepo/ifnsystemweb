@@ -243,7 +243,7 @@ class Pb extends CI_Controller
             $html .= "<tr>";
             $html .= "<td>" . $que['nama_barang'] . "</td>";
             $html .= "<td>" . $que['kode'] . "</td>";
-            $html .= "<td>Satuan</td>";
+            $html .= "<td>-</td>";
             $html .= "<td>";
             $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $que['nama_barang'] . "' rel2='" . $que['id'] . "' rel3=" . $que['id_satuan'] . ">Pilih</a>";
             $html .= "</td>";

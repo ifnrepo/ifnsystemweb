@@ -30,6 +30,7 @@ class Out extends CI_Controller {
             'dept_tuju' => $this->session->userdata('tujusekarang') == null ? '' : $this->session->userdata('tujusekarang'),
         ];
         $data['data'] = $this->out_model->getdata($kode);
+        $data['jumlahpcskgs'] = $this->out_model->getdatapcskgs($kode);
         $footer['fungsi'] = 'out';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('out/out',$data);
@@ -74,8 +75,8 @@ class Out extends CI_Controller {
             $hasil .= "<td><a href='".base_url().'out/getdatadetail/'.$que['id_header']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Detail Barang'>".$que['nama_barang']."</a></td>";
             $hasil .= "<td>".$que['brg_id']."</td>";
             $hasil .= "<td>".$que['namasatuan']."</td>";
-            $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
-            $hasil .= "<td>".rupiah($que['kgsminta'],2)."</td>";
+                $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
+                $hasil .= "<td>".rupiah($que['kgsminta'],2)."</td>";
             $hasil .= "<td class='text-primary'>".rupiah($que['pcs'],0)."</td>";
             $hasil .= "<td class='text-primary'>".rupiah($que['kgs'],2)."</td>";
             if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']!=''){
@@ -89,7 +90,8 @@ class Out extends CI_Controller {
                 $hasil .= "<td class='text-primary font-bold'>".$que['sublok']."</td>";
             }
             $hasil .= "<td>";
-            $hasil .= "<a href=".base_url().'out/editdetailout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
+            $hasil .= "<a href=".base_url().'out/editdetailout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah Qty</a>";
+            $hasil .= "<a href='#' data-href=".base_url().'out/hapusdetailout/'.$que['id'].'/'.$que['id_header']." data-message='Akan menghapus data barang ".$que['nama_barang']."' class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
             $jumlah++;
@@ -106,13 +108,13 @@ class Out extends CI_Controller {
         $data['bon'] = $this->out_model->getbon();
         $this->load->view('out/add_out',$data);
     }
-    public function adddata(){
+    public function adddata($jn){
         if(($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null) && ($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null)){
             $this->session->set_flashdata('errorparam',1);
             $url = base_url().'out';
             redirect($url);
         }else{
-            $hasil = $this->out_model->adddata();
+            $hasil = $this->out_model->adddata($jn);
             if($hasil){
                 $url = base_url().'out/dataout/'.$hasil;
                 redirect($url);
@@ -171,6 +173,7 @@ class Out extends CI_Controller {
     public function dataout($kode){
         $header['header'] = 'transaksi';
         $data['data'] = $this->out_model->getdatabyid($kode);
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
         $data['mode'] = 'tambah';
         $footer['fungsi'] = 'out';
 		$this->load->view('layouts/header',$header);
@@ -199,6 +202,13 @@ class Out extends CI_Controller {
             redirect($url);
         }
     }
+    public function hapusdetailout($id,$head){
+        $query = $this->out_model->hapusdetailout($id);
+        if($query){
+            $url = base_url().'out/dataout/'.$head;
+            redirect($url);
+        }
+    }
     public function viewdetailout($id){
         $data['header'] = $this->out_model->getdatabyid($id);
         $data['detail'] = $this->out_model->getdatadetailout($id);
@@ -220,6 +230,19 @@ class Out extends CI_Controller {
             $url = base_url().'out/dataout/'.$id;
         }
         redirect($url);
+    }
+    public function addspecbarang()
+    {
+        $this->load->view('out/addspecbarang');
+    }
+    public function simpandetailbarang()
+    {
+        $hasil = $this->out_model->simpandetailbarang();
+        if ($hasil) {
+            $kode = $hasil['id'];
+            $url = base_url() . 'out/dataout/' . $kode;
+            redirect($url);
+        }
     }
     function cetakqr2($isi,$id)
 	{

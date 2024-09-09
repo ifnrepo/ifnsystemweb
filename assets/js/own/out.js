@@ -54,6 +54,24 @@ $("#dept_kirim").change(function () {
 // 		getdataout();
 // 	}
 // });
+$("#simpandetailbarang").click(function () {
+	if ($("#id_barang").val() == "") {
+		pesan("Isi / Cari nama barang", "error");
+		return;
+	}
+	if ($("#id_satuan").val() == "") {
+		pesan("Isi Satuan barang", "error");
+		return;
+	}
+	if (
+		($("#pcs").val() == "" || $("#pcs").val() == "0") &&
+		($("#kgs").val() == "" || $("#kgs").val() == "0")
+	) {
+		pesan("Isi Qty atau Kgs", "error");
+		return;
+	}
+	document.formbarangout.submit();
+});
 $("#bl").change(function () {
 	$.ajax({
 		// dataType: "json",
@@ -91,9 +109,7 @@ function getdataout() {
 			dept_tuju: $("#dept_tuju").val(),
 		},
 		success: function (data) {
-			// alert(data);
 			window.location.reload();
-			// $("#body-table").html(data.datagroup).show();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -124,3 +140,20 @@ function getdatadetailout() {
 		},
 	});
 }
+$("#resetdetailbarang").click(function () {
+	$("#id_barang").val("");
+	$("#nama_barang").val("");
+	$("#id_satuan").val("");
+	$("#pcs").val("");
+	$("#kgs").val("");
+	$("#id").val("");
+	$("#keterangan").val("");
+	$("#spekbarangnya").text("");
+	$("#cont-spek").addClass("hilang");
+});
+$("#nama_barang").on("keyup", function (e) {
+	if (e.key === "Enter" || e.keyCode === 13) {
+		$("#caribarang").click();
+		$("#caribarang").focus();
+	}
+});

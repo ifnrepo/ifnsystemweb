@@ -1,7 +1,7 @@
 <?php 
 class Satuanmodel extends CI_Model{
     public function getdata(){
-        $query = $this->db->query("Select * from satuan");
+        $query = $this->db->query("Select * from satuan order by namasatuan");
         return $query;
     }
     public function getdatabyid($id){

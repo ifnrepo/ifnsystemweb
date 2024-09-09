@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          OUT (Perpindahan Barang) # <?= $data['nomor_dok'] ?>
+          <div>OUT (Perpindahan Barang) # <?= $data['nomor_dok'] ?><br><span class="title-dok"><?php if($data['jn_bbl']==1){echo "dengan Bon Permintaan";}else{echo "tanpa Bon Permintaan";} ?></span></div>
         </h2>
       </div>
       <input id="errornya" class="hilang" value="<?= $this->session->flashdata('errornya'); ?>">
@@ -52,7 +52,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-3"></div>
                 <div class="col-3">
                   <div style="position:absolute;bottom:0px;right:10px;">
+                    <?php if($data['jn_bbl']==1){ ?>
                     <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>
+                    <?php } ?>
                   </div>
                 </div>
               </div>
@@ -61,7 +63,62 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div class="row">
-          <div class="col-sm-12">
+          <div class="col-sm-4 mt-1 <?php if($data['jn_bbl']==1){ echo "hilang";} ?>">
+            <form method="post" action="<?= base_url() . 'out/simpandetailbarang'; ?>" name="formbarangout" id="formbarangout">
+              <input type="text" id="id" name="id" value="" class="hilang">
+              <div class="row font-kecil mb-0">
+                <label class="col-2 col-form-label font-kecil required">Spec</label>
+                <div class="col input-group mb-1">
+                  <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
+                  <input type="text" id="id_barang" name="id_barang" class="hilang">
+                  <input type="text" class="form-control font-kecil" id="nama_barang" name="nama_barang" placeholder="Spec Barang">
+                  <a href="<?= base_url() . 'out/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
+                </div>
+              </div>
+              <div class="row font-kecil mb-0 hilang" id="cont-spek">
+                <label class="col-2 col-form-label font-kecil"></label>
+                <div class="col input-group mb-1 text-teal" id="spekbarangnya"></div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label required">Satuan</label>
+                <div class="col">
+                  <select name="id_satuan" id="id_satuan" class="form-control font-kecil form-select">
+                    <option value="">Pilih Satuan</option>
+                    <?php foreach ($satuan as $sat) { ?>
+                      <option value="<?= $sat['id']; ?>"><?= $sat['namasatuan']; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Qty</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil text-right" id="pcs" name="pcs" autocomplete="off" aria-describedby="emailHelp" placeholder="Qty">
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Kgs</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" id="kgs" name="kgs"  autocomplete="off" aria-describedby="emailHelp" placeholder="Kgs">
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Ket</label>
+                <div class="col">
+                  <textarea class="form-control font-kecil" id="keterangan" name="keterangan" placeholder="Keterangan"></textarea>
+                </div>
+              </div>
+            </form>
+            <div class="row">
+              <div class="col-6">
+                <a href="#" class="btn btn-sm btn-primary" style="width:100%" id="simpandetailbarang">Simpan Barang</a>
+              </div>
+              <div class="col-6">
+                <a href="#" class="btn btn-sm btn-danger" style="width:100%" id="resetdetailbarang">Reset Detail</a>
+              </div>
+            </div>
+          </div>
+          <div class="col-sm-<?php if($data['jn_bbl']==1){ echo "12";}else{ echo "8";} ?>">
             <div id="table-default" class="table-responsive">
               <table class="table table-hover datatable6" id="cobasisip">
                 <thead style="background-color: blue !important">
@@ -70,8 +127,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Specific</th>
                     <th>SKU</th>
                     <th>Satuan</th>
+                    <?php if($data['jn_bbl']==1): ?>
                     <th>Qty MINTA</th>
                     <th>Kgs MINTA</th>
+                    <?php endif; ?>
                     <th>Qty REAL</th>
                     <th>Kgs REAL</th>
                     <?php if($this->session->userdata('deptsekarang')=='GM'){ ?>

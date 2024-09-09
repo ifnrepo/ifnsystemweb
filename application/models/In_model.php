@@ -78,7 +78,7 @@ class In_model extends CI_Model{
             $detail = $this->db->get('tb_detail')->result_array();
             foreach($detail as $det){
                 $kondisistok = [
-                    'tgl' => $det['tgl'],
+                    // 'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
                     'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
                     'nobontr' => $det['nobontr'],
@@ -87,7 +87,7 @@ class In_model extends CI_Model{
                     'po' => $det['po'],
                     'item' => $det['item'],
                     'dis' => $det['dis'],
-                    'dl' => $det['dl'],
+                    'dl' => $det['dln'],
                     'nobale' => $det['nobale'],
                     'harga' => $det['harga'] 
                 ];
