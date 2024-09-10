@@ -9,9 +9,13 @@
         <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
         </div>
         <div class="col-4 text-primary font-bold">
-        <span>Dibuat Oleh</span>
-        <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4>
+        <!-- <span>Dibuat Oleh</span>
+        <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4> -->
         </div>
+    </div>
+    <hr class="m-0">
+    <div class="bg-cyan-lt p-1 font-bold">
+        -
     </div>
     <hr class='m-1'>
     <div class="card card-lg">

@@ -84,7 +84,7 @@ class Pb extends CI_Controller
     }
     public function tambahdata()
     {
-        $this->load->view('pb/add_pb');
+            $this->load->view('pb/add_pb');
     }
     public function edittgl()
     {
@@ -303,7 +303,27 @@ class Pb extends CI_Controller
         $tempdir = "temp/";
         $namafile = $id;
         $codeContents = $isi;
-        QRcode::png($codeContents, $tempdir . $namafile . '.png', QR_ECLEVEL_L, 4, 1);
+        $iconpath = "assets/image/BigLogo.png";
+        QRcode::png($codeContents, $tempdir . $namafile . '.png', QR_ECLEVEL_H, 4, 1);
+        $filepath = $tempdir.$namafile.'.png';
+        $QR = imagecreatefrompng($filepath);
+
+        $logo = imagecreatefromstring(file_get_contents($iconpath));
+        $QR_width = imagesx($QR);
+        $QR_height = imagesy($QR);
+    
+        $logo_width = imagesx($logo);
+        $logo_height = imagesy($logo);
+    
+        //besar logo
+        $logo_qr_width = $QR_width/2.5;
+        $scale = $logo_width/$logo_qr_width;
+        $logo_qr_height = $logo_height/$scale;
+    
+        //posisi logo
+        imagecopyresampled($QR, $logo, $QR_width/3.3, $QR_height/2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+    
+        imagepng($QR,$filepath);
         return $tempdir . $namafile;
     }
     public function cetakbon($id)

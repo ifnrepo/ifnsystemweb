@@ -82,10 +82,12 @@
         var x = $(this).attr('rel1');
         var y = $(this).attr('rel2');
         var z = $(this).attr('rel3');
-        $("#nama_barang").val(x);
+        // $("#nama_barang").val(x);
+        $("#spekbarangnya").text(x);
         $("#id_barang").val(y);
         $("#id_satuan").val(z)
         $("#modal-scroll").modal('hide');
+        $("#cont-spek").removeClass('hilang');
     })
     // $("#simpanbarang").click(function(){
         // if($("#id_barang_bom").val() == ''){

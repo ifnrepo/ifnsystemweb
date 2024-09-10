@@ -100,7 +100,7 @@
 	<script src="<?= base_url(); ?>assets/js/own/hargamat.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
-	print_r(json_encode($dataproduksi['data_isi'])); ?>
+	// print_r(json_encode($dataproduksi['data_isi'])); ?>
 	<?php
 	// Untuk Warna Chart Produksi 
 	$pembagi = $dataproduksi['data_prod_bulan_lalu']==0 ? 1 : $dataproduksi['data_prod_bulan_lalu'];

@@ -32,6 +32,7 @@ class Out extends CI_Controller {
         $data['data'] = $this->out_model->getdata($kode);
         $data['jumlahpcskgs'] = $this->out_model->getdatapcskgs($kode);
         $footer['fungsi'] = 'out';
+        $this->session->unset_userdata('barangerror');
 		$this->load->view('layouts/header',$header);
 		$this->load->view('out/out',$data);
 		$this->load->view('layouts/footer',$footer);
@@ -71,8 +72,9 @@ class Out extends CI_Controller {
         $query = $this->out_model->getdatadetailout($id);
         $jumlah=0;
         foreach ($query as $que) {
+            $tandakurang = $this->session->userdata('barangerror')==$que['id_barang'] ? 'text-danger' : '';
             $hasil .= "<tr>";
-            $hasil .= "<td><a href='".base_url().'out/getdatadetail/'.$que['id_header']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Detail Barang'>".$que['nama_barang']."</a></td>";
+            $hasil .= "<td><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang']."'>".$que['nama_barang']."</a></td>";
             $hasil .= "<td>".$que['brg_id']."</td>";
             $hasil .= "<td>".$que['namasatuan']."</td>";
                 $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
@@ -109,7 +111,7 @@ class Out extends CI_Controller {
         $this->load->view('out/add_out',$data);
     }
     public function adddata($jn){
-        if(($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null) && ($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null)){
+        if(($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null) && ($this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null)){
             $this->session->set_flashdata('errorparam',1);
             $url = base_url().'out';
             redirect($url);
@@ -249,7 +251,27 @@ class Out extends CI_Controller {
 		$tempdir = "temp/";
 		$namafile = $id;
 		$codeContents = $isi;
-		QRcode::png($codeContents, $tempdir . $namafile . '.png', QR_ECLEVEL_L, 4,1);
+        $iconpath = "assets/image/BigLogo.png";
+		QRcode::png($codeContents, $tempdir . $namafile . '.png', QR_ECLEVEL_H, 4,1);
+        $filepath = $tempdir.$namafile.'.png';
+        $QR = imagecreatefrompng($filepath);
+
+        $logo = imagecreatefromstring(file_get_contents($iconpath));
+        $QR_width = imagesx($QR);
+        $QR_height = imagesy($QR);
+    
+        $logo_width = imagesx($logo);
+        $logo_height = imagesy($logo);
+    
+        //besar logo
+        $logo_qr_width = $QR_width/2.5;
+        $scale = $logo_width/$logo_qr_width;
+        $logo_qr_height = $logo_height/$scale;
+    
+        //posisi logo
+        imagecopyresampled($QR, $logo, $QR_width/3.3, $QR_height/2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+    
+        imagepng($QR,$filepath);
 		return $tempdir . $namafile;
 	}
     public function cetakbon($id){

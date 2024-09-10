@@ -104,7 +104,7 @@ class In_model extends CI_Model{
                     'po' => $det['po'],
                     'item' => $det['item'],
                     'dis' => $det['dis'],
-                    'dl' => $det['dl'],
+                    'dl' => $det['dln'],
                     'nobale' => $det['nobale'],
                     'harga' => $det['harga'],
                     'pcs_masuk' => $det['pcs'],

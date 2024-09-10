@@ -28,8 +28,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item font-kecil font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/0'; ?>" title="Dari BON Permintaan">Dari BON Permintaan</a>
-                  <a class="dropdown-item font-kecil font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/1'; ?>" title="Tanpa BON Permintaan">Tanpa BON Permintaan</a>
+                  <a class="dropdown-item font-kecil font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/1'; ?>" title="Dari BON Permintaan">Dari BON Permintaan</a>
+                  <a class="dropdown-item font-kecil font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/0'; ?>" title="Tanpa BON Permintaan">Tanpa BON Permintaan</a>
                   </div>
               </div>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
@@ -89,8 +89,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
 
         </div>
-        <div>
-          <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
+        <div class="mt-2">
+          <table id="pbtabel" class="table nowrap order-column datatable" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Tgl</th>

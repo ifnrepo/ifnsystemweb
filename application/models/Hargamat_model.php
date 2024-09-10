@@ -73,9 +73,9 @@ class Hargamat_model extends CI_Model
     }
 
     public function getbarang(){
-        $this->db->select('id_detail');
-        $this->db->from('tb_hargamaterial');
-        $strkondisi = $this->db->get()->result_array();
+        // $this->db->select('id_detail');
+        // $this->db->from('tb_hargamaterial');
+        // $strkondisi = $this->db->get()->result_array();
 
         $this->db->select("*,tb_detail.id as idx");
         $this->db->from('tb_detail');

@@ -131,18 +131,21 @@ class Out_model extends CI_Model{
         $this->db->join('tb_detail d','a.id = d.id_out','left');
         $this->db->join('tb_header e','e.id = d.id_header','left');
         $this->db->where('a.id_header',$data);
-        return $this->db->get()->result_array();
+        return $this->db->get()->result_array();    
     }
     public function getdatadetailout($data){
+        // $ini = $this->session->flashdata('barangerror')=='' ? "''" : $this->session->flashdata('barangerror');
+        $ini = 7184;
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
+        $this->db->select($ini.' as baer');
         $this->db->from('tb_detail a');
         $this->db->join('satuan b','b.id = a.id_satuan','left');
         $this->db->join('barang c','c.id = a.id_barang','left');
         $this->db->join('tb_detail d','a.id = d.id_out','left');
         $this->db->join('tb_header e','e.id = d.id_header','left');
-        $this->db->where('a.id_header',$data);
+        $this->db->where('a.id_header'.$this->session->flashdata('barangerror'),$data);
         return $this->db->get()->result_array();
     }
     public function getdatadetailoutbyid($data){
@@ -161,6 +164,8 @@ class Out_model extends CI_Model{
         return $query;
     }
     public function updatedetail($data){
+        $this->db->where('id_detail',$data['id']);
+        $this->db->update('tb_detailgen',$data);
         $this->db->where('id',$data['id']);
         $query = $this->db->update('tb_detail',$data);
         return $query;
@@ -222,6 +227,9 @@ class Out_model extends CI_Model{
     }
     public function hapusdetailout($id){
         $this->db->trans_start();
+            $this->db->where('id_out',$id);
+            $this->db->update('tb_detail',['id_out'=>0]);
+
             $this->db->where('id_detail',$id);
             $this->db->delete('tb_detmaterial');
             $this->db->where('id_detail',$id);
@@ -232,6 +240,7 @@ class Out_model extends CI_Model{
         return $hasil;
     }
     public function simpanheaderout($id){
+        $this->session->unset_userdata('barangerror');
         $iniquery = false;
         $this->db->trans_begin();
         $datadetail = $this->db->get_where('tb_detailgen',['id_header'=>$id]);
@@ -323,8 +332,12 @@ class Out_model extends CI_Model{
                             if($loopke > 1){
                                 // insert ke tabel detail apabila stokdept menguragi 2 rekord
                                 unset($datdet['id']);
+                                unset($datdet['id_detail']);
                                 $this->db->insert('tb_detail',$datdet);
                                 $idinsert = $this->db->insert_id();
+                                $this->db->insert('tb_detailgen',$datdet);
+                                $idinsertx = $this->db->insert_id();
+
                                 $this->db->set('id_stokdept',$stokid);
                                 $this->db->set('nobontr',$nobontr);
                                 $this->db->set('pcs',$kurangpcs);
@@ -332,6 +345,14 @@ class Out_model extends CI_Model{
                                 $this->db->set('harga',$deta['harga']);
                                 $this->db->where('id',$idinsert);
                                 $this->db->update('tb_detail');
+
+                                $this->db->set('id_stokdept',$stokid);
+                                $this->db->set('nobontr',$nobontr);
+                                $this->db->set('pcs',$kurangpcs);
+                                $this->db->set('kgs',$kurangkgs);
+                                $this->db->set('harga',$deta['harga']);
+                                $this->db->where('id',$idinsertx);
+                                $this->db->update('tb_detailgen');
                             }else{
                                 // update id_stokdept di tabel detail 
                                 $this->db->set('id_stokdept',$stokid);
@@ -357,6 +378,7 @@ class Out_model extends CI_Model{
                         $iniquery = true;
                         $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
                         $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. '('.$hasilnya['kode'].')');
+                        $this->session->set_userdata('barangerror',$datdet['id_barang']);
                         break;
                     }
                 }
@@ -382,11 +404,21 @@ class Out_model extends CI_Model{
                 $bbl['id'] = null;
                 $this->db->insert('tb_detail',$bbl);
                 $iddetail = $this->db->insert_id();
+                $bbl['id_detail'] = $iddetail;
+                $this->db->insert('tb_detailgen',$bbl);
+                $iddetail2 = $this->db->insert_id();
+
                 $this->db->set('id_header',$idheader);
                 $this->db->set('pcs',$isidetail['pcs'].'- pcs',FALSE);
                 $this->db->set('kgs',$isidetail['kgs'].'- kgs',FALSE);
                 $this->db->where('id',$iddetail);
                 $this->db->update('tb_detail');
+
+                $this->db->set('id_header',$idheader);
+                $this->db->set('pcs',$isidetail['pcs'].'- pcs',FALSE);
+                $this->db->set('kgs',$isidetail['kgs'].'- kgs',FALSE);
+                $this->db->where('id',$iddetail2);
+                $this->db->update('tb_detail2');
             }
         }
         //Hapus data detail awal yang pcs nya 0 dan masuk ke A

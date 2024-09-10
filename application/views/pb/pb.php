@@ -22,7 +22,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
-              <a href="<?= base_url() . 'pb/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <?php $disab=''; if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null){ $disab = 'disabled';} ?>
+              <a href="<?= base_url() . 'pb/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm <?= $disab; ?>" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
@@ -90,7 +91,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <h4 class="mb-1"></h4>
                 </div>
                 <div class="col-2">
-                  <h4 class="mb-1"></h4>
+                  <h4 class="mb-1">
+                    <?php if($disab!=''){ ?>
+                    <small class="text-pink text-center">Tekan <b>GO</b> untuk mengaktifkan Tombol Tambah Data</small>
+                    <?php } ?>
+                  </h4>
                 </div>
               </div>
               <!-- <div class="hr m-1"></div> -->

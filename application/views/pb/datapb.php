@@ -66,6 +66,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <a href="<?= base_url() . 'pb/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</a>
                 </div>
               </div>
+              <div class="row font-kecil mb-0 hilang" id="cont-spek">
+                <label class="col-2 col-form-label font-kecil"></label>
+                <div class="col input-group mb-1 text-teal" id="spekbarangnya"></div>
+              </div>
               <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label required">Satuan</label>
                 <div class="col">

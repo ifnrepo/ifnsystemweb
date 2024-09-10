@@ -75,7 +75,7 @@ class In extends CI_Controller {
                 $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
             }
             $hasil .= "<td>".$jmlrek."</td>";
-            $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
+            $hasil .= "<td style='line-height: 12px'>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;' class='text-secondary'>".tglmysql2($que['tgl_ok'])."</span></td>";
             $hasil .= "<td class='font-kecil'>".$kete."</td>";
             $hasil .= "<td>";
             if($que['ok_valid']==0){
