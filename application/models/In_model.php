@@ -152,7 +152,7 @@ class In_model extends CI_Model{
             // for($x=0;$x<=strlen($query['pengeluaran'])/2;$x++){
             //     array_push($xkode,substr($query['pengeluaran'],($x*2)-2,2));
             // }
-            $this->db->where_in('dept_id',arrdep($query['pengeluaran']));
+            $this->db->where_in('dept_id',arrdep($query['penerimaan']));
             $this->db->order_by('departemen','asc');
             $hasil = $this->db->get('dept');
         }

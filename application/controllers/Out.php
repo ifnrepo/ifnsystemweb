@@ -264,12 +264,12 @@ class Out extends CI_Controller {
         $logo_height = imagesy($logo);
     
         //besar logo
-        $logo_qr_width = $QR_width/2.5;
+        $logo_qr_width = $QR_width/4.3;
         $scale = $logo_width/$logo_qr_width;
         $logo_qr_height = $logo_height/$scale;
     
         //posisi logo
-        imagecopyresampled($QR, $logo, $QR_width/3.3, $QR_height/2.5, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+        imagecopyresampled($QR, $logo, $QR_width/2.7, $QR_height/2.7, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
     
         imagepng($QR,$filepath);
 		return $tempdir . $namafile;
