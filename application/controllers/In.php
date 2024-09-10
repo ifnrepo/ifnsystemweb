@@ -75,7 +75,7 @@ class In extends CI_Controller {
                 $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
             }
             $hasil .= "<td>".$jmlrek."</td>";
-            $hasil .= "<td>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;'>".tglmysql2($que['tgl_ok'])."</span></td>";
+            $hasil .= "<td style='line-height: 12px'>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;' class='text-secondary'>".tglmysql2($que['tgl_ok'])."</span></td>";
             $hasil .= "<td class='font-kecil'>".$kete."</td>";
             $hasil .= "<td>";
             if($que['ok_valid']==0){
@@ -169,7 +169,27 @@ class In extends CI_Controller {
 		$tempdir = "temp/";
 		$namafile = $id;
 		$codeContents = $isi;
-		QRcode::png($codeContents, $tempdir . $namafile . '.png', QR_ECLEVEL_L, 4,1);
+        $iconpath = "assets/image/BigLogo.png";
+		QRcode::png($codeContents, $tempdir . $namafile . '.png', QR_ECLEVEL_H, 4,1);
+        $filepath = $tempdir.$namafile.'.png';
+        $QR = imagecreatefrompng($filepath);
+
+        $logo = imagecreatefromstring(file_get_contents($iconpath));
+        $QR_width = imagesx($QR);
+        $QR_height = imagesy($QR);
+    
+        $logo_width = imagesx($logo);
+        $logo_height = imagesy($logo);
+    
+        //besar logo
+        $logo_qr_width = $QR_width/4.3;
+        $scale = $logo_width/$logo_qr_width;
+        $logo_qr_height = $logo_height/$scale;
+    
+        //posisi logo
+        imagecopyresampled($QR, $logo, $QR_width/2.7, $QR_height/2.7, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+    
+        imagepng($QR,$filepath);
 		return $tempdir . $namafile;
 	}
     public function cetakbon($id){
@@ -206,7 +226,7 @@ class In extends CI_Controller {
         $pdf->ln(1);
         $header = $this->out_model->getdatabyid($id);
         $isi = 'Nobon '.$header['nomor_dok']."\r\n".'Dikeluarkan Oleh : '.datauser($header['user_ok'],'name').'@'."\r\n".tglmysql2($header['tgl_ok']);
-        $isi .= "\r\n".'Diterima Oleh : '.datauser($header['user_tuju'],'name').'@'."\r\n".tglmysql2($header['tgl_tuju']);
+        $isi .= "\r\n".'Diterima Oleh : '.datauser($header['user_valid'],'name').'@'."\r\n".tglmysql2($header['tgl_valid']);
         $qr = $this->cetakqr2($isi,$header['id']);
         $pdf->Image($qr.".png",177,30,18);
 		$pdf->SetFont('Lato','',10);

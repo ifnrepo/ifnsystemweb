@@ -48,22 +48,6 @@ $("#dept_kirim").change(function () {
 		},
 	});
 });
-// $("#dept_tuju").change(function () {
-// 	$("#adddatapb").removeClass("disabled");
-// 	$("#level").removeClass("bg-primary");
-// 	$("#level").removeClass("bg-success");
-// 	if ($("#level").val() <= 1) {
-// 		$("#level").addClass("bg-primary");
-// 	} else {
-// 		$("#level").addClass("bg-success");
-// 	}
-// 	var ix = $(this).val();
-// 	if (ix != null) {
-// 		getdatapb();
-// 	} else {
-// 		$("#adddatapb").addClass("disabled");
-// 	}
-// });
 $("#simpandetailbarang").click(function () {
 	if ($("#id_barang").val() == "") {
 		pesan("Isi / Cari nama barang", "error");
@@ -99,6 +83,7 @@ $("#resetdetailbarang").click(function () {
 	$("#kgs").val("");
 	$("#id").val("");
 	$("#keterangan").val("");
+	$("#cont-spek").addClass("hilang");
 });
 $("#nama_barang").on("keyup", function (e) {
 	if (e.key == "Enter" || e.keycode === 13) {

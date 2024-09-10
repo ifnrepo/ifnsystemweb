@@ -126,9 +126,20 @@ class Pb_model extends CI_Model
     public function getspecbarang($mode, $spec)
     {
         if ($mode == 0) {
-            $this->db->like('nama_barang', $spec);
-            $this->db->order_by('nama_barang', 'ASC');
-            $query = $this->db->get_where('barang', array('act' => 1))->result_array();
+            $pek = explode(' ',$spec);
+            $spekjadi= '';
+            if(count($pek)>0){
+                for($x=0;$x<count($pek);$x++){
+                    $spekjadi .= $pek[$x].'%';
+                }
+            }else{
+                $spekjadi = $spec.'%';
+            }
+            $queryx = $this->db->query("Select * from barang where nama_barang like '%".substr($spekjadi,0,strlen($spekjadi)-1)."%' and act=1 order by nama_barang ");
+            // $this->db->like('nama_barange', substr($spekjadi,0,strlen($spekjadi)-1));
+            // $this->db->order_by('nama_barang', 'ASC');
+            // $query = $this->db->get_where('barang', array('act' => 1))->result_array();
+            $query = $queryx->result_array();
         } else {
             $this->db->like('kode', $spec);
             $this->db->order_by('kode', 'ASC');
