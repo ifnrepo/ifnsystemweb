@@ -390,16 +390,24 @@ class Out_model extends CI_Model{
         // Cek data temp yang akan dibuat BBL
         $datacekbbl = $this->db->get_where('tb_detail',['id_header'=>$id,'tempbbl'=>1]);
         if($datacekbbl->num_rows() > 0){
-            $this->db->select('id_perusahaan,kode_dok,dept_id,dept_tuju,nomor_dok,tgl,data_ok,ok_tuju,ok_valid,tgl_ok,tgl_tuju,user_ok,user_tuju');
-            $this->db->from('tb_header');
-            $this->db->where('id_keluar',$id);  
-            $isiheader = $this->db->get();
-            $hasilheader = $this->db->insert_batch('tb_header',$isiheader->result_array());
-            $idheader = $this->db->insert_id();
-            $xisiheader = $isiheader->row_array();
-            $this->db->where('id',$idheader);
-            $this->db->update('tb_header',['nomor_dok' => $xisiheader['nomor_dok'].'-A']);
+            $ceknomordok = '';
             foreach ($datacekbbl->result_array() as $bbl) {
+                $this->db->select('id_perusahaan,kode_dok,dept_id,dept_tuju,nomor_dok,tgl,data_ok,ok_tuju,ok_valid,tgl_ok,tgl_tuju,user_ok,user_tuju');
+                $this->db->from('tb_header');
+                $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
+                $this->db->where('tb_detail.id',$bbl['id_minta']);  
+                $isiheader = $this->db->get();
+                $xisiheader = $isiheader->row_array();
+                if($ceknomordok != $xisiheader['nomor_dok']){
+                    $hasilheader = $this->db->insert_batch('tb_header',$isiheader->result_array());
+                    $idheader = $this->db->insert_id();
+                    $this->db->where('id',$idheader);
+                    $this->db->update('tb_header',['nomor_dok' => $xisiheader['nomor_dok'].'-A']);
+                    $ceknomordok = $xisiheader['nomor_dok'];
+                }else{
+                    $idheader = $xisiheader['id'];
+                }
+
                 $isidetail = $this->db->get_where('tb_detail',['id' => $bbl['id_minta']])->row_array();
                 $bbl['id'] = null;
                 $this->db->insert('tb_detail',$bbl);
@@ -418,7 +426,7 @@ class Out_model extends CI_Model{
                 $this->db->set('pcs',$isidetail['pcs'].'- pcs',FALSE);
                 $this->db->set('kgs',$isidetail['kgs'].'- kgs',FALSE);
                 $this->db->where('id',$iddetail2);
-                $this->db->update('tb_detail2');
+                $this->db->update('tb_detailgen');
             }
         }
         //Hapus data detail awal yang pcs nya 0 dan masuk ke A
