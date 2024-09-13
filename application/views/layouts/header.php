@@ -327,7 +327,7 @@
   </div> -->
   <div class="page">
     <!-- Sidebar -->
-    <aside class="navbar navbar-vertical navbar-expand-lg" data-bs-theme="dark">
+    <aside class="navbar navbar-vertical navbar-expand-lg d-print-none" data-bs-theme="dark">
       <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#sidebar-menu" aria-controls="sidebar-menu" aria-expanded="false" aria-label="Toggle navigation">
           <span class="navbar-toggler-icon"></span>
@@ -338,7 +338,7 @@
           </a>
         </h1>
         <div class="hr mt-2 mb-0"></div>
-        <div class="navbar-nav flex-row d-lg-none">
+        <div class="navbar-nav flex-row d-lg-none d-print-none">
           <div class="d-none d-lg-flex">
             <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
               <!-- Download SVG icon from http://tabler-icons.io/i/moon -->

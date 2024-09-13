@@ -17,7 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </a>
         <button type="button" class="btn btn-primary btn-sm" onclick="javascript:window.print();">
           <i class="fa fa-print mr-1"></i>
-          Print Invoice
+          Print
         </button>
       </div>
     </div>
