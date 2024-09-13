@@ -123,7 +123,7 @@ class Ib_model extends CI_Model
         return $hasil;
     }
     public function getbarangib($sup=''){
-        $this->db->select('*,tb_detail.id as iddetbbl,d.nomor_dok as nodok');
+        $this->db->select('tb_detail.*,tb_detail.id as iddetbbl,a.nomor_dok as nodok,b.nama_barang,d.dept_id');
         $this->db->from('tb_detail');
         $this->db->join('tb_header a','a.id = tb_detail.id_header','left');
         $this->db->join('barang b','b.id = tb_detail.id_barang','left');
@@ -168,6 +168,7 @@ class Ib_model extends CI_Model
             $arrdat = $data['data'];
             $detail = $this->db->where('id', $arrdat[$x])->get('tb_detail')->row_array();
             $header = $this->db->where('id',$detail['id_header'])->get('tb_header')->row_array();
+            $headerx = $this->db->where('id',$id)->get('tb_header')->row_array();
             $isi = [
                 'id_header' => $id,
                 'seri_barang' => $x,
@@ -176,7 +177,7 @@ class Ib_model extends CI_Model
                 'kgs' => $detail['kgs'],
                 'pcs' => $detail['pcs'],
                 'harga' => $detail['harga'],
-                'nobontr' => $header['nomor_dok']
+                'nobontr' => $headerx['nomor_dok']
             ];
             $this->db->insert('tb_detail', $isi);
             $this->helpermodel->isilog($this->db->last_query());

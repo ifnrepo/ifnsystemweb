@@ -72,8 +72,8 @@ class Po_model extends CI_Model
             'tgl' => $date
         ];
         $this->db->insert('tb_header', $tambah);
-        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->insert_id();
+        $this->helpermodel->isilog($this->db->last_query());
         $catatan = [
          'id_header' => $hasil,
          'header_po' => 'Berdasarkan surat penawaran dari [namasupplier] tanggal [tgl], maka kami memesan barang-barang sebagai berikut :'
@@ -143,8 +143,8 @@ class Po_model extends CI_Model
                 'pcs' => $detail['pcs']
             ];
             $this->db->insert('tb_detail',$isi);
-            $this->helpermodel->isilog($this->db->last_query());
             $idsimpan = $this->db->insert_id();
+            $this->helpermodel->isilog($this->db->last_query());
             $this->db->where('id',$arrdat[$x])->update('tb_detail',['id_po'=>$idsimpan]);
             $itembarang = $this->db->where('id_header',$id)->get('tb_detail')->num_rows();
             $this->db->where('id',$id)->update('tb_header',['jumlah_barang'=>$itembarang]);

@@ -31,7 +31,7 @@
                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
                         <?php $no=0; foreach($datadetail->result_array() as $detail){ $no++; ?>
                             <tr class="font-kecil">
-                                <td><?= $detail['nomor_dok']; ?></td>
+                                <td><?= $detail['nodok']; ?></td>
                                 <td><?= $detail['nama_barang']; ?></td>
                                 <td><?= rupiah($detail['pcs'],0); ?></td>
                                 <td><?= rupiah($detail['kgs'],2); ?></td>
