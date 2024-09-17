@@ -68,7 +68,7 @@ $("#butgo").click(function () {
 });
 $("#jn_ib").change(function () {
 	var isinya =
-		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
+		'<span class="text-primary"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Loading ...</span>';
 	$("#loadview").html(isinya);
 	$.ajax({
 		dataType: "json",
@@ -76,6 +76,29 @@ $("#jn_ib").change(function () {
 		url: base_url + "ib/updatebykolom/jn_ib",
 		data: {
 			isinya: $(this).val(),
+			id: $("#id_header").val(),
+		},
+		success: function (data) {
+			$("#loadview").html("");
+			window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
+$("#tanpa_bc").click(function () {
+	var isinya =
+		'<span class="text-primary"><div class="spinner-border spinner-border-sm text-primary" role="status"></div> Loading ...</span>';
+	$("#loadview").html(isinya);
+	var ikeh = $(this).is(":checked") ? 1 : 0;
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "ib/updatebykolom/tanpa_bc",
+		data: {
+			isinya: ikeh,
 			id: $("#id_header").val(),
 		},
 		success: function (data) {
@@ -262,24 +285,28 @@ function getdatadetailib() {
 	});
 }
 $("#xsimpanib").click(function () {
+	var ikeh = $("#tanpa_bc").is(":checked") ? 1 : 0;
 	if ($("#nomor_sj").val() == "" || $("#tgl_sj").val() == "") {
 		pesan("Nomor/Tgl Surat jalan belum diisi !", "info");
 		return false;
 	}
-	if ($("#jns_bc").val() == "") {
-		pesan("Jenis BC belum di isi !", "info");
-		return false;
+	// if($("#tanpa_bc").is(":checked"))
+	if (ikeh == 0) {
+		if ($("#jns_bc").val() == "") {
+			pesan("Jenis BC belum di isi !", "info");
+			return false;
+		}
+		if ($("#nomor_aju").val() == "" || $("#tgl_aju").val() == "") {
+			pesan("Nomor/Tgl AJU belum di isi !", "info");
+			return false;
+		}
+		if ($("#nomor_bc").val() == "" || $("#tgl_bc").val() == "") {
+			pesan("Nomor/Tgl BC belum di isi !", "info");
+			return false;
+		}
 	}
-	if ($("#nomor_aju").val() == "" || $("#tgl_aju").val() == "") {
-		pesan("Nomor/Tgl AJU belum di isi !", "info");
-		return false;
-	}
-	if ($("#nomor_bc").val() == "" || $("#tgl_bc").val() == "") {
-		pesan("Nomor/Tgl BC belum di isi !", "info");
-		return false;
-	}
-	if ($("#totalharga").val() == "") {
-		pesan("Harga ada yang kosong !", "info");
+	if ($("#jmlrek").val() == "0") {
+		pesan("Barang kosong !", "info");
 		return false;
 	}
 	$("#carisimpanib").click();

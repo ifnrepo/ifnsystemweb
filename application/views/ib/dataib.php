@@ -45,6 +45,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         } ?>>CASH</option>
                     </select>
                   </div>
+                  <hr class="m-1">
+                  <label class="form-check pt-2 pb-2 bg-pink-lt font-bold" style="padding-right: 15px !important">
+                    <input class="form-check-input" type="checkbox" id="tanpa_bc" <?php if($data['tanpa_bc']==1){ echo "checked"; } ?> >
+                    <span class="form-check-label">Tanpa BC</span>
+                  </label>
                   <div style="position:absolute;bottom:0px;left:10px;">
                     <div class="dropdown <?php if ($data['jn_ib'] == 0) {
                                             echo "hilang";
