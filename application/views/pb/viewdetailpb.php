@@ -83,7 +83,24 @@
                 <?php if(count($riwayat) > 0):  ?>
                     <ul>
                         <?php foreach ($riwayat as $riw) { ?>
-                            <li><?= $riw; ?></li>
+                            <?php if(is_array($riw)){ ?>
+                                <hr class="m-1">
+                                <ul>
+                                    <?php foreach ($riw as $raw) { ?>
+                                        <?php if(is_array($raw)){ ?>
+                                            <ul>
+                                                <?php foreach ($raw as $ruw) { ?>
+                                                    <li><?= $ruw; ?></li>
+                                                <?php } ?>
+                                            </ul>
+                                        <?php }else{ ?>
+                                            <li><?= $raw; ?></li>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </ul>
+                            <?php }else{ ?>
+                                <li><?= $riw; ?></li>
+                            <?php } ?>
                         <?php } ?>
                     </ul>
                 <?php endif; ?>

@@ -30,19 +30,61 @@ class Helper_model extends CI_Model
         $cek = $this->db->get('tb_header')->row_array();
         $hasil = [];
         if($cek['data_ok']==1){
-            $kata = 'Dokumen dibuat oleh '.datauser($cek['user_ok'],'name').' on '.tglmysql2($cek['tgl_ok']);
+            $kata = 'Dokumen DIBUAT oleh '.datauser($cek['user_ok'],'name').' on '.tglmysql2($cek['tgl_ok']);
             array_push($hasil,$kata);
         }
         if($cek['ok_valid']==1){
-            $kata = 'Dokumen disetujui oleh '.datauser($cek['user_valid'],'name').' on '.tglmysql2($cek['tgl_valid']);
+            $kata = 'Dokumen DISETUJUI oleh '.datauser($cek['user_valid'],'name').' on '.tglmysql2($cek['tgl_valid']);
             array_push($hasil,$kata);
         }
         // Cek detail barang 
         $this->db->where('id_header',$id);
         $detail = $this->db->get('tb_detail');
+        $hasil2 = [];
         foreach($detail->result_array() as $det){
-            
+            $barang = $this->db->get_where('barang',['id'=>$det['id_barang']])->row_array();
+            $kata = $barang['nama_barang'];
+            array_push($hasil2,$kata);
+            $hasil3 = [];
+            for($ke=0;$ke <= 3;$ke++){
+                // 0 : cek data BBL
+                // 1 : cek data PO
+                // 2 : cek data IB
+                // 3 : cek data OUT
+                switch ($ke) {
+                    case 0:
+                        $fid = 'id_bbl';
+                        $fed = 'BBL No. ';
+                        break;
+                    case 1:
+                        $fid = 'id_po';
+                        $fed = 'PO No. ';
+                        break;
+                    case 2:
+                        $fid = 'id_ib';
+                        $fed = 'IB No. ';
+                        break;
+                    case 3:
+                        $fid = 'id_out';
+                        $fed = 'OUT No. ';
+                        break;
+                }
+                if($det[$fid]!=0){
+                    $isifield = $det[$fid];
+                    $this->db->select('tb_header.*');
+                    $this->db->from('tb_header');
+                    $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
+                    $this->db->where('tb_detail.id',$isifield);
+                    $isinya = $this->db->get()->row_array();
+
+                    array_push($hasil3,$fed.$isinya['nomor_dok']);
+                }else{
+                    array_push($hasil3,$fed.'-');
+                }
+            }
+            array_push($hasil2,$hasil3);
         }
+        array_push($hasil,$hasil2);
         return $hasil;
     }
     public function dataproduksi(){
@@ -81,6 +123,12 @@ class Helper_model extends CI_Model
     public function cekclosebook($periode){
         $this->db->where('periode',$periode);
         $hasil = $this->db->get('tb_lockinv')->num_rows();
+        return $hasil;
+    }
+    public function cekdetout($header){
+        $this->db->where('id_out',0);
+        $this->db->where('id_header',$header);
+        $hasil = $this->db->get('tb_detail')->num_rows();
         return $hasil;
     }
 }

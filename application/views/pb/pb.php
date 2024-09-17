@@ -141,6 +141,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $usersetuju = substr(datauser($datdet['user_valid'], 'name'), 0, 35);
                   $tglsetuju = tglmysql2($datdet['tgl_valid']);
                 }
+                if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 1) {
+                  $cekdetout = cekdetout($datdet['id']);
+                  $tunggukonfirmasi = $cekdetout;
+                }
               ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>

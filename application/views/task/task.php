@@ -97,10 +97,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <tr>
                 <td><?= tglmysql($datpb['tgl']); ?></td>
                 <td><a href="<?= $viewdetail ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail"><?= $datpb['nomor_dok']; ?></a></td>
-                <td class="font-bold font-kecil text-success"><?php if ($datpb['bbl_pp'] == 1) {
-                                                    echo "P";
+                <td class="font-bold font-kecil"><?php if ($datpb['bbl_pp'] == 1) {
+                                                    echo "<span class='text-success'>P</span>";
                                                   } ?><?php if ($datpb['bbl_pp'] == 2) {
-                                                    echo "Ut";
+                                                    echo "<span class='text-success'>UT</span>";
                                                   } ?></td>
                 <td class="font-bold font-kecil"><?php if ($datpb['pb_sv'] == 1 || $datpb['bbl_sv'] == 1) {
                                                     echo "<span class='text-danger'>Sv</span>";

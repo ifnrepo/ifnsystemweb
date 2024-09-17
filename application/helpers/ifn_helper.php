@@ -491,3 +491,16 @@ function toAngka($rp)
 {
     return str_replace(',', '', $rp);
 }
+function cekdetout($header)
+{
+    $isi = '';
+    $CI = &get_instance();
+    // $periode = kodebulan($CI->session->userdata('bl')) . $CI->session->userdata('th');
+    $hasil = $CI->helpermodel->cekdetout($header);
+    if ($hasil != 0) {
+        $isi = '<span  class="badge badge-outline text-green">OPEN</span>';
+    }else{
+        $isi = '<span  class="badge badge-outline text-red">CLOSED</span>';
+    }
+    return $isi;
+}

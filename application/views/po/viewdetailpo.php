@@ -1,118 +1,134 @@
 <div class="container-xl"> 
-    <?php $kensel = $header['ok_valid']==2 ? 'text-danger' : 'text-primary'; ?>
-    <div class="row mb-1">
-        <div class="col-4 <?= $kensel; ?> font-bold">
-            <span>Nomor</span>
-            <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
-            <hr class="m-0">
-            <div class="font-kecil p-1 bg-teal-lt">
-                Supplier <br>
-                <div style="font-weight: normal;">
-                    <?= $header['id_pemasok'].' - '.$header['namasupplier']; ?><br>
-                    <?= $header['alamat']; ?><br>
-                    Attn. <?= $header['kontak']; ?>
+    <div class="card-header font-kecil">
+        <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+            <li class="nav-item">
+            <a href="#tabs-home-8" class="nav-link bg-teal-lt active btn-flat" data-bs-toggle="tab">View Dokumen</a>
+            </li>
+            <li class="nav-item">
+            <a href="#tabs-profile-8" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Riwayat Dokumen</a>
+            </li>
+        </ul>
+    </div>
+    <div class="card-body">
+        <div class="tab-content">
+            <div class="tab-pane fade active show p-2" id="tabs-home-8">
+                <?php $kensel = $header['ok_valid']==2 ? 'text-danger' : 'text-primary'; ?>
+                <div class="row mb-1">
+                    <div class="col-4 <?= $kensel; ?> font-bold">
+                        <span>Nomor</span>
+                        <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
+                        <hr class="m-0">
+                        <div class="font-kecil p-1 bg-teal-lt">
+                            Supplier <br>
+                            <div style="font-weight: normal;">
+                                <?= $header['id_pemasok'].' - '.$header['namasupplier']; ?><br>
+                                <?= $header['alamat']; ?><br>
+                                Attn. <?= $header['kontak']; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 <?= $kensel; ?> font-bold">
+                        <span>Tanggal</span>
+                        <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
+                        <hr class="m-0">
+                        <div class="font-kecil p-1 bg-red-lt">
+                            Informasi <br>
+                            <div style="font-weight: normal;">
+                                Tgl rencana datang : <?= $header['tgl_dtb']; ?><br>
+                                Jenis Bayar : <?= $header['jenis_pembayaran']; ?><br>
+                                <?= $header['mt_uang'].' - '.$header['detterm']; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-4 <?= $kensel; ?> font-bold">
+                    <span>Dibuat Oleh</span>
+                    <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4>
+                    </div>
                 </div>
-            </div>
-        </div>
-        <div class="col-4 <?= $kensel; ?> font-bold">
-            <span>Tanggal</span>
-            <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
-            <hr class="m-0">
-            <div class="font-kecil p-1 bg-red-lt">
-                Informasi <br>
-                <div style="font-weight: normal;">
-                    Tgl rencana datang : <?= $header['tgl_dtb']; ?><br>
-                    Jenis Bayar : <?= $header['jenis_pembayaran']; ?><br>
-                    <?= $header['mt_uang'].' - '.$header['detterm']; ?>
+                <hr class='m-1'>
+                <div class="card card-lg">
+                    <div class="card-body p-2">
+                        <div class="font-kecil mb-1">
+                            <?= $header['header_po']; ?>
+                        </div>
+                        <table class="table datatable6 table-hover" id="cobasisip">
+                            <thead style="background-color: blue !important">
+                                <tr>
+                                <!-- <th>No</th> -->
+                                <th>Specific</th>
+                                <th>SKU</th>
+                                <th>Satuan</th>
+                                <th>Qty</th>
+                                <th>Kgs</th>
+                                <th>Harga</th>
+                                <th>Total</th>
+                                <th>Keterangan</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
+                            <?php foreach ($detail as $val) { $tampil = $val['pcs']==0 ? $val['kgs'] : $val['pcs']; ?>
+                                <tr>
+                                    <td><?= $val['nama_barang']; ?></td>
+                                    <td><?= $val['brg_id']; ?></td>
+                                    <td><?= $val['namasatuan']; ?></td>
+                                    <td><?= rupiah($val['pcs'],0); ?></td>
+                                    <td><?= rupiah($val['kgs'],2); ?></td>
+                                    <td><?= rupiah($val['harga'],2); ?></td>
+                                    <td><?= rupiah($val['harga']*$tampil,2); ?></td>
+                                    <td><?= $val['keter']; ?></td>
+                                </tr>
+                            <?php } ?>
+                            </tbody>
+                        </table>
+                        <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
+                    </div>
                 </div>
+                <hr class="m-1">
+                <div class="row">
+                    <div class="col-sm-6">
+                        Catatan :
+                        <ul>
+                            <li> <?= $header['catatan1']; ?></li>
+                            <li> <?= $header['catatan2']; ?></li>
+                            <li> <?= $header['catatan3']; ?></li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        Harga Total :<br>
+                        Diskon :<br>
+                        Total :<br>
+                        PPN <?= rupiah($header['cekppn'],0).'%'; ?>:<br>
+                        PPh :<br>
+                        Jumlah :
+                    </div>
+                    <div class="col-sm-3 text-right">
+                        <strong><?= rupiah($header['totalharga'],2); ?></strong><br>
+                        <strong><?= rupiah($header['diskon'],2); ?></strong><br>
+                        <strong><?= rupiah($header['totalharga']-$header['diskon'],2); ?></strong><br>
+                        <strong><?= rupiah($header['ppn'],2); ?></strong><br>
+                        <strong><?= rupiah($header['pph'],2); ?></strong><br>
+                        <strong><?= rupiah(($header['totalharga']-$header['diskon'])+$header['ppn']-$header['pph'],2); ?></strong>
+                    </div>
+                </div>
+                <hr class="m-1">
+                <div class="row mb-1">
+                    <div class="col-4 <?= $kensel; ?> font-bold">
+                        <span>KETERANGAN :</span>
+                        <h4 class="mb-1"><?= $header['keterangan'].'-'.$header['ketcancel']; ?></h4>
+                    </div>
+                    <div class="col-4"></div>
+                    <?php $bgr = $header['ketcancel']==null ? "text-primary" : "text-danger"; ?>
+                    <?php $vld = $header['ok_valid']==0 ? "hilang" : ""; ?>
+                    <div class="col-4 <?= $kensel.' '.$vld; ?> font-bold ">
+                        <?php $cek = $header['ok_valid']!=2 ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
+                        <span><?= $cek; ?></span>
+                        <h4 class="mb-1"><?= datauser($header['user_valid'],'name').' ('.$header['tgl_valid'].')'."<br>".$header['ketcancel'] ?></h4>
+                    </div>
+                </div>
+                <hr class="m-1">
             </div>
         </div>
-        <div class="col-4 <?= $kensel; ?> font-bold">
-        <span>Dibuat Oleh</span>
-        <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4>
-        </div>
     </div>
-    <hr class='m-1'>
-    <div class="card card-lg">
-        <div class="card-body p-2">
-            <div class="font-kecil mb-1">
-                <?= $header['header_po']; ?>
-            </div>
-            <table class="table datatable6 table-hover" id="cobasisip">
-                <thead style="background-color: blue !important">
-                    <tr>
-                    <!-- <th>No</th> -->
-                    <th>Specific</th>
-                    <th>SKU</th>
-                    <th>Satuan</th>
-                    <th>Qty</th>
-                    <th>Kgs</th>
-                    <th>Harga</th>
-                    <th>Total</th>
-                    <th>Keterangan</th>
-                    </tr>
-                </thead>
-                <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                <?php foreach ($detail as $val) { $tampil = $val['pcs']==0 ? $val['kgs'] : $val['pcs']; ?>
-                    <tr>
-                        <td><?= $val['nama_barang']; ?></td>
-                        <td><?= $val['brg_id']; ?></td>
-                        <td><?= $val['namasatuan']; ?></td>
-                        <td><?= rupiah($val['pcs'],0); ?></td>
-                        <td><?= rupiah($val['kgs'],2); ?></td>
-                        <td><?= rupiah($val['harga'],2); ?></td>
-                        <td><?= rupiah($val['harga']*$tampil,2); ?></td>
-                        <td><?= $val['keter']; ?></td>
-                    </tr>
-                <?php } ?>
-                </tbody>
-            </table>
-            <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
-        </div>
-    </div>
-    <hr class="m-1">
-    <div class="row">
-        <div class="col-sm-6">
-            Catatan :
-            <ul>
-                <li> <?= $header['catatan1']; ?></li>
-                <li> <?= $header['catatan2']; ?></li>
-                <li> <?= $header['catatan3']; ?></li>
-            </ul>
-        </div>
-        <div class="col-sm-3 text-right">
-            Harga Total :<br>
-            Diskon :<br>
-            Total :<br>
-            PPN <?= rupiah($header['cekppn'],0).'%'; ?>:<br>
-            PPh :<br>
-            Jumlah :
-        </div>
-        <div class="col-sm-3 text-right">
-            <strong><?= rupiah($header['totalharga'],2); ?></strong><br>
-            <strong><?= rupiah($header['diskon'],2); ?></strong><br>
-            <strong><?= rupiah($header['totalharga']-$header['diskon'],2); ?></strong><br>
-            <strong><?= rupiah($header['ppn'],2); ?></strong><br>
-            <strong><?= rupiah($header['pph'],2); ?></strong><br>
-            <strong><?= rupiah(($header['totalharga']-$header['diskon'])+$header['ppn']-$header['pph'],2); ?></strong>
-        </div>
-    </div>
-    <hr class="m-1">
-    <div class="row mb-1">
-        <div class="col-4 <?= $kensel; ?> font-bold">
-            <span>KETERANGAN :</span>
-            <h4 class="mb-1"><?= $header['keterangan'].'-'.$header['ketcancel']; ?></h4>
-        </div>
-        <div class="col-4"></div>
-        <?php $bgr = $header['ketcancel']==null ? "text-primary" : "text-danger"; ?>
-        <?php $vld = $header['ok_valid']==0 ? "hilang" : ""; ?>
-        <div class="col-4 <?= $kensel.' '.$vld; ?> font-bold ">
-            <?php $cek = $header['ok_valid']!=2 ? "Disetujui Oleh" : "Dicancel Oleh"; ?>
-            <span><?= $cek; ?></span>
-            <h4 class="mb-1"><?= datauser($header['user_valid'],'name').' ('.$header['tgl_valid'].')'."<br>".$header['ketcancel'] ?></h4>
-        </div>
-    </div>
-    <hr class="m-1">
 </div>
 <script>
     $(document).ready(function(){
