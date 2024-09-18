@@ -297,7 +297,7 @@ class Bbl_model extends CI_Model
     }
     public function ubahdataok($id,$nilai){
         $this->db->where('id',$id);
-        $hasil = $this->db->update('tb_header',['data_ok'=>$nilai]);
+        $hasil = $this->db->update('tb_header',['ok_bb'=>$nilai]);
         return $hasil;
     }
     public function gethrg($idbarang,$nobontr){

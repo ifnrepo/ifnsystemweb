@@ -129,19 +129,43 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php } ?>
                                     <td><?= $datdet['keterangan'] ?></td>
                                     <td>
-                                        <?php if($datdet['data_ok']==1 && $datdet['ok_valid']==0 && $this->session->userdata('level_user') > 1){ ?>
+                                        <?php if($datdet['ok_bb']==1 && $datdet['data_ok']==0 && $datdet['ok_valid']==0 && $this->session->userdata('level_user') > 1){ ?>
+                                        Tunggu Validasi Kep Dept
                                         <a href="#" data-href="<?= base_url() . 'bbl/editbbl/' . $datdet['id']; ?>" class="btn btn-sm btn-info btn-icon btn-flat mr-1" style="padding: 5px !important" id="Edit detail Bbl" data-message="Akan edit data ini" data-bs-toggle='modal' data-bs-target='#modal-info' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
-                                            <i class="fa fa-refresh mr-1"></i> Edit Transaksi
+                                            <i class="fa fa-refresh mr-1"></i> Edit
                                         </a>
-                                        <?php }else if($datdet['data_ok']==0 && $datdet['ok_valid']==0){ ?>
+                                        
+                                        <?php }else if($datdet['ok_bb']==0 && $datdet['data_ok']==0 && $datdet['ok_valid']==0){ ?>
                                         <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusnettype" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'bbl/hapus_detail/' . $datdet['id']; ?>" title="Hapus data">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
-                                        <?php }else{ $tungguvalid = tungguvalid($datdet['kodeunik']); ?>
-                                            Tunggu <?= $tungguvalid; ?>
+                                        <?php }else{ 
+                                            if($datdet['ok_pp']==0){
+                                                if($datdet['bbl_pp']==1){
+                                                    $tungguvalid = 'Tunggu Validasi Manager PP';
+                                                }else{
+                                                    $tungguvalid = 'Tunggu Validasi Manager UT';
+                                                }
+                                            }else{
+                                                if($datdet['ok_valid']==0){
+                                                    $tungguvalid = 'Tunggu Validasi Manager '.$datdet['dept_bbl'];
+                                                }else{
+                                                    if($datdet['ok_tuju']==0){
+                                                        $tungguvalid = 'Tunggu Validasi GM '.$datdet['dept_bbl'];
+                                                    }else{
+                                                        if($datdet['ok_tuju']==0){
+                                                            $tungguvalid = 'Tunggu Validasi GM Purchasing';
+                                                        }else{
+                                                            $tungguvalid = 'Proses Pembuatan PO';
+                                                        }
+                                                    }
+                                                }
+                                            }
+                                            ?>
+                                            <?= $tungguvalid; ?>
                                         <?php } ?>
                                     </td>
                                 </tr>

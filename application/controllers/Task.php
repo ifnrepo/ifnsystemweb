@@ -75,7 +75,9 @@ class Task extends CI_Controller {
         echo $simpan;
     }
     public function validasibbl($id,$kolom)
-    {
+    {  
+        $kolom = $kolom < 1 ? 1 : $kolom;
+        $kolom = datauser($this->session->userdata('id'),'cekbbl')==1 && $kolom==2 ? 1 : $kolom;
         $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
         $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];
         $arrayuser=['user_ok','user_pp','user_valid','user_tuju','user_pc'];
@@ -100,7 +102,9 @@ class Task extends CI_Controller {
     public function cancelbbl()
     {
         $id = $_POST['id'];
-        $kolom = $_POST['ke'];
+        $xkolom = $_POST['ke'];
+        $kolom = $xkolom < 1 ? 1 : $xkolom;
+        $kolom = datauser($this->session->userdata('id'),'cekbbl')==1 && $xkolom==2 ? 1 : $xkolom;
         $ketcancel = $_POST['ketcancel'];
         $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
         $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];

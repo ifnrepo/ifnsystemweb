@@ -29,7 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     echo 'selected';
                                   } ?>>Validasi PB (Permintaan Barang)</option>
               <?php endif; ?>
-              <?php if($this->session->userdata('ttd') >= 2 || datauser($this->session->userdata('id'),'cekpp')==1 || datauser($this->session->userdata('id'),'cekut')==1  ): ?>
+              <?php if($this->session->userdata('ttd') >= 2 || datauser($this->session->userdata('id'),'cekbbl')==1  || datauser($this->session->userdata('id'),'cekpp')==1 || datauser($this->session->userdata('id'),'cekut')==1): ?>
               <option value="bbl" <?php if ($this->session->userdata('modetask') == 'bbl') {
                                     echo 'selected';
                                   } ?>>Validasi BBL (Bon Permintaan Pembelian)</option>

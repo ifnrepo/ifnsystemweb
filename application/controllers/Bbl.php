@@ -313,9 +313,12 @@ class Bbl extends CI_Controller
             redirect(base_url() . 'bbl/databbl/' . $id);
         }
         $data = [
-            'data_ok' => 1,
-            'tgl_ok' => date('Y-m-d H:i:s'),
-            'user_ok' => $this->session->userdata('id'),
+            // 'data_ok' => 1,
+            // 'tgl_ok' => date('Y-m-d H:i:s'),
+            // 'user_ok' => $this->session->userdata('id'),
+            'ok_bb' => 1,
+            'tgl_bb' => date('Y-m-d H:i:s'),
+            'user_bb' => $this->session->userdata('id'),
             'id' => $id,
             'jumlah_barang' => $jmlrec['jml']
         ];
@@ -410,7 +413,7 @@ class Bbl extends CI_Controller
         }
     }
     public function editbbl($id){
-        $cek = $this->bbl_model->cekfield($id,'ok_valid',0);
+        $cek = $this->bbl_model->cekfield($id,'data_ok',0);
         if($cek){
             $this->bbl_model->ubahdataok($id,0);
             $url = base_url('bbl/editdetail_bbl/'.$id);
