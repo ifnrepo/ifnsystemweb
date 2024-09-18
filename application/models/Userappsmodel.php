@@ -40,6 +40,7 @@ class Userappsmodel extends CI_Model
         $data['cekpp'] = isset($data['cekpp']) ? 1 : 0;
         $data['cekut'] = isset($data['cekut']) ? 1 : 0;
         $data['cekbatalstok'] = isset($data['cekbatalstok']) ? 1 : 0;
+        $data['cekbbl'] = isset($data['cekbbl']) ? 1 : 0;
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -113,6 +114,7 @@ class Userappsmodel extends CI_Model
         $data['cekpp'] = isset($data['cekpp']) ? 1 : 0;
         $data['cekut'] = isset($data['cekut']) ? 1 : 0;
         $data['cekbatalstok'] = isset($data['cekbatalstok']) ? 1 : 0;
+        $data['cekbbl'] = isset($data['cekbbl']) ? 1 : 0;
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -190,6 +192,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('hak_ttd_pb',arrdep($cek['cekpb']));
             $this->session->set_userdata('ttd',$cek['ttd']);
             $this->session->set_userdata('viewharga',$cek['view_harga']);
+            $this->session->set_userdata('sess_cekbbl',$cek['cekbbl']);
         }
 
         return $hasil;
@@ -212,6 +215,7 @@ class Userappsmodel extends CI_Model
         $this->session->set_userdata('viewharga',$cek['view_harga']);
         $this->session->set_userdata('cekadj',$cek['cekadj']);
         $this->session->set_userdata('cekpo',$cek['cekpo']);
+        $this->session->set_userdata('sess_cekbbl',$cek['cekbbl']);
         return 1;
     }
 }

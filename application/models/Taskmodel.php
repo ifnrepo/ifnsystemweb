@@ -38,6 +38,9 @@ class Taskmodel extends CI_Model
             if(datauser($this->session->userdata('id'),'cekpc')==1){
                 $masuk = 4;
             }
+            if(datauser($this->session->userdata('id'),'cekbbl')==1){
+                $masuk = 5;
+            }
             switch ($masuk) {
                 case 1:
                     $this->db->where('data_ok', 1);
@@ -93,6 +96,16 @@ class Taskmodel extends CI_Model
                     $this->db->where('ok_pc', 0);
                     // $this->db->where('bbl_pp',1);
                     // $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
+                    break;
+                case 5:
+                    $this->db->where('data_ok', 0);
+                    // $this->db->where('ok_pp', 1);
+                    $this->db->where('ok_valid', 0);
+                    $this->db->where('ok_tuju', 0);
+                    $this->db->where('ok_pc', 0);
+                    // $this->db->where('bbl_pp', 1);
+                    $this->db->where('ok_bb', 1);
+                    $this->db->where_in('dept_bbl',arrdep($this->session->userdata('hakdepartemen')));
                     break;
                 default:
                     $this->db->where('data_ok', 99);

@@ -206,6 +206,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col">Validasi BBL (Kep Dept)</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekbbl" id="cekbbl" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="hr mt-2 mb-1"></div>
               <div class="card-body pt-2">
                 <div class="row">
