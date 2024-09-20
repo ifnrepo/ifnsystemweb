@@ -46,6 +46,13 @@ class Bbl extends CI_Controller
         echo 1;
     }
 
+    public function clear(){
+        $this->session->unset_userdata('deptsekarang');
+        $this->session->unset_userdata('tujusekarang');
+        $url = base_url().'Bbl';
+        redirect($url);
+    }
+
     public function tambahdata($jn)
     {
         $data['jns'] = $jn;

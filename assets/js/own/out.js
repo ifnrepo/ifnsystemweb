@@ -29,6 +29,7 @@ $(document).ready(function () {
 	$("#dept_kirim").change();
 });
 $("#dept_kirim").change(function () {
+	var kirim = $(this).val();
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
@@ -37,10 +38,14 @@ $("#dept_kirim").change(function () {
 			kode: $(this).val(),
 		},
 		success: function (data) {
-			// alert(data);
-			// window.location.reload();
+			if (kirim == "GM" || kirim == "GS" || kirim == "GP") {
+				$("#adddataout").removeClass("hilang");
+				$("#buttonpilih2").addClass("hilang");
+			} else {
+				$("#adddataout").addClass("hilang");
+				$("#buttonpilih2").removeClass("hilang");
+			}
 			$("#dept_tuju").html(data);
-			// $("#dept_tuju").change();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);

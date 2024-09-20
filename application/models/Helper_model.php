@@ -46,6 +46,7 @@ class Helper_model extends CI_Model
             $kata = $barang['nama_barang'];
             array_push($hasil2,$kata);
             $hasil3 = [];
+            $kepalanya = 0;
             for($ke=0;$ke <= 3;$ke++){
                 // 0 : cek data BBL
                 // 1 : cek data PO
@@ -54,32 +55,48 @@ class Helper_model extends CI_Model
                 switch ($ke) {
                     case 0:
                         $fid = 'id_bbl';
+                        $fod = 'id_po';
                         $fed = 'BBL No. ';
                         break;
                     case 1:
                         $fid = 'id_po';
+                        $fod = 'id_ib';
                         $fed = 'PO No. ';
                         break;
                     case 2:
                         $fid = 'id_ib';
+                        $fod = 'id_out';
                         $fed = 'IB No. ';
                         break;
                     case 3:
                         $fid = 'id_out';
+                        $fod = 'id';
                         $fed = 'OUT No. ';
                         break;
                 }
+                if($kepalanya == 1){
+                    $cekisi = $this->db->get_where('tb_detail',['id'=>$idisinya]);
+                    if($cekisi->num_rows() > 0){
+                        $rekisi = $cekisi->row_array();
+                        $det[$fid] = $rekisi['id'];
+                    }else{
+                        $det[$fid] = 0;
+                    }
+                }
+                $selesai = $ke==3 ? ' (SELESAI)' : '';
                 if($det[$fid]!=0){
                     $isifield = $det[$fid];
-                    $this->db->select('tb_header.*');
+                    $this->db->select('tb_header.*,tb_detail.id_bbl,tb_detail.id_po,tb_detail.id_ib,tb_detail.id_out,tb_detail.id_minta');
                     $this->db->from('tb_header');
                     $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
                     $this->db->where('tb_detail.id',$isifield);
                     $isinya = $this->db->get()->row_array();
-
-                    array_push($hasil3,$fed.$isinya['nomor_dok']);
+                    $kepalanya = 1;
+                    $idisinya = $isinya[$fod];
+                    array_push($hasil3,$fed.$isinya['nomor_dok'].$selesai);
                 }else{
-                    array_push($hasil3,$fed.'-');
+                    $kepalanya = 0;
+                    // array_push($hasil3,$fed.'-');
                 }
             }
             array_push($hasil2,$hasil3);

@@ -89,8 +89,29 @@ class Po extends CI_Controller
     }
     public function getbarangpo()
     {
-        $data['datadetail'] = $this->pomodel->getbarangpo();
-        $this->load->view('po/getbarangpo',$data);
+        // $data['datadetail'] = $this->pomodel->getbarangpo();
+        $this->load->view('po/getbarangpo');
+    }
+    public function getdetailbarangpo(){
+        $data = $_POST['data'];
+        $query = $this->pomodel->getbarangpo($data);
+        $html  = '';
+        $no=0; 
+        foreach ($query->result_array() as $que) { $no++;
+            $html .= "<tr>";
+            $html .= "<td>".$que['nomor_dok']."</td>";
+            $html .= "<td>" . $que['nomorpb'] . "</td>";
+            $html .= "<td>" . $que['nama_barang'] . "</td>";
+            $html .= "<td>";
+            $html .= "<label class='form-check'>";
+            $html .= "<input class='form-check-input' name='cekpilihbarang' title='cekbok".$no."' id='cekbok".$no."' rel='".$que['iddetbbl']."' type='checkbox'>";
+            $html .= "<span class='form-check-label'>Pilih</span>";
+            $html .= "</label>";
+            $html .= "</td>";
+            $html .= "</tr>";
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
     }
     public function adddetailpo(){
         $id = $_POST['id'];

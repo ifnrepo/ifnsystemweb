@@ -93,7 +93,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-2">
                   <h4 class="mb-1">
                     <?php if($disab!=''){ ?>
-                    <small class="text-pink text-center">Tekan <b>GO</b> untuk mengaktifkan Tombol Tambah Data</small>
+                    <small class="text-pink text-center">Tekan <b>GO</b> untuk mengaktifkan Tombol Tambah Data dan Load Data</small>
                     <?php } ?>
                   </h4>
                 </div>
