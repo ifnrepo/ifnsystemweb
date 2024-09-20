@@ -195,7 +195,35 @@ class Barang extends CI_Controller
             $buton .= "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=" . base_url() . 'barang/hapusbarang/' . $field->id . "><i class='fa fa-trash-o'></i></a>";
             $buton .= "<a href=" . base_url() . 'barang/isistock/' . $field->id .'/'.$no. " class='btn btn-sm btn-info btn-icon mr-1' id='stockbarang' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Isi Safety Stock' title='Isi Safety Stock' ><i class='fa fa-info pl-1 pr-1'></i></a>";
             $buton .= "<a href=" . base_url() . 'barang/bombarang/' . $field->id . " class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM" . $jmbon . "</a>";
-            $row[] = $buton;
+            $jmbon2 = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg ms-2'>" . $field->jmbom . "</span>" : "";
+            $buton2 = '<div class="btn-group" role="group">';
+            $buton2 .= '<label for="btn-radio-dropdown-dropdown" class="btn btn-sm btn-success btn-flat dropdown-toggle text-black" style="padding:3px 4px !important;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
+            $buton2 .= 'Aksi';
+            $buton2 .= '</label>';
+            $buton2 .= '<div class="dropdown-menu">';
+            $buton2 .= '<label class="dropdown-item p-1">';
+            $buton2 .= '<a href='.base_url() . 'barang/editbarang/' . $field->id.'/'.$no.' rel="' . $field->id . '" rel2="' . $no . '" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Barang" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="'.$key['id'].'" title="Edit data">';
+            $buton2 .= '<i class="fa fa-edit pr-1"></i> Edit Data';
+            $buton2 .= '</a>';
+            $buton2 .= '</label>';
+            $buton2 .= '<label class="dropdown-item p-1">';
+            $buton2 .= '<a class="btn btn-sm btn-danger btn-icon text-white w-100" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href='.base_url() . 'barang/hapusbarang/' . $field->id.' title="Hapus data">';
+            $buton2 .= '<i class="fa fa-trash-o pr-1"></i> Hapus Data';
+            $buton2 .= '</a>';
+            $buton2 .= '</label>';
+            $buton2 .= '<label class="dropdown-item p-1">';
+            $buton2 .= '<a href='.base_url() . 'barang/isistock/' . $field->id .' class="btn btn-sm btn-info btn-icon w-100" id="edituser" rel="'.$key['id'].'" title="View data" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Isi Safety Stock">';
+            $buton2 .= '<i class="fa fa-info pr-1"></i> Isi Safety Stock';
+            $buton2 .= '</a>';
+            $buton2 .= '</label>';
+            $buton2 .= '<label class="dropdown-item p-1">';
+            $buton2 .= '<a href='.base_url() . 'barang/bombarang/' . $field->id .' class="btn btn-sm btn-cyan btn-icon w-100" id="edituser" rel="'.$key['id'].'" title="Add Data BOM" >';
+            $buton2 .= 'BOM'.$jmbon2;
+            $buton2 .= '</a>';
+            $buton2 .= '</label>';
+            $buton2 .= '</div>';
+            $buton2 .= '</div>';
+            $row[] = $buton2;
 
             $data[] = $row;
         }

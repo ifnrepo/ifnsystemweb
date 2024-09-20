@@ -501,7 +501,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 1); ?>" href="<?= base_url('pb/clear'); ?>">
                       PB (Bon Permintaan Barang)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 2); ?>" href="<?= base_url('bbl'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 2); ?>" href="<?= base_url('bbl/clear'); ?>">
                       BBL (Bon Pembelian Barang)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 3); ?>" href="<?= base_url('in/clear'); ?>">

@@ -167,6 +167,9 @@ $("#simpandetailbarang").click(function () {
 	}
 	document.formbarangpb.submit();
 });
+$("#jn_po").change(function () {
+	$("#butgo").click();
+});
 $("#butgo").click(function () {
 	// $("#dept_tuju").change();
 	getdatapo();

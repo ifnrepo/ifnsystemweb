@@ -46,9 +46,9 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                            <?php foreach ($detail as $val) { ?>
+                            <?php $no=0; foreach ($detail as $val) { $no++; ?>
                                 <tr>
-                                    <td><?= $val['nama_barang']; ?></td>
+                                    <td><?= $no.'. '.$val['nama_barang']; ?></td>
                                     <td><?= $val['brg_id']; ?></td>
                                     <td><?= $val['namasatuan']; ?></td>
                                     <td><?= rupiah($val['pcs'],0); ?></td>
@@ -85,7 +85,9 @@
                         <?php foreach ($riwayat as $riw) { ?>
                             <?php if(is_array($riw)){ ?>
                                 <hr class="m-1">
-                                <ul>
+                                <div class="p-2" style="border:1px solid #FBEBEB !important;">
+                                <u>DETAIL PERMINTAAN</u>
+                                <ol>
                                     <?php foreach ($riw as $raw) { ?>
                                         <?php if(is_array($raw)){ ?>
                                             <ul>
@@ -94,10 +96,11 @@
                                                 <?php } ?>
                                             </ul>
                                         <?php }else{ ?>
-                                            <li><?= $raw; ?></li>
+                                            <li class='text-pink'><?= $raw; ?></li>
                                         <?php } ?>
                                     <?php } ?>
-                                </ul>
+                                </ol>
+                                </div>
                             <?php }else{ ?>
                                 <li><?= $riw; ?></li>
                             <?php } ?>

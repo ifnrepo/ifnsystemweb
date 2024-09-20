@@ -111,11 +111,13 @@ class Po_model extends CI_Model
         $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
-    public function getbarangpo(){
-        $this->db->select('*,tb_detail.id as iddetbbl');
+    public function getbarangpo($data){
+        $this->db->select('tb_detail.*,tb_detail.id as iddetbbl,a.nomor_dok,b.nama_barang,d.nomor_dok as nomorpb');
         $this->db->from('tb_detail');
         $this->db->join('tb_header a','a.id = tb_detail.id_header','left');
         $this->db->join('barang b','b.id = tb_detail.id_barang','left');
+        $this->db->join('tb_detail c','c.id_bbl = tb_detail.id','left');
+        $this->db->join('tb_header d','d.id = c.id_header','left');
         $this->db->where('a.id_perusahaan',IDPERUSAHAAN);
         $this->db->where('a.data_ok',1);
         $this->db->where('a.ok_valid',1);
@@ -123,7 +125,10 @@ class Po_model extends CI_Model
         $this->db->where('a.ok_pp',1);
         $this->db->where('a.ok_pc',1);
         $this->db->where('a.kode_dok','BBL');
-        $this->db->where('id_po',0);
+        $this->db->where('tb_detail.id_po',0);
+        if($data!=''){
+            $this->db->like('a.nomor_dok',$data);
+        }
         return $this->db->get();
     }
 

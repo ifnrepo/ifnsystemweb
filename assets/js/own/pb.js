@@ -25,6 +25,8 @@ $(document).ready(function () {
 	if (errosimpan == 1) {
 		pesan("Departemen Asal dan Departemen Tujuan harus di isi !", "info");
 	}
+	// $("#butgo").click();
+	// getdatapb();
 });
 // $("#tglpb").datepicker();
 
@@ -40,13 +42,17 @@ $("#dept_kirim").change(function () {
 			// alert(data);
 			// window.location.reload();
 			$("#dept_tuju").html(data);
-			// $("#dept_tuju").change();
+			$("#dept_tuju").change();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
 			console.log(thrownError);
 		},
 	});
+});
+$("#dept_tuju").change(function () {
+	// getdatapb();
+	// alert("INI");
 });
 $("#simpandetailbarang").click(function () {
 	if ($("#id_barang").val() == "") {
