@@ -106,7 +106,13 @@ function nomorout($tgl, $asal, $tuju)
     $kode = $CI->out_model->getnomorout($bl, $thp, $asal, $tuju);
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return $asal . "-" . $tuju . "/T/" . $bl . $th . "/" . sprintf("%03s", $urut);
+    $hasil = 'ERROR';
+    if ($asal=='DL' && $tuju=='GM'){
+        $hasil = "DLN-IFN/SJ/". $bl . $th . "/" . sprintf("%03s", $urut);
+    }else{
+        $hasil = $asal . "-" . $tuju . "/T/" . $bl . $th . "/" . sprintf("%03s", $urut);
+    }
+    return $hasil;
 }
 function nomorpo()
 {

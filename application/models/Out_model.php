@@ -76,8 +76,13 @@ class Out_model extends CI_Model{
         return $query->result_array();
     }
     public function getnomorout($bl,$th,$asal,$tuju){
-        $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,14,3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
+        if($asal=='DL' && $tuju=='GM'){
+            $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,17,3)) AS maxkode FROM tb_header 
+            WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
+        }else{
+            $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,14,3)) AS maxkode FROM tb_header 
+            WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
+        }
         return $hasil;
     }
     public function adddata($jn){

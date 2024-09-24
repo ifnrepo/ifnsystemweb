@@ -16,7 +16,7 @@ $(document).ready(function () {
 	}
 	if ($("#errornya").val() != "" && $("#errornya").length > 0) {
 		var ini = $("#errornya").val();
-		var isipesan = "Stok Barang " + ini + " kurang, cek data !";
+		var isipesan = "Periksa Stok Barang " + ini + " !";
 		if (ini == "Nobontr Kosong") {
 			var isipesan = "Masih ada data yang belum pakai Nobontr, cek data !";
 		}

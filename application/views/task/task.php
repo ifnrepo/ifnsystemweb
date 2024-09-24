@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          <?php $hasil = $this->session->userdata('modetask')=='' ? '' : 'Validasi '.strtoupper($this->session->userdata('modetask')) ?>
+          <?php $hasil = $this->session->userdata('modetask')=='' ? 'Tekan Get untuk Load Data !' : 'Validasi '.strtoupper($this->session->userdata('modetask')) ?>
           <div>Pending Task [<?= $this->session->userdata('ttd'); ?>] <br><span class="title-dok"><?= $hasil; ?></span></div>
         </h2>
       </div>

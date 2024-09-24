@@ -6,7 +6,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          Konfirmasi Input Barang <?= $this->session->userdata('bl').$this->session->userdata('th'); ?>
+          Konfirmasi Input Barang
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -30,7 +30,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           <div class="card card-active" style="clear:both;" >
             <div class="card-body p-2 font-kecil">
               <div class="row">
-                <div class="col-3">
+                <div class="col-3 bg-cyan-lt">
                  <span>Nomor Dokumen : <strong class="font-bold"><?= $header['nomor_dok']; ?></strong></span><br>
                  <span>Tgl Dokumen : <strong class="font-bold"><?= tgl_indo($header['tgl']); ?></strong></span>
                 </div>
