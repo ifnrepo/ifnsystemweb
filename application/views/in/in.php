@@ -35,7 +35,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </div>
           </div>
           <div class="card card-active" style="clear:both;" >
-            <div class="card-body p-2 font-kecil">
+            <div class="card-body p-2">
               <div class="row">
                 <div class="col-2">
                   <h4 class="mb-1 font-kecil">Dept</h4>
@@ -46,6 +46,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                           //$arrjanganada = ['IT','PP','AK','MK','PG','BC','UT','RD','PC','EI']; 
                           $arrjanganada = [];
                         ?>
+                        <?php $disab=''; if($this->session->userdata('curdept')=='' || $this->session->userdata('curdept')==null || $this->session->userdata('todept')=='' || $this->session->userdata('todept')==null){ $disab = 'disabled';} ?>
                         <?php foreach ($hakdep as $hak): if(!in_array($hak['dept_id'],$arrjanganada)): $selek = $this->session->userdata('curdept')== null ? '' : $this->session->userdata('curdept'); ?>
                           <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?php if($selek==$hak['dept_id']) echo "selected"; ?>><?= $hak['departemen']; ?></option>
                         <?php endif; endforeach; ?>
@@ -74,6 +75,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1"></h4>
+                    <?php if($disab!=''){ ?>
+                      <small class="text-pink text-center">Tekan <b>GO</b> untuk Load Data</small>
+                    <?php } ?>
                 </div>
               </div>
               <!-- <div class="hr m-1"></div> -->
