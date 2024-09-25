@@ -52,7 +52,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <select name="jabatan" id="jabatan" class="form-control form-select">
                     <option value="">Jabatan</option>
                     <?php foreach ($jabat as $jbt) : ?>
-                      <option value="<?= $jbt['nama_jabatan']; ?>"><?= $jbt['nama_jabatan']; ?></option>
+                      <option value="<?= $jbt['nama_jabatan']; ?>"><?= $jbt['nojab'].' # '.$jbt['nama_jabatan']; ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>

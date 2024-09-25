@@ -2,6 +2,12 @@
     <div class="row">
         <div class="col-12">
             <div class="mb-1 row">
+                <label class="col-3 col-form-label required">No Jabatan</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="nojab" id="nojab" value="<?= $data['nojab']; ?>">
+                </div>
+            </div>
+            <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Nama Jabatan</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" name="nama_jabatan" id="nama_jabatan" placeholder="Nama Jabatan">
@@ -22,6 +28,7 @@
             url: base_url + 'jabatan/simpandata',
             data: {
                 nama_jabatan: $("#nama_jabatan").val(),
+                nojab: $("#nojab").val(),
             },
             success: function(data) {
                 window.location.reload();
