@@ -62,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </h2><br>
             <p class="mt-2"><?= 'No. ' . $header['nomor_dok']; ?></p>
           </div>
-          <div class="mt" style="font-size: 20px;">
+          <div class="mt" style="font-size: 20px; color: black;">
             Dengan Hormat,<br>
             <?= $header['header_po'];  ?>
             <br><br>

@@ -443,7 +443,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 2); ?>" href="<?= base_url('kategori'); ?>">
                       Kategori Barang
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 3); ?>" href="<?= base_url() . 'barang'; ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 3); ?>" href="<?= base_url() . 'barang/clear'; ?>">
                       Barang
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 4); ?>" href="<?= base_url('supplier'); ?>">
@@ -472,6 +472,15 @@
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 12); ?>" href="<?= base_url('grup'); ?>">
                       Data Grup
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 14); ?>" href="<?= base_url('hargacost'); ?>">
+                      Harga cost division
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 15); ?>" href="<?= base_url('setcost'); ?>">
+                      Setting cost division
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 16); ?>" href="<?= base_url('prosbor'); ?>">
+                      Proses Borongan
                     </a>
                   </div>
                 </div>
@@ -517,7 +526,7 @@
                       PO (Purchase Order)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 7); ?>" href="<?= base_url('ib/clear'); ?>">
-                      IB (Penerimaan Barang)
+                      IB (AJU Masuk Barang)
                     </a>
                   </div>
                 </div>
@@ -550,8 +559,11 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 2); ?>" href="<?= base_url('inv/clear'); ?>">
                       Inventory
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 3); ?>" href="<?= base_url('invmesin'); ?>">
-                      Inventory Mesin
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 8); ?>" href="<?= base_url('hargamat'); ?>">
+                      Harga Material
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 9); ?>" href="<?= base_url('pricinginv'); ?>">
+                      Pricing Inventory
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 4); ?>" href="<?= base_url('bcmasuk'); ?>">
                       BC Masuk
@@ -559,14 +571,26 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 5); ?>" href="<?= base_url('bckeluar'); ?>">
                       BC Keluar
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 10); ?>" href="<?= base_url('bcmaterial'); ?>">
+                      Material
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 11); ?>" href="<?= base_url('bcwip'); ?>">
+                      WIP
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 12); ?>" href="<?= base_url('bcgf'); ?>">
+                      Finished Goods
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 3); ?>" href="<?= base_url('invmesin'); ?>">
+                     Barang Modal
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 13); ?>" href="<?= base_url('bcwaste'); ?>">
+                      Scrap / Waste
+                    </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 7); ?>" href="<?= base_url('cctv'); ?>">
                       Akses CCTV
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 6); ?>" href="<?= base_url('logact/clear'); ?>">
                       Log Activity
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 8); ?>" href="<?= base_url('hargamat'); ?>">
-                      Harga Material
                     </a>
                   </div>
                 </div>
@@ -592,7 +616,7 @@
                 <div class="dropdown-menu-columns">
                   <div class="dropdown-menu-column">
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 1); ?>" href="<?= base_url('userapps'); ?>">
-                      User Manajemen
+                      Setting User
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 2); ?>" href="<?= base_url('lockinv'); ?>">
                       Close Book Inventory

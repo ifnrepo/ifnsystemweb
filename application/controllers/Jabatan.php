@@ -33,6 +33,7 @@ class jabatan extends CI_Controller
     {
         $data = [
             'nama_jabatan' => $_POST['nama_jabatan'],
+            'nojab' => $_POST['nojab'],
         ];
         $hasil = $this->jabatanmodel->simpan($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -48,6 +49,7 @@ class jabatan extends CI_Controller
         $data = [
             'id' => $_POST['id'],
             'nama_jabatan' => $_POST['nama_jabatan'],
+            'nojab' => $_POST['nojab'],
         ];
         $hasil = $this->jabatanmodel->updatedata($data);
         $this->helpermodel->isilog($this->db->last_query());

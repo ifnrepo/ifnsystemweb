@@ -33,7 +33,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <?php $no = 0;
                             foreach ($jabatan as $key) : $no++; ?>
                                 <tr>
-                                    <td><?= $no; ?></td>
+                                    <td><?= $key['nojab']; ?></td>
                                     <td><?= $key['nama_jabatan']; ?></td>
                                     <td>
                                         <a href="<?= base_url() . 'jabatan/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editjabatan" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Jabatan" rel="<?= $key['id']; ?>" title="Edit data">

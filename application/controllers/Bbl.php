@@ -356,6 +356,7 @@ class Bbl extends CI_Controller
     {
         $data['header'] = $this->bbl_model->getdatabyid($id);
         $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
+        $data['riwayat'] = riwayatbbl($id);
         $this->load->view('bbl/viewdetail_bbl', $data);
     }
 

@@ -26,6 +26,11 @@ class Barang extends CI_Controller
         $this->load->view('barang/barang', $data);
         $this->load->view('layouts/footer', $footer);
     }
+    public function clear(){
+        $this->session->unset_userdata('viewalias');
+        $url = base_url().'barang';
+        redirect($url);
+    }
     public function tambahdata()
     {
         $data['itemsatuan'] = $this->satuanmodel->getdata();
@@ -38,6 +43,7 @@ class Barang extends CI_Controller
         $data = [
             'kode' => $_POST['kode'],
             'nama_barang' => $_POST['nama'],
+            'nama_alias' => $_POST['namali'],
             'id_satuan' => $_POST['sat'],
             'id_kategori' => $_POST['kat'],
             'dln' => $_POST['dln'],
@@ -70,6 +76,7 @@ class Barang extends CI_Controller
             'id' => $_POST['id'],
             'kode' => $_POST['kode'],
             'nama_barang' => $_POST['nama'],
+            'nama_alias' => $_POST['namali'],
             'id_satuan' => $_POST['sat'],
             'id_kategori' => $_POST['kat'],
             'dln' => $_POST['dln'],
@@ -150,6 +157,11 @@ class Barang extends CI_Controller
         $hasil = $this->barangmodel->updatestock($data);
         echo json_encode($hasil->result());
     }
+    public function updateview(){
+        $data = $_POST['isinya'];
+        $this->session->set_userdata('viewalias',$data);
+        echo 1;
+    }
 
     public function get_data_barang()
     {
@@ -168,8 +180,11 @@ class Barang extends CI_Controller
             $row[] = $no;
             $row[] = $field->kode;
             $row[] = $field->nama_barang;
+            if($this->session->userdata('viewalias')==1){
+                $row[] = $field->nama_alias;
+            }
             $row[] = $field->nama_kategori;
-            $row[] = $field->namasatuan;
+            $row[] = $field->kodesatuan;
             if ($field->dln == 1) {
                 $row[] = '<i class="fa fa-check text-success"></i>';
             } else {
