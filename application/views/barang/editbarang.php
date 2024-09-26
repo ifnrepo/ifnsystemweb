@@ -16,6 +16,12 @@
                 </div>
             </div>
             <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Alias</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="nama_alias" id="nama_alias" placeholder="Nama Alias" value="<?= $data['nama_alias']; ?>">
+                </div>
+            </div>
+            <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kategori</label>
                 <div class="col"> 
                     <select class="form-select font-kecil" id="id_kategori" name="id_kategori">
@@ -103,6 +109,7 @@
             data: {
                 kode: $("#kode").val(),
                 nama: $("#nama_barang").val(),
+                namali: $("#nama_alias").val(),
                 sat: $("#id_satuan").val(),
                 kat: $("#id_kategori").val(),
                 id: $("#id").val(),
@@ -119,11 +126,17 @@
                 let noinv = (data[0]['noinv'] == 1) ? '<i class="fa fa-check text-success"></i>' : '-';
                 temp[1] = data[0]['kode'];
                 temp[2] = data[0]['nama_barang'];
-                temp[3] = data[0]['nama_kategori'];
-                temp[4] = data[0]['namasatuan'];
-                temp[5] = dln;
-                temp[6] = noinv;
-                temp[7] = aktif;
+                <?php if($this->session->userdata('viewalias')==1){ ?>
+                    let kurangi = 0;
+                    temp[3] = data[0]['nama_alias'];
+                <?php }else{ ?>
+                    let kurangi = 1;
+                <?php } ?>
+                temp[4-kurangi] = data[0]['nama_kategori'];
+                temp[5-kurangi] = data[0]['kodesatuan'];
+                temp[6-kurangi] = dln;
+                temp[7-kurangi] = noinv;
+                temp[8-kurangi] = aktif;
                 buton = "<a href=" + base_url + 'barang/editbarang/' + data[0]['id'] +'/'+noe+" class='btn btn-sm btn-primary btn-icon text-white mr-1' rel="+data[0]['id']+ " rel2=" +noe+ " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
                 buton += "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=" + base_url + 'barang/hapusbarang/' +data[0]['id']+ "><i class='fa fa-trash-o'></i></a>";
                 buton += "<a href=" + base_url + 'barang/isistock/' +data[0]['id']+ " class='btn btn-sm btn-info btn-icon mr-1' id='stockbarang' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Isi Safety Stock' title='Isi Safety Stock' ><i class='fa fa-info pl-1 pr-1'></i></a>";

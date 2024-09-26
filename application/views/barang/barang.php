@@ -44,6 +44,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <option value="x">Tidak Aktif</option>
           </select>
         </div>
+        <div class="col-md-2 font-kecil">
+          <label class="form-check mt-1 mb-1 bg-teal-lt">
+              <input class="form-check-input" type="checkbox" id="viewalias" <?php if($this->session->userdata('viewalias')==1){ echo "checked"; } ?> >
+              <span class="form-check-label font-bold">Tampilkan Alias</span>
+            </label>
+        </div>
       </div>
       <hr class="p-1 m-1">
       <div class="card-body pt-1">
@@ -55,6 +61,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>No</th>
                 <th>Kode</th>
                 <th>Nama Barang</th>
+                <?php if($this->session->userdata('viewalias')==1){ ?>
+                <th>Alias</th>
+                <?php } ?>
                 <th>Kategori</th>
                 <th>Satuan</th>
                 <th>DLN</th>

@@ -341,6 +341,7 @@ class Po extends CI_Controller
     {
         $data['header'] = $this->pomodel->getdatabyid($id);
         $data['detail'] = $this->pomodel->getdatadetailpo($id);
+        $data['riwayat'] = riwayatpo($id);
         $this->load->view('po/viewdetailpo', $data);
     }
     public function resetdetail($id)

@@ -106,3 +106,25 @@ $("#tabelnya tbody").on("click", "td", function () {
 	$("#currentrow").val(rowindex);
 	// table.row(this).data(d).draw();
 });
+$("#viewalias").click(function () {
+	var isi = $(this).is(":checked") ? 1 : 0;
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "barang/updateview",
+		data: {
+			isinya: isi,
+		},
+		success: function (data) {
+			window.location.reload();
+			// alert('berhasil');
+			// window.location.href = base_url + "bbl/databbl/" + $("#id_header").val();
+			// $("#butbatal").click();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+			pesan("ERROR " + xhr.status + " " + thrownError, "info");
+		},
+	});
+});

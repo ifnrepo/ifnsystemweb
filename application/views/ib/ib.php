@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          IB (Penerimaan Barang)
+          IB (AJU Masuk Barang)
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">

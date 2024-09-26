@@ -136,7 +136,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col">Validator Purchase Order</span>
+                      <span class="col">Validator Purchase Order (PO)</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="cekpo" id="cekpo" type="checkbox">
@@ -324,6 +324,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master12" name="master12" type="checkbox">
                                 <span class="form-check-label">Data Grup</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master13" name="master13" type="checkbox">
+                                <span class="form-check-label">Harga cost division</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master14" name="master14" type="checkbox">
+                                <span class="form-check-label">Setting cost division</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master15" name="master15" type="checkbox">
+                                <span class="form-check-label">Proses Borongan</span>
+                              </label>
                               <!-- xx -->
                             </div>
                           </div>
@@ -360,7 +372,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi7" name="transaksi7" type="checkbox">
-                                <span class="form-check-label">IB (PENERIMAAN BARANG)</span>
+                                <span class="form-check-label">IB (AJU MASUK BARANG)</span>
                               </label>
                               <!-- xx -->
                             </div>
@@ -379,8 +391,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">Inventory</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="other3" name="other3" type="checkbox">
-                                <span class="form-check-label">Inventory Mesin</span>
+                                <input class="form-check-input" id="other8" name="other8" type="checkbox">
+                                <span class="form-check-label">Harga Material</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other9" name="other9" type="checkbox">
+                                <span class="form-check-label">Pricing Inventory</span>
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="other4" name="other4" type="checkbox">
@@ -391,6 +407,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">BC Keluar</span>
                               </label>
                               <label class="form-check mb-1">
+                                <input class="form-check-input" id="other10" name="other10" type="checkbox">
+                                <span class="form-check-label">Material</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other11" name="other11" type="checkbox">
+                                <span class="form-check-label">WIP</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other12" name="other12" type="checkbox">
+                                <span class="form-check-label">Finished Goods</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other3" name="other3" type="checkbox">
+                                <span class="form-check-label">Barang Modal</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other13" name="other13" type="checkbox">
+                                <span class="form-check-label">Scrap / Waste</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other13" name="other13" type="checkbox">
+                                <span class="form-check-label">Scrap / Waste</span>
+                              </label>
+                              <label class="form-check mb-1">
                                 <input class="form-check-input" id="other7" name="other7" type="checkbox">
                                 <span class="form-check-label">Akses CCTV</span>
                               </label>
@@ -398,10 +438,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="other6" name="other6" type="checkbox">
                                 <span class="form-check-label">Log Activity</span>
                               </label>
-                              <label class="form-check mb-1">
-                                <input class="form-check-input" id="other8" name="other8" type="checkbox">
-                                <span class="form-check-label">Harga Material</span>
-                              </label>
+                              
+                              
                             </div>
                             <div class="col-6">
                               <!-- xx -->

@@ -127,6 +127,36 @@
                 </div>
                 <hr class="m-1">
             </div>
+            <div class="tab-pane fade p-4 text-blue" id="tabs-profile-8">
+                <?php if(count($riwayat) > 0):  ?>
+                    <ul>
+                        <?php foreach ($riwayat as $riw) { ?>
+                            <?php if(is_array($riw)){ ?>
+                                <hr class="m-1">
+                                <div class="p-2" style="border:1px solid #FBEBEB !important;">
+                                <u>DETAIL BBL</u>
+                                <ol>
+                                    <?php foreach ($riw as $raw) { ?>
+                                        <?php if(is_array($raw)){ ?>
+                                            <ul>
+                                                <?php foreach ($raw as $ruw) { ?>
+                                                    <li style="font-size: 12px;"><?= $ruw; ?></li>
+                                                <?php } ?>
+                                            </ul>
+                                        <?php }else{ ?>
+                                            <li class='text-pink'><?= $raw; ?></li>
+                                        <?php } ?>
+                                    <?php } ?>
+                                </ol>
+                                </div>
+                            <?php }else{ ?>
+                                <li><?= $riw; ?></li>
+                            <?php } ?>
+                        <?php } ?>
+                    </ul>
+                <?php endif; ?>
+                <hr class="m-1">
+            </div>
         </div>
     </div>
 </div>

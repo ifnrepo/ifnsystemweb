@@ -14,6 +14,12 @@
                 </div>
             </div>
             <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Alias</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="nama_alias" id="nama_alias" placeholder="Nama Alias">
+                </div>
+            </div>
+            <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kategori</label>
                 <div class="col"> 
                     <select class="form-select font-kecil" id="id_kategori" name="id_kategori">
@@ -100,6 +106,7 @@
             data: {
                 kode: $("#kode").val(),
                 nama: $("#nama_barang").val(),
+                namali: $("#nama_alias").val(),
                 sat: $("#id_satuan").val(),
                 kat: $("#id_kategori").val(),
                 noinv: y,
