@@ -7,7 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     td,
     ol,
     li {
-      font-size: 18px !important;
+      font-size: 22px !important;
 
     }
   }
@@ -36,13 +36,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
   </div>
 </div>
 <!-- Page body -->
-<div class="page-body mt-1" style="font-size: 18px; ">
+<div class="page-body mt-3">
   <div class="container-xl">
     <div class="card card-lg">
       <div class="card-body">
-        <div class="row">
-          <div class=" col-6 mt-8" style="font-size: 20px;">
-            <p class="h2 mb-1">Bandung, <?= tgl_indo($header['tgl']); ?></p>
+        <div class="row mt-7" style="color : black ;">
+          <div class="col-6 mt-8" style="font-size: 22px !important; line-height: 22px !important; ">
+            <p class=" h2 mb-1">Bandung, <?= tgl_indo($header['tgl']); ?></p>
             <address>
               Kepada Yth,<br>
               <b><?= $header['namasupplier']; ?></b><br>
@@ -56,13 +56,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <span style="font-size: 11px;">Tanggal cetak : <?= date('d M Y'); ?> jam <?= date('H:i:s'); ?></span>
             </p>
           </div>
-          <div class="col-12 my-0 text-center" style="line-height: 14px !important; font-size: 28px; color:black ;">
-            <h2 style="display: inline-block; border-bottom: 2px solid black; margin: 0; font-size : 30px; color :black ;">
+          <div class="col-12 my-0 text-center" style="line-height: 2px !important;">
+            <h1 style="display: inline-block; border-bottom: 2px solid black; margin: 0;  font-size: 35px !important; ">
               ORDER PEMBELIAN
-            </h2><br>
-            <p class="mt-2"><?= 'No. ' . $header['nomor_dok']; ?></p>
+            </h1><br>
+            <p class="mt-2" style="font-size: 20px !important;"><?= 'No. ' . $header['nomor_dok']; ?></p>
           </div>
-          <div class="mt" style="font-size: 20px; color: black;">
+          <div class="mt" style="font-size: 22px !important; ">
             Dengan Hormat,<br>
             <?= $header['header_po'];  ?>
             <br><br>
@@ -70,46 +70,44 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <table class="table table-transparent table-responsive">
             <thead>
               <tr>
-                <th class="text-center" style="width: 1% ; font-size: 18px ; color :black ;">No</th>
-                <th style="font-size:18px; color :black ;">Nama Barang</th>
-                <th class="text-center" style="width: 1% ; font-size: 18px ; color :black ;">Jumlah</th>
-                <th class="text-center" style="width: 1% ; font-size: 18px ; color :black ;">Sat</th>
-                <th class="text-end" style="width: 3% ; font-size: 18px ; color :black ;">Harga</th>
-                <th class="text-end" style="width: 1% ; font-size: 18px ; color :black ;">Total</th>
+                <th class="text-center" style="width: 1% ; font-size: 18px ; ">No</th>
+                <th style="font-size:18px; ">Nama Barang</th>
+                <th class="text-center" style="width: 1% ; font-size: 18px ; ">Jumlah</th>
+                <th class="text-center" style="width: 1% ; font-size: 18px ; ">Sat</th>
+                <th class="text-end" style="width: 3% ; font-size: 18px ;">Harga</th>
+                <th class="text-end" style="width: 1% ; font-size: 18px ; ">Total</th>
               </tr>
             </thead>
             <?php $no = 1;
             foreach ($detail as $datdet) {
               $tampil = $datdet['pcs'] != 0 ? $datdet['pcs'] : $datdet['kgs']; ?>
               <tr>
-                <td class="text-center p-1"><?= $no++; ?></td>
+                <td class="text-center p-1" style="font-size: 16px !important;"><?= $no++; ?></td>
                 <td class="p-1">
-                  <p class="strong mb-1"><?= $datdet['nama_barang']; ?></p>
+                  <p class="strong mb-1" style="font-size: 16px !important;"><?= $datdet['nama_barang']; ?></p>
                 </td>
-                <td class="text-center p-1">
+                <td class="text-center p-1" style="font-size: 16px !important;">
                   <?= $tampil ?>
                 </td>
-                <td class="text-end p-1"><?= $datdet['kodesatuan']; ?></td>
-                <td class="text-end p-1"><?= rupiah($datdet['harga'], 2); ?></td>
-                <td class="text-end p-1"><?= rupiah($datdet['harga'] * $tampil, 2); ?></td>
+                <td class="text-end p-1" style="font-size: 16px !important;"><?= $datdet['kodesatuan']; ?></td>
+                <td class="text-end p-1" style="font-size: 16px !important;"><?= rupiah($datdet['harga'], 2); ?></td>
+                <td class="text-end p-1" style="font-size: 16px !important;"><?= rupiah($datdet['harga'] * $tampil, 2); ?></td>
               </tr>
             <?php } ?>
             <?php for ($x = 0; $x <= (12 - $no); $x++) { ?>
               <tr>
-                <td class="text-center p-1"><?= $x + $no; ?></td>
-                <td class="p-1">
-                  <p class="strong mb-1"></p>
+                <td class="text-center p-1" style="font-size: 16px !important;">&nbsp;<?= $x + $no; ?></td>
+                <td class="p-1" style="font-size: 16px !important;">
+                  <p class="strong mb-1">&nbsp;</p>
                 </td>
-                <td class="text-center p-1">
-
-                </td>
-                <td class="text-end p-1"></td>
-                <td class="text-end p-1"></td>
-                <td class="text-end p-1"></td>
+                <td class="text-center p-1" style="font-size: 16px !important;">&nbsp;</td>
+                <td class="text-end p-1" style="font-size: 16px !important;">&nbsp;</td>
+                <td class="text-end p-1" style="font-size: 16px !important;">&nbsp;</td>
+                <td class="text-end p-1" style="font-size: 16px !important;">&nbsp;</td>
               </tr>
             <?php } ?>
             <tr>
-              <td class="p-1" colspan="4" rowspan="5">
+              <td class="p-1" colspan="4" rowspan="5" style="font-size: 16px !important;">
                 Terbilang : <strong><?= terbilang(($header['totalharga'] - $header['diskon']) + $header['ppn'] - $header['pph']); ?></strong>
                 <br>
                 <br>
@@ -117,31 +115,31 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <br>
                 Tanggal rencana Datang barang : <?= tgl_indo($header['tgl_dtb']); ?>
               </td>
-              <td class="strong text-end p-1">Subtotal</td>
-              <td class="text-end p-1"><?= rupiah($header['totalharga'], 2); ?></td>
+              <td class="strong text-end p-1" style="font-size: 16px !important;">Subtotal</td>
+              <td class="text-end p-1" style="font-size: 16px !important;"><?= rupiah($header['totalharga'], 2); ?></td>
             </tr>
             <tr>
-              <td class="strong text-end p-1">Diskon</td>
+              <td class="strong text-end p-1" style="font-size: 16px !important;">Diskon</td>
               <td class="text-end p-1"><?= rupiah($header['diskon'], 2); ?></td>
             </tr>
             <tr>
-              <td class="strong text-end p-1">PPN(<?= rupiah($header['cekppn'], 0); ?>%)</td>
-              <td class="text-end p-1"><?= rupiah($header['ppn'], 2); ?></td>
+              <td class="strong text-end p-1" style="font-size: 16px !important;">PPN(<?= rupiah($header['cekppn'], 0); ?>%)</td>
+              <td class="text-end p-1" style="font-size: 14px !important;"><?= rupiah($header['ppn'], 2); ?></td>
             </tr>
             <tr>
-              <td class="strong text-end p-1">PPH</td>
-              <td class="text-end p-1"><?= rupiah($header['pph'], 2); ?></td>
+              <td class="strong text-end p-1" style="font-size: 16px !important;">PPH</td>
+              <td class="text-end p-1" style="font-size: 16px !important;"><?= rupiah($header['pph'], 2); ?></td>
             </tr>
             <tr>
-              <td class="font-weight-bold text-uppercase text-end p-1">Total</td>
-              <td class="font-weight-bold text-end p-1"><?= rupiah(($header['totalharga'] - $header['diskon']) + $header['ppn'] - $header['pph'], 2); ?></td>
+              <td class="font-weight-bold text-uppercase text-end p-1" style="font-size: 16px !important;">Total</td>
+              <td class="font-weight-bold text-end p-1" style="font-size: 16px !important;"><?= rupiah(($header['totalharga'] - $header['diskon']) + $header['ppn'] - $header['pph'], 2); ?></td>
             </tr>
             <tr>
               <td colspan="8" class="p-1">Catatan :</td>
             </tr>
             <tr>
-              <td colspan="8" class="p-1" style="font-size: 18px;">
-                <ol>
+              <td colspan="8" class="p-1">
+                <ol style="font-size: 22px !important; line-height : 22px !important;">
                   <li>Pesanan dikirim ke PT. Indoneptune Net Manufacturing, Jl. Raya Bandung-Garut Km.25 Rancaekek</li>
                   <li>Pembayaran 1 (satu) bulan setelah barang di terima</li>
                   <?php for ($x = 1; $x <= 3; $x++) { ?>
@@ -161,7 +159,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </tr>
           </table>
         </div>
-        <p>Kami ucapkan terima kasih atas perhatian dan kerjasamanya, <br>
+        <p style="font-size: 20px !important; color : black ;">Kami ucapkan terima kasih atas perhatian dan kerjasamanya, <br>
           Hormat Kami,</p>
       </div>
     </div>
