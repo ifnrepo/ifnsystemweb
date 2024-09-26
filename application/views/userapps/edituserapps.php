@@ -57,7 +57,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                    <select name="jabatan" id="jabatan" class="form-control form-select">
                     <option value="">Jabatan</option>
                     <?php foreach ($jabat as $jbt) : $selek = $jbt['nama_jabatan']==strtoupper($user['jabatan']) ? 'selected' : ''; ?>
-                      <option value="<?= $jbt['nama_jabatan']; ?>" <?= $selek; ?>><?= $jbt['nama_jabatan']; ?></option>
+                      <option value="<?= $jbt['nama_jabatan']; ?>" <?= $selek; ?>><?= $jbt['nojab'].' # '.$jbt['nama_jabatan']; ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -160,7 +160,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col font-bold">Validator Purchase Order</span>
+                      <span class="col font-bold">Validator Purchase Order (PO)</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <?php $poaktif = $user['cekpo'] == 1 ? 'checked' : ''; ?>
@@ -348,11 +348,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master11" name="master11" type="checkbox" <?= cekceklis($user['master'], 11); ?>>
-                                <span class="form-check-label">Jabatan</span>
+                                <span class="form-check-label">Data Jabatan</span>
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master12" name="master12" type="checkbox" <?= cekceklis($user['master'], 12); ?>>
-                                <span class="form-check-label">Grup</span>
+                                <span class="form-check-label">Data Grup</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master14" name="master14" type="checkbox" <?= cekceklis($user['master'], 14); ?>>
+                                <span class="form-check-label">Harga cost division</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master16" name="master15" type="checkbox" <?= cekceklis($user['master'], 15); ?>>
+                                <span class="form-check-label">Setting cost division</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master16" name="master16" type="checkbox" <?= cekceklis($user['master'], 16); ?>>
+                                <span class="form-check-label">Proses Borongan</span>
                               </label>
                               <!-- xx -->
                             </div>
@@ -390,7 +402,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi7" name="transaksi7" type="checkbox" <?= cekceklis($user['transaksi'], 7); ?>>
-                                <span class="form-check-label">IB (PENERIMAAN BARANG)</span>
+                                <span class="form-check-label">IB (AJU MASUK BARANG)</span>
                               </label>
                               <!-- xx -->
                             </div>
@@ -409,9 +421,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">Inventory</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="other3" name="other3" type="checkbox" <?= cekceklis($user['other'], 3); ?>>
-                                <span class="form-check-label">Inventory Mesin</span>
+                                <input class="form-check-input" id="other8" name="other8" type="checkbox" <?= cekceklis($user['other'], 8); ?>>
+                                <span class="form-check-label">Harga Material</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other9" name="other9" type="checkbox" <?= cekceklis($user['other'], 9); ?>>
+                                <span class="form-check-label">Pricing Inventory</span>
+                              </label>
+                              
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="other4" name="other4" type="checkbox" <?= cekceklis($user['other'], 4); ?>>
                                 <span class="form-check-label">BC Masuk</span>
@@ -421,6 +438,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">BC Keluar</span>
                               </label>
                               <label class="form-check mb-1">
+                                <input class="form-check-input" id="other10" name="other10" type="checkbox" <?= cekceklis($user['other'], 10); ?>>
+                                <span class="form-check-label">Material</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other11" name="other11" type="checkbox" <?= cekceklis($user['other'], 11); ?>>
+                                <span class="form-check-label">WIP</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other12" name="other12" type="checkbox" <?= cekceklis($user['other'], 12); ?>>
+                                <span class="form-check-label">Finished Goods</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other3" name="other3" type="checkbox" <?= cekceklis($user['other'], 3); ?>>
+                                <span class="form-check-label">Barang Modal</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="other13" name="other13" type="checkbox" <?= cekceklis($user['other'], 13); ?>>
+                                <span class="form-check-label">Scrap / Waste</span>
+                              </label>
+                              <label class="form-check mb-1">
                                 <input class="form-check-input" id="other7" name="other7" type="checkbox" <?= cekceklis($user['other'], 7); ?>>
                                 <span class="form-check-label">Akses CCTV</span>
                               </label>
@@ -428,10 +465,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="other6" name="other6" type="checkbox" <?= cekceklis($user['other'], 6); ?>>
                                 <span class="form-check-label">Log Activity</span>
                               </label>
-                              <label class="form-check mb-1">
-                                <input class="form-check-input" id="other8" name="other8" type="checkbox" <?= cekceklis($user['other'], 8); ?>>
-                                <span class="form-check-label">Harga Material</span>
-                              </label>
+                              
                             </div>
                             <div class="col-6">
                               <!-- xx -->

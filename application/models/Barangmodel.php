@@ -16,7 +16,7 @@ class Barangmodel extends CI_Model
     }
     public function getdata($filter_kategori,$filter_inv,$filter_act)
     {
-        $this->db->select('barang.*,satuan.namasatuan,kategori.nama_kategori,(select count(*) from bom_barang where id_barang = barang.id) as jmbom', FALSE);
+        $this->db->select('barang.*,satuan.namasatuan,satuan.kodesatuan,kategori.nama_kategori,(select count(*) from bom_barang where id_barang = barang.id) as jmbom', FALSE);
         $this->db->from($this->table);
         $this->db->join('kategori', 'kategori.kategori_id = barang.id_kategori', 'left');
         $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
@@ -91,7 +91,7 @@ class Barangmodel extends CI_Model
         $query = $this->db->update('barang', $data);
         $this->helpermodel->isilog($this->db->last_query());
 
-        $this->db->select('barang.*,kategori.nama_kategori,satuan.namasatuan');
+        $this->db->select('barang.*,kategori.nama_kategori,satuan.namasatuan,satuan.kodesatuan');
         $this->db->from('barang');
         $this->db->join('kategori','kategori.kategori_id = barang.id_kategori','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');

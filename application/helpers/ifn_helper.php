@@ -431,6 +431,18 @@ function riwayatdok($id)
     $hasil = $CI->helpermodel->riwayatdok($id);
     return $hasil;
 }
+function riwayatbbl($id)
+{
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->riwayatbbl($id);
+    return $hasil;
+}
+function riwayatpo($id)
+{
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->riwayatpo($id);
+    return $hasil;
+}
 function get_client_ip()
 {
     $ipaddress = '';

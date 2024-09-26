@@ -92,7 +92,7 @@
                                         <?php if(is_array($raw)){ ?>
                                             <ul>
                                                 <?php foreach ($raw as $ruw) { ?>
-                                                    <li><?= $ruw; ?></li>
+                                                    <li style="font-size: 12px;"><?= $ruw; ?></li>
                                                 <?php } ?>
                                             </ul>
                                         <?php }else{ ?>

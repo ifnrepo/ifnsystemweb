@@ -360,7 +360,10 @@ class Pb extends CI_Controller
         $pdf->Cell(190, 1, '', 1, 0, '', 1);
         $pdf->ln(1);
         $header = $this->pb_model->getdatabyid($id);
-        $isi = 'Nobon ' . $header['nomor_dok'] . "\r\n" . datauser($header['user_tuju'], 'name') . "\r\n" . 'Date : ' . tglmysql2($header['tgl_tuju']);
+        $isi = 'Nobon ' . $header['nomor_dok'] . "\r\n" . 'dibuat oleh : ' . datauser($header['user_ok'], 'name') . "\r\n" . 'Date : ' . tglmysql2($header['tgl_ok']);
+        if($header['ok_valid']==1){
+        $isi .= "\r\n" .'disetujui oleh : ' . datauser($header['user_valid'], 'name') . "\r\n" . 'Date : ' . tglmysql2($header['tgl_valid']);
+        }
         $qr = $this->cetakqr2($isi, $header['id']);
         $pdf->Image($qr . ".png", 177, 30, 18);
         $pdf->SetFont('Lato', '', 10);
@@ -375,7 +378,7 @@ class Pb extends CI_Controller
         $pdf->Cell(2, 5, ':', 0, 0);
         $pdf->Cell(60, 5, $header['departemen'], 'R', 0);
         $pdf->SetFont('Latob', '', 9);
-        $pdf->Cell(41, 5, substr(datauser($header['user_tuju'], 'name'), 0, 20), 'R', 0);
+        $pdf->Cell(41, 5, substr(datauser($header['user_valid'], 'name'), 0, 20), 'R', 0);
         $pdf->SetFont('Lato', '', 9);
         $pdf->Cell(41, 5, '', 'R', 0);
         $pdf->Cell(28, 5, '', 'R', 1);
@@ -383,7 +386,7 @@ class Pb extends CI_Controller
         $pdf->Cell(2, 5, ':', 0, 0);
         $pdf->Cell(60, 5, $header['tgl'], 'R', 0);
         $pdf->SetFont('Latob', '', 9);
-        $pdf->Cell(41, 5, substr(datauser($header['user_tuju'], 'jabatan'), 0, 20), 'R', 0);
+        $pdf->Cell(41, 5, substr(datauser($header['user_valid'], 'jabatan'), 0, 20), 'R', 0);
         $pdf->SetFont('Lato', '', 9);
         $pdf->Cell(41, 5, '', 'R', 0);
         $pdf->Cell(28, 5, '', 'R', 1);

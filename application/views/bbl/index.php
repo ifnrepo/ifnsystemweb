@@ -164,7 +164,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                         if($datdet['ok_tuju']==0){
                                                             $tungguvalid = 'Tunggu Validasi GM Purchasing';
                                                         }else{
-                                                            $tungguvalid = 'Proses Pembuatan PO';
+                                                            $tungguvalid = 'Proses PO';
                                                         }
                                                     }
                                                 }

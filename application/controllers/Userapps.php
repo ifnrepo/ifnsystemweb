@@ -45,7 +45,7 @@ class Userapps extends CI_Controller
 		$data['deptpb'] = $this->deptmodel->getdata_dept_pb();
 		$data['dept'] = $this->db->order_by('departemen')->get('dept')->result_array();
 		$data['level'] = $this->db->get('level_user')->result_array();
-		$data['jabat'] = $this->db->get('jabatan')->result_array();
+		$data['jabat'] = $this->db->order_by('nojab', 'ASC')->get('jabatan')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/adduserapps', $data);
@@ -61,7 +61,7 @@ class Userapps extends CI_Controller
 		$data['deptpb'] = $this->deptmodel->getdata_dept_pb();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$data['dept'] = $this->db->order_by('departemen')->get('dept')->result_array();
-		$data['jabat'] = $this->db->get('jabatan')->result_array();
+		$data['jabat'] = $this->db->order_by('nojab', 'ASC')->get('jabatan')->result_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/edituserapps', $data);
