@@ -313,9 +313,26 @@ $("#xsimpanib").click(function () {
 		pesan("Barang kosong !", "info");
 		return false;
 	}
-	$("#carisimpanib").click();
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "ib/cekhargabarang",
+		data: {
+			id: $("#id_header").val(),
+		},
+		success: function (data) {
+			if (data == 0) {
+				$("#carisimpanib").click();
+			} else {
+				pesan("Harga barang harus diisi !", "info");
+			}
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
 });
-//End IB JS
 function getdataib() {
 	// alert($("#dept_tuju").val());
 	$.ajax({

@@ -9,9 +9,9 @@ class In_model extends CI_Model{
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
             'data_ok' => 1,
-            // 'ok_valid' => 0
+            // 'ok_valid' => 1
         ];
-        $kondisi = " (kode_dok='T' OR kode_dok = 'IB')";
+        $kondisi = " (kode_dok='T' OR (kode_dok = 'IB' AND ok_valid = 1))";
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->where($arrkondisi);
