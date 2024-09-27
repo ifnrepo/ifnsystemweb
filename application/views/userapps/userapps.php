@@ -48,9 +48,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a class="btn btn-sm btn-danger btn-icon text-white" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'userapps/hapusdata/' . $key['id']; ?>" title="Hapus data">
                       <i class="fa fa-trash-o"></i>
                     </a>
-                    <a href="<?= base_url() . 'userapps/viewuser/' . $key['id']; ?>" class="btn btn-sm btn-teal btn-icon" id="edituser" rel="<?= $key['id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View User">
+                    <!-- <a href="<?= base_url() . 'userapps/viewuser/' . $key['id']; ?>" class="btn btn-sm btn-teal btn-icon" id="edituser" rel="<?= $key['id']; ?>" title="View data" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View User">
                       <i class="fa fa-eye"></i>
-                    </a>
+                    </a> -->
                   </td>
                 </tr>
               <?php endforeach; ?>
