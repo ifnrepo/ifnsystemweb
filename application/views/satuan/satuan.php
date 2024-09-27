@@ -19,6 +19,12 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
+        <div class="card card-active mb-2">
+          <div class="card-body p-1 text-right">
+            <a href="<?= base_url().'satuan/excel'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Excel</span></a>
+            <a href="<?= base_url().'satuan/cetakpdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">PDF</span></a>
+          </div>
+        </div>
         <div id="table-default" class="table-responsive">
           <table class="table datatable">
             <thead>
