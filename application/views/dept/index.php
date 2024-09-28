@@ -20,6 +20,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         <div class="card">
             <div class="card-body">
+                <div class="card card-active mb-2">
+                    <div class="card-body p-1 text-right">
+                        Export Data To :
+                        <a href="<?= base_url() . 'dept/excel'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Excel</span></a>
+                        <a href="<?= base_url() . 'dept/cetakpdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">PDF</span></a>
+                    </div>
+                </div>
                 <div id="table-default" class="table-responsive">
                     <table class="table datatable">
                         <thead>
@@ -34,7 +41,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </thead>
                         <tbody class="table-tbody" style="font-size: 13px !important;">
                             <?php $no = 0;
-                            foreach ($dept as $key) : $no++; $oth = cekoth($key['pb'],$key['bbl'],$key['adj']); ?>
+                            foreach ($dept as $key) : $no++;
+                                $oth = cekoth($key['pb'], $key['bbl'], $key['adj']); ?>
                                 <tr>
                                     <td><?= $no; ?></td>
                                     <td><?= $key['dept_id']; ?></td>

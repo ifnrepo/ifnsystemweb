@@ -20,6 +20,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <?= $pesan = $this->session->flashdata('pesan'); ?>
         <div class="card">
             <div class="card-body">
+                <div class="card card-active mb-2">
+                    <div class="card-body p-1 text-right">
+                        Export Data To :
+                        <a href="<?= base_url() . 'customer/excel'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Excel</span></a>
+                        <a href="<?= base_url() . 'customer/cetakpdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">PDF</span></a>
+                    </div>
+                </div>
                 <div id="table-default" class="table-responsive">
                     <table class="table datatable">
                         <thead>
@@ -46,11 +53,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td>
                                         <div class="btn-group" role="group">
                                             <label for="btn-radio-dropdown-dropdown" class="btn btn-sm btn-success btn-flat dropdown-toggle text-black" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                                            Aksi
+                                                Aksi
                                             </label>
                                             <div class="dropdown-menu">
                                                 <label class="dropdown-item p-1">
-                                                    <a href="<?= base_url() . 'customer/editcustomer/' . $key['id']; ?>"  data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Customer" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="<?= $key['id']; ?>" title="Edit data">
+                                                    <a href="<?= base_url() . 'customer/editcustomer/' . $key['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Customer" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="<?= $key['id']; ?>" title="Edit data">
                                                         <i class="fa fa-edit pr-1"></i> Edit Data
                                                     </a>
                                                 </label>

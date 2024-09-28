@@ -98,6 +98,17 @@ $(document).ready(function () {
 	$("#filteract").on("change", function () {
 		table.ajax.reload();
 	});
+
+	$("#excel").on("click", function () {
+		var filter_kategori = $("#filter").val();
+		var filter_inv = $("#filterinv").val();
+		var filter_act = $("#filteract").val();
+	
+		var url = base_url + "barang/excel?filter_kategori=" + filter_kategori + "&filter_inv=" + filter_inv + "&filter_act=" + filter_act;
+	
+		window.location.href = url; 
+	});
+	
 });
 $("#tabelnya tbody").on("click", "td", function () {
 	var tr = $(this).closest("tr");
