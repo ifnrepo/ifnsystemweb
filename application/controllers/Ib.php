@@ -73,7 +73,7 @@ class Ib extends CI_Controller
     public function cekbc()
     {
         $header['header'] = 'transaksi';
-        $data['data'] = $this->ibmodel->getdatabyid($kode);
+        $data['data'] = $this->ibmodel->getdatacekbc();
         $data['mtuang'] = $this->mtuangmodel->getdata();
         $data['jnsbc'] = $this->ibmodel->getdokbcmasuk();
         $footer['fungsi'] = 'ib';
@@ -255,6 +255,9 @@ class Ib extends CI_Controller
         $id  = $_POST['id'];
         $hasil = $this->ibmodel->cekhargabarang($id);
         echo $hasil;
+    }
+    public function viewbc($id){
+        $this->load->view('ib/viewbc');
     }
     //End IB Controller
     

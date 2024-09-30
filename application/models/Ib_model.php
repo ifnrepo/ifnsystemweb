@@ -226,6 +226,15 @@ class Ib_model extends CI_Model
         $this->db->where('harga',0);
         return $this->db->get('tb_detail')->num_rows();
     }
+    public function getdatacekbc(){
+        $kondisi = [
+            'data_ok' => 1,
+            'ok_tuju' => 0,
+            'kode_dok' => 'IB'
+        ];
+        $this->db->where($kondisi);
+        return $this->db->get('tb_header');
+    }
     //End IB Models
 
 
