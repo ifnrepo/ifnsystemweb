@@ -26,7 +26,7 @@ class Ib_model extends CI_Model
     }
     public function getdatadetailib($data)
     {
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
@@ -34,6 +34,7 @@ class Ib_model extends CI_Model
         $this->db->join('barang c', 'c.id = a.id_barang', 'left');
         $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
         $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
+        $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left');
         
         $this->db->where('a.id_header', $data);
         return $this->db->get()->result_array();
@@ -234,6 +235,26 @@ class Ib_model extends CI_Model
         ];
         $this->db->where($kondisi);
         return $this->db->get('tb_header');
+    }
+    public function simpandatabc($data,$head){
+        if($data==1){
+           $kondisi = [
+                'ok_tuju' => 1,
+                'user_tuju' => $this->session->userdata('id'),
+                'tgl_tuju' => date('Y-m-d H:i:s'),
+            ];
+            $this->db->where('id',$head);
+            return $this->db->update('tb_header',$kondisi);
+        }else{
+            $kondisi = [
+                'ok_tuju' => 1,
+                'tanpa_bc' => 1,
+                'user_tuju' => $this->session->userdata('id'),
+                'tgl_tuju' => date('Y-m-d H:i:s'),
+            ];
+            $this->db->where('id',$head);
+            return $this->db->update('tb_header',$kondisi);
+        }
     }
     //End IB Models
 

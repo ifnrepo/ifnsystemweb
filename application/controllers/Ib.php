@@ -257,7 +257,15 @@ class Ib extends CI_Controller
         echo $hasil;
     }
     public function viewbc($id){
-        $this->load->view('ib/viewbc');
+        $data['header'] = $this->ibmodel->getdatadetailib($id);
+        $data['datheader'] = $id;
+        $this->load->view('ib/viewbc',$data);
+    }
+    public function simpandatabc(){
+        $data = $_POST['mode'];
+        $head = $_POST['head'];
+        $hasil = $this->ibmodel->simpandatabc($data,$head);
+        echo $hasil;
     }
     //End IB Controller
     
