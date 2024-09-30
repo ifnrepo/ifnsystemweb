@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Barang extends CI_Controller
 {
     function __construct()
@@ -15,6 +18,10 @@ class Barang extends CI_Controller
         $this->load->model('kategorimodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('helper_model', 'helpermodel');
+
+        $this->load->library('Pdf');
+        // $this->load->library('Codeqr');
+        include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
     }
     public function index()
     {
@@ -26,9 +33,10 @@ class Barang extends CI_Controller
         $this->load->view('barang/barang', $data);
         $this->load->view('layouts/footer', $footer);
     }
-    public function clear(){
+    public function clear()
+    {
         $this->session->unset_userdata('viewalias');
-        $url = base_url().'barang';
+        $url = base_url() . 'barang';
         redirect($url);
     }
     public function tambahdata()
@@ -54,20 +62,20 @@ class Barang extends CI_Controller
         $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
-    public function editbarang($id,$nom)
+    public function editbarang($id, $nom)
     {
         $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
         $data['itemsatuan'] = $this->satuanmodel->getdata();
         $data['itemkategori'] = $this->kategorimodel->getdata();
-        $data['rekrow'] = $nom-1;
+        $data['rekrow'] = $nom - 1;
         $this->load->view('barang/editbarang', $data);
     }
-    public function isistock($id,$nom)
+    public function isistock($id, $nom)
     {
         $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
         $data['itemsatuan'] = $this->satuanmodel->getdata();
         $data['itemkategori'] = $this->kategorimodel->getdata();
-        $data['rekrow'] = $nom-1;
+        $data['rekrow'] = $nom - 1;
         $this->load->view('barang/isistock', $data);
     }
     public function updatebarang()
@@ -149,7 +157,8 @@ class Barang extends CI_Controller
             redirect($url);
         }
     }
-    public function updatestock(){
+    public function updatestock()
+    {
         $data = [
             'id' => $_POST['id'],
             'safety_stock' => $_POST['safety']
@@ -157,9 +166,10 @@ class Barang extends CI_Controller
         $hasil = $this->barangmodel->updatestock($data);
         echo json_encode($hasil->result());
     }
-    public function updateview(){
+    public function updateview()
+    {
         $data = $_POST['isinya'];
-        $this->session->set_userdata('viewalias',$data);
+        $this->session->set_userdata('viewalias', $data);
         echo 1;
     }
 
@@ -171,7 +181,7 @@ class Barang extends CI_Controller
         $filter_kategori = $this->input->post('filter_kategori');
         $filter_inv = $this->input->post('filter_inv');
         $filter_act = $this->input->post('filter_act');
-        $list = $this->barangmodel->get_datatables($filter_kategori,$filter_inv,$filter_act);
+        $list = $this->barangmodel->get_datatables($filter_kategori, $filter_inv, $filter_act);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $field) {
@@ -180,7 +190,7 @@ class Barang extends CI_Controller
             $row[] = $no;
             $row[] = $field->kode;
             $row[] = $field->nama_barang;
-            if($this->session->userdata('viewalias')==1){
+            if ($this->session->userdata('viewalias') == 1) {
                 $row[] = $field->nama_alias;
             }
             $row[] = $field->nama_kategori;
@@ -200,15 +210,15 @@ class Barang extends CI_Controller
             } else {
                 $row[] = '<i class="fa fa-times text-danger"></i>';
             }
-            if($field->safety_stock == 0){
+            if ($field->safety_stock == 0) {
                 $row[] = '-';
-            }else{
-                $row[] = rupiah($field->safety_stock,2);
+            } else {
+                $row[] = rupiah($field->safety_stock, 2);
             }
             $jmbon = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg badge-notification badge-pill'>" . $field->jmbom . "</span>" : "";
-            $buton = "<a href=" . base_url() . 'barang/editbarang/' . $field->id .'/'.$no." class='btn btn-sm btn-primary btn-icon text-white mr-1' rel=" . $field->id . " rel2=" . $no . " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
+            $buton = "<a href=" . base_url() . 'barang/editbarang/' . $field->id . '/' . $no . " class='btn btn-sm btn-primary btn-icon text-white mr-1' rel=" . $field->id . " rel2=" . $no . " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
             $buton .= "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=" . base_url() . 'barang/hapusbarang/' . $field->id . "><i class='fa fa-trash-o'></i></a>";
-            $buton .= "<a href=" . base_url() . 'barang/isistock/' . $field->id .'/'.$no. " class='btn btn-sm btn-info btn-icon mr-1' id='stockbarang' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Isi Safety Stock' title='Isi Safety Stock' ><i class='fa fa-info pl-1 pr-1'></i></a>";
+            $buton .= "<a href=" . base_url() . 'barang/isistock/' . $field->id . '/' . $no . " class='btn btn-sm btn-info btn-icon mr-1' id='stockbarang' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Isi Safety Stock' title='Isi Safety Stock' ><i class='fa fa-info pl-1 pr-1'></i></a>";
             $buton .= "<a href=" . base_url() . 'barang/bombarang/' . $field->id . " class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM" . $jmbon . "</a>";
             $jmbon2 = $field->jmbom > 0 ? "<span class='badge bg-pink text-blue-fg ms-2'>" . $field->jmbom . "</span>" : "";
             $buton2 = '<div class="btn-group" role="group">';
@@ -217,23 +227,23 @@ class Barang extends CI_Controller
             $buton2 .= '</label>';
             $buton2 .= '<div class="dropdown-menu">';
             $buton2 .= '<label class="dropdown-item p-1">';
-            $buton2 .= '<a href='.base_url() . 'barang/editbarang/' . $field->id.'/'.$no.' rel="' . $field->id . '" rel2="' . $no . '" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Barang" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="'.$key['id'].'" title="Edit data">';
+            $buton2 .= '<a href=' . base_url() . 'barang/editbarang/' . $field->id . '/' . $no . ' rel="' . $field->id . '" rel2="' . $no . '" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Barang" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="' . $key['id'] . '" title="Edit data">';
             $buton2 .= '<i class="fa fa-edit pr-1"></i> Edit Data';
             $buton2 .= '</a>';
             $buton2 .= '</label>';
             $buton2 .= '<label class="dropdown-item p-1">';
-            $buton2 .= '<a class="btn btn-sm btn-danger btn-icon text-white w-100" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href='.base_url() . 'barang/hapusbarang/' . $field->id.' title="Hapus data">';
+            $buton2 .= '<a class="btn btn-sm btn-danger btn-icon text-white w-100" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href=' . base_url() . 'barang/hapusbarang/' . $field->id . ' title="Hapus data">';
             $buton2 .= '<i class="fa fa-trash-o pr-1"></i> Hapus Data';
             $buton2 .= '</a>';
             $buton2 .= '</label>';
             $buton2 .= '<label class="dropdown-item p-1">';
-            $buton2 .= '<a href='.base_url() . 'barang/isistock/' . $field->id .' class="btn btn-sm btn-info btn-icon w-100" id="edituser" rel="'.$key['id'].'" title="View data" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Isi Safety Stock">';
+            $buton2 .= '<a href=' . base_url() . 'barang/isistock/' . $field->id . ' class="btn btn-sm btn-info btn-icon w-100" id="edituser" rel="' . $key['id'] . '" title="View data" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Isi Safety Stock">';
             $buton2 .= '<i class="fa fa-info pr-1"></i> Isi Safety Stock';
             $buton2 .= '</a>';
             $buton2 .= '</label>';
             $buton2 .= '<label class="dropdown-item p-1">';
-            $buton2 .= '<a href='.base_url() . 'barang/bombarang/' . $field->id .' class="btn btn-sm btn-cyan btn-icon w-100" id="edituser" rel="'.$key['id'].'" title="Add Data BOM" >';
-            $buton2 .= 'BOM'.$jmbon2;
+            $buton2 .= '<a href=' . base_url() . 'barang/bombarang/' . $field->id . ' class="btn btn-sm btn-cyan btn-icon w-100" id="edituser" rel="' . $key['id'] . '" title="Add Data BOM" >';
+            $buton2 .= 'BOM' . $jmbon2;
             $buton2 .= '</a>';
             $buton2 .= '</label>';
             $buton2 .= '</div>';
@@ -245,7 +255,7 @@ class Barang extends CI_Controller
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->barangmodel->count_all(),
-            "recordsFiltered" => $this->barangmodel->count_filtered($filter_kategori,$filter_inv,$filter_act),
+            "recordsFiltered" => $this->barangmodel->count_filtered($filter_kategori, $filter_inv, $filter_act),
             "data" => $data,
         );
 
@@ -253,5 +263,153 @@ class Barang extends CI_Controller
         echo json_encode($output);
         ob_end_flush();
         error_log("Finished fetching data");
+    }
+
+    // public function excel()
+    // {
+    //     $filter_kategori = $this->input->get('filter_kategori');
+    //     $filter_inv = $this->input->get('filter_inv');
+    //     $filter_act = $this->input->get('filter_act');
+
+    //     $spreadsheet = new Spreadsheet();
+    //     $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+    //     $sheet->setCellValue('A1', "DATA BARANG"); // Set kolom A1 dengan tulisan "DATA SISWA"    
+    //     $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+
+    //     // Buat header tabel nya pada baris ke 3    
+    //     $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
+    //     $sheet->setCellValue('B2', "KODE"); // Set kolom B3 dengan tulisan "KODE"    
+    //     $sheet->setCellValue('C2', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"   
+    //     $sheet->setCellValue('D2', "KATEGORI");
+    //     $sheet->setCellValue('E2', "SATUAN");
+    //     $sheet->setCellValue('F2', "DLN");
+    //     $sheet->setCellValue('G2', "NO INV");
+    //     $sheet->setCellValue('H2', "ACT");
+    //     $sheet->setCellValue('I2', "SAFETY");
+
+
+    //     // Panggil model Get Data   
+    //     $barang = $this->barangmodel->get_datatables($filter_kategori, $filter_inv, $filter_act);
+    //     $no = 1;
+
+    //     // Untuk penomoran tabel, di awal set dengan 1    
+    //     $numrow = 8;
+
+    //     // Set baris pertama untuk isi tabel adalah baris ke 3    
+    //     foreach ($barang as $data) {
+    //         // Lakukan looping pada variabel      
+    //         $sheet->setCellValue('A' . $numrow, $no);
+    //         $sheet->setCellValue('B' . $numrow, $data['kode']);
+    //         $sheet->setCellValue('C' . $numrow, $data['nama_barang']);
+    //         $sheet->setCellValue('D' . $numrow, $data['nama_alias']);
+    //         $sheet->setCellValue('E' . $numrow, $data['nama_kategori']);
+    //         $sheet->setCellValue('F' . $numrow, $data['namasatuan']);
+    //         $sheet->setCellValue('G' . $numrow, $data['dln']);
+    //         $sheet->setCellValue('H' . $numrow, $data['noinv']);
+    //         $sheet->setCellValue('I' . $numrow, $data['act']);
+    //         $no++;
+    //         // Tambah 1 setiap kali looping      
+    //         $numrow++; // Tambah 1 setiap kali looping    
+    //     }
+
+
+    //     // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+    //     $sheet->getDefaultRowDimension()->setRowHeight(-1);
+    //     // Set orientasi kertas jadi LANDSCAPE    
+    //     $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+    //     // Set judul file excel nya    
+    //     $sheet->setTitle(" DATA BARANG");
+
+    //     // Proses file excel    
+    //     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    //     header('Content-Disposition: attachment; filename="Data Barang.xlsx"'); // Set nama file excel nya    
+    //     header('Cache-Control: max-age=0');
+    //     $writer = new Xlsx($spreadsheet);
+    //     $writer->save('php://output');
+    //     $this->helpermodel->isilog('Download Excel DATA BARANG');
+    // }
+
+    public function excel()
+    {
+        // Ambil filter
+        $filter_kategori = $this->input->get('filter_kategori');
+        $filter_inv = $this->input->get('filter_inv');
+        $filter_act = $this->input->get('filter_act');
+
+        // Inisialisasi Spreadsheet
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+        // Set Header
+        $sheet->setCellValue('A1', "DATA BARANG")->getStyle('A1')->getFont()->setBold(true);
+        // Set Header Tabel
+        $headers = ["NO", "KODE", "NAMA BARANG", "KATEGORI", "SATUAN", "DLN", "NO INV", "ACT"];
+        foreach ($headers as $index => $header) {
+            $sheet->setCellValue(chr(65 + $index) . '2', $header);
+        }
+
+        // Panggil Data
+        $barang = $this->barangmodel->get_datatables($filter_kategori, $filter_inv, $filter_act);
+        $numrow = 3;
+        foreach ($barang as $data) {
+            $sheet->setCellValue('A' . $numrow, $numrow - 2);
+            $sheet->setCellValue('B' . $numrow, $data->kode);
+            $sheet->setCellValue('C' . $numrow, $data->nama_barang);
+            $sheet->setCellValue('D' . $numrow, $data->nama_kategori);
+            $sheet->setCellValue('E' . $numrow, $data->namasatuan);
+            $sheet->setCellValue('F' . $numrow, $data->dln);
+            $sheet->setCellValue('G' . $numrow, $data->noinv);
+            $sheet->setCellValue('H' . $numrow, $data->act);
+            $numrow++;
+        }
+
+        // Set Header untuk File Excel
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data_Barang.xlsx"'); // Pastikan tidak ada spasi di nama file
+        header('Cache-Control: max-age=0');
+
+        // Simpan dan Output File
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+
+        // Jangan ada output lain setelah ini
+        exit; // Tambahkan exit untuk menghentikan eksekusi skrip
+    }
+
+    public function cetakpdf()
+    {
+        $pdf = new PDF('P', 'mm', 'A4');
+        $pdf->AliasNbPages();
+        // $pdf->setMargins(5,5,5);
+        $pdf->AddFont('Lato', '', 'Lato-Regular.php');
+        $pdf->AddFont('Latob', '', 'Lato-Bold.php');
+        $pdf->SetFillColor(7, 178, 251);
+        $pdf->SetFont('Latob', '', 12);
+        // $isi = $this->jualmodel->getrekap();
+        $pdf->SetFillColor(205, 205, 205);
+        $pdf->AddPage();
+        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 155, 5, 55);
+        $pdf->Cell(30, 18, 'DATA BARANG');
+        $pdf->ln(12);
+        $pdf->SetFont('Latob', '', 10);
+        $pdf->Cell(15, 8, 'No', 1, 0, 'C');
+        $pdf->Cell(35, 8, 'Kode ', 1, 0, 'C');
+        $pdf->Cell(140, 8, 'Nama Barang', 1, 0, 'C');
+        $pdf->SetFont('Lato', '', 10);
+        $pdf->ln(8);
+        $detail = $this->barangmodel->count_filtered($filter_kategori, $filter_inv, $filter_act);
+        $no = 1;
+        foreach ($detail as $det) {
+            $pdf->Cell(15, 6, $no++, 1, 0, 'C');
+            $pdf->Cell(35, 6, $det['kode'], 1);
+            $pdf->Cell(140, 6, $det['nama_barang'], 1);
+            $pdf->ln(6);
+        }
+        $pdf->SetFont('Lato', '', 8);
+        $pdf->ln(10);
+        $pdf->Cell(190, 6, 'Tgl Cetak : ' . date('d-m-Y H:i:s') . ' oleh ' . datauser($this->session->userdata('id'), 'name'), 0, 0, 'R');
+        $pdf->Output('I', 'Data Barang.pdf');
+        $this->helpermodel->isilog('Download PDF DATA Barang');
     }
 }

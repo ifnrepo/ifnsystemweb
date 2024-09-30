@@ -20,12 +20,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         <div class="card">
             <div class="card-body">
+                <div class="card card-active mb-2">
+                    <div class="card-body p-1 text-right">
+                        Export Data To :
+                        <a href="<?= base_url() . 'kategori/excel'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Excel</span></a>
+                        <a href="<?= base_url() . 'kategori/cetakpdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">PDF</span></a>
+                    </div>
+                </div>
                 <div id="table-default" class="table-responsive">
                     <table class="table datatable">
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Id Kategori</th>
+                                <th style="text-align: center;">Id Kategori</th>
                                 <th>Nama Kategori</th>
                                 <th>Aksi</th>
                             </tr>
@@ -35,7 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             foreach ($kategori as $key) : $no++; ?>
                                 <tr>
                                     <td><?= $no; ?></td>
-                                    <td><?= $key['kategori_id']; ?></td>
+                                    <td style="text-align: center;"><?= $key['kategori_id']; ?></td>
                                     <td><?= $key['nama_kategori']; ?></td>
                                     <td>
                                         <a href="<?= base_url() . 'kategori/editkategori/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editkategori" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Satuan" rel="<?= $key['id']; ?>" title="Edit data">

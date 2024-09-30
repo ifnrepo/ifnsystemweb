@@ -18,6 +18,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="page-body">
   <div class="container-xl">
     <div class="card">
+      <!-- <div class="card card-active mb-2">
+        <div class="card-body p-1 text-right">
+          Export Data To :
+          <a href="<?= base_url() . 'barang/excel'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Excel</span></a>
+          <a href="<?= base_url() . 'barang/cetakpdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">PDF</span></a>
+
+        </div>
+      </div> -->
+      <div class="card card-active mb-2">
+        <div class="card-body p-1 text-right">
+          Ekspor Data Ke :
+          <a href="#" id="excel" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Excel</span></a>
+          <a href="#" id="export-pdf" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">PDF</span></a>
+        </div>
+      </div>
+
       <div class="row m-1">
         <div class="col-md-3">
           <label class="mb-0 font-kecil font-bold text-azure">Kategori Barang</label>
@@ -46,9 +62,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
         <div class="col-md-2 font-kecil">
           <label class="form-check mt-1 mb-1 bg-teal-lt">
-              <input class="form-check-input" type="checkbox" id="viewalias" <?php if($this->session->userdata('viewalias')==1){ echo "checked"; } ?> >
-              <span class="form-check-label font-bold">Tampilkan Alias</span>
-            </label>
+            <input class="form-check-input" type="checkbox" id="viewalias" <?php if ($this->session->userdata('viewalias') == 1) {
+                                                                              echo "checked";
+                                                                            } ?>>
+            <span class="form-check-label font-bold">Tampilkan Alias</span>
+          </label>
         </div>
       </div>
       <hr class="p-1 m-1">
@@ -61,8 +79,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>No</th>
                 <th>Kode</th>
                 <th>Nama Barang</th>
-                <?php if($this->session->userdata('viewalias')==1){ ?>
-                <th>Alias</th>
+                <?php if ($this->session->userdata('viewalias') == 1) { ?>
+                  <th>Alias</th>
                 <?php } ?>
                 <th>Kategori</th>
                 <th>Satuan</th>

@@ -52,4 +52,11 @@ class Ponet extends CI_Controller
 
         $this->load->view('ponet/detail', $data);
     }
+
+    public function netinstr($po)
+    {
+        $header['header'] = 'manajemen';
+        $data['netinstr'] = $this->Ponet_model->GetDataByPo_id($po);
+        $this->load->view('ponet/netstr', $data);
+    }
 }
