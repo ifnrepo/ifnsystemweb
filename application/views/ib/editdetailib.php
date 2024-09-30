@@ -33,6 +33,13 @@
                     <input type="text" class="form-control font-kecil" aria-label="Text input" placeholder="Satuan Barang" value="<?= $data['namasatuan']; ?>" readonly>
                 </div>
             </div>
+            <?php $hilang = $data['jn_ib']==0 ? 'hilang' : ''; ?>
+            <div class="row mt-1 <?= $hilang; ?>">
+                <label class="col-3 col-form-label">Harga Satuan</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil inputangka text-right" id="harga" aria-label="Text input" placeholder="Harga Barang" value="<?= rupiah($data['harga'],2); ?>">
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -65,7 +72,8 @@
             data: {
                 id: $("#iddetail").val(),
                 pcs : toAngka($("#pcs").val()),
-                kgs : toAngka($("#kgs").val())
+                kgs : toAngka($("#kgs").val()),
+                hrg : toAngka($("#harga").val()),
             },
             success: function (data) {
                 window.location.reload();

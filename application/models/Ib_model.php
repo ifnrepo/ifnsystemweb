@@ -137,6 +137,7 @@ class Ib_model extends CI_Model
         $this->db->where('a.ok_pc',0);
         $this->db->where('a.kode_dok','PO');
         $this->db->where('tb_detail.id_ib',0);
+        $this->db->where('tb_detail.id_po',0);
         $this->db->where('a.id_pemasok',$sup);
         $this->db->where('d.dept_id',$this->session->userdata('depttuju'));
         return $this->db->get();
@@ -154,6 +155,7 @@ class Ib_model extends CI_Model
         $this->db->where('a.ok_pp',1);
         $this->db->where('a.ok_pc',1);
         $this->db->where('a.kode_dok','BBL');
+        $this->db->where('id_ib',0);
         $this->db->where('id_po',0);
         $this->db->where('a.dept_id',$this->session->userdata('depttuju'));
         return $this->db->get();
@@ -180,9 +182,9 @@ class Ib_model extends CI_Model
                 'nobontr' => $headerx['nomor_dok']
             ];
             $this->db->insert('tb_detail', $isi);
-            $this->helpermodel->isilog($this->db->last_query());
             $idsimpan = $this->db->insert_id();
             $this->db->where('id', $arrdat[$x])->update('tb_detail', ['id_ib' => $idsimpan]);
+            $this->helpermodel->isilog($this->db->last_query());
             $itembarang = $this->db->where('id_header', $id)->get('tb_detail')->num_rows();
             $this->db->where('id', $id)->update('tb_header', ['jumlah_barang' => $itembarang]);
         }
@@ -206,10 +208,11 @@ class Ib_model extends CI_Model
     }
     public function getdetailibbyid($data)
     {
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,d.jn_ib");
         $this->db->from('tb_detail a');
         $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
         $this->db->join('barang c', 'c.id = a.id_barang', 'left');
+        $this->db->join('tb_header d', 'd.id = a.id_header', 'left');
         $this->db->where('a.id', $data);
         return $this->db->get()->row_array();
     }
@@ -217,6 +220,20 @@ class Ib_model extends CI_Model
         $this->db->where('masuk',1);
         $hasil = $this->db->get('ref_dok_bc');
         return $hasil;
+    }
+    public function cekhargabarang($id){
+        $this->db->where('id_header',$id);
+        $this->db->where('harga',0);
+        return $this->db->get('tb_detail')->num_rows();
+    }
+    public function getdatacekbc(){
+        $kondisi = [
+            'data_ok' => 1,
+            'ok_tuju' => 0,
+            'kode_dok' => 'IB'
+        ];
+        $this->db->where($kondisi);
+        return $this->db->get('tb_header');
     }
     //End IB Models
 

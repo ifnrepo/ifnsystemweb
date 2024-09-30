@@ -45,29 +45,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         } ?>>CASH</option>
                     </select>
                   </div>
-                  <hr class="m-1">
+                  <!-- <hr class="m-1">
                   <label class="form-check pt-2 pb-2 bg-pink-lt font-bold" style="padding-right: 15px !important">
                     <input class="form-check-input" type="checkbox" id="tanpa_bc" <?php if($data['tanpa_bc']==1){ echo "checked"; } ?> >
                     <span class="form-check-label">Tanpa BC</span>
-                  </label>
-                  <div style="position:absolute;bottom:0px;left:10px;">
-                    <div class="dropdown <?php if ($data['jn_ib'] == 0) {
-                                            echo "hilang";
-                                          } ?>">
-                      <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                        <span class="ml-1">Get Barang</span>
-                      </button>
-                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                        <a class="dropdown-item font-kecil font-bold" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'ib/getbarangib/' . $data['id_pemasok']; ?>" title="BBL Dari BON Permintaan">Dari PO</a>
-                        <a class="dropdown-item font-kecil font-bold" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'ib/getbarangib/'; ?>" title="BBL Tanpa BON Permintaan">Dari BBL</a>
-                      </div>
-                    </div>
-                    <?php $ada = $data['jn_ib'] == 0 ? '/' . $data['id_pemasok'] : ''; ?>
-                    <button href="<?= base_url() . 'ib/getbarangib' . $ada; ?>" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Get data PO" id="getbarang" class="btn btn-sm btn-success hilang">Get</button>
-                    <a href="#" id="cekbarang" class="btn btn-sm btn-success <?php if ($data['jn_ib'] == 1) {
-                                                                                echo "hilang";
-                                                                              } ?>">Get Barang</a>
-                  </div>
+                  </label> -->
+                  
                 </div>
                 <div class="col-4">
                   <h4 class="mb-0 font-kecil font-bold">SUPPLIER</h4>
@@ -85,7 +68,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="input-icon">
                        <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
                   </div>
-
                   </div>
                 </div>
                 <div class="col-3">
@@ -101,6 +83,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <input type="text" class="form-control font-kecil inputtgl" id="tgl_sj" aria-label="Text input with dropdown" placeholder="Tgl SJ" value="<?= tglmysql($data['tgl_sj']); ?>">
                     </div>
                   </div>
+                </div>
+                <div class="col-3">
                   <div class="row mt-1">
                     <label class="col-4 col-form-label font-bold">No Mobil</label>
                     <div class="col">
@@ -113,48 +97,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <input type="text" class="form-control font-kecil" id="no_faktur_pajak" aria-label="Text input with dropdown" placeholder="No F. Pajak" value="<?= $data['no_faktur_pajak']; ?>">
                     </div>
                   </div>
-                  <div class="row mt-1 text-center p-2">
-                    <div id="generatenobc" class="col col-form-label font-bold bg-red-lt">BC No. 000000-000000-00000000-000000</div>
-                  </div>
-                </div>
-                <div class="col-3 bg-cyan-lt p-2">
-                  <div class="row mt-1">
-                    <label class="col-4 col-form-label font-bold">Jenis BC</label>
-                    <!-- <h4 class="mb-0 font-kecil font-bold">Nomor BC</h4> -->
-                    <div class="col">
-                      <select class="form-control form-select font-kecil font-bold" id="jns_bc">
-                      <option value="">-- Pilih --</option>
-                      <?php foreach ($jnsbc->result_array() as $bc) { ?>
-                      <option value="<?= $bc['jns_bc']; ?>" <?php if($bc['jns_bc']==$data['jns_bc']){ echo "selected"; }; ?>><?= $bc['ket_bc']; ?></option>
-                      <?php } ?>
-                      </select>
+                  <div style="position:absolute;bottom:0px;right:10px;">
+                    <div class="dropdown <?php if ($data['jn_ib'] == 0) {
+                                            echo "hilang";
+                                          } ?>">
+                      <button class="btn btn-success btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        <span class="ml-1">Get Barang</span>
+                      </button>
+                      <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                        <?php $sabel = $data['id_pemasok']==0 ? 'disabled' : ''; ?>
+                        <a class="dropdown-item font-kecil font-bold <?= $sabel; ?>" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'ib/getbarangib/' . $data['id_pemasok']; ?>" title="BBL Dari BON Permintaan">Dari PO</a>
+                        <a class="dropdown-item font-kecil font-bold" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'ib/getbarangib/'; ?>" title="BBL Tanpa BON Permintaan">Dari BBL</a>
+                      </div>
                     </div>
-                  </div>
-                  <div class="row mt-1">
-                    <label class="col-4 col-form-label font-bold">Tgl AJU</label>
-                    <div class="col">
-                      <input type="text" class="form-control font-kecil inputtgl" id="tgl_aju" aria-label="Text input with dropdown" placeholder="Tgl AJU" value="<?= tglmysql($data['tgl_aju']); ?>">
-                    </div>
-                  </div>
-                  <div class="row mt-1">
-                    <label class="col-4 col-form-label font-bold">Nomor AJU</label>
-                    <!-- <h4 class="mb-0 font-kecil font-bold">Nomor AJU</h4> -->
-                    <div class="col">
-                      <input type="text" class="form-control font-kecil" id="nomor_aju" aria-label="Text input with dropdown" placeholder="Nomor AJU" value="<?= $data['nomor_aju']; ?>">
-                    </div>
-                  </div>
-                  <div class="row mt-1">
-                    <label class="col-4 col-form-label font-bold">Tgl BC</label>
-                    <div class="col">
-                      <input type="text" class="form-control font-kecil inputtgl" id="tgl_bc" aria-label="Text input with dropdown" placeholder="Tgl BC" value="<?= tglmysql($data['tgl_bc']); ?>">
-                    </div>
-                  </div>
-                  <div class="row mt-1">
-                    <label class="col-4 col-form-label font-bold">Nomor BC</label>
-                    <!-- <h4 class="mb-0 font-kecil font-bold">Nomor BC</h4> -->
-                    <div class="col">
-                      <input type="text" class="form-control font-kecil" id="nomor_bc" aria-label="Text input with dropdown" autocomplete="off" placeholder="Nomor BC" value="<?= $data['nomor_bc']; ?>">
-                    </div>
+                    <?php $ada = $data['jn_ib'] == 0 ? '/' . $data['id_pemasok'] : ''; ?>
+                    <button href="<?= base_url() . 'ib/getbarangib' . $ada; ?>" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Get data PO" id="getbarang" class="btn btn-sm btn-success hilang">Get</button>
+                    <a href="#" id="cekbarang" class="btn btn-sm btn-success <?php if ($data['jn_ib'] == 1) {
+                                                                                echo "hilang";
+                                                                              } ?>">Get Barang</a>
                   </div>
                 </div>
               </div>
@@ -174,6 +134,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Satuan</th>
                     <th>Qty PO</th>
                     <th>Qty Terima</th>
+                    <?php if($data['jn_ib']==1){ ?>
+                    <th>Harga Sat</th>
+                    <?php } ?>
                     <th>Aksi</th>
                   </tr>
                 </thead>

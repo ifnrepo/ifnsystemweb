@@ -49,14 +49,14 @@
             $.ajax({
                 dataType: "json",
                 type: "POST",
-                url: base_url + "po/adddetailpo",
+                url: base_url + "ib/adddetailib",
                 data: {
                     id: $("#id_header").val(),
                     brg: text
                 },
                 success: function(data) {
                     // alert('berhasil');
-                    window.location.href = base_url + "po/datapo/" + $("#id_header").val();
+                    window.location.href = base_url + "ib/dataib/" + $("#id_header").val();
                     // $("#butbatal").click();
                 },
                 error: function(xhr, ajaxOptions, thrownError) {

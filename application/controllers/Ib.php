@@ -70,6 +70,17 @@ class Ib extends CI_Controller
             redirect($url);
         }
     }
+    public function cekbc()
+    {
+        $header['header'] = 'transaksi';
+        $data['data'] = $this->ibmodel->getdatacekbc();
+        $data['mtuang'] = $this->mtuangmodel->getdata();
+        $data['jnsbc'] = $this->ibmodel->getdokbcmasuk();
+        $footer['fungsi'] = 'ib';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('ib/datacekbc', $data);
+        $this->load->view('layouts/footer', $footer);
+    }
     public function hapusib($id)
     {
         $query = $this->ibmodel->hapusib($id);
@@ -142,6 +153,7 @@ class Ib extends CI_Controller
         $hasil = '';
         $id = $_POST['id_header'];
         $query = $this->ibmodel->getdatadetailib($id);
+        $header = $this->ibmodel->getdatabyid($id);
         $totalharga = 0;
         $no = 0;
         foreach ($query as $que) {
@@ -155,6 +167,9 @@ class Ib extends CI_Controller
             $hasil .= "<td>" . $que['namasatuan'] . "</td>";
             $hasil .= "<td>" . rupiah($tampil2, 0) . "</td>";
             $hasil .= "<td>" . rupiah($tampil, 0) . "</td>";
+            if($header['jn_ib']==1){
+            $hasil .= "<td>" . rupiah($que['harga'],2) . "</td>";
+            }
             $hasil .= "<td>";
             $hasil .= "<a href=" . base_url() . 'ib/editdetailib/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
             $hasil .= "<a href='#' data-href=" . base_url() . 'ib/hapusdetailib/' . $que['id'] .'/'.$que['id_header']. " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
@@ -174,6 +189,7 @@ class Ib extends CI_Controller
     }
     public function editdetailib($id){
         $data['data'] = $this->ibmodel->getdetailibbyid($id);
+        $data['header'] = $this->ibmodel->getdatabyid($id);
         $this->load->view('ib/editdetailib',$data);
     }
     public function updatepcskgs()
@@ -181,7 +197,8 @@ class Ib extends CI_Controller
         $kondisi = [
             'id' => $_POST['id'],
             'pcs' => $_POST['pcs'],
-            'kgs' => $_POST['kgs']
+            'kgs' => $_POST['kgs'],
+            'harga' => $_POST['hrg'],
         ];
         $hasil = $this->ibmodel->updatepcskgs($kondisi);
         echo $hasil;
@@ -233,6 +250,14 @@ class Ib extends CI_Controller
             $url = base_url().'po';
             redirect($url);
         }
+    }
+    public function cekhargabarang(){
+        $id  = $_POST['id'];
+        $hasil = $this->ibmodel->cekhargabarang($id);
+        echo $hasil;
+    }
+    public function viewbc($id){
+        $this->load->view('ib/viewbc');
     }
     //End IB Controller
     
