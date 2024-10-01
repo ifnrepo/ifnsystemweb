@@ -89,23 +89,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php foreach ($data as $datdet) {
                 $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item';
-                $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set'; ?>
+                $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set'; 
+                $nomorbc = $datdet['tanpa_bc']== 1 ? 'Tanpa BC' : 'XX';
+                $isibc = $nomorbc=='XX' ? 'AJU. '.$datdet['nomor_aju'].'<br>BC. '.$datdet['nomor_bc'] : $nomorbc;
+                ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
-                  <td class='font-bold'><a href="<?= base_url().'ib/viewdetail/'.$datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail IB (Penerimaan Barang)"><?= $datdet['nomor_dok'] ?></a></td>
+                  <td class='font-bold'><a href="<?= base_url().'ib/viewdetail/'.$datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail IB (AJU Masuk Barang)"><?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $namasup ?></td>
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
-                  <td><?= $datdet['keterangan']; ?></td>
+                  <td class="line-12"><?= $isibc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
                   <td class="text-right line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'ib/dataib/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
                       <a href="#" data-href="<?= base_url() . 'ib/hapusib/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus IB <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==0 && $datdet['tanpa_bc']==0) { ?>
                       Pengecekan Beacukai /<a href="#" class="text-danger" data-href="<?= base_url() . 'ib/editib/' . $datdet['id'] ?>" style='padding: 3px 8px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit IB <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'>Edit</a>
-                    <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && $datdet['tanpa_bc']==0) { ?>
-                      <a href="#" data-href="<?= base_url() ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Isi Dok BC</a>
-                    <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && $datdet['tanpa_bc']==1) { ?>
+                    <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && $datdet['tanpa_bc']==0 && $datdet['nomor_bc']=='') { ?>
+                      <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
+                    <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { ?>
                       <span class="text-teal">Tunggu Verifikasi <b>IN</b> Departemen</span>
                     <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>
                       <?= $katakata.datauser($datdet['user_valid'], 'name') ?><br>

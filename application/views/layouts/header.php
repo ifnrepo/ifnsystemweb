@@ -474,7 +474,7 @@
                       Data Grup
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 14); ?>" href="<?= base_url('hargacost'); ?>">
-                      Harga cost division
+                      Cost division
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 15); ?>" href="<?= base_url('setcost'); ?>">
                       Setting cost division

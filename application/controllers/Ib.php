@@ -228,7 +228,7 @@ class Ib extends CI_Controller
         }
     }
     public function editib($id){
-        $cek = $this->ibmodel->cekfield($id,'ok_valid',0)->num_rows();
+        $cek = $this->ibmodel->cekfield($id,'ok_tuju',0)->num_rows();
         if($cek==1){
             $data = [
                 'data_ok' => 0,
@@ -242,12 +242,12 @@ class Ib extends CI_Controller
                 redirect($url);
             }else{
                 $this->session->set_flashdata('errorsimpan',3);
-                $url = base_url().'po';
+                $url = base_url().'ib';
                 redirect($url);
             }
         }else{
             $this->session->set_flashdata('errorsimpan',2);
-            $url = base_url().'po';
+            $url = base_url().'ib';
             redirect($url);
         }
     }
@@ -265,6 +265,16 @@ class Ib extends CI_Controller
         $data = $_POST['mode'];
         $head = $_POST['head'];
         $hasil = $this->ibmodel->simpandatabc($data,$head);
+        echo $hasil;
+    }
+    public function isidokbc($id){
+        $data['header'] = $this->ibmodel->getdatadetailib($id);
+        $data['datheader'] = $id;
+        $data['bcmasuk'] = $this->ibmodel->getbcmasuk();
+        $this->load->view('ib/isidokbc',$data);
+    }
+    public function simpandatanobc(){
+        $hasil = $this->ibmodel->simpandatanobc();
         echo $hasil;
     }
     //End IB Controller

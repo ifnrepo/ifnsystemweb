@@ -256,6 +256,27 @@ class Ib_model extends CI_Model
             return $this->db->update('tb_header',$kondisi);
         }
     }
+    public function getbcmasuk(){
+        $this->db->where('masuk',1);
+        return $this->db->get('ref_dok_bc');
+    }
+    public function simpandatanobc(){
+        $data = [
+            'id' => $_POST['id'],
+            'jns_bc' => $_POST['jns'],
+            'nomor_aju' => $_POST['aju'],
+            'tgl_aju' => tglmysql($_POST['tglaju']),
+            'nomor_bc' => $_POST['bc'],
+            'tgl_bc' => tglmysql($_POST['tglbc']),
+            'ok_tuju' => 1,
+            'user_tuju' => $this->session->userdata('id'),
+            'tgl_tuju' => date('Y-m-d H:i:s')
+        ];
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_header',$data);
+        $this->helpermodel->isilog($this->db->last_query());
+        return $hasil;
+    }
     //End IB Models
 
 
