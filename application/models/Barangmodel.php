@@ -162,4 +162,26 @@ class Barangmodel extends CI_Model
 
         return $query;
     }
+
+    public function getdata_export($filter_kategori, $filter_inv, $filter_act)
+    {
+        $this->db->select('barang.*,satuan.namasatuan,satuan.kodesatuan,kategori.nama_kategori,(select count(*) from bom_barang where id_barang = barang.id) as jmbom', FALSE);
+        $this->db->from($this->table);
+        $this->db->join('kategori', 'kategori.kategori_id = barang.id_kategori', 'left');
+        $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
+
+        if ($filter_kategori && $filter_kategori != 'all') {
+            $this->db->where('kategori.id', $filter_kategori);
+        }
+        if ($filter_inv && $filter_inv != 'all') {
+            $isi = $filter_inv == 'x' ? 0 : 1;
+            $this->db->where('barang.noinv', $isi);
+        }
+        if ($filter_act && $filter_act != 'all') {
+            $isi = $filter_act == 'x' ? 0 : 1;
+            $this->db->where('barang.act', $isi);
+        }
+        $query = $this->db->get();
+        return $query->result_array();
+    }
 }
