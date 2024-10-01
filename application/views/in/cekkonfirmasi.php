@@ -39,7 +39,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                  <span>Alamat : <strong class="font-bold"><?= $header['alamat']; ?></strong></span><br>
                  <span>Kontak : <strong class="font-bold"><?= $header['kontak']; ?></strong></span>
                 </div>
-                <div class="col-5">
+                <div class="col-5 <?php if($header['tanpa_bc']==1){ echo "hilang"; } ?>">
                   <span>Nomor SJ/Tgl : <strong class="font-bold"><?= $header['nomor_sj'].'/'.tglmysql($header['tgl_sj']); ?></strong></span><br>
                   <span>Nomor AJU/Tgl : <a href="#"><strong class="font-bold"><?= $header['nomor_aju'].'/'.tglmysql($header['tgl_aju']); ?></strong></a></span><br>
                   <span>Di Input : <strong class="font-bold"><?= datauser($header['user_ok'],'name').' on '.tglmysql2($header['tgl_ok']); ?></strong></span><br>

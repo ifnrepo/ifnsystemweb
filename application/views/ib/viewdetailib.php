@@ -49,7 +49,7 @@
                         <span>Dibuat Oleh</span>
                         <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4>
                         <hr class="m-0">
-                        <div class="font-kecil bg-teal-lt p-1">
+                        <div class="font-kecil bg-teal-lt p-1 <?php if($header['tanpa_bc']==1){ echo "hilang"; } ?>">
                             Informasi BC <br>
                             <div style="font-weight: normal !important;">
                                 <?php 

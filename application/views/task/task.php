@@ -50,7 +50,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
       </div>
       <div class="card-body pt-1">
-        <table id="tabel" class="table nowrap order-column table-hover datatable7" style="width: 100% !important;">
+        <table id="tabel" class="table nowrap order-column table-hover datatable8" style="width: 100% !important;">
           <thead>
             <tr>
               <th>Tgl</th>
