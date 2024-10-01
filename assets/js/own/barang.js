@@ -56,6 +56,50 @@ var table;
 // 	// $(".dataTables_filter").css("float", "right !important");
 // });
 
+// $(document).ready(function () {
+// 	var table = $("#tabelnya").DataTable({
+// 		processing: true,
+// 		serverSide: true,
+// 		order: [],
+// 		ajax: {
+// 			url: base_url + "barang/get_data_barang",
+// 			type: "POST",
+// 			data: function (d) {
+// 				d.filter_kategori = $("#filter").val();
+// 				d.filter_inv = $("#filterinv").val();
+// 				d.filter_act = $("#filteract").val();
+// 				console.log("Filter kategori:", d.filter_kategori);
+// 				console.log("Filter kategori:", d.filter_inv);
+// 				console.log("Filter aktif:", d.filter_act);
+// 			},
+// 		},
+// 		columnDefs: [
+// 			{
+// 				targets: [0],
+// 				orderable: false,
+// 			},
+// 		],
+// 		createdRow: function (row, data, dataIndex) {
+// 			if (data[7] == '<i class="fa fa-times text-danger"></i>') {
+// 				$(row).addClass("text-red");
+// 				// $(row).addClass("font-strike");
+// 			}
+// 		},
+// 		pageLength: 50,
+// 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
+// 	});
+
+// 	$("#filter").on("change", function () {
+// 		table.ajax.reload();
+// 	});
+// 	$("#filterinv").on("change", function () {
+// 		table.ajax.reload();
+// 	});
+// 	$("#filteract").on("change", function () {
+// 		table.ajax.reload();
+// 	});
+// });
+
 $(document).ready(function () {
 	var table = $("#tabelnya").DataTable({
 		processing: true,
@@ -69,7 +113,7 @@ $(document).ready(function () {
 				d.filter_inv = $("#filterinv").val();
 				d.filter_act = $("#filteract").val();
 				console.log("Filter kategori:", d.filter_kategori);
-				console.log("Filter kategori:", d.filter_inv);
+				console.log("Filter INV:", d.filter_inv);
 				console.log("Filter aktif:", d.filter_act);
 			},
 		},
@@ -79,37 +123,35 @@ $(document).ready(function () {
 				orderable: false,
 			},
 		],
-		createdRow: function (row, data, dataIndex) {
-			if (data[7] == '<i class="fa fa-times text-danger"></i>') {
-				$(row).addClass("text-red");
-				// $(row).addClass("font-strike");
-			}
-		},
 		pageLength: 50,
-		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 
-	$("#filter").on("change", function () {
-		table.ajax.reload();
-	});
-	$("#filterinv").on("change", function () {
-		table.ajax.reload();
-	});
-	$("#filteract").on("change", function () {
+
+	$("#filter, #filterinv, #filteract").on("change", function () {
 		table.ajax.reload();
 	});
 
-	$("#excel").on("click", function () {
+	$("#filter, #filterinv, #filteract").on("change", function () {
 		var filter_kategori = $("#filter").val();
 		var filter_inv = $("#filterinv").val();
 		var filter_act = $("#filteract").val();
+		
+		var exportUrlExcel = base_url + "barang/excel?filter=" + filter_kategori + "&filterinv=" + filter_inv + "&filteract=" + filter_act;
+		$(".btn-export-excel").attr("href", exportUrlExcel);
 	
-		var url = base_url + "barang/excel?filter_kategori=" + filter_kategori + "&filter_inv=" + filter_inv + "&filter_act=" + filter_act;
+		var exportUrlPdf = base_url + "barang/pdf?filter=" + filter_kategori + "&filterinv=" + filter_inv + "&filteract=" + filter_act;
+		$(".btn-export-pdf").attr("href", exportUrlPdf);
 	
-		window.location.href = url; 
+		console.log("Export Excel URL:", exportUrlExcel);
+		console.log("Export PDF URL:", exportUrlPdf);
 	});
+
 	
 });
+
+
+
+
 $("#tabelnya tbody").on("click", "td", function () {
 	var tr = $(this).closest("tr");
 	var rowindex = tr.index();
