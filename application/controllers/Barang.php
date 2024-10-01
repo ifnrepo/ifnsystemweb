@@ -265,121 +265,67 @@ class Barang extends CI_Controller
         error_log("Finished fetching data");
     }
 
-    // public function excel()
-    // {
-    //     $filter_kategori = $this->input->get('filter_kategori');
-    //     $filter_inv = $this->input->get('filter_inv');
-    //     $filter_act = $this->input->get('filter_act');
-
-    //     $spreadsheet = new Spreadsheet();
-    //     $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
-
-    //     $sheet->setCellValue('A1', "DATA BARANG"); // Set kolom A1 dengan tulisan "DATA SISWA"    
-    //     $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
-
-    //     // Buat header tabel nya pada baris ke 3    
-    //     $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
-    //     $sheet->setCellValue('B2', "KODE"); // Set kolom B3 dengan tulisan "KODE"    
-    //     $sheet->setCellValue('C2', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"   
-    //     $sheet->setCellValue('D2', "KATEGORI");
-    //     $sheet->setCellValue('E2', "SATUAN");
-    //     $sheet->setCellValue('F2', "DLN");
-    //     $sheet->setCellValue('G2', "NO INV");
-    //     $sheet->setCellValue('H2', "ACT");
-    //     $sheet->setCellValue('I2', "SAFETY");
-
-
-    //     // Panggil model Get Data   
-    //     $barang = $this->barangmodel->get_datatables($filter_kategori, $filter_inv, $filter_act);
-    //     $no = 1;
-
-    //     // Untuk penomoran tabel, di awal set dengan 1    
-    //     $numrow = 8;
-
-    //     // Set baris pertama untuk isi tabel adalah baris ke 3    
-    //     foreach ($barang as $data) {
-    //         // Lakukan looping pada variabel      
-    //         $sheet->setCellValue('A' . $numrow, $no);
-    //         $sheet->setCellValue('B' . $numrow, $data['kode']);
-    //         $sheet->setCellValue('C' . $numrow, $data['nama_barang']);
-    //         $sheet->setCellValue('D' . $numrow, $data['nama_alias']);
-    //         $sheet->setCellValue('E' . $numrow, $data['nama_kategori']);
-    //         $sheet->setCellValue('F' . $numrow, $data['namasatuan']);
-    //         $sheet->setCellValue('G' . $numrow, $data['dln']);
-    //         $sheet->setCellValue('H' . $numrow, $data['noinv']);
-    //         $sheet->setCellValue('I' . $numrow, $data['act']);
-    //         $no++;
-    //         // Tambah 1 setiap kali looping      
-    //         $numrow++; // Tambah 1 setiap kali looping    
-    //     }
-
-
-    //     // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
-    //     $sheet->getDefaultRowDimension()->setRowHeight(-1);
-    //     // Set orientasi kertas jadi LANDSCAPE    
-    //     $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-    //     // Set judul file excel nya    
-    //     $sheet->setTitle(" DATA BARANG");
-
-    //     // Proses file excel    
-    //     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-    //     header('Content-Disposition: attachment; filename="Data Barang.xlsx"'); // Set nama file excel nya    
-    //     header('Cache-Control: max-age=0');
-    //     $writer = new Xlsx($spreadsheet);
-    //     $writer->save('php://output');
-    //     $this->helpermodel->isilog('Download Excel DATA BARANG');
-    // }
-
     public function excel()
     {
-        // Ambil filter
-        $filter_kategori = $this->input->get('filter_kategori');
-        $filter_inv = $this->input->get('filter_inv');
-        $filter_act = $this->input->get('filter_act');
-
-        // Inisialisasi Spreadsheet
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-        // Set Header
-        $sheet->setCellValue('A1', "DATA BARANG")->getStyle('A1')->getFont()->setBold(true);
-        // Set Header Tabel
-        $headers = ["NO", "KODE", "NAMA BARANG", "KATEGORI", "SATUAN", "DLN", "NO INV", "ACT"];
-        foreach ($headers as $index => $header) {
-            $sheet->setCellValue(chr(65 + $index) . '2', $header);
-        }
+        $sheet->setCellValue('A1', "DATA BARANG");
+        $sheet->getStyle('A1')->getFont()->setBold(true);
 
-        // Panggil Data
-        $barang = $this->barangmodel->get_datatables($filter_kategori, $filter_inv, $filter_act);
+        $sheet->setCellValue('A2', "NO");
+        $sheet->setCellValue('B2', "KODE");
+        $sheet->setCellValue('C2', "NAMA BARANG");
+        $sheet->setCellValue('D2', "KATEGORI");
+        $sheet->setCellValue('E2', "SATUAN");
+        $sheet->setCellValue('F2', "DLN");
+        $sheet->setCellValue('G2', "NO INV");
+        $sheet->setCellValue('H2', "ACT");
+        $sheet->setCellValue('I2', "SAFETY");
+
+        $filter_kategori = $this->input->get('filter');
+        $filter_inv = $this->input->get('filterinv');
+        $filter_act = $this->input->get('filteract');
+
+        $barang = $this->barangmodel->getdata_export($filter_kategori, $filter_inv, $filter_act);
+
+        $no = 1;
         $numrow = 3;
+
         foreach ($barang as $data) {
-            $sheet->setCellValue('A' . $numrow, $numrow - 2);
-            $sheet->setCellValue('B' . $numrow, $data->kode);
-            $sheet->setCellValue('C' . $numrow, $data->nama_barang);
-            $sheet->setCellValue('D' . $numrow, $data->nama_kategori);
-            $sheet->setCellValue('E' . $numrow, $data->namasatuan);
-            $sheet->setCellValue('F' . $numrow, $data->dln);
-            $sheet->setCellValue('G' . $numrow, $data->noinv);
-            $sheet->setCellValue('H' . $numrow, $data->act);
+            log_message('debug', 'Data untuk Excel: ' . print_r($data, true));
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $data['kode']);
+            $sheet->setCellValue('C' . $numrow, $data['nama_barang']);
+            $sheet->setCellValue('D' . $numrow, $data['nama_alias']);
+            $sheet->setCellValue('E' . $numrow, $data['nama_kategori']);
+            $sheet->setCellValue('F' . $numrow, $data['namasatuan']);
+            $sheet->setCellValue('G' . $numrow, $data['dln']);
+            $sheet->setCellValue('H' . $numrow, $data['noinv']);
+            $sheet->setCellValue('I' . $numrow, $data['act']);
+            $sheet->setCellValue('I' . $numrow, $data['safety_stock']);
+            $no++;
             $numrow++;
         }
 
-        // Set Header untuk File Excel
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data_Barang.xlsx"'); // Pastikan tidak ada spasi di nama file
-        header('Cache-Control: max-age=0');
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        $sheet->setTitle(" DATA BARANG");
 
-        // Simpan dan Output File
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data Barang.xlsx"');
+        header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
-
-        // Jangan ada output lain setelah ini
-        exit; // Tambahkan exit untuk menghentikan eksekusi skrip
+        $this->helpermodel->isilog('Download Excel DATA BARANG');
     }
 
-    public function cetakpdf()
+
+
+
+    public function pdf()
     {
-        $pdf = new PDF('P', 'mm', 'A4');
+        $pdf = new PDF('L', 'mm', 'A4');
         $pdf->AliasNbPages();
         // $pdf->setMargins(5,5,5);
         $pdf->AddFont('Lato', '', 'Lato-Regular.php');
@@ -389,21 +335,39 @@ class Barang extends CI_Controller
         // $isi = $this->jualmodel->getrekap();
         $pdf->SetFillColor(205, 205, 205);
         $pdf->AddPage();
-        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 155, 5, 55);
+        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 0, 5, 55);
         $pdf->Cell(30, 18, 'DATA BARANG');
         $pdf->ln(12);
         $pdf->SetFont('Latob', '', 10);
-        $pdf->Cell(15, 8, 'No', 1, 0, 'C');
-        $pdf->Cell(35, 8, 'Kode ', 1, 0, 'C');
-        $pdf->Cell(140, 8, 'Nama Barang', 1, 0, 'C');
+        $pdf->Cell(10, 8, 'No', 1, 0, 'C');
+        $pdf->Cell(20, 8, 'Kode ', 1, 0, 'C');
+        $pdf->Cell(103, 8, 'Nama Barang', 1, 0, 'C');
+        $pdf->Cell(45, 8, 'Nama Kategori', 1, 0, 'C');
+        $pdf->Cell(45, 8, 'Satuan', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'Dln', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'No Inv', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'Act', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'Safety', 1, 0, 'C');
         $pdf->SetFont('Lato', '', 10);
         $pdf->ln(8);
-        $detail = $this->barangmodel->count_filtered($filter_kategori, $filter_inv, $filter_act);
+        // Mengambil nilai filter dari GET
+        $filter_kategori = $this->input->get('filter');
+        $filter_inv = $this->input->get('filterinv');
+        $filter_act = $this->input->get('filteract');
+
+        // Mengambil data barang dengan filter
+        $barang = $this->barangmodel->getdata_export($filter_kategori, $filter_inv, $filter_act);
         $no = 1;
-        foreach ($detail as $det) {
-            $pdf->Cell(15, 6, $no++, 1, 0, 'C');
-            $pdf->Cell(35, 6, $det['kode'], 1);
-            $pdf->Cell(140, 6, $det['nama_barang'], 1);
+        foreach ($barang as $det) {
+            $pdf->Cell(10, 6, $no++, 1, 0, 'C');
+            $pdf->Cell(20, 6, $det['kode'], 1);
+            $pdf->Cell(103, 6, $det['nama_barang'], 1);
+            $pdf->Cell(45, 6, $det['nama_kategori'], 1);
+            $pdf->Cell(45, 6, $det['namasatuan'], 1);
+            $pdf->Cell(15, 6, $det['dln'], 1);
+            $pdf->Cell(15, 6, $det['noinv'], 1);
+            $pdf->Cell(15, 6, $det['act'], 1);
+            $pdf->Cell(15, 6, $det['safety_stock'], 1);
             $pdf->ln(6);
         }
         $pdf->SetFont('Lato', '', 8);
