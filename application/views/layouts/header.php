@@ -482,6 +482,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 16); ?>" href="<?= base_url('prosbor'); ?>">
                       Proses Borongan
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 17); ?>" href="<?= base_url('mastermsn'); ?>">
+                      Data Mesin
+                    </a>
                   </div>
                 </div>
               </div>

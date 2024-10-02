@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+// use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
 class Ib extends CI_Controller
 {
     function __construct()
@@ -269,13 +273,156 @@ class Ib extends CI_Controller
     }
     public function isidokbc($id){
         $data['header'] = $this->ibmodel->getdatadetailib($id);
-        $data['datheader'] = $id;
+        $data['datheader'] = $this->ibmodel->getdatabyid($id);
         $data['bcmasuk'] = $this->ibmodel->getbcmasuk();
         $this->load->view('ib/isidokbc',$data);
     }
     public function simpandatanobc(){
         $hasil = $this->ibmodel->simpandatanobc();
         echo $hasil;
+    }
+    public function ceisa40excel(){
+        $spreadsheet = new Spreadsheet();    
+        $array = [
+            'HEADER',
+            'ENTITAS',
+            'DOKUMEN',
+            'PENGANGKUT','KEMASAN','KONTAINER','BARANG','BARANGTARIF','BARANGDOKUMEN','BARANGENTITAS','BARANGSPEKKHUSUS','BARANGVD',
+            'BAHANBAKU','BAHANBAKUTARIF','BAHANBAKUDOKUMEN','PUNGUTAN','JAMINAN','BANKDEVISA','VERSI'
+        ];
+        
+        $no=0;
+        for($i=0;$i<count($array);$i++){
+            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, $array[$i]); 
+            $spreadsheet->addSheet($myWorkSheet);
+            $no++;
+        }
+        for($z=0;$z<count($array);$z++){
+            $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+            $sheet = $spreadsheet->getSheetByName($array[$z]);
+            // 65
+            $arrayheader = [
+                'NOMOR AJU','KODE DOKUMEN','KODE KANTOR','KODE KANTOR BONGKAR','KODE KANTOR PERIKSA','KODE KANTOR TUJUAN',
+                'KODE KANTOR EKSPOR','KODE JENIS IMPOR','KODE JENIS EKSPOR','KODE JENIS TPB','KODE JENIS PLB','KODE JENIS PROSEDUR',
+                'KODE TUJUAN PEMASUKAN','KODE TUJUAN PENGIRIMAN','KODE TUJUAN TPB','KODE CARA DAGANG','KODE CARA BAYAR','KODE CARA BAYAR LAINNYA',
+                'KODE GUDANG ASAL','KODE GUDANG TUJUAN','KODE JENIS KIRIM','KODE JENIS PENGIRIMAN','KODE KATEGORI EKSPOR','KODE KATEGORI MASUK FTZ',
+                'KODE KATEGORI KELUAR FTZ','KODE KATEGORI BARANG FTZ','KODE LOKASI','KODE LOKASI BAYAR','LOKASI ASAL','LOKASI TUJUAN','KODE DAERAH ASAL',
+                'KODE GUDANG ASAL','KODE GUDANG TUJUAN','KODE NEGARA TUJUAN','KODE TUTUP PU','NOMOR BC11','TANGGAL BC11','NOMOR POS','NOMOR SUB POS',
+                'KODE PELABUHAN BONGKAR','KODE PELABUHAN MUAT','KODE PELABUHAN MUAT AKHIR','KODE PELABUHAN TRANSIT','KODE PELABUHAN TUJUAN','KODE PELABUHAN EKSPOR',
+                'KODE TPS','TANGGAL BERANGKAT','TANGGAL EKSPOR','TANGGAL MASUK','TANGGAL MUAT','TANGGAL TIBA','TANGGAL PERIKSA','TEMPAT STUFFING',
+                'TANGGAL STUFFING','KODE TANDA PENGAMAN','JUMLAH TANDA PENGAMAN','FLAG CURAH','FLAG SDA','FLAG VD','FLAG AP BK','FLAG MIGAS','KODE ASURANSI',
+                'ASURANSI','NILAI BARANG','NILAI INCOTERM','NILAI MAKLON','ASURANSI','FREIGHT','FOB','BIAYA TAMBAHAN','BIAYA PENGURANG','VD','CIF','HARGA_PENYERAHAN',
+                'NDPBM','TOTAL DANA SAWIT','DASAR PENGENAAN PAJAK','NILAI JASA','UANG MUKA','BRUTO','NETTO','VOLUME','KOTA PERNYATAAN','TANGGAL PERNYATAAN',
+                'NAMA PERNYATAAN','JABATAN PERNYATAAN','KODE VALUTA','KODE INCOTERM','KODE JASA KENA PAJAK','NOMOR BUKTI BAYAR','TANGGAL BUKTI BAYAR','KODE JENIS NILAI',
+                'KODE KANTOR MUAT','NOMOR DAFTAR','TANGGAL DAFTAR','KODE ASAL BARANG FTZ','KODE TUJUAN PENGELUARAN','PPN PAJAK','PPNBM PAJAK',
+                'TARIF PPN PAJAK','TARIF PPNBM PAJAK','BARANG TIDAK BERWUJUD','KODE JENIS PENGELUARAN'
+            ];
+            $arrayentitas = [
+                'NOMOR AJU','SERI','KODE ENTITAS','KODE JENIS IDENTITAS','NOMOR IDENTITAS','NAMA ENTITAS','ALAMAT ENTITAS','NIB ENTITAS','KODE JENIS API',
+                'KODE STATUS','NOMOR UIN ENTITAS','TANGGAL UIN ENTITAS','KODE NEGARA','NIPER ENTITAS'
+            ];
+            $arraydokumen = [
+                'NOMOR AJU','SERI','KODE DOKUMEN','NOMOR DOKUMEN','TANGGAL DOKUMEN','KODE FASILITAS','KODE UIN'
+            ];
+            $arraypengangkut = [
+                'NOMOR AJU','SERI','KODE CARA ANGKUT','NAMA PENGANGKUT','NOMOR PENGANGKUT','KODE NEGARA','CALL SIGN','FLAG ANGKUT PLB'
+            ];
+            $arraykemasan = [
+                'NOMOR AJU','SERI','KODE KEMASAN','JUMLAH KEMASAN','MERK'
+            ];
+            $arraykontainer = [
+                'NOMOR AJU','SERI','NOMOR KONTAINER','KODE UKURAN KONTAINER','KODE JENIS KONTAINER','KODE TIPE KONTAINER'
+            ];
+            $arraybarang = [
+                'NOMOR AJU','SERI BARANG','HS','KODE BARANG','URAIAN','MEREK','TIPE','UKURAN','SPESIFIKASI LAIN','KODE SATUAN','JUMLAH SATUAN',
+                'KODE KEMASAN','JUMLAH KEMASAN','KODE DOKUMEN ASAL','KODE KANTOR ASAL','NOMOR DAFTAR ASAL','TANGGAL DAFTAR ASAL','NOMOR AJU ASAL',
+                'SERI BARANG ASAL','NETTO','BRUTO','VOLUME','SALDO AWAL','SALDO AKHIR','JUMLAH REALISASI','CIF','CIF RUPIAH','NDPBM','FOB','ASURANSI',
+                'FREIGHT','NILAI TAMBAH','DISKON','HARGA PENYERAHAN','HARGA PEROLEHAN','HARGA SATUAN','HARGA EKSPOR','HARGA PATOKAN','NILAI BARANG','NILAI JASA',
+                'NILAI DANA SAWIT','NILAi DEVISA','PERSENTASE IMPOR','KODE ASAL BARANG','KODE DAERAH ASAL','KODE GUNA BARANG','KODE JENIS NILAI',
+                'JATUH TEMPO ROYALTI','KODE KATEGORI BARANG','KODE KONDISI BARANG','KODE NEGARA ASAL','KODE PERHITUNGAN','PERNYATAAN LARTAS',
+                'FLAG 4 TAHUN','SERI IZIN','TAHUN PEMBUATAN','KAPASITAS SILINDER','KODE BKC','KODE KOMODITI BKC','KODE SUB KOMODITI BKC','FLAG TIS',
+                'ISI PER KEMASAN','JUMLAH DILEKATKAN','JUMLAH PITA CUKAI','HJE CUKAI','TARIF CUKAI'
+            ];
+            $arraybarangtarif = [
+                'NOMOR AJU','SERI BARANG','KODE PUNGUTAN','KODE TARIF','TARIF','KODE FASILITAS','TARIF FASILITAS','NILAI BAYAR','NILAI FASILITAS',
+                'NILAI SUDAH DILUNASI','KODE SATUAN','JUMLAH SATUAN','FLAG BMT SEMENTARA','KODE KOMODITI CUKAI','KODE SUB KOMODITI CUKAI','FLAG TIS',
+                'FLAG PELEKATAN','KODE KEMASAN','JUMLAH KEMASAN'
+            ];
+            $arraybarangdokumen = [
+                'NOMOR AJU','SERI BARANG','SERI DOKUMEN','SERI IZIN'  
+            ];
+            $arraybarangentitas = [
+                'NOMOR AJU','SERI BARANG','SERI DOKUMEN'
+            ];
+            $arraybarangspekkhusus = [
+                'NOMOR AJU','SERI BARANG','KODE','URAIAN'
+            ];
+            $arraybarangvd = [
+                'NOMOR AJU','SERI BARANG','KODE VD','NILAI BARANG','BIAYA TAMBAHAN','BIAYA PENGURANG','JATUH TEMPO'
+            ];
+            $arraybahanbaku = [
+                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE ASAL BAHAN BAKU','HS','KODE BARANG','URAIAN','MEREK','TIPE','UKURAN','SPESIFIKASI LAIN',
+                'KODE SATUAN','JUMLAH SATUAN','KODE KEMASAN','JUMLAH KEMASAN','KODE DOKUMEN ASAL','KODE KANTOR ASAL','NOMOR DAFTAR ASAL','TANGGAL DAFTAR ASAl',
+                'NOMOR AJU ASAL','SERI BARANG ASAL','NETTO','BRUTO','VOLUME','CIF','CIF RUPIAH','NDPBM','HARGA PENYERAHAN','HARGA PEROLEHAN','NILAI JASA','SERI IZIN',
+                'VALUTA','KODE BKC','KODE KOMODITI BKC','KODE SUB KOMODITI BKC','FLAG TIS','ISI PER KEMASAN','JUMLAH DILEKATKAN','JUMLAH PITA CUKAI','HJE CUKAI','TARIF CUKAI'
+            ];
+            $arraybahanbakutarif = [
+                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE ASAL BAHAN BAKU','KODE PUNGUTAN','KODE TARIF','TARIF','KODE FASILITAS','TARIF FASILITAS',
+                'NILAI BAYAR','NILAI FASILITAS','NILAI SUDAH DILUNASI','KODE SATUAN','JUMLAH SATUAN','FLAG BMT SEMENTARA','KODE KOMODITI CUKAI','KODE SUB KOMODITI CUKAI',
+                'FLAG TIS','FLAG PELEKATAN','KODE KEMASAN','KODE SUB KOMODITI CUKAI','FLAG TIS','FLAG PELEKATAN','KODE KEMASAN','JUMLAH KEMASAN'
+            ];
+            $arraybahanbakudokumen = [
+                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE_ASAL_BAHAN_BAKU','SERI DOKUMEN','SERI IZIN'
+            ];
+            $arraypungutan = [
+                'NOMOR AJU','KODE FASILITAS TARIF','KODE JENIS PUNGUTAN','NILAI PUNGUTAN','NPWP BILLING'
+            ];
+            $arrayjaminan = [
+                'NOMOR AJU','KODE KANTOR','KODE JAMINAN','NOMOR JAMINAN','TANGGAL JAMINAN','NILAI JAMINAN','PENJAMIN','TANGGAL JATUH TEMPO','NOMOR BPJ','TANGGAL BPJ'
+            ];
+            $arraybankdevisa = [
+                'NOMOR AJU','SERI','KODE','NAMA'
+            ];
+            $arrayversi = [
+                'VERSI'
+            ];
+            $kode = 'array'.strtolower($array[$z]);
+            // print_r($$kode);
+            for($i=0;$i<count($$kode);$i++){
+                if((65+$i) > 142){
+                    $chr = chr(67).chr(65+($i-78));
+                }else if((65+$i) > 116){
+                    $chr = chr(66).chr(65+($i-52));
+                }else if((65+$i) > 90){
+                    $chr = chr(65).chr(65+($i-26));
+                }else{
+                    $chr = chr(65+$i);
+                }
+                $sheet->setCellValue($chr.'1', $$kode[$i]);
+            }
+        }  
+        $sheetIndex = $spreadsheet->getIndex(
+            $spreadsheet->getSheetByName('Worksheet')
+        );
+        $spreadsheet->removeSheetByIndex($sheetIndex);
+        //Proses pengisian excel dari database
+        $sheet = $spreadsheet->getSheetByName('HEADER');
+        $sheet->setCellValue('A2', '000100001442'); 
+        $sheet->setCellValue('B2', '"40'); 
+        $sheet->setCellValue('C2', '"050500'); 
+        $sheet->setCellValue('J2', '"1'); 
+        $sheet->setCellValue('N2', '"1'); 
+        $sheet->setCellValue('BV2', '1');  // Nilai PAB
+        $sheet->setCellValue('CB2', '1');  // Bruto
+        $sheet->setCellValue('CC2', '1');  // Netto
+        $sheet->setCellValue('CD2', '0');
+        $sheet->setCellValue('CE2', 'BANDUNG');
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');    
+        header('Content-Disposition: attachment; filename="Data Ceisa 40.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');    
+        $writer = new Xlsx($spreadsheet);    
+        $writer->save('php://output');
     }
     //End IB Controller
     

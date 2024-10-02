@@ -325,16 +325,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">Data Grup</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="master13" name="master13" type="checkbox">
+                                <input class="form-check-input" id="master14" name="master14" type="checkbox">
                                 <span class="form-check-label">Harga cost division</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="master14" name="master14" type="checkbox">
+                                <input class="form-check-input" id="master15" name="master15" type="checkbox">
                                 <span class="form-check-label">Setting cost division</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="master15" name="master15" type="checkbox">
+                                <input class="form-check-input" id="master16" name="master16" type="checkbox">
                                 <span class="form-check-label">Proses Borongan</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master17" name="master17" type="checkbox">
+                                <span class="form-check-label">Data Mesin</span>
                               </label>
                               <!-- xx -->
                             </div>
