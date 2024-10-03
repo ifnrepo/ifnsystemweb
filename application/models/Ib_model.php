@@ -277,21 +277,46 @@ class Ib_model extends CI_Model
         $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
-    //End IB Models
-
-
-
-
+    public function getjnsangkutan(){
+       return $this->db->order_by('id')->get('ref_jns_angkutan');
+    }
+    public function refkemas(){
+       return $this->db->order_by('kdkem')->get('ref_kemas');
+    }
     public function updatepcskgs($data){
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$data);
         return $hasil;
     }
     public function cekdetail($id){
-        $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
-        $this->db->from('tb_detail');
-        $this->db->where('id_header',$id);
-        return $this->db->get()->row_array();
+        $cekarr = [
+            'xharga' => 0,
+            'xkgs' => 0,
+            'xpcs' => 0,
+            'totalharga' => 0,
+            'kgs' => 0.00
+        ];
+        $qry = $this->db->where('id_header',$id)->get('tb_detail');
+        foreach ($qry->result_array() as $isidata) {
+            if($isidata['harga']==0){
+                $cekarr['xharga']++;
+            }
+            if($isidata['kgs']==0){
+                $cekarr['xkgs']++;
+            }else{
+                $cekarr['kgs'] += $isidata['kgs'];
+            }
+            if($isidata['pcs']==0){
+                $cekarr['totalharga'] += $isidata['kgs']*$isidata['harga'];
+            }else{
+                $cekarr['totalharga'] += $isidata['pcs']*$isidata['harga'];
+            }
+        }
+        // $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
+        // $this->db->from('tb_detail');
+        // $this->db->where('id_header',$id);
+        // return $this->db->get()->row_array();
+        return $cekarr;
     }
     public function simpanib($data)
     {
@@ -311,6 +336,9 @@ class Ib_model extends CI_Model
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_header',$data);
         return $hasil;
+    }
+    public function refmtuang(){
+        return $this->db->order_by('id')->get('ref_mt_uang');
     }
     //End IB Models
     public function updatepo($data)

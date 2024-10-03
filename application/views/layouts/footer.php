@@ -52,7 +52,7 @@
 <script src="<?= base_url(); ?>assets/vendor/litepicker/dist/litepicker.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/nprogress/nprogress.js"></script>
 <!-- Custom JS -->
-<script src="<?= base_url(); ?>assets/js/myscript.js?1724750323"></script>
+<script src="<?= base_url(); ?>assets/js/myscript.js?1724750325"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1724750323"></script>

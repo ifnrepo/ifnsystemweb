@@ -16,7 +16,7 @@ $(document).ready(function () {
 			getdatadetailib();
 		}
 	}
-	generatekode();
+	// generatekode();
 	// $("#dept_kirim").change();
 	// $("#level").change();
 	var jn_bayar = $("#jn_pembayaran").val();
@@ -38,6 +38,9 @@ $(document).ready(function () {
 	}
 	if (errosimpan == 3) {
 		pesan("Tidak terjadi perubahan pada data X !", "error");
+	}
+	if (errosimpan == 4) {
+		pesan("Ada Pcs, Kgs atau Harga yang masih kosong !", "error");
 	}
 });
 // $("#tglpb").datepicker();

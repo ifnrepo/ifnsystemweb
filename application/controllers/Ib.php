@@ -210,7 +210,7 @@ class Ib extends CI_Controller
     public function simpanib($id)
     {
         $cekdetail = $this->ibmodel->cekdetail($id);
-        if($cekdetail['xharga']==0){
+        if($cekdetail['xharga']==0 && $cekdetail['xkgs']==0){
             $data = [
                 'user_ok' => $this->session->userdata('id'),
                 'data_ok' => 1,
@@ -218,7 +218,8 @@ class Ib extends CI_Controller
                 'id' => $id,
                 'totalharga' => $cekdetail['totalharga'],
                 'total' => 'totalharga - diskon',
-                'jumlah' => '((totalharga-diskon)+ppn)-pph'
+                'jumlah' => '((totalharga-diskon)+ppn)-pph',
+                'bruto' => $cekdetail['kgs']
             ];
             $query = $this->ibmodel->simpanib($data);
             if ($query) {
@@ -226,8 +227,8 @@ class Ib extends CI_Controller
                 redirect($url);
             }
         }else{
-            $this->session->set_flashdata('errorsimpan',1);
-            $url = base_url() . 'po/datapo/'.$id;
+            $this->session->set_flashdata('errorsimpan',4);
+            $url = base_url() . 'ib/dataib/'.$id;
             redirect($url);
         }
     }
@@ -275,13 +276,16 @@ class Ib extends CI_Controller
         $data['header'] = $this->ibmodel->getdatadetailib($id);
         $data['datheader'] = $this->ibmodel->getdatabyid($id);
         $data['bcmasuk'] = $this->ibmodel->getbcmasuk();
+        $data['jnsangkutan'] = $this->ibmodel->getjnsangkutan();
+        $data['refkemas'] = $this->ibmodel->refkemas();
+        $data['refmtuang'] = $this->ibmodel->refmtuang();
         $this->load->view('ib/isidokbc',$data);
     }
     public function simpandatanobc(){
         $hasil = $this->ibmodel->simpandatanobc();
         echo $hasil;
     }
-    public function ceisa40excel(){
+    public function ceisa40excel($id){
         $spreadsheet = new Spreadsheet();    
         $array = [
             'HEADER',
@@ -406,17 +410,34 @@ class Ib extends CI_Controller
         );
         $spreadsheet->removeSheetByIndex($sheetIndex);
         //Proses pengisian excel dari database
+        $data = $this->ibmodel->getdatabyid($id);
         $sheet = $spreadsheet->getSheetByName('HEADER');
-        $sheet->setCellValue('A2', '000100001442'); 
-        $sheet->setCellValue('B2', '"40'); 
-        $sheet->setCellValue('C2', '"050500'); 
-        $sheet->setCellValue('J2', '"1'); 
-        $sheet->setCellValue('N2', '"1'); 
-        $sheet->setCellValue('BV2', '1');  // Nilai PAB
-        $sheet->setCellValue('CB2', '1');  // Bruto
-        $sheet->setCellValue('CC2', '1');  // Netto
+        $sheet->setCellValue('A2', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('B2', '40'); 
+        $sheet->setCellValue('C2', '050500'); 
+        $sheet->setCellValue('J2', '1'); 
+        $sheet->setCellValue('N2', '1'); 
+        $sheet->setCellValue('BV2', $data['totalharga']);  // Nilai PAB
+        $sheet->setCellValue('CB2', $data['bruto']);  // Bruto
+        $sheet->setCellValue('CC2', $data['netto']);  // Netto
         $sheet->setCellValue('CD2', '0');
         $sheet->setCellValue('CE2', 'BANDUNG');
+        $sheet->setCellValue('CF2', $data['tgl_aju']);
+        $sheet->setCellValue('CG2', 'MIRA AMALIA WULAN');
+        $sheet->setCellValue('CH2', 'MANAGER KEU. & AKT');
+
+        $sheet = $spreadsheet->getSheetByName('ENTITAS');
+        $sheet->setCellValue('A2', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('B2', '3'); 
+        $sheet->setCellValue('C2', '3'); 
+        $sheet->setCellValue('D2', '5'); 
+        $sheet->setCellValue('E2', '010017176057000'); 
+        $sheet->setCellValue('F2', 'INDONEPTUNE NET MANUFACTURING');
+        $sheet->setCellValue('G2', 'JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT'); 
+        $sheet->setCellValue('H2', "9120011042693");
+        $sheet->setCellValue('K2', '1555/KM.4/2017');
+        $sheet->setCellValue('L2', '2017-07-10');
+
         // Proses file excel    
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');    
         header('Content-Disposition: attachment; filename="Data Ceisa 40.xlsx"'); // Set nama file excel nya    
