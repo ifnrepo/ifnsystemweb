@@ -1,22 +1,25 @@
 <?php
 class Helper_model extends CI_Model
 {
-    public function cekkolom($id,$kolom,$nilai,$tabel){
-        $this->db->where('id',$id);
-        $this->db->where($kolom,$nilai);
+    public function cekkolom($id, $kolom, $nilai, $tabel)
+    {
+        $this->db->where('id', $id);
+        $this->db->where($kolom, $nilai);
         $hasil = $this->db->get($tabel);
         return $hasil;
     }
-    public function getterms($kode){
-        $this->db->where('lokal',$kode);
+    public function getterms($kode)
+    {
+        $this->db->where('lokal', $kode);
         $hasil = $this->db->get('term_payment');
         return $hasil;
     }
-    public function getdatasublok(){
+    public function getdatasublok()
+    {
         $dp = $this->session->userdata('deptsekarang');
         switch ($dp) {
             case 'FG':
-                $this->db->where('kode',1);
+                $this->db->where('kode', 1);
                 break;
             default:
                 # code...
@@ -25,29 +28,30 @@ class Helper_model extends CI_Model
         $hasil = $this->db->get('tb_sublok');
         return $hasil;
     }
-    public function riwayatdok($id){
-        $this->db->where('id',$id);
+    public function riwayatdok($id)
+    {
+        $this->db->where('id', $id);
         $cek = $this->db->get('tb_header')->row_array();
         $hasil = [];
-        if($cek['data_ok']==1){
-            $kata = 'Dokumen DIBUAT oleh '.datauser($cek['user_ok'],'name').' on '.tglmysql2($cek['tgl_ok']);
-            array_push($hasil,$kata);
+        if ($cek['data_ok'] == 1) {
+            $kata = 'Dokumen DIBUAT oleh ' . datauser($cek['user_ok'], 'name') . ' on ' . tglmysql2($cek['tgl_ok']);
+            array_push($hasil, $kata);
         }
-        if($cek['ok_valid']==1){
-            $kata = 'Dokumen DISETUJUI oleh '.datauser($cek['user_valid'],'name').' on '.tglmysql2($cek['tgl_valid']);
-            array_push($hasil,$kata);
+        if ($cek['ok_valid'] == 1) {
+            $kata = 'Dokumen DISETUJUI oleh ' . datauser($cek['user_valid'], 'name') . ' on ' . tglmysql2($cek['tgl_valid']);
+            array_push($hasil, $kata);
         }
         // Cek detail barang 
-        $this->db->where('id_header',$id);
+        $this->db->where('id_header', $id);
         $detail = $this->db->get('tb_detail');
         $hasil2 = [];
-        foreach($detail->result_array() as $det){
-            $barang = $this->db->get_where('barang',['id'=>$det['id_barang']])->row_array();
+        foreach ($detail->result_array() as $det) {
+            $barang = $this->db->get_where('barang', ['id' => $det['id_barang']])->row_array();
             $kata = $barang['nama_barang'];
-            array_push($hasil2,$kata);
+            array_push($hasil2, $kata);
             $hasil3 = [];
             $kepalanya = 0;
-            for($ke=0;$ke <= 3;$ke++){
+            for ($ke = 0; $ke <= 3; $ke++) {
                 // 0 : cek data BBL
                 // 1 : cek data PO
                 // 2 : cek data IB
@@ -74,90 +78,91 @@ class Helper_model extends CI_Model
                         $fed = 'OUT No. ';
                         break;
                 }
-                if($kepalanya == 1){
-                    $cekisi = $this->db->get_where('tb_detail',['id'=>$idisinya]);
-                    if($cekisi->num_rows() > 0){
+                if ($kepalanya == 1) {
+                    $cekisi = $this->db->get_where('tb_detail', ['id' => $idisinya]);
+                    if ($cekisi->num_rows() > 0) {
                         $rekisi = $cekisi->row_array();
                         $det[$fid] = $rekisi['id'];
-                    }else{
+                    } else {
                         $det[$fid] = 0;
                     }
                 }
-                $selesai = $ke==3 ? ' (SELESAI)' : '';
-                if($det[$fid]!=0){
+                $selesai = $ke == 3 ? ' (SELESAI)' : '';
+                if ($det[$fid] != 0) {
                     $isifield = $det[$fid];
                     $this->db->select('tb_header.*,tb_detail.id_bbl,tb_detail.id_po,tb_detail.id_ib,tb_detail.id_out,tb_detail.id_minta');
                     $this->db->from('tb_header');
-                    $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
-                    $this->db->where('tb_detail.id',$isifield);
+                    $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
+                    $this->db->where('tb_detail.id', $isifield);
                     $isinya = $this->db->get()->row_array();
                     $kepalanya = 1;
                     $idisinya = $isinya[$fod];
-                    array_push($hasil3,$fed.$isinya['nomor_dok'].' ; '.tglmysql($isinya['tgl']).$selesai);
-                }else{
+                    array_push($hasil3, $fed . $isinya['nomor_dok'] . ' ; ' . tglmysql($isinya['tgl']) . $selesai);
+                } else {
                     $kepalanya = 0;
                     // array_push($hasil3,$fed.'-');
                 }
             }
-            array_push($hasil2,$hasil3);
+            array_push($hasil2, $hasil3);
         }
-        array_push($hasil,$hasil2);
+        array_push($hasil, $hasil2);
         return $hasil;
     }
-    public function riwayatbbl($id){
-        $this->db->where('id',$id);
+    public function riwayatbbl($id)
+    {
+        $this->db->where('id', $id);
         $cek = $this->db->get('tb_header')->row_array();
         $hasil = [];
-        if($cek['ok_bb']==1){
-            $data_ok = 'Dokumen diinput Oleh : '.datauser($cek['user_bb'],'name').' on '.$cek['tgl_bb'];
-            array_push($hasil,$data_ok);
-        }else{
+        if ($cek['ok_bb'] == 1) {
+            $data_ok = 'Dokumen diinput Oleh : ' . datauser($cek['user_bb'], 'name') . ' on ' . $cek['tgl_bb'];
+            array_push($hasil, $data_ok);
+        } else {
             $data_ok = 'Dokumen belum selesai di input !';
-            array_push($hasil,$data_ok);
+            array_push($hasil, $data_ok);
         }
-        if($cek['data_ok']==1){
-            $ok_bb = 'Dokumen dibuat oleh : '.datauser($cek['user_bb'],'name').' on '.$cek['tgl_bb'];
-            array_push($hasil,$ok_bb);
-        }else{
-            if($cek['ok_bb']==1){
-                $ok_bb = 'Menunggu Approve kepala departemen '.$cek['dept_id'];
-                array_push($hasil,$ok_bb);
+        if ($cek['data_ok'] == 1) {
+            $ok_bb = 'Dokumen dibuat oleh : ' . datauser($cek['user_bb'], 'name') . ' on ' . $cek['tgl_bb'];
+            array_push($hasil, $ok_bb);
+        } else {
+            if ($cek['ok_bb'] == 1) {
+                $ok_bb = 'Menunggu Approve kepala departemen ' . $cek['dept_id'];
+                array_push($hasil, $ok_bb);
             }
         }
-        if($cek['ok_valid']==1){
-            $ok_valid = 'Dokumen divalidasi oleh : '.datauser($cek['user_valid'],'name').' on '.$cek['tgl_valid'];
-            array_push($hasil,$ok_valid);
-        }else{
-            if($cek['data_ok']==1){
-                $ok_bb = 'Menunggu Validasi Manager '.$cek['dept_id'];
-                array_push($hasil,$ok_bb);
+        if ($cek['ok_valid'] == 1) {
+            $ok_valid = 'Dokumen divalidasi oleh : ' . datauser($cek['user_valid'], 'name') . ' on ' . $cek['tgl_valid'];
+            array_push($hasil, $ok_valid);
+        } else {
+            if ($cek['data_ok'] == 1) {
+                $ok_bb = 'Menunggu Validasi Manager ' . $cek['dept_id'];
+                array_push($hasil, $ok_bb);
             }
         }
-        if($cek['ok_tuju']==1){
-            $ok_valid = 'Dokumen disetujui oleh : '.datauser($cek['user_tuju'],'name').' on '.$cek['tgl_tuju'];
-            array_push($hasil,$ok_valid);
-        }else{
-            if($cek['ok_valid']==1){
-                $ok_bb = 'Menunggu Validasi GM '.$cek['dept_id'];
-                array_push($hasil,$ok_bb);
+        if ($cek['ok_tuju'] == 1) {
+            $ok_valid = 'Dokumen disetujui oleh : ' . datauser($cek['user_tuju'], 'name') . ' on ' . $cek['tgl_tuju'];
+            array_push($hasil, $ok_valid);
+        } else {
+            if ($cek['ok_valid'] == 1) {
+                $ok_bb = 'Menunggu Validasi GM ' . $cek['dept_id'];
+                array_push($hasil, $ok_bb);
             }
         }
-        if($cek['ok_pc']==1){
-            $ok_valid = 'Dokumen Disetujui oleh : '.datauser($cek['user_pc'],'name').' on '.$cek['tgl_pc'];
-            array_push($hasil,$ok_valid);
+        if ($cek['ok_pc'] == 1) {
+            $ok_valid = 'Dokumen Disetujui oleh : ' . datauser($cek['user_pc'], 'name') . ' on ' . $cek['tgl_pc'];
+            array_push($hasil, $ok_valid);
 
             $this->db->select('tb_detail.*,barang.nama_barang');
             $this->db->from('tb_detail');
-            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-            $this->db->where('tb_detail.id_header',$id);
+            $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+            $this->db->where('tb_detail.id_header', $id);
             $cek = $this->db->get();
-            if($cek->num_rows() > 0){
+            if ($cek->num_rows() > 0) {
                 $hasil2 = [];
-                foreach($cek->result_array() as $det){
-                    array_push($hasil2,$det['nama_barang']);
+                foreach ($cek->result_array() as $det) {
+                    array_push($hasil2, $det['nama_barang']);
                     $hasil3 = [];
                     $kepalanya = 0;
-                    for($ke=0;$ke <= 3;$ke++){
+                    for ($ke = 0; $ke <= 3; $ke++) {
                         // 0 : cek data BBL
                         // 1 : cek data PO
                         // 2 : cek data IB
@@ -184,105 +189,129 @@ class Helper_model extends CI_Model
                                 $fed = 'OUT No. ';
                                 break;
                         }
-                        if($kepalanya == 1){
-                            $cekisi = $this->db->get_where('tb_detail',['id'=>$idisinya]);
-                            if($cekisi->num_rows() > 0){
+                        if ($kepalanya == 1) {
+                            $cekisi = $this->db->get_where('tb_detail', ['id' => $idisinya]);
+                            if ($cekisi->num_rows() > 0) {
                                 $rekisi = $cekisi->row_array();
                                 $det[$fid] = $rekisi['id'];
-                            }else{
+                            } else {
                                 $det[$fid] = 0;
                             }
                         }
-                        $selesai = $ke==3 ? ' (SELESAI)' : '';
-                        if($det[$fid]!=0){
+                        $selesai = $ke == 3 ? ' (SELESAI)' : '';
+                        if ($det[$fid] != 0) {
                             $isifield = $det[$fid];
                             $this->db->select('tb_header.*,tb_detail.id_bbl,tb_detail.id_po,tb_detail.id_ib,tb_detail.id_out,tb_detail.id_minta');
                             $this->db->from('tb_header');
-                            $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
-                            $this->db->where('tb_detail.id',$isifield);
+                            $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
+                            $this->db->where('tb_detail.id', $isifield);
                             $isinya = $this->db->get()->row_array();
                             $kepalanya = 1;
                             $idisinya = $isinya[$fod];
-                            array_push($hasil3,$fed.$isinya['nomor_dok'].' ; '.tglmysql($isinya['tgl']).$selesai);
-                        }else{
+                            array_push($hasil3, $fed . $isinya['nomor_dok'] . ' ; ' . tglmysql($isinya['tgl']) . $selesai);
+                        } else {
                             $kepalanya = 0;
                             // array_push($hasil3,$fed.'-');
                         }
                     }
-                    array_push($hasil2,$hasil3);
+                    array_push($hasil2, $hasil3);
                 }
-                array_push($hasil,$hasil2);
+                array_push($hasil, $hasil2);
             }
-        }else{
-            if($cek['ok_tuju']==1){
+        } else {
+            if ($cek['ok_tuju'] == 1) {
                 $ok_bb = 'Menunggu Validasi GM Purchasing';
-                array_push($hasil,$ok_bb);
+                array_push($hasil, $ok_bb);
             }
         }
         return $hasil;
     }
-    public function riwayatpo($id){
-        $this->db->where('id',$id);
+    public function riwayatpo($id)
+    {
+        $this->db->where('id', $id);
         $cek = $this->db->get('tb_header')->row_array();
         $hasil = [];
-        if($cek['data_ok']==1){
-            $ok = 'Dokumen dibuat oleh : '.datauser($cek['user_ok'],'name').' on '.$cek['tgl_ok'];
-            array_push($hasil,$ok);
-        }else{
-            array_push($hasil,'Dokumen sedang dibuat');
+        if ($cek['data_ok'] == 1) {
+            $ok = 'Dokumen dibuat oleh : ' . datauser($cek['user_ok'], 'name') . ' on ' . $cek['tgl_ok'];
+            array_push($hasil, $ok);
+        } else {
+            array_push($hasil, 'Dokumen sedang dibuat');
         }
-        if($cek['ok_valid']==1){
-            $valid = 'Dokumen sudah disetujui '.datauser($cek['user_valid'],'name').' on '.$cek['tgl_valid'];
-            array_push($hasil,$valid);
-        }else{
-            if($cek['data_ok']==1){
+        if ($cek['ok_valid'] == 1) {
+            $valid = 'Dokumen sudah disetujui ' . datauser($cek['user_valid'], 'name') . ' on ' . $cek['tgl_valid'];
+            array_push($hasil, $valid);
+        } else {
+            if ($cek['data_ok'] == 1) {
                 $valid = 'Dokumen menunggu persetujuan';
-                array_push($hasil,$valid);
+                array_push($hasil, $valid);
             }
         }
         return $hasil;
     }
-    public function dataproduksi(){
+    public function dataproduksi()
+    {
         $bulan = 'janfebmaraprmeijunjulagtsepoktnopdes';
-        $fieldd = substr($bulan,((int)date('m')*3)-3,3);
-        $fielde = substr($bulan,(((int)date('m')-1)*3)-3,3);
+        $fieldd = substr($bulan, ((int)date('m') * 3) - 3, 3);
+        $fielde = substr($bulan, (((int)date('m') - 1) * 3) - 3, 3);
         $array1 = [];
         $array2 = [];
         $this->db->select("SUM(jan) AS jan,SUM(feb) AS feb,SUM(mar) AS mar,SUM(apr) AS apr,SUM(mei) AS mei,SUM(jun) AS jun,SUM(jul) AS jul,SUM(agt) AS agt,SUM(sep) AS sep,SUM(okt) AS okt,SUM(nop) AS nop,SUM(des) AS des");
-        $this->db->where('tahun',date('Y'));
+        $this->db->where('tahun', date('Y'));
         $cek = $this->db->get('monitoringprd')->row_array();
-        for($x=0;$x<12;$x++){
-            $field = substr($bulan,(($x+1)*3)-3,3);
-            $cik = $x+1;
+        for ($x = 0; $x < 12; $x++) {
+            $field = substr($bulan, (($x + 1) * 3) - 3, 3);
+            $cik = $x + 1;
             $cok = $field;
-            array_push($array1,strtoupper($field).' - '.date('Y'));
-            array_push($array2,$cek[$field]);
+            array_push($array1, strtoupper($field) . ' - ' . date('Y'));
+            array_push($array2, $cek[$field]);
         }
         // foreach ($cek as $kec) {
         //     array_push($array1,$kec['tgl']);
         //     array_push($array2,$kec[$field]);
         // }
-        return array('data_tgl' => $array1, 'data_isi' => $array2,'data_prod_bulan_ini' => $cek[$fieldd],'data_prod_bulan_lalu' => $cek[$fielde]);
+        return array('data_tgl' => $array1, 'data_isi' => $array2, 'data_prod_bulan_ini' => $cek[$fieldd], 'data_prod_bulan_lalu' => $cek[$fielde]);
     }
-    public function isilog($isilog){
-        $useragent=$_SERVER['HTTP_USER_AGENT'];
+
+    public function isilog($isilog)
+    {
+        $useragent = $_SERVER['HTTP_USER_AGENT'];
+        $dapatkan_ip = get_client_ip();
+
+        if ($this->isLocalIP($dapatkan_ip)) {
+            $ip = 'Local IP';
+        } else {
+            $ip = 'Public IP';
+        }
+
         $data = [
-            'activitylog' => str_replace('`','',$isilog),
-            'userlog' => datauser($this->session->userdata('id'),'name'),
+            'activitylog' => str_replace('`', '', $isilog),
+            'userlog' => datauser($this->session->userdata('id'), 'name'),
             'iduserlog' => $this->session->userdata('id'),
-            'devicelog' => get_client_ip().' on '.$useragent,
+            'devicelog' => $dapatkan_ip . ' (' . $ip . ') on ' . $useragent,
             'modul' => strtoupper($this->uri->segment(1))
         ];
-        $this->db->insert('tb_logactivity',$data);
+
+        $this->db->insert('tb_logactivity', $data);
     }
-    public function cekclosebook($periode){
-        $this->db->where('periode',$periode);
+
+
+    private function isLocalIP($ip)
+    {
+        return preg_match('/^10\..*/', $ip) ||
+            preg_match('/^192\.168\..*/', $ip) ||
+            preg_match('/^172\.(1[6-9]|2[0-9]|3[0-1])\..*/', $ip);
+    }
+
+    public function cekclosebook($periode)
+    {
+        $this->db->where('periode', $periode);
         $hasil = $this->db->get('tb_lockinv')->num_rows();
         return $hasil;
     }
-    public function cekdetout($header){
-        $this->db->where('id_out',0);
-        $this->db->where('id_header',$header);
+    public function cekdetout($header)
+    {
+        $this->db->where('id_out', 0);
+        $this->db->where('id_header', $header);
         $hasil = $this->db->get('tb_detail')->num_rows();
         return $hasil;
     }
