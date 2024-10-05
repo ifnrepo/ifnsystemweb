@@ -198,6 +198,7 @@ $(document).ready(function () {
 		info: false,
 		scrollY: false,
 		pageLength: 50,
+		responsive: true,
 	});
 	$(".datatable7").DataTable({
 		paging: false,
