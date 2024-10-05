@@ -46,7 +46,7 @@ class Pb extends CI_Controller
         $this->session->unset_userdata('levelsekarang');
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
-        $this->session->set_userdata('levelsekarang',1);
+        $this->session->set_userdata('levelsekarang', 1);
         $url = base_url('Pb');
         redirect($url);
     }
@@ -72,7 +72,7 @@ class Pb extends CI_Controller
             $hasil .= "<td>" . $dt['namasatuan'] . "</td>";
             $hasil .= "<td class='text-center'>" . rupiah($dt['pcs'], 0) . "</td>";
             $hasil .= "<td>" . rupiah($dt['kgs'], 2) . "</td>";
-            $hasil .= "<td class='text-center font-bold'>".$dt['sublok']."</td>";
+            $hasil .= "<td class='text-center font-bold'>" . $dt['sublok'] . "</td>";
             $hasil .= "<td class='text-center'>";
             $hasil .= "<a href='#' id='editdetailpb' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
             $hasil .= "<a href='" . base_url() . 'pb/hapusdetailpb/' . $dt['id'] . "' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
@@ -84,7 +84,7 @@ class Pb extends CI_Controller
     }
     public function tambahdata()
     {
-            $this->load->view('pb/add_pb');
+        $this->load->view('pb/add_pb');
     }
     public function edittgl()
     {
@@ -99,10 +99,10 @@ class Pb extends CI_Controller
     }
     public function tambahpb()
     {
-        if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null ){
-            $this->session->set_flashdata('errorparam',1);
+        if ($this->session->userdata('deptsekarang') == '' || $this->session->userdata('deptsekarang') == null || $this->session->userdata('tujusekarang') == '' || $this->session->userdata('tujusekarang') == null) {
+            $this->session->set_flashdata('errorparam', 1);
             echo 0;
-        }else{
+        } else {
             $data = [
                 'dept_id' => $_POST['dept_id'],
                 'dept_tuju' => $_POST['dept_tuju'],
@@ -110,7 +110,7 @@ class Pb extends CI_Controller
                 'kode_dok' => 'PB',
                 'id_perusahaan' => IDPERUSAHAAN,
                 'pb_sv' => $_POST['jn'],
-                'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'],$_POST['jn'])
+                'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'], $_POST['jn'])
             ];
             $simpan = $this->pb_model->tambahpb($data);
             echo $simpan['id'];
@@ -142,8 +142,8 @@ class Pb extends CI_Controller
     }
     public function validasipb($id)
     {
-        $cek = $this->pb_model->cekfield($id,'data_ok',1)->num_rows();
-        if($cek==1){
+        $cek = $this->pb_model->cekfield($id, 'data_ok', 1)->num_rows();
+        if ($cek == 1) {
             $data = [
                 'ok_valid' => 1,
                 'tgl_valid' => date('Y-m-d H:i:s'),
@@ -151,7 +151,7 @@ class Pb extends CI_Controller
                 'id' => $id
             ];
             $simpan = $this->pb_model->validasipb($data);
-        }else{
+        } else {
             $simpan = 1;
         }
         if ($simpan) {
@@ -175,8 +175,8 @@ class Pb extends CI_Controller
     }
     public function editokpb($id)
     {
-        $cek = $this->pb_model->cekfield($id,'ok_valid',0)->num_rows();
-        if($cek==1){
+        $cek = $this->pb_model->cekfield($id, 'ok_valid', 0)->num_rows();
+        if ($cek == 1) {
             $data = [
                 'data_ok' => 0,
                 'tgl_ok' => null,
@@ -184,8 +184,8 @@ class Pb extends CI_Controller
                 'id' => $id
             ];
             $simpan = $this->pb_model->validasipb($data);
-        }else{
-            $this->session->set_flashdata('pesanerror','Bon permintaan sudah divalidasi !');
+        } else {
+            $this->session->set_flashdata('pesanerror', 'Bon permintaan sudah divalidasi !');
             $simpan = 1;
         }
         if ($simpan) {
@@ -305,25 +305,25 @@ class Pb extends CI_Controller
         $codeContents = $isi;
         $iconpath = "assets/image/BigLogo.png";
         QRcode::png($codeContents, $tempdir . $namafile . '.png', QR_ECLEVEL_H, 4, 1);
-        $filepath = $tempdir.$namafile.'.png';
+        $filepath = $tempdir . $namafile . '.png';
         $QR = imagecreatefrompng($filepath);
 
         $logo = imagecreatefromstring(file_get_contents($iconpath));
         $QR_width = imagesx($QR);
         $QR_height = imagesy($QR);
-    
+
         $logo_width = imagesx($logo);
         $logo_height = imagesy($logo);
-    
+
         //besar logo
-        $logo_qr_width = $QR_width/4.3;
-        $scale = $logo_width/$logo_qr_width;
-        $logo_qr_height = $logo_height/$scale;
-    
+        $logo_qr_width = $QR_width / 4.3;
+        $scale = $logo_width / $logo_qr_width;
+        $logo_qr_height = $logo_height / $scale;
+
         //posisi logo
-        imagecopyresampled($QR, $logo, $QR_width/2.7, $QR_height/2.7, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
-    
-        imagepng($QR,$filepath);
+        imagecopyresampled($QR, $logo, $QR_width / 2.7, $QR_height / 2.7, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
+
+        imagepng($QR, $filepath);
         return $tempdir . $namafile;
     }
     public function cetakbon($id)
@@ -361,8 +361,8 @@ class Pb extends CI_Controller
         $pdf->ln(1);
         $header = $this->pb_model->getdatabyid($id);
         $isi = 'Nobon ' . $header['nomor_dok'] . "\r\n" . 'dibuat oleh : ' . datauser($header['user_ok'], 'name') . "\r\n" . 'Date : ' . tglmysql2($header['tgl_ok']);
-        if($header['ok_valid']==1){
-        $isi .= "\r\n" .'disetujui oleh : ' . datauser($header['user_valid'], 'name') . "\r\n" . 'Date : ' . tglmysql2($header['tgl_valid']);
+        if ($header['ok_valid'] == 1) {
+            $isi .= "\r\n" . 'disetujui oleh : ' . datauser($header['user_valid'], 'name') . "\r\n" . 'Date : ' . tglmysql2($header['tgl_valid']);
         }
         $qr = $this->cetakqr2($isi, $header['id']);
         $pdf->Image($qr . ".png", 177, 30, 18);
@@ -406,7 +406,7 @@ class Pb extends CI_Controller
             $jumlah = $det['pcs'] == 0 ? $det['kgs'] : $det['pcs'];
             $pdf->Cell(8, 6, $no++, 'LRB', 0);
             $pdf->Cell(97, 6, $det['nama_barang'], 'LBR', 0);
-            $pdf->Cell(45, 6, '', 'LRB', 0);
+            $pdf->Cell(45, 6,  $det['keterangan'], 'LRB', 0);
             $pdf->Cell(20, 6, rupiah($jumlah, 0), 'LRB', 0, 'R');
             $pdf->Cell(20, 6, $det['kodesatuan'], 'LBR', 1, 'R');
         }
