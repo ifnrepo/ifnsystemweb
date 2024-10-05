@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Logact extends CI_Controller
 {
     function __construct()
@@ -11,42 +15,50 @@ class Logact extends CI_Controller
             redirect($url);
         }
         $this->load->model('logactmodel');
+        $this->load->model('userappsmodel', 'usermodel');
+
+
+        $this->load->library('Pdf');
+        // $this->load->library('Codeqr');
+        include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
     }
     public function index()
     {
         $header['header'] = 'other';
         // $data['data'] = $this->barangmodel->getdata();
         // $data['kategori_options'] = $this->barangmodel->getFilter();
-        if($this->session->userdata('tglawallog')==null){
-            $this->session->set_userdata('tglawallog',date('Y-m-01'));
+        if ($this->session->userdata('tglawallog') == null) {
+            $this->session->set_userdata('tglawallog', date('Y-m-01'));
         }
-        if($this->session->userdata('tglakhirlog')==null){
-            $this->session->set_userdata('tglakhirlog',date('Y-m-t'));
+        if ($this->session->userdata('tglakhirlog') == null) {
+            $this->session->set_userdata('tglakhirlog', date('Y-m-t'));
         }
-        if($this->session->userdata('tglawallog')!=null && $this->session->userdata('tglakhirlog')!=null){
+        if ($this->session->userdata('tglawallog') != null && $this->session->userdata('tglakhirlog') != null) {
             $data['data'] = $this->logactmodel->getdata();
             $data['datauser'] = $this->logactmodel->getdatauser();
         }
         $footer['fungsi'] = 'logact';
         $this->load->view('layouts/header', $header);
-        $this->load->view('logact/logact',$data);
+        $this->load->view('logact/logact', $data);
         $this->load->view('layouts/footer', $footer);
     }
-    public function clear(){
+    public function clear()
+    {
         $this->session->unset_userdata('tglawallog');
         $this->session->unset_userdata('tglakhirlog');
         $this->session->unset_userdata('userlogact');
-        $url = base_url().'logact';
+        $url = base_url() . 'logact';
         redirect($url);
     }
-    public function updatetgl(){
+    public function updatetgl()
+    {
         $tgaw = $_POST['tgaw'];
         $tgak = $_POST['tgak'];
         $userlog = $_POST['usr'];
-        $this->session->set_userdata('tglawallog',tglmysql($tgaw));
-        $this->session->set_userdata('tglakhirlog',tglmysql($tgak));
-        $this->session->set_userdata('userlogact',$userlog);
-        $url = base_url().'logact';
+        $this->session->set_userdata('tglawallog', tglmysql($tgaw));
+        $this->session->set_userdata('tglakhirlog', tglmysql($tgak));
+        $this->session->set_userdata('userlogact', $userlog);
+        $url = base_url() . 'logact';
         redirect($url);
     }
     //End Controller 
@@ -231,5 +243,112 @@ class Logact extends CI_Controller
         echo json_encode($output);
         ob_end_flush();
         error_log("Finished fetching data");
+    }
+
+    public function excel()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+        $sheet->setCellValue('A1', "DATA LOG ACTIVITY"); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B2', "DATETIME LOG"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C2', "ACTIVITY LOG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D2', "MODUL");
+        $sheet->setCellValue('E2', "USER LOG");
+        $sheet->setCellValue('F2', "DEVICE LOG");
+        // Panggil model Get Data   
+
+        $tglawal = $this->input->get('tglawal');
+        $tglakhir = $this->input->get('tglakhir');
+        $userlog = $this->input->get('userlog');
+
+        $log = $this->logactmodel->getFilteredData($tglawal, $tglakhir, $userlog);
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 3;
+
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($log as $data) {
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, tglmysql2($data['datetimelog']));
+            $sheet->setCellValue('C' . $numrow, $data['activitylog']);
+            $sheet->setCellValue('E' . $numrow, $data['modul']);
+            $sheet->setCellValue('F' . $numrow, $data['userlog']);
+            $sheet->setCellValue('G' . $numrow, getdevice($data['devicelog']));
+
+            $no++;
+            // Tambah 1 setiap kali looping      
+            $numrow++; // Tambah 1 setiap kali looping    
+        }
+
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle("Data Log Activity");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data Log Activity.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel DATA LOG ACTIVITY');
+    }
+
+
+    public function cetakpdf()
+    {
+        $pdf = new PDF('L', 'mm', 'A4');
+        $pdf->AliasNbPages();
+        // $pdf->setMargins(5,5,5);
+        $pdf->AddFont('Lato', '', 'Lato-Regular.php');
+        $pdf->AddFont('Latob', '', 'Lato-Bold.php');
+        $pdf->SetFillColor(7, 178, 251);
+        $pdf->SetFont('Latob', '', 12);
+        // $isi = $this->jualmodel->getrekap();
+        $pdf->SetFillColor(205, 205, 205);
+        $pdf->AddPage();
+        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 0, 5, 55);
+        $pdf->Cell(30, 18, 'DATA LOG ACTIVITY');
+        $pdf->ln(12);
+        $pdf->SetFont('Latob', '', 12);
+        $pdf->Cell(120, 8, 'Activity Log', 1, 0, 'C');
+        $pdf->Cell(40, 8, 'Date Log', 1, 0, 'C');
+        $pdf->Cell(25, 8, 'Modul', 1, 0, 'C');
+        $pdf->Cell(40, 8, 'User Log', 1, 0, 'C');
+        $pdf->Cell(48, 8, 'Device Log', 1, 0, 'C');
+        $pdf->SetFont('Lato', '', 10);
+        $pdf->ln(8);
+
+        $tglawal = $this->input->get('tglawal');
+        $tglakhir = $this->input->get('tglakhir');
+        $userlog = $this->input->get('userlog');
+
+        $log = $this->logactmodel->getFilteredData($tglawal, $tglakhir, $userlog);
+        foreach ($log as $det) {
+            $x = $pdf->GetX();
+            $y = $pdf->GetY();
+            $pdf->MultiCell(120, 6, $det['activitylog'], 1);
+            $height = $pdf->GetY() - $y;
+            $pdf->SetXY($x + 120, $y);
+            $pdf->Cell(40, $height, tglmysql($det['datetimelog']), 1);
+            $pdf->Cell(25, $height, $det['modul'], 1);
+            $pdf->Cell(40, $height, $det['userlog'], 1);
+            $pdf->Cell(48, $height, getdevice($det['devicelog']), 1);
+            $pdf->Ln($height);
+        }
+        $pdf->SetFont('Lato', '', 8);
+        $pdf->ln(10);
+        $pdf->Output('I', 'Data Log Activity.pdf');
+        $this->helpermodel->isilog('Download PDF DATA LOG ACTIFITY');
     }
 }
