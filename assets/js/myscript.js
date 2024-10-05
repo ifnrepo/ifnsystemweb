@@ -28,6 +28,7 @@ $(document).ready(function () {
 	modalBoxXl();
 	modalBoxSc();
 	modalBoxlgSc();
+	modalBoxFull();
 	cancelTask();
 	verifTask();
 	canvasoff();
@@ -197,6 +198,7 @@ $(document).ready(function () {
 		info: false,
 		scrollY: false,
 		pageLength: 50,
+		responsive: true,
 	});
 	$(".datatable7").DataTable({
 		paging: false,
@@ -373,6 +375,17 @@ function modalBoxLg2() {
 
 function modalBoxXl() {
 	$("#modalBox-xl").on("show.bs.modal", function (e) {
+		var link = $(e.relatedTarget);
+		var title = link.data("title");
+		var modal = $(this);
+		modal.find(".modal-title").text(title);
+		$(this).find(".fetched-data").load(link.attr("href"));
+	});
+	return false;
+}
+
+function modalBoxFull() {
+	$("#modal-full").on("show.bs.modal", function (e) {
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);

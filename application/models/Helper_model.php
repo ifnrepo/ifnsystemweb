@@ -315,4 +315,9 @@ class Helper_model extends CI_Model
         $hasil = $this->db->get('tb_detail')->num_rows();
         return $hasil;
     }
+    public function getbctoken(){
+        $this->db->where('id',1);
+        $hasil =  $this->db->get('token_bc')->row_array();
+        return $hasil['token'];
+    }
 }

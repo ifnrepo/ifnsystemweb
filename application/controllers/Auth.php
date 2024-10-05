@@ -90,6 +90,7 @@ class Auth extends CI_Controller
                 $this->session->set_userdata('hak_ttd_pb',arrdep($user['cekpb']));
                 $this->session->set_userdata('bl',date('m'));
                 $this->session->set_userdata('th',date('Y'));
+                $this->session->set_userdata('datatokenbeacukai',$this->helpermodel->getbctoken());
 
                 $this->helpermodel->isilog('LOGIN Aplikasi momois DG COOKIE');
 

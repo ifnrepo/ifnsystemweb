@@ -288,6 +288,23 @@
       </div>
     </div>
   </div>
+  <div class="modal modal-blur fade" id="modal-full" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-info">
+          <h5 class="modal-title">Full width modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body fetched-data p-0">
+          Lorem ipsum dolor sit amet, consectetur adipisicing elit. Adipisci animi beatae delectus deleniti dolorem eveniet facere fuga iste nemo nesciunt nihil odio perspiciatis, quia quis reprehenderit sit tempora totam unde.
+        </div>
+        <!-- <div class="modal-footer">
+          <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+          <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+        </div> -->
+      </div>
+    </div>
+  </div>
   <!-- End Modal -->
   <!-- Canvas -->
   <div class="offcanvas offcanvas-end" tabindex="-1" id="canvasdet" aria-labelledby="offcanvasEndLabel" style="min-width:75% !important">
@@ -481,6 +498,9 @@
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 16); ?>" href="<?= base_url('prosbor'); ?>">
                       Proses Borongan
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 17); ?>" href="<?= base_url('mastermsn'); ?>">
+                      Data Mesin
                     </a>
                   </div>
                 </div>
