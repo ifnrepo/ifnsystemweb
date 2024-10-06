@@ -65,10 +65,22 @@ $(document).ready(function () {
 		pageLength: 50,
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
-	$("#filter").change(function () {
+
+	$("#filter, #filterinv").on("change", function () {
 		table.ajax.reload();
 	});
-	$("#filterinv").change(function () {
-		table.ajax.reload();
+
+	$("#filter, #filterinv").on("change", function () {
+		var filter_kategori = $("#filter").val();
+		var filter_inv = $("#filterinv").val();
+		
+		var exportUrlExcel = base_url + "hargamat/excel?filter=" + filter_kategori + "&filterinv=" + filter_inv ;
+		$(".btn-export-excel").attr("href", exportUrlExcel);
+	
+		var exportUrlPdf = base_url + "hargamat/pdf?filter=" + filter_kategori + "&filterinv=" + filter_inv ;
+		$(".btn-export-pdf").attr("href", exportUrlPdf);
+	
+		console.log("Export Excel URL:", exportUrlExcel);
+		console.log("Export PDF URL:", exportUrlPdf);
 	});
 });
