@@ -17,7 +17,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </div>
 <div class="page-body">
   <div class="container-xl">
-    <div class="card">  
+    <div class="card">
+      <div class="card card-active mb-2">
+        <div class="card-body p-1 text-right">
+          <a href="<?= base_url() . 'logact/excel?tglawal=' . $this->session->userdata('tglawallog') . '&tglakhir=' . $this->session->userdata('tglakhirlog') . '&userlog=' . $this->session->userdata('userlogact'); ?>" class="btn btn-success btn-sm btn-export-excel"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export To Excel</span></a>
+          <a href="<?= base_url() . 'logact/cetakpdf?tglawal=' . $this->session->userdata('tglawallog') . '&tglakhir=' . $this->session->userdata('tglakhirlog') . '&userlog=' . $this->session->userdata('userlogact'); ?>" target="_blank" class="btn btn-danger btn-sm btn-export-pdf"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export To PDF</span></a>
+        </div>
+      </div>
+
       <div class="row px-2">
         <div class="col-md-4 d-flex bg-red-lt">
           <div class="mb-1 font-kecil mr-1 mt-1">
@@ -32,12 +39,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <input type="email" class="form-control font-kecil" id="tglakhir" value="<?= tglmysql($this->session->userdata('tglakhirlog')); ?>" aria-describedby="emailHelp" placeholder="Tgl Akhir">
             </div>
           </div>
-          <!-- <div class="mb-1 font-kecil mr-1 mt-1">
-            <label class="form-label font-kecil mb-1 text-white">.</label>
-            <div>
-              <a href="" class="btn btn-sm btn-primary mt-1" id="butgo">Go</a>
-            </div>
-          </div> -->
         </div>
         <div class="col-md-4 bg-teal-lt">
           <div class="row">
@@ -46,7 +47,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div>
                 <select class="form-control form-select font-kecil" id="userlog">
                   <option value="">Semua User</option>
-                  <?php foreach ($datauser->result_array() as $dete) { $sele = $this->session->userdata('userlogact')==$dete['iduserlog'] ? 'selected' : ''; ?>
+                  <?php foreach ($datauser->result_array() as $dete) {
+                    $sele = $this->session->userdata('userlogact') == $dete['iduserlog'] ? 'selected' : ''; ?>
                     <option value="<?= $dete['iduserlog']; ?>" <?= $sele; ?>><?= strtoupper($dete['userlog']); ?></option>
                   <?php } ?>
                 </select>
@@ -61,7 +63,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div class="col-md-4 bg-blue-lt">
-        
+
         </div>
       </div>
       <hr class="p-1 m-1">
