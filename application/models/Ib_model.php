@@ -18,7 +18,7 @@ class Ib_model extends CI_Model
     }
     public function getdatabyid($kode)
     {
-        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak');
+        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,supplier.npwp');
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
         $this->db->join('supplier', 'supplier.id=tb_header.id_pemasok', 'left');
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
@@ -277,21 +277,46 @@ class Ib_model extends CI_Model
         $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
-    //End IB Models
-
-
-
-
+    public function getjnsangkutan(){
+       return $this->db->order_by('id')->get('ref_jns_angkutan');
+    }
+    public function refkemas(){
+       return $this->db->order_by('kdkem')->get('ref_kemas');
+    }
     public function updatepcskgs($data){
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$data);
         return $hasil;
     }
     public function cekdetail($id){
-        $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
-        $this->db->from('tb_detail');
-        $this->db->where('id_header',$id);
-        return $this->db->get()->row_array();
+        $cekarr = [
+            'xharga' => 0,
+            'xkgs' => 0,
+            'xpcs' => 0,
+            'totalharga' => 0,
+            'kgs' => 0.00
+        ];
+        $qry = $this->db->where('id_header',$id)->get('tb_detail');
+        foreach ($qry->result_array() as $isidata) {
+            if($isidata['harga']==0){
+                $cekarr['xharga']++;
+            }
+            if($isidata['kgs']==0){
+                $cekarr['xkgs']++;
+            }else{
+                $cekarr['kgs'] += $isidata['kgs'];
+            }
+            if($isidata['pcs']==0){
+                $cekarr['totalharga'] += $isidata['kgs']*$isidata['harga'];
+            }else{
+                $cekarr['totalharga'] += $isidata['pcs']*$isidata['harga'];
+            }
+        }
+        // $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
+        // $this->db->from('tb_detail');
+        // $this->db->where('id_header',$id);
+        // return $this->db->get()->row_array();
+        return $cekarr;
     }
     public function simpanib($data)
     {
@@ -311,6 +336,36 @@ class Ib_model extends CI_Model
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_header',$data);
         return $hasil;
+    }
+    public function refmtuang(){
+        return $this->db->order_by('id')->get('ref_mt_uang');
+    }
+    public function getjenisdokumen(){
+        return $this->db->order_by('kode')->get('ref_jns_dokumen');
+    }
+    public function getdatalampiran($id){
+        $this->db->select('*,lampiran.id as idx');
+        $this->db->from('lampiran');
+        $this->db->join('ref_jns_dokumen','ref_jns_dokumen.kode = lampiran.kode_dokumen','left');
+        return $this->db->get();
+    }
+    public function tambahlampiran($data){
+        return $this->db->insert('lampiran',$data);
+    }
+    public function hapuslampiran($id){
+        $this->db->where('id',$id);
+        return $this->db->delete('lampiran');
+    }
+    public function getdatadokumen($id){
+        return $this->db->get_where('lampiran',['id_header'=>$id]);
+    }
+    public function getdatanomoraju($id){
+        $detail = $this->db->get_where('tb_header',['id'=>$id])->row_array();
+        return '000040010017'.str_replace('-','',$detail['tgl_aju']).$detail['nomor_aju'];
+    }
+    public function isitokenbc($data){
+        $this->db->where('id',1);
+        $this->db->update('token_bc',['token'=>$data]);
     }
     //End IB Models
     public function updatepo($data)

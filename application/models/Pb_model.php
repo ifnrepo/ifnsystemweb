@@ -87,7 +87,7 @@ class Pb_model extends CI_Model
     }
     public function getnomorpb($bl, $th, $asal, $tuju)
     {
-        $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,15,3)) AS maxkode FROM tb_header 
+        $hasil = $this->db->query("SELECT MAX(SUBSTR(trim(nomor_dok),-3)) AS maxkode FROM tb_header 
         WHERE kode_dok = 'PB' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_id = '" . $asal . "' AND dept_tuju = '" . $tuju . "' ")->row_array();
         return $hasil;
     }

@@ -52,7 +52,7 @@
 <script src="<?= base_url(); ?>assets/vendor/litepicker/dist/litepicker.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/nprogress/nprogress.js"></script>
 <!-- Custom JS -->
-<script src="<?= base_url(); ?>assets/js/myscript.js?1724750323"></script>
+<script src="<?= base_url(); ?>assets/js/myscript.js?1724750326"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
 <?php if (isset($fungsi) && $fungsi == 'userapps') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1724750323"></script>
@@ -86,6 +86,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'ib') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/ib.js?1724750323"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'ibx') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/ibbcdok.js?1724750324"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'adj') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/adj.js?1724750323"></script>

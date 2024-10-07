@@ -50,8 +50,8 @@ class In extends CI_Controller {
         echo $hasil;
     }
     public function ubahperiode(){
-        $this->session->unset_userdata('curdept');
-        $this->session->unset_userdata('todept');
+        // $this->session->unset_userdata('curdept');
+        // $this->session->unset_userdata('todept');
         $this->session->set_userdata('bl',$_POST['bl']);
         $this->session->set_userdata('th',$_POST['th']);
         echo 1;

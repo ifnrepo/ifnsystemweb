@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+// use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
+
 class Ib extends CI_Controller
 {
     function __construct()
@@ -206,7 +210,7 @@ class Ib extends CI_Controller
     public function simpanib($id)
     {
         $cekdetail = $this->ibmodel->cekdetail($id);
-        if($cekdetail['xharga']==0){
+        if($cekdetail['xharga']==0 && $cekdetail['xkgs']==0){
             $data = [
                 'user_ok' => $this->session->userdata('id'),
                 'data_ok' => 1,
@@ -214,7 +218,8 @@ class Ib extends CI_Controller
                 'id' => $id,
                 'totalharga' => $cekdetail['totalharga'],
                 'total' => 'totalharga - diskon',
-                'jumlah' => '((totalharga-diskon)+ppn)-pph'
+                'jumlah' => '((totalharga-diskon)+ppn)-pph',
+                'bruto' => $cekdetail['kgs']
             ];
             $query = $this->ibmodel->simpanib($data);
             if ($query) {
@@ -222,8 +227,8 @@ class Ib extends CI_Controller
                 redirect($url);
             }
         }else{
-            $this->session->set_flashdata('errorsimpan',1);
-            $url = base_url() . 'po/datapo/'.$id;
+            $this->session->set_flashdata('errorsimpan',4);
+            $url = base_url() . 'ib/dataib/'.$id;
             redirect($url);
         }
     }
@@ -268,14 +273,438 @@ class Ib extends CI_Controller
         echo $hasil;
     }
     public function isidokbc($id){
+        // $header['header'] = 'transaksi';
+        // $data['data'] = $this->ibmodel->getdatabyid($kode);
+        // $data['mtuang'] = $this->mtuangmodel->getdata();
+        // $data['jnsbc'] = $this->ibmodel->getdokbcmasuk();
+        // $footer['fungsi'] = 'ib';
+        // $this->load->view('layouts/header', $header);
+        // $this->load->view('ib/dataib', $data);
+        // $this->load->view('layouts/footer', $footer);
+
+        $header['header'] = 'transaksi';
         $data['header'] = $this->ibmodel->getdatadetailib($id);
-        $data['datheader'] = $id;
+        $data['datheader'] = $this->ibmodel->getdatabyid($id);
         $data['bcmasuk'] = $this->ibmodel->getbcmasuk();
+        $data['jnsangkutan'] = $this->ibmodel->getjnsangkutan();
+        $data['refkemas'] = $this->ibmodel->refkemas();
+        $data['refmtuang'] = $this->ibmodel->refmtuang();
+        $footer['fungsi'] = 'ibx';
+        $this->load->view('layouts/header', $header);
         $this->load->view('ib/isidokbc',$data);
+        $this->load->view('layouts/footer', $footer);
     }
     public function simpandatanobc(){
         $hasil = $this->ibmodel->simpandatanobc();
         echo $hasil;
+    }
+    public function ceisa40excel($id){
+        $spreadsheet = new Spreadsheet();    
+        $array = [
+            'HEADER',
+            'ENTITAS',
+            'DOKUMEN',
+            'PENGANGKUT','KEMASAN','KONTAINER','BARANG','BARANGTARIF','BARANGDOKUMEN','BARANGENTITAS','BARANGSPEKKHUSUS','BARANGVD',
+            'BAHANBAKU','BAHANBAKUTARIF','BAHANBAKUDOKUMEN','PUNGUTAN','JAMINAN','BANKDEVISA','VERSI'
+        ];
+        
+        $no=0;
+        for($i=0;$i<count($array);$i++){
+            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, $array[$i]); 
+            $spreadsheet->addSheet($myWorkSheet);
+            $no++;
+        }
+        for($z=0;$z<count($array);$z++){
+            $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+            $sheet = $spreadsheet->getSheetByName($array[$z]);
+            // 65
+            $arrayheader = [
+                'NOMOR AJU','KODE DOKUMEN','KODE KANTOR','KODE KANTOR BONGKAR','KODE KANTOR PERIKSA','KODE KANTOR TUJUAN',
+                'KODE KANTOR EKSPOR','KODE JENIS IMPOR','KODE JENIS EKSPOR','KODE JENIS TPB','KODE JENIS PLB','KODE JENIS PROSEDUR',
+                'KODE TUJUAN PEMASUKAN','KODE TUJUAN PENGIRIMAN','KODE TUJUAN TPB','KODE CARA DAGANG','KODE CARA BAYAR','KODE CARA BAYAR LAINNYA',
+                'KODE GUDANG ASAL','KODE GUDANG TUJUAN','KODE JENIS KIRIM','KODE JENIS PENGIRIMAN','KODE KATEGORI EKSPOR','KODE KATEGORI MASUK FTZ',
+                'KODE KATEGORI KELUAR FTZ','KODE KATEGORI BARANG FTZ','KODE LOKASI','KODE LOKASI BAYAR','LOKASI ASAL','LOKASI TUJUAN','KODE DAERAH ASAL',
+                'KODE GUDANG ASAL','KODE GUDANG TUJUAN','KODE NEGARA TUJUAN','KODE TUTUP PU','NOMOR BC11','TANGGAL BC11','NOMOR POS','NOMOR SUB POS',
+                'KODE PELABUHAN BONGKAR','KODE PELABUHAN MUAT','KODE PELABUHAN MUAT AKHIR','KODE PELABUHAN TRANSIT','KODE PELABUHAN TUJUAN','KODE PELABUHAN EKSPOR',
+                'KODE TPS','TANGGAL BERANGKAT','TANGGAL EKSPOR','TANGGAL MASUK','TANGGAL MUAT','TANGGAL TIBA','TANGGAL PERIKSA','TEMPAT STUFFING',
+                'TANGGAL STUFFING','KODE TANDA PENGAMAN','JUMLAH TANDA PENGAMAN','FLAG CURAH','FLAG SDA','FLAG VD','FLAG AP BK','FLAG MIGAS','KODE ASURANSI',
+                'ASURANSI','NILAI BARANG','NILAI INCOTERM','NILAI MAKLON','ASURANSI','FREIGHT','FOB','BIAYA TAMBAHAN','BIAYA PENGURANG','VD','CIF','HARGA_PENYERAHAN',
+                'NDPBM','TOTAL DANA SAWIT','DASAR PENGENAAN PAJAK','NILAI JASA','UANG MUKA','BRUTO','NETTO','VOLUME','KOTA PERNYATAAN','TANGGAL PERNYATAAN',
+                'NAMA PERNYATAAN','JABATAN PERNYATAAN','KODE VALUTA','KODE INCOTERM','KODE JASA KENA PAJAK','NOMOR BUKTI BAYAR','TANGGAL BUKTI BAYAR','KODE JENIS NILAI',
+                'KODE KANTOR MUAT','NOMOR DAFTAR','TANGGAL DAFTAR','KODE ASAL BARANG FTZ','KODE TUJUAN PENGELUARAN','PPN PAJAK','PPNBM PAJAK',
+                'TARIF PPN PAJAK','TARIF PPNBM PAJAK','BARANG TIDAK BERWUJUD','KODE JENIS PENGELUARAN'
+            ];
+            $arrayentitas = [
+                'NOMOR AJU','SERI','KODE ENTITAS','KODE JENIS IDENTITAS','NOMOR IDENTITAS','NAMA ENTITAS','ALAMAT ENTITAS','NIB ENTITAS','KODE JENIS API',
+                'KODE STATUS','NOMOR UIN ENTITAS','TANGGAL UIN ENTITAS','KODE NEGARA','NIPER ENTITAS'
+            ];
+            $arraydokumen = [
+                'NOMOR AJU','SERI','KODE DOKUMEN','NOMOR DOKUMEN','TANGGAL DOKUMEN','KODE FASILITAS','KODE UIN'
+            ];
+            $arraypengangkut = [
+                'NOMOR AJU','SERI','KODE CARA ANGKUT','NAMA PENGANGKUT','NOMOR PENGANGKUT','KODE NEGARA','CALL SIGN','FLAG ANGKUT PLB'
+            ];
+            $arraykemasan = [
+                'NOMOR AJU','SERI','KODE KEMASAN','JUMLAH KEMASAN','MERK'
+            ];
+            $arraykontainer = [
+                'NOMOR AJU','SERI','NOMOR KONTAINER','KODE UKURAN KONTAINER','KODE JENIS KONTAINER','KODE TIPE KONTAINER'
+            ];
+            $arraybarang = [
+                'NOMOR AJU','SERI BARANG','HS','KODE BARANG','URAIAN','MEREK','TIPE','UKURAN','SPESIFIKASI LAIN','KODE SATUAN','JUMLAH SATUAN',
+                'KODE KEMASAN','JUMLAH KEMASAN','KODE DOKUMEN ASAL','KODE KANTOR ASAL','NOMOR DAFTAR ASAL','TANGGAL DAFTAR ASAL','NOMOR AJU ASAL',
+                'SERI BARANG ASAL','NETTO','BRUTO','VOLUME','SALDO AWAL','SALDO AKHIR','JUMLAH REALISASI','CIF','CIF RUPIAH','NDPBM','FOB','ASURANSI',
+                'FREIGHT','NILAI TAMBAH','DISKON','HARGA PENYERAHAN','HARGA PEROLEHAN','HARGA SATUAN','HARGA EKSPOR','HARGA PATOKAN','NILAI BARANG','NILAI JASA',
+                'NILAI DANA SAWIT','NILAi DEVISA','PERSENTASE IMPOR','KODE ASAL BARANG','KODE DAERAH ASAL','KODE GUNA BARANG','KODE JENIS NILAI',
+                'JATUH TEMPO ROYALTI','KODE KATEGORI BARANG','KODE KONDISI BARANG','KODE NEGARA ASAL','KODE PERHITUNGAN','PERNYATAAN LARTAS',
+                'FLAG 4 TAHUN','SERI IZIN','TAHUN PEMBUATAN','KAPASITAS SILINDER','KODE BKC','KODE KOMODITI BKC','KODE SUB KOMODITI BKC','FLAG TIS',
+                'ISI PER KEMASAN','JUMLAH DILEKATKAN','JUMLAH PITA CUKAI','HJE CUKAI','TARIF CUKAI'
+            ];
+            $arraybarangtarif = [
+                'NOMOR AJU','SERI BARANG','KODE PUNGUTAN','KODE TARIF','TARIF','KODE FASILITAS','TARIF FASILITAS','NILAI BAYAR','NILAI FASILITAS',
+                'NILAI SUDAH DILUNASI','KODE SATUAN','JUMLAH SATUAN','FLAG BMT SEMENTARA','KODE KOMODITI CUKAI','KODE SUB KOMODITI CUKAI','FLAG TIS',
+                'FLAG PELEKATAN','KODE KEMASAN','JUMLAH KEMASAN'
+            ];
+            $arraybarangdokumen = [
+                'NOMOR AJU','SERI BARANG','SERI DOKUMEN','SERI IZIN'  
+            ];
+            $arraybarangentitas = [
+                'NOMOR AJU','SERI BARANG','SERI DOKUMEN'
+            ];
+            $arraybarangspekkhusus = [
+                'NOMOR AJU','SERI BARANG','KODE','URAIAN'
+            ];
+            $arraybarangvd = [
+                'NOMOR AJU','SERI BARANG','KODE VD','NILAI BARANG','BIAYA TAMBAHAN','BIAYA PENGURANG','JATUH TEMPO'
+            ];
+            $arraybahanbaku = [
+                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE ASAL BAHAN BAKU','HS','KODE BARANG','URAIAN','MEREK','TIPE','UKURAN','SPESIFIKASI LAIN',
+                'KODE SATUAN','JUMLAH SATUAN','KODE KEMASAN','JUMLAH KEMASAN','KODE DOKUMEN ASAL','KODE KANTOR ASAL','NOMOR DAFTAR ASAL','TANGGAL DAFTAR ASAl',
+                'NOMOR AJU ASAL','SERI BARANG ASAL','NETTO','BRUTO','VOLUME','CIF','CIF RUPIAH','NDPBM','HARGA PENYERAHAN','HARGA PEROLEHAN','NILAI JASA','SERI IZIN',
+                'VALUTA','KODE BKC','KODE KOMODITI BKC','KODE SUB KOMODITI BKC','FLAG TIS','ISI PER KEMASAN','JUMLAH DILEKATKAN','JUMLAH PITA CUKAI','HJE CUKAI','TARIF CUKAI'
+            ];
+            $arraybahanbakutarif = [
+                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE ASAL BAHAN BAKU','KODE PUNGUTAN','KODE TARIF','TARIF','KODE FASILITAS','TARIF FASILITAS',
+                'NILAI BAYAR','NILAI FASILITAS','NILAI SUDAH DILUNASI','KODE SATUAN','JUMLAH SATUAN','FLAG BMT SEMENTARA','KODE KOMODITI CUKAI','KODE SUB KOMODITI CUKAI',
+                'FLAG TIS','FLAG PELEKATAN','KODE KEMASAN','KODE SUB KOMODITI CUKAI','FLAG TIS','FLAG PELEKATAN','KODE KEMASAN','JUMLAH KEMASAN'
+            ];
+            $arraybahanbakudokumen = [
+                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE_ASAL_BAHAN_BAKU','SERI DOKUMEN','SERI IZIN'
+            ];
+            $arraypungutan = [
+                'NOMOR AJU','KODE FASILITAS TARIF','KODE JENIS PUNGUTAN','NILAI PUNGUTAN','NPWP BILLING'
+            ];
+            $arrayjaminan = [
+                'NOMOR AJU','KODE KANTOR','KODE JAMINAN','NOMOR JAMINAN','TANGGAL JAMINAN','NILAI JAMINAN','PENJAMIN','TANGGAL JATUH TEMPO','NOMOR BPJ','TANGGAL BPJ'
+            ];
+            $arraybankdevisa = [
+                'NOMOR AJU','SERI','KODE','NAMA'
+            ];
+            $arrayversi = [
+                'VERSI'
+            ];
+            $kode = 'array'.strtolower($array[$z]);
+            // print_r($$kode);
+            for($i=0;$i<count($$kode);$i++){
+                if((65+$i) > 142){
+                    $chr = chr(67).chr(65+($i-78));
+                }else if((65+$i) > 116){
+                    $chr = chr(66).chr(65+($i-52));
+                }else if((65+$i) > 90){
+                    $chr = chr(65).chr(65+($i-26));
+                }else{
+                    $chr = chr(65+$i);
+                }
+                $sheet->setCellValue($chr.'1', $$kode[$i]);
+            }
+        }  
+        $sheetIndex = $spreadsheet->getIndex(
+            $spreadsheet->getSheetByName('Worksheet')
+        );
+        $spreadsheet->removeSheetByIndex($sheetIndex);
+        //Proses pengisian excel dari database
+        $data = $this->ibmodel->getdatabyid($id);
+        $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
+        $sheet = $spreadsheet->getSheetByName('HEADER');
+        $sheet->setCellValue('A2', $noaju); 
+        $sheet->setCellValue('B2', '40'); 
+        $sheet->setCellValue('C2', '050500'); 
+        $sheet->setCellValue('J2', '1'); 
+        $sheet->setCellValue('N2', '1'); 
+        $sheet->setCellValue('BV2', $data['totalharga']);  // Nilai PAB
+        $sheet->setCellValue('CB2', $data['bruto']);  // Bruto
+        $sheet->setCellValue('CC2', $data['netto']);  // Netto
+        $sheet->setCellValue('CD2', '0');
+        $sheet->setCellValue('CE2', 'BANDUNG');
+        $sheet->setCellValue('CF2', $data['tgl_aju']);
+        $sheet->setCellValue('CG2', 'MIRA AMALIA WULAN');
+        $sheet->setCellValue('CH2', 'MANAGER KEU. & AKT');
+
+        $sheet = $spreadsheet->getSheetByName('ENTITAS');
+        $sheet->setCellValue('A2', $noaju); 
+        $sheet->setCellValue('B2', '3'); 
+        $sheet->setCellValue('C2', '3'); 
+        $sheet->setCellValue('D2', '5'); 
+        $sheet->setCellValue('E2', '010017176057000'); 
+        $sheet->setCellValue('F2', 'INDONEPTUNE NET MANUFACTURING');
+        $sheet->setCellValue('G2', 'JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT'); 
+        $sheet->setCellValue('H2', "9120011042693");
+        $sheet->setCellValue('K2', '1555/KM.4/2017');
+        $sheet->setCellValue('L2', '2017-07-10');
+
+        $sheet->setCellValue('A3', $noaju); 
+        $sheet->setCellValue('B3', '7'); 
+        $sheet->setCellValue('C3', '7'); 
+        $sheet->setCellValue('D3', '5'); 
+        $sheet->setCellValue('E3', '010017176057000'); 
+        $sheet->setCellValue('F3', 'INDONEPTUNE NET MANUFACTURING');
+        $sheet->setCellValue('G3', 'JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT'); 
+        $sheet->setCellValue('J2', "LAINNYA");
+        $sheet->setCellValue('K3', '1555/KM.4/2017');
+        $sheet->setCellValue('L3', '2017-07-10');
+
+        $sheet->setCellValue('A4', $noaju); 
+        $sheet->setCellValue('B4', '9'); 
+        $sheet->setCellValue('C4', '9'); 
+        $sheet->setCellValue('D4', '5'); 
+        $sheet->setCellValue('E4', $data['npwp']); 
+        $sheet->setCellValue('F4', $data['namasupplier']);
+        $sheet->setCellValue('G4', $data['alamat']); 
+        $sheet->setCellValue('I4', "02");
+        $sheet->setCellValue('J4', 'LAINNYA');
+
+        $sheet = $spreadsheet->getSheetByName('DOKUMEN');
+        $dokmen = $this->ibmodel->getdatadokumen($id);
+        $no = 1;
+        foreach ($dokmen->result_array() as $doku) {
+            $sheet->setCellValue('A2', $noaju); 
+            $sheet->setCellValue('B2', $no++);
+            $sheet->setCellValue('C2', $doku['kode_dokumen']);
+            $sheet->setCellValue('D2', $doku['nomor_dokumen']);
+            $sheet->setCellValue('E2', $doku['tgl_dokumen']);
+        }
+
+        $sheet = $spreadsheet->getSheetByName('PENGANGKUT');
+        $sheet->setCellValue('A2', $noaju); 
+        $sheet->setCellValue('C2', $data['jns_angkutan']); 
+        $sheet->setCellValue('D2', $data['angkutan']); 
+        $sheet->setCellValue('E2', $data['no_kendaraan']); 
+
+        $sheet = $spreadsheet->getSheetByName('KEMASAN');
+        $sheet->setCellValue('A2', $noaju); 
+        $sheet->setCellValue('B2', '1'); 
+        $sheet->setCellValue('C2', $data['kd_kemasan']); 
+        $sheet->setCellValue('D2', $data['jml_kemasan']);
+        
+        $sheet = $spreadsheet->getSheetByName('BARANG');
+        $datadet = $this->ibmodel->getdatadetailib($id);
+        $no = 1;
+        foreach ($datadet as $detx) {
+            $no++;
+            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
+            $sheet->setCellValue('A'.$no, $noaju); 
+            $sheet->setCellValue('B'.$no, $detx['seri_barang']); 
+            $sheet->setCellValue('C'.$no, $detx['nohs']); 
+            $sheet->setCellValue('D'.$no, $detx['brg_id']); 
+            $sheet->setCellValue('E'.$no, $detx['nama_barang']); 
+            $sheet->setCellValue('J'.$no, $detx['kodesatuan']); 
+            $sheet->setCellValue('K'.$no, $jumlah); 
+            $sheet->setCellValue('L'.$no, $data['kd_kemasan']); 
+            $sheet->setCellValue('M'.$no, '0'); 
+            $sheet->setCellValue('T'.$no, $detx['kgs']); 
+            $sheet->setCellValue('AH'.$no, $detx['harga']); 
+        }
+
+        $sheet = $spreadsheet->getSheetByName('BARANGTARIF');
+        $no = 1;
+        $sumppn = 0;
+        foreach ($datadet as $detx) {
+            $no++;
+            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
+            $sheet->setCellValue('A'.$no, $noaju); 
+            $sheet->setCellValue('B'.$no, $detx['seri_barang']); 
+            $sheet->setCellValue('C'.$no, 'PPN'); 
+            $sheet->setCellValue('D'.$no, '1'); 
+            $sheet->setCellValue('E'.$no, 11); 
+            $sheet->setCellValue('F'.$no, '3'); 
+            $sheet->setCellValue('G'.$no, 100); 
+            $sheet->setCellValue('I'.$no, round($detx['harga']*0.11,0)); 
+            $sheet->setCellValue('J'.$no, '0'); 
+            $sheet->setCellValue('K'.$no, substr($detx['kodesatuan'],0,2)); 
+            $sheet->setCellValue('L'.$no, $jumlah); 
+            $sumppn += round($detx['harga']*0.11,0);
+        }
+
+        $sheet = $spreadsheet->getSheetByName('PUNGUTAN');
+        $sheet->setCellValue('A2', $noaju); 
+        $sheet->setCellValue('B2', '3'); 
+        $sheet->setCellValue('C2', 'PPN'); 
+        $sheet->setCellValue('D2', $sumppn); 
+
+        $sheet = $spreadsheet->getSheetByName('VERSI');
+        $sheet->setCellValue('A2', '1.1'); 
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');    
+        header('Content-Disposition: attachment; filename="Data Ceisa 40.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');    
+        $writer = new Xlsx($spreadsheet);    
+        $writer->save('php://output');
+    }
+    public function hosttohost($id){
+        $this->session->unset_userdata('datatokenbeacukai');
+        $curl = curl_init();
+        // $token = $consID;
+        $headers = array(
+            "Content-Type: application/json",
+            // "Authorization: Bearer ".$logged_user_token
+        );
+        $data = [
+            'username' => 'indoneptune',
+            'password' => 'Bandung#14',
+        ];
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers
+            // array(
+            //     "Authorization: $token",
+            // )
+        );
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/nle-oauth/v1/user/login');
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        $databalik = json_decode($result,true);
+        print_r($databalik['item']['access_token']);
+        if($databalik['status']=='Success'){
+            $this->ibmodel->isitokenbc($databalik['item']['access_token']);
+            $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }else{
+            $url = base_url().'ib/kosong';
+            redirect($url);
+        }
+    }
+    public function getresponhost($id){
+        $dataaju = $this->ibmodel->getdatanomoraju($id);
+        $curl = curl_init();
+        // $token = $consID;
+        $headers = array(
+            "Content-Type: application/json",
+            "Authorization: Bearer ".$this->session->userdata('datatokenbeacukai'),
+            "id_platform: PL002"
+
+        );
+        $data = [
+            $dataaju
+        ];
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/status/'.$dataaju);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        $databalik = json_decode($result,true);
+        print_r($databalik);
+        if($databalik['status']=='success'){
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }else{
+            // echo '<script>alert("'.$databalik['status'].'");</script>';
+            // $url = base_url().'ib/kosong';
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',$databalik['message']);
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }
+    }
+    public function addlampiran($id){
+        $data['datheader'] = $this->ibmodel->getdatabyid($id);
+        $data['lampiran'] = $this->ibmodel->getjenisdokumen();
+        $this->load->view('ib/addlampiran',$data);
+    }
+    public function tambahlampiran(){
+        $data = [
+            'id_header' => $_POST['id'],
+            'kode_dokumen' => $_POST['kode'],
+            'nomor_dokumen' => $_POST['nomor'],
+            'tgl_dokumen' => tglmysql($_POST['tgl']),
+            'keterangan' => $_POST['ket']
+        ];
+        $hasil = $this->ibmodel->tambahlampiran($data);
+        if($hasil){
+            $html = '';
+            $query = $this->ibmodel->getdatalampiran($_POST['id']);
+            $no = 1;
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td>'.$no++.'</td>';
+                $html .= '<td>'.$que['kode_dokumen'].'</td>';
+                $html .= '<td>'.$que['nama_dokumen'].'</td>';
+                $html .= '<td>'.$que['nomor_dokumen'].'</td>';
+                $html .= '<td>'.$que['tgl_dokumen'].'</td>';
+                $html .= '<td>'.$que['keterangan'].'</td>';
+                $html .= '<td>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $cocok = array('datagroup' => $html);
+            echo json_encode($cocok);
+        }
+    }
+    public function getdatalampiran($id){
+        $html = '';
+        $query = $this->ibmodel->getdatalampiran($id);
+        $no = 1;
+        foreach ($query->result_array() as $que) {
+            $html .= '<tr>';
+            $html .= '<td>'.$no++.'</td>';
+            $html .= '<td>'.$que['kode_dokumen'].'</td>';
+            $html .= '<td>'.$que['nama_dokumen'].'</td>';
+            $html .= '<td>'.$que['nomor_dokumen'].'</td>';
+            $html .= '<td>'.$que['tgl_dokumen'].'</td>';
+            $html .= '<td>'.$que['keterangan'].'</td>';
+            $html .= '<td>';
+            $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary">Hapus</a>';
+            $html .= '</td>';
+            $html .= '</tr>';
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function hapuslampiran($id,$ide){
+        $hasil = $this->ibmodel->hapuslampiran($id);
+        if($hasil){
+            $html = '';
+            $query = $this->ibmodel->getdatalampiran($ide);
+            $no = 1;
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td>'.$no++.'</td>';
+                $html .= '<td>'.$que['kode_dokumen'].'</td>';
+                $html .= '<td>'.$que['nama_dokumen'].'</td>';
+                $html .= '<td>'.$que['nomor_dokumen'].'</td>';
+                $html .= '<td>'.$que['tgl_dokumen'].'</td>';
+                $html .= '<td>'.$que['keterangan'].'</td>';
+                $html .= '<td>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $cocok = array('datagroup' => $html);
+            echo json_encode($cocok);
+        }
     }
     //End IB Controller
     

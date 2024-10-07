@@ -9,6 +9,7 @@
              <?= base_url(uri_string()); ?>
              <p class="text-secondary" style="font-size: 14px">----------</p>
             </p>
+            <p><?php if(isset($data)){ echo $data; }; ?></p>
             <div class="empty-action">
             <a href="<?= base_url(); ?>" class="btn btn-primary">
                 <!-- Download SVG icon from http://tabler-icons.io/i/plus -->
