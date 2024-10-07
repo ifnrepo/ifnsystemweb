@@ -17,7 +17,9 @@
         <div class="tab-content">
             <div class="tab-pane fade active show p-2" id="tabs-home-8">
                 <div class="row">
-                    <div class="m-2 font-bold d-flex justify-content-between">Data HEADER BC <span><a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i>ResponH2H</a><a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> Host2Host</a><a href="<?= base_url().'ib'; ?>" class="btn btn-sm btn-primary"><i class="fa fa-arrow-left mr-1"></i> Kembali</a></span></div>
+                    <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
+                    <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
+                    <div class="m-2 font-bold d-flex justify-content-between">Data HEADER BC <span><a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i>ResponH2H</a><a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> Host2Host</a><a href="<?= base_url().'ib'; ?>" class="btn btn-sm btn-primary"><i class="fa fa-arrow-left mr-1"></i> Kembali</a></span></div>
                     <input type="hidden" name="id_header" id="id_header" value="<?= $datheader['id']; ?>">
                     <input type="hidden" name="tgl" id="tgl" value="<?= $datheader['tgl']; ?>">
                     <hr class="m-0">
@@ -237,6 +239,7 @@
             </div>
         </div>
     </div>
+    <hr class="m-1"> 
     <div class="modal-footer">
         <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Batal</button>
         <span class="text-red" style="font-size: 12px !important;" id="keteranganerr"></span>

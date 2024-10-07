@@ -607,7 +607,7 @@
                       Scrap / Waste
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 7); ?>" href="<?= base_url('cctv'); ?>">
-                      Akses CCTV
+                      Tutorial Akses CCTV
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 6); ?>" href="<?= base_url('logact/clear'); ?>">
                       Log Activity

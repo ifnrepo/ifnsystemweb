@@ -522,3 +522,7 @@ function cekdetout($header)
     }
     return $isi;
 }
+function isikurangnol($data){
+    $len = strlen($data);
+    return str_repeat('0',6-$len).$data;
+}
