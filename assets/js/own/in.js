@@ -106,7 +106,8 @@ $("#xsimpanin").click(function () {
 	}
 });
 $("#butgo").click(function () {
-	$("#dept_kirim").change();
+	// getdatain();
+	window.location.reload();
 });
 //End JS
 function getdatain() {

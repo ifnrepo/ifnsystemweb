@@ -424,8 +424,9 @@ class Ib extends CI_Controller
         $spreadsheet->removeSheetByIndex($sheetIndex);
         //Proses pengisian excel dari database
         $data = $this->ibmodel->getdatabyid($id);
+        $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
         $sheet = $spreadsheet->getSheetByName('HEADER');
-        $sheet->setCellValue('A2', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('A2', $noaju); 
         $sheet->setCellValue('B2', '40'); 
         $sheet->setCellValue('C2', '050500'); 
         $sheet->setCellValue('J2', '1'); 
@@ -440,7 +441,7 @@ class Ib extends CI_Controller
         $sheet->setCellValue('CH2', 'MANAGER KEU. & AKT');
 
         $sheet = $spreadsheet->getSheetByName('ENTITAS');
-        $sheet->setCellValue('A2', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('A2', $noaju); 
         $sheet->setCellValue('B2', '3'); 
         $sheet->setCellValue('C2', '3'); 
         $sheet->setCellValue('D2', '5'); 
@@ -451,7 +452,7 @@ class Ib extends CI_Controller
         $sheet->setCellValue('K2', '1555/KM.4/2017');
         $sheet->setCellValue('L2', '2017-07-10');
 
-        $sheet->setCellValue('A3', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('A3', $noaju); 
         $sheet->setCellValue('B3', '7'); 
         $sheet->setCellValue('C3', '7'); 
         $sheet->setCellValue('D3', '5'); 
@@ -462,7 +463,7 @@ class Ib extends CI_Controller
         $sheet->setCellValue('K3', '1555/KM.4/2017');
         $sheet->setCellValue('L3', '2017-07-10');
 
-        $sheet->setCellValue('A4', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('A4', $noaju); 
         $sheet->setCellValue('B4', '9'); 
         $sheet->setCellValue('C4', '9'); 
         $sheet->setCellValue('D4', '5'); 
@@ -476,7 +477,7 @@ class Ib extends CI_Controller
         $dokmen = $this->ibmodel->getdatadokumen($id);
         $no = 1;
         foreach ($dokmen->result_array() as $doku) {
-            $sheet->setCellValue('A2', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+            $sheet->setCellValue('A2', $noaju); 
             $sheet->setCellValue('B2', $no++);
             $sheet->setCellValue('C2', $doku['kode_dokumen']);
             $sheet->setCellValue('D2', $doku['nomor_dokumen']);
@@ -484,13 +485,13 @@ class Ib extends CI_Controller
         }
 
         $sheet = $spreadsheet->getSheetByName('PENGANGKUT');
-        $sheet->setCellValue('A2', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('A2', $noaju); 
         $sheet->setCellValue('C2', $data['jns_angkutan']); 
         $sheet->setCellValue('D2', $data['angkutan']); 
         $sheet->setCellValue('E2', $data['no_kendaraan']); 
 
         $sheet = $spreadsheet->getSheetByName('KEMASAN');
-        $sheet->setCellValue('A2', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('A2', $noaju); 
         $sheet->setCellValue('B2', '1'); 
         $sheet->setCellValue('C2', $data['kd_kemasan']); 
         $sheet->setCellValue('D2', $data['jml_kemasan']);
@@ -501,7 +502,7 @@ class Ib extends CI_Controller
         foreach ($datadet as $detx) {
             $no++;
             $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
-            $sheet->setCellValue('A'.$no, '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+            $sheet->setCellValue('A'.$no, $noaju); 
             $sheet->setCellValue('B'.$no, $detx['seri_barang']); 
             $sheet->setCellValue('C'.$no, $detx['nohs']); 
             $sheet->setCellValue('D'.$no, $detx['brg_id']); 
@@ -520,7 +521,7 @@ class Ib extends CI_Controller
         foreach ($datadet as $detx) {
             $no++;
             $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
-            $sheet->setCellValue('A'.$no, '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+            $sheet->setCellValue('A'.$no, $noaju); 
             $sheet->setCellValue('B'.$no, $detx['seri_barang']); 
             $sheet->setCellValue('C'.$no, 'PPN'); 
             $sheet->setCellValue('D'.$no, '1'); 
@@ -535,7 +536,7 @@ class Ib extends CI_Controller
         }
 
         $sheet = $spreadsheet->getSheetByName('PUNGUTAN');
-        $sheet->setCellValue('A2', '000040010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju']); 
+        $sheet->setCellValue('A2', $noaju); 
         $sheet->setCellValue('B2', '3'); 
         $sheet->setCellValue('C2', 'PPN'); 
         $sheet->setCellValue('D2', $sumppn); 
@@ -614,16 +615,18 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        echo "Authorization: Bearer ".$this->session->userdata('datatokenbeacukai');
         print_r($databalik);
-        echo '<script>pesan("OKKKOKOK");</script>';
-        // if($databalik['status']=='success'){
-        //     $url = base_url().'ib/isidokbc/'.$id;
-        //     redirect($url);
-        // }else{
-        //     $url = base_url().'ib/kosong';
-        //     redirect($url);
-        // }
+        if($databalik['status']=='success'){
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }else{
+            // echo '<script>alert("'.$databalik['status'].'");</script>';
+            // $url = base_url().'ib/kosong';
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',$databalik['message']);
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }
     }
     public function addlampiran($id){
         $data['datheader'] = $this->ibmodel->getdatabyid($id);

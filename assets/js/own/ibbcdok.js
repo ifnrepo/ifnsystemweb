@@ -6,6 +6,12 @@ $(document).ready(function () {
 	});
 
 	loadlampiran();
+	var errosimpan = $("#errorsimpan").val();
+	var pesan = $("#pesanerror").val();
+	if (errosimpan == 1) {
+		// pesan("PESAN :", "error");
+		alert("PESAN : " + pesan);
+	}
 });
 $(".inputangka").on("change click keyup input paste", function (event) {
 	$(this).val(function (index, value) {
@@ -113,7 +119,8 @@ $("#simpanhakbc").click(function () {
 			tglbc: $("#tgl_bc").val(),
 		},
 		success: function (data) {
-			window.location.reload();
+			// window.location.reload();
+			window.location.href = base_url + "ib";
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
