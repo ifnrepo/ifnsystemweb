@@ -1,5 +1,7 @@
 <?php
 define('LOK_UPLOAD_USER', "./assets/image/personil/");
+define('LOK_FOTO_MESIN', base_url()."assets/image/dokmesin/foto/");
+define('LOK_DOK_MESIN', "./assets/image/dokmesin/dok/");
 define('IDPERUSAHAAN', 'IFN');
 define('deptbbl', 'GMGSITPG');
 define('kodeunik', 'concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');

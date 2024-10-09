@@ -499,7 +499,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 16); ?>" href="<?= base_url('prosbor'); ?>">
                       Proses Borongan
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 17); ?>" href="<?= base_url('mastermsn'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 17); ?>" href="<?= base_url('mastermsn/clear'); ?>">
                       Data Mesin
                     </a>
                   </div>
@@ -546,7 +546,10 @@
                       PO (Purchase Order)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 7); ?>" href="<?= base_url('ib/clear'); ?>">
-                      IB (AJU Masuk Barang)
+                      AMK (AJU Masuk Barang)
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 8); ?>" href="<?= base_url('akb/clear'); ?>">
+                      AKB (AJU Keluar Barang)
                     </a>
                   </div>
                 </div>

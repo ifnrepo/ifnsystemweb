@@ -35,6 +35,8 @@ class In extends CI_Controller {
     public function clear(){
         $this->session->set_userdata('bl',date('m'));
         $this->session->set_userdata('th',date('Y'));
+        $this->session->unset_userdata('curdept');
+        $this->session->unset_userdata('todept');
         $url = base_url().'in';
         redirect($url);
     }
