@@ -315,8 +315,8 @@
     <div class="offcanvas-body">
       <div class="fetched-data">
         <!-- Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ab assumenda ea est, eum exercitationem fugiat illum itaque laboriosam magni necessitatibus, nemo nisi numquam quae reiciendis repellat sit soluta unde. Aut! -->
-         <div class="text-center p-5" style="font-size: 20px;">
-        <div class="spinner-border spinner-border text-teal text-center" role="status"></div> LOADING...
+        <div class="text-center p-5" style="font-size: 20px;">
+          <div class="spinner-border spinner-border text-teal text-center" role="status"></div> LOADING...
         </div>
       </div>
       <div class="mt-3">
@@ -378,15 +378,19 @@
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
-                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan').' / '.$this->session->userdata('dept_user') ?></div>
+                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan') . ' / ' . $this->session->userdata('dept_user') ?></div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
               <a class="dropdown-item">Status</a>
               <a class="dropdown-item">Profile</a>
-              <a href="<?= base_url().'userapps/refreshsess/'.$this->session->userdata('id').'/'.uri_string(); ?>" class="dropdown-item">
-              <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" /><path d="M20 4v5h-5" /></svg>  
-              Refresh session</a>
+              <a href="<?= base_url() . 'userapps/refreshsess/' . $this->session->userdata('id') . '/' . uri_string(); ?>" class="dropdown-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
+                  <path d="M20 4v5h-5" />
+                </svg>
+                Refresh session</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item">Settings</a>
               <a href="<?= base_url() . 'Auth/logout'; ?>" class="dropdown-item">Logout</a>
@@ -397,7 +401,7 @@
           <ul class="navbar-nav pt-lg-3">
             <li class="nav-item">
               <a class="nav-link <?php if (!isset($header)) {
-                                    echo 'active';  
+                                    echo 'active';
                                   } ?>" href="<?= base_url(); ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -412,7 +416,7 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item <?php if (($this->session->userdata('level_user') <= 1) && (count($this->session->userdata('hak_ttd_pb'))==0) && ($this->session->userdata('cekpo')==0)) {
+            <li class="nav-item <?php if (($this->session->userdata('level_user') <= 1) && (count($this->session->userdata('hak_ttd_pb')) == 0) && ($this->session->userdata('cekpo') == 0)) {
                                   echo "hilang";
                                 } ?>">
               <a class="nav-link <?php if (isset($header) && $header == 'pendingtask') {
@@ -501,6 +505,15 @@
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 17); ?>" href="<?= base_url('mastermsn'); ?>">
                       Data Mesin
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 18); ?>" href="<?= base_url('agama'); ?>">
+                      Data Agama
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 19); ?>" href="<?= base_url('pendidikan'); ?>">
+                      Data Pendidikan Personil
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 20); ?>" href="<?= base_url('status'); ?>">
+                      Data Status Personil
                     </a>
                   </div>
                 </div>
@@ -601,7 +614,7 @@
                       Finished Goods
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 3); ?>" href="<?= base_url('invmesin'); ?>">
-                     Barang Modal
+                      Barang Modal
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 13); ?>" href="<?= base_url('bcwaste'); ?>">
                       Scrap / Waste
@@ -621,8 +634,8 @@
                                                     echo 'active';
                                                   } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-command">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-command">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                     <path d="M7 9a2 2 0 1 1 2 -2v10a2 2 0 1 1 -2 -2h10a2 2 0 1 1 -2 2v-10a2 2 0 1 1 2 2h-10" />
                   </svg>
                 </span>
@@ -693,14 +706,18 @@
               <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
-                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan').' / '.$this->session->userdata('dept_user'); ?></div>
+                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan') . ' / ' . $this->session->userdata('dept_user'); ?></div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
               <a class="dropdown-item">Status</a>
               <a class="dropdown-item">Profile</a>
-              <a href="<?= base_url().'userapps/refreshsess/'.$this->session->userdata('id').'/'.uri_string(); ?>" class="dropdown-item">
-                <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" /><path d="M20 4v5h-5" /></svg>
+              <a href="<?= base_url() . 'userapps/refreshsess/' . $this->session->userdata('id') . '/' . uri_string(); ?>" class="dropdown-item">
+                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1">
+                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                  <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
+                  <path d="M20 4v5h-5" />
+                </svg>
                 Refresh session</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item">Settings</a>
