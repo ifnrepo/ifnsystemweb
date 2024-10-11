@@ -65,16 +65,22 @@
                 </div>
                 <div class="row">
                     <div class="col-6">
-                        <div class="mb-3">
+                        <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Harga</label>
                             <input type="text" class="form-control font-kecil text-end inputangka" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'],8); ?>">
                         </div>
                     </div>
                     <div class="col-6">
-                        <div class="mb-3">
-                            <label class="form-label font-kecil mb-0 font-bold text-primary">Harga Lainnya</label>
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Harga Lainnya (<?=$data['mt_uang']  ?>)</label>
                             <input type="text" class="form-control font-kecil text-end inputangka" name="oth_amount" placeholder="Input Amount" value="<?= rupiah($data['oth_amount'],2); ?>">
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3">
+                        <label class="form-label font-kecil mb-0 font-bold text-primary">Noted</label>
+                        <input type="text" class="form-control font-kecil" name="price" placeholder="Keterangan" value="<?= $data['remark']; ?>">
                     </div>
                 </div>
                 <fieldset class="form-fieldset bg-primary-lt">
@@ -92,23 +98,23 @@
                     <div class="mb-1 row">
                         <label class="col-2 col-form-label font-bold">Nomor BC</label>
                         <div class="col">
-                            <input type="text" class="form-control font-kecil" value="<?= $data['nomor_bc']; ?>" id="nomor_bc" name="nomor_bc" placeholder="Nomor BC">
+                            <div class="row">
+                                <div class="col-6">
+                                    <input type="text" class="form-control font-kecil" value="<?= $data['nomor_bc']; ?>" id="nomor_bc" name="nomor_bc" placeholder="Nomor BC">
+                                </div>
+                                <div class="col-6">
+                                    <input type="text" class="form-control font-kecil tgl" value="<?= tglmysql($data['tgl_bc']); ?>" id="tgl_bc" name="tgl_bc" placeholder="Tgl BC">
+                                </div>
+                            </div>
                         </div>
                      </div>
-                    <div class="mb-1 row">
-                        <label class="col-2 col-form-label font-bold">Tgl BC</label>
-                        <div class="col">
-                            <input type="text" class="form-control font-kecil tgl" value="<?= tglmysql($data['tgl_bc']); ?>" id="tgl_bc" name="tgl_bc" placeholder="Tgl BC">
-                        </div>
-                     </div>
-                    
                 </fieldset>
             </form>
         </div>
     </div>
 </div>
-<div class="modal-footer font-kecil p-0" style="display: flex;justify-content: space-between;">
-    <a href="#" class="btn btn-link link-secondary" data-bs-dismiss="modal">Close</a>
+<div class="modal-footer font-kecil p-0 mx-2" style="display: flex;justify-content: space-between;">
+    <a href="#" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</a>
     <button type="button" class="btn btn-sm btn-primary" id="simpanbarang" >Simpan</button>
 </div>
 <script>
