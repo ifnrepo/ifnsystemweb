@@ -41,11 +41,11 @@ $(document).ready(function () {
 				targets: [6],
 				orderable: false,
 			},
-			// {
-			// 	className: "text-right",
-			// 	targets: [9],
-			// 	orderable: false,
-			// },
+			{
+				className: "text-right",
+				targets: [7],
+				orderable: false,
+			},
 			// {
 			// 	className: "text-right",
 			// 	targets: [10],

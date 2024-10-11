@@ -1,15 +1,20 @@
 <div class="container-xl">
     <div class="row mb-1">
-        <div class="col-4 font-bold">
+        <div class="col-3 font-bold">
             <span class="text-primary">Inventory per Tanggal</span>
             <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal')), 1); ?></h4>
         </div>
-        <div class="col-8 text-primary font-bold">
+        <div class="col-7 text-primary font-bold">
             <span>SKU/Spesifikasi Barang</span>
             <?php $spekbarang = $header['nama_barang'] == null ? $header['spek'] : $header['nama_barang']; ?>
-            <h4 class="mb-1 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
+            <?php $nobc = trim($header['nomor_bc'])!='' ? 'BC.'.trim($header['jns_bc']).'-'.$header['nomor_bc'] : ''; ?>
+            <h4 class="mb-0 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
+            <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?></h4>
             <hr class="m-0">
-            <span class="font-12 text-red">KATEGORI : <?= $header['nama_kategori']; ?></span>
+            <span class="font-12 text-red">KATEGORI : <?= $header['nama_kategori']; ?></span><br>
+        </div>
+        <div class="col-2 <?php if($this->session->userdata('currdept')=='GM'){ echo "hilang"; } ?>">
+            <a href="#kolap" class="btn btn-sm btn-info" data-toggle="collapse" aria-expanded="false">View BOM</a>
         </div>
         <!-- <div class="col-4 text-primary font-bold">
         <span>Dibuat Oleh</span>
@@ -95,7 +100,25 @@
         <div class="col-4 font-bold">
         </div>
     </div>
-    <hr class="m-1">
+    <div class="collapse" id="kolap">
+        <span class="text-orange font-bold mb-1">DETAIL BOM</span>
+        <table class="table datatable6 table-hover" id="cobasisip">
+            <thead style="background-color: blue !important">
+                <tr>
+                <!-- <th>No</th> -->
+                <th>Specific</th>
+                <th>SKU</th>
+                <th>Satuan</th>
+                <th>Qty</th>
+                <th>Kgs</th>
+                <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
+            </tbody>
+        </table>
+    <div>
+        <hr class="m-1">
 </div>
 <script>
     $(document).ready(function() {
