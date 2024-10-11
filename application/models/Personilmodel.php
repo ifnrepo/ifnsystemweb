@@ -3,22 +3,30 @@ class Personilmodel extends CI_Model
 {
     public function getdata()
     {
-        $this->db->select('personil.*, dept.departemen, grup.nama_grup, jabatan.nama_jabatan');
+        $this->db->select('personil.*, dept.departemen, grup.nama_grup, jabatan.nama_jabatan, tb_agama.nama_agama, tb_status.nama_status, tb_pendidikan.tingkat_pendidikan');
+
         $this->db->from('personil');
         $this->db->join('dept', 'dept.urut = personil.bagian_id', 'left');
         $this->db->join('jabatan', 'jabatan.id = personil.jabatan_id', 'left');
         $this->db->join('grup', 'grup.id = personil.grup_id', 'left');
+        $this->db->join('tb_agama', 'tb_agama.id = personil.id_agama', 'left');
+        $this->db->join('tb_status', 'tb_status.id = personil.id_status', 'left');
+        $this->db->join('tb_pendidikan', 'tb_pendidikan.id = personil.id_pendidikan', 'left');
 
         return $this->db->get()->result_array();
     }
 
     public function getdatabyid($personil_id)
     {
-        $this->db->select('personil.*, dept.departemen, grup.nama_grup, jabatan.nama_jabatan');
+        $this->db->select('personil.*, dept.departemen, grup.nama_grup, jabatan.nama_jabatan, tb_agama.nama_agama, tb_status.nama_status, tb_pendidikan.tingkat_pendidikan');
+
         $this->db->from('personil');
         $this->db->join('dept', 'dept.urut = personil.bagian_id', 'left');
         $this->db->join('jabatan', 'jabatan.id = personil.jabatan_id', 'left');
         $this->db->join('grup', 'grup.id = personil.grup_id', 'left');
+        $this->db->join('tb_agama', 'tb_agama.id = personil.id_agama', 'left');
+        $this->db->join('tb_status', 'tb_status.id = personil.id_status', 'left');
+        $this->db->join('tb_pendidikan', 'tb_pendidikan.id = personil.id_pendidikan', 'left');
         $this->db->where('personil.personil_id', $personil_id);
         return $this->db->get()->row_array();
     }
@@ -36,6 +44,13 @@ class Personilmodel extends CI_Model
         $hasil = $this->db->insert('personil', $data);
         return $hasil;
     }
+    // public function simpandata($data)
+    // {
+    //     // Simpan data ke tabel 'personil'
+    //     $hasil = $this->db->insert('personil', $data);
+    //     return $hasil;
+    // }
+
     public function updatedata()
     {
         $data = $_POST;

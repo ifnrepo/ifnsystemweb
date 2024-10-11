@@ -20,7 +20,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="card">
       <div class="card-body font-kecil">
         <form action="<?= $action; ?>" id="formtambahpersonil" name="formtambahpersonil" method="POST">
-          <div class="row">
+          <div class=" row">
             <div class="col-sm-6">
               <div class="mb-1 row">
                 <label class="col-3 col-form-label required">No Sidik Jari</label>
@@ -58,9 +58,64 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Pendidikan</label>
+                <div class="col">
+                  <select name="id_pendidikan" id="id_pendidikan" class="form-control">
+                    <option value="Select Menu">Pendidikan</option>
+                    <?php foreach ($pendidikan as $key) : ?>
+                      <option value="<?= $key['id']; ?>"><?= $key['tingkat_pendidikan']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Agama</label>
+                <div class="col">
+                  <select name="id_agama" id="id_agama" class="form-control">
+                    <option value="Select Menu">Agama</option>
+                    <?php foreach ($agama as $key) : ?>
+                      <option value="<?= $key['id']; ?>"><?= $key['nama_agama']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Jenis Kelamin</label>
+                <div class="col">
+                  <select class="form-select" name="jenis_kelamin" id="jenis_kelamin" aria-label="Default select example">
+                    <option selected>Jenis Kelamin </option>
+                    <option value="laki-laki">Laki-Laki</option>
+                    <option value="perempuan">Perempuan</option>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Ket</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" name="keterangan" id="keterangan" placeholder="Ket">
+                </div>
+              </div>
+              <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Status Aktif</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil" name="status_aktif" id="status_aktif" placeholder="Status Aktif">
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Status</label>
+                <div class="col">
+                  <select name="id_status" id="id_status" class="form-control">
+                    <option value="Select Menu">Status Personil</option>
+                    <?php foreach ($status as $key) : ?>
+                      <option value="<?= $key['id']; ?>"><?= $key['nama_status']; ?></option>
+                    <?php endforeach; ?>
+                  </select>
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Telp</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" name="tlp" id="tlp" placeholder="Telephone/Wa">
                 </div>
               </div>
               <div class="mb-1 row">
@@ -105,50 +160,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" class="form-control font-kecil" name="kabupaten" id="kabupaten" placeholder="Kabupaten">
                 </div>
               </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Pendidikan</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil" name="pendidikan" id="pendidikan" placeholder="pendidikan" style="text-transform:uppercase">
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Status</label>
-                <div class="col">
-                  <select class="form-select" name="status" id="status" aria-label="Default select example">
-                    <option selected value="belum kawin">Belum Kawin</option>
-                    <option value="Kawin">Kawin</option>
-                  </select>
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Telp</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil" name="tlp" id="tlp" placeholder="Telephone/Wa">
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Agama</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil" name="agama" id="agama" placeholder="Agama" style="text-transform:uppercase">
-                </div>
-              </div>
-
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Jenis Kelamin</label>
-                <div class="col">
-                  <select class="form-select" name="jenis_kelamin" id="jenis_kelamin" aria-label="Default select example">
-                    <option selected>Jenis Kelamin </option>
-                    <option value="laki-laki">Laki-Laki</option>
-                    <option value="perempuan">Perempuan</option>
-                  </select>
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Ket</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil" name="keterangan" id="keterangan" placeholder="Ket">
-                </div>
-              </div>
               <div class="hr mt-2 mb-1"></div>
               <div class="card-body pt-2">
                 <div class="row">
@@ -161,13 +172,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <i class="fa fa-save mr-1"></i>
                       Simpan
                     </a></div>
-
-                  <!-- <div class="col">
-                    <button class="btn btn-primary btn-sm w-100 text-white" id="tambahpersonil">
-                      <i class="fa fa-save mr-1"></i>
-                      Simpan
-                    </button>
-                  </div> -->
                 </div>
               </div>
             </div>
@@ -185,15 +189,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Ktp</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" name="no_ktp" id="no_ktp" placeholder="KTP">
+                </div>
+              </div>
+              <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Npwp</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil" name="no_npwp" id="no_npwp" placeholder="BPJS">
                 </div>
               </div>
               <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Ktp</label>
+                <label class="col-3 col-form-label required">E-fin</label>
                 <div class="col">
-                  <input type="text" class="form-control font-kecil" name="no_ktp" id="no_ktp" placeholder="KTP">
+                  <input type="text" class="form-control font-kecil" name="no_efin" id="no_efin" placeholder="E-FIN">
+                </div>
+              </div>
+              <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Email</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email">
                 </div>
               </div>
               <div class="mb-1 row">
@@ -219,18 +235,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label required">Cabang</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil" name="cabang" id="cabang" placeholder="Cabang">
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label required">E-fin</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil" name="no_e-fin" id="no_e-fin" placeholder="E-FIN">
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Email</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email">
                 </div>
               </div>
               <div class="mb-1 row">
