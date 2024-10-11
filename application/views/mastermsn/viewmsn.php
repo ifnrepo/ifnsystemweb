@@ -66,7 +66,13 @@
         <div class="card-body">
           <div class="row">
             <div class="col-4">
-              <div class="card card-active">
+              <div class="card card-active mb-1">
+                <?php if($data['ok_stok']==1 && $data['ok_disp']==0){ ?>
+                  <div class="ribbon bg-red" style="font-size: 18px;">Verified</div>
+                <?php } ?>
+                <?php if($data['ok_disp']==1){ ?>
+                  <div class="ribbon bg-red" style="font-size: 18px;">DISPOSAL</div>
+                <?php } ?>
                 <div class="card-body p-0">
                     <?php if(trim($data['filefoto'])==''){ ?>
                         <img src="<?= LOK_FOTO_MESIN.'/NoImageYet.jpg'; ?>" alt="<?= LOK_FOTO_MESIN.'NoImageYet.jpg'; ?>">
@@ -75,6 +81,29 @@
                     <?php } ?>
                 </div>
               </div>
+              <div class="card bg-blue-lt">
+                <div class="card-body font-kecil p-2">
+                  <div style="font-size: 13px; font-style: bold !important;" class="mb-1">DATA STOK OPNAME (TERAKHIR)</div>
+                  <hr class="m-0">
+                  <hr class="m-0"><br>
+                  Tgl Stok Opname : <?= $data['tgl_stok']; ?><br>
+                  Oleh : <?= datauser($data['user_stok'],'name'); ?>
+                </div>
+              </div>
+              <?php if($data['ok_disp']==1){ ?>
+                <div class="card bg-blue-lt mt-1">
+                  <div class="card-body font-kecil p-2">
+                    <div style="font-size: 13px; font-style: bold !important;" class="mb-1">DATA DISPOSAL</div>
+                    <hr class="m-0">
+                    <hr class="m-0"><br>
+                    Tgl : <?= $data['tgl_disp']; ?><br>
+                    Oleh : -<br>
+                    <hr class="m-0">
+                    Remark <br>
+                    <?= $data['remark_disp']; ?>
+                  </div>
+                </div>
+              <?php } ?>
             </div>
             <div class="col-8">
               <div class="card card-active">
@@ -100,23 +129,29 @@
                   <div class="mb-1 row">
                     <label class="col-2 col-form-label font-kecil font-bold">Spek (Master)</label>
                     <div class="col">
-                      <input type="email" class="form-control" aria-describedby="emailHelp" value="<?= $data['nama_barang']; ?>" placeholder="Kosong">
+                      <textarea class="form-control" placeholder="Kosong"><?= trim($data['nama_barang']); ?></textarea>
                     </div>
                   </div>
                   <div class="mb-1 row">
-                    <label class="col-2 col-form-label font-kecil font-bold">Spek (Beasukai)</label>
+                    <label class="col-2 col-form-label font-kecil font-bold">Spek (Beacukai)</label>
                     <div class="col">
-                      <input type="email" class="form-control" aria-describedby="emailHelp" value="<?= $data['spek_bc']; ?>" placeholder="Kosong">
+                      <textarea class="form-control" placeholder="Kosong"><?= trim($data['spek_bc']); ?></textarea>
                     </div>
                   </div>
                   <div class="mb-1 row">
                     <label class="col-2 col-form-label font-kecil font-bold">Spek (Akunting)</label>
                     <div class="col">
-                      <input type="email" class="form-control" aria-describedby="emailHelp" value="<?= $data['spek_akt']; ?>" placeholder="Kosong">
+                      <textarea class="form-control" placeholder="Kosong"><?= trim($data['spek_akt']); ?></textarea>
                     </div>
                   </div>
                   <div class="mb-1 row">
-                    <label class="col-2 col-form-label font-kecil font-bold">Berat</label>
+                    <label class="col-2 col-form-label font-kecil font-bold">Tgl Masuk</label>
+                    <div class="col">
+                      <input type="email" class="form-control" aria-describedby="emailHelp" value="<?= tgl_indo($data['tglmasuk']); ?>" placeholder="Kosong">
+                    </div>
+                  </div>
+                  <div class="mb-1 row">
+                    <label class="col-2 col-form-label font-kecil font-bold">Berat (Kgs)</label>
                     <div class="col">
                       <input type="email" class="form-control" aria-describedby="emailHelp" value="<?= rupiah($data['berat'],2); ?>" placeholder="Kosong">
                     </div>

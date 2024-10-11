@@ -1,11 +1,14 @@
 <?php 
 class mastermsn_model extends CI_Model{
     public function getdata(){
-        $this->db->select('*');
+        $this->db->select('*,tb_mesin.id as idx');
         $this->db->from('tb_mesin');
         $this->db->join('barang','barang.id=tb_mesin.id_barang','left');
         if($this->session->userdata('lokasimesin')!=''){
             $this->db->where('lokasi',$this->session->userdata('lokasimesin'));
+        }
+        if($this->session->userdata('disposalmesin')!=0){
+            $this->db->where('ok_disp',$this->session->userdata('disposalmesin'));
         }
         $query = $this->db->order_by('kode')->get();
         return $query;
@@ -17,10 +20,18 @@ class mastermsn_model extends CI_Model{
         return $query;
     }
     public function getdatabyid($id){
-        $this->db->select('*');
+        $this->db->select('*,tb_mesin.id as idx');
         $this->db->from('tb_mesin');
         $this->db->join('barang','barang.id=tb_mesin.id_barang','left');
         $this->db->where('tb_mesin.kode_fix',$id);
+        $query = $this->db->order_by('kode')->get();
+        return $query;
+    }
+    public function getdataby($id){
+        $this->db->select('*,tb_mesin.id as idx');
+        $this->db->from('tb_mesin');
+        $this->db->join('barang','barang.id=tb_mesin.id_barang','left');
+        $this->db->where('tb_mesin.id',$id);
         $query = $this->db->order_by('kode')->get();
         return $query;
     }

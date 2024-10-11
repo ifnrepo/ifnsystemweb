@@ -5,12 +5,43 @@ $(document).ready(function () {
 	// }
 });
 $("#lokasi").change(function () {
+	var cek = $("#cekdisposal").is(":checked");
+	if (cek) {
+		var x = 1;
+	} else {
+		var x = 0;
+	}
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
 		url: base_url + "mastermsn/ubahlokasi",
 		data: {
 			lok: $(this).val(),
+			ceko: x,
+		},
+		success: function (data) {
+			window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
+$("#cekdisposal").click(function () {
+	var cek = $("#cekdisposal").is(":checked");
+	if (cek) {
+		var x = 1;
+	} else {
+		var x = 0;
+	}
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "mastermsn/ubahlokasi",
+		data: {
+			ceko: x,
+			lok: $("#lokasi").val(),
 		},
 		success: function (data) {
 			window.location.reload();

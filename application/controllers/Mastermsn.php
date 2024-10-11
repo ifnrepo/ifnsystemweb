@@ -33,17 +33,32 @@ class Mastermsn extends CI_Controller {
 	}
     public function clear(){
         $this->session->unset_userdata('lokasimesin');
+        $this->session->unset_userdata('disposalmesin');
         $url = base_url().'mastermsn';
         redirect($url);
     }
     public function ubahlokasi(){
         $id = $_POST['lok'];
+        $cek = $_POST['ceko'];
         if($id==''){
             $this->session->unset_userdata('lokasimesin');
         }else{
             $this->session->set_userdata('lokasimesin',$id);
         }
+        if($cek==0){
+            $this->session->unset_userdata('disposalmesin');
+        }else{
+            $this->session->set_userdata('disposalmesin',$cek);
+        }
         echo 1;
+    }
+    public function editmesin($id){
+        $header['header'] = 'master';
+        $data['data'] = $this->mastermsnmodel->getdataby($id)->row_array();
+        $footer['fungsi'] = 'datamesin';
+		$this->load->view('layouts/header',$header);
+		$this->load->view('mastermsn/editmsn',$data);
+		$this->load->view('layouts/footer',$footer);
     }
     public function tambahdata(){
         $this->load->view('satuan/addsatuan');
