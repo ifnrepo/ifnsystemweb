@@ -373,12 +373,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="transaksi3" name="transaksi3" type="checkbox">
                                 <span class="form-check-label">IN (BON PENERIMAAN BARANG)</span>
                               </label>
-                            </div>
-                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi4" name="transaksi4" type="checkbox">
                                 <span class="form-check-label">OUT (BON PENGELUARAN BARANG)</span>
                               </label>
+                            </div>
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi5" name="transaksi5" type="checkbox">
                                 <span class="form-check-label">ADJ (BON ADJUSTMEN)</span>
@@ -389,7 +389,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi7" name="transaksi7" type="checkbox">
-                                <span class="form-check-label">IB (AJU MASUK BARANG)</span>
+                                <span class="form-check-label">AMK (AJU MASUK BARANG)</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi8" name="transaksi8" type="checkbox">
+                                <span class="form-check-label">AKB (AJU KELUAR BARANG)</span>
                               </label>
                               <!-- xx -->
                             </div>

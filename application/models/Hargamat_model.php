@@ -143,6 +143,7 @@ class Hargamat_model extends CI_Model
         $data['weight'] = toAngka($data['weight']);
         $data['price'] = toAngka($data['price']);
         $data['oth_amount'] = toAngka($data['oth_amount']);
+        $data['tgl_bc'] = tglmysql($data['tgl_bc']);
 
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_hargamaterial', $data);
@@ -176,6 +177,10 @@ class Hargamat_model extends CI_Model
         $query = $this->db->get();
         return $query->num_rows();
     }
+
+    public function getdokbc(){
+        $this->db->where('masuk',1);
+        return $this->db->get('ref_dok_bc');
 
     public function getdata_export($filter_kategori, $filter_inv)
     {
