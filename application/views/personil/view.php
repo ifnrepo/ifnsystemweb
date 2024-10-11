@@ -107,15 +107,30 @@
                       <div class="mb-1 row">
                         <label class="col-3 col-form-label required">Pen</label>
                         <div class="col">
-                          <input type="text" class="form-control font-kecil" name="pendidikan" id="pendidikan" placeholder="pendidikan" value="<?= $personil['pendidikan']; ?>" readonly>
+                          <select name="id_pendidikan" id="id_pendidikan" class="form-control">
+                            <option value="">Pendidikan</option>
+                            <?php foreach ($pendidikan as $key) : ?>
+                              <?php if ($key['id'] == $personil['id_pendidikan']) : ?>
+                                <option value="<?= $key['id']; ?>" selected><?= $key['tingkat_pendidikan']; ?></option>
+                              <?php else : ?>
+                                <option value="<?= $key['id']; ?>"><?= $key['tingkat_pendidikan']; ?></option>
+                              <?php endif; ?>
+                            <?php endforeach; ?>
+                          </select>
                         </div>
                       </div>
                       <div class="mb-1 row">
                         <label class="col-3 col-form-label required">Status</label>
                         <div class="col">
-                          <select class="form-select" name="status" id="status" aria-label="Default select example">
-                            <option value="belum kawin" <?= ($personil['status'] == 'belum kawin') ? 'selected' : ''; ?>>Belum Kawin</option>
-                            <option value="Kawin" <?= ($personil['status'] == 'Kawin') ? 'selected' : ''; ?>>Kawin</option>
+                          <select name="id_status" id="id_status" class="form-control" readonly>
+                            <option value="">Status</option>
+                            <?php foreach ($status as $key) : ?>
+                              <?php if ($key['id'] == $personil['id_status']) : ?>
+                                <option value="<?= $key['id']; ?>" selected><?= $key['nama_status']; ?></option>
+                              <?php else : ?>
+                                <option value="<?= $key['id']; ?>"><?= $key['nama_status']; ?></option>
+                              <?php endif; ?>
+                            <?php endforeach; ?>
                           </select>
                         </div>
                       </div>
@@ -128,7 +143,16 @@
                       <div class="mb-1 row">
                         <label class="col-3 col-form-label required">Agama</label>
                         <div class="col">
-                          <input type="text" class="form-control font-kecil" name="agama" id="agama" placeholder="Agama" value="<?= $personil['agama']; ?>" readonly>
+                          <select name="id_agama" id="id_agama" class="form-control" readonly>
+                            <option value="">Agama</option>
+                            <?php foreach ($agama as $key) : ?>
+                              <?php if ($key['id'] == $personil['id_agama']) : ?>
+                                <option value="<?= $key['id']; ?>" selected><?= $key['nama_agama']; ?></option>
+                              <?php else : ?>
+                                <option value="<?= $key['id']; ?>"><?= $key['nama_agama']; ?></option>
+                              <?php endif; ?>
+                            <?php endforeach; ?>
+                          </select>
                         </div>
                       </div>
 
@@ -186,7 +210,7 @@
                       <div class="mb-1 row">
                         <label class="col-3 col-form-label required">E-fin</label>
                         <div class="col">
-                          <input type="text" class="form-control font-kecil" name="no_e-fin" id="no_e-fin" placeholder="E-FIN" value="<?= $personil['no_e-fin']; ?>" readonly>
+                          <input type="text" class="form-control font-kecil" name="no_e-fin" id="no_e-fin" placeholder="E-FIN" value="<?= $personil['no_efin']; ?>" readonly>
                         </div>
                       </div>
                       <div class="mb-1 row">

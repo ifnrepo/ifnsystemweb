@@ -4,7 +4,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 
-class grup extends CI_Controller
+class Pendidikan extends CI_Controller
 {
     function __construct()
     {
@@ -13,7 +13,7 @@ class grup extends CI_Controller
             $url = base_url('Auth');
             redirect($url);
         }
-        $this->load->model('grupmodel');
+        $this->load->model('Pendidikanmodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('helper_model', 'helpermodel');
 
@@ -26,47 +26,47 @@ class grup extends CI_Controller
     public function index()
     {
         $header['header'] = 'master';
-        $data['grup'] = $this->grupmodel->getdata();
+        $data['pendidikan'] = $this->Pendidikanmodel->getdata();
         $this->load->view('layouts/header', $header);
-        $this->load->view('grup/index', $data);
+        $this->load->view('pendidikan/index', $data);
         $this->load->view('layouts/footer');
     }
 
     public function tambahdata()
     {
-        $this->load->view('grup/add');
+        $this->load->view('pendidikan/add');
     }
 
     public function simpandata()
     {
         $data = [
-            'nama_grup' => $_POST['nama_grup'],
+            'tingkat_pendidikan' => $_POST['tingkat_pendidikan'],
         ];
-        $hasil = $this->grupmodel->simpan($data);
+        $hasil = $this->Pendidikanmodel->simpan($data);
         $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function edit($id)
     {
-        $data['data'] = $this->grupmodel->getdatabyid($id);
-        $this->load->view('grup/edit', $data);
+        $data['data'] = $this->Pendidikanmodel->getdatabyid($id);
+        $this->load->view('pendidikan/edit', $data);
     }
     public function update()
     {
         $data = [
             'id' => $_POST['id'],
-            'nama_grup' => $_POST['nama_grup'],
+            'tingkat_pendidikan' => $_POST['tingkat_pendidikan'],
         ];
-        $hasil = $this->grupmodel->updatedata($data);
+        $hasil = $this->Pendidikanmodel->updatedata($data);
         $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
     public function hapus($id)
     {
-        $hasil = $this->grupmodel->hapus($id);
+        $hasil = $this->Pendidikanmodel->hapus($id);
         if ($hasil) {
             $this->helpermodel->isilog($this->db->last_query());
-            $url = base_url('grup');
+            $url = base_url('pendidikan');
             redirect($url);
         }
     }
@@ -76,24 +76,24 @@ class grup extends CI_Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
-        $sheet->setCellValue('A1', "DATA GRUP"); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->setCellValue('A1', "DATA TINGKAT PENDIDIKAN"); // Set kolom A1 dengan tulisan "DATA SISWA"    
         $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
 
         // Buat header tabel nya pada baris ke 3    
         $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
-        $sheet->setCellValue('B2', "NAMA GRUP"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('B2', "TINGKAT PENDIDIKAN"); // Set kolom B3 dengan tulisan "KODE"    
         // Panggil model Get Data   
-        $grup = $this->grupmodel->getdata();
+        $pendidikan = $this->Pendidikanmodel->getdata();
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 3;
 
         // Set baris pertama untuk isi tabel adalah baris ke 3    
-        foreach ($grup as $data) {
+        foreach ($pendidikan as $data) {
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, $data['nama_grup']);
+            $sheet->setCellValue('B' . $numrow, $data['tingkat_pendidikan']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    
@@ -105,15 +105,15 @@ class grup extends CI_Controller
         // Set orientasi kertas jadi LANDSCAPE    
         $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
         // Set judul file excel nya    
-        $sheet->setTitle("Data Grup");
+        $sheet->setTitle("Data Tingkatan Pendidikan");
 
         // Proses file excel    
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data Grup.xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="Data Tingkatan Pendidikan.xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
-        $this->helpermodel->isilog('Download Excel DATA GRUP ');
+        $this->helpermodel->isilog('Download Excel DATA TINGKATAN PENDIDIKAN ');
     }
     public function cetakpdf()
     {
@@ -128,26 +128,26 @@ class grup extends CI_Controller
         $pdf->SetFillColor(205, 205, 205);
         $pdf->AddPage();
         $pdf->Image(base_url() . 'assets/image/logodepanK.png', 0, 5, 55);
-        $pdf->Cell(30, 18, 'DATA GRUP');
+        $pdf->Cell(30, 18, 'DATA TINGKATAN PENDIDIKAN');
         $pdf->ln(12);
         $pdf->SetFont('Latob', '', 10);
         $pdf->Cell(15, 8, 'No', 1, 0, 'C');
-        $pdf->Cell(105, 8, 'Nama Grup', 1, 0, 'C');
+        $pdf->Cell(105, 8, 'Tingkat Pendidikan', 1, 0, 'C');
 
         $pdf->SetFont('Lato', '', 10);
         $pdf->ln(8);
-        $detail = $this->grupmodel->getdata();
+        $detail = $this->Pendidikanmodel->getdata();
         $no = 1;
         foreach ($detail as $det) {
             $pdf->Cell(15, 6, $no++, 1, 0, 'C');
-            $pdf->Cell(105, 6, $det['nama_grup'], 1);
+            $pdf->Cell(105, 6, $det['tingkat_pendidikan'], 1);
 
             $pdf->ln(6);
         }
         $pdf->SetFont('Lato', '', 8);
         $pdf->ln(10);
         $pdf->Cell(190, 6, 'Tgl Cetak : ' . date('d-m-Y H:i:s') . ' oleh ' . datauser($this->session->userdata('id'), 'name'), 0, 0, 'R');
-        $pdf->Output('I', 'Data Grup.pdf');
-        $this->helpermodel->isilog('Download PDF DATA GRUP');
+        $pdf->Output('I', 'Data Tingkat Pendidikan.pdf');
+        $this->helpermodel->isilog('Download PDF DATA TINGKAT PENDIDIKAN');
     }
 }

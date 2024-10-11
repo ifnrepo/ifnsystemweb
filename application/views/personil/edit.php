@@ -31,28 +31,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">Foto Pegawai</label>
-                                <div class="col" style="text-align: center;">
-                                    <?php if (!empty($personil['foto_personil'])) : ?>
+
+                                <div class="mb-1 row">
+                                    <div class="col" style="text-align: center;">
                                         <div style="float: left; margin-right: 10px;">
                                             <img src="<?= base_url('assets/image/personil/' . $personil['foto_personil']); ?>" alt="Foto Personil" width="100">
                                         </div>
-                                        <div style="float: left;">
-                                            <form action="<?= base_url('personil/update_foto/' . $personil['personil_id']); ?>" method="post" enctype="multipart/form-data" style="display: inline-block; margin-right: 10px;">
-                                                <input type="file" class="form-control" name="foto_personil" id="foto_personil" required>
-                                                <button type="submit" class="btn btn-primary mt-2"><i class="fa fa-file mr-1"> Perbarui Foto</i></button>
-                                            </form>
-                                            <form action="<?= base_url('personil/delete_foto/' . $personil['personil_id']); ?>" method="post" enctype="multipart/form-data" style="display: inline-block;">
-                                                <button type="submit" class="btn btn-danger mt-2" onclick="return confirm('Apakah Anda yakin ingin menghapus foto ini?');"> <i class="fa fa-trash-o"> Hapus Foto</i></button>
-                                            </form>
-                                        </div>
-                                        <div style="clear: both;"></div>
-                                    <?php else : ?>
-                                        <form action="<?= base_url('personil/update_foto/' . $personil['personil_id']); ?>" method="post" enctype="multipart/form-data" style="display: inline-block; margin-right: 10px;">
-                                            <input type="file" class="form-control" name="foto_personil" id="foto_personil" required>
-                                            <button type="submit" class="btn btn-primary mt-2"><i class="fa fa-file mr-1"> Perbarui Foto</i></button>
-                                        </form>
-
-                                    <?php endif; ?>
+                                        <input type="hidden" name="foto_personil" id="foto_personil" value="<?= $personil['foto_personil']; ?>">
+                                        <input type="file" class="form-control" name="foto_personil" id="foto_personil">
+                                    </div>
                                 </div>
                             </div>
 
@@ -175,17 +162,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                         </div>
                                                         <div class="col-6">
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">Pen</label>
+                                                                <label class="col-3 col-form-label required">Pendidikan</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="pendidikan" id="pendidikan" placeholder="pendidikan" value="<?= $personil['pendidikan']; ?>">
+                                                                    <select name="id_pendidikan" id="id_pendidikan" class="form-control">
+                                                                        <option value="">Pendidikan</option>
+                                                                        <?php foreach ($pendidikan as $key) : ?>
+                                                                            <?php if ($key['id'] == $personil['id_pendidikan']) : ?>
+                                                                                <option value="<?= $key['id']; ?>" selected><?= $key['tingkat_pendidikan']; ?></option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?= $key['id']; ?>"><?= $key['tingkat_pendidikan']; ?></option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Status</label>
                                                                 <div class="col">
-                                                                    <select class="form-select" name="status" id="status" aria-label="Default select example">
-                                                                        <option value="belum kawin" <?= ($personil['status'] == 'belum kawin') ? 'selected' : ''; ?>>Belum Kawin</option>
-                                                                        <option value="Kawin" <?= ($personil['status'] == 'Kawin') ? 'selected' : ''; ?>>Kawin</option>
+                                                                    <select name="id_status" id="id_status" class="form-control">
+                                                                        <option value="">Status</option>
+                                                                        <?php foreach ($status as $key) : ?>
+                                                                            <?php if ($key['id'] == $personil['id_status']) : ?>
+                                                                                <option value="<?= $key['id']; ?>" selected><?= $key['nama_status']; ?></option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?= $key['id']; ?>"><?= $key['nama_status']; ?></option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
                                                                     </select>
                                                                 </div>
                                                             </div>
@@ -198,7 +200,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Agama</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="agama" id="agama" placeholder="Agama" value="<?= $personil['agama']; ?>">
+                                                                    <div class="col">
+                                                                        <select name="id_agama" id="id_agama" class="form-control">
+                                                                            <option value="">Agama</option>
+                                                                            <?php foreach ($agama as $key) : ?>
+                                                                                <?php if ($key['id'] == $personil['id_agama']) : ?>
+                                                                                    <option value="<?= $key['id']; ?>" selected><?= $key['nama_agama']; ?></option>
+                                                                                <?php else : ?>
+                                                                                    <option value="<?= $key['id']; ?>"><?= $key['nama_agama']; ?></option>
+                                                                                <?php endif; ?>
+                                                                            <?php endforeach; ?>
+                                                                        </select>
+                                                                    </div>
                                                                 </div>
                                                             </div>
 
@@ -253,7 +266,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">E-fin</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="no_e-fin" id="no_e-fin" placeholder="E-FIN" value="<?= $personil['no_e-fin']; ?>">
+                                                                    <input type="text" class="form-control font-kecil" name="no_efin" id="no_efin" placeholder="E-FIN" value="<?= $personil['no_efin']; ?>">
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">

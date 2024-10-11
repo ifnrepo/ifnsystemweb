@@ -54,10 +54,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label required">jabatan</label>
                 <div class="col">
                   <!-- <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $user['jabatan']; ?>"> -->
-                   <select name="jabatan" id="jabatan" class="form-control form-select">
+                  <select name="jabatan" id="jabatan" class="form-control form-select">
                     <option value="">Jabatan</option>
-                    <?php foreach ($jabat as $jbt) : $selek = $jbt['nama_jabatan']==strtoupper($user['jabatan']) ? 'selected' : ''; ?>
-                      <option value="<?= $jbt['nama_jabatan']; ?>" <?= $selek; ?>><?= $jbt['nojab'].' # '.$jbt['nama_jabatan']; ?></option>
+                    <?php foreach ($jabat as $jbt) : $selek = $jbt['nama_jabatan'] == strtoupper($user['jabatan']) ? 'selected' : ''; ?>
+                      <option value="<?= $jbt['nama_jabatan']; ?>" <?= $selek; ?>><?= $jbt['nojab'] . ' # ' . $jbt['nama_jabatan']; ?></option>
                     <?php endforeach; ?>
                   </select>
                 </div>
@@ -328,8 +328,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master6" name="master6" type="checkbox" <?= cekceklis($user['master'], 6); ?>>
                                 <span class="form-check-label">Nettype</span>
                               </label>
-                            </div>
-                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master7" name="master7" type="checkbox" <?= cekceklis($user['master'], 7); ?>>
                                 <span class="form-check-label">Departemen</span>
@@ -342,6 +340,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master9" name="master9" type="checkbox" <?= cekceklis($user['master'], 9); ?>>
                                 <span class="form-check-label">Kategori Departemen</span>
                               </label>
+                            </div>
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master10" name="master10" type="checkbox" <?= cekceklis($user['master'], 10); ?>>
                                 <span class="form-check-label">Personil</span>
@@ -369,6 +369,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master17" name="master17" type="checkbox" <?= cekceklis($user['master'], 17); ?>>
                                 <span class="form-check-label">Data Mesin</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master18" name="master18" type="checkbox" <?= cekceklis($user['master'], 18); ?>>
+                                <span class="form-check-label">Data Agama</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master19" name="master19" type="checkbox" <?= cekceklis($user['master'], 19); ?>>
+                                <span class="form-check-label">Data Pendidikan Personil</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master20" name="master20" type="checkbox" <?= cekceklis($user['master'], 20); ?>>
+                                <span class="form-check-label">Data Status Personil</span>
                               </label>
                               <!-- xx -->
                             </div>
@@ -436,7 +448,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="other9" name="other9" type="checkbox" <?= cekceklis($user['other'], 9); ?>>
                                 <span class="form-check-label">Pricing Inventory</span>
                               </label>
-                              
+
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="other4" name="other4" type="checkbox" <?= cekceklis($user['other'], 4); ?>>
                                 <span class="form-check-label">BC Masuk</span>
@@ -473,7 +485,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="other6" name="other6" type="checkbox" <?= cekceklis($user['other'], 6); ?>>
                                 <span class="form-check-label">Log Activity</span>
                               </label>
-                              
+
                             </div>
                             <div class="col-6">
                               <!-- xx -->
@@ -517,7 +529,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               $jml = $jmldept;
                               foreach ($deptpb as $dept) : $no++; ?>
                                 <label class="form-check mb-1">
-                                  <input class="form-check-input" id="<?= 'X'.$dept['dept_id']; ?>" name="<?= 'X'.$dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['cekpb'], $dept['dept_id']); ?>>
+                                  <input class="form-check-input" id="<?= 'X' . $dept['dept_id']; ?>" name="<?= 'X' . $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['cekpb'], $dept['dept_id']); ?>>
                                   <span class="form-check-label"><?= $dept['departemen']; ?></span>
                                 </label>
                               <?php endforeach; ?>
@@ -527,24 +539,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="tab-pane" id="tabs-ceklisbbl">
                           <div class="row">
                             <div class="col-6">
-                             <label class="form-check">
-                                <input class="form-check-input" type="radio" 
-          name="ttd" value="0" <?php if($user['ttd']==0){ echo "checked"; } ?>>
+                              <label class="form-check">
+                                <input class="form-check-input" type="radio" name="ttd" value="0" <?php if ($user['ttd'] == 0) {
+                                                                                                    echo "checked";
+                                                                                                  } ?>>
                                 <span class="form-check-label">NO TTD</span>
                               </label>
                               <label class="form-check">
-                                <input class="form-check-input" type="radio" 
-          name="ttd" value="1" <?php if($user['ttd']==1){ echo "checked"; } ?>>
+                                <input class="form-check-input" type="radio" name="ttd" value="1" <?php if ($user['ttd'] == 1) {
+                                                                                                    echo "checked";
+                                                                                                  } ?>>
                                 <span class="form-check-label">MANAGER PPIC (Mengetahui)</span>
                               </label>
                               <label class="form-check">
-                                <input class="form-check-input" type="radio" 
-          name="ttd" value="2" <?php if($user['ttd']==2){ echo "checked"; } ?>>
+                                <input class="form-check-input" type="radio" name="ttd" value="2" <?php if ($user['ttd'] == 2) {
+                                                                                                    echo "checked";
+                                                                                                  } ?>>
                                 <span class="form-check-label">MANAGER PRODUKSI / NON (APPROVER)</span>
                               </label>
                               <label class="form-check">
-                                <input class="form-check-input" type="radio" 
-          name="ttd" value="3" <?php if($user['ttd']==3){ echo "checked"; } ?>>
+                                <input class="form-check-input" type="radio" name="ttd" value="3" <?php if ($user['ttd'] == 3) {
+                                                                                                    echo "checked";
+                                                                                                  } ?>>
                                 <span class="form-check-label">GM PRODUKSI / NON (RELEASER)</span>
                               </label>
                             </div>

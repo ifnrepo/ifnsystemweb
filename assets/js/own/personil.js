@@ -144,18 +144,12 @@ $("#tambahpersonil").click(function () {
 });
 
 $("#editpersonil").click(function () {
-	if ($("#sidikjari_personil").val() == "") {
-		pesan("Sidik Jari tidak boleh kosong !", "error");
-		return;
-	}
-	if ($("#foto_personil").val() == "") {
-		pesan(" Foto Harus dipilih !", "error");
-		return;
-	}
-	if ($("#foto_personil").val() == "") {
-		pesan("Sidik Jari tidak boleh kosong !", "error");
-		return;
-	}
+	
+
+	if ($("#foto_personil").val() == "" && $("#foto_personil").val() == "") {
+        pesan("Foto tidak boleh kosong !", "error");
+        return;
+    }
 	if ($("#nama_personil").val() == "") {
 		pesan("Nama tidak boleh kosong !", "error");
 		return;
