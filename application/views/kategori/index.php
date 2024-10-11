@@ -33,18 +33,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>No</th>
                                 <th style="text-align: center;">Id Kategori</th>
                                 <th>Nama Kategori</th>
+                                <th style="text-align: center;">Urut</th>
+                                <th style="text-align: center;">Kode</th>
+                                <th style="text-align: center;">Jns</th>
+                                <th style="text-align: center;">Net</th>
+                                <th>Ket</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
-                        <tbody class="table-tbody" style="font-size: 13px !important;">
+                        <tbody class=" table-tbody" style="font-size: 13px !important;">
                             <?php $no = 0;
                             foreach ($kategori as $key) : $no++; ?>
                                 <tr>
                                     <td><?= $no; ?></td>
                                     <td style="text-align: center;"><?= $key['kategori_id']; ?></td>
                                     <td><?= $key['nama_kategori']; ?></td>
+                                    <td style="text-align: center;"><?= $key['urut']; ?></td>
+                                    <td style="text-align: center;"><?= $key['kode']; ?></td>
+                                    <td style="text-align: center;"><?= $key['jns']; ?></td>
+                                    <td style="text-align: center;"><?= $key['net']; ?></td>
+                                    <td><?= $key['ket']; ?></td>
                                     <td>
-                                        <a href="<?= base_url() . 'kategori/editkategori/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editkategori" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Satuan" rel="<?= $key['id']; ?>" title="Edit data">
+                                        <a href="<?= base_url() . 'kategori/editkategori/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editkategori" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Kategori" rel="<?= $key['id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
                                         </a>
                                         <a class="btn btn-sm btn-danger btn-icon text-white" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'kategori/hapuskategori/' . $key['id']; ?>" title="Hapus data">
