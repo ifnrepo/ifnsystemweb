@@ -21,9 +21,10 @@ $(document).ready(function () {
 				orderable: false,
 			},
 			{
-				className: "text-right",
+				// className: "text-right",
 				targets: [3],
-				orderable: false,
+				// orderable: false,
+				className: "text-primary",
 			},
 			{
 				className: "text-right",
@@ -40,16 +41,16 @@ $(document).ready(function () {
 				targets: [6],
 				orderable: false,
 			},
-			{
-				className: "text-right",
-				targets: [9],
-				orderable: false,
-			},
-			{
-				className: "text-right",
-				targets: [10],
-				orderable: false,
-			},
+			// {
+			// 	className: "text-right",
+			// 	targets: [9],
+			// 	orderable: false,
+			// },
+			// {
+			// 	className: "text-right",
+			// 	targets: [10],
+			// 	orderable: false,
+			// },
 		],
 		drawCallback: function (response) {
 			// var api = this.api();
@@ -73,13 +74,23 @@ $(document).ready(function () {
 	$("#filter, #filterinv").on("change", function () {
 		var filter_kategori = $("#filter").val();
 		var filter_inv = $("#filterinv").val();
-		
-		var exportUrlExcel = base_url + "hargamat/excel?filter=" + filter_kategori + "&filterinv=" + filter_inv ;
+
+		var exportUrlExcel =
+			base_url +
+			"hargamat/excel?filter=" +
+			filter_kategori +
+			"&filterinv=" +
+			filter_inv;
 		$(".btn-export-excel").attr("href", exportUrlExcel);
-	
-		var exportUrlPdf = base_url + "hargamat/pdf?filter=" + filter_kategori + "&filterinv=" + filter_inv ;
+
+		var exportUrlPdf =
+			base_url +
+			"hargamat/pdf?filter=" +
+			filter_kategori +
+			"&filterinv=" +
+			filter_inv;
 		$(".btn-export-pdf").attr("href", exportUrlPdf);
-	
+
 		console.log("Export Excel URL:", exportUrlExcel);
 		console.log("Export PDF URL:", exportUrlPdf);
 	});

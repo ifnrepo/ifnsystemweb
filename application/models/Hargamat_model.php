@@ -1,7 +1,7 @@
 <?php
 class Hargamat_model extends CI_Model
 {
-    var $column_search = array('nama_barang', 'nama_supplier', 'remark');
+    var $column_search = array('nama_barang', 'nama_supplier', 'remark','nomor_bc','nobontr');
     var $column_order = array(null, 'nama_barang', 'nama_supplier', 'remark');
     var $order = array('nama_barang' => 'asc');
     // var $table = 'barang';
@@ -181,7 +181,7 @@ class Hargamat_model extends CI_Model
     public function getdokbc(){
         $this->db->where('masuk',1);
         return $this->db->get('ref_dok_bc');
-
+    }
     public function getdata_export($filter_kategori, $filter_inv)
     {
         $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang');

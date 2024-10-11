@@ -71,14 +71,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Article</th>
                 <th>Tgl</th>
                 <th>Nomor IB</th>
+                <th class="text-left">Info BC</th>
                 <th>Qty</th>
                 <th>Weight</th>
                 <th>Price (IDR)</th>
                 <th>Total</th>
                 <th>Supplier</th>
-                <th>Cur</th>
-                <th>Amount</th>
-                <th>Kurs (Idr)</th>
+                <!-- <th>Cur</th> -->
+                <!-- <th>Amount</th> -->
+                <!-- <th>Kurs (Idr)</th> -->
                 <th>Edit</th>
               </tr>
             </thead>
