@@ -4,6 +4,8 @@ define('LOK_FOTO_MESIN', base_url()."assets/image/dokmesin/foto/");
 define('LOK_DOK_MESIN', "./assets/image/dokmesin/dok/");
 define('IDPERUSAHAAN', 'IFN');
 define('deptbbl', 'GMGSITPG');
+define('LOK_UPLOAD_DOKHAMAT', "./assets/image/dokhamat/");
+define('LOK_UPLOAD_MESIN', "./assets/image/dokmesin/foto/");
 define('kodeunik', 'concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');
 
 function visibpass($kata)
@@ -527,4 +529,15 @@ function cekdetout($header)
 function isikurangnol($data){
     $len = strlen($data);
     return str_repeat('0',6-$len).$data;
+}
+function max_upload()
+{
+	$max_filesize = (int) (ini_get('upload_max_filesize'));
+	$max_post     = (int) (ini_get('post_max_size'));
+	$memory_limit = (int) (ini_get('memory_limit'));
+	return min($max_filesize, $max_post, $memory_limit);
+}
+function nospasi($str){
+    $strc = str_replace(' ','',$str);
+    return $strc;
 }

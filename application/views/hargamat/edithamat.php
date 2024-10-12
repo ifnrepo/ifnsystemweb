@@ -1,11 +1,21 @@
 <div class="container-xl"> 
     <div class="row font-kecil">
         <div class="col-12 font-kecil">
-            <form method="post" action="<?= base_url().'hargamat/updatehamat'; ?>" id="formhamat" name="formhamat">
+            <form method="POST" action="<?= base_url().'hargamat/updatehamat'; ?>" id="formhamat" name="formhamat" enctype="multipart/form-data">
                 <input type="hidden" name="id" id="id_hargamaterial" value="<?= $data['idx']; ?>">
-                <div class="mb-1">
-                    <label class="form-label font-kecil mb-0 font-bold text-primary">Nama Barang</label>
-                    <input type="text" class="form-control font-kecil"  placeholder="Nama Barang KOSONG" value="<?= $data['nama_barang']; ?>" disabled>
+                <div class="row">
+                    <div class="col-10">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Nama Barang</label>
+                            <input type="text" class="form-control font-kecil"  placeholder="Nama Barang KOSONG" value="<?= $data['nama_barang']; ?>" disabled>
+                        </div>
+                    </div>
+                    <div class="col-2">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0">ID Barang</label>
+                            <input type="text" class="form-control font-kecil" placeholder="Input placeholder" value="<?= $data['idx'].'-'.$data['id_barang']; ?>" disabled>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-4">
@@ -108,6 +118,18 @@
                             </div>
                         </div>
                      </div>
+                     <div class="mb-1 row">
+                        <label class="col-2 col-form-label font-bold">DOK</label>
+                        <div class="col">
+                            <div class="input-group mb-2">
+                                <input type="file" class="hidden hilang" accept=".pdf" id="dok" name="dok">
+                                <input type="text" class="form-control font-kecil" id="namedok" name="namedok" value="<?= $data['filedok']; ?>" placeholder="Dok Empty" readonly>
+                                <input type="text" class="form-control font-kecil hilang" id="dok_lama" name="dok_lama" value="<?= $data['filedok']; ?>"  placeholder="Dok Lama" readonly>
+                                <a href="#" class="btn btn-info font-kecil" id="getdok">Add/Edit</a>
+                                <a href="#" class="btn btn-danger font-kecil" id="removedok">Remove</a>
+                            </div>
+                        </div>
+                     </div>
                 </fieldset>
             </form>
         </div>
@@ -125,6 +147,17 @@
             todayHighlight: true
         });
         $("#nama_barang").focus();
+    });
+    $("#removedok").click(function(){
+        $("#namedok").val('');
+    });
+    $("#getdok").click(function(){
+        $("#dok").click();
+        $("#dok").change();
+    });
+    $("#dok").change(function(){
+        var name = document.getElementById('dok'); 
+        $("#namedok").val(name.files.item(0).name);
     })
     $(".inputangka").on("change click keyup input paste", function (event) {
         $(this).val(function (index, value) {

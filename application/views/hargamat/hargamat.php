@@ -20,6 +20,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="card">
       <div class="card card-active mb-2">
         <div class="card-body p-1 text-right">
+          <?= $this->session->flashdata('ketlain'); ?>
+          <?= $this->session->flashdata('msg'); ?>
           <a href="<?= base_url('hargamat/excel') . '?filter=' . $this->input->get('filter') . '&filterinv=' . $this->input->get('filterinv'); ?>" class="btn btn-success btn-sm btn-export-excel">
             <i class="fa fa-file-excel-o"></i><span class="ml-1">Export to Excel</span>
           </a>
@@ -71,12 +73,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Article</th>
                 <th>Tgl</th>
                 <th>Nomor IB</th>
-                <th class="text-left">Info BC</th>
+                <!-- <th class="text-left">Info BC</th> -->
                 <th>Qty</th>
                 <th>Weight</th>
                 <th>Price (IDR)</th>
                 <th>Total</th>
-                <th>Supplier</th>
+                <!-- <th>Supplier</th> -->
                 <!-- <th>Cur</th> -->
                 <!-- <th>Amount</th> -->
                 <!-- <th>Kurs (Idr)</th> -->

@@ -118,8 +118,8 @@ class inv_model extends CI_Model
             $kolomkgs = "IF(tb_detail.kgs < 0,0,tb_detail.kgs) AS kgsin,IF(tb_detail.kgs < 0,abs(tb_detail.kgs),0) AS kgsout";
             $period = substr($tglx, 5, 2) . substr($tglx, 0, 4);
             $hasil = $this->db->query("SELECT 'SALDO' AS mode,'SA' AS kode_dok,stokdept.id,NULL AS id_header,stokdept.id_barang,stokdept.po,stokdept.item,
-                                        stokdept.dis, stokdept.insno,stokdept.nobontr,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
-                                        barang.nama_barang,barang.kode,kategori.nama_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,
+                                        stokdept.dis, stokdept.insno,stokdept.nobontr,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
+                                        barang.nama_barang,barang.kode,kategori.nama_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,0 as pcsadj,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,0 as kgsadj,
                                         satuan.kodesatuan,1 AS nome,if(stokdept.po!='',concat(stokdept.po,stokdept.item),barang.kode) AS idd,tb_po.spek
                                         FROM stokdept 
                                         LEFT JOIN barang ON barang.id = stokdept.id_barang 
@@ -132,8 +132,8 @@ class inv_model extends CI_Model
                                         " . $tambah1 . "
                                         UNION ALL 
                                         SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detailgen.id,tb_detailgen.id_barang,tb_detailgen.po,
-                                        tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno,tb_detailgen.nobontr,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,
-                                        0 AS pcs,0 AS pcsin,tb_detailgen.pcs AS pcsout,0 as kgs,0 as kgsin,tb_detailgen.kgs AS kgsout, satuan.kodesatuan,3 AS nome,'' as idd,tb_po.spek
+                                        tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno,tb_detailgen.nobontr,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,
+                                        0 AS pcs,0 AS pcsin,tb_detailgen.pcs AS pcsout,0 as pcsadj,0 as kgs,0 as kgsin,tb_detailgen.kgs AS kgsout,0 as kgsout, satuan.kodesatuan,3 AS nome,'' as idd,tb_po.spek
                                         FROM tb_detailgen 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detailgen.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detailgen.id_barang 
@@ -146,8 +146,8 @@ class inv_model extends CI_Model
                                         " . $tambah2 . "
                                         UNION ALL 
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
-                                        tb_detail.insno,tb_detail.nobontr,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
-                                        0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,2 AS nome,'' as idd,tb_po.spek
+                                        tb_detail.insno,tb_detail.nobontr,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_detail.harga,tb_header.nomor_dok,tb_hargamaterial.tgl_bc,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
+                                        0 AS pcsout,0 as pcsadj,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,0 as kgsadj,satuan.kodesatuan,2 AS nome,'' as idd,tb_po.spek
                                         FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
@@ -160,10 +160,10 @@ class inv_model extends CI_Model
                                         " . $tambah3 . "
                                         UNION ALL 
                                         SELECT 'ADJ' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
-                                        tb_detail.insno,tb_detail.nobontr,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,
-                                        ".$kolompcs.",
+                                        tb_detail.insno,tb_detail.nobontr,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,
+                                        0 as pcsin,0 as pcsout,tb_detail.pcs as pcsadj,
                                         0 as kgs,
-                                        ".$kolomkgs.",
+                                        0 as kgsin,0 as kgsout,tb_detail.kgs as kgsadj,
                                         satuan.kodesatuan,3 AS nome,'' as idd,tb_po.spek
                                         FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 

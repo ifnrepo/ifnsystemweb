@@ -1,8 +1,8 @@
 <?php
 class Barangmodel extends CI_Model
 {
-    var $column_search = array('nama_barang', 'kode', 'nama_kategori');
-    var $column_order = array(null, 'nama_barang', 'kode', 'nama_kategori');
+    var $column_search = array('nama_barang','barang.kode', 'nama_kategori');
+    var $column_order = array(null, 'nama_barang', 'barang.kode', 'nama_kategori');
     var $order = array('nama_barang' => 'asc');
     var $table = 'barang';
     public function getdatajson()
@@ -16,7 +16,7 @@ class Barangmodel extends CI_Model
     }
     public function getdata($filter_kategori, $filter_inv, $filter_act)
     {
-        $this->db->select('barang.*,satuan.namasatuan,satuan.kodesatuan,kategori.nama_kategori,(select count(*) from bom_barang where id_barang = barang.id) as jmbom', FALSE);
+        $this->db->select('barang.*,barang.kode as kodex,satuan.namasatuan,satuan.kodesatuan,kategori.nama_kategori,(select count(*) from bom_barang where id_barang = barang.id) as jmbom', FALSE);
         $this->db->from($this->table);
         $this->db->join('kategori', 'kategori.kategori_id = barang.id_kategori', 'left');
         $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
