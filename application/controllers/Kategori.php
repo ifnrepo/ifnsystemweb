@@ -40,7 +40,12 @@ class Kategori extends CI_Controller
     {
         $data = [
             'kategori_id' => $_POST['kategori_id'],
-            'nama_kategori' => $_POST['nama_kategori']
+            'nama_kategori' => $_POST['nama_kategori'],
+            'urut' => $_POST['urut'],
+            'kode' => $_POST['kode'],
+            'ket' => $_POST['ket'],
+            'jns' => $_POST['jns'],
+            'net' => $_POST['net']
         ];
         $hasil = $this->kategorimodel->simpankategori($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -57,7 +62,12 @@ class Kategori extends CI_Controller
         $data = [
             'id' => $_POST['id'],
             'kategori_id' => $_POST['kategori_id'],
-            'nama_kategori' => $_POST['nama_kategori']
+            'nama_kategori' => $_POST['nama_kategori'],
+            'urut' => $_POST['urut'],
+            'kode' => $_POST['kode'],
+            'ket' => $_POST['ket'],
+            'jns' => $_POST['jns'],
+            'net' => $_POST['net']
         ];
         $hasil = $this->kategorimodel->updatekategori($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -85,7 +95,11 @@ class Kategori extends CI_Controller
         $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
         $sheet->setCellValue('B2', "ID KATEGORI"); // Set kolom B3 dengan tulisan "KODE"    
         $sheet->setCellValue('C2', "NAMA KATEGORI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-
+        $sheet->setCellValue('D2', "NO URUT"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('E2', "KODE"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('F2', "KETERANGAN"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('G2', "JNS");
+        $sheet->setCellValue('H2', "NET");
         // Panggil model Get Data   
         $kategori = $this->kategorimodel->getdata();
         $no = 1;
@@ -99,6 +113,11 @@ class Kategori extends CI_Controller
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $data['kategori_id']);
             $sheet->setCellValue('C' . $numrow, $data['nama_kategori']);
+            $sheet->setCellValue('D' . $numrow, $data['urut']);
+            $sheet->setCellValue('E' . $numrow, $data['kode']);
+            $sheet->setCellValue('F' . $numrow, $data['ket']);
+            $sheet->setCellValue('G' . $numrow, $data['jns']);
+            $sheet->setCellValue('H' . $numrow, $data['net']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    
@@ -122,7 +141,7 @@ class Kategori extends CI_Controller
     }
     public function cetakpdf()
     {
-        $pdf = new PDF('P', 'mm', 'A4');
+        $pdf = new PDF('L', 'mm', 'A4');
         $pdf->AliasNbPages();
         // $pdf->setMargins(5,5,5);
         $pdf->AddFont('Lato', '', 'Lato-Regular.php');
@@ -137,16 +156,26 @@ class Kategori extends CI_Controller
         $pdf->ln(12);
         $pdf->SetFont('Latob', '', 10);
         $pdf->Cell(15, 8, 'No', 1, 0, 'C');
-        $pdf->Cell(35, 8, 'Id Kategori', 1, 0, 'C');
-        $pdf->Cell(140, 8, 'Nama Kategori', 1, 0, 'C');
+        $pdf->Cell(20, 8, 'Id Kategori', 1, 0, 'C');
+        $pdf->Cell(80, 8, 'Nama Kategori', 1, 0, 'C');
+        $pdf->Cell(10, 8, 'Urut', 1, 0, 'C');
+        $pdf->Cell(10, 8, 'Kode', 1, 0, 'C');
+        $pdf->Cell(10, 8, 'Jns', 1, 0, 'C');
+        $pdf->Cell(10, 8, 'Net', 1, 0, 'C');
+        $pdf->Cell(120, 8, 'Ket', 1, 0, 'C');
         $pdf->SetFont('Lato', '', 10);
         $pdf->ln(8);
         $detail = $this->kategorimodel->getdata();
         $no = 1;
         foreach ($detail as $det) {
             $pdf->Cell(15, 6, $no++, 1, 0, 'C');
-            $pdf->Cell(35, 6, $det['kategori_id'], 1);
-            $pdf->Cell(140, 6, $det['nama_kategori'], 1);
+            $pdf->Cell(20, 6, $det['kategori_id'], 1);
+            $pdf->Cell(80, 6, $det['nama_kategori'], 1);
+            $pdf->Cell(10, 6, $det['urut'], 1);
+            $pdf->Cell(10, 6, $det['kode'], 1);
+            $pdf->Cell(10, 6, $det['jns'], 1);
+            $pdf->Cell(10, 6, $det['net'], 1);
+            $pdf->Cell(120, 6, $det['ket'], 1);
             $pdf->ln(6);
         }
         $pdf->SetFont('Lato', '', 8);
