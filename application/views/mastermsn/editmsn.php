@@ -20,24 +20,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="card">
       <div class="card-header font-bold text-primary">
         <?= $data['nama_barang']; ?><br>
+        <?= $this->session->set_flashdata('ketlain'); ?>
+        <?= $this->session->set_flashdata('msg'); ?>
       </div>
       <div class="card-body font-kecil">
         <div class="row">
           <div class="col-4">
             <div class="bg-blue-lt p-1">
-              <?php if(trim($data['filefoto'])==''){ ?>
-                  <img src="<?= LOK_FOTO_MESIN.'/NoImageYet.jpg'; ?>" alt="<?= LOK_FOTO_MESIN.'NoImageYet.jpg'; ?>">
-              <?php }else{ ?>
-                <img src="<?= LOK_FOTO_MESIN.$data['filefoto']; ?>" alt="<?= LOK_FOTO_MESIN.$data['filefoto']; ?>">
-              <?php } ?>
+              <?php $foto = trim($data['filefoto'])=='' ? LOK_FOTO_MESIN.'/NoImageYet.jpg' : LOK_FOTO_MESIN.$data['filefoto'];  ?>
+              <img src="<?= $foto ?>" alt="<?= $foto ?>" style="width: auto;" id="gbimage">
             </div>
             <div class="text-center">
-            <form name="formFoto" id="formFoto" action="" method="post" enctype="multipart/form-data">
+            <form name="formFoto" id="formFoto" action="<?= $actionfoto; ?>" method="post" enctype="multipart/form-data">
+              <input type="hidden" name="id" id="id" value="<?= $data['idx']; ?>">
               <hr class="m-1">
               <div>
                 <div class="input-group">
                       <input type="hidden" class="form-control group-control" id="file_path" name="file_path">
-                      <input type="file" class="hilang" id="file" name="logo">
+                      <input type="file" class="hilang" accept="image/*"  id="file" name="file" onchange="loadFile(event)">
                       <input type="hidden" name="old_logo" value="<?= $data['filefoto'] ?>">
                           <!-- <span class="input-group-btn">
                             <button type="button" class="btn btn-info btn-flat" id="file_browser"><i class="fa fa-search"></i></button>
@@ -45,7 +45,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </div>
               </div>
               <button type="button" class="btn btn-sm btn-info btn-flat" id="file_browser"><i class="fa fa-search mr-1"></i> Get Foto</button>
-              <button type="submit" class="btn btn-sm btn-danger btn-flat"><i class="fa fa-check mr-1"></i> Update Foto</button>
+              <button type="submit" class="btn btn-sm btn-danger btn-flat disabled" id="okesubmit"><i class="fa fa-check mr-1"></i> Update Foto</button>
             </form>
             </div>
           </div>

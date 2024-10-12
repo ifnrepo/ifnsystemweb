@@ -188,7 +188,7 @@ class Barang extends CI_Controller
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $field->kode;
+            $row[] = $field->kodex;
             $row[] = $field->nama_barang;
             if ($this->session->userdata('viewalias') == 1) {
                 $row[] = $field->nama_alias;

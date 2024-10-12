@@ -92,20 +92,26 @@ class Hargamat extends CI_Controller
         foreach ($list as $field) {
             $tampil = $field->weight == 0 ? $field->qty : $field->weight;
             $barang = $field->id_barang == 0 ? $field->remark . ' (ID not found)' : $field->nama_barang;
+            $nobc = '';
+            if(trim($field->nomor_bc) !=  ''){
+                $nobc = 'BC '.trim($field->jns_bc).'-'.$field->nomor_bc;
+            }
             $no++;
             $row = array();
             $row[] = $barang;
             $row[] = tglmysql($field->tgl);
             $row[] = $field->nobontr;
+            // $row[] = $nobc;
             $row[] = rupiah($field->qty, 0);
             $row[] = rupiah($field->weight, 2);
             $row[] = rupiah($field->price, 2);
             $row[] = rupiah($tampil * $field->price, 2);
-            $row[] = $field->nama_supplier;
-            $row[] = $field->mt_uang;
-            $row[] = rupiah($field->oth_amount, 2);
-            $row[] = rupiah($field->kurs, 2);
-            $buton = "<a href=" . base_url() . 'hargamat/edithamat/' . $field->idx . " class='btn btn-sm btn-info' style='padding: 2px 5px !important;' data-bs-target='#modal-large' data-bs-toggle='modal' data-title='Edit HAMAT' title='EDIT " . trim($field->nama_barang) . "><i class='fa fa-pencil mr-1'></i> Edit</a>";
+            // $row[] = $field->nama_supplier;
+            // $row[] = $field->mt_uang;
+            // $row[] = rupiah($field->oth_amount, 2);
+            // $row[] = rupiah($field->kurs, 2);
+            $buton = "<a href=" . base_url() . 'hargamat/edithamat/' . $field->idx . " class='btn btn-sm btn-info' style='padding: 2px 5px !important;' data-bs-target='#modal-large' data-bs-toggle='modal' data-title='Edit HAMAT' title='EDIT " . trim($field->nama_barang) . "'><i class='fa fa-pencil mr-1'></i> Edit</a>";
+            $buton .= "<a href=" . base_url() . 'hargamat/viewdok/' . $field->idx . " class='btn btn-sm btn-danger ml-1' style='padding: 5px !important;' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View DOKUMEN'><i class='fa fa-file-pdf-o'></i></a>";
             $row[] = $buton;
 
             $data[] = $row;
@@ -136,6 +142,10 @@ class Hargamat extends CI_Controller
     function kedepan()
     {
         return 0;
+    }
+    public function viewdok($id){
+        $data['data'] = $this->hargamatmodel->getdatabyid($id)->row_array();
+        $this->load->view('hargamat/viewdok',$data);
     }
     //End Controller
     public function mode()

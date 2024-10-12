@@ -52,6 +52,20 @@ $("#cekdisposal").click(function () {
 		},
 	});
 });
+var loadFile = function (event) {
+	var output = document.getElementById("gbimage");
+	var isifile = event.target.files[0];
+	$("#okesubmit").addClass("disabled");
+	if (!isifile) {
+		output.src = "assets/page/images/add-files.svg";
+	} else {
+		output.src = URL.createObjectURL(isifile);
+		output.onload = function () {
+			URL.revokeObjectURL(output.src); // free memory
+		};
+		$("#okesubmit").removeClass("disabled");
+	}
+};
 // $("#tglpb").datepicker();
 
 // // $("#dept_kirim").change(function () {

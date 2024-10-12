@@ -124,8 +124,8 @@ $(document).ready(function () {
 			},
 		],
 		pageLength: 50,
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
-
 
 	$("#filter, #filterinv, #filteract").on("change", function () {
 		table.ajax.reload();
@@ -135,22 +135,31 @@ $(document).ready(function () {
 		var filter_kategori = $("#filter").val();
 		var filter_inv = $("#filterinv").val();
 		var filter_act = $("#filteract").val();
-		
-		var exportUrlExcel = base_url + "barang/excel?filter=" + filter_kategori + "&filterinv=" + filter_inv + "&filteract=" + filter_act;
+
+		var exportUrlExcel =
+			base_url +
+			"barang/excel?filter=" +
+			filter_kategori +
+			"&filterinv=" +
+			filter_inv +
+			"&filteract=" +
+			filter_act;
 		$(".btn-export-excel").attr("href", exportUrlExcel);
-	
-		var exportUrlPdf = base_url + "barang/pdf?filter=" + filter_kategori + "&filterinv=" + filter_inv + "&filteract=" + filter_act;
+
+		var exportUrlPdf =
+			base_url +
+			"barang/pdf?filter=" +
+			filter_kategori +
+			"&filterinv=" +
+			filter_inv +
+			"&filteract=" +
+			filter_act;
 		$(".btn-export-pdf").attr("href", exportUrlPdf);
-	
+
 		console.log("Export Excel URL:", exportUrlExcel);
 		console.log("Export PDF URL:", exportUrlPdf);
 	});
-
-	
 });
-
-
-
 
 $("#tabelnya tbody").on("click", "td", function () {
 	var tr = $(this).closest("tr");

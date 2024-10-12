@@ -3,6 +3,7 @@
         <div class="col-12">
             <input type="hidden" value="<?= $detail['id']; ?>" name="id" id="id">
             <input type="hidden" value="<?= $detail['id_barang'] ?>" name="id_barang" id="id_barang">
+            <p><?= $detail['nama_barang']; ?></p>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Nama Barang</label>
                 <div class="col"> 

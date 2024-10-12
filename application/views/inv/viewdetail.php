@@ -1,15 +1,20 @@
 <div class="container-xl">
     <div class="row mb-1">
-        <div class="col-4 font-bold">
+        <div class="col-3 font-bold">
             <span class="text-primary">Inventory per Tanggal</span>
             <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal')), 1); ?></h4>
         </div>
-        <div class="col-8 text-primary font-bold">
+        <div class="col-7 text-primary font-bold">
             <span>SKU/Spesifikasi Barang</span>
             <?php $spekbarang = $header['nama_barang'] == null ? $header['spek'] : $header['nama_barang']; ?>
-            <h4 class="mb-1 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
+            <?php $nobc = trim($header['nomor_bc'])!='' ? 'BC.'.trim($header['jns_bc']).'-'.$header['nomor_bc'].'('.tglmysql($header['tgl_bc']).')<a href="#" class="btn btn-sm btn-danger ml-2" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
+            <h4 class="mb-0 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
+            <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?></h4>
             <hr class="m-0">
-            <span class="font-12 text-red">KATEGORI : <?= $header['nama_kategori']; ?></span>
+            <span class="font-12 text-red">KATEGORI : <?= $header['nama_kategori']; ?></span><br>
+        </div>
+        <div class="col-2 <?php if($this->session->userdata('currdept')=='GM'){ echo "hilang"; } ?>">
+            <a href="#kolap" class="btn btn-sm btn-info" data-toggle="collapse" aria-expanded="false">View BOM</a>
         </div>
         <!-- <div class="col-4 text-primary font-bold">
         <span>Dibuat Oleh</span>
@@ -27,6 +32,7 @@
                         <th colspan="2">Awal</th>
                         <th colspan="2">In</th>
                         <th colspan="2">Out</th>
+                        <th colspan="2">ADJ</th>
                         <th colspan="2">Saldo</th>
                         <?php if($this->session->userdata('invharga')): ?>
                         <th rowspan="2">Harga</th>
@@ -35,6 +41,8 @@
                         <th rowspan="2">Keterangan</th>
                     </tr>
                     <tr>
+                        <th>Pcs</th>
+                        <th>Kgs</th>
                         <th>Pcs</th>
                         <th>Kgs</th>
                         <th>Pcs</th>
@@ -53,18 +61,18 @@
                     foreach ($detail->result_array() as $det) {
 
                         if ($det['nome'] == 1) {
-                            $saldoawal = $det['pcs'] + $det['pcsin'] - $det['pcsout'];
-                            $saldoawalkgs = $det['kgs'] + $det['kgsin'] - $det['kgsout'];
+                            $saldoawal = $det['pcs'] + $det['pcsin'] - $det['pcsout']-$det['pcsadj'];
+                            $saldoawalkgs = $det['kgs'] + $det['kgsin'] - $det['kgsout']-$det['kgsadj'];
                         } else {
                             $saldoawal = $saldo;
                             $saldoawalkgs = $saldokgs;
                         }
-                        $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'];
-                        $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout'];
+                        $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'] - $det['pcsadj'];
+                        $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout']- $det['kgsadj'];
                         $pilihtampil = $saldo==0 ? $saldokgs : $saldo;
                     ?>
                         <tr>
-                            <td class="font-italic text-primary"><?= tgl_indo($det['tgl'], 1); ?></td>
+                            <td class="font-italic text-primary"><?= tgl_indo($det['tgl'], 0); ?></td>
                             <td><?= $det['nobontr']; ?></td>
                             <td><?= rupiah($saldoawal, 0); ?></td>
                             <td><?= rupiah($saldoawalkgs, 2); ?></td>
@@ -72,6 +80,8 @@
                             <td><?= rupiah($det['kgsin'], 2); ?></td>
                             <td><?= rupiah($det['pcsout'], 0); ?></td>
                             <td><?= rupiah($det['kgsout'], 2); ?></td>
+                            <td><?= rupiah($det['pcsadj'], 0); ?></td>
+                            <td><?= rupiah($det['kgsadj'], 2); ?></td>
                             <td class="font-bold text-primary"><?= rupiah($saldo, 0); ?></td>
                             <td><?= rupiah($saldokgs, 2); ?></td>
                             <?php if($this->session->userdata('invharga')): ?>
@@ -95,7 +105,25 @@
         <div class="col-4 font-bold">
         </div>
     </div>
-    <hr class="m-1">
+    <div class="collapse" id="kolap">
+        <span class="text-orange font-bold mb-1">DETAIL BOM</span>
+        <table class="table datatable6 table-hover" id="cobasisip">
+            <thead style="background-color: blue !important">
+                <tr>
+                <!-- <th>No</th> -->
+                <th>Specific</th>
+                <th>SKU</th>
+                <th>Satuan</th>
+                <th>Qty</th>
+                <th>Kgs</th>
+                <th>Keterangan</th>
+                </tr>
+            </thead>
+            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
+            </tbody>
+        </table>
+    <div>
+        <hr class="m-1">
 </div>
 <script>
     $(document).ready(function() {

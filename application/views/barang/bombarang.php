@@ -19,24 +19,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
-        <div id="sisipkan" class="hilang">
+        <div id="sisipkan" class="">
           <div class="mb-1">
-            <a href="<?= base_url().'barang/addbombarang/'.$detail['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Data BOM" class="btn btn-primary btn-sm" ><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+            <!-- <a href="<?= base_url().'barang/addbombarang/'.$detail['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Data BOM" class="btn btn-primary btn-sm" ><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
           </div>
           <div class="card card-active" style="clear:both;" >
             <div class="card-body p-2">
-              <div class="row">
-                <div class="col-3">
+              <div class="row mb-2" style="line-height: 10px;">
+                <div class="col" >
                   <h4 class="mb-1">Nama Barang</h4>
-                  <span class="font-kecil"><?= $detail['nama_barang']; ?></span>
+                  <span class="font-bold text-brown"><?= $detail['nama_barang']; ?></span>
                 </div>
+              </div>
+              <div class="row mb-2" style="line-height: 10px;">
                 <div class="col-3">
                   <h4 class="mb-1">Kode Barang</h4>
-                  <span class="font-kecil"><?= $detail['kode']; ?></span>
+                  <span class="font-bold"><?= $detail['kode']; ?></span>
                 </div>
                 <div class="col-3">
                   <h4 class="mb-1">Total Persen BOM</h4>
-                  <span class="font-kecil"><?= $detail['persenbom']; ?></span>
+                  <span class="font-bold"><?= $detail['persenbom']; ?></span>
                 </div>
                 <div class="col-3">
                   <h4 class="mb-1"></h4>
@@ -63,8 +65,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <td><?= $no; ?></td>
                   <td><?= $key['kode']; ?></td>
                   <td><?= $key['nama_barang']; ?></td>
-                  <td><?= $key['persen']; ?></td>
-                  <td>
+                  <td class="text-right"><?= $key['persen']; ?></td>
+                  <td class="text-center">
                     <a href="<?= base_url().'barang/editbombarang/'.$key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editsatuan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data BOM" rel="<?= $key['id']; ?>" title="Edit data">
                       <i class="fa fa-edit"></i>
                     </a>

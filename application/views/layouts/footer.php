@@ -58,7 +58,7 @@
 	<script src="<?= base_url(); ?>assets/js/own/userapps.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'barang') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/barang.js?1724750323"></script>
+	<script src="<?= base_url(); ?>assets/js/own/barang.js?1724750324"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'dept') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/dept.js?1724750323"></script>

@@ -93,20 +93,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <label for="btn-radio-dropdown-dropdown" class="btn btn-sm btn-success btn-flat dropdown-toggle text-black" style="padding: 0px 5px !important" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                               Aksi
                           </label>
-                          <div class="dropdown-menu">
+                          <div class="dropdown-menu" style="min-width: 20px !important;">
                               <label class="dropdown-item py-1">
                                   <a href="<?= base_url() . 'mastermsn/editmesin/' . $res['idx']; ?>" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="<?= $res['id']; ?>" title="Edit data">
-                                      <i class="fa fa-edit pr-1"></i> Edit Data
+                                      <i class="fa fa-edit pr-1"></i> Edit
                                   </a>
                               </label>
-                              <label class="dropdown-item py-1">
+                              <!-- <label class="dropdown-item py-1">
                                   <a class="btn btn-sm btn-danger btn-icon text-white w-100" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'mastermsn/disposal/' . $res['id']; ?>" title="Hapus data">
                                       <i class="fa fa-trash-o pr-1"></i> Disposal
                                   </a>
-                              </label>
+                              </label> -->
                               <label class="dropdown-item py-1">
                                   <a href="<?= base_url() . 'viewmsn/mesinno/'.encrypto($res['kode_fix']); ?>" class="btn btn-sm btn-teal btn-icon w-100" id="edituser" rel="<?= $res['id']; ?>" title="View data">
-                                      <i class="fa fa-eye pr-1"></i> View Data
+                                      <i class="fa fa-eye pr-1"></i> View
                                   </a>
                               </label>
                           </div>

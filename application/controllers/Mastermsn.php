@@ -55,10 +55,14 @@ class Mastermsn extends CI_Controller {
     public function editmesin($id){
         $header['header'] = 'master';
         $data['data'] = $this->mastermsnmodel->getdataby($id)->row_array();
+        $data['actionfoto'] = base_url().'mastermsn/updatefoto';
         $footer['fungsi'] = 'datamesin';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('mastermsn/editmsn',$data);
 		$this->load->view('layouts/footer',$footer);
+    }
+    public function updatefoto(){
+        $this->mastermsnmodel->updatefoto();
     }
     public function tambahdata(){
         $this->load->view('satuan/addsatuan');
@@ -174,4 +178,5 @@ class Mastermsn extends CI_Controller {
         $pdf->Output('I', 'Data Satuan.pdf');
         $this->helpermodel->isilog('Download PDF DATA SATUAN');
     }
+    
 }
