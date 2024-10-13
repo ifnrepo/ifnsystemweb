@@ -1,4 +1,4 @@
-<div class="container-xl"> 
+<div class="container-xl">
     <div class="row">
         <div class="col-12">
             <input type="hidden" name="rekrow" id="rekrow" value="<?= $rekrow; ?>">
@@ -23,22 +23,30 @@
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kategori</label>
-                <div class="col"> 
+                <div class="col">
                     <select class="form-select font-kecil" id="id_kategori" name="id_kategori">
                         <option value="">--Pilih Kategori--</option>
-                        <?php foreach ($itemkategori as $kategori) { $selek = $kategori['kategori_id']==$data['id_kategori'] ? 'selected' : ''; ?>
-                            <option value="<?= $kategori['kategori_id']; ?>" <?= $selek; ?>><?= '['.$kategori['kategori_id'].'] '.$kategori['nama_kategori']; ?></option>
+                        <?php foreach ($itemkategori as $kategori) {
+                            $selek = $kategori['kategori_id'] == $data['id_kategori'] ? 'selected' : ''; ?>
+                            <option value="<?= $kategori['kategori_id']; ?>" <?= $selek; ?>><?= '[' . $kategori['kategori_id'] . '] ' . $kategori['nama_kategori']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
             </div>
             <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Safty Stock</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="safety_stock" id="safety_stock" value="<?= $data['safety_stock']; ?>">
+                </div>
+            </div>
+            <div class=" mb-1 row">
                 <label class="col-3 col-form-label required">Satuan</label>
                 <div class="col">
                     <select class="form-select font-kecil" id="id_satuan" name="id_satuan">
                         <option value="">--Pilih Satuan--</option>
-                        <?php foreach ($itemsatuan->result_array() as $satuan) { $selek = $satuan['id']==$data['id_satuan'] ? 'selected' : ''; ?>
-                            <option value="<?= $satuan['id']; ?>" <?= $selek; ?>><?= '['.$satuan['kodesatuan'].'] '.$satuan['namasatuan']; ?></option>
+                        <?php foreach ($itemsatuan->result_array() as $satuan) {
+                            $selek = $satuan['id'] == $data['id_satuan'] ? 'selected' : ''; ?>
+                            <option value="<?= $satuan['id']; ?>" <?= $selek; ?>><?= '[' . $satuan['kodesatuan'] . '] ' . $satuan['namasatuan']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -47,7 +55,9 @@
                 <label class="col-3 col-form-label pt-0"></label>
                 <div class="col">
                     <label class="form-check">
-                        <input class="form-check-input" id="dln" name="dln" type="checkbox" <?php if($data['dln']==1){ echo 'checked'; } ?>>
+                        <input class="form-check-input" id="dln" name="dln" type="checkbox" <?php if ($data['dln'] == 1) {
+                                                                                                echo 'checked';
+                                                                                            } ?>>
                         <span class="form-check-label">DLN</span>
                     </label>
                 </div>
@@ -56,7 +66,9 @@
                 <label class="col-3 col-form-label pt-0"></label>
                 <div class="col">
                     <label class="form-check">
-                        <input class="form-check-input" id="noinv" name="noinv" type="checkbox" <?php if($data['noinv']==1){ echo 'checked'; } ?>>
+                        <input class="form-check-input" id="noinv" name="noinv" type="checkbox" <?php if ($data['noinv'] == 1) {
+                                                                                                    echo 'checked';
+                                                                                                } ?>>
                         <span class="form-check-label">No INV</span>
                     </label>
                 </div>
@@ -65,7 +77,9 @@
                 <label class="col-3 col-form-label pt-0"></label>
                 <div class="col">
                     <label class="form-check">
-                        <input class="form-check-input" id="act" name="act" type="checkbox" <?php if($data['act']==1){ echo 'checked'; } ?>>
+                        <input class="form-check-input" id="act" name="act" type="checkbox" <?php if ($data['act'] == 1) {
+                                                                                                echo 'checked';
+                                                                                            } ?>>
                         <span class="form-check-label">Aktif</span>
                     </label>
                 </div>
@@ -75,37 +89,37 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="updatebarang" >Simpan</button>
+    <button type="button" class="btn btn-primary" id="updatebarang">Simpan</button>
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         $("#nama_barang").focus();
     })
-    $("#updatebarang").click(function(){
+    $("#updatebarang").click(function() {
         var x = $("#dln").prop('checked') ? 1 : 0;
         var y = $("#noinv").prop('checked') ? 1 : 0;
         var z = $("#act").prop('checked') ? 1 : 0;
-        if($("#kode").val() == ''){
-            pesan('Kode harus di isi !','error');
+        if ($("#kode").val() == '') {
+            pesan('Kode harus di isi !', 'error');
             return;
         }
-        if($("#nama_barang").val() == ''){
-            pesan('Nama Barang harus di isi !','error');
+        if ($("#nama_barang").val() == '') {
+            pesan('Nama Barang harus di isi !', 'error');
             return;
         }
-        if($("#id_satuan").val() == ''){
-            pesan('Satuan harus di isi !','error');
+        if ($("#id_satuan").val() == '') {
+            pesan('Satuan harus di isi !', 'error');
             return;
         }
-        if($("#id_kategori").val() == ''){
-            pesan('Kategori harus di isi !','error');
+        if ($("#id_kategori").val() == '') {
+            pesan('Kategori harus di isi !', 'error');
             return;
         }
         var noe = $("#currentrow").val();
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url+'barang/updatebarang',
+            url: base_url + 'barang/updatebarang',
             data: {
                 kode: $("#kode").val(),
                 nama: $("#nama_barang").val(),
@@ -117,7 +131,7 @@
                 noinv: y,
                 act: z
             },
-            success: function(data){
+            success: function(data) {
                 var temp = $("#tabelnya").DataTable().row(noe).data();
                 // alert(temp);
                 let buton = '';
@@ -126,28 +140,28 @@
                 let noinv = (data[0]['noinv'] == 1) ? '<i class="fa fa-check text-success"></i>' : '-';
                 temp[1] = data[0]['kode'];
                 temp[2] = data[0]['nama_barang'];
-                <?php if($this->session->userdata('viewalias')==1){ ?>
+                <?php if ($this->session->userdata('viewalias') == 1) { ?>
                     let kurangi = 0;
                     temp[3] = data[0]['nama_alias'];
-                <?php }else{ ?>
+                <?php } else { ?>
                     let kurangi = 1;
                 <?php } ?>
-                temp[4-kurangi] = data[0]['nama_kategori'];
-                temp[5-kurangi] = data[0]['kodesatuan'];
-                temp[6-kurangi] = dln;
-                temp[7-kurangi] = noinv;
-                temp[8-kurangi] = aktif;
-                buton = "<a href=" + base_url + 'barang/editbarang/' + data[0]['id'] +'/'+noe+" class='btn btn-sm btn-primary btn-icon text-white mr-1' rel="+data[0]['id']+ " rel2=" +noe+ " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
-                buton += "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=" + base_url + 'barang/hapusbarang/' +data[0]['id']+ "><i class='fa fa-trash-o'></i></a>";
-                buton += "<a href=" + base_url + 'barang/isistock/' +data[0]['id']+ " class='btn btn-sm btn-info btn-icon mr-1' id='stockbarang' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Isi Safety Stock' title='Isi Safety Stock' ><i class='fa fa-info pl-1 pr-1'></i></a>";
-                buton += "<a href=" + base_url + 'barang/bombarang/' +data[0]['id']+ " class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM</a>";
+                temp[4 - kurangi] = data[0]['nama_kategori'];
+                temp[5 - kurangi] = data[0]['kodesatuan'];
+                temp[6 - kurangi] = dln;
+                temp[7 - kurangi] = noinv;
+                temp[8 - kurangi] = aktif;
+                buton = "<a href=" + base_url + 'barang/editbarang/' + data[0]['id'] + '/' + noe + " class='btn btn-sm btn-primary btn-icon text-white mr-1' rel=" + data[0]['id'] + " rel2=" + noe + " title='Edit data' id='editsatuan' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Edit Data Satuan'><i class='fa fa-edit'></i></a>";
+                buton += "<a class='btn btn-sm btn-danger btn-icon text-white mr-1' id='hapusbarang' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' title='Hapus data' data-href=" + base_url + 'barang/hapusbarang/' + data[0]['id'] + "><i class='fa fa-trash-o'></i></a>";
+                buton += "<a href=" + base_url + 'barang/isistock/' + data[0]['id'] + " class='btn btn-sm btn-info btn-icon mr-1' id='stockbarang' data-bs-toggle='modal' data-bs-target='#modal-simple' data-title='Isi Safety Stock' title='Isi Safety Stock' ><i class='fa fa-info pl-1 pr-1'></i></a>";
+                buton += "<a href=" + base_url + 'barang/bombarang/' + data[0]['id'] + " class='btn btn-sm btn-cyan btn-icon text-white position-relative' style='padding: 3px 8px !important;' title='Add Bill Of Material'>BOM</a>";
                 // temp[9] = buton;
                 $("#tabelnya").DataTable().row(noe).data(temp).invalidate();
                 // $("#tabelnya").DataTable().row(noe).addClass('text-red').draw();
                 // $(row).addClass("text-red");
                 $("#modal-simple").modal('hide');
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: function(xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
                 console.log(thrownError);
             }
