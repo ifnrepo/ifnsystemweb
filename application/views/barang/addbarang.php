@@ -1,4 +1,4 @@
-<div class="container-xl"> 
+<div class="container-xl">
     <div class="row font-kecil">
         <div class="col-12">
             <div class="mb-1 row">
@@ -21,13 +21,19 @@
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kategori</label>
-                <div class="col"> 
+                <div class="col">
                     <select class="form-select font-kecil" id="id_kategori" name="id_kategori">
                         <option value="">--Pilih Kategori--</option>
                         <?php foreach ($itemkategori as $kategori) { ?>
-                            <option value="<?= $kategori['kategori_id']; ?>"><?= '['.$kategori['kategori_id'].'] '.$kategori['nama_kategori']; ?></option>
+                            <option value="<?= $kategori['kategori_id']; ?>"><?= '[' . $kategori['kategori_id'] . '] ' . $kategori['nama_kategori']; ?></option>
                         <?php } ?>
                     </select>
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Safty Stock</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="safety_stock" id="safety_stock" placeholder="Safty Stock">
                 </div>
             </div>
             <div class="mb-1 row">
@@ -36,7 +42,7 @@
                     <select class="form-select font-kecil" id="id_satuan" name="id_satuan">
                         <option value="">--Pilih Satuan--</option>
                         <?php foreach ($itemsatuan->result_array() as $satuan) { ?>
-                            <option value="<?= $satuan['id']; ?>"><?= '['.$satuan['kodesatuan'].'] '.$satuan['namasatuan']; ?></option>
+                            <option value="<?= $satuan['id']; ?>"><?= '[' . $satuan['kodesatuan'] . '] ' . $satuan['namasatuan']; ?></option>
                         <?php } ?>
                     </select>
                 </div>
@@ -73,36 +79,36 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="simpanbarang" >Simpan</button>
+    <button type="button" class="btn btn-primary" id="simpanbarang">Simpan</button>
 </div>
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         $("#nama_barang").focus();
     })
-    $("#simpanbarang").click(function(){
+    $("#simpanbarang").click(function() {
         var x = $("#dln").prop('checked') ? 1 : 0;
         var y = $("#noinv").prop('checked') ? 1 : 0;
         var z = $("#act").prop('checked') ? 1 : 0;
-        if($("#kode").val() == ''){
-            pesan('Kode harus di isi !','error');
+        if ($("#kode").val() == '') {
+            pesan('Kode harus di isi !', 'error');
             return;
         }
-        if($("#nama_barang").val() == ''){
-            pesan('Nama Barang harus di isi !','error');
+        if ($("#nama_barang").val() == '') {
+            pesan('Nama Barang harus di isi !', 'error');
             return;
         }
-        if($("#id_satuan").val() == ''){
-            pesan('Satuan harus di isi !','error');
+        if ($("#id_satuan").val() == '') {
+            pesan('Satuan harus di isi !', 'error');
             return;
         }
-        if($("#id_kategori").val() == ''){
-            pesan('Kategori harus di isi !','error');
+        if ($("#id_kategori").val() == '') {
+            pesan('Kategori harus di isi !', 'error');
             return;
         }
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url+'barang/simpanbarang',
+            url: base_url + 'barang/simpanbarang',
             data: {
                 kode: $("#kode").val(),
                 nama: $("#nama_barang").val(),
@@ -113,11 +119,11 @@
                 dln: x,
                 act: z,
             },
-            success: function(data){
+            success: function(data) {
                 window.location.reload();
                 // $("#tabelnya").DataTable.ajax.reload();
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: function(xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
                 console.log(thrownError);
             }
