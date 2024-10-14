@@ -7,14 +7,15 @@
         <div class="col-7 text-primary font-bold">
             <span>SKU/Spesifikasi Barang</span>
             <?php $spekbarang = $header['nama_barang'] == null ? $header['spek'] : $header['nama_barang']; ?>
-            <?php $nobc = trim($header['nomor_bc'])!='' ? 'BC.'.trim($header['jns_bc']).'-'.$header['nomor_bc'].'('.tglmysql($header['tgl_bc']).')<a href="#" class="btn btn-sm btn-danger ml-2" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
+            <?php $hilangtombol = $this->session->userdata('viewharga')==1 ? '' : 'hilang'; ?>
+            <?php $nobc = trim($header['nomor_bc'])!='' ? 'BC.'.trim($header['jns_bc']).'-'.$header['nomor_bc'].'('.tglmysql($header['tgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
             <h4 class="mb-0 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
             <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?></h4>
             <hr class="m-0">
             <span class="font-12 text-red">KATEGORI : <?= $header['nama_kategori']; ?></span><br>
         </div>
         <div class="col-2 <?php if($this->session->userdata('currdept')=='GM'){ echo "hilang"; } ?>">
-            <a href="#kolap" class="btn btn-sm btn-info" data-toggle="collapse" aria-expanded="false">View BOM</a>
+            <a href="#kolap" class="btn btn-sm btn-info" id="cekkolap" data-toggle="collapse" aria-expanded="false">View BOM</a>
         </div>
         <!-- <div class="col-4 text-primary font-bold">
         <span>Dibuat Oleh</span>
@@ -22,7 +23,7 @@
         </div> -->
     </div>
     <hr class='m-1'>
-    <div class="card card-lg">
+    <div class="card card-lg" id="cekkolape">
         <div class="card-body p-2">
             <table class="table datatable6 table-hover table-bordered" id="cobasisip">
                 <thead style="background-color: blue !important">
@@ -95,6 +96,15 @@
             </table>
         </div>
     </div>
+    <div class="card hilang" id="dokfile">
+      <div class="card-body pt-1 pb-1" style="overflow: auto;">
+        <?php if($dok['filedok']!='' || $dok['filedok']!=NULL){ ?>
+            <iframe src="<?= base_url().LOK_UPLOAD_DOKHAMAT.$dok['filedok']; ?>" style="width:100%;height:700px;" alt="Tidak ditemukan"></iframe>
+        <?php }else{ ?>
+            <div class="text-center font-bold m-0"><h3>BELUM ADA DOKUMEN</h3></div>
+        <?php } ?>
+      </div>
+    </div>
     <hr class="m-1">
     <div class="row mb-1">
         <div class="col-4 text-primary font-bold">
@@ -123,7 +133,7 @@
             </tbody>
         </table>
     <div>
-        <hr class="m-1">
+    <hr class="m-1">
 </div>
 <script>
     $(document).ready(function() {
@@ -133,6 +143,15 @@
         //     $("#getbarang").click();
         // }
     })
+    $("#viewdokhamat").click(function(){
+        if($("#cekkolape").hasClass('hilang')){
+            $("#cekkolape").removeClass('hilang');
+            $("#dokfile").addClass('hilang');
+        }else{
+            $("#cekkolape").addClass('hilang');
+            $("#dokfile").removeClass('hilang');
+        }
+    });
     // $("#keyw").on('keyup',function(e){
     //     if(e.key == 'Enter' || e.keycode === 13){
     //         $("#getbarang").click();
