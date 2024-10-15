@@ -42,6 +42,13 @@ class Nettype extends CI_Controller
         $data = [
             'name_nettype' => $_POST['name_nettype'],
             'id_kategori' => $_POST['id_kategori'],
+            'grup' => $_POST['grup'],
+            'kode_grup' => $_POST['kode_grup'],
+            'nommsq' => $_POST['nommsq'],
+            'nopack' => $_POST['nopack'],
+            'xmin' => $_POST['xmin'],
+            'isimmsq' => $_POST['isimmsq'],
+
         ];
         $hasil = $this->nettype_model->simpannettype($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -58,6 +65,14 @@ class Nettype extends CI_Controller
         $data = [
             'id' => $_POST['id'],
             'name_nettype' => $_POST['name_nettype'],
+            'id_kategori' => $_POST['id_kategori'],
+            'grup' => $_POST['grup'],
+            'kode_grup' => $_POST['kode_grup'],
+            'nommsq' => $_POST['nommsq'],
+            'nopack' => $_POST['nopack'],
+            'xmin' => $_POST['xmin'],
+            'isimmsq' => $_POST['isimmsq'],
+
         ];
         $hasil = $this->nettype_model->updatenettype($data);
         $this->helpermodel->isilog($this->db->last_query());

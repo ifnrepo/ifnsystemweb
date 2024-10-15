@@ -240,7 +240,7 @@ class Barang extends CI_Controller
             // $buton2 .= '<a href=' . base_url() . 'barang/isistock/' . $field->id . ' class="btn btn-sm btn-info btn-icon w-100" id="edituser" rel="' . $key['id'] . '" title="View data" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Isi Safety Stock">';
             // $buton2 .= '<i class="fa fa-info pr-1"></i> Isi Safety Stock';
             // $buton2 .= '</a>';
-            $buton2 .= '</label>';
+            // $buton2 .= '</label>';
             $buton2 .= '<label class="dropdown-item p-1">';
             $buton2 .= '<a href=' . base_url() . 'barang/bombarang/' . $field->id . ' class="btn btn-sm btn-cyan btn-icon w-100" id="edituser" rel="' . $key['id'] . '" title="Add Data BOM" >';
             $buton2 .= 'BOM' . $jmbon2;

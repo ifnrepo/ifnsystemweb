@@ -33,6 +33,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>No</th>
                                 <th>Net Type</th>
                                 <th>Kategori</th>
+                                <th style="text-align: center;">Grup</th>
+                                <th style="text-align: center;">Kode Grup</th>
+                                <th style="text-align: center;">NoMmsq</th>
+                                <th style="text-align: center;">NoPack</th>
+                                <th style="text-align: center;">Xmin</th>
+                                <th style="text-align: center;">IsiMmsq</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -43,7 +49,44 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= $no; ?></td>
                                     <td><?= $key['name_nettype']; ?></td>
                                     <td><?= $key['nama_kategori']; ?></td>
-                                    <td>
+                                    <td style="text-align: center;"><?= $key['grup']; ?></td>
+                                    <td style="text-align: center;"><?= $key['kode_grup']; ?></td>
+                                    <td style="text-align: center;"><?php
+                                                                    if ($key['nommsq'] == 1) {
+                                                                        echo '<i class="fa fa-check text-success"></i>';
+                                                                    } else {
+                                                                        echo '-';
+                                                                    } ?>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <?php
+                                        if ($key['nopack'] == 1) {
+                                            echo '<i class="fa fa-check text-success"></i>';
+                                        } else {
+                                            echo '-';
+                                        }
+                                        ?>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <?php
+                                        if ($key['xmin'] == 1) {
+                                            echo '<i class="fa fa-check text-success"></i>';
+                                        } else {
+                                            echo '-';
+                                        }
+                                        ?>
+                                    </td>
+                                    <td style="text-align: center;">
+                                        <?php
+                                        if ($key['isimmsq'] == 1) {
+                                            echo '<i class="fa fa-check text-success"></i>';
+                                        } else {
+                                            echo '-';
+                                        }
+                                        ?>
+                                    </td>
+
+                                    <td style="text-align: center;">
                                         <a href="<?= base_url() . 'nettype/editnettype/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editkategori" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Net Type" rel="<?= $key['id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
                                         </a>
