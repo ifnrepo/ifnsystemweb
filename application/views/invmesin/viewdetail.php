@@ -10,9 +10,8 @@
             <?php $hilangtombol = $this->session->userdata('viewharga')==1 ? '' : 'hilang'; ?>
             <?php $nobc = trim($header['nomor_bc'])!='' ? 'BC.'.trim($header['jns_bc']).'-'.$header['nomor_bc'].'('.tglmysql($header['tgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
             <h4 class="mb-0 text-teal-green"><?= $header['kode_fix'] . " # " . $spekbarang; ?></h4>
-            <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?></h4>
             <hr class="m-0">
-            <span class="font-12 text-red">KATEGORI : <?= $header['nama_kategori']; ?></span><br>
+            <span class="font-12 text-red mt-1">KATEGORI : <?= $header['nama_kategori']; ?></span><a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 mt-1 <?= $hilangtombol ?>" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o mr-1"></i> Dok</a><br>
         </div>
     </div>
     <hr class='m-1'>
@@ -66,8 +65,8 @@
     </div>
     <div class="card hilang" id="dokfile">
       <div class="card-body pt-1 pb-1" style="overflow: auto;">
-        <?php if($dok['filedok']!='' || $dok['filedok']!=NULL){ ?>
-            <iframe src="<?= base_url().LOK_UPLOAD_DOKHAMAT.$dok['filedok']; ?>" style="width:100%;height:700px;" alt="Tidak ditemukan"></iframe>
+        <?php if(!empty(trim($header['filepdf']))){ ?>
+            <iframe src="<?= LOK_DOK_MESIN.$header['filepdf']; ?>" style="width:100%;height:700px;" alt="Tidak ditemukan"></iframe>
         <?php }else{ ?>
             <div class="text-center font-bold m-0"><h3>BELUM ADA DOKUMEN</h3></div>
         <?php } ?>
@@ -95,9 +94,11 @@
     })
     $("#viewdokhamat").click(function(){
         if($("#cekkolape").hasClass('hilang')){
+            // $(this).text('XXX');
             $("#cekkolape").removeClass('hilang');
             $("#dokfile").addClass('hilang');
         }else{
+            // $(this).text('YYY');
             $("#cekkolape").addClass('hilang');
             $("#dokfile").removeClass('hilang');
         }

@@ -69,6 +69,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Kode Asset</th>
                 <th>Lokasi</th>
                 <th>Spek Mesin</th>
+                <th>Harga</th>
                 <th>Asset</th>
                 <th>Tgl Masuk</th>
                 <th>Aksi</th>
@@ -82,6 +83,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $res['kode_fix']; ?></td>
                   <td><?= $res['lokasi']; ?></td>
                   <td><?= $res['nama_barang']; ?></td>
+                  <td><?= rupiah(($res['harga']*$res['kurs'])+$res['landing'],2); ?></td>
                   <td class="text-center">
                     <?php if($res['is_asset']==1){ ?>
                       <i class="fa fa-check text-success"></i>
