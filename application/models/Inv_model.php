@@ -261,4 +261,7 @@ class inv_model extends CI_Model
         $this->db->where('stokdept.id',$id);
         return $this->db->get()->row_array();
     }
+    public function getdatadok($kondisi){
+        return $this->db->get_where('tb_hargamaterial',$kondisi);
+    }
 }

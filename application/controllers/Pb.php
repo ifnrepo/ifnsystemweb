@@ -405,7 +405,7 @@ class Pb extends CI_Controller
         foreach ($detail as $det) {
             $jumlah = $det['pcs'] == 0 ? $det['kgs'] : $det['pcs'];
             $pdf->Cell(8, 6, $no++, 'LRB', 0);
-            $pdf->Cell(97, 6, $det['nama_barang'], 'LBR', 0);
+            $pdf->Cell(97, 6, utf8_decode($det['nama_barang']), 'LBR', 0);
             $pdf->Cell(45, 6,  $det['keterangan'], 'LRB', 0);
             $pdf->Cell(20, 6, rupiah($jumlah, 0), 'LRB', 0, 'R');
             $pdf->Cell(20, 6, $det['kodesatuan'], 'LBR', 1, 'R');

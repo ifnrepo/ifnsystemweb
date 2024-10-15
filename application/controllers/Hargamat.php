@@ -33,11 +33,18 @@ class Hargamat extends CI_Controller
         // $data['data'] = $this->hargamatmodel->getdata();
         $data['kategori'] = $this->hargamatmodel->getdatakategori();
         $data['artikel'] = $this->hargamatmodel->getdataartikel();
+        $data['tahune'] = $this->hargamatmodel->getdatatahun();
         // $data['databbl'] = $this->taskmodel->getdatabbl();
         $footer['fungsi'] = 'hargamat';
         $this->load->view('layouts/header', $header);
         $this->load->view('hargamat/hargamat', $data);
         $this->load->view('layouts/footer', $footer);
+    }
+    public function clear(){
+        $this->session->unset_userdata('bl');
+        $this->session->userdata('th',date('Y'));
+        $url = base_url().'hargamat';
+        redirect($url);
     }
     public function getbarang()
     {
@@ -147,17 +154,16 @@ class Hargamat extends CI_Controller
         $data['data'] = $this->hargamatmodel->getdatabyid($id)->row_array();
         $this->load->view('hargamat/viewdok',$data);
     }
+    public function ubahperiode(){
+        $this->session->set_userdata('bl',$_POST['bl']);
+        $this->session->set_userdata('th',$_POST['th']);
+        echo 1;
+    }
     //End Controller
     public function mode()
     {
         $this->session->set_userdata('modetask', $_POST['id']);
         echo 1;
-    }
-    public function clear()
-    {
-        $this->session->unset_userdata('modetask');
-        $url = base_url() . 'task';
-        redirect($url);
     }
     public function validasipb($id)
     {

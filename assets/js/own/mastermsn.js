@@ -52,6 +52,24 @@ $("#cekdisposal").click(function () {
 		},
 	});
 });
+$("#simpanmesin").click(function () {
+	document.formkolom.submit();
+});
+$("#btnget").click(function () {
+	$("#dok").click();
+	$("#dok").change();
+});
+$("#dok").change(function () {
+	var name = document.getElementById("dok");
+	$("#namedok").val(name.files.item(0).name);
+	$("#btnupdate").addClass("disabled");
+	if ($("#namedok").val() != "") {
+		$("#btnupdate").removeClass("disabled");
+	}
+});
+$("#btnupdate").click(function () {
+	document.formdok.submit();
+});
 var loadFile = function (event) {
 	var output = document.getElementById("gbimage");
 	var isifile = event.target.files[0];

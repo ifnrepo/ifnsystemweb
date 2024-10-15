@@ -56,13 +56,27 @@ class Mastermsn extends CI_Controller {
         $header['header'] = 'master';
         $data['data'] = $this->mastermsnmodel->getdataby($id)->row_array();
         $data['actionfoto'] = base_url().'mastermsn/updatefoto';
+        $data['actionkolom'] = base_url().'mastermsn/updatemsn/'.$id;
+        $data['actiondok'] = base_url().'mastermsn/updatedok';
         $footer['fungsi'] = 'datamesin';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('mastermsn/editmsn',$data);
 		$this->load->view('layouts/footer',$footer);
     }
+    public function updatemsn($id){
+        $this->mastermsnmodel->updatemsn();
+        $url = base_url().'mastermsn/editmesin/'.$id;
+        redirect($url);
+    }
     public function updatefoto(){
         $this->mastermsnmodel->updatefoto();
+    }
+    public function updatedok(){
+        $this->mastermsnmodel->updatedok();
+    }
+    public function viewdok($id){
+        $data['data'] = $this->mastermsnmodel->getdataby($id)->row_array();
+        $this->load->view('mastermsn/viewdok',$data);
     }
     public function tambahdata(){
         $this->load->view('satuan/addsatuan');

@@ -52,6 +52,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <option value="<?= $artik['id_barang']; ?>" <?= $selek; ?>><?= $artik['nama_barang']; ?></option>
             <?php } ?>
           </select>
+          <label class="mb-0 font-kecil font-bold text-azure">Periode</label>
+          <div class="row">
+            <div class="col-8">
+               <select name="blperiode" id="blperiode" class="form-select font-kecil mt-0">
+                <option value="">Semua</option>
+                <?php for ($x = 1; $x <= 12; $x++) : ?>
+                  <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
+                <?php endfor; ?>
+              </select>
+            </div>
+            <div class="col-4">
+              <?php $thperiode = $this->session->userdata('th')!='' ? $this->session->userdata('th') : date('Y'); ?>
+              <select name="thperiode" id="thperiode" class="form-select font-kecil mt-0">
+                <option value="">Semua</option>
+                <?php foreach ($tahune->result_array() as $thn ) { ?>
+                  <option value="<?= $thn['thun']; ?>" <?php if ($this->session->userdata('th') == $thn['thun']) echo "selected"; ?>><?= $thn['thun']; ?></option>
+                <?php } ?>
+              </select>
+            </div>
+          </div>
+         
         </div>
         <div class="col-md-7 bg-cyan-lt">
           <div style="line-height: 10px !important">

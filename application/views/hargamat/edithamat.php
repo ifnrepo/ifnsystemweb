@@ -77,7 +77,7 @@
                     <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Harga</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'],8); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" id="price" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'],8); ?>">
                         </div>
                     </div>
                     <div class="col-6">
@@ -90,7 +90,7 @@
                 <div class="row">
                     <div class="mb-3">
                         <label class="form-label font-kecil mb-0 font-bold text-primary">Noted</label>
-                        <input type="text" class="form-control font-kecil" name="price" placeholder="Keterangan" value="<?= $data['remark']; ?>">
+                        <input type="text" class="form-control font-kecil" name="remark" placeholder="Keterangan" value="<?= $data['remark']; ?>">
                     </div>
                 </div>
                 <fieldset class="form-fieldset bg-primary-lt">

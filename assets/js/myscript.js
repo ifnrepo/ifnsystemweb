@@ -207,11 +207,17 @@ $(document).ready(function () {
 		scrollY: false,
 		pageLength: 50,
 		scrollY: 500,
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 	$(".datatable8").DataTable({
 		responsive: true,
 		pageLength: 50,
 		order: [[0, "desc"]],
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
+	});
+	$(".datatable9").DataTable({
+		pageLength: 50,
+		order: [[1, "asc"]],
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 	$("#modal-danger").on("show.bs.modal", function (e) {

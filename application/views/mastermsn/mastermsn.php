@@ -83,7 +83,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $res['lokasi']; ?></td>
                   <td><?= $res['nama_barang']; ?></td>
                   <td class="text-center">
-                    <?php if($res['is_asset']==0){ ?>
+                    <?php if($res['is_asset']==1){ ?>
                       <i class="fa fa-check text-success"></i>
                     <?php } ?>
                   </td>
