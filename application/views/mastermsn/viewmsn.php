@@ -230,6 +230,15 @@
                       </div>
                     </div>
                   </div>  
+                  <div class="mb-1 row">
+                    <label class="col-2 col-form-label font-kecil font-bold">Dokumen</label>
+                    <div class="col">
+                      <div class="input-group mb-2">
+                        <input type="text" class="form-control font-kecil disabled" value="<?= $data['filepdf']; ?>" placeholder="Nama Dokumen">
+                        <button class="btn font-kecil btn-primary" type="button">View Dok</button>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>

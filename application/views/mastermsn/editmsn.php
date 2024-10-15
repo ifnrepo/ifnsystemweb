@@ -185,12 +185,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </div>
               <div class="row">
                 <label class="col-3 col-form-label font-bold">Asset ?</label>
-                <div class="col mt-2">
-                  <label class="form-check form-switch">
-                    <?php $ceklis = $data['is_asset']=='1' ? 'checked' : ''; ?>
-                    <input class="form-check-input" type="checkbox" id="is_asset" name="is_asset" <?= $ceklis; ?>>
-                    <span class="form-check-label"></span>
-                  </label>
+                <div class="col">
+                  <div class="row">
+                    <div class="col-6 mt-2">
+                      <label class="form-check form-switch">
+                        <?php $ceklis = $data['is_asset']=='1' ? 'checked' : ''; ?>
+                        <input class="form-check-input" type="checkbox" id="is_asset" name="is_asset" <?= $ceklis; ?>>
+                        <span class="form-check-label"></span>
+                      </label>
+                    </div>
+                    <div class="col-6">
+                      <div class="mb-1 row">
+                        <label class="col-3 col-form-label font-bold">Klp Asset</label>
+                        <div class="col">
+                          <select class="form-control form-select font-kecil">
+                            <option value="">Pilih Klp Asset</option>
+                          </select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  
                 </div>
               </div>
               <div class="mb-1 row">
