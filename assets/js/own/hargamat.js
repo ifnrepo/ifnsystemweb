@@ -67,10 +67,30 @@ $(document).ready(function () {
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 
+	$("#blperiode, #thperiode").on("change", function () {
+		$.ajax({
+			dataType: "json",
+			type: "POST",
+			url: base_url + "hargamat/ubahperiode",
+			data: {
+				bl: $("#blperiode").val(),
+				th: $("#thperiode").val(),
+			},
+			success: function (data) {
+				table.ajax.reload();
+				// alert('berhasil');
+				// window.location.href = base_url + "bbl/databbl/" + $("#id_header").val();
+				// $("#butbatal").click();
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(thrownError);
+			},
+		});
+	});
 	$("#filter, #filterinv").on("change", function () {
 		table.ajax.reload();
 	});
-
 	$("#filter, #filterinv").on("change", function () {
 		var filter_kategori = $("#filter").val();
 		var filter_inv = $("#filterinv").val();

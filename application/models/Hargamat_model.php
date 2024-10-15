@@ -2,8 +2,8 @@
 class Hargamat_model extends CI_Model
 {
     var $column_search = array('nama_barang', 'nama_supplier', 'remark','nomor_bc','nobontr');
-    var $column_order = array(null, 'nama_barang', 'nama_supplier', 'remark');
-    var $order = array('nama_barang' => 'asc');
+    var $column_order = array(null, 'nama_barang', 'nama_supplier', 'remark','tgl');
+    var $order = array('tgl'=> 'asc');
     // var $table = 'barang';
     public function getdata($filter_kategori, $filter_inv)
     {
@@ -21,6 +21,12 @@ class Hargamat_model extends CI_Model
         }
         if ($filter_inv && $filter_inv != 'all') {
             $this->db->where('barang.id', $filter_inv);
+        }
+        if($this->session->userdata('bl')!=''){
+            $this->db->where('month(tgl)',$this->session->userdata('bl'));
+        }
+        if($this->session->userdata('th')!=''){
+            $this->db->where('year(tgl)',$this->session->userdata('th'));
         }
         $i = 0;
         foreach ($this->column_search as $item) {
@@ -73,6 +79,15 @@ class Hargamat_model extends CI_Model
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->group_by('tb_hargamaterial.id_barang');
         $this->db->order_by('barang.nama_barang', 'ASC');
+        return $this->db->get();
+    }
+
+    public function getdatatahun(){
+        $this->db->select('year(tgl) as thun');
+        $this->db->from('tb_hargamaterial');
+        $this->db->where('year(tgl) is not null');
+        $this->db->group_by('year(tgl)');
+        $this->db->order_by('year(tgl)', 'DESC');
         return $this->db->get();
     }
 
@@ -229,7 +244,7 @@ class Hargamat_model extends CI_Model
 		$this->load->library('upload');
 		$this->uploadConfig = array(
 			'upload_path' => LOK_UPLOAD_DOKHAMAT,
-			'allowed_types' => 'pdf',
+			'allowed_types' => 'pdf|PDF',
 			'max_size' => max_upload() * 1024,
 		);
 		// Adakah berkas yang disertakan?

@@ -126,7 +126,7 @@
                 <th>Satuan</th>
                 <th>Qty</th>
                 <th>Kgs</th>
-                <th>Keterangan</th>
+                <th>Info BC</th>
                 </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
