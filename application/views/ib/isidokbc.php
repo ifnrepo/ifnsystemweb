@@ -19,7 +19,12 @@
                 <div class="row">
                     <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
                     <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
-                    <div class="m-2 font-bold d-flex justify-content-between">Data HEADER BC <span><a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i>ResponH2H</a><a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> Host2Host</a><a href="<?= base_url().'ib'; ?>" class="btn btn-sm btn-primary"><i class="fa fa-arrow-left mr-1"></i> Kembali</a></span></div>
+                    <div class="m-2 font-bold d-flex justify-content-between">Data HEADER BC 
+                    <span>
+                        <?php $hilang = $datheader['send_ceisa']==0 ? "hilang" : ""; ?>
+                        <?php $hilang2 = $datheader['send_ceisa']==1 ? "hilang" : ""; ?>
+                        <a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="<?= base_url().'ib/kirimdatakeceisa/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a>
+                        <a href="<?= base_url().'ib'; ?>" class="btn btn-sm btn-primary"><i class="fa fa-arrow-left mr-1"></i> Kembali</a></span></div>
                     <input type="hidden" name="id_header" id="id_header" value="<?= $datheader['id']; ?>">
                     <input type="hidden" name="tgl" id="tgl" value="<?= $datheader['tgl']; ?>">
                     <hr class="m-0">
@@ -33,9 +38,10 @@
                     <div class="col-sm-6">
                         <div class="bg-teal-lt px-2 py-1 mt-1">
                             <div class="mb-1 mt-3 row">
+                                <?php $disab = $datheader['send_ceisa']==1 ? "disabled" : ""; ?>
                                 <label class="col-3 col-form-label font-kecil">Jenis DOK BC</label>
                                 <div class="col font-kecil">
-                                    <select class="form-select font-kecil font-bold" name="jns_bc" id="jns_bc">
+                                    <select class="form-select font-kecil font-bold" name="jns_bc" id="jns_bc" <?= $disab; ?>>
                                         <option value="">Pilih Jenis BC</option>
                                         <?php foreach ($bcmasuk->result_array() as $bcmas) { ?>
                                             <?php $selek = $datheader['jns_bc']==$bcmas['jns_bc'] ? 'selected' : ''; ?>
@@ -47,19 +53,23 @@
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label font-kecil">No/Tgl AJU</label>
                                 <div class="col">
-                                    <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="<?= $datheader['nomor_aju']; ?>" aria-describedby="emailHelp" placeholder="No AJU">
+                                    <div class="input-group mb-2">
+                                        <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="<?= $datheader['nomor_aju']; ?>"  placeholder="Nomor Aju" <?= $disab; ?>>
+                                        <a href="#" class="btn font-kecil font-bold <?= $disab; ?>" id="getnomoraju">Get</a>
+                                    </div>
+                                    <!-- <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="" aria-describedby="emailHelp" placeholder="No AJU"> -->
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control font-kecil tgl" id="tgl_aju" name="tgl_aju" value="<?= tglmysql($datheader['tgl_aju']); ?>" aria-describedby="emailHelp" placeholder="Tgl AJU">
+                                    <input type="text" class="form-control font-kecil tgl" id="tgl_aju" name="tgl_aju" value="<?= tglmysql($datheader['tgl_aju']); ?>" aria-describedby="emailHelp" placeholder="Tgl AJU" <?= $disab; ?>>
                                 </div>
                             </div>
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label font-kecil">No/Tgl BC</label>
-                                <div class="col">
-                                    <input type="text" class="form-control font-kecil" id="nomor_bc" name="nomor_bc" value="<?= $datheader['nomor_bc']; ?>" aria-describedby="emailHelp" placeholder="No BC">
+                                <div class="col"> 
+                                    <input type="text" class="form-control font-kecil" id="nomor_bc" name="nomor_bc" value="<?= $datheader['nomor_bc']; ?>" aria-describedby="emailHelp" placeholder="No BC" readonly>
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control font-kecil tgl" id="tgl_bc" name="tgl_bc" value="<?= tglmysql($datheader['tgl_bc']); ?>" aria-describedby="emailHelp" placeholder="Tgl BC">
+                                    <input type="text" class="form-control font-kecil" id="tgl_bc" name="tgl_bc" value="<?= tglmysql($datheader['tgl_bc']); ?>" aria-describedby="emailHelp" placeholder="Tgl BC" readonly>
                                 </div>
                             </div>
                         </div>
@@ -195,6 +205,7 @@
                                 <tr>
                                     <th>Nama Barang</th>
                                     <th>Kategori</th>
+                                    <th class="text-left">HS Code</th>
                                     <th>Satuan</th>
                                     <th>Pcs</th>
                                     <th>Kgs</th>
@@ -205,6 +216,7 @@
                                     <tr>
                                         <td><?= $data['nama_barang']; ?></td>
                                         <td><?= $data['nama_kategori']; ?></td>
+                                        <td class="text-left"><?= $data['nohs']; ?></td>
                                         <td><?= $data['namasatuan']; ?></td>
                                         <td><?= rupiah($data['pcs'],2); ?></td>
                                         <td><?= rupiah($data['kgs'],2); ?></td>

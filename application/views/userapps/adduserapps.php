@@ -389,7 +389,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi7" name="transaksi7" type="checkbox">
-                                <span class="form-check-label">AMK (AJU MASUK BARANG)</span>
+                                <span class="form-check-label">AMB (AJU MASUK BARANG)</span>
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi8" name="transaksi8" type="checkbox">

@@ -559,7 +559,7 @@
                       PO (Purchase Order)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 7); ?>" href="<?= base_url('ib/clear'); ?>">
-                      AMK (AJU Masuk Barang)
+                      AMB (AJU Masuk Barang)
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 8); ?>" href="<?= base_url('akb/clear'); ?>">
                       AKB (AJU Keluar Barang)

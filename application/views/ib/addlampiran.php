@@ -5,7 +5,7 @@
         <div class="col">
             <!-- <input type="text" class="form-control font-kecil" id="netto" name="netto" aria-describedby="emailHelp" placeholder="Netto Kgs"> -->
             <select class="form-select font-kecil font-bold" name="kode_dokumen" id="kode_dokumen">
-                <option value="">Pilih Kemasan</option>
+                <option value="">Pilih Dokumen</option>
                 <?php foreach ($lampiran->result_array() as $lampir) { ?>
                     <option value="<?= $lampir['kode']; ?>" <?php if($lampir['kode']==$datheader['kd_kemasan']){ echo "selected"; } ?>><?= $lampir['kode'].' # '.$lampir['nama_dokumen']; ?></option>
                 <?php } ?>

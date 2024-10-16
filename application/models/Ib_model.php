@@ -26,7 +26,7 @@ class Ib_model extends CI_Model
     }
     public function getdatadetailib($data)
     {
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
@@ -344,9 +344,10 @@ class Ib_model extends CI_Model
         return $this->db->order_by('kode')->get('ref_jns_dokumen');
     }
     public function getdatalampiran($id){
-        $this->db->select('*,lampiran.id as idx');
+        $this->db->select('lampiran.*,lampiran.id as idx,ref_jns_dokumen.nama_dokumen');
         $this->db->from('lampiran');
         $this->db->join('ref_jns_dokumen','ref_jns_dokumen.kode = lampiran.kode_dokumen','left');
+        $this->db->where('id_header',$id);
         return $this->db->get();
     }
     public function tambahlampiran($data){
@@ -366,6 +367,20 @@ class Ib_model extends CI_Model
     public function isitokenbc($data){
         $this->db->where('id',1);
         $this->db->update('token_bc',['token'=>$data]);
+    }
+    public function getnomoraju($jns){
+        $hass = $this->db->get_where('tb_ajuceisa',['jns_bc' => $jns])->row_array();
+        $this->helpermodel->isilog("Isi Nomor Aju Otomatis dengan Nomor ".$hass['nomor_aju']);
+        $urut = (int) $hass['nomor_aju'];
+        $urut++;
+        $isi = sprintf("%06s", $urut);
+        $this->db->where('jns_bc',$jns);
+        $this->db->update('tb_ajuceisa',['nomor_aju' => $isi]);
+        return $hass['nomor_aju'];
+    }
+    public function updatesendceisa($id){
+        $this->db->where('id',$id);
+        $this->db->update('tb_header',['send_ceisa' => 1]);
     }
     //End IB Models
     public function updatepo($data)

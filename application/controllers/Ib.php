@@ -579,14 +579,18 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        print_r($databalik['item']['access_token']);
+        // print_r($databalik);
         if($databalik['status']=='Success'){
             $this->ibmodel->isitokenbc($databalik['item']['access_token']);
             $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }else{
-            $url = base_url().'ib/kosong';
+            // $url = base_url().'ib/kosong';
+            // redirect($url);
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+            $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }
     }
@@ -616,14 +620,20 @@ class Ib extends CI_Controller
 
         $databalik = json_decode($result,true);
         print_r($databalik);
-        if($databalik['status']=='success'){
+        if($databalik['status']=='Success'){
+            if($databalik['dataStatus'][0]['nomorDaftar']!=''){
+
+            }else{
+                $this->session->set_flashdata('errorsimpan',1);
+                $this->session->set_flashdata('pesanerror','Nomor Pendaftaran Masih kosong, '.$databalik['dataStatus'][0]['keterangan']);
+            }
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }else{
             // echo '<script>alert("'.$databalik['status'].'");</script>';
             // $url = base_url().'ib/kosong';
             $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message']);
+            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }
@@ -655,7 +665,7 @@ class Ib extends CI_Controller
                 $html .= '<td>'.$que['tgl_dokumen'].'</td>';
                 $html .= '<td>'.$que['keterangan'].'</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -676,7 +686,7 @@ class Ib extends CI_Controller
             $html .= '<td>'.$que['tgl_dokumen'].'</td>';
             $html .= '<td>'.$que['keterangan'].'</td>';
             $html .= '<td>';
-            $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary">Hapus</a>';
+            $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
             $html .= '</td>';
             $html .= '</tr>';
         }
@@ -684,10 +694,19 @@ class Ib extends CI_Controller
         echo json_encode($cocok);
     }
     public function hapuslampiran($id,$ide){
-        $hasil = $this->ibmodel->hapuslampiran($id);
+        $data = [
+            'id' => $id,
+            'header' => $ide
+        ];
+        $this->load->view('ib/hapuslampiran',$data);
+    }
+    public function hapuslamp(){
+        $data = $_POST['id'];
+        $header = $_POST['head'];
+        $hasil = $this->ibmodel->hapuslampiran($data);
         if($hasil){
             $html = '';
-            $query = $this->ibmodel->getdatalampiran($ide);
+            $query = $this->ibmodel->getdatalampiran($header);
             $no = 1;
             foreach ($query->result_array() as $que) {
                 $html .= '<tr>';
@@ -698,7 +717,7 @@ class Ib extends CI_Controller
                 $html .= '<td>'.$que['tgl_dokumen'].'</td>';
                 $html .= '<td>'.$que['keterangan'].'</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" class="btn btn-sm btn-primary">Hapus</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -706,141 +725,201 @@ class Ib extends CI_Controller
             echo json_encode($cocok);
         }
     }
+    function kirimdatakeceisa($id){
+        $data = $this->ibmodel->getdatabyid($id);
+        $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
+        $arrayheader = [
+            "asalData" => "S",
+            "asuransi" => 0,
+            "bruto" => (float) $data['bruto'],
+            "cif" => 0,
+            "kodeJenisTpb" => "1",
+            "freight" => 0,
+            "hargaPenyerahan" => (float) $data['totalharga'],
+            "idPengguna" => "",
+            "jabatanTtd" => "MANAGER KEU. & AKT",
+            "jumlahKontainer" => 0,
+            "kodeDokumen" => $data['jns_bc'],
+            "kodeKantor" => "050500",
+            "kodeTujuanPengiriman" => "1",
+            "kotaTtd" => "BANDUNG",
+            "namaTtd" => "MIRA AMALIA WULAN",
+            "netto" => (float) $data['netto'],
+            "nik" => "",
+            "nomorAju" => $noaju,
+            "seri" => 1,
+            "tanggalAju" => $data['tgl_aju'],
+            "tanggalTtd" => $data['tgl_aju'],
+            "volume" => 0,
+            "biayaTambahan" => 0,
+            "biayaPengurang" => 0,
+            "vd" => 0,
+            "uangMuka" => 0,
+            "nilaiJasa" => 0,
+        ];
+        $arrayentitas = [];
+        for($ke=1;$ke<=3;$ke++){
+            $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT";
+            $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "7" : "9");
+            $nomoridentitas = $ke==1 ? "010017176057000" : (($ke==2) ? "010017176057000" : $data['npwp']);
+            $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
+            $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
+            $nibidentitas = $ke==1 ? "9120011042693" : "";
+            $arrayke = [
+                "seriEntitas" => $ke,
+                "alamatEntitas" => $alamat,
+                "kodeEntitas" => $kodeentitas,
+                "kodeJenisIdentitas" => "5",
+                "namaEntitas" => trim($namaidentitas),
+                "nibEntitas" => $nibidentitas,
+                "nomorIdentitas" => $nomoridentitas,
+            ];
+            if($ke>1){
+                $arrayke["kodeJenisApi"] = "2";
+            }
+            if($ke < 3){
+                $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
+                $arrayke["tanggalIjinEntitas"] = "2017-07-10";
+            }
+            array_push($arrayentitas,$arrayke);
+        }
+        $arraydokumen = [];
+        $dokmen = $this->ibmodel->getdatadokumen($id);
+        $no = 1;
+        foreach ($dokmen->result_array() as $doku) {
+            $arrayke = [
+                "kodeDokumen" => $doku['kode_dokumen'],
+                "nomorDokumen" => $doku['nomor_dokumen'],
+                "seriDokumen" => $no++,
+                "tanggalDokumen" => $doku['tgl_dokumen']
+            ];
+            array_push($arraydokumen,$arrayke);
+        }
+        $arrangkut = [];
+        $arrayangkutan = [
+            "namaPengangkut" => $data['angkutan'],
+            "nomorPengangkut" => $data['no_kendaraan'],
+            "seriPengangkut" => 1,
+        ];
+        array_push($arrangkut,$arrayangkutan);
+        $arrkemas = [];
+        $arraykemasan = [
+            "jumlahKemasan" => (int) $data['jml_kemasan'],
+            "kodeJenisKemasan" => $data['kd_kemasan'],
+            "merkKemasan" => "-",
+            "seriKemasan" => 1
+        ];
+        array_push($arrkemas,$arraykemasan);
+        $arraybarang = [];
+        $datadet = $this->ibmodel->getdatadetailib($id);
+        $no = 0;
+        $jumlahfasilitas = 0;
+        foreach ($datadet as $detx) {
+            $no++;
+            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
+            $arrayke = [
+                "seriBarang" => $no,
+                "asuransi" => 0,
+                "bruto" => 0,
+                "hargaPenyerahan" => (float) $detx['harga'],
+                "jumlahSatuan" => (int) $jumlah,
+                "kodeBarang" => $detx['brg_id'],
+                "kodeDokumen" => "40",
+                "kodeJenisKemasan" => $data['kd_kemasan'],
+                "kodeSatuanBarang" => $detx['kodesatuan'],
+                "merk" => "-",
+                "netto" => (float) $detx['kgs'],
+                "nilaiBarang" => 0,
+                "posTarif" => $detx['nohs'], //Nomor HS
+                "spesifikasiLain" => trim($detx['nama_barang']),
+                "tipe" => "-",
+                "ukuran" => "",
+                "uraian" => "",
+                "volume" => 0,
+                "jumlahKemasan" => (int) $data['jml_kemasan'],
+                "uraian" => trim($detx['nama_barang'])
+            ];
+            $arraytarif = [];
+            $barangtarif = [
+                "seriBarang" => $no,
+                "jumlahSatuan" => (int) $jumlah,
+                "kodeFasilitasTarif" => "3",
+                "kodeSatuanBarang" => $detx['kodesatuan'],
+                "nilaiBayar" => 0,
+                "nilaiFasilitas" => round($detx['harga']*0.11,0),
+                "nilaiSudahDilunasi" => 0,
+                "tarif" => 11,
+                "tarifFasilitas" => 100,
+                "kodeJenisPungutan" => "PPN",
+                "kodeJenisTarif" => "1"
+            ];
+            $jumlahfasilitas += $detx['harga']*0.11;
+            array_push($arraytarif,$barangtarif);
+            $arrayke['barangTarif'] = $arraytarif;
+            array_push($arraybarang,$arrayke);
+        }
+        $arraypungutan = [];
+        $pungutanarray = [
+            "kodeFasilitasTarif" => "3",
+            "kodeJenisPungutan" => "PPN",
+            "nilaiPungutan" => round($jumlahfasilitas,0)
+        ];
+        array_push($arraypungutan,$pungutanarray);
+
+        $arrayheader['entitas'] = $arrayentitas;
+        $arrayheader['dokumen'] = $arraydokumen;
+        $arrayheader['pengangkut'] = $arrangkut;
+        $arrayheader['kemasan'] = $arrkemas;
+        $arrayheader['barang'] = $arraybarang;
+        $arrayheader['pungutan'] = $arraypungutan;
+        // echo '<pre>'.json_encode($arrayheader)."</pre>";
+        $this->kirim40($arrayheader,$id);
+    }
+    public function kirim40($data,$id){
+        $curl = curl_init();
+        // $token = $consID;
+        $headers = array(
+            "Content-Type: application/json",
+            "Authorization: Bearer ".$this->session->userdata('datatokenbeacukai'),
+        );
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/document');
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        $databalik = json_decode($result,true);
+        // print_r($databalik);
+        if($databalik['status']=='OK'){
+            $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
+            $this->session->set_flashdata('errorsimpan',2);
+            $this->session->set_flashdata('pesanerror',$databalik['message']);
+            $this->ibmodel->updatesendceisa($id);
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }else{
+            // echo '<script>alert("'.$databalik['status'].'");</script>';
+            // $url = base_url().'ib/kosong';
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }
+    }
+
+    public function getnomoraju(){
+        $jns = $_POST['jns'];
+        $hasil = $this->ibmodel->getnomoraju($jns);
+        echo json_encode($hasil);
+    }
     //End IB Controller
     
-    public function updatepo()
-    {
-        $data = [
-            'tgl' => tglmysql($_POST['tgl']),
-            // 'keterangan' => $_POST['ket'],
-            'id' => $_POST['id']
-        ];
-        $simpan = $this->pomodel->updatepo($data);
-        echo $simpan;
-    }
-    public function getbarangpo()
-    {
-        $data['datadetail'] = $this->pomodel->getbarangpo();
-        $this->load->view('po/getbarangpo',$data);
-    }
-
-
-    public function getdata()
-    {
-        $this->session->set_userdata('deptsekarang', $_POST['dept_id']);
-        $this->session->set_userdata('tujusekarang', $_POST['dept_tuju']);
-        echo 1;
-    }
-    
-    
-
-
-
-    public function edittgl()
-    {
-        $this->load->view('po/edit_tgl');
-    }
-    public function getsupplierbyname()
-    {
-        $nama = $_POST['data'];
-        $hasil = '';
-        $query = $this->suppliermodel->getdatabyname($nama);
-        if ($query->num_rows() > 0) {
-            foreach ($query->result_array() as $data) {
-                $hasil .= "<tr>";
-                $hasil .= "<td class='text-primary'>" . $data['nama_supplier'] . "</td>";
-                $hasil .= "<td>" . substr($data['alamat'], 0, 35) . "</td>";
-                $hasil .= "<td><a href='#' class='btn btn-sm btn-success' rel='" . $data['id'] . "' id='pilihsupplier'>Pilih</a></td></tr>";
-            }
-        } else {
-            $hasil .= "<tr>";
-            $hasil .= '<td colspan="3" class="text-center">No Data / Cari dahulu data</td></tr>';
-        }
-        $cocok = array('datagroup' => $hasil);
-        echo json_encode($cocok);
-    }
-    public function editdetailout($id)
-    {
-        $data['data'] = $this->out_model->getdatadetailoutbyid($id);
-        $this->load->view('out/editdetailout', $data);
-    }
-    public function invoice($id)
-    {
-        $header['header'] = 'transaksi';
-        $data['header'] = $this->pomodel->getdatabyid($id);
-        $data['detail'] = $this->pomodel->getdatadetailpo($id);
-        $footer['fungsi'] = 'po';
-        $this->load->view('layouts/header', $header);
-        $this->load->view('po/invoice',$data);
-        $this->load->view('layouts/footer', $footer);
-    }
-    public function addnobontr($id, $idbarang)
-    {
-        $data['data'] = $this->out_model->getdatagm($idbarang);
-        $data['iddetail'] = $id;
-        $data['header'] = $this->out_model->getdatagm($idbarang)->row_array();
-        $this->load->view('out/addnobontr', $data);
-    }
-    public function editnobontr()
-    {
-        $data = [
-            'idstok' => $_POST['id'],
-            'nobontr' => $_POST['bon'],
-            'id' => $_POST['idd']
-        ];
-        $hasil = $this->out_model->editnobontr($data);
-        echo $hasil;
-    }
-    public function updatedetail()
-    {
-        $data = [
-            'id' => $_POST['id'],
-            'kgs' => $_POST['kgs'],
-            'pcs' => $_POST['pcs'],
-            'tempbbl' => $_POST['tempbbl']
-        ];
-        $query = $this->out_model->updatedetail($data);
-        echo $query;
-    }
-    public function updatesupplier(){
-        $data = [
-            'id' => $_POST['id'],
-            'id_supplier' => $_POST['rel']
-        ];
-        $hasil = $this->pomodel->updatesupplier($data);
-        echo $hasil;
-    }
-    
-
-    
-    public function hapuspo($id)
-    {
-        $query = $this->pomodel->hapuspo($id);
-        if ($query) {
-            $url = base_url() . 'po';
-            redirect($url);
-        }
-    }
-    
-    
-    public function resetdetail($id)
-    {
-        $query = $this->out_model->resetdetail($id);
-        if ($query) {
-            $url = base_url() . 'out/dataout/' . $id;
-            redirect($url);
-        }
-    }
-    public function simpanheaderout($id)
-    {
-        $query = $this->out_model->simpanheaderout($id);
-        if ($query) {
-            $url = base_url() . 'out';
-        } else {
-            $url = base_url() . 'out/dataout/' . $id;
-        }
-        redirect($url);
-    }
+  
     function cetakqr2($isi, $id)
     {
         $tempdir = "temp/";
