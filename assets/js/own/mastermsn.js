@@ -5,7 +5,7 @@ $(document).ready(function () {
 	// }
 });
 $("#lokasi").change(function () {
-	var cek = $("#cekdisposal").is(":checked");
+	var cek = $("#cekdisposal").is(":checked") ? 1 : 0;
 	if (cek) {
 		var x = 1;
 	} else {
@@ -29,7 +29,7 @@ $("#lokasi").change(function () {
 	});
 });
 $("#cekdisposal").click(function () {
-	var cek = $("#cekdisposal").is(":checked");
+	var cek = $("#cekdisposal").is(":checked") ? 1 : 0;
 	if (cek) {
 		var x = 1;
 	} else {
@@ -52,6 +52,8 @@ $("#cekdisposal").click(function () {
 		},
 	});
 });
+
+
 $("#simpanmesin").click(function () {
 	document.formkolom.submit();
 });
