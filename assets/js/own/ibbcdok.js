@@ -12,6 +12,29 @@ $(document).ready(function () {
 		// pesan("PESAN :", "error");
 		alert("PESAN : " + pesan);
 	}
+	if (errosimpan == 2) {
+		// pesan("PESAN :", "error");
+		alert("PESAN : " + pesan);
+	}
+});
+$("#getnomoraju").click(function () {
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "ib/getnomoraju",
+		data: {
+			jns: $("#jns_bc").val(),
+		},
+		success: function (data) {
+			alert(data);
+			$("#nomor_aju").val(data);
+			savedata("nomor_aju", data);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
 });
 $(".inputangka").on("change click keyup input paste", function (event) {
 	$(this).val(function (index, value) {

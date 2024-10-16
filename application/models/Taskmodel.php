@@ -105,7 +105,7 @@ class Taskmodel extends CI_Model
                     $this->db->where('ok_pc', 0);
                     // $this->db->where('bbl_pp', 1);
                     $this->db->where('ok_bb', 1);
-                    $this->db->where_in('dept_bbl',arrdep($this->session->userdata('hakdepartemen')));
+                    $this->db->where_in('dept_id',arrdep($this->session->userdata('hakdepartemen')));
                     break;
                 default:
                     $this->db->where('data_ok', 99);
