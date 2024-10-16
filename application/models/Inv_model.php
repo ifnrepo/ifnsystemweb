@@ -32,11 +32,11 @@ class inv_model extends CI_Model
                     $xcari3 = " AND if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) LIKE '%" . $this->session->userdata('katcari') . "%'";
                 }
             }
-            if($dpt == 'GS'){
+            if ($dpt == 'GS') {
                 $noeb1 = " '' as Nobontr";
                 $noeb2 = " '' as Nobontr";
                 $noeb3 = " '' as Nobontr";
-            }else{
+            } else {
                 $noeb1 = "stokdept.nobontr";
                 $noeb2 = "tb_detailgen.nobontr";
                 $noeb3 = "tb_detail.nobontr";
@@ -47,7 +47,7 @@ class inv_model extends CI_Model
             $tambah2 = ") pt GROUP BY po,item,dis,id_barang,nobontr,insno";
             $tambah2 .= $dpt == 'GS' ? '' : ",nobontr,insno";
             $hasil = $this->db->query($tambah1 . "SELECT 'SALDO' AS mode,'SA' AS kode_dok,stokdept.id,NULL AS id_header,stokdept.id_barang,stokdept.po,stokdept.item,
-                                        stokdept.dis, stokdept.insno,".$noeb1.",tb_hargamaterial.jns_bc,stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
+                                        stokdept.dis, stokdept.insno," . $noeb1 . ",tb_hargamaterial.jns_bc,stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
                                         barang.nama_barang,barang.kode,kategori.nama_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,
                                         satuan.kodesatuan,1 AS nome,if(stokdept.po!='',concat(stokdept.po,stokdept.item),barang.kode) AS idd,tb_po.spek,stokdept.id as idu,stokdept.user_verif,stokdept.tgl_verif
                                         FROM stokdept 
@@ -56,10 +56,10 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = stokdept.id_po
                                         LEFT JOIN tb_hargamaterial on tb_hargamaterial.id_barang = stokdept.id_barang and tb_hargamaterial.nobontr = stokdept.nobontr
-                                        WHERE periode = '" . $period . "' AND dept_id = '" . $dpt . "'" .$xinv. $xkat . $xcari . "
+                                        WHERE periode = '" . $period . "' AND dept_id = '" . $dpt . "'" . $xinv . $xkat . $xcari . "
                                         UNION ALL 
                                         SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detailgen.id,tb_detailgen.id_barang,tb_detailgen.po,
-                                        tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno,".$noeb2.",tb_hargamaterial.jns_bc,tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,
+                                        tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno," . $noeb2 . ",tb_hargamaterial.jns_bc,tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,
                                         0 AS pcs,0 AS pcsin,tb_detailgen.pcs AS pcsout,0 as kgs,0 as kgsin,tb_detailgen.kgs AS kgsout, satuan.kodesatuan,
                                         3 AS nome,if(tb_detailgen.po!='',concat(tb_detailgen.po,tb_detailgen.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif
                                         FROM tb_detailgen 
@@ -69,10 +69,10 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detailgen.id_po
                                         LEFT JOIN tb_hargamaterial on tb_hargamaterial.id_barang = tb_detailgen.id_barang and tb_hargamaterial.nobontr = tb_detailgen.nobontr
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " .$xinv. $xkat . $xcari2 . "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " . $xinv . $xkat . $xcari2 . "
                                         UNION ALL 
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
-                                        tb_detail.insno,".$noeb3.",tb_hargamaterial.jns_bc,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
+                                        tb_detail.insno," . $noeb3 . ",tb_hargamaterial.jns_bc,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,2 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif
                                         FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
@@ -81,10 +81,10 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
                                         LEFT JOIN tb_hargamaterial on tb_hargamaterial.id_barang = tb_detail.id_barang and tb_hargamaterial.nobontr = tb_detail.nobontr
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" .$xinv. $xkat . $xcari3 . "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . "
                                         UNION ALL 
                                         SELECT 'ADJ' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
-                                        tb_detail.insno,".$noeb3.",tb_hargamaterial.jns_bc,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
+                                        tb_detail.insno," . $noeb3 . ",tb_hargamaterial.jns_bc,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,kategori.nama_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,3 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif
                                         FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
@@ -93,7 +93,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
                                         LEFT JOIN tb_hargamaterial on tb_hargamaterial.id_barang = tb_detail.id_barang and tb_hargamaterial.nobontr = tb_detail.nobontr
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv.$xkat . $xcari3 . "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . "
                                         ORDER BY nama_barang,tgl,nome" . $tambah2);
             return $hasil;
         }
@@ -228,40 +228,44 @@ class inv_model extends CI_Model
         $hasil = $this->db->query("Select * from tb_po where concat(po,item,dis) = '" . $data . "' ")->row_array();
         return $hasil['spek'];
     }
-    public function verifikasidata($id){
+    public function verifikasidata($id)
+    {
         $kondisi = [
             'user_verif' => $this->session->userdata('id'),
             'tgl_verif' => date('Y-m-d H:i:s')
         ];
-        $this->db->where('id',$id);
-        $simpan = $this->db->update('stokdept',$kondisi);
-        if($simpan){
+        $this->db->where('id', $id);
+        $simpan = $this->db->update('stokdept', $kondisi);
+        if ($simpan) {
             $kode = $this->getdatasaldo($id);
-            $arraye = [substr(datauser($this->session->userdata('id'),'username'),0,9),date('Y-m-d H:i:s'),$kode['idu'],$kode['nama_barang']];
+            $arraye = [substr(datauser($this->session->userdata('id'), 'username'), 0, 9), date('Y-m-d H:i:s'), $kode['idu'], $kode['nama_barang']];
         }
         return $arraye;
     }
-    public function cancelverifikasidata($id){
+    public function cancelverifikasidata($id)
+    {
         $kondisi = [
             'user_verif' => 0,
             'tgl_verif' => null
         ];
-        $this->db->where('id',$id);
-        $simpan = $this->db->update('stokdept',$kondisi);
-        if($simpan){
+        $this->db->where('id', $id);
+        $simpan = $this->db->update('stokdept', $kondisi);
+        if ($simpan) {
             $kode = $this->getdatasaldo($id);
-            $arraye = [$kode['idu'],$kode['nama_barang']];
+            $arraye = [$kode['idu'], $kode['nama_barang']];
         }
         return $arraye;
     }
-    public function getdatasaldo($id){
+    public function getdatasaldo($id)
+    {
         $this->db->select('*,stokdept.id as idu');
         $this->db->from('stokdept');
-        $this->db->join('barang','barang.id = stokdept.id_barang','left');
-        $this->db->where('stokdept.id',$id);
+        $this->db->join('barang', 'barang.id = stokdept.id_barang', 'left');
+        $this->db->where('stokdept.id', $id);
         return $this->db->get()->row_array();
     }
-    public function getdatadok($kondisi){
-        return $this->db->get_where('tb_hargamaterial',$kondisi);
+    public function getdatadok($kondisi)
+    {
+        return $this->db->get_where('tb_hargamaterial', $kondisi);
     }
 }

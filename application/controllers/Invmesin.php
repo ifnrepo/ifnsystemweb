@@ -13,7 +13,7 @@ class Invmesin extends CI_Controller
             $url = base_url('Auth');
             redirect($url);
         }
-        $this->load->model('invmesin_model','invmesinmodel');
+        $this->load->model('invmesin_model', 'invmesinmodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('helper_model', 'helpermodel');
 
@@ -30,25 +30,28 @@ class Invmesin extends CI_Controller
         $footer['fungsi'] = 'invmesin';
         $this->load->view('layouts/header', $header);
         $this->load->view('invmesin/index', $data);
-        $this->load->view('layouts/footer',$footer);
+        $this->load->view('layouts/footer', $footer);
     }
-    public function clear(){
-        $this->session->set_userdata('th',date('Y'));
-        $this->session->set_userdata('bl',date('m'));
-        $this->session->unset_userdata('lokasimesin',date('Y'));
-        $url = base_url().'invmesin';
+    public function clear()
+    {
+        $this->session->set_userdata('th', date('Y'));
+        $this->session->set_userdata('bl', date('m'));
+        $this->session->unset_userdata('lokasimesin', date('Y'));
+        $url = base_url() . 'invmesin';
         redirect($url);
     }
-    public function ubahperiode(){
-        $this->session->set_userdata('th',$_POST['th']);
-        $this->session->set_userdata('bl',$_POST['bl']);
-        $this->session->set_userdata('lokasimesin',$_POST['lok']);
+    public function ubahperiode()
+    {
+        $this->session->set_userdata('th', $_POST['th']);
+        $this->session->set_userdata('bl', $_POST['bl']);
+        $this->session->set_userdata('lokasimesin', $_POST['lok']);
         echo 1;
     }
-    public function getdetail($id){
+    public function getdetail($id)
+    {
         $data['header'] = $this->invmesinmodel->getdatabyid($id)->row_array();
         $data['detail'] = $this->invmesinmodel->getdatadetail($id);
-        $this->load->view('invmesin/viewdetail',$data);
+        $this->load->view('invmesin/viewdetail', $data);
     }
 
     public function excel()
@@ -73,14 +76,24 @@ class Invmesin extends CI_Controller
         $sheet->setCellValue('K2', "OPNAME");
         $sheet->setCellValue('L2', "KETERANGAN");
         // Panggil model Get Data   
-        $dept = $this->invmesinmodel->getdata();
+
+        $bl = $this->input->get('blperiode');
+        $th = $this->input->get('thperiode');
+        $lokasi = $this->input->get('lokasimesin');
+        if (!is_numeric($bl) || $bl < 1 || $bl > 12) {
+            $bl = null;
+        }
+        if (!is_numeric($th) || $th < 2020 || $th > date('Y')) {
+            $th = null;
+        }
+        $master = $this->invmesinmodel->getdata_export($bl, $th, $lokasi);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 3;
 
         // Set baris pertama untuk isi tabel adalah baris ke 3    
-        foreach ($dept->result_array() as $data) {
+        foreach ($master as $data) {
             // $oth = cekoth($data['pb'], $data['bbl'], $data['adj']);
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
@@ -92,7 +105,7 @@ class Invmesin extends CI_Controller
             $sheet->setCellValue('G' . $numrow, $data['ini']);
             $sheet->setCellValue('H' . $numrow, $data['outi']);
             $sheet->setCellValue('I' . $numrow, $data['adji']);
-            $sheet->setCellValue('J' . $numrow, $data['sawi']+$data['ini']-$data['outi']);
+            $sheet->setCellValue('J' . $numrow, $data['sawi'] + $data['ini'] - $data['outi']);
             $sheet->setCellValue('K' . $numrow, 0);
             $sheet->setCellValue('L' . $numrow, 'Sesuai');
             $no++;
@@ -116,9 +129,9 @@ class Invmesin extends CI_Controller
         $writer->save('php://output');
         $this->helpermodel->isilog('Download Excel DATA MESIN/ASSET');
     }
-    public function cetakpdf()
+    public function pdf()
     {
-        $pdf = new PDF('P', 'mm', 'A4');
+        $pdf = new PDF('L', 'mm', 'A4');
         $pdf->AliasNbPages();
         // $pdf->setMargins(5,5,5);
         $pdf->AddFont('Lato', '', 'Lato-Regular.php');
@@ -128,26 +141,47 @@ class Invmesin extends CI_Controller
         // $isi = $this->jualmodel->getrekap();
         $pdf->SetFillColor(205, 205, 205);
         $pdf->AddPage();
-        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 155, 5, 55);
-        $pdf->Cell(30, 18, 'DATA DEPARTEMEN');
+        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 0, 5, 55);
+        $pdf->Cell(30, 18, 'DATA ASET MESIN');
         $pdf->ln(12);
         $pdf->SetFont('Latob', '', 10);
         $pdf->Cell(10, 8, 'No', 1, 0, 'C');
-        $pdf->Cell(20, 8, 'KODE', 1, 0, 'C');
-        $pdf->Cell(55, 8, 'NAMA DEPARTEMEN', 1, 0, 'C');
-        $pdf->Cell(55, 8, 'KATEGORI', 1, 0, 'C');
-        $pdf->Cell(55, 8, 'OTHER', 1, 0, 'C');
+        $pdf->Cell(23, 8, 'KODE', 1, 0, 'C');
+        $pdf->Cell(110, 8, 'NAMA MESIN', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'UNIT', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'SAW', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'IN', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'OUT', 1, 0, 'C');
+        $pdf->Cell(15, 8, 'ADJ', 1, 0, 'C');
+        $pdf->Cell(25, 8, 'SALDO', 1, 0, 'C');
+        $pdf->Cell(25, 8, 'KETERANGAN', 1, 0, 'C');
         $pdf->SetFont('Lato', '', 10);
         $pdf->ln(8);
-        $detail = $this->dept_model->getdata();
+        $bl = $this->input->get('blperiode');
+        $th = $this->input->get('thperiode');
+        $lokasi = $this->input->get('lokasimesin');
+        if (!is_numeric($bl) || $bl < 1 || $bl > 12) {
+            $bl = null;
+        }
+        if (!is_numeric($th) || $th < 2020 || $th > date('Y')) {
+            $th = null;
+        }
+        $master = $this->invmesinmodel->getdata_export($bl, $th, $lokasi);
         $no = 1;
-        foreach ($detail as $det) {
-            $oth = cekoth($det['pb'], $det['bbl'], $det['adj']);
+        foreach ($master as $det) {
             $pdf->Cell(10, 6, $no++, 1, 0, 'C');
-            $pdf->Cell(20, 6, $det['dept_id'], 1);
-            $pdf->Cell(55, 6, $det['departemen'], 1);
-            $pdf->Cell(55, 6, strtoupper($det['nama']), 1);
-            $pdf->Cell(55, 6, $oth, 1);
+            $pdf->Cell(23, 6, $det['kode_fix'], 1);
+            $pdf->Cell(110, 6, $det['nama_barang'], 1);
+            $pdf->Cell(15, 6, $det['kodesatuan'], 1);
+            $pdf->Cell(15, 6, $det['sawi'], 1);
+            $pdf->Cell(15, 6, $det['ini'], 1);
+            $pdf->Cell(15, 6, $det['outi'], 1);
+            $pdf->Cell(15, 6, $det['adji'], 1);
+            $pdf->Cell(25, 6, $det['sawi'] + $det['ini'] - $det['outi'], 1);
+
+            $pdf->Cell(25, 6, 'Sesuai', 1);
+
+
             $pdf->ln(6);
         }
         $pdf->SetFont('Lato', '', 8);

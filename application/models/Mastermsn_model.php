@@ -1,41 +1,46 @@
-<?php 
-class mastermsn_model extends CI_Model{
-    public function getdata(){
-        $this->db->select('*,tb_mesin.id as idx');
-        $this->db->from('tb_mesin');
-        $this->db->join('barang','barang.id=tb_mesin.id_barang','left');
-        if($this->session->userdata('lokasimesin')!=''){
-            $this->db->where('lokasi',$this->session->userdata('lokasimesin'));
-        }
-        if($this->session->userdata('disposalmesin')!=0){
-            $this->db->where('ok_disp',$this->session->userdata('disposalmesin'));
-        }
-        $query = $this->db->order_by('kode')->get();
-        return $query;
-    }
-    public function getdatalokasi(){
-        $this->db->select('lokasi');
-        $this->db->from('tb_mesin');
-        $query = $this->db->group_by('lokasi')->order_by('lokasi')->get();
-        return $query;
-    }
-    public function getdatabyid($id){
-        $this->db->select('*,tb_mesin.id as idx');
-        $this->db->from('tb_mesin');
-        $this->db->join('barang','barang.id=tb_mesin.id_barang','left');
-        $this->db->where('tb_mesin.kode_fix',$id);
-        $query = $this->db->order_by('kode')->get();
-        return $query;
-    }
-    public function getdataby($id){
-        $this->db->select('*,tb_mesin.id as idx');
-        $this->db->from('tb_mesin');
-        $this->db->join('barang','barang.id=tb_mesin.id_barang','left');
-        $this->db->where('tb_mesin.id',$id);
-        $query = $this->db->order_by('kode')->get();
-        return $query;
-    }
-    public function updatefoto()
+<?php
+class mastermsn_model extends CI_Model
+{
+	public function getdata()
+	{
+		$this->db->select('*,tb_mesin.id as idx');
+		$this->db->from('tb_mesin');
+		$this->db->join('barang', 'barang.id=tb_mesin.id_barang', 'left');
+		if ($this->session->userdata('lokasimesin') != '') {
+			$this->db->where('lokasi', $this->session->userdata('lokasimesin'));
+		}
+		if ($this->session->userdata('disposalmesin') != 0) {
+			$this->db->where('ok_disp', $this->session->userdata('disposalmesin'));
+		}
+		$query = $this->db->order_by('kode')->get();
+		return $query;
+	}
+	public function getdatalokasi()
+	{
+		$this->db->select('lokasi');
+		$this->db->from('tb_mesin');
+		$query = $this->db->group_by('lokasi')->order_by('lokasi')->get();
+		return $query;
+	}
+	public function getdatabyid($id)
+	{
+		$this->db->select('*,tb_mesin.id as idx');
+		$this->db->from('tb_mesin');
+		$this->db->join('barang', 'barang.id=tb_mesin.id_barang', 'left');
+		$this->db->where('tb_mesin.kode_fix', $id);
+		$query = $this->db->order_by('kode')->get();
+		return $query;
+	}
+	public function getdataby($id)
+	{
+		$this->db->select('*,tb_mesin.id as idx');
+		$this->db->from('tb_mesin');
+		$this->db->join('barang', 'barang.id=tb_mesin.id_barang', 'left');
+		$this->db->where('tb_mesin.id', $id);
+		$query = $this->db->order_by('kode')->get();
+		return $query;
+	}
+	public function updatefoto()
 	{
 		$data = $_POST;
 		$temp = $this->getdataby($data['id'])->row_array();
@@ -58,10 +63,10 @@ class mastermsn_model extends CI_Model{
 		} else {
 			$this->session->set_flashdata('ketlain', 'Error Upload Foto Profile ' . $temp['noinduk'] . ' ');
 		}
-		$url = base_url() . 'mastermsn/editmesin/'.$data['id'];
+		$url = base_url() . 'mastermsn/editmesin/' . $data['id'];
 		redirect($url);
 	}
-    public function updatedok()
+	public function updatedok()
 	{
 		$data = $_POST;
 		$temp = $this->getdataby($data['id_mesin'])->row_array();
@@ -84,28 +89,29 @@ class mastermsn_model extends CI_Model{
 		} else {
 			$this->session->set_flashdata('ketlain', 'Error Upload Foto Profile ' . $temp['id'] . ' ');
 		}
-		$url = base_url() . 'mastermsn/editmesin/'.$id;
+		$url = base_url() . 'mastermsn/editmesin/' . $id;
 		redirect($url);
 	}
-    public function updatemsn(){
-        $data = $_POST;
-        $data['tglmasuk'] = tglmysql($data['tglmasuk']);
-        $data['tgl_bc'] = tglmysql($data['tgl_bc']);
-        $data['nomor_bc'] = isikurangnol($data['nomor_bc']);
-        $data['berat'] = toAngka($data['berat']);
-        $data['kurs'] = toAngka($data['kurs']);
-        $data['harga'] = toAngka($data['harga']);
-        $data['landing'] = toAngka($data['landing']);
+	public function updatemsn()
+	{
+		$data = $_POST;
+		$data['tglmasuk'] = tglmysql($data['tglmasuk']);
+		$data['tgl_bc'] = tglmysql($data['tgl_bc']);
+		$data['nomor_bc'] = isikurangnol($data['nomor_bc']);
+		$data['berat'] = toAngka($data['berat']);
+		$data['kurs'] = toAngka($data['kurs']);
+		$data['harga'] = toAngka($data['harga']);
+		$data['landing'] = toAngka($data['landing']);
 		$data['is_asset'] = isset($_POST['is_asset']);
-		if($data['mt_uang']=='IDR'){
+		if ($data['mt_uang'] == 'IDR') {
 			$data['kurs'] = 1;
 		}
 		$data['id'] = $data['idu'];
 		unset($data['idu']);
-        $this->db->where('id',$data['id']);
-        return $this->db->update('tb_mesin',$data);
-    }
-    public function uploadLogo()
+		$this->db->where('id', $data['id']);
+		return $this->db->update('tb_mesin', $data);
+	}
+	public function uploadLogo()
 	{
 		$this->load->library('upload');
 		$this->uploadConfig = array(
@@ -137,7 +143,7 @@ class mastermsn_model extends CI_Model{
 		}
 		return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
 	}
-    public function uploaddok()
+	public function uploaddok()
 	{
 		$this->load->library('upload');
 		$this->uploadConfig = array(
@@ -169,18 +175,35 @@ class mastermsn_model extends CI_Model{
 		}
 		return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
 	}
-    public function simpansatuan($data){
-        $query = $this->db->insert('satuan',$data);
-        return $query;
-    }
-    public function updatesatuan($data){
-        $this->db->where('id',$data['id']);
-        $query = $this->db->update('satuan',$data);
-        return $query;
-    }
-    public function hapussatuan($id){
-        $this->db->where('id',$id);
-        $query = $this->db->delete('satuan');
-        return $query;
-    }
+	public function simpansatuan($data)
+	{
+		$query = $this->db->insert('satuan', $data);
+		return $query;
+	}
+	public function updatesatuan($data)
+	{
+		$this->db->where('id', $data['id']);
+		$query = $this->db->update('satuan', $data);
+		return $query;
+	}
+	public function hapussatuan($id)
+	{
+		$this->db->where('id', $id);
+		$query = $this->db->delete('satuan');
+		return $query;
+	}
+
+	public function getdata_export($lokasi, $cekdisposal)
+	{
+		$this->db->select('*,tb_mesin.id as idx');
+		$this->db->from('tb_mesin');
+		$this->db->join('barang', 'barang.id=tb_mesin.id_barang', 'left');
+		if ($lokasi != '') {
+			$this->db->where('lokasi', $lokasi);
+		}
+		if ($cekdisposal == 1) {
+			$this->db->where('disposal', 1);
+		}
+		return $this->db->get()->result_array();
+	}
 }

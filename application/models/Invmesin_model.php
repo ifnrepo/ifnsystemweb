@@ -5,90 +5,93 @@ class Invmesin_model extends CI_Model
     {
         $tahun = $this->session->userdata('th');
         $bulan = $this->session->userdata('bl');
-        if($bulan==''){
+        if ($bulan == '') {
             $periode = $tahun;
-            $loka = $this->session->userdata('lokasimesin') != '' ? ' AND lokasi = "'.trim($this->session->userdata('lokasimesin')).'"' : '';
+            $loka = $this->session->userdata('lokasimesin') != '' ? ' AND lokasi = "' . trim($this->session->userdata('lokasimesin')) . '"' : '';
             $hasil = $this->db->query("SELECT *,sum(mesinsaw) as sawi,sum(mesinin) as ini,sum(mesinout) as outi,sum(mesinadj) as adji FROM (
             SELECT tb_mesin.*,satuan.kodesatuan,barang.nama_barang,1 AS mesinsaw,0 AS mesinout,0 as mesinin,0 AS mesinadj
             FROM tb_mesin 
             LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
             LEFT JOIN satuan ON satuan.id = barang.id_satuan
-            WHERE YEAR(tglmasuk) < '".$periode."' AND (YEAR(tgl_disp) IS NULL OR YEAR(tgl_disp) >= '".$periode."')".$loka."
+            WHERE YEAR(tglmasuk) < '" . $periode . "' AND (YEAR(tgl_disp) IS NULL OR YEAR(tgl_disp) >= '" . $periode . "')" . $loka . "
             UNION ALL 
             SELECT tb_mesin.*,satuan.kodesatuan,barang.nama_barang,0 AS mesinsaw,1 AS mesinout,0 as mesinin,0 AS mesinadj
             FROM tb_mesin 
             LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
             LEFT JOIN satuan ON satuan.id = barang.id_satuan
-            WHERE YEAR(tgl_disp) = '".$periode."'".$loka."
+            WHERE YEAR(tgl_disp) = '" . $periode . "'" . $loka . "
             UNION ALL 
             SELECT tb_mesin.*,satuan.kodesatuan,barang.nama_barang,0 AS mesinsaw,0 AS mesinout,1 AS mesinin,0 AS mesinadj
             FROM tb_mesin 
             LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
             LEFT JOIN satuan ON satuan.id = barang.id_satuan
-            WHERE YEAR(tglmasuk) = '".$periode."'".$loka."
+            WHERE YEAR(tglmasuk) = '" . $periode . "'" . $loka . "
             ) pt GROUP BY id_barang ORDER BY kode_fix");
-        }else{
-            $periode = $tahun.'-'.$bulan.'-01';
-            $loka = $this->session->userdata('lokasimesin') != '' ? ' AND lokasi = "'.trim($this->session->userdata('lokasimesin')).'"' : '';
+        } else {
+            $periode = $tahun . '-' . $bulan . '-01';
+            $loka = $this->session->userdata('lokasimesin') != '' ? ' AND lokasi = "' . trim($this->session->userdata('lokasimesin')) . '"' : '';
             $hasil = $this->db->query("SELECT *,sum(mesinsaw) as sawi,sum(mesinin) as ini,sum(mesinout) as outi,sum(mesinadj) as adji FROM (
             SELECT tb_mesin.*,satuan.kodesatuan,barang.nama_barang,1 AS mesinsaw,0 AS mesinout,0 as mesinin,0 AS mesinadj
             FROM tb_mesin 
             LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
             LEFT JOIN satuan ON satuan.id = barang.id_satuan
-            WHERE tglmasuk < '".$periode."' AND (tgl_disp IS NULL OR tgl_disp >= '".$periode."')".$loka."
+            WHERE tglmasuk < '" . $periode . "' AND (tgl_disp IS NULL OR tgl_disp >= '" . $periode . "')" . $loka . "
             UNION ALL 
             SELECT tb_mesin.*,satuan.kodesatuan,barang.nama_barang,0 AS mesinsaw,1 AS mesinout,0 as mesinin,0 AS mesinadj
             FROM tb_mesin 
             LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
             LEFT JOIN satuan ON satuan.id = barang.id_satuan
-            WHERE month(tgl_disp) = '".$this->session->userdata('bl')."' AND year(tgl_disp) = '".$this->session->userdata('th')."' ".$loka."
+            WHERE month(tgl_disp) = '" . $this->session->userdata('bl') . "' AND year(tgl_disp) = '" . $this->session->userdata('th') . "' " . $loka . "
             UNION ALL 
             SELECT tb_mesin.*,satuan.kodesatuan,barang.nama_barang,0 AS mesinsaw,0 AS mesinout,1 AS mesinin,0 AS mesinadj
             FROM tb_mesin 
             LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
             LEFT JOIN satuan ON satuan.id = barang.id_satuan
-            WHERE month(tglmasuk) = '".$this->session->userdata('bl')."' AND year(tglmasuk) = '".$this->session->userdata('th')."' ".$loka."
+            WHERE month(tglmasuk) = '" . $this->session->userdata('bl') . "' AND year(tglmasuk) = '" . $this->session->userdata('th') . "' " . $loka . "
             ) pt GROUP BY id_barang ORDER BY kode_fix");
         }
         return $hasil;
     }
-    public function getdatadetail($id){
+    public function getdatadetail($id)
+    {
         $tahun = $this->session->userdata('th');
-        $loka = $this->session->userdata('lokasimesin') != '' ? ' AND lokasi = "'.trim($this->session->userdata('lokasimesin')).'"' : '';
-        $hasil = $this->db->query("SELECT '".$tahun."-01-01' as tgl,'SALDO AWAL' as asal,tb_mesin.*,satuan.kodesatuan,barang.nama_barang,kategori.nama_kategori,1 AS mesinsaw,0 AS mesinout,0 as mesinin,0 AS mesinadj
+        $loka = $this->session->userdata('lokasimesin') != '' ? ' AND lokasi = "' . trim($this->session->userdata('lokasimesin')) . '"' : '';
+        $hasil = $this->db->query("SELECT '" . $tahun . "-01-01' as tgl,'SALDO AWAL' as asal,tb_mesin.*,satuan.kodesatuan,barang.nama_barang,kategori.nama_kategori,1 AS mesinsaw,0 AS mesinout,0 as mesinin,0 AS mesinadj
         FROM tb_mesin 
         LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
         LEFT JOIN satuan ON satuan.id = barang.id_satuan
         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
-        WHERE YEAR(tglmasuk) < ".$tahun." AND (YEAR(tgl_disp) IS NULL OR YEAR(tgl_disp) >= ".$tahun.")".$loka." AND tb_mesin.id = ".$id."
+        WHERE YEAR(tglmasuk) < " . $tahun . " AND (YEAR(tgl_disp) IS NULL OR YEAR(tgl_disp) >= " . $tahun . ")" . $loka . " AND tb_mesin.id = " . $id . "
         UNION ALL 
         SELECT tgl_disp as tgl,'DISPOSAL' as asal,tb_mesin.*,satuan.kodesatuan,barang.nama_barang,kategori.nama_kategori,0 AS mesinsaw,1 AS mesinout,0 as mesinin,0 AS mesinadj
         FROM tb_mesin 
         LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
         LEFT JOIN satuan ON satuan.id = barang.id_satuan
         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
-        WHERE YEAR(tgl_disp) = ".$tahun.$loka." AND tb_mesin.id = ".$id."
+        WHERE YEAR(tgl_disp) = " . $tahun . $loka . " AND tb_mesin.id = " . $id . "
         UNION ALL 
         SELECT tglmasuk as tgl,nomor_bc as asal,tb_mesin.*,satuan.kodesatuan,barang.nama_barang,kategori.nama_kategori,0 AS mesinsaw,0 AS mesinout,1 AS mesinin,0 AS mesinadj
         FROM tb_mesin 
         LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
         LEFT JOIN satuan ON satuan.id = barang.id_satuan
         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
-        WHERE YEAR(tglmasuk) = ".$tahun.$loka." AND tb_mesin.id = ".$id);
+        WHERE YEAR(tglmasuk) = " . $tahun . $loka . " AND tb_mesin.id = " . $id);
         return $hasil;
     }
-    public function getdatalokasi(){
+    public function getdatalokasi()
+    {
         $this->db->select('lokasi');
         $this->db->from('tb_mesin');
         $query = $this->db->group_by('lokasi')->order_by('lokasi')->get();
         return $query;
     }
-    public function getdatabyid($id){
+    public function getdatabyid($id)
+    {
         $this->db->select('tb_mesin.*,barang.nama_barang,kategori.nama_kategori');
         $this->db->from('tb_mesin');
-        $this->db->join('barang','barang.id = tb_mesin.id_barang','left');
-        $this->db->join('kategori','kategori.kategori_id = barang.id_kategori','left');
-        $this->db->where('tb_mesin.id',$id);
+        $this->db->join('barang', 'barang.id = tb_mesin.id_barang', 'left');
+        $this->db->join('kategori', 'kategori.kategori_id = barang.id_kategori', 'left');
+        $this->db->where('tb_mesin.id', $id);
         return $this->db->get();
     }
     public function jmldept()
@@ -199,36 +202,102 @@ class Invmesin_model extends CI_Model
         $this->db->from('dept');
         $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
         $this->db->where_in('dept.dept_id', $arrdep);
-        $this->db->where('dept.pb','1');
+        $this->db->where('dept.pb', '1');
         $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
-    public function getdata_dept_bbl($mode=0)
+    public function getdata_dept_bbl($mode = 0)
     {
-        if($mode==1){
+        if ($mode == 1) {
             $this->db->select('dept_id');
-        }else{
+        } else {
             $this->db->select('*');
         }
         $this->db->from('dept');
         $this->db->where('bbl', '1');
-        return $this->db->order_by('departemen','ASC')->get()->result_array();
+        return $this->db->order_by('departemen', 'ASC')->get()->result_array();
     }
     public function getdata_dept_pb()
     {
         $this->db->select('*');
         $this->db->from('dept');
         $this->db->where('pb', '1');
-        return $this->db->order_by('departemen','ASC')->get()->result_array();
+        return $this->db->order_by('departemen', 'ASC')->get()->result_array();
     }
-    public function getdata_dept_adj($dept='')
+    public function getdata_dept_adj($dept = '')
     {
         $this->db->select('*');
         $this->db->from('dept');
         $this->db->where('adj', '1');
-        if($dept != ''){
-            $this->db->where_in('dept_id',$dept);
+        if ($dept != '') {
+            $this->db->where_in('dept_id', $dept);
         }
-        return $this->db->order_by('departemen','ASC')->get()->result_array();
+        return $this->db->order_by('departemen', 'ASC')->get()->result_array();
+    }
+
+    public function getdata_export($bl, $th, $lokasi)
+    {
+        $tahun = $this->session->userdata('th');
+        $bulan = $this->session->userdata('bl');
+
+        // Mengatur lokasi
+        $loka = $this->session->userdata('lokasimesin') != '' ? ' AND lokasi = "' . trim($this->session->userdata('lokasimesin')) . '"' : '';
+
+        if (empty($bulan)) {
+            $periode = $tahun;
+            // Query untuk semua lokasi
+            $query = "SELECT *, SUM(mesinsaw) as sawi, SUM(mesinin) as ini, SUM(mesinout) as outi, SUM(mesinadj) as adji FROM (
+                        SELECT tb_mesin.*, satuan.kodesatuan, barang.nama_barang, 1 AS mesinsaw, 0 AS mesinout, 0 AS mesinin, 0 AS mesinadj
+                        FROM tb_mesin 
+                        LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
+                        LEFT JOIN satuan ON satuan.id = barang.id_satuan
+                        WHERE YEAR(tglmasuk) < '$periode' AND (YEAR(tgl_disp) IS NULL OR YEAR(tgl_disp) >= '$periode') $loka
+                        
+                        UNION ALL 
+                        
+                        SELECT tb_mesin.*, satuan.kodesatuan, barang.nama_barang, 0 AS mesinsaw, 1 AS mesinout, 0 AS mesinin, 0 AS mesinadj
+                        FROM tb_mesin 
+                        LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
+                        LEFT JOIN satuan ON satuan.id = barang.id_satuan
+                        WHERE YEAR(tgl_disp) = '$periode' $loka
+                        
+                        UNION ALL 
+                        
+                        SELECT tb_mesin.*, satuan.kodesatuan, barang.nama_barang, 0 AS mesinsaw, 0 AS mesinout, 1 AS mesinin, 0 AS mesinadj
+                        FROM tb_mesin 
+                        LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
+                        LEFT JOIN satuan ON satuan.id = barang.id_satuan
+                        WHERE YEAR(tglmasuk) = '$periode' $loka
+                    ) pt GROUP BY id_barang ORDER BY kode_fix";
+        } else {
+            $periode = "$tahun-$bulan-01";
+            $query = "SELECT *, SUM(mesinsaw) as sawi, SUM(mesinin) as ini, SUM(mesinout) as outi, SUM(mesinadj) as adji FROM (
+                        SELECT tb_mesin.*, satuan.kodesatuan, barang.nama_barang, 1 AS mesinsaw, 0 AS mesinout, 0 AS mesinin, 0 AS mesinadj
+                        FROM tb_mesin 
+                        LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
+                        LEFT JOIN satuan ON satuan.id = barang.id_satuan
+                        WHERE tglmasuk < '$periode' AND (tgl_disp IS NULL OR tgl_disp >= '$periode') $loka
+                        
+                        UNION ALL 
+                        
+                        SELECT tb_mesin.*, satuan.kodesatuan, barang.nama_barang, 0 AS mesinsaw, 1 AS mesinout, 0 AS mesinin, 0 AS mesinadj
+                        FROM tb_mesin 
+                        LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
+                        LEFT JOIN satuan ON satuan.id = barang.id_satuan
+                        WHERE MONTH(tgl_disp) = '{$this->session->userdata('bl')}' AND YEAR(tgl_disp) = '{$this->session->userdata('th')}' $loka
+                        
+                        UNION ALL 
+                        
+                        SELECT tb_mesin.*, satuan.kodesatuan, barang.nama_barang, 0 AS mesinsaw, 0 AS mesinout, 1 AS mesinin, 0 AS mesinadj
+                        FROM tb_mesin 
+                        LEFT JOIN barang ON tb_mesin.id_barang = barang.id 
+                        LEFT JOIN satuan ON satuan.id = barang.id_satuan
+                        WHERE MONTH(tglmasuk) = '{$this->session->userdata('bl')}' AND YEAR(tglmasuk) = '{$this->session->userdata('th')}' $loka
+                    ) pt GROUP BY id_barang ORDER BY kode_fix";
+        }
+
+        // Eksekusi query
+        $hasil = $this->db->query($query);
+        return $hasil->result_array();
     }
 }
