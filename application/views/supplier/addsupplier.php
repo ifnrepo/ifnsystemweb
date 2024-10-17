@@ -44,8 +44,6 @@
                     <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" placeholder="propinsi">
                 </div>
             </div>
-        </div>
-        <div class="col-6">
 
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kode Pos</label>
@@ -53,18 +51,23 @@
                     <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" placeholder="kodepos">
                 </div>
             </div>
+
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Npwp</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="Npwp">
                 </div>
             </div>
+
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Telp</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" name="telp" id="telp" placeholder="Telp">
                 </div>
             </div>
+        </div>
+        <div class="col-6">
+
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Email</label>
                 <div class="col">
@@ -89,6 +92,49 @@
                     <textarea class="form-control font-kecil" name="keterangan" rows="3" id="keterangan"></textarea>
                 </div>
             </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Jenis Suplier</label>
+                <div class="col">
+                    <select class="form-select" name="jns_supplier" id="jns_supplier" aria-label="Default select example">
+                        <option value="-" selected>-</option>
+                        <option value="TOKO">TOKO</option>
+                        <option value="RM SAKIT/DOKTER">RM SAKIT/DOKTER</option>
+                        <option value="SUBKON/KANTIN">SUBKON/KANTIN</option>
+                        <option value="ANGKUTAN">ANGKUTAN</option>
+                        <option value="PLN">PLN</option>
+                        <option value="LAIN-LAIN">LAIN-LAIN</option>
+                        <option value="PERORANGAN">PERORANGAN</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Nama Bank</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="namabank" id="namabank" placeholder="Nama Bank">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Atas Nama</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="atas_nama" id="atas_nama" placeholder="Atas Nama">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">No Rek</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="norek" id="norek" placeholder="No Rekening">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <label class="col-3 col-form-label pt-0"></label>
+                <div class="col">
+                    <label class="form-check">
+                        <input class="form-check-input" id="aktif" name="aktif" type="checkbox">
+                        <span class="form-check-label">NOMMSQ</span>
+                    </label>
+                </div>
+            </div>
+
         </div>
     </div>
 </div>
@@ -100,12 +146,13 @@
 </div>
 <script>
     $("#simpansupplier").click(function() {
-        if($("#kode").val() == ''){
-            pesan('Kode harus di isi !','error');
+        var aktif = $("#aktif").prop('aktif') ? 1 : 0;
+        if ($("#kode").val() == '') {
+            pesan('Kode harus di isi !', 'error');
             return;
-            }
-        if($("#nama_supplier").val() == ''){
-            pesan('Nama Supplier harus di isi !','error');
+        }
+        if ($("#nama_supplier").val() == '') {
+            pesan('Nama Supplier harus di isi !', 'error');
             return;
         }
         $.ajax({
@@ -126,7 +173,12 @@
                 email: $("#email").val(),
                 kontak: $("#kontak").val(),
                 jabatan: $("#jabatan").val(),
-                keterangan: $("#keterangan").val()
+                keterangan: $("#keterangan").val(),
+                jns_supplier: $("#jns_supplier").val(),
+                namabank: $("#namabank").val(),
+                atas_nama: $("#atas_nama").val(),
+                norek: $("#norek").val(),
+                aktif: aktif
             },
             success: function(data) {
                 window.location.reload();

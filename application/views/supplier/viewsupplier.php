@@ -19,95 +19,140 @@
                                             <div class="tab-content">
                                                 <div class="tab-pane active show" id="tabs-home-1">
                                                     <div class="row">
-                                                        <div class="col-sm-6">
+
+                                                        <div class="col-6">
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">Kode </label>
+                                                                <label class="col-3 col-form-label required">Kode</label>
                                                                 <div class="col">
-                                                                    <input type="hidden" class="form-control font-kecil hilang" name="id" id="id" value="<?= $data['id']; ?>">
-                                                                    <input type="text" class="form-control font-kecil" name="kode_customer" id="kode_customer" value="<?= $data['kode']; ?>" readonly>
+                                                                    <input type="hidden" id="id" name="id" value="<?= $data['id']; ?>">
+                                                                    <input type="text" class="form-control font-kecil" name="kode" id="kode" placeholder="Kode" value="<?= $data['kode']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">Nama </label>
+                                                                <label class="col-3 col-form-label required">Supplier</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="nama_customer" id="nama_customer" value="<?= $data['nama_supplier']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="nama_supplier" id="nama_supplier" placeholder="Nama supplier" value="<?= $data['nama_supplier']; ?>" readonly>
                                                                 </div>
                                                             </div>
+
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Alamat</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="alamat" id="alamat" value="<?= $data['alamat']; ?>" readonly>
+                                                                    <textarea class="form-control font-kecil" name="alamat" id="alamat" rows="3" readonly><?= $data['alamat']; ?></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Desa</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="desa" id="desa" value="<?= $data['desa']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="desa" id="desa" placeholder="desa" value="<?= $data['desa']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">Kec</label>
+                                                                <label class="col-3 col-form-label required">Kecamatan</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" value=" <?= $data['kecamatan']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" placeholder="Kecamatan" value="<?= $data['kecamatan']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">kab_kota</label>
+                                                                <label class="col-3 col-form-label required">Kab_Kota</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" value=" <?= $data['kab_kota']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" placeholder="Kab/Kota" value="<?= $data['kab_kota']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">provinsi</label>
+                                                                <label class="col-3 col-form-label required">Provinsi</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" value=" <?= $data['propinsi']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" placeholder="Propinsi" value="<?= $data['propinsi']; ?>" readonly>
                                                                 </div>
                                                             </div>
-                                                        </div>
-                                                        <div class="col-sm-6">
+
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">kodepos</label>
+                                                                <label class="col-3 col-form-label required">Kode Pos</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" value=" <?= $data['kodepos']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" placeholder="Kodepos" value="<?= $data['kodepos']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Npwp</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="npwp" id="npwp" value=" <?= $data['npwp']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="Npwp" value="<?= $data['npwp']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">telp</label>
+                                                                <label class="col-3 col-form-label required">Telp</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="telp" id="telp" value=" <?= $data['telp']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="telp" id="telp" placeholder="Telp" value="<?= $data['telp']; ?>" readonly>
                                                                 </div>
                                                             </div>
+                                                        </div>
+                                                        <div class="col-6">
+
+
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Email</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="email" id="email" value=" <?= $data['email']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email" value="<?= $data['email']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Kontak</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kontak" id="kontak" value=" <?= $data['kontak']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="kontak" id="kontak" placeholder="Kontak" value="<?= $data['kontak']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Jabatan</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kontak" id="kontak" value=" <?= $data['jabatan']; ?>" readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $data['jabatan']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">Ket</label>
+                                                                <label class="col-3 col-form-label required">Keterangan</label>
                                                                 <div class="col">
-                                                                    <input type="text area" class="form-control font-kecil" name="keterangan" id="keterangan" value=" <?= $data['keterangan']; ?>" readonly>
+                                                                    <textarea class="form-control font-kecil" name="keterangan" rows="3" id="keterangan" value="<?= $data['keterangan']; ?>" readonly> </textarea>
                                                                 </div>
                                                             </div>
-
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Jenis Suplier</label>
+                                                                <div class="col">
+                                                                    <select class="form-select" name="jns_supplier" id="jns_supplier" aria-label="Default select example" required>
+                                                                        <option value="-" selected>-</option>
+                                                                        <option value="TOKO" <?= ($data['jns_supplier'] == 'TOKO') ? 'selected' : ''; ?>>TOKO</option>
+                                                                        <option value="RM SAKIT/DOKTER" <?= ($data['jns_supplier'] == 'RM SAKIT/DOKTER') ? 'selected' : ''; ?>>RM SAKIT/DOKTER</option>
+                                                                        <option value="SUBKON/KANTIN" <?= ($data['jns_supplier'] == 'SUBKON/KANTIN') ? 'selected' : ''; ?>>SUBKON/KANTIN</option>
+                                                                        <option value="ANGKUTAN" <?= ($data['jns_supplier'] == 'ANGKUTAN') ? 'selected' : ''; ?>>ANGKUTAN</option>
+                                                                        <option value="PLN" <?= ($data['jns_supplier'] == 'PLN') ?  'selected' : ''; ?>>PLN</option>
+                                                                        <option value="LAIN-LAIN" <?= ($data['jns_supplier'] == 'LAIN-LAIN') ? 'selected' : ''; ?>>LAIN-LAIN</option>
+                                                                        <option value="PERORANGAN" <?= ($data['jns_supplier'] == 'PERORANGAN') ? 'selected' : ''; ?>>PERORANGAN</option>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Nama Bank</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="namabank" id="namabank" value="<?= $data['namabank']; ?>" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Atas Nama</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="atas_nama" id="atas_nama" value="<?= $data['atas_nama']; ?>" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">No Rek</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="norek" id="norek" value="<?= $data['norek']; ?>" readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row mt-2">
+                                                                <label class="col-3 col-form-label pt-0">Aktif</label>
+                                                                <div class="col">
+                                                                    <label class="form-check form-check-single form-switch">
+                                                                        <input class="form-check-input" id="aktif" name="aktif" type="checkbox" <?php if ($data['aktif'] == 1) echo 'checked'; ?> readonly>
+                                                                    </label>
+                                                                </div>
+                                                            </div>
                                                         </div>
 
                                                     </div>

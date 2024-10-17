@@ -52,7 +52,12 @@ class Supplier extends CI_Controller
             'email' => $_POST['email'],
             'kontak' => $_POST['kontak'],
             'jabatan' => $_POST['jabatan'],
-            'keterangan' => $_POST['keterangan']
+            'keterangan' => $_POST['keterangan'],
+            'jns_supplier' => $_POST['jns_supplier'],
+            'namabank' => strtoupper($_POST['namabank']),
+            'atas_nama' => $_POST['atas_nama'],
+            'norek' => $_POST['norek'],
+            'aktif' => $_POST['aktif']
         ];
         $hasil = $this->supplier_model->simpansupplier($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -84,7 +89,12 @@ class Supplier extends CI_Controller
             'email' => $_POST['email'],
             'kontak' => $_POST['kontak'],
             'jabatan' => $_POST['jabatan'],
-            'keterangan' => $_POST['keterangan']
+            'keterangan' => $_POST['keterangan'],
+            'jns_supplier' => $_POST['jns_supplier'],
+            'namabank' => strtoupper($_POST['namabank']),
+            'atas_nama' => $_POST['atas_nama'],
+            'norek' => $_POST['norek'],
+            'aktif' => $_POST['aktif']
         ];
         $hasil = $this->supplier_model->updatesupplier($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -195,16 +205,16 @@ class Supplier extends CI_Controller
         $pdf->SetFont('Latob', '', 10);
         $pdf->Cell(8, 8, 'No', 1, 0, 'C');
         $pdf->Cell(15, 8, 'Kode', 1, 0, 'C');
-        $pdf->Cell(63, 8, 'Nama Supplier', 1, 0, 'C');
+        $pdf->Cell(65, 8, 'Nama Supplier', 1, 0, 'C');
         // $pdf->Cell(35, 8, 'Desa', 1, 0, 'C');
         // $pdf->Cell(140, 8, 'Kecamatan', 1, 0, 'C');
         // $pdf->Cell(140, 8, 'Kab/Kota', 1, 0, 'C');
         // $pdf->Cell(140, 8, 'Provinsi', 1, 0, 'C');
         // $pdf->Cell(140, 8, 'Kode Pos', 1, 0, 'C');
         // $pdf->Cell(35, 8, 'Npwp', 1, 0, 'C');
-        $pdf->Cell(23, 8, 'Telp', 1, 0, 'C');
-        $pdf->Cell(53, 8, 'Email', 1, 0, 'C');
-        $pdf->Cell(120, 8, 'Alamat', 1, 0, 'C');
+        $pdf->Cell(43, 8, 'Telp', 1, 0, 'C');
+        // $pdf->Cell(53, 8, 'Email', 1, 0, 'C');
+        $pdf->Cell(125, 8, 'Alamat', 1, 0, 'C');
         // $pdf->Cell(40, 8, 'Kontak', 1, 0, 'C');
         // $pdf->Cell(40, 8, 'Jabatan', 1, 0, 'C');
         // $pdf->Cell(140, 8, 'Keterangan', 1, 0, 'C');
@@ -215,16 +225,16 @@ class Supplier extends CI_Controller
         foreach ($detail as $det) {
             $pdf->Cell(8, 6, $no++, 1, 0, 'C');
             $pdf->Cell(15, 6, $det['kode'], 1);
-            $pdf->Cell(63, 6, $det['nama_supplier'], 1);
+            $pdf->Cell(65, 6, $det['nama_supplier'], 1);
             // $pdf->Cell(35, 6, $det['desa'], 1);
             // $pdf->Cell(140, 6, $det['kecamatan'], 1);
             // $pdf->Cell(140, 6, $det['kab_kota'], 1);
             // $pdf->Cell(140, 6, $det['propinsi'], 1);
             // $pdf->Cell(140, 6, $det['kodepos'], 1);
             // $pdf->Cell(35, 6, $det['npwp'], 1);
-            $pdf->Cell(23, 6, $det['telp'], 1);
-            $pdf->Cell(53, 6, $det['email'], 1);
-            $pdf->Cell(120, 6, $det['alamat'], 1);
+            $pdf->Cell(43, 6, $det['telp'], 1);
+            // $pdf->Cell(53, 6, $det['email'], 1);
+            $pdf->Cell(125, 6, $det['alamat'], 1);
             // $pdf->Cell(40, 6, $det['kontak'], 1);
             // $pdf->Cell(40, 6, $det['jabatan'], 1);
             // $pdf->Cell(40, 6, $det['keterangan'], 1);
