@@ -151,6 +151,21 @@ $("#simpanhakbc").click(function () {
 		},
 	});
 });
+$("#cekdata").click(function () {
+	if ($("#jns_bc").val() == "") {
+		pesan("Pilih Jenis BC !", "error");
+		return false;
+	}
+	if ($("#nomor_aju").val() == "") {
+		pesan("Isi atau Get Nomor AJU !", "error");
+		return false;
+	}
+	if ($("#tgl_aju").val() == "") {
+		pesan("Isi Tanggal AJU", "error");
+		return false;
+	}
+	$("#kirimkeceisa").click();
+});
 function savedata(kolom, data) {
 	$("#keteranganerr").text("Loading ..!");
 	$.ajax({

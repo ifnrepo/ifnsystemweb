@@ -507,7 +507,7 @@ class Ib extends CI_Controller
             $sheet->setCellValue('C'.$no, $detx['nohs']); 
             $sheet->setCellValue('D'.$no, $detx['brg_id']); 
             $sheet->setCellValue('E'.$no, $detx['nama_barang']); 
-            $sheet->setCellValue('J'.$no, $detx['kodesatuan']); 
+            $sheet->setCellValue('J'.$no, $detx['satbc']); 
             $sheet->setCellValue('K'.$no, $jumlah); 
             $sheet->setCellValue('L'.$no, $data['kd_kemasan']); 
             $sheet->setCellValue('M'.$no, '0'); 
@@ -560,8 +560,8 @@ class Ib extends CI_Controller
             // "Authorization: Bearer ".$logged_user_token
         );
         $data = [
-            'username' => 'indoneptune',
-            'password' => 'Bandung#14',
+            'username' => 'siaga1', //'indoneptune',
+            'password' => 'Ifn123456' //'Bandung#14',
         ];
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,$headers
@@ -579,10 +579,15 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        // print_r($databalik);
+        print_r($databalik);
         if($databalik['status']=='Success'){
-            $this->ibmodel->isitokenbc($databalik['item']['access_token']);
+            $data = [
+                'token' => $databalik['item']['access_token'],
+                'refresh_token' => $databalik['item']['refresh_token']
+            ];
+            $this->ibmodel->isitokenbc($data);
             $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
+            $this->helpermodel->isilog('Refresh Token CEISA 40');
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }else{
@@ -601,8 +606,6 @@ class Ib extends CI_Controller
         $headers = array(
             "Content-Type: application/json",
             "Authorization: Bearer ".$this->session->userdata('datatokenbeacukai'),
-            "id_platform: PL002"
-
         );
         $data = [
             $dataaju
@@ -622,7 +625,19 @@ class Ib extends CI_Controller
         print_r($databalik);
         if($databalik['status']=='Success'){
             if($databalik['dataStatus'][0]['nomorDaftar']!=''){
-
+                $data = [
+                    'id' => $id,
+                    'nomor_bc' => $databalik['dataStatus'][0]['nomorDaftar'],
+                    'tgl_bc' => tglmysql($databalik['dataStatus'][0]['tanggalDaftar']),
+                    'nomor_sppb' => $databalik['dataRespon'][0]['nomorRespon'],
+                    'tgl_sppb' => $databalik['dataRespon'][0]['tanggalRespon']
+                ];
+                $hasil = $this->ibmodel->simpanresponbc($data);
+                if($hasil){
+                    $this->helpermodel->isilog("Berhasil GET RESPON AJU ".$dataaju." (".$databalik['dataStatus'][0]['nomorDaftar'].")");
+                    $this->session->set_flashdata('errorsimpan',2);
+                    $this->session->set_flashdata('pesanerror','Respon sudah berhasil di Tarik');
+                }
             }else{
                 $this->session->set_flashdata('errorsimpan',1);
                 $this->session->set_flashdata('pesanerror','Nomor Pendaftaran Masih kosong, '.$databalik['dataStatus'][0]['keterangan']);
@@ -653,6 +668,7 @@ class Ib extends CI_Controller
         ];
         $hasil = $this->ibmodel->tambahlampiran($data);
         if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
             $html = '';
             $query = $this->ibmodel->getdatalampiran($_POST['id']);
             $no = 1;
@@ -705,6 +721,7 @@ class Ib extends CI_Controller
         $header = $_POST['head'];
         $hasil = $this->ibmodel->hapuslampiran($data);
         if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
             $html = '';
             $query = $this->ibmodel->getdatalampiran($header);
             $no = 1;
@@ -772,7 +789,7 @@ class Ib extends CI_Controller
                 "kodeJenisIdentitas" => "5",
                 "namaEntitas" => trim($namaidentitas),
                 "nibEntitas" => $nibidentitas,
-                "nomorIdentitas" => $nomoridentitas,
+                "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$nomoridentitas))),
             ];
             if($ke>1){
                 $arrayke["kodeJenisApi"] = "2";
@@ -821,17 +838,17 @@ class Ib extends CI_Controller
                 "seriBarang" => $no,
                 "asuransi" => 0,
                 "bruto" => 0,
-                "hargaPenyerahan" => (float) $detx['harga'],
+                "hargaPenyerahan" => (float) $detx['harga']*$jumlah,
                 "jumlahSatuan" => (int) $jumlah,
                 "kodeBarang" => $detx['brg_id'],
                 "kodeDokumen" => "40",
                 "kodeJenisKemasan" => $data['kd_kemasan'],
-                "kodeSatuanBarang" => $detx['kodesatuan'],
+                "kodeSatuanBarang" => $detx['satbc'],
                 "merk" => "-",
                 "netto" => (float) $detx['kgs'],
                 "nilaiBarang" => 0,
                 "posTarif" => $detx['nohs'], //Nomor HS
-                "spesifikasiLain" => trim($detx['nama_barang']),
+                "spesifikasiLain" => "",
                 "tipe" => "-",
                 "ukuran" => "",
                 "uraian" => "",
@@ -846,14 +863,14 @@ class Ib extends CI_Controller
                 "kodeFasilitasTarif" => "3",
                 "kodeSatuanBarang" => $detx['kodesatuan'],
                 "nilaiBayar" => 0,
-                "nilaiFasilitas" => round($detx['harga']*0.11,0),
+                "nilaiFasilitas" => round(($detx['harga']*$jumlah)*0.11,0),
                 "nilaiSudahDilunasi" => 0,
                 "tarif" => 11,
                 "tarifFasilitas" => 100,
                 "kodeJenisPungutan" => "PPN",
                 "kodeJenisTarif" => "1"
             ];
-            $jumlahfasilitas += $detx['harga']*0.11;
+            $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
             array_push($arraytarif,$barangtarif);
             $arrayke['barangTarif'] = $arraytarif;
             array_push($arraybarang,$arrayke);
@@ -894,7 +911,7 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        // print_r($databalik);
+        print_r($databalik);
         if($databalik['status']=='OK'){
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
             $this->session->set_flashdata('errorsimpan',2);
@@ -918,7 +935,6 @@ class Ib extends CI_Controller
         echo json_encode($hasil);
     }
     //End IB Controller
-    
   
     function cetakqr2($isi, $id)
     {

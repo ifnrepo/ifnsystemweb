@@ -26,7 +26,7 @@ class Ib_model extends CI_Model
     }
     public function getdatadetailib($data)
     {
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
@@ -366,7 +366,7 @@ class Ib_model extends CI_Model
     }
     public function isitokenbc($data){
         $this->db->where('id',1);
-        $this->db->update('token_bc',['token'=>$data]);
+        $this->db->update('token_bc',$data);
     }
     public function getnomoraju($jns){
         $hass = $this->db->get_where('tb_ajuceisa',['jns_bc' => $jns])->row_array();
@@ -381,6 +381,11 @@ class Ib_model extends CI_Model
     public function updatesendceisa($id){
         $this->db->where('id',$id);
         $this->db->update('tb_header',['send_ceisa' => 1]);
+    }
+    public function simpanresponbc($data){
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_header',$data);
+        return $hasil;
     }
     //End IB Models
     public function updatepo($data)
