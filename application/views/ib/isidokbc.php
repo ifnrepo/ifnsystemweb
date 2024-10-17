@@ -23,15 +23,16 @@
                     <span>
                         <?php $hilang = $datheader['send_ceisa']==0 ? "hilang" : ""; ?>
                         <?php $hilang2 = $datheader['send_ceisa']==1 ? "hilang" : ""; ?>
-                        <a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="<?= base_url().'ib/kirimdatakeceisa/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a>
+                        <a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a>
                         <a href="<?= base_url().'ib'; ?>" class="btn btn-sm btn-primary"><i class="fa fa-arrow-left mr-1"></i> Kembali</a></span></div>
-                    <input type="hidden" name="id_header" id="id_header" value="<?= $datheader['id']; ?>">
-                    <input type="hidden" name="tgl" id="tgl" value="<?= $datheader['tgl']; ?>">
-                    <hr class="m-0">
-                    <div class="p-2 font-kecil">
-                        Nama Pengirim : <?= $datheader['namasupplier']; ?><br>
-                        Alamat Pengirim : <?= $datheader['alamat']; ?></br>
-                        NPWP : <?= $datheader['npwp']; ?>
+                        <input type="hidden" name="id_header" id="id_header" value="<?= $datheader['id']; ?>">
+                        <input type="hidden" name="tgl" id="tgl" value="<?= $datheader['tgl']; ?>">
+                        <hr class="m-0">
+                        <div class="p-2 font-kecil">
+                            Nama Pengirim : <?= $datheader['namasupplier']; ?><br>
+                            Alamat Pengirim : <?= $datheader['alamat']; ?></br>
+                            NPWP : <?= $datheader['npwp']; ?>
+                            <button href="#" id="kirimkeceisa" data-href="<?= base_url().'ib/kirimdatakeceisa/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                     </div>
                     <hr class="m-0">
                     <hr class="m-0">
