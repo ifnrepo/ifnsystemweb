@@ -35,18 +35,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Nama Supplier</th>
                                 <th>Alamat</th>
                                 <th>Kontak</th>
+                                <th>Aktif</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="table-tbody" style="font-size: 13px !important;">
                             <?php $no = 0;
-                            foreach ($supplier as $key) : $no++; ?>
+                            foreach ($supplier as $key) : $no++
+                            ?>
+
                                 <tr>
                                     <td><?= $no; ?></td>
                                     <td><?= $key['kode']; ?></td>
                                     <td><?= $key['nama_supplier']; ?></td>
                                     <td><?= $key['alamat']; ?></td>
                                     <td><?= $key['kontak']; ?></td>
+                                    <td style="text-align: center;">
+                                        <?php if ($key['aktif'] == 1) : ?>
+                                            <i class="fa fa-check text-success"></i>
+                                        <?php else : ?>
+                                            <i class="fa fa-times text-danger"></i>
+                                        <?php endif; ?>
+                                    </td>
                                     <td>
                                         <div class="btn-group" role="group">
                                             <label for="btn-radio-dropdown-dropdown" class="btn btn-sm btn-success btn-flat dropdown-toggle text-black" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

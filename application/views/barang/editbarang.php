@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Safty Stock</label>
+                <label class="col-3 col-form-label required">Safety Stock</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" name="safety_stock" id="safety_stock" value="<?= $data['safety_stock']; ?>">
                 </div>
@@ -49,6 +49,12 @@
                             <option value="<?= $satuan['id']; ?>" <?= $selek; ?>><?= '[' . $satuan['kodesatuan'] . '] ' . $satuan['namasatuan']; ?></option>
                         <?php } ?>
                     </select>
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">No Hs</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="nohs" id="nohs" value="<?= $data['nohs']; ?>">
                 </div>
             </div>
             <div class="row mt-2">
@@ -124,8 +130,10 @@
                 kode: $("#kode").val(),
                 nama: $("#nama_barang").val(),
                 namali: $("#nama_alias").val(),
-                sat: $("#id_satuan").val(),
                 kat: $("#id_kategori").val(),
+                safety: $("#safety_stock").val(),
+                sat: $("#id_satuan").val(),
+                nohs: $("#nohs").val(),
                 id: $("#id").val(),
                 dln: x,
                 noinv: y,

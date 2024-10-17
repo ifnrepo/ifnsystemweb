@@ -34,7 +34,7 @@
                 </div>
             </div>
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">kab_kota</label>
+                <label class="col-3 col-form-label required">Kab_Kota</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" placeholder="Kab/Kota" value="<?= $data['kab_kota']; ?>">
                 </div>
@@ -42,16 +42,14 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Provinsi</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" placeholder="propinsi" value="<?= $data['propinsi']; ?>">
+                    <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" placeholder="Provinsi" value="<?= $data['propinsi']; ?>">
                 </div>
             </div>
-        </div>
-        <div class="col-6">
 
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kode Pos</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" placeholder="kodepos" value="<?= $data['kodepos']; ?>">
+                    <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" placeholder="Kode Pos" value="<?= $data['kodepos']; ?>">
                 </div>
             </div>
             <div class="mb-1 row">
@@ -66,10 +64,14 @@
                     <input type="text" class="form-control font-kecil" name="telp" id="telp" placeholder="Telp" value="<?= $data['telp']; ?>">
                 </div>
             </div>
+        </div>
+        <div class="col-6">
+
+
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Email</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email" value="<?= $data['email']; ?>"> 
+                    <input type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email" value="<?= $data['email']; ?>">
                 </div>
             </div>
             <div class="mb-1 row">
@@ -87,7 +89,48 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Keterangan</label>
                 <div class="col">
-                    <textarea class="form-control font-kecil" name="keterangan" rows="3" id="keterangan"><?= $data['keterangan']; ?></textarea>
+                    <textarea class="form-control font-kecil" name="keterangan" rows="3" id="keterangan" value="<?= $data['keterangan']; ?>"> </textarea>
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Jenis Suplier</label>
+                <div class="col">
+                    <select class="form-select" name="jns_supplier" id="jns_supplier" aria-label="Default select example">
+                        <option value="-" selected>-</option>
+                        <option value="TOKO" <?= ($data['jns_supplier'] == 'TOKO') ? 'selected' : ''; ?>>TOKO</option>
+                        <option value="RM SAKIT/DOKTER" <?= ($data['jns_supplier'] == 'RM SAKIT/DOKTER') ? 'selected' : ''; ?>>RM SAKIT/DOKTER</option>
+                        <option value="SUBKON/KANTIN" <?= ($data['jns_supplier'] == 'SUBKON/KANTIN') ? 'selected' : ''; ?>>SUBKON/KANTIN</option>
+                        <option value="ANGKUTAN" <?= ($data['jns_supplier'] == 'ANGKUTAN') ? 'selected' : ''; ?>>ANGKUTAN</option>
+                        <option value="PLN" <?= ($data['jns_supplier'] == 'PLN') ?  'selected' : ''; ?>>PLN</option>
+                        <option value="LAIN-LAIN" <?= ($data['jns_supplier'] == 'LAIN-LAIN') ? 'selected' : ''; ?>>LAIN-LAIN</option>
+                        <option value="PERORANGAN" <?= ($data['jns_supplier'] == 'PERORANGAN') ? 'selected' : ''; ?>>PERORANGAN</option>
+                    </select>
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Nama Bank</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="namabank" id="namabank" value="<?= $data['namabank']; ?>">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Atas Nama</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="atas_nama" id="atas_nama" value="<?= $data['atas_nama']; ?>">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">No Rek</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="norek" id="norek" value="<?= $data['norek']; ?>">
+                </div>
+            </div>
+            <div class="row mt-2">
+                <label class="col-3 col-form-label pt-0">Aktif</label>
+                <div class="col">
+                    <label class="form-check form-check-single form-switch">
+                        <input class="form-check-input" id="aktif" name="aktif" type="checkbox" <?php if ($data['aktif'] == 1) echo 'checked'; ?>>
+                    </label>
                 </div>
             </div>
         </div>
@@ -101,12 +144,13 @@
 </div>
 <script>
     $("#updatesupplier").click(function() {
-        if($("#kode").val() == ''){
-            pesan('Kode harus di isi !','error');
+        var aktif = $("#aktif").prop('checked') ? 1 : 0;
+        if ($("#kode").val() == '') {
+            pesan('Kode harus di isi !', 'error');
             return;
-            }
-        if($("#nama_supplier").val() == ''){
-            pesan('Nama Supplier harus di isi !','error');
+        }
+        if ($("#nama_supplier").val() == '') {
+            pesan('Nama Supplier harus di isi !', 'error');
             return;
         }
         $.ajax({
@@ -128,7 +172,12 @@
                 kontak: $("#kontak").val(),
                 jabatan: $("#jabatan").val(),
                 keterangan: $("#keterangan").val(),
-                id:$("#id").val()
+                jns_supplier: $("#jns_supplier").val(),
+                namabank: $("#namabank").val(),
+                atas_nama: $("#atas_nama").val(),
+                norek: $("#norek").val(),
+                aktif: aktif,
+                id: $("#id").val()
             },
             success: function(data) {
                 window.location.reload();

@@ -47,6 +47,12 @@
                     </select>
                 </div>
             </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">NoHs</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="nohs" id="nohs" placeholder="NoHs">
+                </div>
+            </div>
             <div class="row mt-2">
                 <label class="col-3 col-form-label pt-0"></label>
                 <div class="col">
@@ -115,6 +121,8 @@
                 namali: $("#nama_alias").val(),
                 sat: $("#id_satuan").val(),
                 kat: $("#id_kategori").val(),
+                safety: $("#safety_stock").val(),
+                nohs: $("#nohs").val(),
                 noinv: y,
                 dln: x,
                 act: z,

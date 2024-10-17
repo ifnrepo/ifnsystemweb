@@ -84,7 +84,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <th>DLN</th>
               <th>No INV</th>
               <th>Act</th>
-              <th class="text-red">Safety</th>
+              <th class="text-red">Safety Stock</th>
               <th>Aksi</th>
             </tr>
           </thead>
