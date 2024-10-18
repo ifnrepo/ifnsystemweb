@@ -586,7 +586,7 @@ class Ib extends CI_Controller
                 'refresh_token' => $databalik['item']['refresh_token']
             ];
             $this->ibmodel->isitokenbc($data);
-            $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
+            // $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
             $this->helpermodel->isilog('Refresh Token CEISA 40');
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
@@ -601,11 +601,12 @@ class Ib extends CI_Controller
     }
     public function getresponhost($id){
         $dataaju = $this->ibmodel->getdatanomoraju($id);
+        $token = $this->ibmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
             "Content-Type: application/json",
-            "Authorization: Bearer ".$this->session->userdata('datatokenbeacukai'),
+            "Authorization: Bearer ".$token,
         );
         $data = [
             $dataaju
@@ -645,13 +646,79 @@ class Ib extends CI_Controller
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }else{
-            // echo '<script>alert("'.$databalik['status'].'");</script>';
-            // $url = base_url().'ib/kosong';
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }
+    }
+    public function getresponpdf($id){
+        $dataaju = $this->ibmodel->getdatanomoraju($id);
+        $token = $this->ibmodel->gettoken();
+        $curl = curl_init();
+        // $token = $consID;
+        $headers = array(
+            "Content-Type: application/json",
+            "Authorization: Bearer ".$token,
+        );
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/status/'.$dataaju);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        $databalik = json_decode($result,true);
+        if($databalik['status']=='Success'){
+            if($databalik['dataStatus'][0]['nomorDaftar']!=''){
+                $this->tampilkanpdf($databalik['dataRespon'][0]['pdf'],$id);
+            }else{
+                $this->session->set_flashdata('errorsimpan',1);
+                $this->session->set_flashdata('pesanerror','PDF Belum ada');
+            }
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }else{
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }
+    }
+    public function tampilkanpdf($data,$id){
+        $token = $this->ibmodel->gettoken();
+        $curl = curl_init();
+        // $token = $consID;
+        $headers = array(
+            "Content-Type: application/json",
+            "Authorization: Bearer ".$token,
+        );
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, "https://apis-gw.beacukai.go.id/openapi/download-respon?path=".$data);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+        
+        // print_r($data);
+        $pisah = explode('/',$data);
+        $filename = $data;
+        $databalik = $result;
+        header('Cache-Control: public'); 
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="'.$pisah[5].'"');
+        header('Content-Length: '.strlen($databalik));
+        echo $databalik;
+        $url = base_url().'ib/isidokbc/'.$id;
+        redirect($url);
     }
     public function addlampiran($id){
         $data['datheader'] = $this->ibmodel->getdatabyid($id);
@@ -893,11 +960,12 @@ class Ib extends CI_Controller
         $this->kirim40($arrayheader,$id);
     }
     public function kirim40($data,$id){
+        $token = $this->ibmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
             "Content-Type: application/json",
-            "Authorization: Bearer ".$this->session->userdata('datatokenbeacukai'),
+            "Authorization: Bearer ".$token,
         );
 
         curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);

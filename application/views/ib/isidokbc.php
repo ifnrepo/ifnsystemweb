@@ -33,6 +33,7 @@
                             Alamat Pengirim : <?= $datheader['alamat']; ?></br>
                             NPWP : <?= $datheader['npwp']; ?>
                             <button href="#" id="kirimkeceisa" data-href="<?= base_url().'ib/kirimdatakeceisa/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
+                            <a id="kirimkeceisax" href="<?= base_url().'ib/getresponpdf/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                     </div>
                     <hr class="m-0">
                     <hr class="m-0">
