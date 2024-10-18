@@ -25,63 +25,63 @@
                                                                 <label class="col-3 col-form-label required">Kode</label>
                                                                 <div class="col">
                                                                     <input type="hidden" id="id" name="id" value="<?= $data['id']; ?>">
-                                                                    <input type="text" class="form-control font-kecil" name="kode" id="kode" placeholder="Kode" value="<?= $data['kode']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="kode" id="kode" placeholder="Kode" value="<?= $data['kode']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Supplier</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="nama_supplier" id="nama_supplier" placeholder="Nama supplier" value="<?= $data['nama_supplier']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="nama_supplier" id="nama_supplier" placeholder="Nama supplier" value="<?= $data['nama_supplier']; ?>" readonly>
                                                                 </div>
                                                             </div>
 
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Alamat</label>
                                                                 <div class="col">
-                                                                    <textarea class="form-control font-kecil" name="alamat" id="alamat" rows="3" readonly><?= $data['alamat']; ?></textarea>
+                                                                    <textarea style="background-color: floralwhite;" class="form-control font-kecil" name="alamat" id="alamat" rows="3" readonly><?= $data['alamat']; ?></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Desa</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="desa" id="desa" placeholder="desa" value="<?= $data['desa']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="desa" id="desa" placeholder="desa" value="<?= $data['desa']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Kecamatan</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" placeholder="Kecamatan" value="<?= $data['kecamatan']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" placeholder="Kecamatan" value="<?= $data['kecamatan']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Kab_Kota</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" placeholder="Kab/Kota" value="<?= $data['kab_kota']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" placeholder="Kab/Kota" value="<?= $data['kab_kota']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Provinsi</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" placeholder="Propinsi" value="<?= $data['propinsi']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="propinsi" id="propinsi" placeholder="Provinsi" value="<?= $data['propinsi']; ?>" readonly>
                                                                 </div>
                                                             </div>
 
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Kode Pos</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" placeholder="Kodepos" value="<?= $data['kodepos']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="kodepos" id="kodepos" placeholder="Kodepos" value="<?= $data['kodepos']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Npwp</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="Npwp" value="<?= $data['npwp']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="Npwp" value="<?= $data['npwp']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Telp</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="telp" id="telp" placeholder="Telp" value="<?= $data['telp']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="telp" id="telp" placeholder="Telp" value="<?= $data['telp']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -91,31 +91,31 @@
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Email</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email" value="<?= $data['email']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email" value="<?= $data['email']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Kontak</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="kontak" id="kontak" placeholder="Kontak" value="<?= $data['kontak']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="kontak" id="kontak" placeholder="Kontak" value="<?= $data['kontak']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Jabatan</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $data['jabatan']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="jabatan" value="<?= $data['jabatan']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Keterangan</label>
                                                                 <div class="col">
-                                                                    <textarea class="form-control font-kecil" name="keterangan" rows="3" id="keterangan" value="<?= $data['keterangan']; ?>" readonly> </textarea>
+                                                                    <textarea style="background-color: floralwhite;" class="form-control font-kecil" name="keterangan" rows="3" id="keterangan" value="<?= $data['keterangan']; ?>" readonly> </textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Jenis Suplier</label>
                                                                 <div class="col">
-                                                                    <select class="form-select" name="jns_supplier" id="jns_supplier" aria-label="Default select example" required>
+                                                                    <select class="form-select" name="jns_supplier" id="jns_supplier" aria-label="Default select example" style="background-color: floralwhite;" disabled>
                                                                         <option value="-" selected>-</option>
                                                                         <option value="TOKO" <?= ($data['jns_supplier'] == 'TOKO') ? 'selected' : ''; ?>>TOKO</option>
                                                                         <option value="RM SAKIT/DOKTER" <?= ($data['jns_supplier'] == 'RM SAKIT/DOKTER') ? 'selected' : ''; ?>>RM SAKIT/DOKTER</option>
@@ -130,19 +130,19 @@
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Nama Bank</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="namabank" id="namabank" value="<?= $data['namabank']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="namabank" id="namabank" value="<?= $data['namabank']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Atas Nama</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="atas_nama" id="atas_nama" value="<?= $data['atas_nama']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="atas_nama" id="atas_nama" value="<?= $data['atas_nama']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">No Rek</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="norek" id="norek" value="<?= $data['norek']; ?>" readonly>
+                                                                    <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="norek" id="norek" value="<?= $data['norek']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="row mt-2">
