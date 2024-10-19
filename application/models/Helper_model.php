@@ -121,7 +121,7 @@ class Helper_model extends CI_Model
             array_push($hasil, $data_ok);
         }
         if ($cek['data_ok'] == 1) {
-            $ok_bb = 'Dokumen dibuat oleh : ' . datauser($cek['user_bb'], 'name') . ' on ' . $cek['tgl_bb'];
+            $ok_bb = 'Dokumen dibuat oleh : ' . datauser($cek['user_ok'], 'name') . ' on ' . $cek['tgl_ok'];
             array_push($hasil, $ok_bb);
         } else {
             if ($cek['ok_bb'] == 1) {
@@ -134,7 +134,7 @@ class Helper_model extends CI_Model
             array_push($hasil, $ok_valid);
         } else {
             if ($cek['data_ok'] == 1) {
-                $ok_bb = 'Menunggu Validasi Manager ' . $cek['dept_id'];
+                $ok_bb = 'Menunggu Validasi Manager ' . $cek['dept_bbl'];
                 array_push($hasil, $ok_bb);
             }
         }

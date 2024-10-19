@@ -74,6 +74,10 @@ $("#simpandetailbarang").click(function () {
 		pesan("Isi Qty atau Kgs", "error");
 		return;
 	}
+	if ($("#keterangan").val() == "") {
+		pesan("Isi keterangan", "error");
+		return;
+	}
 	document.formbarangpb.submit();
 });
 $("#butgo").click(function () {
@@ -157,6 +161,13 @@ $("#bl").change(function () {
 $("#th").change(function () {
 	$("#bl").change();
 });
+$("#simpanpbu").click(function () {
+	if ($("#catat").val() == "") {
+		pesan("Isi Catatan PB !", "info");
+		return false;
+	}
+	$("#simpanpb").click();
+});
 function getdatapb() {
 	// alert($("#level").val());
 	$.ajax({
@@ -193,7 +204,7 @@ function getdatadetailpb() {
 			$("#jmlrek").val(data.jmlrek);
 			$("#body-table").html(data.datagroup).show();
 			if (data.jmlrek == 0) {
-				$("#simpanpb").addClass("disabled");
+				$("#simpanpbu").addClass("disabled");
 			}
 		},
 		error: function (xhr, ajaxOptions, thrownError) {

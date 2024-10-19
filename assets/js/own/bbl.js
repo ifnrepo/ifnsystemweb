@@ -181,6 +181,13 @@ $("#bl").change(function () {
 $("#th").change(function () {
 	$("#bl").change();
 });
+$("#simpanbblu").click(function () {
+	if ($("#catat").val() == "") {
+		pesan("Isi Keterangan/Catatan BBL", "info");
+		return false;
+	}
+	$("#simpanbbl").click();
+});
 function getdatabbl() {
 	// alert($("#level").val());
 	$.ajax({
@@ -214,7 +221,7 @@ function getdatadetail_bbl() {
 			$("#jmlrek").val(data.jmlrek);
 			$("#body-table").html(data.datagroup).show();
 			if (data.jmlrek == 0) {
-				$("#simpanbbl").addClass("disabled");
+				$("#simpanbblu").addClass("disabled");
 			}
 		},
 		error: function (xhr, ajaxOptions, thrownError) {

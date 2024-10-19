@@ -64,6 +64,10 @@
             pesan('Isi data Pcs/Qty','info');
             return false;
         }
+        if($("#keterangan").val()==''){
+            pesan('Harap Isi Keterangan','info');
+            return false;
+        }
         $.ajax({
             dataType: "json",
             type: "POST",
