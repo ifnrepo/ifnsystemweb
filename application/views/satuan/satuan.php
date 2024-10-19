@@ -31,6 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <tr>
                 <th>No</th>
                 <th>Kode Satuan</th>
+                <th>Kode BC</th>
                 <th>Nama Satuan</th>
                 <th>Aksi</th>
               </tr>
@@ -41,6 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <tr>
                   <td><?= $no; ?></td>
                   <td><?= $key['kodesatuan']; ?></td>
+                  <td><?= $key['kodebc']; ?></td>
                   <td><?= $key['namasatuan']; ?></td>
                   <td>
                     <a href="<?= base_url() . 'satuan/editsatuan/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editsatuan" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Satuan" rel="<?= $key['id']; ?>" title="Edit data">

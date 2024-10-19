@@ -1,4 +1,4 @@
-<div class="container-xl"> 
+<div class="container-xl">
     <div class="row">
         <div class="col-12">
             <div class="mb-1 row">
@@ -6,6 +6,12 @@
                 <div class="col">
                     <input type="text" name="id" id="id" class="hilang" value="<?= $data['id']; ?>">
                     <input type="text" class="form-control font-kecil" name="kodesatuan" id="kodesatuan" placeholder="Kode Satuan" value="<?= $data['kodesatuan']; ?>">
+                </div>
+            </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Kode BC</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="kodebc" id="kodebc" placeholder="Kode BC" value="<?= $data['kodebc']; ?>">
                 </div>
             </div>
             <div class="mb-1 row">
@@ -19,31 +25,36 @@
 </div>
 <div class="modal-footer">
     <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="updatesatuan" >Update</button>
+    <button type="button" class="btn btn-primary" id="updatesatuan">Update</button>
 </div>
 <script>
-    $("#updatesatuan").click(function(){
-        if($("#kodesatuan").val() == ''){
-            pesan('Kode Satuan harus di isi !','error');
+    $("#updatesatuan").click(function() {
+        if ($("#kodesatuan").val() == '') {
+            pesan('Kode Satuan harus di isi !', 'error');
             return;
         }
-        if($("#namasatuan").val() == ''){
-            pesan('Nama Satuan harus di isi !','error');
+        if ($("#kodebc").val() == '') {
+            pesan('Kode BC harus di isi !', 'error');
+            return;
+        }
+        if ($("#namasatuan").val() == '') {
+            pesan('Nama Satuan harus di isi !', 'error');
             return;
         }
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url+'satuan/updatesatuan',
+            url: base_url + 'satuan/updatesatuan',
             data: {
                 kode: $("#kodesatuan").val(),
+                bc: $("#kodebc").val(),
                 nama: $("#namasatuan").val(),
                 id: $("#id").val()
             },
-            success: function(data){
+            success: function(data) {
                 window.location.reload();
             },
-            error: function (xhr, ajaxOptions, thrownError) {
+            error: function(xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
                 console.log(thrownError);
             }
