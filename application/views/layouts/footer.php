@@ -51,6 +51,20 @@
 <script src="<?= base_url(); ?>assets/vendor/select2/js/select2.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/litepicker/dist/litepicker.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/nprogress/nprogress.js"></script>
+<?php if(ENVIRONMENT!='development'){ ?>
+<script>
+	$(document).keydown(function (event) {
+      if (event.keyCode == 123) { // Prevent F12
+          return false;
+      } else if (event.ctrlKey && event.shiftKey && event.keyCode == 73) { // Prevent Ctrl+Shift+I        
+          return false;
+      }
+  	});
+	$(document).on("contextmenu", function (e) {        
+		e.preventDefault();
+	});
+</script>
+	<?php } ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?1724750326"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->

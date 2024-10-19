@@ -43,6 +43,14 @@
   <script type="text/javascript">
     base_url = '<?= base_url() ?>';
   </script>
+  <noscript>
+    <style type="text/css">
+        .page {display:none;}
+    </style>
+    <div class="noscriptmsg">
+      You don't have javascript enabled.  Good luck with that.
+    </div>
+  </noscript>
 </head>
 
 <body>

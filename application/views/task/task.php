@@ -44,6 +44,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     echo 'selected';
                                   } ?>>Validasi ADJ (Adjustment)</option>
               <?php endif; ?>
+            </select >
+            <select class="form-select bg-cyan-lt font-bold ml-1 hilang">
+              <option value="">XXXX</option>
             </select>
             <button class="btn font-kecil font-bold btn-flat" id="gettask" type="button">Get !</button>
           </div>

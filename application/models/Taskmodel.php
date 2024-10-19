@@ -64,7 +64,7 @@ class Taskmodel extends CI_Model
                     }else{
                         if($ttdutl==1){
                             $this->db->group_start();
-                                $this->db->where('ok_pp',1);
+                                $this->db->where('ok_pp',0);
                                 $this->db->or_group_start();
                                     $this->db->where('ok_pp',0);
                                     $this->db->where('bbl_pp',2);
@@ -72,9 +72,9 @@ class Taskmodel extends CI_Model
                             $this->db->group_end();
                         }else{
                             $this->db->where('ok_pp',1);
+                            $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
                         }
                     }
-                    $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
                     $this->db->where('ok_valid', 0);
                     $this->db->where('ok_tuju', 0);
                     $this->db->where('ok_pc', 0);

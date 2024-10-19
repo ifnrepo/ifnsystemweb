@@ -387,6 +387,10 @@ class Ib_model extends CI_Model
         $hasil = $this->db->update('tb_header',$data);
         return $hasil;
     }
+    public function gettoken(){
+        $query = $this->db->get_where('token_bc',['id'=>1])->row_array();
+        return $query['token'];
+    }
     //End IB Models
     public function updatepo($data)
     {

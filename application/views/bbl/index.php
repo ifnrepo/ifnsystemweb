@@ -134,12 +134,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php } ?>
                                     <td><?= $datdet['keterangan'] ?></td>
                                     <td>
-                                        <?php if($datdet['ok_bb']==1 && $datdet['data_ok']==0 && $datdet['ok_valid']==0 && $this->session->userdata('level_user') > 1){ ?>
+                                        <?php if($datdet['ok_bb']==1 && $datdet['data_ok']==0 && $datdet['ok_valid']==0){ ?>
                                         Tunggu Validasi Kep Dept
                                         <a href="#" data-href="<?= base_url() . 'bbl/editbbl/' . $datdet['id']; ?>" class="btn btn-sm btn-info btn-icon btn-flat mr-1" style="padding: 5px !important" id="Edit detail Bbl" data-message="Akan edit data ini" data-bs-toggle='modal' data-bs-target='#modal-info' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
                                             <i class="fa fa-refresh mr-1"></i> Edit
                                         </a>
-                                        
                                         <?php }else if($datdet['ok_bb']==0 && $datdet['data_ok']==0 && $datdet['ok_valid']==0){ ?>
                                         <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white">
                                             <i class="fa fa-edit"></i>
@@ -161,7 +160,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     if($datdet['ok_tuju']==0){
                                                         $tungguvalid = 'Tunggu Validasi GM '.$datdet['dept_bbl'];
                                                     }else{
-                                                        if($datdet['ok_tuju']==0){
+                                                        if($datdet['ok_pc']==0){
                                                             $tungguvalid = 'Tunggu Validasi GM Purchasing';
                                                         }else{
                                                             $tungguvalid = 'Proses PO';
