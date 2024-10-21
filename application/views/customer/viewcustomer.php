@@ -69,28 +69,28 @@
                                                                     <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" value=" <?= $data['kecamatan']; ?>" readonly>
                                                                 </div>
                                                             </div>
-                                                          
-                                                        </div>
-                                                        <div class="col-sm-6">
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">kab_kota</label>
+                                                                <label class="col-3 col-form-label required">Kab_Kota</label>
                                                                 <div class="col">
                                                                     <input type="text" class="form-control font-kecil" name="kab_kota" id="kab_kota" value=" <?= $data['kab_kota']; ?>" readonly>
                                                                 </div>
                                                             </div>
 
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">provinsi</label>
+                                                                <label class="col-3 col-form-label required">Provinsi</label>
                                                                 <div class="col">
                                                                     <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" value=" <?= $data['propinsi']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">kodepos</label>
+                                                                <label class="col-3 col-form-label required">Kode Pos</label>
                                                                 <div class="col">
                                                                     <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" value=" <?= $data['kodepos']; ?>" readonly>
                                                                 </div>
                                                             </div>
+
+                                                        </div>
+                                                        <div class="col-sm-6">
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Npwp</label>
                                                                 <div class="col">
@@ -98,7 +98,7 @@
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">telp</label>
+                                                                <label class="col-3 col-form-label required">Telp</label>
                                                                 <div class="col">
                                                                     <input type="text" class="form-control font-kecil" name="telp" id="telp" value=" <?= $data['telp']; ?>" readonly>
                                                                 </div>
@@ -116,13 +116,116 @@
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
-                                                                <label class="col-3 col-form-label required">Keterangan</label>
+                                                                <label class="col-3 col-form-label required">Ket</label>
                                                                 <div class="col">
                                                                     <textarea class="form-control font-kecil" name="keterangan" id="keterangan" value=" <?= $data['keterangan']; ?>" readonly> </textarea>
                                                                 </div>
                                                             </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">BuyCode</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="buycode" id="buycode" placeholder="BuyCode" <?= $data['buycode']; ?> readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">InsCode</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="inscode" id="inscode" placeholder="Inscode" <?= $data['inscode']; ?>readonly>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">JCode1</label>
+                                                                <div class="col">
+                                                                    <select class="form-select font-kecil" name="jcode1" id="jcode1" disabled>
+                                                                        <option selected value="1" <?php if ($data['jcode1'] == '1') {
+                                                                                                        echo "selected";
+                                                                                                    }; ?>>1</option>
+                                                                        <option value="2" <?php if ($data['jcode1'] == 2) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>2</option>
+                                                                        <option value="3" <?php if ($data['jcode1'] == 3) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>3</option>
+                                                                        <option value="4" <?php if ($data['jcode1'] == 4) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>4</option>
+                                                                        <option value="5" <?php if ($data['jcode1'] == 5) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>5</option>
+                                                                        <option value="6" <?php if ($data['jcode1'] == 6) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>6</option>
+                                                                        <option value="7" <?php if ($data['jcode1'] == 7) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>7</option>
+                                                                        <option value="8" <?php if ($data['jcode1'] == 8) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>8</option>
+                                                                        <option value="9" <?php if ($data['jcode1'] == 9) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>9</option>
+
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">JCode2</label>
+                                                                <div class="col">
+                                                                    <select class="form-select font-kecil" name="jcode2" id="jcode2" disabled>
+                                                                        <option selected value="1" <?php if ($data['jcode2'] == 1) {
+                                                                                                        echo "selected";
+                                                                                                    }; ?>>1</option>
+                                                                        <option value="2" <?php if ($data['jcode2'] == 2) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>2</option>
+                                                                        <option value="3" <?php if ($data['jcode2'] == 3) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>3</option>
+                                                                        <option value="4" <?php if ($data['jcode2'] == 4) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>4</option>
+                                                                        <option value="5" <?php if ($data['jcode2'] == 5) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>5</option>
+                                                                        <option value="6" <?php if ($data['jcode2'] == 6) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>6</option>
+                                                                        <option value="7" <?php if ($data['jcode2'] == 7) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>7</option>
+                                                                        <option value="8" <?php if ($data['jcode2'] == 8) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>8</option>
+                                                                        <option value="9" <?php if ($data['jcode2'] == 9) {
+                                                                                                echo "selected";
+                                                                                            }; ?>>9</option>
+
+                                                                    </select>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Benua</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="benua" id="benua" placeholder="Benua" <?= $data['benua']; ?> readonly>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Region</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="region" id="region" placeholder="Region" <?= $data['region']; ?> readonly>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">CustId</label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="cust_id" id="cust_id" placeholder="CustId" <?= $data['cust_id']; ?> readonly>
+                                                                </div>
+                                                            </div>
                                                         </div>
-                                                    </div>  
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>

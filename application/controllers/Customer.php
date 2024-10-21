@@ -55,7 +55,14 @@ class Customer extends CI_Controller
             'telp' => $_POST['telp'],
             'email' => $_POST['email'],
             'kontak' => $_POST['kontak'],
-            'keterangan' => $_POST['keterangan']
+            'keterangan' => $_POST['keterangan'],
+            'buycode' => $_POST['buycode'],
+            'inscode' => $_POST['inscode'],
+            'jcode1' => $_POST['jcode1'],
+            'jcode2' => $_POST['jcode2'],
+            'benua' => $_POST['benua'],
+            'region' => $_POST['region'],
+            'cust_id' => $_POST['cust_id']
         ];
         $hasil = $this->customer_model->simpancustomer($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -90,7 +97,14 @@ class Customer extends CI_Controller
             'telp' => $_POST['telp'],
             'email' => $_POST['email'],
             'kontak' => $_POST['kontak'],
-            'keterangan' => $_POST['keterangan']
+            'keterangan' => $_POST['keterangan'],
+            'buycode' => $_POST['buycode'],
+            'inscode' => $_POST['inscode'],
+            'jcode1' => $_POST['jcode1'],
+            'jcode2' => $_POST['jcode2'],
+            'benua' => $_POST['benua'],
+            'region' => $_POST['region'],
+            'cust_id' => $_POST['cust_id']
         ];
         $hasil = $this->customer_model->updatecustomer($data);
         // if ($hasil) {
