@@ -88,7 +88,6 @@
                                                                     <input type="text" class="form-control font-kecil" name="kodepos" id="kodepos" value=" <?= $data['kodepos']; ?>" readonly>
                                                                 </div>
                                                             </div>
-
                                                         </div>
                                                         <div class="col-sm-6">
                                                             <div class="mb-1 row">

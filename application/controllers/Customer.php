@@ -163,7 +163,7 @@ class Customer extends CI_Controller
         $customer = $this->customer_model->getdata();
         $no = 1;
 
-        // Untuk penomoran tabel, di awal set dengan 1    
+
         $numrow = 3;
 
         // Set baris pertama untuk isi tabel adalah baris ke 3    
@@ -187,7 +187,7 @@ class Customer extends CI_Controller
             $sheet->setCellValue('P' . $numrow, $data['kontak']);
             $sheet->setCellValue('Q' . $numrow, $data['keterangan']);
             $no++;
-            // Tambah 1 setiap kali looping      
+            // Tambah 1 setiap   
             $numrow++; // Tambah 1 setiap kali looping    
         }
 

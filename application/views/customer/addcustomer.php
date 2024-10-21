@@ -187,6 +187,7 @@
     <button type="button" class="btn btn-primary" id="simpancustomer">Simpan</button>
 </div>
 <script>
+    // validasi
     $("#simpancustomer").click(function() {
         if ($("#kode_customer").val() == '') {
             pesan('Kode harus di isi !', 'error');
