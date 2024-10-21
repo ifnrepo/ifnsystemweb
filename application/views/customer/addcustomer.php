@@ -3,7 +3,7 @@
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Kode</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="kode_customer" id="kode_customer"  placeholder="Kode Customer">
+                <input type="text" class="form-control font-kecil" name="kode_customer" id="kode_customer" placeholder="Kode Customer">
             </div>
         </div>
         <div class="mb-1 row">
@@ -49,10 +49,7 @@
                 <input type="text" class="form-control font-kecil" name="desa" id="desa" placeholder="Desa">
             </div>
         </div>
-    </div>
-    <div class="col-6">
-
-    <div class="mb-1 row">
+        <div class="mb-1 row">
             <label class="col-3 col-form-label required">Kecamatan</label>
             <div class="col">
                 <input type="text" class="form-control font-kecil" name="kecamatan" id="kecamatan" placeholder="Kecamatan">
@@ -82,6 +79,10 @@
                 <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="NPWP">
             </div>
         </div>
+
+    </div>
+    <div class="col-6">
+
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Telp</label>
             <div class="col">
@@ -106,6 +107,79 @@
                 <textarea class="form-control font-kecil" name="keterangan" id="keterangan" cols="30" rows="3" placeholder="Keterangan"></textarea>
             </div>
         </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">BuyCode</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="buycode" id="buycode" placeholder="BuyCode">
+            </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">InsCode</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="inscode" id="inscode" placeholder="Inscode">
+            </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">JCode1</label>
+            <div class="col">
+                <select class="form-select font-kecil" name="jcode1" id="jcode1">
+                    <option selected value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+
+                </select>
+            </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">JCode2</label>
+            <div class="col">
+                <select class="form-select font-kecil" name="jcode2" id="jcode2">
+                    <option selected value="1">1</option>
+                    <option value="2">2</option>
+                    <option value="3">3</option>
+                    <option value="4">4</option>
+                    <option value="5">5</option>
+                    <option value="6">6</option>
+                    <option value="7">7</option>
+                    <option value="8">8</option>
+                    <option value="9">9</option>
+
+                </select>
+            </div>
+        </div>
+
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Benua</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="benua" id="benua" placeholder="Benua">
+            </div>
+        </div>
+
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Region</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="region" id="region" placeholder="Region">
+            </div>
+        </div>
+
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">InCode</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="incode" id="incode" placeholder="Incode">
+            </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">CustId</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="cust_id" id="cust_id" placeholder="CustId">
+            </div>
+        </div>
     </div>
 </div>
 <div class="modal-footer">
@@ -114,12 +188,12 @@
 </div>
 <script>
     $("#simpancustomer").click(function() {
-        if($("#kode_customer").val() == ''){
-            pesan('Kode harus di isi !','error');
+        if ($("#kode_customer").val() == '') {
+            pesan('Kode harus di isi !', 'error');
             return;
-            }
-        if($("#nama_customer").val() == ''){
-            pesan('Nama Customer harus di isi !','error');
+        }
+        if ($("#nama_customer").val() == '') {
+            pesan('Nama Customer harus di isi !', 'error');
             return;
         }
         $.ajax({
@@ -142,7 +216,15 @@
                 telp: $("#telp").val(),
                 email: $("#email").val(),
                 kontak: $("#kontak").val(),
-                keterangan: $("#keterangan").val()
+                keterangan: $("#keterangan").val(),
+                buycode: $("#buycode").val(),
+                inscode: $("#incode").val(),
+                jcode1: $("#jcode1").val(),
+                jcode2: $("#jcode2").val(),
+                benua: $("#benua").val(),
+                region: $("#region").val(),
+                cust_id: $("#cust_id").val(),
+
             },
             success: function(data) {
                 window.location.reload();
