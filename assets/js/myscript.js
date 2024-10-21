@@ -212,7 +212,8 @@ $(document).ready(function () {
 	$(".datatable8").DataTable({
 		responsive: true,
 		pageLength: 50,
-		order: [[0, "desc"]],
+		// order: [[0, "desc"]],
+		ordering: false,
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 	$(".datatable9").DataTable({

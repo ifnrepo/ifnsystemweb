@@ -117,6 +117,7 @@ class Taskmodel extends CI_Model
         }else { 
             $this->db->where('data_ok', 99);
         }
+        $this->db->order_by('tgl','DESC');
         $query = $this->db->get('tb_header');
         return $query;
     }
