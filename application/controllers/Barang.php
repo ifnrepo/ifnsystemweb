@@ -64,13 +64,43 @@ class Barang extends CI_Controller
         $this->helpermodel->isilog($this->db->last_query());
         echo $hasil;
     }
-    public function editbarang($id, $nom)
+    // public function editbarang($id, $nom)
+    // {
+
+    //     $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
+    //     $data['itemsatuan'] = $this->satuanmodel->getdata();
+    //     $data['itemkategori'] = $this->kategorimodel->getdata();
+    //     $data['rekrow'] = $nom - 1;
+    //     $this->load->view('barang/editbarang', $data);
+    // }
+    public function editdata($id)
     {
+        $header['header'] = 'master';
         $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
         $data['itemsatuan'] = $this->satuanmodel->getdata();
         $data['itemkategori'] = $this->kategorimodel->getdata();
-        $data['rekrow'] = $nom - 1;
-        $this->load->view('barang/editbarang', $data);
+        // $data['rekrow'] = $nom - 1;
+
+        $data['actionfoto'] = base_url() . 'barang/updatefoto';
+        $data['actionkolom'] = base_url() . 'barang/updatebarang/' . $id;
+        $data['actiondok'] = base_url() . 'barang/updatedok';
+        $footer['fungsi'] = 'barang';
+
+        $this->load->view('layouts/header', $header);
+        $this->load->view('barang/editdata', $data);
+        $this->load->view('layouts/footer', $footer);
+    }
+
+    // public function updatebrg($id)
+    // {
+    //     $this->barangmodel->updatebrg();
+    //     $url = base_url() . 'barang/editdata/' . $id;
+    //     redirect($url);
+    // }
+
+    public function updatefoto()
+    {
+        $this->barangmodel->updatefoto_baru();
     }
     public function isistock($id, $nom)
     {
@@ -85,18 +115,22 @@ class Barang extends CI_Controller
         $data = [
             'id' => $_POST['id'],
             'kode' => $_POST['kode'],
-            'nama_barang' => $_POST['nama'],
-            'nama_alias' => $_POST['namali'],
-            'id_kategori' => $_POST['kat'],
-            'id_satuan' => $_POST['sat'],
-            'safety_stock' => $_POST['safety'],
+            'ukuran' => $_POST['ukuran'],
+            'tipe' => $_POST['tipe'],
+            'merek' => $_POST['merek'],
+            'nama_barang' => $_POST['nama_barang'],
+            'nama_alias' => $_POST['nama_alias'],
+            'id_kategori' => $_POST['id_kategori'],
+            'id_satuan' => $_POST['id_satuan'],
+            'safety_stock' => $_POST['safety_stock'],
             'nohs' => $_POST['nohs'],
-            'dln' => $_POST['dln'],
-            'noinv' => $_POST['noinv'],
-            'act' => $_POST['act'],
+            'dln' => $this->input->post('dln') ? 1 : 0,
+            'noinv' => $this->input->post('noinv') ? 1 : 0,
+            'act' => $this->input->post('act') ? 1 : 0,
         ];
-        $hasil = $this->barangmodel->updatebarang($data);
-        echo json_encode($hasil->result());
+        $this->barangmodel->updatebarang($data);
+        $url = base_url() . 'barang';
+        redirect($url);
     }
     public function hapusbarang($id)
     {
@@ -229,12 +263,20 @@ class Barang extends CI_Controller
             $buton2 .= '<label for="btn-radio-dropdown-dropdown" class="btn btn-sm btn-success btn-flat dropdown-toggle text-black" style="padding:3px 4px !important;" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">';
             $buton2 .= 'Aksi';
             $buton2 .= '</label>';
+            // $buton2 .= '<div class="dropdown-menu">';
+            // $buton2 .= '<label class="dropdown-item p-1">';
+            // $buton2 .= '<a href=' . base_url() . 'barang/editbarang/' . $field->id . '/' . $no . ' rel="' . $field->id . '" rel2="' . $no . '" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Barang" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="' . $key['id'] . '" title="Edit data">';
+            // $buton2 .= '<i class="fa fa-edit pr-1"></i> Edit Data';
+            // $buton2 .= '</a>';
+            // $buton2 .= '</label>';
+
             $buton2 .= '<div class="dropdown-menu">';
             $buton2 .= '<label class="dropdown-item p-1">';
-            $buton2 .= '<a href=' . base_url() . 'barang/editbarang/' . $field->id . '/' . $no . ' rel="' . $field->id . '" rel2="' . $no . '" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Barang" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="' . $key['id'] . '" title="Edit data">';
+            $buton2 .= '<a href=' . base_url() . 'barang/editdata/' . $field->id . '/' . $no . ' rel="' . $field->id . '" rel2="' . $no . ' data-title="Edit Data Barang" class="btn btn-sm btn-primary btn-icon text-white w-100" rel="' . $key['id'] . '" title="Edit data">';
             $buton2 .= '<i class="fa fa-edit pr-1"></i> Edit Data';
             $buton2 .= '</a>';
             $buton2 .= '</label>';
+
             // $buton2 .= '<label class="dropdown-item p-1">';
             // $buton2 .= '<a class="btn btn-sm btn-danger btn-icon text-white w-100" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href=' . base_url() . 'barang/hapusbarang/' . $field->id . ' title="Hapus data">';
             // $buton2 .= '<i class="fa fa-trash-o pr-1"></i> Hapus Data';

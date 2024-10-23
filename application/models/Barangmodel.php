@@ -1,7 +1,7 @@
 <?php
 class Barangmodel extends CI_Model
 {
-    var $column_search = array('nama_barang','barang.kode', 'nama_kategori');
+    var $column_search = array('nama_barang', 'barang.kode', 'nama_kategori');
     var $column_order = array(null, 'nama_barang', 'barang.kode', 'nama_kategori');
     var $order = array('nama_barang' => 'asc');
     var $table = 'barang';
@@ -183,5 +183,69 @@ class Barangmodel extends CI_Model
         }
         $query = $this->db->get();
         return $query->result_array();
+    }
+
+
+    public function updatefoto_baru()
+    {
+        $data = $_POST;
+        $temp = $this->barangmodel->getdatabyid($data['id'])->row_array(); // Memanggil barangmodel
+        $fotodulu = FCPATH . 'assets/image/dokbar/' . $temp['filefoto'];
+        $id = $data['id'];
+        $data['filefoto'] = $this->uploadLogo(); // Memanggil method uploadLogo()
+
+        if ($data['filefoto'] != NULL) {
+            if ($data['filefoto'] == 'kosong') {
+                $data['filefoto'] = NULL;
+            } else {
+                if (file_exists($fotodulu)) {
+                    unlink($fotodulu); // Hapus file lama jika ada
+                }
+            }
+            $query = $this->db->query("UPDATE barang SET filefoto = '" . $data['filefoto'] . "' WHERE id = '" . $id . "' ");
+            if ($query) {
+                $this->session->set_userdata('foto', $data['filefoto']);
+                $this->session->set_flashdata('simpanfoto', 'berhasil');
+            }
+        } else {
+            $this->session->set_flashdata('ketlain', 'Error Upload Foto');
+        }
+
+        redirect(base_url() . 'barang/editdata/' . $data['id']);
+    }
+
+
+    public function uploadLogo()
+    {
+
+        $this->load->library('upload');
+        $this->uploadConfig = array(
+            'upload_path' => FCPATH . 'assets/image/dokbar/',
+            'allowed_types' => 'gif|jpg|jpeg|png',
+            'max_size' => max_upload() * 1024,
+        );
+        // Adakah berkas yang disertakan?
+        $adaBerkas = $_FILES['file']['name'];
+        if (empty($adaBerkas)) {
+            return 'kosong';
+        }
+        $uploadData = NULL;
+        $this->upload->initialize($this->uploadConfig);
+        if ($this->upload->do_upload('file')) {
+            $uploadData = $this->upload->data();
+            $namaFileUnik = strtolower($uploadData['file_name']);
+            $fileRenamed = rename(
+                $this->uploadConfig['upload_path'] . $uploadData['file_name'],
+                $this->uploadConfig['upload_path'] . $namaFileUnik
+            );
+            $uploadData['file_name'] = $fileRenamed ? $namaFileUnik : $uploadData['file_name'];
+        } else {
+            $_SESSION['success'] = -1;
+            $ext = pathinfo($adaBerkas, PATHINFO_EXTENSION);
+            $ukuran = $_FILES['file']['size'] / 1000000;
+            $tidakupload = $this->upload->display_errors(NULL, NULL);
+            $this->session->set_flashdata('msg', $tidakupload . ' ' . $ext . ' ukuran ' . round($ukuran, 2) . ' MB');
+        }
+        return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
     }
 }
