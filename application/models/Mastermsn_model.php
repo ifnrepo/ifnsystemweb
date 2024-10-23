@@ -33,7 +33,7 @@ class mastermsn_model extends CI_Model
 	}
 	public function getdataby($id)
 	{
-		$this->db->select('*,tb_mesin.id as idx');
+		$this->db->select('*,tb_mesin.id as idx,tb_mesin.filefoto as fotomesin');
 		$this->db->from('tb_mesin');
 		$this->db->join('barang', 'barang.id=tb_mesin.id_barang', 'left');
 		$this->db->where('tb_mesin.id', $id);

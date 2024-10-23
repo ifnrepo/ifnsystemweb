@@ -53,7 +53,6 @@ $("#cekdisposal").click(function () {
 	});
 });
 
-
 $("#simpanmesin").click(function () {
 	document.formkolom.submit();
 });

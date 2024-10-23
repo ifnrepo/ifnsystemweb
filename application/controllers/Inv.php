@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Inv extends CI_Controller
 {
     function __construct()
@@ -114,6 +117,67 @@ class Inv extends CI_Controller
         $id = $_POST['id'];
         $simpan = $this->invmodel->cancelverifikasidata($id);
         echo json_encode($simpan);
+    }
+    public function toexcel(){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+        $sheet->setCellValue('A1', "INVENTORY ".$this->session->userdata('currdept')); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B2', "ID"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C2', "SPESIFIKASI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D2', "SKU");
+        $sheet->setCellValue('E2', "NOMOR IB");
+        $sheet->setCellValue('F2', "INSNO");
+        $sheet->setCellValue('G2', "SATUAN");
+        $sheet->setCellValue('H2', "QTY");
+        $sheet->setCellValue('I2', "KGS");
+        $sheet->setCellValue('J2', "NAMA KATEGORI/NETTYPE");
+        // Panggil model Get Data   
+        $inv = $this->invmodel->getdata();
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 3;
+
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($inv->result_array() as $data) {
+            $spekbarang = $data['nama_barang'] == null ? $data['spek'] : substr($data['nama_barang'], 0, 75);
+            $sku = viewsku(id: $data['kode'], po: $data['po'], no: $data['item'], dis: $data['dis']);
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $data['id_barang']);
+            $sheet->setCellValue('C' . $numrow, $spekbarang);
+            $sheet->setCellValue('D' . $numrow, $sku);
+            $sheet->setCellValue('E' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('F' . $numrow, $data['insno']);
+            $sheet->setCellValue('G' . $numrow, $data['kodesatuan']);
+            $sheet->setCellValue('H' . $numrow, $data['pcs']+$data['pcsin']-$data['pcsout']);
+            $sheet->setCellValue('I' . $numrow, $data['kgs']+$data['kgsin']-$data['kgsout']);
+            $sheet->setCellValue('J' . $numrow, $data['name_kategori']);
+            $no++;
+            // Tambah 1 setiap kali looping      
+            $numrow++; // Tambah 1 setiap kali looping    
+        }
+
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle(" DATA INV");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data INV.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel DATA INVENTORY'.$this->session->userdata('currdept'));
     }
     //END INV Controllers 
     public function getdatadetailpb()
