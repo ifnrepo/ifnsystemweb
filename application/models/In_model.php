@@ -10,7 +10,7 @@ class In_model extends CI_Model{
             'year(tgl)' => $this->session->userdata('th'),
             'data_ok' => 1,
             'ok_tuju' => 1,
-            'ok_valid' => 0,
+            // 'ok_valid' => 0,
         ];
         $kondisi = " (kode_dok='T' OR (kode_dok = 'IB' AND (nomor_bc != '' OR tanpa_bc = 1)))";
         $this->db->select('tb_header.*');

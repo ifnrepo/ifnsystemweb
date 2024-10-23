@@ -445,6 +445,9 @@ class Out_model extends CI_Model{
         }else{
             $jumlah = $this->db->get_where('tb_detail',['id_header'=>$id])->num_rows();
             $data = [
+                'ok_tuju' => 1,
+                'user_tuju' => $this->session->userdata('id'),
+                'tgl_tuju' => date('Y-m-d H:i:s'),
                 'data_ok' => 1,
                 'user_ok' => $this->session->userdata('id'),
                 'tgl_ok' => date('Y-m-d H:i:s'),
@@ -488,6 +491,9 @@ class Out_model extends CI_Model{
         ];
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$update);
+        $this->helpermodel->isilog($this->db->last_query());
+        $this->db->where('id_detail',$data['id']);
+        $hasil = $this->db->update('tb_detailgen',$update);
         $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }

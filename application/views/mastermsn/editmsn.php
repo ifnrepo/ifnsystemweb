@@ -20,14 +20,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="card">
       <div class="card-header font-bold text-primary">
         <?= $data['nama_barang']; ?><br>
-        <?= $this->session->set_flashdata('ketlain'); ?>
-        <?= $this->session->set_flashdata('msg'); ?>
+        <?= $this->session->flashdata('ketlain'); ?>
+        <?= $this->session->flashdata('msg'); ?>
       </div>
       <div class="card-body font-kecil">
         <div class="row">
           <div class="col-4">
             <div class="bg-blue-lt p-1">
-              <?php $foto = trim($data['filefoto'])=='' ? LOK_FOTO_MESIN.'/NoImageYet.jpg' : LOK_FOTO_MESIN.$data['filefoto'];  ?>
+              <?php $foto = trim($data['fotomesin'])=='' ? LOK_FOTO_MESIN.'/NoImageYet.jpg' : LOK_FOTO_MESIN.'/'.$data['fotomesin'];  ?>
               <img src="<?= $foto ?>" alt="<?= $foto ?>" style="width: auto;" id="gbimage">
             </div>
             <div class="text-center">

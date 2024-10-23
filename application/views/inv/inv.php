@@ -40,7 +40,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <a href="#" class="btn btn-success btn-sm font-bold" id="updateinv"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-
+              <a href="#" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a>
+              <a href="<?= base_url().'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
             </div>
           </div>
           <div class="card card-active" style="clear:both;">
@@ -51,10 +52,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="katbar" name="katbar">
-                        <option value="">Semua Kategori</option>
+                        <option value="X">Semua Kategori</option>
                         <?php if ($kat != null) : foreach ($kat->result_array() as $kate) {
-                            $selek = $this->session->userdata('filterkat') == $kate['id_kategori'] ? 'selected' : ''; ?>
-                            <option value="<?= $kate['id_kategori']; ?>" <?= $selek; ?>><?= $kate['nama_kategori']; ?></option>
+                            $pakai = $kate['id_kategori']!=null ? $kate['id_kategori'] : $kate['name_kategori'];
+                            $selek = $this->session->userdata('filterkat') == $pakai ? 'selected' : ''; 
+                            ?>
+                            <option value="<?= $pakai; ?>" <?= $selek; ?>><?= $kate['name_kategori']; ?></option>
                         <?php }
                         endif ?>
                       </select>
@@ -63,14 +66,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                        
                 </div>
                 <div class="col-3 ">
-                  <!-- <label class="form-check mt-1">
-                    <input class="form-check-input" type="checkbox" id="gbg">
-                    <span class="form-check-label font-bold">Gabung</span>
-                  </label>
-                  <label class="form-check mb-0">
-                    <input class="form-check-input" type="checkbox">
-                    <span class="form-check-label font-bold" id="spcbarang">Minus</span>
-                  </label> -->
                   <label class="form-check mt-1 mb-1 bg-teal-lt <?php if($this->session->userdata('viewharga')!=1){ echo "hilang"; } ?>">
                     <input class="form-check-input" type="checkbox" id="viewharga" <?php if($this->session->userdata('invharga')==1){ echo "checked"; } ?> >
                     <span class="form-check-label font-bold">Tampilkan Harga</span>
@@ -84,7 +79,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     
                 </div>
                 <div class="col-3">
-                  <!-- <h4 class="mb-1 font-kecil font-bold text-primary" id="caribar" style="cursor: hand;" title="ubah kondisi Pencarian"></h4> -->
                   <div class="">
                     <label class="form-check form-check-inline mb-1">
                       <input class="form-check-input" type="radio" name="radios-inline" value="Cari Barang" <?php if ($kategoricari == 'Cari Barang') {
@@ -98,10 +92,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                                                           } ?>>
                       <span class="form-check-label font-kecil">SKU</span>
                     </label>
-                    <!-- <label class="form-check form-check-inline">
-                        <input class="form-check-input" type="radio" name="radios-inline"  disabled>
-                        <span class="form-check-label">Option 3</span>
-                      </label> -->
                   </div>
                   <div class="input-group mb-0">
                     <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
@@ -156,14 +146,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $saldokg = $det['kgs'];
                   $inkg = $det['kgsin'];
                   $outkg = $det['kgsout'];
-                  if ($brg != $det['id_barang']) {
+                  // if ($brg != $det['id_barang']) {
                     $brg = $det['id_barang'];
                     $sak = $saldo + $in - $out;
                     $sakkg = $saldokg + $inkg - $outkg;
-                  } else {
-                    $sak += $saldo + $in - $out;
-                    $sakkg = $saldokg + $inkg - $outkg;
-                  }
+                  // } else {
+                  //   $sak += $saldo + $in - $out;
+                  //   $sakkg = $saldokg + $inkg - $outkg;
+                  // }
                   $bg = $sak >= 0 ? 'text-teal-green' : 'text-danger';
                   $hasilsak += $det['pcs'];
                   $cntbrg += 1;
@@ -185,7 +175,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td style="border-bottom: red;"><?= $insno; ?></td>
                     <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
                     <!-- <td style="border-bottom: red; font-size: 9px;"></td> -->
-                    <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 0); ?></td>
+                    <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 2); ?></td>
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg, 2); ?></td>
                     <?php if($this->session->userdata('invharga')==1): ?>
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($det['harga'], 2); ?></td>
@@ -222,7 +212,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="col-3 ">
                 <h4 class="mb-0 font-kecil font-bold">Pcs</h4>
                 <span class="font-kecil">
-                  <?= rupiah($jmpcs, 0); ?>
+                  <?= rupiah($jmpcs, 2); ?>
                 </span>
               </div>
               <div class="col-3">

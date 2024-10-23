@@ -35,7 +35,7 @@
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
                 <?php foreach ($detail as $val) { ?>
                     <tr>
-                        <td><?= $val['nama_barang']; ?></td>
+                        <td style="line-height: 12px;"><?= $val['nama_barang'].' <br><span class="text-teal" style="font-style: italic; font-size: 12px;">'.$val['nobontr'].'</span>'; ?></td>
                         <td><?= $val['brg_id']; ?></td>
                         <td><?= $val['namasatuan']; ?></td>
                         <td class="text-end"><?= rupiah($val['pcs'],0); ?></td>

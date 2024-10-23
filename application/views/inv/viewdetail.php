@@ -12,7 +12,7 @@
             <h4 class="mb-0 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
             <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?></h4>
             <hr class="m-0">
-            <span class="font-12 text-red">KATEGORI : <?= $header['nama_kategori']; ?></span><br>
+            <span class="font-12 text-red">KATEGORI : <?= $header['name_kategori']; ?></span><br>
         </div>
         <div class="col-2 <?php if($this->session->userdata('currdept')=='GM'){ echo "hilang"; } ?>">
             <a href="#kolap" class="btn btn-sm btn-info" id="cekkolap" data-toggle="collapse" aria-expanded="false">View BOM</a>
