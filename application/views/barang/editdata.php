@@ -34,7 +34,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 : $path . $data['filefoto'];
                             $foto_url = base_url($foto) . '?t=' . time();
                             ?>
-                            <img src="<?= $foto_url; ?>" alt="Foto" style="width: auto;" id="gbimage">
+                            <img src="<?= $foto_url; ?>" alt="Foto" style="width: 100%;" id="gbimage">
                         </div>
                         <div class="text-center">
                             <form name="formFoto" id="formFoto" action="<?= $actionfoto; ?>" method="post" enctype="multipart/form-data">
@@ -82,7 +82,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </div>
                             </div>
                             <div class="mb-1 row">
-                                <label class="col-3 col-form-label required">merek</label>
+                                <label class="col-3 col-form-label required">Merek</label>
                                 <div class="col">
                                     <input type="text" class="form-control font-kecil" name="merek" id="merek" placeholder="Merek" value="<?= $data['merek']; ?>">
                                 </div>

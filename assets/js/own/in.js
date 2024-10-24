@@ -123,6 +123,9 @@ function getdatain() {
 			// alert(data.datagroup);
 			// window.location.reload();
 			$("#body-table").html(data.datagroup).show();
+			$("#jumlahrekod").text(rupiah(data.jmlrek, ".", ",", 0));
+			$("#jumlahpcs").text(rupiah(data.jmlpcs, ".", ",", 0));
+			$("#jumlahkgs").text(rupiah(data.jmlkgs, ".", ",", 2));
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);

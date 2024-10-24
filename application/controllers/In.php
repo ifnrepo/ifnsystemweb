@@ -66,11 +66,17 @@ class In extends CI_Controller {
         ];
         $this->session->set_userdata('todept',$_POST['dept_tuju']);
         $query = $this->inmodel->getdata($kode);
+        $norek=0;$jmlpcs=0;$jmlkgs=0;
         foreach ($query as $que) {
             $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
             $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('curdept') : 'diKonfirmasi Oleh : '.datauser($que['user_valid'],'name').'@'.tglmysql2($que['tgl_valid']);
             $hasil .= "<tr>";
             $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
+            if($que['ok_valid']==1){
+                $cekpcskgs = $this->inmodel->cekpcskgs($que['id'])->row_array();
+                $jmlpcs += $cekpcskgs['pcs'];
+                $jmlkgs += $cekpcskgs['kgs'];
+            }
             if($que['data_ok']==1){
                 $hasil .= "<td class='font-bold'><a href='".base_url().'in/viewdetailin/'.$que['id']."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
             }else{
@@ -87,8 +93,9 @@ class In extends CI_Controller {
             }
             $hasil .= "</td>";
             $hasil .= "</tr>";
+            $norek++;
         }
-        $cocok = array('datagroup' => $hasil);
+        $cocok = array('datagroup' => $hasil,'jmlrek'=>$norek,'jmlpcs'=>$jmlpcs,'jmlkgs'=>$jmlkgs);
         echo json_encode($cocok);
     }
     public function cekkonfirmasi($id){

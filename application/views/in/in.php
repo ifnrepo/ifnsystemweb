@@ -102,6 +102,24 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </tbody>
           </table>
         </div>
+        <div class="card card-active mt-2" style="clear:both;">
+          <div class="card-body p-2 font-kecil">
+            <div class="row">
+              <div class="col-3">
+                <div class="font-bold">Jumlah Rec : </div>
+                <div id="jumlahrekod">XX</div>
+              </div>
+              <div class="col-3">
+                <div class="font-bold">Pcs : </div>
+                <div id="jumlahpcs">XX</div>
+              </div>
+              <div class="col-3">
+                <div class="font-bold">Kgs : </div>
+                <div id="jumlahkgs">XX</div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>

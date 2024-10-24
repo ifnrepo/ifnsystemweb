@@ -27,11 +27,12 @@ $(document).ready(function () {
 	}
 	var value_old = 0;
 	var errosimpan = $("#errorsimpan").val();
+	var pesanerr = $("#pesanerror").val();
 	if (errosimpan == 1) {
-		pesan(
-			"Pilih departemen penerima Input Barang (tekan tombol 'GO' dahulu)",
-			"error",
-		);
+		var pesan1 =
+			"Pilih departemen penerima Input Barang (tekan tombol 'GO' dahulu)";
+		var cekpesan = pesanerr == "" ? pesan1 : pesanerr;
+		pesan(cekpesan, "error");
 	}
 	if (errosimpan == 2) {
 		pesan("Ada Error Program, Hubungi Administrator Aplikasi !", "error");

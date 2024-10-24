@@ -137,6 +137,12 @@ class In_model extends CI_Model{
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
+    public function cekpcskgs($id){
+        $this->db->select("Sum(pcs) as pcs,sum(kgs) as kgs");
+        $this->db->from('tb_detail');
+        $this->db->where('id_header',$id);
+        return $this->db->get();
+    }
     // END In Model
     public function konfirmasi($data){
         $this->db->where('id',$data['id']);

@@ -42,6 +42,7 @@ class Userappsmodel extends CI_Model
         $data['cekbatalstok'] = isset($data['cekbatalstok']) ? 1 : 0;
         $data['cekbbl'] = isset($data['cekbbl']) ? 1 : 0;
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
+        $data['cekpakaibc'] = isset($data['cekpakaibc']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
@@ -116,6 +117,7 @@ class Userappsmodel extends CI_Model
         $data['cekbatalstok'] = isset($data['cekbatalstok']) ? 1 : 0;
         $data['cekbbl'] = isset($data['cekbbl']) ? 1 : 0;
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
+        $data['cekpakaibc'] = isset($data['cekpakaibc']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
