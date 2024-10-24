@@ -194,21 +194,21 @@
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Benua</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="benua" id="benua" placeholder="Benua" <?= $data['benua']; ?>>
+                <input type="text" class="form-control font-kecil" name="benua" id="benua" placeholder="Benua" value="<?= $data['benua']; ?>">
             </div>
         </div>
 
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Region</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="region" id="region" placeholder="Region" <?= $data['region']; ?>>
+                <input type="text" class="form-control font-kecil" name="region" id="region" placeholder="Region" value="<?= $data['region']; ?>">
             </div>
         </div>
 
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">CustId</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="cust_id" id="cust_id" placeholder="CustId" <?= $data['cust_id']; ?>>
+                <input type="text" class="form-control font-kecil" name="cust_id" id="cust_id" placeholder="CustId" value="<?= $data['cust_id']; ?>">
             </div>
         </div>
     </div>
