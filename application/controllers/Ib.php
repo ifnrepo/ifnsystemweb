@@ -588,14 +588,22 @@ class Ib extends CI_Controller
             $this->ibmodel->isitokenbc($data);
             // $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
             $this->helpermodel->isilog('Refresh Token CEISA 40');
-            $url = base_url().'ib/isidokbc/'.$id;
+            if($id=99){
+                $url = base_url().'ib';
+            }else{
+                $url = base_url().'ib/isidokbc/'.$id;
+            }
             redirect($url);
         }else{
             // $url = base_url().'ib/kosong';
             // redirect($url);
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
-            $url = base_url().'ib/isidokbc/'.$id;
+            if($id=''){
+                $url = base_url().'ib';
+            }else{
+                $url = base_url().'ib/isidokbc/'.$id;
+            }
             redirect($url);
         }
     }
@@ -648,11 +656,12 @@ class Ib extends CI_Controller
         }else{
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+            // $url = base_url().'ib/isidokbc/'.$id;
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }
     }
-    public function getresponpdf($id){
+    public function getresponpdf($id,$mode=0){
         $dataaju = $this->ibmodel->getdatanomoraju($id);
         $token = $this->ibmodel->gettoken();
         $curl = curl_init();
@@ -675,21 +684,22 @@ class Ib extends CI_Controller
         $databalik = json_decode($result,true);
         if($databalik['status']=='Success'){
             if($databalik['dataStatus'][0]['nomorDaftar']!=''){
-                $this->tampilkanpdf($databalik['dataRespon'][0]['pdf'],$id);
+                $this->tampilkanpdf($databalik['dataRespon'][0]['pdf'],$id,$mode);
             }else{
                 $this->session->set_flashdata('errorsimpan',1);
                 $this->session->set_flashdata('pesanerror','PDF Belum ada');
             }
-            $url = base_url().'ib/isidokbc/'.$id;
+            $url = $mode = 0 ? base_url().'ib/isidokbc/'.$id : base_url().'ib';
             redirect($url);
         }else{
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
-            $url = base_url().'ib/isidokbc/'.$id;
+            // $url = base_url().'ib/isidokbc/'.$id;
+            $url = $mode = 0 ? base_url().'ib/isidokbc/'.$id : base_url().'ib';
             redirect($url);
         }
     }
-    public function tampilkanpdf($data,$id){
+    public function tampilkanpdf($data,$id,$mode){
         $token = $this->ibmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
@@ -717,7 +727,11 @@ class Ib extends CI_Controller
         header('Content-Disposition: attachment; filename="'.$pisah[5].'"');
         header('Content-Length: '.strlen($databalik));
         echo $databalik;
-        $url = base_url().'ib/isidokbc/'.$id;
+        if($mode=0){
+            $url = base_url().'ib/isidokbc/'.$id;
+        }else{
+            $url = base_url().'ib';
+        }
         redirect($url);
     }
     public function addlampiran($id){

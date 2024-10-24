@@ -84,7 +84,7 @@
 	<script src="<?= base_url(); ?>assets/js/own/personil.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'in') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/in.js?1724750323"></script>
+	<script src="<?= base_url(); ?>assets/js/own/in.js?1724750329"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'out') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/out.js?1724750323"></script>
@@ -99,7 +99,7 @@
 	<script src="<?= base_url(); ?>assets/js/own/po.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'ib') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/ib.js?1724750323"></script>
+	<script src="<?= base_url(); ?>assets/js/own/ib.js?1724750329"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'ibx') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/ibbcdok.js?1724750324"></script>

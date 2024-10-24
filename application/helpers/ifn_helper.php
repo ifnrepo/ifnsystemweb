@@ -412,8 +412,8 @@ function gethrg($idb, $nobo)
 function generatekodebc($jnsbc, $tglbc, $nobc)
 {
     $kode = '000000-010017-00000000-000000';
-    if ($jnsbc != '') {
-        $kode1 = str_repeat('0', 6 - strlen($jnsbc)) . $jnsbc;
+    if (trim($jnsbc) != '') {
+        $kode1 = str_repeat('0', 6 - strlen(trim($jnsbc))) . trim($jnsbc);
     } else {
         $kode1 = '000000';
     }
@@ -422,13 +422,15 @@ function generatekodebc($jnsbc, $tglbc, $nobc)
     } else {
         $kode2 = '00000000';
     }
-    if ($nobc != '') {
-        $kode3 = str_repeat('0', 6 - strlen($nobc)) . $nobc;
+    if (trim($nobc) != '') {
+        $kode3 = str_repeat('0', 6 - strlen(trim($nobc))) . trim($nobc);
     } else {
         $kode3 = '000000';
     }
+    // $kode3 = '';
     $kode = $kode1 . '-010017-' . $kode2 . '-' . $kode3;
     return $kode;
+    // return  6 - strlen(trim($nobc));
 }
 function riwayatdok($id)
 {
