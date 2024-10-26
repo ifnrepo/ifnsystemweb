@@ -54,7 +54,7 @@
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Alamat</label>
                                                                 <div class="col">
-                                                                    <textarea class="form-control" name="alamat" id="alamat" cols="30" rows="3" placeholder="Alamat"><?= $data['alamat'] ?></textarea>
+                                                                    <textarea class="form-control" name="alamat" id="alamat" cols="30" rows="3" placeholder="Alamat" value="<?= $data['alamat'] ?>"></textarea>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
@@ -123,13 +123,13 @@
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">BuyCode</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="buycode" id="buycode" placeholder="BuyCode" <?= $data['buycode']; ?> readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="buycode" id="buycode" placeholder="BuyCode" value="<?= $data['buycode']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">InsCode</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="inscode" id="inscode" placeholder="Inscode" <?= $data['inscode']; ?>readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="inscode" id="inscode" placeholder="Inscode" value="<?= $data['inscode']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">
@@ -206,21 +206,21 @@
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Benua</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="benua" id="benua" placeholder="Benua" <?= $data['benua']; ?> readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="benua" id="benua" placeholder="Benua" value="<?= $data['benua']; ?>" readonly>
                                                                 </div>
                                                             </div>
 
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">Region</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="region" id="region" placeholder="Region" <?= $data['region']; ?> readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="region" id="region" placeholder="Region" value="<?= $data['region']; ?>" readonly>
                                                                 </div>
                                                             </div>
 
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">CustId</label>
                                                                 <div class="col">
-                                                                    <input type="text" class="form-control font-kecil" name="cust_id" id="cust_id" placeholder="CustId" <?= $data['cust_id']; ?> readonly>
+                                                                    <input type="text" class="form-control font-kecil" name="cust_id" id="cust_id" placeholder="CustId" value="<?= $data['cust_id']; ?> " readonly>
                                                                 </div>
                                                             </div>
                                                         </div>

@@ -25,11 +25,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <thead>
                             <tr>
                                 <th>No</th>
-                                <th>Foto</th>
                                 <th>Nama </th>
                                 <th>Nip</th>
                                 <th>Bagian</th>
                                 <th>Jabatan</th>
+                                <th>Status Aktif</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -38,11 +38,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             foreach ($personil as $key) : $no++; ?>
                                 <tr>
                                     <td><?= $no; ?></td>
-                                    <td><?= $key['foto_personil']; ?></td>
                                     <td><?= $key['nama_personil']; ?></td>
                                     <td><?= $key['nip']; ?></td>
                                     <td><?= $key['departemen']; ?></td>
                                     <td><?= $key['nama_jabatan']; ?></td>
+                                    <td style="text-align: center;"><?php if ($key['status_aktif'] == 1) : ?>
+                                            <i class="fa fa-check text-success"></i>
+                                        <?php else : ?>
+                                            <i class="fa fa-times text-danger"></i>
+                                        <?php endif; ?>
+                                    </td>
                                     <td>
                                         <a href="<?= base_url() . 'personil/edit/' . $key['personil_id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="edituser" rel="<?= $key['personil_id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
@@ -59,6 +64,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </tbody>
                     </table>
                 </div>
+
+
+
+
             </div>
         </div>
     </div>

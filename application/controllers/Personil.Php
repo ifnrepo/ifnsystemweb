@@ -57,18 +57,25 @@ class Personil extends CI_Controller
     public function edit($personil_id)
     {
         $header['header'] = 'master';
-        $data['action'] = base_url() . 'personil/updatedata';
         $data['jabatan'] = $this->db->get('jabatan')->result_array();
         $data['grups'] = $this->db->get('grup')->result_array();
         $data['dept'] = $this->db->get('dept')->result_array();
         $data['agama'] = $this->db->get('tb_agama')->result_array();
         $data['pendidikan'] = $this->db->get('tb_pendidikan')->result_array();
         $data['status'] = $this->db->get('tb_status')->result_array();
-        $data['personil'] = $this->Personilmodel->getdatabyid($personil_id);
+        $data['personil'] = $this->Personilmodel->getdatabyid($personil_id)->row_array();
+
+        $data['actionfoto'] = base_url() . 'personil/updatefoto';
+        $data['actionkolom'] = base_url() . 'personil/updatedata/' . $personil_id;
         $footer['fungsi'] = 'personil';
         $this->load->view('layouts/header', $header);
         $this->load->view('personil/edit', $data);
         $this->load->view('layouts/footer', $footer);
+    }
+
+    public function updatefoto()
+    {
+        $this->Personilmodel->updatefoto_baru();
     }
 
 
@@ -81,11 +88,6 @@ class Personil extends CI_Controller
             redirect($url);
         }
     }
-
-
-
-
-
 
     public function hapusdata($personil_id)
     {
@@ -105,7 +107,7 @@ class Personil extends CI_Controller
         $data['agama'] = $this->db->get('tb_agama')->result_array();
         $data['pendidikan'] = $this->db->get('tb_pendidikan')->result_array();
         $data['status'] = $this->db->get('tb_status')->result_array();
-        $data['personil'] = $this->Personilmodel->getdatabyid($personil_id);
-        $this->load->view('personil/view', $data);
+        $data['personil'] = $this->Personilmodel->getdatabyid($personil_id)->row_array();
+        $this->load->view('personil/viewpersonil', $data);
     }
 }

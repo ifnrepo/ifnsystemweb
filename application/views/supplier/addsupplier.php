@@ -126,11 +126,10 @@
                 </div>
             </div>
             <div class="row mt-2">
-                <label class="col-3 col-form-label pt-0"></label>
+                <label class="col-3 col-form-label pt-0">Aktif</label>
                 <div class="col">
-                    <label class="form-check">
+                    <label class="form-check form-check-single form-switch">
                         <input class="form-check-input" id="aktif" name="aktif" type="checkbox">
-                        <span class="form-check-label">NOMMSQ</span>
                     </label>
                 </div>
             </div>
