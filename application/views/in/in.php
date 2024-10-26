@@ -70,8 +70,10 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
                 </div>
-                <div class="col-3">
-                  <h4 class="mb-1"></h4>
+                <div class="col-3" style="font-size: 13px;">
+                  <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod">0</span>/<span id="jumlahrekode">0</span></div>
+                  <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs">0</span></div>
+                  <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs">0.00</span></div>
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1"></h4>
@@ -85,8 +87,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           
         </div>
-        <div id="table-default" class="table-responsive">
-          <table class="table datatable6" id="cobasisip">
+        <div id="table-default" class="table-responsive mt-2">
+          <table class="table datatable4" id="cobasisip">
             <thead>
               <tr>
                 <th>Tgl</th>
@@ -102,7 +104,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </tbody>
           </table>
         </div>
-        <div class="card card-active mt-2" style="clear:both;">
+        <div class="card card-active mt-2 hilang" style="clear:both;">
           <div class="card-body p-2 font-kecil">
             <div class="row">
               <div class="col-3">

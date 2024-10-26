@@ -22,14 +22,32 @@ class Out_model extends CI_Model{
             'dept_tuju' => $kode['dept_tuju'],
             'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th')
+            'year(tgl)' => $this->session->userdata('th'),
         ];
-        $this->db->select('sum(tb_detail.pcs) as pcs, sum(tb_detail.kgs) as kgs');
-        $this->db->from('tb_detail');
-        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->select('count(distinct nomor_dok) as jmrek,sum(tb_detail.pcs) as pcs, sum(tb_detail.kgs) as kgs');
+        $this->db->from('tb_header');
+        $this->db->join('tb_detail','tb_header.id = tb_detail.id_header','left');
         $this->db->where($arrkondisi);
         $this->db->where('tb_header.data_ok',1);
-        // $this->db->where('tb_header.ok_valid',1);
+        // $this->db->where('tb_header.ok_tuju',1);
+        $hasil = $this->db->get();
+        return $hasil->row_array();
+    }
+    public function getrekod($kode){
+        $arrkondisi = [
+            'id_perusahaan'=>IDPERUSAHAAN,
+            'dept_id' => $kode['dept_id'],
+            'dept_tuju' => $kode['dept_tuju'],
+            'kode_dok' => 'T',
+            'month(tgl)' => $this->session->userdata('bl'),
+            'year(tgl)' => $this->session->userdata('th'),
+        ];
+        $this->db->select('count(distinct nomor_dok) as jmlrek');
+        $this->db->from('tb_header');
+        $this->db->join('tb_detail','tb_header.id = tb_detail.id_header','left');
+        $this->db->where($arrkondisi);
+        // $this->db->where('tb_header.data_ok',1);
+        // $this->db->where('tb_header.ok_tuju',1);
         $hasil = $this->db->get();
         return $hasil->row_array();
     }
@@ -129,13 +147,15 @@ class Out_model extends CI_Model{
         return $dataheader['id'];
     }
     public function getdatadetail($data){
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.nomor_bc as bcnomor,f.tgl_bc as bctgl,f.jns_bc");
         $this->db->from('tb_detailgen a');
         $this->db->join('satuan b','b.id = a.id_satuan','left');
         $this->db->join('barang c','c.id = a.id_barang','left');
         $this->db->join('tb_detail d','a.id = d.id_out','left');
         $this->db->join('tb_header e','e.id = d.id_header','left');
+        $this->db->join('tb_hargamaterial f','f.id_barang = c.id and f.nobontr = a.nobontr','left');
         $this->db->where('a.id_header',$data);
+        $this->db->order_by('c.nama_barang','asc');
         return $this->db->get()->result_array();    
     }
     public function getdatadetailout($data){
@@ -151,6 +171,7 @@ class Out_model extends CI_Model{
         $this->db->join('tb_detail d','a.id = d.id_out','left');
         $this->db->join('tb_header e','e.id = d.id_header','left');
         $this->db->where('a.id_header'.$this->session->flashdata('barangerror'),$data);
+        $this->db->order_by('c.nama_barang','asc');
         return $this->db->get()->result_array();
     }
     public function getdatadetailoutbyid($data){

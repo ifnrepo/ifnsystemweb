@@ -31,6 +31,7 @@ class Out extends CI_Controller {
         ];
         $data['data'] = $this->out_model->getdata($kode);
         $data['jumlahpcskgs'] = $this->out_model->getdatapcskgs($kode);
+        $data['jmlrekod'] = $this->out_model->getrekod($kode);
         $footer['fungsi'] = 'out';
         $this->session->unset_userdata('barangerror');
 		$this->load->view('layouts/header',$header);

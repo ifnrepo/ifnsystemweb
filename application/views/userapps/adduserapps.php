@@ -463,8 +463,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label">Scrap / Waste</span>
                               </label>
                               <label class="form-check mb-1">
-                                <input class="form-check-input" id="other13" name="other13" type="checkbox">
-                                <span class="form-check-label">Scrap / Waste</span>
+                                <input class="form-check-input" id="other14" name="other14" type="checkbox">
+                                <span class="form-check-label">Sparepart</span>
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="other7" name="other7" type="checkbox">

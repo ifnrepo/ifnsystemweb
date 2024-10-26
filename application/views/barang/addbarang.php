@@ -31,9 +31,9 @@
                 </div>
             </div>
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Safty Stock</label>
+                <label class="col-3 col-form-label required">Safety Stock</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="safety_stock" id="safety_stock" placeholder="Safty Stock">
+                    <input type="text" class="form-control font-kecil" name="safety_stock" id="safety_stock" placeholder="Safty Stock" disabled>
                 </div>
             </div>
             <div class="mb-1 row">
@@ -62,7 +62,7 @@
                     </label>
                 </div>
             </div>
-            <div class="row mt-2">
+            <div class="row mt-0">
                 <label class="col-3 col-form-label pt-0"></label>
                 <div class="col">
                     <label class="form-check">
@@ -71,7 +71,7 @@
                     </label>
                 </div>
             </div>
-            <div class="row mt-2">
+            <div class="row mt-0">
                 <label class="col-3 col-form-label pt-0"></label>
                 <div class="col">
                     <label class="form-check">

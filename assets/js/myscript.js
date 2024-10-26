@@ -553,7 +553,7 @@ function ponodis(po, item, dis, brg) {
 
 function rupiah(amount, decimalSeparator, thousandsSeparator, nDecimalDigits) {
 	if (amount == 0) {
-		return "";
+		return "0";
 	} else {
 		var num = parseFloat(amount); //convert to float
 		//default values
@@ -605,4 +605,14 @@ function roundTo(n, place) {
 function tglmysql(str) {
 	var c = str.split("-");
 	return c[2] + "-" + c[1] + "-" + c[0];
+}
+let cachedIP = null;
+async function getIP() {
+	if (cachedIP) {
+		return cachedIP;
+	}
+	const response = await fetch("https://api.ipify.org?format=json");
+	const data = await response.json();
+	cachedIP = data.ip;
+	return cachedIP;
 }
