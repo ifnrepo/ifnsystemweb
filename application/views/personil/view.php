@@ -43,7 +43,7 @@
         <div class="resume-wrapper mx-auto rounded-2">
           <div class="resume-header px-4 px-lg-5">
             <div class="resume-profile-holder text-center">
-              <img class="resume-profile-pic rounded-circle" src="<?= LOK_UPLOAD_USER . $personil['foto_personil']; ?>" alt="" style="max-width: 180px; max-height: 180px;">
+              <img class="resume-profile-pic rounded-circle" src="<?= LOK_UPLOAD_USER . $personil['filefoto']; ?>" alt="" style="max-width: 180px; max-height: 180px;">
               <h2 class="resume-name text-uppercase"><?= $personil['nama_personil']; ?></h2>
               <div class="resume-role-title text-uppercase">Sidik Jari : <?= $personil['sidikjari_personil']; ?></div>
               <div class="resume-role-title text-uppercase">NIP : <?= $personil['nip']; ?></div>

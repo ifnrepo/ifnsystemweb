@@ -105,19 +105,19 @@
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Keterangan</label>
             <div class="col">
-                <textarea class="form-control font-kecil" name="keterangan" id="keterangan" cols="30" rows="3" placeholder="Keterangan"><?= $data['keterangan'] ?></textarea>
+                <textarea class="form-control font-kecil" name="keterangan" id="keterangan" cols="30" rows="3" placeholder="Keterangan" value="<?= $data['keterangan'] ?>"></textarea>
             </div>
         </div>
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">BuyCode</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="buycode" id="buycode" placeholder="BuyCode" <?= $data['buycode']; ?>>
+                <input type="text" class="form-control font-kecil" name="buycode" id="buycode" placeholder="BuyCode" value="<?= $data['buycode']; ?>">
             </div>
         </div>
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">InsCode</label>
             <div class="col">
-                <input type="text" class="form-control font-kecil" name="inscode" id="inscode" placeholder="Inscode" <?= $data['inscode']; ?>>
+                <input type="text" class="form-control font-kecil" name="inscode" id="inscode" placeholder="Inscode" value="<?= $data['inscode']; ?>">
             </div>
         </div>
         <div class="mb-1 row">

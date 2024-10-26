@@ -28,7 +28,7 @@ class Personilmodel extends CI_Model
         $this->db->join('tb_status', 'tb_status.id = personil.id_status', 'left');
         $this->db->join('tb_pendidikan', 'tb_pendidikan.id = personil.id_pendidikan', 'left');
         $this->db->where('personil.personil_id', $personil_id);
-        return $this->db->get()->row_array();
+        return $this->db->get();
     }
 
 
@@ -41,6 +41,8 @@ class Personilmodel extends CI_Model
     public function simpandata()
     {
         $data = $_POST;
+        $data['status_aktif'] = $this->input->post('status_aktif') ? 1 : 0;
+
         $hasil = $this->db->insert('personil', $data);
         return $hasil;
     }
@@ -54,8 +56,72 @@ class Personilmodel extends CI_Model
     public function updatedata()
     {
         $data = $_POST;
+        $data['status_aktif'] = $this->input->post('status_aktif') ? 1 : 0;
         $this->db->where('personil_id', $data['personil_id']);
         $hasil = $this->db->update('personil', $data);
         return $hasil;
+    }
+
+    public function updatefoto_baru()
+    {
+        $data = $_POST;
+        $temp = $this->Personilmodel->getdatabyid($data['personil_id'])->row_array();
+        $fotodulu = FCPATH . 'assets/image/dokper/' . $temp['filefoto'];
+        $personil_id = $data['personil_id'];
+        $data['filefoto'] = $this->uploadLogo();
+
+        if ($data['filefoto'] != NULL) {
+            if ($data['filefoto'] == 'kosong') {
+                $data['filefoto'] = NULL;
+            } else {
+                if (file_exists($fotodulu)) {
+                    unlink($fotodulu);
+                }
+            }
+            $query = $this->db->query("UPDATE personil SET filefoto = '" . $data['filefoto'] . "' WHERE personil_id = '" . $personil_id . "' ");
+            if ($query) {
+                $this->session->set_userdata('foto', $data['filefoto']);
+                $this->session->set_flashdata('simpanfoto', 'berhasil');
+            }
+        } else {
+            $this->session->set_flashdata('ketlain', 'Error Upload Foto');
+        }
+
+        redirect(base_url() . 'personil/edit/' . $data['personil_id']);
+    }
+
+
+    public function uploadLogo()
+    {
+
+        $this->load->library('upload');
+        $this->uploadConfig = array(
+            'upload_path' => FCPATH . 'assets/image/dokper/',
+            'allowed_types' => 'gif|jpg|jpeg|png',
+            'max_size' => max_upload() * 1024,
+        );
+        // Adakah berkas yang disertakan?
+        $adaBerkas = $_FILES['file']['name'];
+        if (empty($adaBerkas)) {
+            return 'kosong';
+        }
+        $uploadData = NULL;
+        $this->upload->initialize($this->uploadConfig);
+        if ($this->upload->do_upload('file')) {
+            $uploadData = $this->upload->data();
+            $namaFileUnik = strtolower($uploadData['file_name']);
+            $fileRenamed = rename(
+                $this->uploadConfig['upload_path'] . $uploadData['file_name'],
+                $this->uploadConfig['upload_path'] . $namaFileUnik
+            );
+            $uploadData['file_name'] = $fileRenamed ? $namaFileUnik : $uploadData['file_name'];
+        } else {
+            $_SESSION['success'] = -1;
+            $ext = pathinfo($adaBerkas, PATHINFO_EXTENSION);
+            $ukuran = $_FILES['file']['size'] / 1000000;
+            $tidakupload = $this->upload->display_errors(NULL, NULL);
+            $this->session->set_flashdata('msg', $tidakupload . ' ' . $ext . ' ukuran ' . round($ukuran, 2) . ' MB');
+        }
+        return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
     }
 }
