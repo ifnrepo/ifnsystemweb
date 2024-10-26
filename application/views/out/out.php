@@ -78,9 +78,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
                 </div>
-                <div class="col-3" style="font-size: 14px;">
-                  <div class="text-pink font-bold mt-2 ">Jumlah Pcs : <?= rupiah($jumlahpcskgs['pcs'],0); ?></div>
-                  <div class="text-pink font-bold">Jumlah Kgs : <?= rupiah($jumlahpcskgs['kgs'],2); ?></div>
+                <div class="col-3" style="font-size: 13px;">
+                  <div class="text-blue font-bold mt-2 ">Jumlah Rec : <?= rupiah($jumlahpcskgs['jmrek'],0).'/'.rupiah($jmlrekod['jmlrek'],0); ?></div>
+                  <div class="text-blue font-bold">Jumlah Pcs : <?= rupiah($jumlahpcskgs['pcs'],0); ?></div>
+                  <div class="text-blue font-bold">Jumlah Kgs : <?= rupiah($jumlahpcskgs['kgs'],2); ?></div>
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1">

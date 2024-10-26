@@ -18,6 +18,8 @@ class In_model extends CI_Model{
         $this->db->where($arrkondisi);
         // $this->db->where('kode_dok','T');
         $this->db->where($kondisi);
+        $this->db->order_by('tgl');
+        $this->db->order_by('nomor_dok');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }

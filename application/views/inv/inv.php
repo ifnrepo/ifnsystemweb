@@ -119,7 +119,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Nomor IB</th>
                 <th>Insno</th>
                 <th>Satuan</th>
-                <!-- <th>Kategori</th> -->
+                <!-- <th>Sf</th> -->
                 <!-- <th>Output</th> -->
                 <th>Qty</th>
                 <th>Kgs</th>
@@ -167,14 +167,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $pilihtampil = $sak==0 ? $sakkg : $sak;
                   $totalharga = $pilihtampil * $det['harga'];
                   $grandtotal += $totalharga;
+                  $cx='';
+                  if($this->session->userdata('currdept')=='GM' || $this->session->userdata('currdept')=='GS'){
+                    if($det['kodesatuan']=='KGS'){
+                      if((float) $det['totkgs'] <= (float) $det['safety_stock']){
+                        $cx = 'text-red';
+                      }
+                    }else{
+                      if((float) $det['totpcs'] <= (float) $det['safety_stock']){
+                        $cx = 'text-red';
+                      }
+                    }
+                  }
               ?>
-                  <tr class="<?= $bg; ?>">
-                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="text-teal-green"><?= $spekbarang; ?></a></td>
+                  <tr class="<?= $bg; ?><?= $cx; ?>">
+                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="<?= $cx; ?>"><?= $spekbarang; ?></a></td>
                     <td style="border-bottom: red;"><?= viewsku(id: $det['kode'], po: $det['po'], no: $det['item'], dis: $det['dis']) ?></td>
                     <td style="border-bottom: red;"><?= $nobontr; ?></td>
                     <td style="border-bottom: red;"><?= $insno; ?></td>
                     <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
-                    <!-- <td style="border-bottom: red; font-size: 9px;"></td> -->
+                    <!-- <td style="border-bottom: red;"></td> -->
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 2); ?></td>
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg, 2); ?></td>
                     <?php if($this->session->userdata('invharga')==1): ?>

@@ -108,7 +108,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">Safety Stock</label>
                                 <div class="col">
-                                    <input type="text" class="form-control font-kecil" name="safety_stock" id="safety_stock" value="<?= $data['safety_stock']; ?>">
+                                    <input type="text" class="form-control font-kecil" name="safety_stock" id="safety_stock" value="<?= $data['safety_stock']; ?>" disabled>
                                 </div>
                             </div>
                             <div class=" mb-1 row">

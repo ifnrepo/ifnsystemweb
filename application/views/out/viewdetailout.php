@@ -70,14 +70,14 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                            <?php foreach ($detail2 as $val) { ?>
+                            <?php foreach ($detail2 as $val) { $ketbc = $val['bcnomor']!=null ? 'BC. '.trim($val['jns_bc']).'-'.$val['bcnomor'].'('.$val['bctgl'].')' : ''; ?>
                                 <tr>
-                                    <td><?= $val['nama_barang'].' # <span class="text-teal">'.$val['nobontr'].'</span>'; ?></td>
+                                    <td style="line-height: 13px;"><?= $val['nama_barang'].' # <span class="text-teal">'.$val['nobontr'].'<br><span class="text-cyan">'.$ketbc.'</span></span>'; ?></td>
                                     <td><?= $val['brg_id']; ?></td>
                                     <td><?= $val['namasatuan']; ?></td>
                                     <td class="text-right"><?= rupiah($val['pcs'],0); ?></td>
                                     <td class="text-right"><?= rupiah($val['kgs'],2); ?></td>
-                                    <td><?= $val['nodok']; ?></td>
+                                    <td></td>
                                 </tr>
                             <?php } ?>
                             </tbody>
