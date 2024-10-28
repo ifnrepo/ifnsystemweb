@@ -151,8 +151,15 @@
                                             <input type="text" class="form-control font-kecil" name="email" id="email" placeholder="Email" value="<?= $personil['email']; ?>" readonly>
                                         </div>
                                     </div>
+
                                 </div>
                                 <div class="col">
+                                    <div class="mb-1 row">
+                                        <label class="col-3 col-form-label required">Jamsos</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control font-kecil" name="no_jamsostek" id="tempat_lahir" placeholder="Jamsostek" value="<?= $personil['no_jamsostek']; ?>" readonly>
+                                        </div>
+                                    </div>
                                     <div class="mb-1 row">
                                         <label class="col-3 col-form-label required">Jabatan</label>
                                         <div class="col">
@@ -260,8 +267,33 @@
                                             <input type="text" class="form-control font-kecil" name="kabupaten" id="kabupaten" placeholder="Kabupaten" value="<?= $personil['kabupaten']; ?>" readonly>
                                         </div>
                                     </div>
+                                    <div class="mb-1 row">
+                                        <label class="col-3 col-form-label required">Bpjs</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control font-kecil" name="no_bpjs" id="no_bpjs" placeholder="BPJS" value="<?= $personil['no_bpjs']; ?>" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-1 row">
+                                        <label class="col-3 col-form-label required">Ktp</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control font-kecil" name="no_ktp" id="no_ktp" placeholder="KTP" value="<?= $personil['no_ktp']; ?>" readonly>
+                                        </div>
+                                    </div>
+
                                 </div>
                                 <div class="col">
+                                    <div class="mb-1 row">
+                                        <label class="col-3 col-form-label required">Npwp</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control font-kecil" name="no_npwp" id="no_npwp" placeholder="NPWP" value="<?= $personil['no_npwp']; ?>" readonly>
+                                        </div>
+                                    </div>
+                                    <div class="mb-1 row">
+                                        <label class="col-3 col-form-label required">E-fin</label>
+                                        <div class="col">
+                                            <input type="text" class="form-control font-kecil" name="no_efin" id="no_efin" placeholder="E-FIN" value="<?= $personil['no_efin']; ?>" readonly>
+                                        </div>
+                                    </div>
                                     <div class="mb-1 row">
                                         <label class="col-3 col-form-label required">Pendidikan</label>
                                         <div class="col">
@@ -340,38 +372,6 @@
                         <div class="card-body">
                             <div class="card-title">Bank Account</div>
                             <div class="row" style="font-size: 12px;">
-                                <div class="col">
-                                    <div class="mb-1 row">
-                                        <label class="col-3 col-form-label required">Jamsos</label>
-                                        <div class="col">
-                                            <input type="text" class="form-control font-kecil" name="no_jamsostek" id="tempat_lahir" placeholder="Jamsostek" value="<?= $personil['no_jamsostek']; ?>" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="mb-1 row">
-                                        <label class="col-3 col-form-label required">Bpjs</label>
-                                        <div class="col">
-                                            <input type="text" class="form-control font-kecil" name="no_bpjs" id="no_bpjs" placeholder="BPJS" value="<?= $personil['no_bpjs']; ?>" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="mb-1 row">
-                                        <label class="col-3 col-form-label required">Ktp</label>
-                                        <div class="col">
-                                            <input type="text" class="form-control font-kecil" name="no_ktp" id="no_ktp" placeholder="KTP" value="<?= $personil['no_ktp']; ?>" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="mb-1 row">
-                                        <label class="col-3 col-form-label required">Npwp</label>
-                                        <div class="col">
-                                            <input type="text" class="form-control font-kecil" name="no_npwp" id="no_npwp" placeholder="NPWP" value="<?= $personil['no_npwp']; ?>" readonly>
-                                        </div>
-                                    </div>
-                                    <div class="mb-1 row">
-                                        <label class="col-3 col-form-label required">E-fin</label>
-                                        <div class="col">
-                                            <input type="text" class="form-control font-kecil" name="no_efin" id="no_efin" placeholder="E-FIN" value="<?= $personil['no_efin']; ?>" readonly>
-                                        </div>
-                                    </div>
-                                </div>
                                 <div class="col">
                                     <div class="mb-1 row">
                                         <label class="col-3 col-form-label required">No Rekening</label>

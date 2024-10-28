@@ -1,6 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
+
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row g-0 d-flex align-items-between">
@@ -17,10 +18,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </div>
 <div class="page-body">
     <div class="container-xl">
-
         <div class="card">
-            <div class="card-body">
+            <div class="row m-1">
+                <!-- <div class="col-md-3">
+                    <select name="filter" id="filter" class="form-select font-kecil mt-0">
+                        <option value="all">Semua Departemen</option>
+                        <?php foreach ($dept_options as $option) : ?>
+                            <option value="<?= $option['urut']; ?>"><?= $option['departemen']; ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                </div> -->
+            </div>
+            <div class="card-body pt-1">
                 <div id="table-default" class="table-responsive">
+
                     <table class="table datatable">
                         <thead>
                             <tr>
@@ -63,12 +74,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <?php endforeach; ?>
                         </tbody>
                     </table>
+
                 </div>
-
-
-
-
             </div>
         </div>
     </div>
 </div>
+<script>
+    $(document).ready(function() {
+        $("#filter").change(function() {
+            $.ajax({
+                url: base_url + "personil/filter", // Ubah ke URL controller yang tepat
+                type: "POST",
+                data: {
+                    filter: $(this).val()
+                },
+                success: function(response) {
+                    $("#table-default").html(response); // Ganti konten di dalam #table-default
+                },
+                error: function(xhr, status, error) {
+                    console.error("AJAX Error: ", status, error);
+                }
+            });
+        });
+    });
+</script>
