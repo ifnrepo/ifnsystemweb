@@ -330,10 +330,11 @@ class Out_model extends CI_Model{
                             $this->db->or_where('kgs_akhir > ',0);
                             $this->db->group_end();
                             $arrstokdept = $this->db->order_by('tgl,urut')->get('stokdept')->row_array();
+                            $nobontr = '';
                             if($this->session->userdata('deptsekarang')=='GS'){
                                 $nobontr = $arrstokdept['nobontr'];
                             }else{
-                                $nobontr = $datdet['nobontr'];
+                               $nobontr = $datdet['nobontr'];
                             }
                             // echo print_r($datdet);
                             $stokid=$arrstokdept['id'];
@@ -365,7 +366,9 @@ class Out_model extends CI_Model{
                                 $idinsertx = $this->db->insert_id();
 
                                 $this->db->set('id_stokdept',$stokid);
-                                $this->db->set('nobontr',$nobontr);
+                                if($this->session->userdata('deptsekarang')=='GM'){
+                                    $this->db->set('nobontr',$nobontr);
+                                }
                                 $this->db->set('pcs',$kurangpcs);
                                 $this->db->set('kgs',$kurangkgs);
                                 $this->db->set('harga',$deta['harga']);
@@ -388,9 +391,10 @@ class Out_model extends CI_Model{
                                 $this->db->set('harga',$deta['harga']);
                                 $this->db->where('id',$datdet['id']);
                                 $this->db->update('tb_detailgen');
-
                                 $this->db->set('id_stokdept',$stokid);
-                                $this->db->set('nobontr',$nobontr);
+                                if($this->session->userdata('deptsekarang')=='GM'){
+                                    $this->db->set('nobontr',$nobontr);
+                                }
                                 $this->db->set('pcs',$kurangpcs);
                                 $this->db->set('kgs',$kurangkgs);
                                 $this->db->set('harga',$deta['harga']);

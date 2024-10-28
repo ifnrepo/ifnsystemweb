@@ -71,7 +71,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-3" style="font-size: 13px;">
-                  <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod">0</span>/<span id="jumlahrekode">0</span></div>
+                  <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekode">0</span>/<span id="jumlahrekod">0</span></div>
                   <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs">0</span></div>
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs">0.00</span></div>
                 </div>

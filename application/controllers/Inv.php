@@ -39,6 +39,7 @@ class Inv extends CI_Controller
             $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
             $data['data'] = null;
             $data['kat'] = null;
+            $data['katbc'] = null;
             $data['gbg'] = '';
             $data['kategoricari'] = 'Cari Barang';
         } else {
@@ -46,12 +47,13 @@ class Inv extends CI_Controller
             $data['tglakhir'] = $this->session->userdata('tglakhir');
             $data['data'] = $this->invmodel->getdata();
             $data['kat'] = $this->invmodel->getdatakategori();
+            $data['katbc'] = $this->invmodel->getdatabc();
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
         }
         $footer['fungsi'] = 'inv';
         $this->load->view('layouts/header', $header);
-        $this->load->view('inv/inv', $data);
+        $this->load->view('inv/inv',$data);
         $this->load->view('layouts/footer', $footer);
     }
     public function clear()
@@ -75,9 +77,10 @@ class Inv extends CI_Controller
         $this->session->set_userdata('gbg', $_POST['gbn']);
         $this->session->set_userdata('filterkat', $_POST['kat']);
         $this->session->set_userdata('kategoricari', $_POST['kcari']);
+        $this->session->set_userdata('nomorbcnya', $_POST['nobcnya']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
-                $this->session->unset_userdata('katcari');
+                $this->session->unset_userdata('katcari');  
             } else {
                 $this->session->set_userdata('katcari', $_POST['cari']);
             }

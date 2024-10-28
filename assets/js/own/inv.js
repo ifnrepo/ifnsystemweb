@@ -4,6 +4,12 @@ $(window).on("load", function () {
 });
 $(document).ready(function () {
 	NProgress.done();
+	var jmlrek = $("#jumlahrek").text();
+	var jmlpc = $("#jumlahpc").text();
+	var jmlkg = $("#jumlahkg").text();
+	$("#jumlahrekod").text(rupiah(jmlrek, ",", ".", 0));
+	$("#jumlahpcs").text(rupiah(jmlpc, ",", ".", 0));
+	$("#jumlahkgs").text(rupiah(jmlkg, ",", ".", 2));
 });
 
 // document.addEventListener("DOMContentLoaded", function () {
@@ -59,6 +65,9 @@ $("#viewharga").click(function () {
 $("#katbar").change(function () {
 	$("#updateinv").click();
 });
+$("#nomorbcnya").change(function () {
+	$("#updateinv").click();
+});
 $("#tglawal").datepicker({
 	autoclose: true,
 	format: "dd-mm-yyyy",
@@ -74,6 +83,7 @@ $("#updateinv").click(function () {
 	// var katcari = document.getElementById("caribar").innerHTML;
 	var katcari = $("input:radio[name=radios-inline]:checked").val();
 	// $("#textcari").val("");
+	var nomorbcnya = $("#nomorbcnya").val();
 	var textcari = $("#textcari").val();
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
@@ -97,6 +107,7 @@ $("#updateinv").click(function () {
 			kat: katbar,
 			kcari: katcari,
 			cari: textcari,
+			nobcnya: nomorbcnya,
 		},
 		success: function (data) {
 			// alert(data);
