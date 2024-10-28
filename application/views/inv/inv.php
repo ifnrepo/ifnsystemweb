@@ -6,7 +6,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          Inventory Barang <?= $this->session->userdata('currdept'); ?>
+          <?php if(isset($repbeac) && $repbeac==1){ ?>
+              IT Inventory <?= $this->session->userdata('currdept'); ?>
+          <?php }else{ ?>
+            Inventory Barang <?= $this->session->userdata('currdept'); ?>
+          <?php } ?>
           <input type="hidden" id="bukavalid" value="<?= datauser($this->session->userdata('id'),'cekbatalstok'); ?>">
         </h2>
       </div>
@@ -27,6 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <?php
                 // Mendapatkan nilai 'deptsekarang', jika null nilai default jadi it
                 $selek = $this->session->userdata('currdept') ?? 'IT';
+                $disabel = isset($repbeac) && $repbeac==1 ? 'disabled' : '';
                 foreach ($hakdep as $hak) :
                   $selected = ($selek == $hak['dept_id']) ? "selected" : "";
                 ?>
@@ -74,9 +79,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input class="form-check-input" type="checkbox" id="viewinv" <?php if($this->session->userdata('viewinv')==1){ echo "checked"; } ?> >
                     <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
                   </label>
+                  <?php $hilang = $this->session->userdata('currdept')!='GM' ? 'hilang' : ''; ?>
+                  <select class="form-control form-select font-kecil font-bold bg-blue-lt <?= $hilang; ?>" id="nomorbcnya" style="height: 25px !important; padding-top:2px;">
+                    <option value="X">Pilih BC</option>
+                    <?php foreach ($katbc->result_array() as $katbc) { $selek = $this->session->userdata('nomorbcnya')==$katbc['nomor_bc'] ? 'selected' : ''; $isi = $katbc['nomor_bc'] != null ? 'BC. '.$katbc['jns_bc'].'-'.$katbc['nomor_bc'].'('.$katbc['tgl_bc'].')' : ''; ?>
+                      <option value="<?= $katbc['nomor_bc']; ?>" <?= $selek; ?>><?= $isi; ?></option>
+                    <?php } ?>
+                  </select>
                 </div>
-                <div class="col-3">
-                    
+                <div class="col-3 font-kecil">
+                  <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod">0</span></div>
+                  <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs">0</span></div>
+                  <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs">0.00</span></div>
                 </div>
                 <div class="col-3">
                   <div class="">
@@ -212,7 +226,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </tbody>
           </table>
         </div>
-        <div class="card card-active" style="clear:both;">
+        <div id="jumlahrek" class="hilang"><?= $cntbrg; ?></div>
+        <div id="jumlahpc" class="hilang"><?= $jmpcs; ?></div>
+        <div id="jumlahkg" class="hilang"><?= $jmkgs; ?></div>
+        <div class="card card-active hilang" style="clear:both;">
           <div class="card-body p-2 font-kecil">
             <div class="row">
               <div class="col-3">

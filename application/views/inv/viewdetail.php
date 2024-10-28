@@ -14,7 +14,7 @@
             <hr class="m-0">
             <span class="font-12 text-red">KATEGORI : <?= $header['name_kategori']; ?></span><br>
         </div>
-        <div class="col-2 <?php if($this->session->userdata('currdept')=='GM'){ echo "hilang"; } ?>">
+        <div class="col-2 <?php if($this->session->userdata('currdept')=='GM' || $this->session->userdata('currdept')=='SP'){ echo "hilang"; } ?>">
             <a href="#kolap" class="btn btn-sm btn-info" id="cekkolap" data-toggle="collapse" aria-expanded="false">View BOM</a>
         </div>
         <!-- <div class="col-4 text-primary font-bold">

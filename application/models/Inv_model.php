@@ -8,10 +8,12 @@ class inv_model extends CI_Model
             $tglawal = tglmysql($this->session->userdata('tglawal'));
             $tglakhir = tglmysql($this->session->userdata('tglakhir'));
             $dpt = $this->session->userdata('currdept');
+            $bcnya = $this->session->userdata('nomorbcnya');
             $kat = $this->session->userdata('filterkat');
             $xkat = '';
             $inv = $this->session->userdata('viewinv');
             $xinv = '';
+            $xbcnya = '';
             if($kat != 'X'){
                 if ($kat != '' || $kat != null) {
                     $xkat = ' AND (barang.id_kategori = "' . $kat.'" OR name_nettype = "'.$kat.'") ';
@@ -20,9 +22,16 @@ class inv_model extends CI_Model
             if ($inv == 0) {
                 $xinv = ' AND barang.noinv = 0 ';
             }
+            if($bcnya != 'X' && $this->session->userdata('currdept')=='GM'){
+                if ($bcnya != '') {
+                    $xbcnya = ' AND tb_hargamaterial.nomor_bc =  "'.$bcnya.'" ';
+                }
+            }
             $xcari = '';
             $xcari2 = '';
             $xcari3 = '';
+            $field = ',"" as nomor_bc';
+            $join='';$join1='';$join2='';
             if ($this->session->userdata('katcari') != null) {
                 if ($this->session->userdata('kategoricari') == 'Cari Barang') {
                     $xcari = " AND barang.nama_barang LIKE '%" . $this->session->userdata('katcari') . "%'";
@@ -43,6 +52,12 @@ class inv_model extends CI_Model
                 $noeb2 = "tb_detailgen.nobontr";
                 $noeb3 = "tb_detail.nobontr";
             }
+            if($dpt == 'GM'){
+                $field = ',tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc';
+                $join = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join1 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detailgen.id_barang AND tb_hargamaterial.nobontr = tb_detailgen.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join2 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr AND tb_hargamaterial.nomor_bc != ""';
+            }
             $period = substr($tglx, 5, 2) . substr($tglx, 0, 4);
             $tambah1 = "SELECT tgl,null as nomor_dok,mode,po,item,dis,id_barang,nama_barang,spek,name_kategori,kode,nobontr,insno,harga,kodesatuan,SUM(pcs) AS pcs,SUM(kgs) AS kgs,SUM(pcsin) AS pcsin,
                         SUM(kgsin) AS kgsin,SUM(pcsout) AS pcsout,SUM(kgsout) AS kgsout,idd,idu,user_verif,tgl_verif,
@@ -53,51 +68,51 @@ class inv_model extends CI_Model
             $hasil = $this->db->query($tambah1 . "SELECT 'SALDO' AS mode,'SA' AS kode_dok,stokdept.id,NULL AS id_header,stokdept.id_barang,stokdept.po,stokdept.item,
                                         stokdept.dis, stokdept.insno," . $noeb1 . ",stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
                                         barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,
-                                        satuan.kodesatuan,1 AS nome,if(stokdept.po!='',concat(stokdept.po,stokdept.item),barang.kode) AS idd,tb_po.spek,stokdept.id as idu,stokdept.user_verif,stokdept.tgl_verif,barang.safety_stock
+                                        satuan.kodesatuan,1 AS nome,if(stokdept.po!='',concat(stokdept.po,stokdept.item),barang.kode) AS idd,tb_po.spek,stokdept.id as idu,stokdept.user_verif,stokdept.tgl_verif,barang.safety_stock".$field."
                                         FROM stokdept 
                                         LEFT JOIN barang ON barang.id = stokdept.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = stokdept.id_po
-                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype 
-                                        WHERE periode = '" . $period . "' AND dept_id = '" . $dpt . "'" . $xinv . $xkat . $xcari . "
+                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join."
+                                        WHERE periode = '" . $period . "' AND dept_id = '" . $dpt . "'" . $xinv . $xkat . $xcari . $xbcnya. "
                                         UNION ALL 
                                         SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detailgen.id,tb_detailgen.id_barang,tb_detailgen.po,
                                         tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno," . $noeb2 . ",tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,
                                         0 AS pcs,0 AS pcsin,tb_detailgen.pcs AS pcsout,0 as kgs,0 as kgsin,tb_detailgen.kgs AS kgsout, satuan.kodesatuan,
-                                        3 AS nome,if(tb_detailgen.po!='',concat(tb_detailgen.po,tb_detailgen.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif,barang.safety_stock
+                                        3 AS nome,if(tb_detailgen.po!='',concat(tb_detailgen.po,tb_detailgen.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif,barang.safety_stock".$field."
                                         FROM tb_detailgen 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detailgen.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detailgen.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detailgen.id_po
-                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype 
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " . $xinv . $xkat . $xcari2 . "
+                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join1."
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " . $xinv . $xkat . $xcari2 .$xbcnya.  "
                                         UNION ALL 
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno," . $noeb3 . ",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
-                                        0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,2 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif,barang.safety_stock
+                                        0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,2 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif,barang.safety_stock".$field."
                                         FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
-                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype 
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . "
+                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join2."
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 .$xbcnya.  "
                                         UNION ALL 
                                         SELECT 'ADJ' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno," . $noeb3 . ",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
-                                        0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,3 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif,barang.safety_stock
+                                        0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,3 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif,barang.safety_stock".$field."
                                         FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
-                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype 
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . "
+                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join2."
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . $xbcnya. "
                                         ORDER BY nama_barang,tgl,nome" . $tambah2);
             return $hasil;
         }
@@ -122,9 +137,9 @@ class inv_model extends CI_Model
             }
             if($dpt == 'GM'){
                 $field = ',tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc';
-                $join = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr';
-                $join1 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detailgen.id_barang AND tb_hargamaterial.nobontr = tb_detailgen.nobontr';
-                $join2 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr';
+                $join = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join1 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detailgen.id_barang AND tb_hargamaterial.nobontr = tb_detailgen.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join2 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr AND tb_hargamaterial.nomor_bc != ""';
             }
             $kolompcs = "IF(tb_detail.pcs < 0,0,tb_detail.pcs) AS pcsin,IF(tb_detail.pcs < 0,abs(tb_detail.pcs),0) AS pcsout";
             $kolomkgs = "IF(tb_detail.kgs < 0,0,tb_detail.kgs) AS kgsin,IF(tb_detail.kgs < 0,abs(tb_detail.kgs),0) AS kgsout";
@@ -237,6 +252,66 @@ class inv_model extends CI_Model
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype
                                         WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'IB' AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 
+                                        ORDER BY nama_barang,tgl,nome" . $tambah2);
+            return $hasil;
+        }
+    }
+    public function getdatabc()
+    {
+        if ($this->session->userdata('tglawal') != null) {
+            $tglx = firstday($this->session->userdata('tglawal'));
+            $tglawal = tglmysql($this->session->userdata('tglawal'));
+            $tglakhir = tglmysql($this->session->userdata('tglakhir'));
+            $dpt = $this->session->userdata('currdept');
+            $kat = $this->session->userdata('filterkat');
+            $xkat = '';
+            if($kat != 'X'){
+                if ($kat != '' || $kat != null) {
+                    $xkat = ' AND (barang.id_kategori = "' . $kat.'") ';
+                }
+            }
+            $period = substr($tglx, 5, 2) . substr($tglx, 0, 4);
+            $tambah1 = "SELECT tgl,null as nomor_dok,mode,po,item,dis,id_barang,nama_barang,id_kategori,name_kategori,kode,nobontr,insno,kodesatuan,SUM(pcs) AS pcs,SUM(kgs) AS kgs,SUM(pcsin) AS pcsin,
+                        SUM(kgsin) AS kgsin,SUM(pcsout) AS pcsout,SUM(kgsout) AS kgsout,nomor_bc,tgl_bc,jns_bc FROM (";
+            $tambah2 = ") pt GROUP BY nomor_bc ORDER BY jns_bc,nomor_bc,tgl_bc";
+            $hasil = $this->db->query($tambah1 . "SELECT 'SALDO' AS mode,'SA' AS kode_dok,stokdept.id,NULL AS id_header,stokdept.id_barang,stokdept.po,stokdept.item,
+                                        stokdept.dis, stokdept.insno,stokdept.nobontr,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
+                                        barang.nama_barang,barang.kode,barang.id_kategori,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,
+                                        satuan.kodesatuan,1 AS nome,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_hargamaterial.jns_bc
+                                        FROM stokdept 
+                                        LEFT JOIN barang ON barang.id = stokdept.id_barang 
+                                        LEFT JOIN satuan ON satuan.id = barang.id_satuan 
+                                        LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
+                                        LEFT JOIN tb_po ON tb_po.id = stokdept.id_po
+                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype
+                                        LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr AND tb_hargamaterial.nomor_bc != ''
+                                        WHERE periode = '" . $period . "' AND dept_id = '" . $dpt . "' ".$xkat."
+                                        UNION ALL 
+                                        SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,
+                                        tb_detail.item,tb_detail.dis, tb_detail.insno,tb_detail.nobontr,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,barang.id_kategori,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,
+                                        0 AS pcs,0 AS pcsin,tb_detail.pcs AS pcsout,0 as kgs,0 as kgsin,tb_detail.kgs AS kgsout, satuan.kodesatuan,3 AS nome,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_hargamaterial.jns_bc
+                                        FROM tb_detail 
+                                        LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
+                                        LEFT JOIN barang ON barang.id = tb_detail.id_barang 
+                                        LEFT JOIN satuan ON satuan.id = barang.id_satuan 
+                                        LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
+                                        LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
+                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype
+                                        LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr AND tb_hargamaterial.nomor_bc != ''
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'OUT' AND tb_header.dept_id='" . $dpt . "' ".$xkat." AND tb_header.data_ok = 1 
+                                        UNION ALL 
+                                        SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
+                                        tb_detail.insno,tb_detail.nobontr,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,barang.id_kategori,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
+                                        0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,2 AS nome,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_hargamaterial.jns_bc
+                                        FROM tb_detail 
+                                        LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
+                                        LEFT JOIN barang ON barang.id = tb_detail.id_barang 
+                                        LEFT JOIN satuan ON satuan.id = barang.id_satuan 
+                                        LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
+                                        LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
+                                        LEFT JOIN nettype ON nettype.id = tb_po.id_nettype
+                                        LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr AND tb_hargamaterial.nomor_bc != ''
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'IB' AND tb_header.dept_tuju='" . $dpt ."' ".$xkat." AND tb_header.data_ok = 1 
                                         ORDER BY nama_barang,tgl,nome" . $tambah2);
             return $hasil;
         }
