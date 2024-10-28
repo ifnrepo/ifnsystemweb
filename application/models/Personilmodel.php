@@ -38,20 +38,66 @@ class Personilmodel extends CI_Model
         return $query;
     }
 
+
+    // public function simpandata()
+    // {
+    //     $data = $_POST;
+    //     $data['status_aktif'] = $this->input->post('status_aktif') ? 1 : 0;
+    //     $hasil = $this->db->insert('personil', $data);
+    //     return $hasil;
+    // }
     public function simpandata()
     {
         $data = $_POST;
         $data['status_aktif'] = $this->input->post('status_aktif') ? 1 : 0;
+        $filefoto = $this->uploadLogo_awal();
+
+        if ($filefoto) {
+            $data['filefoto'] = $filefoto;
+        }
 
         $hasil = $this->db->insert('personil', $data);
         return $hasil;
     }
-    // public function simpandata($data)
-    // {
-    //     // Simpan data ke tabel 'personil'
-    //     $hasil = $this->db->insert('personil', $data);
-    //     return $hasil;
-    // }
+
+    public function uploadLogo_awal()
+    {
+        $this->load->library('upload');
+        $this->uploadConfig = array(
+            'upload_path' => FCPATH . 'assets/image/dokper/',
+            'allowed_types' => 'gif|jpg|jpeg|png',
+            'max_size' => max_upload() * 1024,
+        );
+
+        // Pastikan nama yang digunakan adalah filefoto, sesuai dengan nama di form
+        $adaBerkas = $_FILES['filefoto']['name'];
+        if (empty($adaBerkas)) {
+            return 'kosong';
+        }
+
+        $uploadData = NULL;
+        $this->upload->initialize($this->uploadConfig);
+        if ($this->upload->do_upload('filefoto')) { // Ganti juga di sini
+            $uploadData = $this->upload->data();
+            $namaFileUnik = strtolower($uploadData['file_name']);
+            $fileRenamed = rename(
+                $this->uploadConfig['upload_path'] . $uploadData['file_name'],
+                $this->uploadConfig['upload_path'] . $namaFileUnik
+            );
+            $uploadData['file_name'] = $fileRenamed ? $namaFileUnik : $uploadData['file_name'];
+        } else {
+            $_SESSION['success'] = -1;
+            $ext = pathinfo($adaBerkas, PATHINFO_EXTENSION);
+            $ukuran = $_FILES['filefoto']['size'] / 1000000;
+            $tidakupload = $this->upload->display_errors(NULL, NULL);
+            $this->session->set_flashdata('msg', $tidakupload . ' ' . $ext . ' ukuran ' . round($ukuran, 2) . ' MB');
+        }
+
+        return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
+    }
+
+
+
 
     public function updatedata()
     {
@@ -61,6 +107,7 @@ class Personilmodel extends CI_Model
         $hasil = $this->db->update('personil', $data);
         return $hasil;
     }
+
 
     public function updatefoto_baru()
     {
@@ -123,5 +170,32 @@ class Personilmodel extends CI_Model
             $this->session->set_flashdata('msg', $tidakupload . ' ' . $ext . ' ukuran ' . round($ukuran, 2) . ' MB');
         }
         return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
+    }
+
+    public function getFilter()
+    {
+        $this->db->distinct();
+        $this->db->select('dept.departemen, dept.urut');
+        $this->db->from('dept');
+        $this->db->join('personil', 'personil.bagian_id = dept.urut', 'left');
+        $query = $this->db->get()->result_array();
+
+        return $query;
+    }
+
+    public function getdataByFilter($filter)
+    {
+        $this->db->select('personil.*, dept.departemen, grup.nama_grup, jabatan.nama_jabatan, tb_agama.nama_agama, tb_status.nama_status, tb_pendidikan.tingkat_pendidikan');
+        $this->db->from('personil');
+        $this->db->join('dept', 'dept.urut = personil.bagian_id', 'left');
+        $this->db->join('jabatan', 'jabatan.id = personil.jabatan_id', 'left');
+        $this->db->join('grup', 'grup.id = personil.grup_id', 'left');
+        $this->db->join('tb_agama', 'tb_agama.id = personil.id_agama', 'left');
+        $this->db->join('tb_status', 'tb_status.id = personil.id_status', 'left');
+        $this->db->join('tb_pendidikan', 'tb_pendidikan.id = personil.id_pendidikan', 'left');
+
+        $this->db->where('personil.bagian_id', $filter);
+
+        return $this->db->get()->result_array();
     }
 }
