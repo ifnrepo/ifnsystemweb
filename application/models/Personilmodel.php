@@ -30,22 +30,11 @@ class Personilmodel extends CI_Model
         $this->db->where('personil.personil_id', $personil_id);
         return $this->db->get();
     }
-
-
     public function hapus($personil_id)
     {
         $query = $this->db->query("Delete from personil where personil_id =" . $personil_id);
         return $query;
     }
-
-
-    // public function simpandata()
-    // {
-    //     $data = $_POST;
-    //     $data['status_aktif'] = $this->input->post('status_aktif') ? 1 : 0;
-    //     $hasil = $this->db->insert('personil', $data);
-    //     return $hasil;
-    // }
     public function simpandata()
     {
         $data = $_POST;
@@ -69,7 +58,6 @@ class Personilmodel extends CI_Model
             'max_size' => max_upload() * 1024,
         );
 
-        // Pastikan nama yang digunakan adalah filefoto, sesuai dengan nama di form
         $adaBerkas = $_FILES['filefoto']['name'];
         if (empty($adaBerkas)) {
             return 'kosong';
@@ -77,7 +65,7 @@ class Personilmodel extends CI_Model
 
         $uploadData = NULL;
         $this->upload->initialize($this->uploadConfig);
-        if ($this->upload->do_upload('filefoto')) { // Ganti juga di sini
+        if ($this->upload->do_upload('filefoto')) {
             $uploadData = $this->upload->data();
             $namaFileUnik = strtolower($uploadData['file_name']);
             $fileRenamed = rename(
@@ -96,9 +84,6 @@ class Personilmodel extends CI_Model
         return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
     }
 
-
-
-
     public function updatedata()
     {
         $data = $_POST;
@@ -107,8 +92,6 @@ class Personilmodel extends CI_Model
         $hasil = $this->db->update('personil', $data);
         return $hasil;
     }
-
-
     public function updatefoto_baru()
     {
         $data = $_POST;
@@ -136,8 +119,6 @@ class Personilmodel extends CI_Model
 
         redirect(base_url() . 'personil/edit/' . $data['personil_id']);
     }
-
-
     public function uploadLogo()
     {
 
@@ -147,7 +128,6 @@ class Personilmodel extends CI_Model
             'allowed_types' => 'gif|jpg|jpeg|png',
             'max_size' => max_upload() * 1024,
         );
-        // Adakah berkas yang disertakan?
         $adaBerkas = $_FILES['file']['name'];
         if (empty($adaBerkas)) {
             return 'kosong';

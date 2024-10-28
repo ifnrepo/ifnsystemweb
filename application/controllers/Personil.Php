@@ -27,20 +27,20 @@ class Personil extends CI_Controller
         $this->load->view('layouts/footer', $footer);
     }
 
-    public function filter()
-    {
-        $filter = $this->input->post('filter');
+    // public function filter()
+    // {
+    //     $filter = $this->input->post('filter');
 
-        if ($filter == 'all') {
-            $data['personil'] = $this->Personilmodel->getdata();
-        } else {
-            $data['personil'] = $this->Personilmodel->getdataByFilter($filter);
-        }
-        $header['header'] = 'master';
-        $this->load->view('layouts/header', $header);
-        $this->load->view('personil/index', $data);
-        $this->load->view('layouts/footer');
-    }
+    //     if ($filter == 'all') {
+    //         $data['personil'] = $this->Personilmodel->getdata();
+    //     } else {
+    //         $data['personil'] = $this->Personilmodel->getdataByFilter($filter);
+    //     }
+    //     $header['header'] = 'master';
+    //     $this->load->view('layouts/header', $header);
+    //     $this->load->view('personil/index', $data);
+    //     $this->load->view('layouts/footer');
+    // }
 
 
     public function tambahdata()
