@@ -71,10 +71,12 @@
                         $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'] - $det['pcsadj'];
                         $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout']- $det['kgsadj'];
                         $pilihtampil = $saldo==0 ? $saldokgs : $saldo;
+                        $depnobontr = ['GM','SP'];
+                        $boninsno = in_array($this->session->userdata('currdept'),$depnobontr) ? $det['nobontr'] : $det['insno'];
                     ?>
                         <tr>
                             <td class="font-italic text-primary"><?= tgl_indo($det['tgl'], 0); ?></td>
-                            <td><?= $det['nobontr']; ?></td>
+                            <td><?= $boninsno; ?></td>
                             <td><?= rupiah($saldoawal, 0); ?></td>
                             <td><?= rupiah($saldoawalkgs, 2); ?></td>
                             <td><?= rupiah($det['pcsin'], 0); ?></td>

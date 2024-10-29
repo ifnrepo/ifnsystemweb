@@ -210,6 +210,7 @@ class Auth extends CI_Controller
         // delete_cookie('usernameMasukMomois');
         // delete_cookie('passwordMasukMomois');
         $this->helpermodel->isilog('LOGOUT Aplikasi momois');
+        $this->session->unset_userdata('nomorbcnya');
         $this->session->sess_destroy();
         $url = base_url('Auth');
         redirect($url);

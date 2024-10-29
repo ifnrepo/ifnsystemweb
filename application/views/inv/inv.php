@@ -7,7 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="col-md-6">
         <h2 class="page-title p-2">
           <?php if(isset($repbeac) && $repbeac==1){ ?>
-              IT Inventory <?= $this->session->userdata('currdept'); ?>
+              IT Inventory <?= $this->session->userdata('currdept'); ?> - <?= datadepartemen($this->session->userdata('currdept'),'departemen'); ?>
           <?php }else{ ?>
             Inventory Barang <?= $this->session->userdata('currdept'); ?>
           <?php } ?>
@@ -27,11 +27,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 d-flex">
-              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept" name="currdept">
+              <?php $disabel = isset($repbeac) && $repbeac==1 ? 'disabled' : ''; ?>
+              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept" name="currdept" <?= $disabel; ?>>
                 <?php
                 // Mendapatkan nilai 'deptsekarang', jika null nilai default jadi it
                 $selek = $this->session->userdata('currdept') ?? 'IT';
-                $disabel = isset($repbeac) && $repbeac==1 ? 'disabled' : '';
                 foreach ($hakdep as $hak) :
                   $selected = ($selek == $hak['dept_id']) ? "selected" : "";
                 ?>
@@ -79,12 +79,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input class="form-check-input" type="checkbox" id="viewinv" <?php if($this->session->userdata('viewinv')==1){ echo "checked"; } ?> >
                     <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
                   </label>
-                  <?php $hilang = $this->session->userdata('currdept')!='GM' ? 'hilang' : ''; ?>
-                  <select class="form-control form-select font-kecil font-bold bg-blue-lt <?= $hilang; ?>" id="nomorbcnya" style="height: 25px !important; padding-top:2px;">
+                  <?php $deptampil = ['GM','SP']; ?>
+                  <select class="form-control form-select font-kecil font-bold bg-cyan-lt <?php if(!in_array($this->session->userdata['currdept'],$deptampil)){ echo "hilang"; } ?>" id="nomorbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
                     <option value="X">Pilih BC</option>
-                    <?php foreach ($katbc->result_array() as $katbc) { $selek = $this->session->userdata('nomorbcnya')==$katbc['nomor_bc'] ? 'selected' : ''; $isi = $katbc['nomor_bc'] != null ? 'BC. '.$katbc['jns_bc'].'-'.$katbc['nomor_bc'].'('.$katbc['tgl_bc'].')' : ''; ?>
-                      <option value="<?= $katbc['nomor_bc']; ?>" <?= $selek; ?>><?= $isi; ?></option>
-                    <?php } ?>
+                    <?php if ($kat != null) : foreach ($katbece->result_array() as $bece) { ?>
+                    <?php 
+                      $isi = $bece['nomor_bc']!=null ? 'BC. '.trim($bece['jns_bc']).'- '.$bece['nomor_bc'].'('.$bece['tgl_bc'].')' : 'Semua';
+                      $selek = $this->session->userdata('nomorbcnya')==$bece['nomor_bc'] ? 'selected' : '';
+                    ?>
+                      <option value="<?= $bece['nomor_bc']; ?>" <?= $selek; ?>><?= $isi; ?></option>
+                     <?php } endif; ?>
                   </select>
                 </div>
                 <div class="col-3 font-kecil">

@@ -320,4 +320,7 @@ class Helper_model extends CI_Model
         $hasil =  $this->db->get('token_bc')->row_array();
         return $hasil['token'];
     }
+    public function getdatadepartemen($kode){
+        return $this->db->get_where('dept',['dept_id'=>$kode]);
+    }
 }

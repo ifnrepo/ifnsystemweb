@@ -89,6 +89,13 @@ class Out extends CI_Controller {
                     $hasil .= "<td class='text-primary'><a href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
                 }
             }
+            if($this->session->userdata('deptsekarang')=='GP' && $que['insno']!=''){
+                $hasil .= "<td class='text-primary'>".$que['insno']."</td>";
+            }else{
+                if($this->session->userdata('deptsekarang')=='GP' && $que['insno']==''){
+                    $hasil .= "<td class='text-primary'><a href='".base_url().'out/addinsno/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data insno'>Pilih Insno</a></td>";
+                }
+            }
             if($this->session->userdata('deptsekarang')=='GS'){
                 $hasil .= "<td class='text-primary font-bold'>".$que['sublok']."</td>";
             }
@@ -154,6 +161,12 @@ class Out extends CI_Controller {
         $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
         $this->load->view('out/addnobontr',$data);
     }
+    public function addinsno($id,$idbarang){
+        $data['data'] = $this->out_model->getdatagp($idbarang);
+        $data['iddetail'] = $id;
+        $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
+        $this->load->view('out/addinsno',$data);
+    }
     public function editnobontr(){
         $data = [
             'idstok' => $_POST['id'],
@@ -161,6 +174,15 @@ class Out extends CI_Controller {
             'id' => $_POST['idd']
         ];
         $hasil = $this->out_model->editnobontr($data);
+        echo $hasil;
+    }
+    public function editinsno(){
+        $data = [
+            'idstok' => $_POST['id'],
+            'insno' => $_POST['bon'],
+            'id' => $_POST['idd']
+        ];
+        $hasil = $this->out_model->editinsno($data);
         echo $hasil;
     }
     public function updatedetail(){

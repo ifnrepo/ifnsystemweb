@@ -630,7 +630,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 13); ?>" href="<?= base_url('bcwaste'); ?>">
                       Scrap / Waste
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 14); ?>" href="<?= base_url('sparepart'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 14); ?>" href="<?= base_url('bcsparepart'); ?>">
                       Sparepart
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 7); ?>" href="<?= base_url('cctv'); ?>">

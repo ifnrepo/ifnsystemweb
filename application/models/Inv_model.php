@@ -22,7 +22,7 @@ class inv_model extends CI_Model
             if ($inv == 0) {
                 $xinv = ' AND barang.noinv = 0 ';
             }
-            if($bcnya != 'X' && $this->session->userdata('currdept')=='GM'){
+            if($bcnya != 'X' && ($this->session->userdata('currdept')=='GM' || $this->session->userdata('currdept')=='SP')){
                 if ($bcnya != '') {
                     $xbcnya = ' AND tb_hargamaterial.nomor_bc =  "'.$bcnya.'" ';
                 }
@@ -52,7 +52,7 @@ class inv_model extends CI_Model
                 $noeb2 = "tb_detailgen.nobontr";
                 $noeb3 = "tb_detail.nobontr";
             }
-            if($dpt == 'GM'){
+            if($dpt == 'GM' || $dpt == 'SP'){
                 $field = ',tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc';
                 $join = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr AND tb_hargamaterial.nomor_bc != ""';
                 $join1 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detailgen.id_barang AND tb_hargamaterial.nobontr = tb_detailgen.nobontr AND tb_hargamaterial.nomor_bc != ""';

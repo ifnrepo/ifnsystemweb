@@ -39,7 +39,7 @@ class Inv extends CI_Controller
             $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
             $data['data'] = null;
             $data['kat'] = null;
-            $data['katbc'] = null;
+            $data['katbece'] = null;
             $data['gbg'] = '';
             $data['kategoricari'] = 'Cari Barang';
         } else {
@@ -47,7 +47,7 @@ class Inv extends CI_Controller
             $data['tglakhir'] = $this->session->userdata('tglakhir');
             $data['data'] = $this->invmodel->getdata();
             $data['kat'] = $this->invmodel->getdatakategori();
-            $data['katbc'] = $this->invmodel->getdatabc();
+            $data['katbece'] = $this->invmodel->getdatabc();
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
         }
@@ -66,6 +66,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('gbg', 1);
         $this->session->set_userdata('invharga', 0);
         $this->session->unset_userdata('katcari');
+        $this->session->unset_userdata('nomorbcnya');
         $url = base_url('Inv');
         redirect($url);
     }

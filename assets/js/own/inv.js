@@ -7,9 +7,9 @@ $(document).ready(function () {
 	var jmlrek = $("#jumlahrek").text();
 	var jmlpc = $("#jumlahpc").text();
 	var jmlkg = $("#jumlahkg").text();
-	$("#jumlahrekod").text(rupiah(jmlrek, ",", ".", 0));
-	$("#jumlahpcs").text(rupiah(jmlpc, ",", ".", 0));
-	$("#jumlahkgs").text(rupiah(jmlkg, ",", ".", 2));
+	$("#jumlahrekod").text(rupiah(jmlrek, ".", ",", 0));
+	$("#jumlahpcs").text(rupiah(jmlpc, ".", ",", 0));
+	$("#jumlahkgs").text(rupiah(jmlkg, ".", ",", 2));
 });
 
 // document.addEventListener("DOMContentLoaded", function () {

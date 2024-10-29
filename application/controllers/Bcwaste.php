@@ -5,7 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 // use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-class Bcmaterial extends CI_Controller
+class Bcwaste extends CI_Controller
 {
     function __construct()
     {
@@ -33,7 +33,7 @@ class Bcmaterial extends CI_Controller
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
-        $this->session->set_userdata('currdept','GM');
+        $this->session->set_userdata('currdept','GW');
         $data['repbeac'] = 1;
         if($this->session->userdata('viewinv')==null){
             $this->session->set_userdata('viewinv',1);
