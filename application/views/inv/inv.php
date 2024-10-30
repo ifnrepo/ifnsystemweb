@@ -80,7 +80,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
                   </label>
                   <?php $deptampil = ['GM','SP']; ?>
-                  <select class="form-control form-select font-kecil font-bold bg-cyan-lt <?php if(!in_array($this->session->userdata['currdept'],$deptampil)){ echo "hilang"; } ?>" id="nomorbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
+                  <select class="form-control form-select font-kecil font-bold bg-cyan-lt <?php if(!in_array($this->session->userdata('currdept'),$deptampil)){ echo "hilang"; } ?>" id="nomorbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
                     <option value="X">Pilih BC</option>
                     <?php if ($kat != null) : foreach ($katbece->result_array() as $bece) { ?>
                     <?php 
@@ -92,9 +92,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </select>
                 </div>
                 <div class="col-3 font-kecil">
-                  <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod">0</span></div>
-                  <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs">0</span></div>
-                  <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs">0.00</span></div>
+                  <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
+                  <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs" style="font-weight: normal;">Loading ..</span></div>
+                  <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
                 </div>
                 <div class="col-3">
                   <div class="">
@@ -139,6 +139,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Satuan</th>
                 <!-- <th>Sf</th> -->
                 <!-- <th>Output</th> -->
+                <?php if($this->session->userdata('currdept')=='GF'): ?>
+                  <th>Nobale</th>
+                <?php endif; ?>
                 <th>Qty</th>
                 <th>Kgs</th>
                 <?php if($this->session->userdata('invharga')==1): ?>
@@ -177,7 +180,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $cntbrg += 1;
                   $jmkgs += $sakkg;
                   $jmpcs += $sak;
-                  $isi = 'OME-' . trim(encrypto($det['po'])) . '-' . trim(encrypto($det['item'])) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-';
+                  $isi = 'OME-' . trim(encrypto($det['po'])) . '-' . trim(encrypto($det['item'])) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-'. trim(encrypto($det['nobale'])) . '-';
                   // $isi = 'XXX';
                   $insno = $this->session->userdata('currdept') == 'GS' ? $det['insno'] : $det['insno'];
                   $nobontr = $this->session->userdata('currdept') == 'GS' ? $det['nobontr'] : $det['nobontr'];
@@ -204,6 +207,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td style="border-bottom: red;"><?= $nobontr; ?></td>
                     <td style="border-bottom: red;"><?= $insno; ?></td>
                     <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
+                    <?php if($this->session->userdata('currdept')=='GF'): ?>
+                      <td style="border-bottom: red;"><?= $det['nobale']; ?></td>
+                    <?php endif; ?>
                     <!-- <td style="border-bottom: red;"></td> -->
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 2); ?></td>
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg, 2); ?></td>

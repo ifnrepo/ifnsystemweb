@@ -7,6 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="col-md-6">
         <h2 class="page-title p-2">
           <div>OUT (Perpindahan Barang) # <?= $data['nomor_dok'] ?><br><span class="title-dok"><?php if($data['jn_bbl']==1){echo "dengan Bon Permintaan";}else{echo "tanpa Bon Permintaan";} ?></span></div>
+          <input type="text" class="hilang" id="nomor_dok" value="<?= $data['nomor_dok']; ?>">
         </h2>
       </div>
       <input id="errornya" class="hilang" value="<?= $this->session->flashdata('errornya'); ?>">
@@ -53,7 +54,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-3">
                   <div style="position:absolute;bottom:0px;right:10px;">
                     <?php if($data['jn_bbl']==1){ ?>
-                    <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>
+                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>
                     <?php } ?>
                   </div>
                 </div>
