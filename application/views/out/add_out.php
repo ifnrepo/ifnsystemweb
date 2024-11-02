@@ -3,7 +3,7 @@
         <div class="col-12">
             <div class="mb-1 input-group">
                 <!-- <label class="form-label mb-0 font-kecil">Departemen</label> -->
-                <input type="text" class="form-control font-kecil mt-1 mr-2" id="departemenasal" placeholder="Input data">
+                <input type="text" class="form-control font-kecil mt-1 mr-2" id="departemenasal" placeholder="Input data" readonly>
                 <button type="button" class="btn btn-primary btn-sm font-kecil mt-1" style="height: 35px !important;" id="simpanout">Simpan Barang</button>
             </div>
             <hr class="m-1">
@@ -48,9 +48,9 @@
 </div>
 <script>
     $(document).ready(function(){
-        var zi = $("#dept_tuju option:selected").attr('rel');
-        var zu = $("#dept_kirim option:selected").attr('rel');
-        $("#departemenasal").val(zu+' ~ '+zi);
+        // var zi = $("#dept_tuju").val();
+        // var zu = $("#dept_kirim").val();
+        $("#departemenasal").val('Bon Permintaan '+$("#nomor_dok").val().substr(0,5));
     })
     $("#simpanout").click(function(){
         $("#simpanout2").click();

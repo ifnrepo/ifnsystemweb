@@ -67,7 +67,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </div>
                             </div> -->
                             </div>
-                            <div class="col-9">
+                            <div class="col-3 text-start">
+                                <span class="text-blue font-kecil font-bold" id="jmlsawe">Saw :</span><br>
+                                <span class="text-blue font-kecil font-bold" id="jmline">In :</span><br>
+                                <span class="text-blue font-kecil font-bold" id="jmloute">Out :</span><br>
+                                <span class="text-blue font-kecil font-bold" id="jmladje">Adj :</span><br>
+                                <span class="text-blue font-kecil font-bold" id="jmlsaldo">Saldo :</span>
+                            </div>
+                            <div class="col-6">
                                 <a href="<?= base_url() . 'invmesin/excel?blperiode=' . $this->session->userdata('blperiode') . '&thperiode=' . $this->session->userdata('thperiode') . '&lokasimesin=' . $this->session->userdata('lokasimesin'); ?>" class="btn btn-success btn-sm">
                                     <i class="fa fa-file-excel-o"></i><span class="ml-1">Export To Excel</span>
                                 </a>
@@ -146,13 +153,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </table>
                     </div>
                 </div>
-                <div class="card card-active">
+                <div class="card card-active hilang">
                     <div class="card-body">
                         <div class="row">
-                            <div class="col-2 text-center">SAW : <span class="font-bold"><?= rupiah($saw, 0); ?></span></div>
-                            <div class="col-2">IN : <span class="font-bold"><?= rupiah($in, 0); ?></span></div>
-                            <div class="col-2">OUT : <span class="font-bold"><?= rupiah($out, 0); ?></span></div>
-                            <div class="col-2">ADJ : <span class="font-bold"><?= rupiah($adj, 0); ?></span></div>
+                            <div class="col-2 text-center">SAW : <span class="font-bold" id="jmlsaw"><?= $saw; ?></span></div>
+                            <div class="col-2">IN : <span class="font-bold" id="jmlin"><?= $in ?></span></div>
+                            <div class="col-2">OUT : <span class="font-bold" id="jmlout"><?= $out; ?></span></div>
+                            <div class="col-2">ADJ : <span class="font-bold" id="jmladj"><?= $adj; ?></span></div>
                             <div class="col-4">SALDO : <span class="font-bold"><?= rupiah($saw + $in - $out - $adj, 0); ?></span></div>
                         </div>
                     </div>

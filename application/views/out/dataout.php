@@ -7,6 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="col-md-6">
         <h2 class="page-title p-2">
           <div>OUT (Perpindahan Barang) # <?= $data['nomor_dok'] ?><br><span class="title-dok"><?php if($data['jn_bbl']==1){echo "dengan Bon Permintaan";}else{echo "tanpa Bon Permintaan";} ?></span></div>
+          <input type="text" class="hilang" id="nomor_dok" value="<?= $data['nomor_dok']; ?>">
         </h2>
       </div>
       <input id="errornya" class="hilang" value="<?= $this->session->flashdata('errornya'); ?>">
@@ -28,18 +29,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
               <div class="row">
-                <div class="col-2">
+                <div class="col-3">
                   <h4 class="mb-0 font-kecil">Tgl</h4>
                   <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
                   <input type="text" id="id_header" class="hilang" value="<?= $data['id']; ?>">
                   <span class="font-bold" style="font-size:15px;">
-                    <?= tglmysql($data['tgl']); ?>
                     <a href="<?= base_url() . 'out/edit_tgl'; ?>" title="Edit Tgl" id="tglpb" name="tglpb" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
-                      <i class="fa fa-edit"></i>
+                      <?= tglmysql($data['tgl']); ?>
+                      <!-- <i class="fa fa-edit"></i> -->
                     </a>
                   </span>
-                </div>
-                <div class="col-4">
                   <h4 class="mb-0 font-kecil">Catatan</h4>
                   <input type="text" id="catat" class="hilang" value="<?= $data['keterangan']; ?>">
                   <span class="font-bold" style="font-size:15px;">
@@ -49,11 +48,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </a>
                   </span>
                 </div>
-                <div class="col-3"></div>
-                <div class="col-3">
+                <div class="col-4">
+                  <?php if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'): ?>
+                  <div class="">
+                    <h4 class="mb-0 font-kecil font-bold">CUSTOMER</h4>
+                    <div class="input-group">
+                      <?php $tekstitle = $data['id_buyer'] == null ? 'Cari ' : 'Ganti '; ?>
+                      <?php $tekstitle2 = $data['id_buyer'] == null || $data['id_buyer'] == 0 ? 'Cari ' : $data['id_buyer']; ?>
+                      <a href="<?= base_url() . 'out/editcustomer'; ?>" class="btn font-bold bg-success" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Cari Customer" title="<?= $tekstitle; ?> Supplier"><?= $tekstitle2; ?></a>
+                      <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown button" placeholder="Nama Customer" value="<?= $data['nama_customer']; ?>">
+                    </div>
+                    <div class="mt-1">
+                      <textarea class="form-control form-sm font-kecil" placeholder="Alamat"><?= $data['alamat']; ?></textarea>
+                    </div>
+                    <div class="mt-0" style="margin-top: 1px !important;">
+                      <div class="input-icon">
+                        <input type="text" class="form-control font-kecil" aria-label="Text input with dropdown" placeholder="Kontak" value="<?= $data['kontak']; ?>">
+                        <span class="input-icon-addon" id="loadertgldtbt">
+
+                        </span>
+                      </div>
+                    </div>
+                  </div>
+                  <?php endif; ?>
+                </div>
+                <div class="col-5">
                   <div style="position:absolute;bottom:0px;right:10px;">
                     <?php if($data['jn_bbl']==1){ ?>
-                    <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>
+                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>
                     <?php } ?>
                   </div>
                 </div>
@@ -135,6 +157,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Kgs REAL</th>
                     <?php if($this->session->userdata('deptsekarang')=='GM'){ ?>
                     <th>Nobontr</th>
+                    <?php } ?>
+                    <?php if($this->session->userdata('deptsekarang')=='GP'){ ?>
+                    <th>Insno</th>
                     <?php } ?>
                     <?php if($this->session->userdata('deptsekarang')=='GS'){ ?>
                     <th>SBL</th>

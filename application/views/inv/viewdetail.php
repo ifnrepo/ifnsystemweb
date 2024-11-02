@@ -3,6 +3,9 @@
         <div class="col-3 font-bold">
             <span class="text-primary">Inventory per Tanggal</span>
             <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal')), 1); ?></h4>
+            <?php if($this->session->userdata('currdept')=='GF'): ?>
+            <h3><?= 'Bale No #'.$header['nobale']; ?></h3>
+            <?php endif; ?>
         </div>
         <div class="col-7 text-primary font-bold">
             <span>SKU/Spesifikasi Barang</span>
@@ -71,10 +74,12 @@
                         $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'] - $det['pcsadj'];
                         $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout']- $det['kgsadj'];
                         $pilihtampil = $saldo==0 ? $saldokgs : $saldo;
+                        $depnobontr = ['GM','SP'];
+                        $boninsno = in_array($this->session->userdata('currdept'),$depnobontr) ? $det['nobontr'] : $det['insno'];
                     ?>
                         <tr>
                             <td class="font-italic text-primary"><?= tgl_indo($det['tgl'], 0); ?></td>
-                            <td><?= $det['nobontr']; ?></td>
+                            <td><?= $boninsno; ?></td>
                             <td><?= rupiah($saldoawal, 0); ?></td>
                             <td><?= rupiah($saldoawalkgs, 2); ?></td>
                             <td><?= rupiah($det['pcsin'], 0); ?></td>

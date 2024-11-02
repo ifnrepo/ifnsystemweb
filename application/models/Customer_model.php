@@ -30,4 +30,9 @@ class Customer_model extends CI_Model
         $query = $this->db->query("Delete from customer where id =" . $id);
         return $query;
     }
+        public function getdatabyname($nama)
+    {
+        $this->db->like('nama_customer', $nama);
+        return $this->db->get('customer');
+    }
 }

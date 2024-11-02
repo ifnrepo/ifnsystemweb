@@ -90,7 +90,7 @@
 	<script src="<?= base_url(); ?>assets/js/own/out.js?1724750323"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'inv') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/inv.js?1724750323"></script>
+	<script src="<?= base_url(); ?>assets/js/own/inv.js?1724750326"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'bbl') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/bbl.js?1724750323"></script>
@@ -121,6 +121,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'invmesin') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/invmesin.js?1724750325"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'bcmasuk') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/bcmasuk.js?1724750325"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
 	// print_r(json_encode($dataproduksi['data_isi'])); 

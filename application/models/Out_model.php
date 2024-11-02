@@ -52,8 +52,10 @@ class Out_model extends CI_Model{
         return $hasil->row_array();
     }
     public function getdatabyid($kode){
+        $this->db->select('tb_header.*,dept.*,customer.nama_customer,customer.alamat,customer.kontak');
         $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
-        $query = $this->db->get_where('tb_header',['id'=>$kode]);
+        $this->db->join('customer','customer.id=tb_header.id_buyer','left');
+        $query = $this->db->get_where('tb_header',['tb_header.id'=>$kode]);
         return $query->row_array();
     }
     public function getdepttuju($kode){
@@ -280,6 +282,13 @@ class Out_model extends CI_Model{
                         break;
                     }
                 }
+                if($this->session->userdata('deptsekarang')=='GP'){
+                    if($datdet['insno']==''){
+                        $iniquery = true;
+                        $this->session->set_flashdata('errornya','Insno Kosong');
+                        break;
+                    }
+                }
                 $no++;
                 if($this->session->userdata('deptsekarang')=='GS'){
                     $kondisi = [
@@ -391,12 +400,13 @@ class Out_model extends CI_Model{
                                 $this->db->set('harga',$deta['harga']);
                                 $this->db->where('id',$datdet['id']);
                                 $this->db->update('tb_detailgen');
+
                                 $this->db->set('id_stokdept',$stokid);
                                 if($this->session->userdata('deptsekarang')=='GM'){
                                     $this->db->set('nobontr',$nobontr);
                                 }
-                                $this->db->set('pcs',$kurangpcs);
-                                $this->db->set('kgs',$kurangkgs);
+                                // $this->db->set('pcs',$kurangpcs);
+                                // $this->db->set('kgs',$kurangkgs);
                                 $this->db->set('harga',$deta['harga']);
                                 $this->db->where('id',$datdet['id_detail']);
                                 $this->db->update('tb_detail');
@@ -505,6 +515,26 @@ class Out_model extends CI_Model{
         $hasil = $this->db->get();
         return $hasil;
     }
+    public function getdatagp($idbarang){
+        $kondisi = [
+            'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+            'dept_id' => 'GP',
+            'id_barang' => $idbarang
+        ];
+        $kondisi2 = [
+            'pcs_akhir > ' => 0,
+            'kgs_akhir > ' => 0 
+        ];
+        $this->db->select('stokdept.*,barang.nama_barang,barang.kode',FALSE);
+        $this->db->from('stokdept');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->where($kondisi);
+        $this->db->group_start();
+        $this->db->or_where($kondisi2);
+        $this->db->group_end();
+        $hasil = $this->db->get();
+        return $hasil;
+    }
     public function getdatabarang($id){
         $this->db->where('id',$id);
         return $this->db->get('barang');
@@ -513,6 +543,19 @@ class Out_model extends CI_Model{
         $update = [
             'id_stokdept' => $data['idstok'],
             'nobontr' => $data['nobontr']
+        ];
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_detail',$update);
+        $this->helpermodel->isilog($this->db->last_query());
+        $this->db->where('id_detail',$data['id']);
+        $hasil = $this->db->update('tb_detailgen',$update);
+        $this->helpermodel->isilog($this->db->last_query());
+        return $hasil;
+    }
+    public function editinsno($data){
+        $update = [
+            'id_stokdept' => $data['idstok'],
+            'insno' => $data['insno']
         ];
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$update);
@@ -552,5 +595,9 @@ class Out_model extends CI_Model{
             $que = $this->db->get('tb_header')->row_array();
         }
         return $que;
+    }
+    public function updatecustomer($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_header',['id_buyer'=>$data['id_buyer']]);
     }
 }

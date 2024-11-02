@@ -16,6 +16,7 @@ class Out extends CI_Controller {
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel','usermodel');
         $this->load->model('helper_model','helpermodel');
+        $this->load->model('customer_model','customermodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -89,6 +90,13 @@ class Out extends CI_Controller {
                     $hasil .= "<td class='text-primary'><a href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
                 }
             }
+            if($this->session->userdata('deptsekarang')=='GP' && $que['insno']!=''){
+                $hasil .= "<td class='text-primary'>".$que['insno']."</td>";
+            }else{
+                if($this->session->userdata('deptsekarang')=='GP' && $que['insno']==''){
+                    $hasil .= "<td class='text-primary'><a href='".base_url().'out/addinsno/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data insno'>Pilih Insno</a></td>";
+                }
+            }
             if($this->session->userdata('deptsekarang')=='GS'){
                 $hasil .= "<td class='text-primary font-bold'>".$que['sublok']."</td>";
             }
@@ -154,6 +162,12 @@ class Out extends CI_Controller {
         $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
         $this->load->view('out/addnobontr',$data);
     }
+    public function addinsno($id,$idbarang){
+        $data['data'] = $this->out_model->getdatagp($idbarang);
+        $data['iddetail'] = $id;
+        $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
+        $this->load->view('out/addinsno',$data);
+    }
     public function editnobontr(){
         $data = [
             'idstok' => $_POST['id'],
@@ -161,6 +175,15 @@ class Out extends CI_Controller {
             'id' => $_POST['idd']
         ];
         $hasil = $this->out_model->editnobontr($data);
+        echo $hasil;
+    }
+    public function editinsno(){
+        $data = [
+            'idstok' => $_POST['id'],
+            'insno' => $_POST['bon'],
+            'id' => $_POST['idd']
+        ];
+        $hasil = $this->out_model->editinsno($data);
         echo $hasil;
     }
     public function updatedetail(){
@@ -246,6 +269,39 @@ class Out extends CI_Controller {
             $url = base_url() . 'out/dataout/' . $kode;
             redirect($url);
         }
+    }
+    public function editcustomer()
+    {
+        $this->load->view('out/editcustomer');
+    }
+    public function getcustomerbyname()
+    {
+        $nama = $_POST['data'];
+        $hasil = '';
+        $query = $this->customermodel->getdatabyname($nama);
+        if ($query->num_rows() > 0) {
+            foreach ($query->result_array() as $data) {
+                $hasil .= "<tr>";
+                $hasil .= "<td class='text-primary'>" . $data['nama_customer'] . "</td>";
+                $hasil .= "<td>" . substr($data['alamat'], 0, 35) . "</td>";
+                $hasil .= "<td>" . $data['port']. "</td>";
+                $hasil .= "<td>" . $data['country'] . "</td>";
+                $hasil .= "<td><a href='#' class='btn btn-sm btn-success' rel='" . $data['id'] . "' id='pilihcustomer'>Pilih</a></td></tr>";
+            }
+        } else {
+            $hasil .= "<tr>";
+            $hasil .= '<td colspan="3" class="text-center">No Data / Cari dahulu data</td></tr>';
+        }
+        $cocok = array('datagroup' => $hasil);
+        echo json_encode($cocok);
+    }
+    public function updatecustomer(){
+        $data = [
+            'id' => $_POST['id'],
+            'id_buyer' => $_POST['rel']
+        ];
+        $hasil = $this->out_model->updatecustomer($data);
+        echo $hasil;
     }
     function cetakqr2($isi,$id)
 	{
