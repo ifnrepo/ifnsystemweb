@@ -39,7 +39,7 @@ class Bcmaterial extends CI_Controller
             $this->session->set_userdata('viewinv',1);
         }
         if ($this->session->userdata('tglawal') == null) {
-            $data['tglawal'] = tglmysql(date('Y-m-d'));
+            // $data['tglawal'] = tglmysql(date('Y-m-d'));
             $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
             $data['data'] = null;
             $data['kat'] = null;

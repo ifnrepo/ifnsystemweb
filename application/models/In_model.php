@@ -74,6 +74,7 @@ class In_model extends CI_Model{
     public function simpanin($id){
         $this->db->trans_start();
         $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
+        $arraynobontr = ['SP','GM'];
         if($cek==1){
             $this->db->select('*');
             $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
@@ -84,7 +85,7 @@ class In_model extends CI_Model{
                     // 'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
                     'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
-                    'nobontr' => $det['dept_tuju']=='SP' ? $det['nobontr'] : '',
+                    'nobontr' => in_array($det['dept_tuju'],$arraynobontr) ? $det['nobontr'] : '',
                     'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],
                     'po' => $det['po'],
@@ -101,7 +102,7 @@ class In_model extends CI_Model{
                     'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
                     'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
-                    'nobontr' => $det['dept_tuju']=='SP' ? $det['nobontr'] : '',
+                    'nobontr' => in_array($det['dept_tuju'],$arraynobontr) ? $det['nobontr'] : '',
                     'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],
                     'po' => $det['po'],

@@ -52,8 +52,10 @@ class Out_model extends CI_Model{
         return $hasil->row_array();
     }
     public function getdatabyid($kode){
+        $this->db->select('tb_header.*,dept.*,customer.nama_customer,customer.alamat,customer.kontak');
         $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
-        $query = $this->db->get_where('tb_header',['id'=>$kode]);
+        $this->db->join('customer','customer.id=tb_header.id_buyer','left');
+        $query = $this->db->get_where('tb_header',['tb_header.id'=>$kode]);
         return $query->row_array();
     }
     public function getdepttuju($kode){
@@ -593,5 +595,9 @@ class Out_model extends CI_Model{
             $que = $this->db->get('tb_header')->row_array();
         }
         return $que;
+    }
+    public function updatecustomer($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_header',['id_buyer'=>$data['id_buyer']]);
     }
 }

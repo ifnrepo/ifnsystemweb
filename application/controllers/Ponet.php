@@ -16,7 +16,7 @@ class Ponet extends CI_Controller
 
     public function index()
     {
-        $header['header'] = 'manajemen';
+        $header['header'] = 'other';
         $po = trim($this->input->post('keyword'));
         $buy = $this->input->post('kategori');
         $checked = $this->input->post('checked');
@@ -35,10 +35,10 @@ class Ponet extends CI_Controller
                 $data['message'] = 'Data tidak ditemukan.';
             }
         }
-
+        $footer['fungsi'] = 'ponet';
         $this->load->view('layouts/header', $header);
         $this->load->view('ponet/index', $data);
-        $this->load->view('layouts/footer');
+        $this->load->view('layouts/footer',$footer);
     }
 
     public function view($id)

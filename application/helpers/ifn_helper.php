@@ -462,6 +462,12 @@ function riwayatpo($id)
     $hasil = $CI->helpermodel->riwayatpo($id);
     return $hasil;
 }
+function riwayatbcmasuk($id)
+{
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->riwayatbcmasuk($id);
+    return $hasil;
+}
 function get_client_ip()
 {
     $ipaddress = '';

@@ -248,6 +248,39 @@ class Helper_model extends CI_Model
         }
         return $hasil;
     }
+    public function riwayatbcmasuk($id){
+        $this->db->where('id', $id);
+        $cek = $this->db->get('tb_header')->row_array();
+        $hasil = [];
+         if ($cek['data_ok'] == 1) {
+            $ok = 'Dokumen dibuat oleh : ' . datauser($cek['user_ok'], 'name') . ' on ' . $cek['tgl_ok'];
+            array_push($hasil,$ok);
+            // array_push($hasil, '1' => $ok);
+            // $hasil['dibuat'] = $cek['tgl'];
+            // $hasil['tgldibuat'] = $ok;
+        } else {
+            array_push($hasil, 'Dokumen sedang dibuat');
+        }
+         if ($cek['ok_tuju'] == 1) {
+            $valid = 'Dokumen sudah diverifikasi ' . datauser($cek['user_tuju'], 'name') . ' on ' . $cek['tgl_tuju'];
+            array_push($hasil, $valid);
+        } else {
+            if ($cek['data_ok'] == 1) {
+                $valid = 'Dokumen menunggu verifikasi BC';
+                array_push($hasil, $valid);
+            }
+        }
+        if ($cek['ok_valid'] == 1) {
+            $valid = 'Dokumen sudah divalidasi ' . datauser($cek['user_valid'], 'name') . ' on ' . $cek['tgl_valid'];
+            array_push($hasil, $valid);
+        } else {
+            if ($cek['data_ok'] == 1) {
+                $valid = 'Dokumen menunggu Validasi';
+                array_push($hasil, $valid);
+            }
+        }
+        return $hasil;
+    }
     public function dataproduksi()
     {
         $bulan = 'janfebmaraprmeijunjulagtsepoktnopdes';

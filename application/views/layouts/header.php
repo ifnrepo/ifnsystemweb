@@ -54,6 +54,19 @@
 </head>
 
 <body>
+    <div class="page page-center" style="z-index: 10000;" id="preloader">
+      <div class="container container-slim py-4">
+        <div class="text-center">
+          <div class="mb-3">
+            <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?= base_url().'assets/image/logosystem3.png'; ?>" height="45" alt=""></a>
+          </div>
+          <div class="text-secondary mb-3">Preparing data, Please wait..</div>
+          <div class="progress progress-sm">
+            <div class="progress-bar progress-bar-indeterminate"></div>
+          </div>
+        </div>
+      </div>
+    </div>
   <!-- Kummpulan Modal -->
   <div class="modal modal-blur fade" id="modal-simple" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -609,7 +622,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 9); ?>" href="<?= base_url('pricinginv'); ?>">
                       Pricing Inventory
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 4); ?>" href="<?= base_url('bcmasuk'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 4); ?>" href="<?= base_url('bcmasuk/clear'); ?>">
                       BC Masuk
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 5); ?>" href="<?= base_url('bckeluar'); ?>">
