@@ -356,4 +356,7 @@ class Helper_model extends CI_Model
     public function getdatadepartemen($kode){
         return $this->db->get_where('dept',['dept_id'=>$kode]);
     }
+    public function getdatafooter(){
+        return $this->db->get('page_footer');
+    }
 }

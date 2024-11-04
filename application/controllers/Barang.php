@@ -28,6 +28,7 @@ class Barang extends CI_Controller
         $header['header'] = 'master';
         // $data['data'] = $this->barangmodel->getdata();
         $data['kategori_options'] = $this->barangmodel->getFilter();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'barang';
         $this->load->view('layouts/header', $header);
         $this->load->view('barang/barang', $data);

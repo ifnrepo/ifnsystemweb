@@ -26,6 +26,7 @@ class Satuan extends CI_Controller
     {
         $header['header'] = 'master';
         $data['data'] = $this->satuanmodel->getdata();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['footer'] = 'satuan';
         $this->load->view('layouts/header', $header);
         $this->load->view('satuan/satuan', $data);

@@ -27,6 +27,7 @@ class Invmesin extends CI_Controller
         $header['header'] = 'other';
         $data['data'] = $this->invmesinmodel->getdata()->result_array();
         $data['lokasi'] = $this->invmesinmodel->getdatalokasi();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'invmesin';
         $this->load->view('layouts/header', $header);
         $this->load->view('invmesin/index', $data);

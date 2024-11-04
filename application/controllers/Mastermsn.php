@@ -27,6 +27,7 @@ class Mastermsn extends CI_Controller
         $header['header'] = 'master';
         $data['data'] = $this->mastermsnmodel->getdata();
         $data['lokasi'] = $this->mastermsnmodel->getdatalokasi();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'datamesin';
         $this->load->view('layouts/header', $header);
         $this->load->view('mastermsn/mastermsn', $data);

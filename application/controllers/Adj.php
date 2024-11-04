@@ -27,6 +27,7 @@ class Adj extends CI_Controller
         $header['header'] = 'transaksi';
         $data['hakdep'] = $this->deptmodel->getdata_dept_adj($this->session->userdata('arrdep'));
         $data['data'] = $this->adjmodel->getdataadj();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'adj';
         $this->load->view('layouts/header', $header);
         $this->load->view('adj/adj', $data);
@@ -300,6 +301,7 @@ class Adj extends CI_Controller
         $header['header'] = 'transaksi';
         $data['data'] = $this->adjmodel->getdatabyid($id);
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'adj';
         $this->load->view('layouts/header', $header);
         $this->load->view('adj/dataadj', $data);

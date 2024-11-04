@@ -36,6 +36,7 @@ class Ib extends CI_Controller
         $data['depbbl'] = $this->deptmodel->getdata_dept_bbl(1);
         $kode = $this->session->userdata('depttuju');
         $data['data'] = $this->ibmodel->getdata($kode);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ib';
         $this->load->view('layouts/header', $header);
         $this->load->view('ib/ib', $data);
@@ -80,6 +81,7 @@ class Ib extends CI_Controller
         $data['data'] = $this->ibmodel->getdatacekbc();
         $data['mtuang'] = $this->mtuangmodel->getdata();
         $data['jnsbc'] = $this->ibmodel->getdokbcmasuk();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ib';
         $this->load->view('layouts/header', $header);
         $this->load->view('ib/datacekbc', $data);
@@ -106,6 +108,7 @@ class Ib extends CI_Controller
         $data['data'] = $this->ibmodel->getdatabyid($kode);
         $data['mtuang'] = $this->mtuangmodel->getdata();
         $data['jnsbc'] = $this->ibmodel->getdokbcmasuk();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ib';
         $this->load->view('layouts/header', $header);
         $this->load->view('ib/dataib', $data);
@@ -289,6 +292,7 @@ class Ib extends CI_Controller
         $data['jnsangkutan'] = $this->ibmodel->getjnsangkutan();
         $data['refkemas'] = $this->ibmodel->refkemas();
         $data['refmtuang'] = $this->ibmodel->refmtuang();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ibx';
         $this->load->view('layouts/header', $header);
         $this->load->view('ib/isidokbc',$data);

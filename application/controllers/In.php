@@ -27,6 +27,7 @@ class In extends CI_Controller {
         $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
         $data['data'] = $this->inmodel->getdata(['dept_id'=>$this->session->userdata('curdept'),'dept_tuju'=>$this->session->userdata('todept')]);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'in';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('in/in',$data);
@@ -103,6 +104,7 @@ class In extends CI_Controller {
         $header['header'] = 'transaksi';
         $data['header'] = $this->inmodel->getdatabyid($id);
         $data['detail'] = $this->inmodel->getdatadetail($id);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'in';
         $this->load->view('layouts/header',$header);
         $this->load->view('in/cekkonfirmasi',$data);

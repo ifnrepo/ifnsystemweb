@@ -26,9 +26,10 @@ class Supplier extends CI_Controller
     {
         $header['header'] = 'master';
         $data['supplier'] = $this->supplier_model->getdata();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('supplier/index', $data);
-        $this->load->view('layouts/footer');
+        $this->load->view('layouts/footer',$footer);
     }
 
     public function tambahdata()

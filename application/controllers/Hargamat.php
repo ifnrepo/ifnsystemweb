@@ -35,6 +35,7 @@ class Hargamat extends CI_Controller
         $data['artikel'] = $this->hargamatmodel->getdataartikel();
         $data['tahune'] = $this->hargamatmodel->getdatatahun();
         // $data['databbl'] = $this->taskmodel->getdatabbl();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'hargamat';
         $this->load->view('layouts/header', $header);
         $this->load->view('hargamat/hargamat', $data);

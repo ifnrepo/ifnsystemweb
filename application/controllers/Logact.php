@@ -16,6 +16,7 @@ class Logact extends CI_Controller
         }
         $this->load->model('logactmodel');
         $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('helper_model','helpermodel');
 
 
         $this->load->library('Pdf');
@@ -37,6 +38,7 @@ class Logact extends CI_Controller
             $data['data'] = $this->logactmodel->getdata();
             $data['datauser'] = $this->logactmodel->getdatauser();
         }
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'logact';
         $this->load->view('layouts/header', $header);
         $this->load->view('logact/logact', $data);

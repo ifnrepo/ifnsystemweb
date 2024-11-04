@@ -18,6 +18,7 @@ class Cctv extends CI_Controller {
         $header['header'] = 'other';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('cctv/cctv');
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'cctv';
 		$this->load->view('layouts/footer',$footer);
 	}

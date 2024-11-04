@@ -21,6 +21,7 @@ class Personil extends CI_Controller
         $header['header'] = 'master';
         $data['personil'] = $this->Personilmodel->getdata();
         $data['dept_options'] = $this->Personilmodel->getFilter();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'personil';
         $this->load->view('layouts/header', $header);
         $this->load->view('personil/index', $data);

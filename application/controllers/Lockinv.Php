@@ -21,9 +21,10 @@ class Lockinv extends CI_Controller
     {
         $header['header'] = 'manajemen';
         $data['lock'] = $this->lockinvmodel->getdata();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('lockinv/lockinv', $data);
-        $this->load->view('layouts/footer');
+        $this->load->view('layouts/footer',$footer);
     }
     public function tambahdata()
     {
