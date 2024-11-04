@@ -273,6 +273,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab">User Manajemen</a>
                         </li>
                         <li class="nav-item">
+                          <a href="#tabs-setting-1" class="nav-link" data-bs-toggle="tab">Setting</a>
+                        </li>
+                        <li class="nav-item">
                           <a href="#tabs-ceklispb" class="nav-link" data-bs-toggle="tab">Validasi PB</a>
                         </li>
                         <li class="nav-item">
@@ -494,6 +497,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="manajemen2" name="manajemen2" type="checkbox">
                                 <span class="form-check-label">Close Book inventory</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane" id="tabs-setting-1">
+                          <div class="row">
+                            <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
+                            <div class="col">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="setting1" name="setting1" type="checkbox">
+                                <span class="form-check-label">Footer</span>
                               </label>
                             </div>
                           </div>

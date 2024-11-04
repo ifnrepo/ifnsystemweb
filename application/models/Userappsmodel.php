@@ -8,7 +8,7 @@ class Userappsmodel extends CI_Model
         $this->db->join('level_user', 'level_user.id = user.id_level_user', 'left');
         $this->db->join('dept', 'dept.dept_id = user.id_dept', 'left');
 
-        return $this->db->order_by('user.id','DESC')->get()->result_array();
+        return $this->db->order_by('user.id', 'DESC')->get()->result_array();
     }
 
     public function getdatabyid($id)
@@ -24,7 +24,7 @@ class Userappsmodel extends CI_Model
     }
     public function hapusdata($id)
     {
-        $this->db->where('id',$id);
+        $this->db->where('id', $id);
         $query = $this->db->delete('user');
         // $query = $this->db->query("Delete from user where id = " . $id);
         $this->helpermodel->isilog($this->db->last_query());
@@ -77,6 +77,14 @@ class Userappsmodel extends CI_Model
                 unset($data['manajemen' . $x]);
             }
         }
+        // Set modul setting
+        $setting = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['setting' . $x])) {
+                $setting = substr_replace($setting, '10', ($x * 2) - 2, 2);
+                unset($data['setting' . $x]);
+            }
+        }
         // Set hak departemen
         $hakdepartemen = '';
         $datdept = $this->deptmodel->getdata();
@@ -90,14 +98,15 @@ class Userappsmodel extends CI_Model
         $cekpb = '';
         $datdept = $this->deptmodel->getdata_dept_pb();
         foreach ($datdept as $dept) {
-            if (isset($data['X'.$dept['dept_id']])) {
+            if (isset($data['X' . $dept['dept_id']])) {
                 $cekpb .= $dept['dept_id'];
-                unset($data['X'.$dept['dept_id']]);
+                unset($data['X' . $dept['dept_id']]);
             }
         }
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
         $data['manajemen'] = $manajemen;
+        $data['setting'] = $setting;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
         // $data['cekpc'] = $cekpc;
@@ -154,6 +163,15 @@ class Userappsmodel extends CI_Model
                 unset($data['manajemen' . $x]);
             }
         }
+
+        // Set modul setting
+        $setting = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['setting' . $x])) {
+                $setting = substr_replace($setting, '10', ($x * 2) - 2, 2);
+                unset($data['setting' . $x]);
+            }
+        }
         // Set hak departemen
         $hakdepartemen = '';
         $datdept = $this->deptmodel->getdata();
@@ -167,15 +185,16 @@ class Userappsmodel extends CI_Model
         $cekpb = '';
         $datdept = $this->deptmodel->getdata_dept_pb();
         foreach ($datdept as $dept) {
-            if (isset($data['X'.$dept['dept_id']])) {
+            if (isset($data['X' . $dept['dept_id']])) {
                 $cekpb .= $dept['dept_id'];
-                unset($data['X'.$dept['dept_id']]);
+                unset($data['X' . $dept['dept_id']]);
             }
         }
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
         $data['other'] = $other;
         $data['manajemen'] = $manajemen;
+        $data['setting'] = $setting;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
         // $data['cekpc'] = $cekpc;
@@ -189,12 +208,13 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('transaksi', $cek['transaksi']);
             $this->session->set_userdata('other', $cek['other']);
             $this->session->set_userdata('manajemen', $cek['manajemen']);
+            $this->session->set_userdata('setting', $cek['setting']);
             $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
-            $this->session->set_userdata('arrdep',arrdep($cek['hakdepartemen']));
-            $this->session->set_userdata('hak_ttd_pb',arrdep($cek['cekpb']));
-            $this->session->set_userdata('ttd',$cek['ttd']);
-            $this->session->set_userdata('viewharga',$cek['view_harga']);
-            $this->session->set_userdata('sess_cekbbl',$cek['cekbbl']);
+            $this->session->set_userdata('arrdep', arrdep($cek['hakdepartemen']));
+            $this->session->set_userdata('hak_ttd_pb', arrdep($cek['cekpb']));
+            $this->session->set_userdata('ttd', $cek['ttd']);
+            $this->session->set_userdata('viewharga', $cek['view_harga']);
+            $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
         }
 
         return $hasil;
@@ -204,20 +224,22 @@ class Userappsmodel extends CI_Model
         $query = $this->db->get('level_user')->result_array();
         return $query;
     }
-    public function refreshsess($id){
+    public function refreshsess($id)
+    {
         $cek = $this->getdatabyid($id)->row_array();
         $this->session->set_userdata('master', $cek['master']);
         $this->session->set_userdata('transaksi', $cek['transaksi']);
         $this->session->set_userdata('other', $cek['other']);
         $this->session->set_userdata('manajemen', $cek['manajemen']);
+        $this->session->set_userdata('setting', $cek['setting']);
         $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
-        $this->session->set_userdata('arrdep',arrdep($cek['hakdepartemen']));
-        $this->session->set_userdata('hak_ttd_pb',arrdep($cek['cekpb']));
-        $this->session->set_userdata('ttd',$cek['ttd']);
-        $this->session->set_userdata('viewharga',$cek['view_harga']);
-        $this->session->set_userdata('cekadj',$cek['cekadj']);
-        $this->session->set_userdata('cekpo',$cek['cekpo']);
-        $this->session->set_userdata('sess_cekbbl',$cek['cekbbl']);
+        $this->session->set_userdata('arrdep', arrdep($cek['hakdepartemen']));
+        $this->session->set_userdata('hak_ttd_pb', arrdep($cek['cekpb']));
+        $this->session->set_userdata('ttd', $cek['ttd']);
+        $this->session->set_userdata('viewharga', $cek['view_harga']);
+        $this->session->set_userdata('cekadj', $cek['cekadj']);
+        $this->session->set_userdata('cekpo', $cek['cekpo']);
+        $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
         return 1;
     }
 }
