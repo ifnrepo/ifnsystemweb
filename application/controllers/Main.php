@@ -18,6 +18,7 @@ class Main extends CI_Controller {
 		$this->load->view('layouts/header');
         $data['dataproduksi'] = $dataproduksi;
 		$this->load->view('main',$data);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'main';
         $footer['dataproduksi'] = $dataproduksi;
 		$this->load->view('layouts/footer',$footer);

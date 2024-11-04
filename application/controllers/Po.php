@@ -32,6 +32,7 @@ class Po extends CI_Controller
         $kode = [
             'jnpo' => $this->session->userdata('jn_po') == null ? 'DO' : $this->session->userdata('jn_po'),
         ];
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $data['data'] = $this->pomodel->getdata($kode);
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
@@ -72,6 +73,7 @@ class Po extends CI_Controller
         $data['mtuang'] = $this->mtuangmodel->getdata();
         $jne = $this->session->userdata('jn_po')=='DO' ? 0 : 1;
         $data['termspay'] = $this->helpermodel->getterms($jne);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
         $this->load->view('po/datapo', $data);
@@ -216,6 +218,7 @@ class Po extends CI_Controller
         $header['header'] = 'transaksi';
         $data['header'] = $this->pomodel->getdatabyid($id);
         $data['detail'] = $this->pomodel->getdatadetailpo($id);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
         $this->load->view('po/invoice',$data);

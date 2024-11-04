@@ -33,6 +33,7 @@ class Bbl extends CI_Controller
             'dept_tuju' => $this->session->userdata('tujusekarang') == null ? '' : $this->session->userdata('tujusekarang'),
         ];
         $data['data'] = $this->bbl_model->getdatabbl($kode);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'bbl';
         $this->load->view('layouts/header', $header);
         $this->load->view('bbl/index', $data);
@@ -93,6 +94,7 @@ class Bbl extends CI_Controller
         $data['barang'] = $this->db->get('barang')->result_array();
         $data['detail'] = $this->bbl_model->getdatadetail_bbl($id)->result_array();
         $data['numdetail'] = $this->bbl_model->getdatadetail_bbl($id)->num_rows();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'bbl';
         $this->load->view('layouts/header', $header);
         $this->load->view('bbl/databbl', $data);
@@ -367,6 +369,7 @@ class Bbl extends CI_Controller
         $data['departemen'] = $this->deptmodel->getdata_dept_pb();
         $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
         $data['numdetail'] = $this->bbl_model->getdatadetail_bbl($id)->num_rows();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'bbl';
         $this->load->view('layouts/header', $header);
         $this->load->view('bbl/edit_detailbbl', $data);

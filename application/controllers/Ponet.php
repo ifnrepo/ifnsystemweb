@@ -11,6 +11,7 @@ class Ponet extends CI_Controller
             redirect($url);
         }
         $this->load->model('Ponet_model');
+        $this->load->model('Helper_model','helpermodel');
         $this->load->helper('ifn_helper');
     }
 
@@ -35,6 +36,7 @@ class Ponet extends CI_Controller
                 $data['message'] = 'Data tidak ditemukan.';
             }
         }
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ponet';
         $this->load->view('layouts/header', $header);
         $this->load->view('ponet/index', $data);

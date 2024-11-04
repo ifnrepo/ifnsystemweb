@@ -51,6 +51,7 @@ class Inv extends CI_Controller
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
         }
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'inv';
         $this->load->view('layouts/header', $header);
         $this->load->view('inv/inv',$data);

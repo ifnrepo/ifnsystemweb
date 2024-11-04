@@ -27,9 +27,10 @@ class Customer extends CI_Controller
     {
         $header['header'] = 'master';
         $data['customer'] = $this->customer_model->getdata();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('customer/index', $data);
-        $this->load->view('layouts/footer');
+        $this->load->view('layouts/footer',$footer);
     }
 
     public function tambahdata()

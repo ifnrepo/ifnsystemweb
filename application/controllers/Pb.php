@@ -34,6 +34,7 @@ class Pb extends CI_Controller
             'level' => $this->session->userdata('levelsekarang') == null ? '' : $this->session->userdata('levelsekarang'),
         ];
         $data['data'] = $this->pb_model->getdatapb($kode);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'pb';
         $this->load->view('layouts/header', $header);
         $this->load->view('pb/pb', $data);
@@ -216,6 +217,7 @@ class Pb extends CI_Controller
         $data['data'] = $this->pb_model->getdatabyid($id);
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
         $data['sublok'] = $this->helpermodel->getdatasublok()->result_array();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'pb';
         $this->load->view('layouts/header', $header);
         $this->load->view('pb/datapb', $data);

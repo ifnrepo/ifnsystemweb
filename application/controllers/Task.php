@@ -21,7 +21,7 @@ class Task extends CI_Controller {
 	{  
         $header['header'] = 'pendingtask';
         $data['data'] = $this->taskmodel->getdata($this->session->userdata('modetask'));
-        // $data['databbl'] = $this->taskmodel->getdatabbl();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'pendingtask';
 		$this->load->view('layouts/header',$header);
 		$this->load->view('task/task',$data);

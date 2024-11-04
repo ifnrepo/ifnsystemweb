@@ -38,6 +38,7 @@ class Bcmasuk extends CI_Controller
             $data['jns'] = $this->session->userdata('jnsbc');
             $data['data'] = $this->bcmasukmodel->getdata();
         }
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'bcmasuk';
         $this->load->view('layouts/header', $header);
         $this->load->view('bcmasuk/bcmasuk', $data);

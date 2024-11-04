@@ -26,9 +26,10 @@ class Kategori extends CI_Controller
     {
         $header['header'] = 'master';
         $data['kategori'] = $this->kategorimodel->getdata();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('kategori/index', $data);
-        $this->load->view('layouts/footer');
+        $this->load->view('layouts/footer',$footer);
     }
 
     public function tambahdata()

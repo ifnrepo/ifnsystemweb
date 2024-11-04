@@ -6,11 +6,11 @@
 			<div class="col-12 col-lg-auto mt-3 mt-lg-0">
 				<ul class="list-inline list-inline-dots mb-0">
 					<li class="list-inline-item">
-						Copyright &copy; <?= date('Y'); ?>
+						<?= $data['footer_caption']; ?>
 					</li>
 					<li class="list-inline-item">
-						<a href="#" data-bs-toggle="modal" data-bs-target="#modal-success">
-							Tim IT IFN
+						<a href="<?= $data['url']; ?>" target="_blank">
+							<?= $data['url_caption']; ?>
 						</a>
 					</li>
 				</ul>

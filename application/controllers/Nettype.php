@@ -26,9 +26,10 @@ class Nettype extends CI_Controller
     {
         $header['header'] = 'master';
         $data['nettype'] = $this->nettype_model->getdata();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('nettype/index', $data);
-        $this->load->view('layouts/footer');
+        $this->load->view('layouts/footer',$footer);
     }
 
     public function tambahdata()

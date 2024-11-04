@@ -23,9 +23,10 @@ class Userapps extends CI_Controller
 	{
 		$header['header'] = 'manajemen';
 		$data['data'] = $this->userappsmodel->getdata();
+		$footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/userapps', $data);
-		$this->load->view('layouts/footer');
+		$this->load->view('layouts/footer',$footer);
 	}
 	public function hapusdata($id)
 	{
