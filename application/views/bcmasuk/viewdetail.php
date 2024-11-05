@@ -42,8 +42,205 @@
                       </li> -->
                     </ul>
                 </div>
-                <div class="tab-pane fade" id="tabs-profile-8">
-                    <div>Sedang dibuat</div>
+                <div class="tab-pane fade p-0" id="tabs-profile-8">
+                    <div class="card">
+                        <div class="card-body p-1">
+                            <div class="p-1 m-0">
+                               <h4 class="font-bold m-1">Informasi</h4> 
+                               <div class="row mb-1 font-kecil">
+                                    <div class="col-6">
+                                        <div class="mb-0">
+                                            <label class="form-label font-kecil mb-0 font-bold">Nomor AJU</label>
+                                            <div class="m-0">
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <input type="email" class="form-control font-kecil btn-flat" aria-describedby="emailHelp" value="<?= generatekodebc($detail['jns_bc'],$detail['tgl_aju'],$detail['nomor_aju']); ?>" placeholder="Enter email">
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="email" class="form-control font-kecil btn-flat" aria-describedby="emailHelp" value="<?= $detail['tgl_aju']; ?>" placeholder="Enter email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="mb-0">
+                                            <label class="form-label font-kecil mb-0 font-bold">Nomor BC</label>
+                                            <div class="m-0">
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <input type="email" class="form-control font-kecil btn-flat" value="<?= $detail['nomor_bc']; ?>" aria-describedby="emailHelp" placeholder="Nomor BC / NOPEN">
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="email" class="form-control font-kecil btn-flat" value="<?= $detail['tgl_bc']; ?>" aria-describedby="emailHelp" placeholder="Tgl BC / NOPEN">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="m-1">
+                            <div class="bg-cyan-lt p-2">
+                                <h4 class="font-bold m-1">Identitas Pengirim Barang</h4>
+                                <div class="row mb-1 font-kecil">
+                                    <label class="col-3 col-form-labels font-bold">Nama</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $detail['nama_supplier']; ?>" aria-describedby="emailHelp" placeholder="Enter Nama Pengirim">
+                                    </div>
+                                </div>
+                                <div class="row mb-1 font-kecil">
+                                    <label class="col-3 col-form-label font-bold">Alamat</label>
+                                    <div class="col">
+                                        <textarea class="form-control font-kecil font-bold btn-flat"><?= $detail['alamat']; ?></textarea>
+                                    </div>
+                                </div>
+                                <div class="row mb-1 font-kecil">
+                                    <label class="col-3 col-form-label font-bold">NPWP</label>
+                                    <div class="col">
+                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $detail['npwp'] ?>" aria-describedby="emailHelp" placeholder="Enter Npwp Pengirim">
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                               <div class="row mt-1">
+                                    <div class="col-6">
+                                        <div class="row font-kecil">
+                                            <label class="col-3 col-form-label font-bold">Jenis Angkutan</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['xangkutan']; ?>" placeholder="Enter jenis angkutan">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-1 font-kecil">
+                                            <label class="col-3 col-form-label font-bold">Sarana Angkut</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil mb-1 btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['angkutan']; ?>" placeholder="Enter Angkutan">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['no_kendaraan']; ?>" placeholder="Enter No Polis">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-3 col-form-label font-bold">Volume</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah(0,2); ?>" placeholder="Enter Nama Pengirim">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-3 col-form-label font-bold">Bruto (kgs)</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah($detail['bruto'],2); ?>" placeholder="Enter Nama Pengirim">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-3 col-form-label font-bold">Netto (kgs)</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil mb-1 btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah($detail['netto'],2); ?>" placeholder="Enter Nama Pengirim">
+                                            </div>
+                                        </div>
+                                    </div>
+                               </div> 
+                            </div>
+                            <hr class="m-1">
+                            <div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="row font-kecil">
+                                            <label class="col-3 col-form-label font-bold">CIF</label>
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="col-5 mr-1">
+                                                        <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['xmt_uang']; ?>" placeholder="Mt Uang">
+                                                    </div>
+                                                    <div class="col-9 mt-1">
+                                                        <input type="text" class="form-control font-kecil btn-sm btn-flat text-right" aria-describedby="emailHelp" value="<?= rupiah($detail['nilai_pab'],2); ?>" placeholder="Enter Nilai PAB">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row font-kecil">
+                                            <label class="col-3 col-form-label font-bold">NDPBM</label>
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="col-12 mr-1">
+                                                        <input type="text" class="form-control font-kecil btn-sm btn-flat text-right" aria-describedby="emailHelp" value="<?= rupiah($detail['kurs_usd'],2); ?>" placeholder="Enter Nama Pengirim">
+                                                    </div>
+                                                    <div class="col-12 mt-1">
+                                                        <input type="text" class="form-control font-kecil btn-sm btn-flat text-right" aria-describedby="emailHelp" value="<?= rupiah($detail['kurs_idr'],2); ?>" placeholder="Enter Nama Pengirim">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row font-kecil">
+                                            <label class="col-3 col-form-label font-bold">Nilai Devisa</label>
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="col-12 mr-1">
+                                                        <div class="input-icon">
+                                                            <span class="input-icon-addon" style="border-right: 2px solid gray;">
+                                                                <div class="text-black font-kecil" role="status">Idr</div>
+                                                            </span>
+                                                            <?php $nilaiidr = $detail['xmt_uang']!='IDR' ? $detail['nilai_pab']*$detail['kurs_usd'] : $detail['nilai_pab']; ?>
+                                                            <input type="text" class="form-control font-kecil btn-sm btn-flat text-right" placeholder="Nilai IDR" value="<?= rupiah($nilaiidr,2); ?>"  style="padding-left: 45px !important;">
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-12 mt-1">
+                                                        <div class="input-icon">
+                                                            <span class="input-icon-addon" style="border-right: 2px solid gray;">
+                                                                <div class="text-black font-kecil" role="status">Usd</div>
+                                                            </span>
+                                                            <?php $nilaiusd = $detail['xmt_uang']=='IDR' ? $detail['nilai_pab']/$detail['kurs_usd'] : $detail['nilai_pab']; ?>
+                                                            <input type="text" value="<?= rupiah($nilaiusd,2); ?>" class="form-control font-kecil btn-sm btn-flat text-right" placeholder="Loading…" style="padding-left: 45px !important;">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <hr class="m-1">
+                            <div>
+                                <h4 class="font-bold m-1" >Detail Barang</h4>
+                                <table id="tabel" class="table order-column table-hover datatable7 mt-1" style="width: 100% !important;">
+                                    <thead>
+                                        <tr class="text-left">
+                                            <!-- <th>Tgl</th> -->
+                                            <th class="text-center">No</th>
+                                            <th class="text-left">Spek</th>
+                                            <th class="text-left">Sat</th>
+                                            <th class="text-left">Jumlah</th>
+                                            <th class="text-left">Berat</th>
+                                            <th class="text-left">SKU</th>
+                                            <th class="text-left">HS</th>
+                                            <th class="text-left">Nilai</th>
+                                            <th class="text-left">Subtotal</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
+                                        <?php foreach ($databarang->result_array() as $datadet) { ?>
+                                            <tr>
+                                                <td></td>
+                                                <td><?= $datadet['nama_barang']; ?></td>
+                                                <td><?= $datadet['kodesatuan']; ?></td>
+                                                <td><?= rupiah($datadet['pcs'],0); ?></td>
+                                                <td><?= rupiah($datadet['kgs'],2); ?></td>
+                                                <td><?= $datadet['kode']; ?></td>
+                                                <td><?= $datadet['nohs']; ?></td>
+                                                <td><?= rupiah($datadet['harga'],2); ?></td>
+                                                <td><?= rupiah($datadet['harga']*$detail['kgs'],2); ?></td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    
                 </div>
                 <div class="tab-pane fade" id="tabs-activity-8">
                     <h4>Activity tab</h4>

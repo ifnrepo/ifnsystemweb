@@ -62,6 +62,8 @@ class Bcmasuk extends CI_Controller
     }
     public function viewdetail($id){
         $data['riwayat'] = riwayatbcmasuk($id);
+        $data['detail'] = $this->bcmasukmodel->getdatabyid($id)->row_array();
+        $data['databarang'] = $this->bcmasukmodel->getdetailbyid($id);
         $this->load->view('bcmasuk/viewdetail',$data);
     }
 
