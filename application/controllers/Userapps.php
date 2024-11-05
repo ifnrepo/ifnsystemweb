@@ -63,6 +63,7 @@ class Userapps extends CI_Controller
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$data['dept'] = $this->db->order_by('departemen')->get('dept')->result_array();
 		$data['jabat'] = $this->db->order_by('nojab', 'ASC')->get('jabatan')->result_array();
+		$footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/edituserapps', $data);
