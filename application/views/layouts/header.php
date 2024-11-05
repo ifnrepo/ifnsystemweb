@@ -45,28 +45,30 @@
   </script>
   <noscript>
     <style type="text/css">
-        .page {display:none;}
+      .page {
+        display: none;
+      }
     </style>
     <div class="noscriptmsg">
-      You don't have javascript enabled.  Good luck with that.
+      You don't have javascript enabled. Good luck with that.
     </div>
   </noscript>
 </head>
 
 <body>
-    <div class="page page-center" style="z-index: 10000;" id="preloader">
-      <div class="container container-slim py-4">
-        <div class="text-center">
-          <div class="mb-3">
-            <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?= base_url().'assets/image/logosystem3.png'; ?>" height="45" alt=""></a>
-          </div>
-          <div class="text-secondary mb-3">Preparing data, Please wait..</div>
-          <div class="progress progress-sm">
-            <div class="progress-bar progress-bar-indeterminate"></div>
-          </div>
+  <div class="page page-center" style="z-index: 10000;" id="preloader">
+    <div class="container container-slim py-4">
+      <div class="text-center">
+        <div class="mb-3">
+          <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?= base_url() . 'assets/image/logosystem3.png'; ?>" height="45" alt=""></a>
+        </div>
+        <div class="text-secondary mb-3">Preparing data, Please wait..</div>
+        <div class="progress progress-sm">
+          <div class="progress-bar progress-bar-indeterminate"></div>
         </div>
       </div>
     </div>
+  </div>
   <!-- Kummpulan Modal -->
   <div class="modal modal-blur fade" id="modal-simple" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered" role="document">
@@ -685,6 +687,35 @@
                 </div>
               </div>
             </li>
+
+            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('setting')); ?>">
+              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'setting') {
+                                                    echo 'active';
+                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
+                    <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                  </svg>
+                </span>
+                <span class="nav-link-title ">
+                  Setting
+                </span>
+              </a>
+              <div class="dropdown-menu <?php if (isset($header) && $header == 'setting') {
+                                          echo 'show active';
+                                        } ?>">
+                <div class="dropdown-menu-columns">
+                  <div class="dropdown-menu-column">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('setting'), 1); ?>" href="<?= base_url('footer'); ?>">
+                      Footer
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
+
             <!-- <li class="nav-item">
               <a class="nav-link <?php if (isset($header) && $header == 'inventory') {
                                     echo 'active';
