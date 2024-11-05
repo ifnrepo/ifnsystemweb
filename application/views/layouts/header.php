@@ -538,6 +538,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 20); ?>" href="<?= base_url('status'); ?>">
                       Data Status Personil
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 21); ?>" href="<?= base_url('kelompokpo'); ?>">
+                      Kelompok PO
+                    </a>
                   </div>
                 </div>
               </div>

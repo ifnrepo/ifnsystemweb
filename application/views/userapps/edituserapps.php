@@ -401,6 +401,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master20" name="master20" type="checkbox" <?= cekceklis($user['master'], 20); ?>>
                                 <span class="form-check-label">Data Status Personil</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master21" name="master21" type="checkbox" <?= cekceklis($user['master'], 21); ?>>
+                                <span class="form-check-label">Kelompok PO</span>
+                              </label>
                               <!-- xx -->
                             </div>
                           </div>
