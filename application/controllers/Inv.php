@@ -19,6 +19,7 @@ class Inv extends CI_Controller
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('inv_model', 'invmodel');
+        $this->load->model('helper_model', 'helpermodel');
 
         $this->load->library('Pdf');
         // $this->load->library('Codeqr');
