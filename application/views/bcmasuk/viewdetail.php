@@ -3,10 +3,10 @@
         <!-- <div class="card-header"> -->
             <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                 <li class="nav-item">
-                <a href="#tabs-home-8" class="nav-link active text-blue font-bold" data-bs-toggle="tab">Riwayat Dokumen</a>
+                <a href="#tabs-profile-8" class="nav-link active text-blue font-bold" data-bs-toggle="tab">Detail Dokumen</a>
                 </li>
                 <li class="nav-item">
-                <a href="#tabs-profile-8" class="nav-link text-blue font-bold" data-bs-toggle="tab">Detail Dokumen</a>
+                <a href="#tabs-home-8" class="nav-link text-blue font-bold" data-bs-toggle="tab">Riwayat Dokumen</a>
                 </li>
                 <li class="nav-item">
                 <a href="#tabs-activity-8" class="nav-link text-blue" data-bs-toggle="tab"></a>
@@ -15,7 +15,7 @@
         <!-- </div> -->
         <!-- <div class="card-body"> -->
             <div class="tab-content p-4">
-                <div class="tab-pane fade active show" id="tabs-home-8">
+                <div class="tab-pane fade" id="tabs-home-8">
                     <!-- <div>Cursus turpis vestibulum, dui in pharetra vulputate id sed non turpis ultricies fringilla at sed facilisis lacus pellentesque purus nibh</div> -->
                     <ul class="steps steps-vertical font-kecil">
                         <?php $no=0; foreach ($riwayat as $riw) { ?>
@@ -42,7 +42,7 @@
                       </li> -->
                     </ul>
                 </div>
-                <div class="tab-pane fade p-0" id="tabs-profile-8">
+                <div class="tab-pane fade active show p-0" id="tabs-profile-8">
                     <div class="card">
                         <div class="card-body p-1">
                             <div class="p-1 m-0">
@@ -222,7 +222,9 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                        <?php foreach ($databarang->result_array() as $datadet) { ?>
+                                        <?php foreach ($databarang->result_array() as $datadet) { 
+                                            $pengali = $datadet['kodesatuan']=='KGS' ? $datadet['kgs'] : $datadet['pcs'];
+                                        ?>
                                             <tr>
                                                 <td></td>
                                                 <td><?= $datadet['nama_barang']; ?></td>
@@ -231,8 +233,8 @@
                                                 <td><?= rupiah($datadet['kgs'],2); ?></td>
                                                 <td><?= $datadet['kode']; ?></td>
                                                 <td><?= $datadet['nohs']; ?></td>
-                                                <td><?= rupiah($datadet['harga'],2); ?></td>
-                                                <td><?= rupiah($datadet['harga']*$detail['kgs'],2); ?></td>
+                                                <td><?= rupiah($datadet['harga'],4); ?></td>
+                                                <td><?= rupiah($datadet['harga']*$pengali,2); ?></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>

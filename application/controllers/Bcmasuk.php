@@ -28,8 +28,8 @@ class Bcmasuk extends CI_Controller
         $header['header'] = 'other';
         $data['dept'] = $this->dept_model->getdata();
         if ($this->session->userdata('tglawal') == null) {
-            $data['tglawal'] = tglmysql(date('Y-m-d'));
-            $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
+            $data['tglawal'] = tglmysql(date('Y-m-01'));
+            $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
             $data['jns'] = null;
             $data['data'] = null;
         }else{
@@ -66,7 +66,81 @@ class Bcmasuk extends CI_Controller
         $data['databarang'] = $this->bcmasukmodel->getdetailbyid($id);
         $this->load->view('bcmasuk/viewdetail',$data);
     }
+    public function excel(){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
+        $sheet->setCellValue('A1', "BC MASUK ".$this->session->userdata('jnsbc')); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A2', "JNS DOK"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B2', "TGL DOK"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C2', "NOMOR DOK"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D2', "NO TERIMA");
+        $sheet->setCellValue('E2', "TGL TERIMA");
+        $sheet->setCellValue('F2', "PEMASOK/PENGIRIM");
+        $sheet->setCellValue('G2', "KODE BARANG");
+        $sheet->setCellValue('H2', "SPEK BARANG");
+        $sheet->setCellValue('I2', "URAIAN BARANG");
+        $sheet->setCellValue('J2', "SAT");
+        $sheet->setCellValue('K2', "QTY");
+        $sheet->setCellValue('L2', "NILAI IDR");
+        $sheet->setCellValue('M2', "NILAI USD");
+        $sheet->setCellValue('N2', "KGS (BRUTO)");
+        $sheet->setCellValue('O2', "KGS (NETTO)");
+        // Panggil model Get Data   
+        $bcmasuk = $this->bcmasukmodel->getdataexcel();
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 3;
+
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($bcmasuk->result_array() as $data) {
+            $nilaiqty = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs'];
+            $nilaiidr = $data['xmtuang']!='USD' ? $data['harga']*$nilaiqty : ($data['harga']*$nilaiqty)*$data['kurs_usd'];
+            $nilaiusd = $data['xmtuang']=='USD' ? $data['harga']*$nilaiqty : ($data['harga']*$nilaiqty)*$data['kurs_usd'];
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $data['jns_bc']);
+            $sheet->setCellValue('B' . $numrow, $data['tgl_bc']);
+            $sheet->setCellValue('C' . $numrow, $data['nomor_bc']);
+            $sheet->setCellValue('D' . $numrow, $data['tgl']);
+            $sheet->setCellValue('E' . $numrow, $data['nomor_dok']);
+            $sheet->setCellValue('F' . $numrow, $data['nama_supplier']);
+            $sheet->setCellValue('G' . $numrow, $data['kode']);
+            $sheet->setCellValue('H' . $numrow, $data['nama_barang']);
+            $sheet->setCellValue('I' . $numrow, $data['nama_alias']);
+            $sheet->setCellValue('J' . $numrow, $data['kodesatuan']);
+            $sheet->setCellValue('K' . $numrow, $nilaiqty);
+            $sheet->setCellValue('L' . $numrow, $nilaiidr);
+            $sheet->setCellValue('M' . $numrow, $nilaiusd);
+            $sheet->setCellValue('N' . $numrow, $data['bruto']);
+            $sheet->setCellValue('O' . $numrow, $data['kgs']);
+            $no++;
+            // Tambah 1 setiap kali looping      
+            $numrow++; // Tambah 1 setiap kali looping    
+        }
+
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle("Data BC Masuk");
+        $jns = $this->session->userdata('jnsbc')=='Y' ? 'ALL' : $this->session->userdata('jnsbc');
+        $title = 'BC '.$jns.' '.$this->session->userdata('tglawal').' sd '.$this->session->userdata('tglakhir');
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'.$title.'.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel DATA DEPARTEMEN');
+    }
+    //End Controller
     public function simpandept()
     {
         $data = [
@@ -140,57 +214,7 @@ class Bcmasuk extends CI_Controller
         $this->load->view('dept/view', $data);
     }
 
-    public function excel()
-    {
-        $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
-
-        $sheet->setCellValue('A1', "DATA DEPARTEMEN"); // Set kolom A1 dengan tulisan "DATA SISWA"    
-        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
-
-        // Buat header tabel nya pada baris ke 3    
-        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
-        $sheet->setCellValue('B2', "KODE "); // Set kolom B3 dengan tulisan "KODE"    
-        $sheet->setCellValue('C2', "NAMA DEPARTEMEN"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('D2', "KATEGORI");
-        $sheet->setCellValue('E2', "OTH");
-        // Panggil model Get Data   
-        $dept = $this->dept_model->getdata();
-        $no = 1;
-
-        // Untuk penomoran tabel, di awal set dengan 1    
-        $numrow = 3;
-
-        // Set baris pertama untuk isi tabel adalah baris ke 3    
-        foreach ($dept as $data) {
-            $oth = cekoth($data['pb'], $data['bbl'], $data['adj']);
-            // Lakukan looping pada variabel      
-            $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, $data['dept_id']);
-            $sheet->setCellValue('C' . $numrow, $data['departemen']);
-            $sheet->setCellValue('D' . $numrow, strtoupper($data['nama']));
-            $sheet->setCellValue('E' . $numrow, $oth);
-            $no++;
-            // Tambah 1 setiap kali looping      
-            $numrow++; // Tambah 1 setiap kali looping    
-        }
-
-
-        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
-        $sheet->getDefaultRowDimension()->setRowHeight(-1);
-        // Set orientasi kertas jadi LANDSCAPE    
-        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-        // Set judul file excel nya    
-        $sheet->setTitle("Data Departemen");
-
-        // Proses file excel    
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data Departemen.xlsx"'); // Set nama file excel nya    
-        header('Cache-Control: max-age=0');
-        $writer = new Xlsx($spreadsheet);
-        $writer->save('php://output');
-        $this->helpermodel->isilog('Download Excel DATA DEPARTEMEN');
-    }
+    
     public function cetakpdf()
     {
         $pdf = new PDF('P', 'mm', 'A4');

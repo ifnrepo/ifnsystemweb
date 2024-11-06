@@ -55,9 +55,9 @@ class inv_model extends CI_Model
             }
             if($dpt == 'GM' || $dpt == 'SP'){
                 $field = ',tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc';
-                $join = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr AND tb_hargamaterial.nomor_bc != ""';
-                $join1 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detailgen.id_barang AND tb_hargamaterial.nobontr = tb_detailgen.nobontr AND tb_hargamaterial.nomor_bc != ""';
-                $join2 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join = ' LEFT JOIN (SELECT DISTINCT jns_bc,nomor_bc,tgl_bc,id_barang,nobontr FROM tb_hargamaterial) as tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join1 = ' LEFT JOIN (SELECT DISTINCT jns_bc,nomor_bc,tgl_bc,id_barang,nobontr FROM tb_hargamaterial) as tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detailgen.id_barang AND tb_hargamaterial.nobontr = tb_detailgen.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join2 = ' LEFT JOIN (SELECT DISTINCT jns_bc,nomor_bc,tgl_bc,id_barang,nobontr FROM tb_hargamaterial) as tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr AND tb_hargamaterial.nomor_bc != ""';
             }
             if($dpt == 'GF'){
                 $nobalefiel = ',nobale';
@@ -93,7 +93,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN tb_po ON tb_po.id = tb_detailgen.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join1."
                                         WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " . $xinv . $xkat . $xcari2 .$xbcnya.  "
-                                        UNION ALL 
+                                        UNION ALL   
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno," . $noeb3 . ",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,2 AS nome,if(tb_detail.po!='',concat(tb_detail.po,tb_detail.item),barang.kode) AS idd,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif,barang.safety_stock,tb_detail.nobale".$field."
@@ -144,9 +144,9 @@ class inv_model extends CI_Model
             }
             if($dpt == 'GM'){
                 $field = ',tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc';
-                $join = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr AND tb_hargamaterial.nomor_bc != ""';
-                $join1 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detailgen.id_barang AND tb_hargamaterial.nobontr = tb_detailgen.nobontr AND tb_hargamaterial.nomor_bc != ""';
-                $join2 = ' LEFT JOIN tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join = ' LEFT JOIN (SELECT DISTINCT jns_bc,nomor_bc,tgl_bc,id_barang,nobontr FROM tb_hargamaterial) as tb_hargamaterial ON tb_hargamaterial.id_barang = stokdept.id_barang AND tb_hargamaterial.nobontr = stokdept.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join1 = ' LEFT JOIN (SELECT DISTINCT jns_bc,nomor_bc,tgl_bc,id_barang,nobontr FROM tb_hargamaterial) as tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detailgen.id_barang AND tb_hargamaterial.nobontr = tb_detailgen.nobontr AND tb_hargamaterial.nomor_bc != ""';
+                $join2 = ' LEFT JOIN (SELECT DISTINCT jns_bc,nomor_bc,tgl_bc,id_barang,nobontr FROM tb_hargamaterial) as tb_hargamaterial ON tb_hargamaterial.id_barang = tb_detail.id_barang AND tb_hargamaterial.nobontr = tb_detail.nobontr AND tb_hargamaterial.nomor_bc != ""';
             }
             if($dpt == 'GF'){
                 $nobalefiel = " and stokdept.nobale = '" . $array['nobale'] . "'";

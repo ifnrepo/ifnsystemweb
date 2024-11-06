@@ -11,7 +11,7 @@ $(document).ready(function () {
 	var jmlpc = $("#jumlahpc").text();
 	var jmlkg = $("#jumlahkg").text();
 	$("#jumlahrekod").text(rupiah(jmlrek, ".", ",", 0));
-	$("#jumlahpcs").text(rupiah(jmlpc, ".", ",", 0));
+	$("#jumlahpcs").text(rupiah(jmlpc, ".", ",", 2));
 	$("#jumlahkgs").text(rupiah(jmlkg, ".", ",", 2));
 });
 $("#textcari").blur(function () {
