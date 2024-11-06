@@ -161,9 +161,13 @@ class Out_model extends CI_Model{
         return $this->db->get()->result_array();    
     }
     public function getdatadetailout($data){
+        $nofilt = "and f.dis=a.dis";
+        if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
+            $nofilt = '';
+        }
         // $ini = $this->session->flashdata('barangerror')=='' ? "''" : $this->session->flashdata('barangerror');
         $ini = 7184;
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.spek,g.engklp");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->select($ini.' as baer');
@@ -172,6 +176,8 @@ class Out_model extends CI_Model{
         $this->db->join('barang c','c.id = a.id_barang','left');
         $this->db->join('tb_detail d','a.id = d.id_out','left');
         $this->db->join('tb_header e','e.id = d.id_header','left');
+        $this->db->join('tb_po f','f.po = a.po and f.item = a.item '.$nofilt,'left');
+        $this->db->join('tb_klppo g','g.id = f.klppo','left');
         $this->db->where('a.id_header'.$this->session->flashdata('barangerror'),$data);
         $this->db->order_by('c.nama_barang','asc');
         return $this->db->get()->result_array();
@@ -297,7 +303,7 @@ class Out_model extends CI_Model{
                         'dis' => $datdet['dis'],
                         'id_barang' => $datdet['id_barang'],
                         'dept_id' => $this->session->userdata('deptsekarang'),
-                        'dl' => $datdet['dln'],
+                        // 'dl' => $datdet['dln'],
                         'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
                     ];
                 }else{
@@ -309,7 +315,7 @@ class Out_model extends CI_Model{
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'insno' => $datdet['insno'],
                         'nobontr' => $datdet['nobontr'],
-                        'dl' => $datdet['dln'],
+                        // 'dl' => $datdet['dln'],
                         'nobale' => $datdet['nobale'],
                         'stok' => $datdet['stok'],
                         'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),

@@ -42,10 +42,17 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                            <?php foreach ($detail as $val) { ?>
+                            <?php foreach ($detail as $val) { 
+                                $sku =($val['po']=='') ?$val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
+                                if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
+                                    $spek = $val['po']=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
+                                }else{
+                                    $spek = $val['po']=='' ? $val['nama_barang'] : $val['spek'];
+                                }
+                            ?>
                                 <tr>
-                                    <td><?= $val['nama_barang']; ?></td>
-                                    <td><?= $val['brg_id']; ?></td>
+                                    <td><?= $spek; ?></td>
+                                    <td><?= $sku; ?></td>
                                     <td><?= $val['namasatuan']; ?></td>
                                     <td class="text-right"><?= rupiah($val['pcs'],0); ?></td>
                                     <td class="text-right"><?= rupiah($val['kgs'],2); ?></td>
@@ -92,6 +99,8 @@
 </div>
 <script>
     $(document).ready(function(){
+        // $("#body-table").removeClass('hilang');
+        // $("#loaderisi").addClass('hilang');
         // $("#keyw").focus();
         // $("#keyw").val($("#nama_barang").val());
         // if($("#keyw").val() != ''){
