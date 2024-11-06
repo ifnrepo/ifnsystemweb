@@ -424,11 +424,14 @@ function verifTask() {
 }
 
 function canvasoff() {
+	var isidata =
+		'<div class="container container-slim py-4" id="loaderisi"><div class="text-center"><div class="mb-3"></div><div class="text-secondary mb-3">Fetching data, Please wait..</div><div class="progress progress-sm"><div class="progress-bar progress-bar-indeterminate"></div></div></div></div>';
 	$("#canvasdet").on("show.bs.offcanvas", function (e) {
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
 		modal.find(".offcanvas-title").text(title);
+		$(this).find(".fetched-data").innerHTML = isidata;
 		$(this).find(".fetched-data").load(link.attr("href"));
 	});
 	return false;

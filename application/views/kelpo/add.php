@@ -8,7 +8,7 @@
                 </div>
             </div>
             <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Produk (Englis)</label>
+                <label class="col-3 col-form-label required">Produk (English)</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" name="engklp" id="engklp" placeholder="Kelompok Produk (Englis)">
                 </div>

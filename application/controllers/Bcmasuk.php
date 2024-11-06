@@ -49,6 +49,7 @@ class Bcmasuk extends CI_Controller
        $this->session->unset_userdata('tglawal');
         $this->session->unset_userdata('tglakhir');
         $this->session->unset_userdata('jnsbc'); 
+        $this->session->unset_userdata('filterkat');
         $url = base_url('bcmasuk');
         redirect($url);
     }
