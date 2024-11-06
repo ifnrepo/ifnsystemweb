@@ -19,7 +19,6 @@ class Ponet_model extends CI_Model
             $this->db->like('tb_po.ord', $po);
         }
 
-
         if (!empty($checked)) {
             $this->db->where('tb_po.stat_po =', 1);
             $this->db->where('tb_po.outstand >', 0);

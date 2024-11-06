@@ -56,6 +56,7 @@ class Personil extends CI_Controller
         $data['status'] = $this->db->get('tb_status')->result_array();
         $data['action'] = base_url() . 'personil/simpandata';
         $footer['fungsi'] = 'personil';
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('personil/add', $data);
         $this->load->view('layouts/footer', $footer);
@@ -90,6 +91,7 @@ class Personil extends CI_Controller
         $data['actionfoto'] = base_url() . 'personil/updatefoto';
         $data['actionkolom'] = base_url() . 'personil/updatedata/' . $personil_id;
         $footer['fungsi'] = 'personil';
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('personil/edit', $data);
         $this->load->view('layouts/footer', $footer);
