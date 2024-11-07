@@ -85,6 +85,7 @@ class Barang extends CI_Controller
         $data['actionfoto'] = base_url() . 'barang/updatefoto';
         $data['actionkolom'] = base_url() . 'barang/updatebarang/' . $id;
         $data['actiondok'] = base_url() . 'barang/updatedok';
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'barang';
 
         $this->load->view('layouts/header', $header);
@@ -103,7 +104,7 @@ class Barang extends CI_Controller
     {
         $this->barangmodel->updatefoto_baru();
     }
-    public function isistock($id,$nom)
+    public function isistock($id, $nom)
     {
         $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
         $data['itemsatuan'] = $this->satuanmodel->getdata();
@@ -147,6 +148,7 @@ class Barang extends CI_Controller
         $header['header'] = 'master';
         $data['detail'] = $this->barangmodel->getdatabyid($id)->row_array();
         $data['data'] = $this->barangmodel->getdatabom($id);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'barang';
         $this->load->view('layouts/header', $header);
         $this->load->view('barang/bombarang', $data);
@@ -282,13 +284,13 @@ class Barang extends CI_Controller
             // $buton2 .= '<a class="btn btn-sm btn-danger btn-icon text-white w-100" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href=' . base_url() . 'barang/hapusbarang/' . $field->id . ' title="Hapus data">';
             // $buton2 .= '<i class="fa fa-trash-o pr-1"></i> Hapus Data';
             // $buton2 .= '</a>';
-            if(cekmenudetail($this->session->userdata('master'), 13)!='hilang'){
-            $buton2 .= '</label>';
-            $buton2 .= '<label class="dropdown-item p-1">';
-            $buton2 .= '<a href=' . base_url() . 'barang/isistock/' . $field->id . '/' . $no .' class="btn btn-sm btn-info btn-icon w-100" id="edituser" rel="' . $key['id'] . '" title="View data" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Isi Safety Stock">';
-            $buton2 .= '<i class="fa fa-info pr-1"></i> Isi Safety Stock';
-            $buton2 .= '</a>';
-            $buton2 .= '</label>';
+            if (cekmenudetail($this->session->userdata('master'), 13) != 'hilang') {
+                $buton2 .= '</label>';
+                $buton2 .= '<label class="dropdown-item p-1">';
+                $buton2 .= '<a href=' . base_url() . 'barang/isistock/' . $field->id . '/' . $no . ' class="btn btn-sm btn-info btn-icon w-100" id="edituser" rel="' . $key['id'] . '" title="View data" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Isi Safety Stock">';
+                $buton2 .= '<i class="fa fa-info pr-1"></i> Isi Safety Stock';
+                $buton2 .= '</a>';
+                $buton2 .= '</label>';
             }
             $buton2 .= '<label class="dropdown-item p-1">';
             $buton2 .= '<a href=' . base_url() . 'barang/bombarang/' . $field->id . ' class="btn btn-sm btn-cyan btn-icon w-100" id="edituser" rel="' . $key['id'] . '" title="Add Data BOM" >';
