@@ -76,13 +76,16 @@ class Barangmodel extends CI_Model
         $this->db->from('barang');
         return $this->db->count_all_results();
     }
+
     public function getdatabyid($id)
     {
-        $query = $this->db->query("Select barang.*,
-        (SELECT SUM(persen) FROM bom_barang WHERE id_barang = barang.id) AS persenbom
-        from barang where id =" . $id);
-        return $query;
+        $this->db->select('barang.*, (SELECT SUM(persen) FROM bom_barang WHERE id_barang = barang.id) AS persenbom');
+        $this->db->from('barang');
+        $this->db->where('id', $id);
+        return $this->db->get();
     }
+
+
     public function simpanbarang($data)
     {
         $query = $this->db->insert('barang', $data);

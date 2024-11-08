@@ -328,12 +328,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master9" name="master9" type="checkbox">
                                 <span class="form-check-label">Kategori Departemen</span>
                               </label>
-                            </div>
-                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master10" name="master10" type="checkbox">
                                 <span class="form-check-label">Personil</span>
                               </label>
+                            </div>
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master11" name="master11" type="checkbox">
                                 <span class="form-check-label">Data Jabatan</span>
@@ -373,6 +373,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master21" name="master21" type="checkbox">
                                 <span class="form-check-label">Kelompok PO</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master22" name="master22" type="checkbox">
+                                <span class="form-check-label">Data Ket Proses</span>
                               </label>
                               <!-- xx -->
                             </div>
