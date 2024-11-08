@@ -118,7 +118,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php } else { ?>
                     <td class='font-bold'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important"><?= $datdet['nodok'] ?></span></a></td>
                   <?php } ?>
-                  <td><?= $jmlrek; ?></td>
+                  <td><?= $jmlrek; ?><br><span class="badge badge-outline text-pink"><?= rupiah($datdet['jumlahpcs'],0); ?> Pcs, <?= rupiah($datdet['netto'],2); ?> Kgs</span></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
                   <td><?= $datdet['keterangan']; ?></td>
                   <td class="text-end"><span style="color: white;">.</span>

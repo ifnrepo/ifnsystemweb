@@ -238,10 +238,53 @@ class Out extends CI_Controller {
         }
     }
     public function viewdetailout($id){
-        $data['header'] = $this->out_model->getdatabyid($id);
-        $data['detail'] = $this->out_model->getdatadetailout($id);
-        $data['detail2'] = $this->out_model->getdatadetail($id);
+        $data['header'] = $this->out_model->getdatabyid($id)->row_array();
+        // $data['detail'] = $this->out_model->getdatadetailout($id);
+        // $data['detail2'] = $this->out_model->getdatadetail($id);
         $this->load->view('out/viewdetailout',$data);
+    }
+    public function loaddetailout(){
+        $id = $_POST['id'];
+        $data = $this->out_model->getdatadetailout($id);
+        $html = "";
+        $no=1;
+         foreach ($data as $val) {
+            $sku =($val['po']=='') ?$val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
+            if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
+                $spek = $val['po']=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
+            }else{
+                $spek = $val['po']=='' ? $val['nama_barang'] : $val['spek'];
+            }
+            $html .= "<tr>";
+            $html .= "<td>".$spek."</td>";
+            $html .= "<td>".$sku."</td>";
+            $html .= "<td>".$val['namasatuan']."</td>";
+            $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
+            $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
+            $html .= "<td>".$val['nodok']."</td>";
+            $html .= "</tr>";
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function loaddetailout2(){
+        $id = $_POST['id'];
+        $data = $this->out_model->getdatadetail($id);
+        $html = "";
+        $no=1;
+       foreach ($data as $val) { 
+        $ketbc = $val['bcnomor']!=null ? 'BC. '.trim($val['jns_bc']).'-'.$val['bcnomor'].'('.$val['bctgl'].')' : '';
+        $html .= "<tr>";
+        $html .= "<td style='line-height: 13px;'>".$val['nama_barang']." # <span class='text-teal'>".$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
+        $html .= "<td>".$val['brg_id']."</td>";
+        $html .= "<td>".$val['namasatuan']."</td>";
+        $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
+        $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
+        $html .= "<td></td>";
+        $html .= "</tr>";
+       }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
     }
     public function resetdetail($id){
         $query = $this->out_model->resetdetail($id);
