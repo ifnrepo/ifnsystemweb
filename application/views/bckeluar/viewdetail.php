@@ -222,6 +222,30 @@
                                     </div>
                                 </div>
                             </div>
+                            <div>
+                                <div class="row mt-1">
+                                    <div class="col-5">
+                                        <div class="row mb-0 font-kecil">
+                                                <label class="col-3 col-form-label font-bold">Nilai CIF</label>
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col-9 mr-1">
+                                                            <input type="text" class="form-control font-kecil btn-sm btn-flat text-right" aria-describedby="emailHelp" value="<?= rupiah($detail['cif'],2); ?>" placeholder="Enter Nilai CIF">
+                                                        </div>
+                                                        <div class="col-9 mt-1">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <div class="col-3">
+                                        
+                                    </div>
+                                    <div class="col-4">
+                                        
+                                    </div>
+                                </div>
+                            </div>
                             <hr class="m-1">
                             <div>
                                 <div class="row">

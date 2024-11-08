@@ -434,6 +434,28 @@ class Inv extends CI_Controller
         $data['isi'] = $array;
         $this->load->view('inv/viewdetail', $data);
     }
+    public function viewdetailwip($isi = '')
+    {
+        $split = explode('-', $isi);
+        $array = [
+            'po' => decrypto($split[1]),
+            'item' => decrypto($split[2]),
+            'dis' => $split[3],
+            'id_barang' => $split[4],
+            'nobontr' => decrypto($split[5]),
+            'insno' => decrypto($split[6]),
+            'nobale' => decrypto($split[7])
+        ];
+        $array2 = [
+            'id_barang' => $split[4],
+            'nobontr' => decrypto($split[5]),
+        ];
+        $data['header'] = $this->invmodel->getdatadetailwip($array)->row_array();
+        $data['detail'] = $this->invmodel->getdatadetailwip($array);
+        $data['dok'] = $this->invmodel->getdatadok($array2)->row_array();
+        $data['isi'] = $array;
+        $this->load->view('inv/viewdetail', $data);
+    }
     public function ubahperiode()
     {
         $this->session->set_userdata('tglawal', $_POST['tga']);

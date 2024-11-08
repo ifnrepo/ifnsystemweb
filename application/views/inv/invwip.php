@@ -110,8 +110,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <table id="tabel" class="table order-column table-hover datatable7" style="width: 100% !important;">
             <thead>
               <tr>
-                <!-- <th>Tgl</th> -->
                 <th>Spesifikasi</th>
+                <th>Lok</th>
                 <th>SKU</th>
                 <th>Nomor IB</th>
                 <th>Insno</th>
@@ -180,7 +180,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   }
               ?>
                   <tr class="<?= $bg; ?><?= $cx; ?>">
-                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="<?= $cx; ?>"><?= $spekbarang; ?></a></td>
+                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetailwip/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="<?= $cx; ?>"><?= $spekbarang; ?></a></td>
+                    <td style="border-bottom: red;"><?= $det['dept_idx']; ?></td>
                     <td style="border-bottom: red;"><?= viewsku(id: $det['kode'], po: $det['po'], no: $det['item'], dis: $det['dis']) ?></td>
                     <td style="border-bottom: red;"><?= $nobontr; ?></td>
                     <td style="border-bottom: red;"><?= $insno; ?></td>

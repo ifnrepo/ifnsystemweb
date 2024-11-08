@@ -50,7 +50,7 @@ class Bcwip extends CI_Controller
             $data['tglawal'] = $this->session->userdata('tglawal');
             $data['tglakhir'] = $this->session->userdata('tglakhir');
             $data['data'] = $this->invmodel->getdatawip();
-            $data['kat'] = $this->invmodel->getdatakategori();
+            $data['kat'] = $this->invmodel->getdatakategoriwip();
             $data['katbece'] = $this->invmodel->getdatabc();
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
