@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-            DOK BC MASUK
+            DOK BC KELUAR
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -25,14 +25,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white form-select" id="jns_bc" name="jns_bc">
                 <!-- <option value="X">Pilih</option> -->
                 <option value="Y" <?php if($this->session->userdata('jnsbc')=='Y'){ echo "selected"; } ?>>All</option>
-                <option value="23" <?php if($this->session->userdata('jnsbc')=='23'){ echo "selected"; } ?>>BC 2.3</option>
-                <option value="262" <?php if($this->session->userdata('jnsbc')=='262'){ echo "selected"; } ?>>BC 2.6.2</option>
-                <option value="40" <?php if($this->session->userdata('jnsbc')=='40'){ echo "selected"; } ?>>BC 4.0</option>
+                <option value="25" <?php if($this->session->userdata('jnsbc')=='25'){ echo "selected"; } ?>>BC 2.5</option>
+                <option value="261" <?php if($this->session->userdata('jnsbc')=='261'){ echo "selected"; } ?>>BC 2.6.1</option>
+                <option value="30" <?php if($this->session->userdata('jnsbc')=='30'){ echo "selected"; } ?>>BC 3.0</option>
+                <option value="41" <?php if($this->session->userdata('jnsbc')=='41'){ echo "selected"; } ?>>BC 4.1</option>
               </select>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-1 tglpilih" title="Tanggal Awal" id="tglawal" name="tglawal" style="width: 95px;" value="<?= $tglawal; ?>">
               <span class="mt-2 text-blue"> ~ </span>
               <input type="text" class="form-control form-sm font-kecil font-bold ml-1 mr-2 tglpilih" title="Tanggal Akhir" id="tglakhir" name="tglakhir" style="width: 95px;" value="<?= $tglakhir; ?>">
-              <a href="#" class="btn btn-success btn-sm font-bold" id="updatebcmasuk"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
+              <a href="#" class="btn btn-success btn-sm font-bold" id="updatebckeluar"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
             </div>
             <div class="col-sm-7 d-flex flex-row-reverse" style="text-align: right;">
               <a href="#" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a>
@@ -92,8 +93,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <!-- <th>Tgl</th> -->
                 <th class="text-center">Dok</th>
                 <th class="text-left">No Pendaftaran / Tgl</th>
-                <th class="text-left">No Dokumen / Tgl</th>
-                <th class="text-left">Pengirim</th>
+                <th class="text-left">No Dokumen/ Tgl</th>
+                <th class="text-left">Customer</th>
                 <th class="text-left">Nomor Respon</th>
                 <th class="text-left">Tanggal Respon</th>
               </tr>
@@ -102,9 +103,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php  $cntbrg=0; $jmpcs=0; $jmkgs=0; if($data!=null): foreach ($data->result_array() as $detail) { ?>
                 <tr>
                   <td class="text-center align-middle"><?= 'BC. '.$detail['jns_bc']; ?></td>
-                  <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url().'bcmasuk/viewdetail/'.$detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'],$detail['tgl_aju'],$detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
+                  <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url().'bckeluar/viewdetail/'.$detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'],$detail['tgl_aju'],$detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
                   <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_sj']; ?><br><?= $detail['tgl_sj']; ?></td>
-                  <td class="text-left"><?= ucwords(strtolower($detail['nama_supplier'])); ?></td>
+                  <td class="text-left"><?= ucwords(strtolower(trim($detail['nama_customer']))); ?><?php if($detail['port']!=''){ echo '- '.ucwords(strtolower($detail['port']));} ?></td>
                   <td class="text-left"><?= $detail['nomor_sppb']; ?></td>
                   <td class="text-left"><?= $detail['tgl_sppb']; ?></td>
                 </tr>

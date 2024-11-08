@@ -11,6 +11,8 @@ class Out_model extends CI_Model{
         ];
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
+        $this->db->select('(SELECT SUM(pcs) AS pcs FROM tb_detail WHERE tb_detail.id_header = tb_header.id GROUP BY id_header ) AS jumlahpcs');
+        $this->db->join('(select distinct id_header from tb_detail) as tb_detail','tb_detail.id_header = tb_header.id','left');
         $this->db->where($arrkondisi);
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
@@ -56,7 +58,7 @@ class Out_model extends CI_Model{
         $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
         $this->db->join('customer','customer.id=tb_header.id_buyer','left');
         $query = $this->db->get_where('tb_header',['tb_header.id'=>$kode]);
-        return $query->row_array();
+        return $query;
     }
     public function getdepttuju($kode){
         $xkode = [];

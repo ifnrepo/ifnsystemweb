@@ -468,6 +468,12 @@ function riwayatbcmasuk($id)
     $hasil = $CI->helpermodel->riwayatbcmasuk($id);
     return $hasil;
 }
+function riwayatbckeluar($id)
+{
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->riwayatbckeluar($id);
+    return $hasil;
+}
 function get_client_ip()
 {
     $ipaddress = '';

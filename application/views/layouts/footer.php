@@ -125,6 +125,9 @@
 <?php if (isset($fungsi) && $fungsi == 'bcmasuk') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/bcmasuk.js?1724750325"></script>
 <?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'bckeluar') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/bckeluar.js?1724750325"></script>
+<?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
 	// print_r(json_encode($dataproduksi['data_isi'])); 
 ?>

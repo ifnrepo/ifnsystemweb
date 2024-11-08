@@ -28,43 +28,48 @@
                 </div>
                 <hr class='m-1'>
                 <div class="card card-lg">
+                    <input type="text" name="iddet" id="iddet" value="<?= $header['id']; ?>" class="hilang">
                     <div class="card-body p-2">
-                        <table class="table datatable6 table-hover" id="cobasisip">
+                        <div class="container container-slim py-4" id="syncloader">
+                            <div class="text-center">
+                                <div class="mb-3">
+                                </div>
+                                <div class="text-secondary mb-3">Fetching data, Please wait..</div>
+                                <div class="progress progress-sm">
+                                <div class="progress-bar progress-bar-indeterminate"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <table class="table datatable6 table-hover hilang" id="cobasisip">
                             <thead style="background-color: blue !important">
                                 <tr>
-                                <!-- <th>No</th> -->
-                                <th>Specific</th>
-                                <th>SKU</th>
-                                <th>Satuan</th>
-                                <th>Qty</th>
-                                <th>Kgs</th>
-                                <th>Keterangan</th>
+                                    <!-- <th>No</th> -->
+                                    <th>Specific</th>
+                                    <th>SKU</th>
+                                    <th>Satuan</th>
+                                    <th>Qty</th>
+                                    <th>Kgs</th>
+                                    <th>Keterangan</th>
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                            <?php foreach ($detail as $val) { 
-                                $sku =($val['po']=='') ?$val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
-                                if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
-                                    $spek = $val['po']=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
-                                }else{
-                                    $spek = $val['po']=='' ? $val['nama_barang'] : $val['spek'];
-                                }
-                            ?>
-                                <tr>
-                                    <td><?= $spek; ?></td>
-                                    <td><?= $sku; ?></td>
-                                    <td><?= $val['namasatuan']; ?></td>
-                                    <td class="text-right"><?= rupiah($val['pcs'],0); ?></td>
-                                    <td class="text-right"><?= rupiah($val['kgs'],2); ?></td>
-                                    <td><?= $val['nodok']; ?></td>
-                                </tr>
-                            <?php } ?>
+
                             </tbody>
                         </table>
                         <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
                         <a href="#teskolap" data-toggle="collapse" aria-expanded="false" class="link text-orange">View Detail BOM</a>
                         <div class="collapse" id="teskolap">
-                            <table class="table datatable6 table-hover" id="cobasisip">
+                            <div class="container container-slim py-4" id="syncloader2">
+                                <div class="text-center">
+                                    <div class="mb-3">
+                                    </div>
+                                    <div class="text-secondary mb-3">Fetching data, Please wait..</div>
+                                    <div class="progress progress-sm">
+                                    <div class="progress-bar progress-bar-indeterminate"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table class="table datatable6 table-hover" id="cobasisip2">
                             <thead style="background-color: blue !important">
                                 <tr>
                                 <!-- <th>No</th> -->
@@ -76,17 +81,8 @@
                                 <th>Keterangan</th>
                                 </tr>
                             </thead>
-                            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                            <?php foreach ($detail2 as $val) { $ketbc = $val['bcnomor']!=null ? 'BC. '.trim($val['jns_bc']).'-'.$val['bcnomor'].'('.$val['bctgl'].')' : ''; ?>
-                                <tr>
-                                    <td style="line-height: 13px;"><?= $val['nama_barang'].' # <span class="text-teal">'.$val['nobontr'].'<br><span class="text-cyan">'.$ketbc.'</span></span>'; ?></td>
-                                    <td><?= $val['brg_id']; ?></td>
-                                    <td><?= $val['namasatuan']; ?></td>
-                                    <td class="text-right"><?= rupiah($val['pcs'],0); ?></td>
-                                    <td class="text-right"><?= rupiah($val['kgs'],2); ?></td>
-                                    <td></td>
-                                </tr>
-                            <?php } ?>
+                            <tbody class="table-tbody" id="body-table2" style="font-size: 13px !important;" >
+                          
                             </tbody>
                         </table>
                         </div>
@@ -106,7 +102,57 @@
         // if($("#keyw").val() != ''){
         //     $("#getbarang").click();
         // }
+        $("#cobasisip").addClass('hilang');
+        $("#syncloader").removeClass('hilang');
+        $("#cobasisip2").addClass('hilang');
+        $("#syncloader2").removeClass('hilang');
+        setTimeout(() => {
+            var iddet = $("#iddet").val();
+            getdatadetail(iddet);
+        }, 500);
+        setTimeout(() => {
+            var iddet = $("#iddet").val();
+            getdatadetail2(iddet);
+        }, 1000);
     })
+    function getdatadetail(iddet){
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: base_url+'out/loaddetailout',
+            data: {
+                id: iddet,
+            },
+            success: function(data){
+                $("#syncloader").addClass('hilang');
+                $("#cobasisip").removeClass('hilang');
+                $("#body-table").html(data.datagroup).show();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        })      
+    }
+    function getdatadetail2(iddet){
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: base_url+'out/loaddetailout2',
+            data: {
+                id: iddet,
+            },
+            success: function(data){
+                $("#syncloader2").addClass('hilang');
+                $("#cobasisip2").removeClass('hilang');
+                $("#body-table2").html(data.datagroup).show();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        })      
+    }
     // $("#keyw").on('keyup',function(e){
     //     if(e.key == 'Enter' || e.keycode === 13){
     //         $("#getbarang").click();
