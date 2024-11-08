@@ -54,6 +54,15 @@ class Dept_model extends CI_Model
         $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
+    public function getdeptwip(){
+        $dtp = ['SP','NT','RR','GP','FG','FN','AR','AN','NU','AM']; 
+        $this->db->select('dept.*, kategori_departemen.nama');
+        $this->db->from('dept');
+        $this->db->join('kategori_departemen', 'kategori_departemen.id = dept.katedept_id', 'left');
+        $this->db->where_in('dept.dept_id', $dtp);
+        $this->db->order_by('departemen', 'ASC');
+        return $this->db->get()->result_array();
+    }
 
     public function simpandept($data)
     {

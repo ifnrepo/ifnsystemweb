@@ -174,8 +174,8 @@
                                                             $dy =0;
                                                             switch ($detail['xmt_uang']) {
                                                                 case 'IDR':
-                                                                    $dx = $detail['kurs_idr'];
-                                                                    $dy = $detail['kurs_idr'];
+                                                                    $dx = 1;
+                                                                    $dy = 1;
                                                                     break;
                                                                 case 'USD':
                                                                     $dx = $detail['kurs_usd'];

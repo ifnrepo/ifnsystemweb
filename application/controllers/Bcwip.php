@@ -5,7 +5,7 @@ use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 // use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
-class Bcmaterial extends CI_Controller
+class Bcwip extends CI_Controller
 {
     function __construct()
     {
@@ -30,10 +30,10 @@ class Bcmaterial extends CI_Controller
     {
         $header['header'] = 'other';
         $data['level'] = $this->usermodel->getdatalevel();
-        $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
+        $data['hakdep'] = $this->deptmodel->getdeptwip();
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
-        $this->session->set_userdata('currdept','GM');
+        // $this->session->set_userdata('currdept','GM');
         $data['repbeac'] = 1;
         if($this->session->userdata('viewinv')==null){
             $this->session->set_userdata('viewinv',1);
@@ -49,7 +49,7 @@ class Bcmaterial extends CI_Controller
         } else {
             $data['tglawal'] = $this->session->userdata('tglawal');
             $data['tglakhir'] = $this->session->userdata('tglakhir');
-            $data['data'] = $this->invmodel->getdata();
+            $data['data'] = $this->invmodel->getdatawip();
             $data['kat'] = $this->invmodel->getdatakategori();
             $data['katbece'] = $this->invmodel->getdatabc();
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
@@ -58,8 +58,15 @@ class Bcmaterial extends CI_Controller
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'inv';
         $this->load->view('layouts/header', $header);
-        $this->load->view('inv/inv', $data);
+        $this->load->view('inv/invwip', $data);
         $this->load->view('layouts/footer', $footer);
+    }
+    public function clear(){
+        $this->session->unset_userdata('tglawal');
+        $this->session->unset_userdata('tglakhir');
+        $this->session->unset_userdata('currdept');
+        $url = base_url() . 'bcwip';
+        redirect($url);
     }
     public function tambahdata()
     {
