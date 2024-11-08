@@ -66,7 +66,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">Nama Barang</label>
                                 <div class="col">
-                                    <input type="text" class="form-control font-kecil" name="nama_barang" id="nama_barang" placeholder="Nama Barang" value="<?= $data['nama_barang']; ?>">
+                                    <input type="text" class="form-control font-kecil" name="nama_barang" id="nama_barang" placeholder="Nama Barang" value="<?= htmlspecialchars($data['nama_barang']); ?>">
                                 </div>
                             </div>
                             <div class="mb-1 row">

@@ -16,7 +16,7 @@ class Userapps extends CI_Controller
      		</script>';
 		$this->load->model('userappsmodel');
 		$this->load->model('dept_model', 'deptmodel');
-		$this->load->model('userappsmodel','usermodel');
+		$this->load->model('userappsmodel', 'usermodel');
 		$this->load->model('helper_model', 'helpermodel');
 	}
 	public function index()
@@ -26,7 +26,7 @@ class Userapps extends CI_Controller
 		$footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/userapps', $data);
-		$this->load->view('layouts/footer',$footer);
+		$this->load->view('layouts/footer', $footer);
 	}
 	public function hapusdata($id)
 	{
@@ -47,6 +47,7 @@ class Userapps extends CI_Controller
 		$data['dept'] = $this->db->order_by('departemen')->get('dept')->result_array();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$data['jabat'] = $this->db->order_by('nojab', 'ASC')->get('jabatan')->result_array();
+		$footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 		$footer['fungsi'] = 'userapps';
 		$this->load->view('layouts/header', $header);
 		$this->load->view('userapps/adduserapps', $data);
@@ -90,9 +91,10 @@ class Userapps extends CI_Controller
 		$data['user'] = $this->userappsmodel->getdatabyid($id)->row_array();
 		$this->load->view('userapps/viewuser', $data);
 	}
-	public function refreshsess($id,$urrl=''){
+	public function refreshsess($id, $urrl = '')
+	{
 		$hasil = $this->userappsmodel->refreshsess($id);
-		if($hasil){
+		if ($hasil) {
 			$url  = base_url($urrl);
 			redirect($url);
 		}
