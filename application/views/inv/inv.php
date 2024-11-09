@@ -137,7 +137,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Nomor IB</th>
                 <th>Insno</th>
                 <th>Satuan</th>
-                <!-- <th>Sf</th> -->
+                <th>BC</th>
                 <!-- <th>Output</th> -->
                 <?php if($this->session->userdata('currdept')=='GF'): ?>
                   <th>Nobale</th>
@@ -148,9 +148,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Harga</th>
                 <th>Total</th>
                 <?php endif; ?>
-                <?php if(!isset($repbeac)){ ?>
                 <th>Verified</th>
-                <?php } ?>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
@@ -209,6 +207,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td style="border-bottom: red;"><?= $nobontr; ?></td>
                     <td style="border-bottom: red;"><?= $insno; ?></td>
                     <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
+                    <td style="border-bottom: red;"><?= $det['nomor_bc']; ?></td>
                     <?php if($this->session->userdata('currdept')=='GF'): ?>
                       <td style="border-bottom: red;"><?= $det['nobale']; ?></td>
                     <?php endif; ?>
@@ -219,7 +218,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($det['harga'], 2); ?></td>
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($totalharga, 2); ?></td>
                     <?php endif; ?>
-                    <?php if(!isset($repbeac)){ ?>
                       <td style="border-bottom: red;" class="text-center line-12" id="row<?= $det['idu'] ?>">
                       <?php if($det['user_verif']==0){ ?>
                         <a href="<?= base_url() . 'inv/confirmverifikasidata/'.$det['idu']; ?>" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>"><span>Verify</span></a>
@@ -233,7 +231,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <span class="font-10"><?= $det['tgl_verif']; ?></span>
                       <?php }} ?>
                       </td>
-                    <?php } ?>
                   </tr>
               <?php }
               endif; ?>

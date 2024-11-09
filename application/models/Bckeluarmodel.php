@@ -6,9 +6,10 @@ class bckeluarmodel extends CI_Model
         $tglakhir = $this->session->userdata('tglakhir');
         $jnsbc = $this->session->userdata('jnsbc');
 
-        $this->db->select('tb_header.*,customer.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx');
+        $this->db->select('tb_header.*,customer3.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_kemas.kemasan');
         $this->db->join('customer','customer.id = tb_header.id_buyer','left');
         $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
+        $this->db->join('ref_kemas','ref_kemas.kdkem = tb_header.kd_kemasan','left');
         $this->db->where("tgl_bc between '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
         $this->db->where('trim(nomor_bc) !=','');
         if($jnsbc!='Y'){

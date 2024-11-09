@@ -95,6 +95,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th class="text-left">No Pendaftaran / Tgl</th>
                 <th class="text-left">No Dokumen/ Tgl</th>
                 <th class="text-left">Customer</th>
+                <th class="text-left">Info</th>
                 <th class="text-left">Nomor Respon</th>
                 <th class="text-left">Tanggal Respon</th>
               </tr>
@@ -106,6 +107,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url().'bckeluar/viewdetail/'.$detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'],$detail['tgl_aju'],$detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
                   <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_sj']; ?><br><?= $detail['tgl_sj']; ?></td>
                   <td class="text-left"><?= ucwords(strtolower(trim($detail['nama_customer']))); ?><?php if($detail['port']!=''){ echo '- '.ucwords(strtolower($detail['port']));} ?></td>
+                  <td class="text-left"  style="line-height: 14px;"><?= $detail['jml_kemasan'].' '.$detail['kemasan']; ?><br><span class="badge badge-outline text-blue"><?= rupiah($detail['netto'],2).' Kgs'; ?></span></td>
                   <td class="text-left"><?= $detail['nomor_sppb']; ?></td>
                   <td class="text-left"><?= $detail['tgl_sppb']; ?></td>
                 </tr>

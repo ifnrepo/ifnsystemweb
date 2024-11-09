@@ -124,7 +124,7 @@
                                         <div class="row mb-0 font-kecil">
                                             <label class="col-3 col-form-label font-bold">Volume</label>
                                             <div class="col">
-                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah($detail['volume'],2); ?>" placeholder="Enter Nama Pengirim">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah($detail['volume'],4); ?>" placeholder="Enter Nama Pengirim">
                                             </div>
                                         </div>
                                         <div class="row mb-0 font-kecil">
