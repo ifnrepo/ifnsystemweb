@@ -63,6 +63,7 @@ class Mastermsn extends CI_Controller
         $data['actionfoto'] = base_url() . 'mastermsn/updatefoto';
         $data['actionkolom'] = base_url() . 'mastermsn/updatemsn/' . $id;
         $data['actiondok'] = base_url() . 'mastermsn/updatedok';
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'datamesin';
         $this->load->view('layouts/header', $header);
         $this->load->view('mastermsn/editmsn', $data);

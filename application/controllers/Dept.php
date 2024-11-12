@@ -29,7 +29,7 @@ class Dept extends CI_Controller
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('dept/index', $data);
-        $this->load->view('layouts/footer',$footer);
+        $this->load->view('layouts/footer', $footer);
     }
 
     public function tambahdata()
@@ -66,6 +66,7 @@ class Dept extends CI_Controller
         $data['data'] = $this->dept_model->getdatabyid($dept_id);
         $data['departemen'] = $this->dept_model->getdata();
         $data['katedept'] = $this->dept_model->getdatakatedept();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'dept';
 
         $this->load->view('layouts/header', $header);
