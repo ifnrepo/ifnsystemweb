@@ -124,7 +124,7 @@
                                         <div class="row mb-0 font-kecil">
                                             <label class="col-3 col-form-label font-bold">Volume</label>
                                             <div class="col">
-                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah($detail['volume'],2); ?>" placeholder="Enter Nama Pengirim">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah($detail['volume'],4); ?>" placeholder="Enter Nama Pengirim">
                                             </div>
                                         </div>
                                         <div class="row mb-0 font-kecil">
@@ -174,8 +174,8 @@
                                                             $dy =0;
                                                             switch ($detail['xmt_uang']) {
                                                                 case 'IDR':
-                                                                    $dx = $detail['kurs_idr'];
-                                                                    $dy = $detail['kurs_idr'];
+                                                                    $dx = 1;
+                                                                    $dy = 1;
                                                                     break;
                                                                 case 'USD':
                                                                     $dx = $detail['kurs_usd'];
@@ -219,6 +219,30 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div>
+                                <div class="row mt-1">
+                                    <div class="col-5">
+                                        <div class="row mb-0 font-kecil">
+                                                <label class="col-3 col-form-label font-bold">Nilai CIF</label>
+                                                <div class="col">
+                                                    <div class="row">
+                                                        <div class="col-9 mr-1">
+                                                            <input type="text" class="form-control font-kecil btn-sm btn-flat text-right" aria-describedby="emailHelp" value="<?= rupiah($detail['cif'],2); ?>" placeholder="Enter Nilai CIF">
+                                                        </div>
+                                                        <div class="col-9 mt-1">
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    <div class="col-3">
+                                        
+                                    </div>
+                                    <div class="col-4">
+                                        
                                     </div>
                                 </div>
                             </div>

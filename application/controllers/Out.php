@@ -199,7 +199,7 @@ class Out extends CI_Controller {
     }
     public function dataout($kode){
         $header['header'] = 'transaksi';
-        $data['data'] = $this->out_model->getdatabyid($kode);
+        $data['data'] = $this->out_model->getdatabyid($kode)->row_array();
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
         $data['mode'] = 'tambah';
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();

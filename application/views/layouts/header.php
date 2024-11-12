@@ -217,8 +217,8 @@
   <div class="modal modal-blur fade" id="modal-scroll" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Large modal</h5>
+        <div class="modal-header bg-primary">
+          <h5 class="modal-title text-white">Large modal</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body fetched-data p-1">
@@ -639,7 +639,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 10); ?>" href="<?= base_url('bcmaterial'); ?>">
                       Material
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 11); ?>" href="<?= base_url('bcwip'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 11); ?>" href="<?= base_url('bcwip/clear'); ?>">
                       WIP
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 12); ?>" href="<?= base_url('bcgf'); ?>">

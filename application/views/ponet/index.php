@@ -136,7 +136,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <div class="mb-2" style="margin-top: 10px; margin-right: 350px; width: 100px;">
                                     <label class="form-check">
                                         <label class="form-label" style="color: #1877f2;">
-                                            <input class="form-check-input" type="checkbox" name="checked" value="1" id="po-aktif-checkbox" checked> po aktiv
+                                            <input class="form-check-input" type="checkbox" name="checked" id="checked" value="1" id="po-aktif-checkbox" <?php if($this->session->flashdata('msg')=='1'){ echo "checked"; } ?>> po aktiv
                                             <!-- <input class="form-check-input" type="checkbox" name="checked" value="1" checked> po aktiv -->
                                         </label>
                                     </label>

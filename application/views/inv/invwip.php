@@ -6,11 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          <?php if(isset($repbeac) && $repbeac==1){ ?>
-              IT Inventory <?= $this->session->userdata('currdept'); ?> - <?= datadepartemen($this->session->userdata('currdept'),'departemen'); ?>
-          <?php }else{ ?>
-            Inventory Barang <?= $this->session->userdata('currdept'); ?>
-          <?php } ?>
+          IT Inventory WIP - WORK IN PROCESS
           <input type="hidden" id="bukavalid" value="<?= datauser($this->session->userdata('id'),'cekbatalstok'); ?>">
         </h2>
       </div>
@@ -27,8 +23,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 d-flex">
-              <?php $disabel = isset($repbeac) && $repbeac==1 ? 'disabled' : ''; ?>
+              <?php $disabel = ''; ?>
+              <!-- <?= json_encode($hakdep); ?> -->
               <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept" name="currdept" <?= $disabel; ?>>
+                <option value="X">Semua</option>
                 <?php
                 // Mendapatkan nilai 'deptsekarang', jika null nilai default jadi it
                 $selek = $this->session->userdata('currdept') ?? 'IT';
@@ -42,7 +40,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </select>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-1" id="tglawal" name="tglawal" style="width: 95px;" value="<?= $tglawal ?>">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2 hilang" id="tglakhir" name="tglakhir" style="width: 95px;" value="<?= $tglakhir ?>">
-              <a href="#" class="btn btn-success btn-sm font-bold" id="updateinv"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
+              <a href="#" class="btn btn-success btn-sm font-bold" id="updateinvwip"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
               <a href="#" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a>
@@ -53,7 +51,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-3">
-                  <h4 class="mb-1 font-kecil">Kategori Barang</h4>
+                  <h4 class="mb-1 font-kecil">Kategori</h4>
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="katbar" name="katbar">
@@ -71,25 +69,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                        
                 </div>
                 <div class="col-3 ">
-                  <label class="form-check mt-1 mb-1 bg-teal-lt <?php if($this->session->userdata('viewharga')!=1){ echo "hilang"; } ?>">
-                    <input class="form-check-input" type="checkbox" id="viewharga" <?php if($this->session->userdata('invharga')==1){ echo "checked"; } ?> >
-                    <span class="form-check-label font-bold">Tampilkan Harga</span>
-                  </label>   
-                  <label class="form-check mt-1 mb-1 bg-red-lt">
-                    <input class="form-check-input" type="checkbox" id="viewinv" <?php if($this->session->userdata('viewinv')==1){ echo "checked"; } ?> >
-                    <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
-                  </label>
-                  <?php $deptampil = ['GM','SP']; ?>
-                  <select class="form-control form-select font-kecil font-bold bg-cyan-lt <?php if(!in_array($this->session->userdata('currdept'),$deptampil)){ echo "hilang"; } ?>" id="nomorbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
-                    <option value="X">Pilih BC</option>
-                    <?php if ($kat != null) : foreach ($katbece->result_array() as $bece) { ?>
-                    <?php 
-                      $isi = $bece['nomor_bc']!=null ? 'BC. '.trim($bece['jns_bc']).'- '.$bece['nomor_bc'].'('.$bece['tgl_bc'].')' : 'Semua';
-                      $selek = $this->session->userdata('nomorbcnya')==$bece['nomor_bc'] ? 'selected' : '';
-                    ?>
-                      <option value="<?= $bece['nomor_bc']; ?>" <?= $selek; ?>><?= $isi; ?></option>
-                     <?php } endif; ?>
-                  </select>
                 </div>
                 <div class="col-3 font-kecil">
                   <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
@@ -131,13 +110,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <table id="tabel" class="table order-column table-hover datatable7" style="width: 100% !important;">
             <thead>
               <tr>
-                <!-- <th>Tgl</th> -->
                 <th>Spesifikasi</th>
+                <th>Lok</th>
                 <th>SKU</th>
                 <th>Nomor IB</th>
                 <th>Insno</th>
                 <th>Satuan</th>
-                <th>BC</th>
+                <!-- <th>Sf</th> -->
                 <!-- <th>Output</th> -->
                 <?php if($this->session->userdata('currdept')=='GF'): ?>
                   <th>Nobale</th>
@@ -184,7 +163,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   // $isi = 'XXX';
                   $insno = $this->session->userdata('currdept') == 'GS' ? $det['insno'] : $det['insno'];
                   $nobontr = $this->session->userdata('currdept') == 'GS' ? $det['nobontr'] : $det['nobontr'];
-                  $spekbarang = trim($det['po']) != '' ? $det['spek'] : substr($det['nama_barang'], 0, 75);
+                  $spekbarang = $det['nama_barang'] == null ? $det['spek'] : substr($det['nama_barang'], 0, 75);
                   $pilihtampil = $sak==0 ? $sakkg : $sak;
                   $totalharga = $pilihtampil * $det['harga'];
                   $grandtotal += $totalharga;
@@ -202,12 +181,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   }
               ?>
                   <tr class="<?= $bg; ?><?= $cx; ?>">
-                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="<?= $cx; ?>"><?= $spekbarang; ?></a></td>
+                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetailwip/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="<?= $cx; ?>"><?= $spekbarang; ?></a></td>
+                    <td style="border-bottom: red;"><?= $det['dept_idx']; ?></td>
                     <td style="border-bottom: red;"><?= viewsku(id: $det['kode'], po: $det['po'], no: $det['item'], dis: $det['dis']) ?></td>
                     <td style="border-bottom: red;"><?= $nobontr; ?></td>
                     <td style="border-bottom: red;"><?= $insno; ?></td>
                     <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
-                    <td style="border-bottom: red;"><?= $det['nomor_bc']; ?></td>
                     <?php if($this->session->userdata('currdept')=='GF'): ?>
                       <td style="border-bottom: red;"><?= $det['nobale']; ?></td>
                     <?php endif; ?>
@@ -218,7 +197,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($det['harga'], 2); ?></td>
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($totalharga, 2); ?></td>
                     <?php endif; ?>
-                      <td style="border-bottom: red;" class="text-center line-12" id="row<?= $det['idu'] ?>">
+                    <td style="border-bottom: red;" class="text-center line-12" id="row<?= $det['idu'] ?>">
                       <?php if($det['user_verif']==0){ ?>
                         <a href="<?= base_url() . 'inv/confirmverifikasidata/'.$det['idu']; ?>" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>"><span>Verify</span></a>
                       <?php }else{ if(datauser($this->session->userdata('id'),'cekbatalstok')==1){  ?>

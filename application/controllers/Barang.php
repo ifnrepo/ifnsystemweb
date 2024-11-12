@@ -95,7 +95,6 @@ class Barang extends CI_Controller
     {
         $header['header'] = 'master';
         $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
-
         $this->load->view('barang/viewdata', $data);
     }
 
@@ -236,7 +235,7 @@ class Barang extends CI_Controller
             $row = array();
             $row[] = $no;
 
-            $row[] = '<a href="' . base_url() . 'barang/viewdata/' . $field->id . '/' . $no . '" rel="' . $field->id . '" data-bs-toggle="modal" data-bs-target="#modal-scroll" title="view data Barang">' . $field->kodex . '</a>';
+            $row[] = '<a href="' . base_url() . 'barang/viewdata/' . $field->id . '/' . $no . '" rel="' . $field->id . '" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="View data" title="view data Barang">' . $field->kodex . '</a>';
 
             $row[] = $field->nama_barang;
             if ($this->session->userdata('viewalias') == 1) {

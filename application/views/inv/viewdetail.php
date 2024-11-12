@@ -135,6 +135,24 @@
                 </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
+                <?php if(isset($detailbom) && $detailbom->num_rows() > 0): ?>
+                <?php foreach($detailbom->result_array() as $detbom): ?>
+                <?php 
+                    if($detbom['po']!=''){
+                        $sku = viewsku($detbom['po'],$detbom['item'],$detbom['dis'],$detbom['id_barang']);
+                    }else{
+                        $sku = $detbom['kode'];
+                    }
+                ?>
+                    <tr>
+                        <td><?= $detbom['nama_barang']; ?></td>
+                        <td><?= $sku; ?></td>
+                        <td><?= $detbom['namasatuan']; ?></td>
+                        <td class="text-right"></td>
+                        <td class="text-right"><?= rupiah($saldokgs*$detbom['persen'],2); ?></td>
+                        <td><?= $detbom['nomor_bc']; ?></td>
+                    </tr>
+                <?php endforeach; endif; ?>
             </tbody>
         </table>
     <div>

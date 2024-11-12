@@ -21,19 +21,25 @@ class Ponet extends CI_Controller
         $po = trim($this->input->post('keyword'));
         $buy = $this->input->post('kategori');
         $checked = $this->input->post('checked');
+        if($checked==''){
+            $checked = "2";
+        }
+        $this->session->set_flashdata('msg',$checked);
         $data['po'] = [];
 
-        // cek key ,kategori,cheked
-        if (!empty($po) && !empty($buy) || !empty($checked)) {
-            $results = $this->Ponet_model->cariData($po, $buy, $checked);
-
-            if ($results) {
-                foreach ($results as &$result) {
-                    $result['lim'] = limit_date($result['lim']);
+        // cek key ,kategori,cheked 
+        if($po!=''){
+            if (!empty($po) && !empty($buy) || !empty($checked)) {
+                $results = $this->Ponet_model->cariData($po, $buy, $checked);
+                // print_r($results);
+                if ($results) {
+                    foreach ($results as &$result) {
+                        $result['lim'] = limit_date($result['lim']);
+                    }
+                    $data['po'] = $results;
+                } else {
+                    $data['message'] = 'Data tidak ditemukan.';
                 }
-                $data['po'] = $results;
-            } else {
-                $data['message'] = 'Data tidak ditemukan.';
             }
         }
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
