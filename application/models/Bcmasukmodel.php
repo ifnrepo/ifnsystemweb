@@ -6,9 +6,10 @@ class Bcmasukmodel extends CI_Model
         $tglakhir = $this->session->userdata('tglakhir');
         $jnsbc = $this->session->userdata('jnsbc');
 
-        $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx');
+        $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_kemas.kemasan');
         $this->db->join('supplier','supplier.id = tb_header.id_pemasok','left');
         $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
+        $this->db->join('ref_kemas','ref_kemas.kdkem = tb_header.kd_kemasan','left');
         $this->db->where("tgl_bc between '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
         $this->db->where('trim(nomor_bc) !=','');
         if($jnsbc!='Y'){
@@ -23,11 +24,12 @@ class Bcmasukmodel extends CI_Model
         return $this->db->get('tb_header');
     }
     public function getdatabyid($id){
-        $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_jns_angkutan.angkutan as xangkutan,ref_mt_uang.mt_uang as xmt_uang');
+        $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_jns_angkutan.angkutan as xangkutan,ref_mt_uang.mt_uang as xmt_uang,ref_kemas.kemasan');
         $this->db->join('supplier','supplier.id = tb_header.id_pemasok','left');
         $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
         $this->db->join('ref_jns_angkutan','ref_jns_angkutan.id = tb_header.jns_angkutan','left');
         $this->db->join('ref_mt_uang','ref_mt_uang.id = tb_header.mtuang','left');
+        $this->db->join('ref_kemas','ref_kemas.kdkem = tb_header.kd_kemasan','left');
         $this->db->where('tb_header.id',$id);
         return $this->db->get('tb_header');
     }   

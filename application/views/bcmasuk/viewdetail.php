@@ -205,6 +205,23 @@
                             </div>
                             <hr class="m-1">
                             <div>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="row font-kecil">
+                                            <label class="col-3 col-form-label font-bold">Data Kemasan</label>
+                                            <div class="col">
+                                                <div class="col-9 mt-1">
+                                                    <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah($detail['jml_kemasan'],0).' '.$detail['kemasan'] ?>" placeholder="Kode Kemasan">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3"></div>
+                                    <div class="col-4"></div>
+                                </div>
+                            </div>
+                            <hr class="m-1">
+                            <div>
                                 <h4 class="font-bold m-1" >Detail Barang</h4>
                                 <table id="tabel" class="table order-column table-hover datatable7 mt-1" style="width: 100% !important;">
                                     <thead>
@@ -222,19 +239,19 @@
                                         </tr>
                                     </thead>
                                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                        <?php foreach ($databarang->result_array() as $datadet) { 
+                                        <?php $no=1; foreach ($databarang->result_array() as $datadet) { 
                                             $pengali = $datadet['kodesatuan']=='KGS' ? $datadet['kgs'] : $datadet['pcs'];
                                         ?>
                                             <tr>
-                                                <td></td>
+                                                <td><?= $no++; ?></td>
                                                 <td><?= $datadet['nama_barang']; ?></td>
                                                 <td><?= $datadet['kodesatuan']; ?></td>
                                                 <td><?= rupiah($datadet['pcs'],0); ?></td>
                                                 <td><?= rupiah($datadet['kgs'],2); ?></td>
                                                 <td><?= $datadet['kode']; ?></td>
                                                 <td><?= $datadet['nohs']; ?></td>
-                                                <td><?= rupiah($datadet['harga'],4); ?></td>
-                                                <td><?= rupiah($datadet['harga']*$pengali,2); ?></td>
+                                                <td class="text-right"><?= rupiah($datadet['harga'],4); ?></td>
+                                                <td class="text-right"><?= rupiah($datadet['harga']*$pengali,2); ?></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>

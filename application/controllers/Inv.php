@@ -431,6 +431,7 @@ class Inv extends CI_Controller
         $data['header'] = $this->invmodel->getdatadetail($array)->row_array();
         $data['detail'] = $this->invmodel->getdatadetail($array);
         $data['dok'] = $this->invmodel->getdatadok($array2)->row_array();
+        $data['detailbom'] = $this->invmodel->getdatadetailbom($data['header']['id_bom']);
         $data['isi'] = $array;
         $this->load->view('inv/viewdetail', $data);
     }
