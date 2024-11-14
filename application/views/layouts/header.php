@@ -544,6 +544,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 22); ?>" href="<?= base_url('ket_proses'); ?>">
                       Data Ket Proses
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 23); ?>" href="<?= base_url('rekanan'); ?>">
+                      Data Rekanan
+                    </a>
                   </div>
                 </div>
               </div>
