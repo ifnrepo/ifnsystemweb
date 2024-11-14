@@ -162,7 +162,7 @@ class inv_model extends CI_Model
                                         stokdept.dis, stokdept.insno,stokdept.nobontr,stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
                                         barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,0 as pcsadj,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,0 as kgsadj,
                                         satuan.kodesatuan,stokdept.id_bom,1 AS nome,if(stokdept.po!='',concat(stokdept.po,stokdept.item),barang.kode) AS idd,tb_po.spek,stokdept.nobale".$field."
-                                        FROM stokdept 
+                                        ,stokdept.nomor_bc as xbc ,stokdept.tgl_bc as xtgl_bc FROM stokdept 
                                         LEFT JOIN barang ON barang.id = stokdept.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
@@ -175,7 +175,7 @@ class inv_model extends CI_Model
                                         SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detailgen.id,tb_detailgen.id_barang,tb_detailgen.po,
                                         tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno,tb_detailgen.nobontr,tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,
                                         0 AS pcs,0 AS pcsin,tb_detailgen.pcs AS pcsout,0 as pcsadj,0 as kgs,0 as kgsin,tb_detailgen.kgs AS kgsout,0 as kgsout, satuan.kodesatuan,0 as id_bom,3 AS nome,'' as idd,tb_po.spek,tb_detailgen.nobale".$field."
-                                        FROM tb_detailgen 
+                                        ,'' as xbc,'0000-00-00' as xtgl_bc FROM tb_detailgen 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detailgen.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detailgen.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
@@ -189,7 +189,7 @@ class inv_model extends CI_Model
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno,tb_detail.nobontr,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as pcsadj,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,0 as kgsadj,satuan.kodesatuan,0 as id_bom,2 AS nome,'' as idd,tb_po.spek,tb_detail.nobale".$field."
-                                        FROM tb_detail 
+                                        ,'' as xbc,'0000-00-00' as xtgl_bc FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
@@ -206,7 +206,7 @@ class inv_model extends CI_Model
                                         0 as kgs,
                                         0 as kgsin,0 as kgsout,tb_detail.kgs as kgsadj,
                                         satuan.kodesatuan,0 as id_bom,3 AS nome,'' as idd,tb_po.spek,tb_detail.nobale".$field."
-                                        FROM tb_detail 
+                                        ,'' as xbc,'0000-00-00' as xtgl_bc FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
@@ -610,7 +610,7 @@ class inv_model extends CI_Model
                                         stokdept.dis, stokdept.insno,stokdept.nobontr,stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,
                                         barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,stokdept.pcs_awal AS pcs,0 AS pcsin,0 AS pcsout,0 as pcsadj,stokdept.kgs_awal AS kgs,0 AS kgsin,0 AS kgsout,0 as kgsadj,
                                         satuan.kodesatuan,stokdept.id_bom,1 AS nome,if(stokdept.po!='',concat(stokdept.po,stokdept.item),barang.kode) AS idd,tb_po.spek,stokdept.nobale".$field."
-                                        FROM stokdept 
+                                        ,stokdept.nomor_bc as xbc ,stokdept.tgl_bc as xtgl_bc FROM stokdept 
                                         LEFT JOIN barang ON barang.id = stokdept.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
@@ -623,7 +623,7 @@ class inv_model extends CI_Model
                                         SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detailgen.id,tb_detailgen.id_barang,tb_detailgen.po,
                                         tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno,tb_detailgen.nobontr,tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,
                                         0 AS pcs,0 AS pcsin,tb_detailgen.pcs AS pcsout,0 as pcsadj,0 as kgs,0 as kgsin,tb_detailgen.kgs AS kgsout,0 as kgsout, satuan.kodesatuan,0 as id_bom,3 AS nome,'' as idd,tb_po.spek,tb_detailgen.nobale".$field."
-                                        FROM tb_detailgen 
+                                        ,'' as xbc,'0000-00-00' as xtgl_bc FROM tb_detailgen 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detailgen.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detailgen.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
@@ -637,7 +637,7 @@ class inv_model extends CI_Model
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno,tb_detail.nobontr,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as pcsadj,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,0 as kgsadj,satuan.kodesatuan,0 as id_bom,2 AS nome,'' as idd,tb_po.spek,tb_detail.nobale".$field."
-                                        FROM tb_detail 
+                                        ,'' as xbc,'0000-00-00' as xtgl_bc FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
@@ -654,7 +654,7 @@ class inv_model extends CI_Model
                                         0 as kgs,
                                         0 as kgsin,0 as kgsout,tb_detail.kgs as kgsadj,
                                         satuan.kodesatuan,0 as id_bom,3 AS nome,'' as idd,tb_po.spek,tb_detail.nobale".$field."
-                                        FROM tb_detail 
+                                        ,'' as xbc,'0000-00-00' as xtgl_bc FROM tb_detail 
                                         LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
@@ -669,9 +669,10 @@ class inv_model extends CI_Model
         }
     }
     public function getdatadetailbom($id){
-        $this->db->select('*,barang.nama_barang,satuan.namasatuan,barang.kode');
+        $this->db->select('det_bommaterial.*,barang.nama_barang,satuan.namasatuan,barang.kode,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_hargamaterial.jns_bc');
         $this->db->join('barang','barang.id = det_bommaterial.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->join('tb_hargamaterial','tb_hargamaterial.id_barang = det_bommaterial.id_barang AND tb_hargamaterial.nobontr = det_bommaterial.nobontr','left');
         $this->db->where('id_bommaterial',$id);
         return $this->db->get('det_bommaterial');
     }

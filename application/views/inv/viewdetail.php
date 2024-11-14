@@ -12,8 +12,9 @@
             <?php $spekbarang = $header['nama_barang'] == null ? $header['spek'] : $header['nama_barang']; ?>
             <?php $hilangtombol = $this->session->userdata('viewharga')==1 ? '' : 'hilang'; ?>
             <?php $nobc = trim($header['nomor_bc'])!='' ? 'BC.'.trim($header['jns_bc']).'-'.$header['nomor_bc'].'('.tglmysql($header['tgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
+            <?php $nobcx = trim($header['xbc'])!='' ? 'No BC. '.$header['xbc'].'('.tglmysql($header['xtgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
             <h4 class="mb-0 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
-            <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?></h4>
+            <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?><?= $nobcx; ?></h4>
             <hr class="m-0">
             <span class="font-12 text-red">KATEGORI : <?= $header['name_kategori']; ?></span><br>
         </div>
@@ -103,9 +104,11 @@
     </div>
     <div class="card hilang" id="dokfile">
       <div class="card-body pt-1 pb-1" style="overflow: auto;">
-        <?php if($dok['filedok']!='' || $dok['filedok']!=NULL){ ?>
+        <?php if(isset($dok['filedok']) || isset($dok2)){ if($dok['filedok']!='' || $dok['filedok']!=NULL || $dok2!='' || $dok2!=NULL){ ?>
             <iframe src="<?= base_url().LOK_UPLOAD_DOKHAMAT.$dok['filedok']; ?>" style="width:100%;height:700px;" alt="Tidak ditemukan"></iframe>
         <?php }else{ ?>
+            <div class="text-center font-bold m-0"><h3>BELUM ADA DOKUMEN</h3></div>
+        <?php } }else{ ?>
             <div class="text-center font-bold m-0"><h3>BELUM ADA DOKUMEN</h3></div>
         <?php } ?>
       </div>
@@ -138,19 +141,15 @@
                 <?php if(isset($detailbom) && $detailbom->num_rows() > 0): ?>
                 <?php foreach($detailbom->result_array() as $detbom): ?>
                 <?php 
-                    if($detbom['po']!=''){
-                        $sku = viewsku($detbom['po'],$detbom['item'],$detbom['dis'],$detbom['id_barang']);
-                    }else{
-                        $sku = $detbom['kode'];
-                    }
+                    $sku = $detbom['kode'];
                 ?>
                     <tr>
                         <td><?= $detbom['nama_barang']; ?></td>
                         <td><?= $sku; ?></td>
                         <td><?= $detbom['namasatuan']; ?></td>
                         <td class="text-right"></td>
-                        <td class="text-right"><?= rupiah($saldokgs*$detbom['persen'],2); ?></td>
-                        <td><?= $detbom['nomor_bc']; ?></td>
+                        <td class="text-right"><?= rupiah($saldokgs*($detbom['persen']/100),2); ?></td>
+                        <td style="line-height: 14px;"><?= 'BC .'.$detbom['jns_bc'] ?><br><span class="text-teal"><?= $detbom['nomor_bc'].'('.$detbom['tgl_bc'].')'; ?></span></td>
                     </tr>
                 <?php endforeach; endif; ?>
             </tbody>

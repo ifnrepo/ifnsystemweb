@@ -86,19 +86,22 @@
                                 <div class="row mb-1 font-kecil">
                                     <label class="col-3 col-form-labels font-bold">Nama</label>
                                     <div class="col">
-                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $detail['nama_supplier']; ?>" aria-describedby="emailHelp" placeholder="Enter Nama Pengirim">
+                                        <?php $supp = $detail['nama_supplier']=='' ? $detail['nama_rekanan'] : $detail['nama_supplier']; ?>
+                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $supp; ?>" aria-describedby="emailHelp" placeholder="Enter Nama Pengirim">
                                     </div>
                                 </div>
                                 <div class="row mb-1 font-kecil">
                                     <label class="col-3 col-form-label font-bold">Alamat</label>
                                     <div class="col">
-                                        <textarea class="form-control font-kecil font-bold btn-flat"><?= $detail['alamat']; ?></textarea>
+                                        <?php $suppalamat = $detail['nama_supplier']=='' ? $detail['alamat_rekanan'] : $detail['alamat']; ?>
+                                        <textarea class="form-control font-kecil font-bold btn-flat"><?= $suppalamat; ?></textarea>
                                     </div>
                                 </div>
                                 <div class="row mb-1 font-kecil">
                                     <label class="col-3 col-form-label font-bold">NPWP</label>
                                     <div class="col">
-                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $detail['npwp'] ?>" aria-describedby="emailHelp" placeholder="Enter Npwp Pengirim">
+                                        <?php $suppnpwp = $detail['nama_supplier']=='' ? $detail['npwp_rekanan'] : $detail['npwp']; ?>
+                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $suppnpwp ?>" aria-describedby="emailHelp" placeholder="Enter Npwp Pengirim">
                                     </div>
                                 </div>
                             </div>
