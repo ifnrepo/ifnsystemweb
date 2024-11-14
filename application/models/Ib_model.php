@@ -13,8 +13,8 @@ class Ib_model extends CI_Model
         $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier');
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->where($arrkondisi);
+        $this->db->order_by('tgl','desc');
         $this->db->order_by('nomor_dok','asc');
-        $this->db->order_by('tgl','asc');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }

@@ -79,6 +79,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php $hilangex = $detail['exnomor_bc']=='' ? 'hilang' : ''; ?>
+                               <div class="row mb-0 font-kecil <?= $hilangex; ?>">
+                                    <div class="col-6">
+                                        <div class="mb-0 bg-red-lt p-1">
+                                            <label class="form-label font-kecil mb-0 font-bold text-black">Ex BC Nomor</label>
+                                            <div class="m-0">
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <input type="email" class="form-control font-kecil btn-fla bg-yellow font-bold" aria-describedby="emailHelp" value="<?= $detail['exnomor_bc']; ?>" placeholder="Enter email">
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="email" class="form-control font-kecil btn-flat bg-yellow font-bold" aria-describedby="emailHelp" value="<?= $detail['extgl_bc']; ?>" placeholder="Enter email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+    
+                                    </div>
+                                </div>
                             </div>
                             <hr class="m-1">
                             <div class="bg-cyan-lt p-2">
@@ -232,10 +253,10 @@
                                             <!-- <th>Tgl</th> -->
                                             <th class="text-center">No</th>
                                             <th class="text-left">Spek</th>
+                                            <th class="text-left">SKU</th>
                                             <th class="text-left">Sat</th>
                                             <th class="text-left">Jumlah</th>
                                             <th class="text-left">Berat</th>
-                                            <th class="text-left">SKU</th>
                                             <th class="text-left">HS</th>
                                             <th class="text-left">Nilai</th>
                                             <th class="text-left">Subtotal</th>
@@ -244,14 +265,16 @@
                                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
                                         <?php $no=1; foreach ($databarang->result_array() as $datadet) { 
                                             $pengali = $datadet['kodesatuan']=='KGS' ? $datadet['kgs'] : $datadet['pcs'];
+                                            $spek = $datadet['nm_alias']=='' ? $datadet['nama_barang'] : $datadet['nm_alias'];
+                                            $sku = viewsku($datadet['po'],$datadet['item'],$datadet['dis'],$datadet['kode']);
                                         ?>
                                             <tr>
                                                 <td><?= $no++; ?></td>
-                                                <td><?= $datadet['nama_barang']; ?></td>
+                                                <td><?= $spek; ?></td>
+                                                <td><?= $sku; ?></td>
                                                 <td><?= $datadet['kodesatuan']; ?></td>
                                                 <td><?= rupiah($datadet['pcs'],0); ?></td>
                                                 <td><?= rupiah($datadet['kgs'],2); ?></td>
-                                                <td><?= $datadet['kode']; ?></td>
                                                 <td><?= $datadet['nohs']; ?></td>
                                                 <td class="text-right"><?= rupiah($datadet['harga'],4); ?></td>
                                                 <td class="text-right"><?= rupiah($datadet['harga']*$pengali,2); ?></td>

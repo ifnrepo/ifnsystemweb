@@ -7,6 +7,9 @@ $(document).ready(function () {
 	$("#jumlahpcs").text(rupiah(jmlpc, ".", ",", 0));
 	$("#jumlahkgs").text(rupiah(jmlkg, ".", ",", 2));
 });
+$("#buttoncaribcmasuk").click(function () {
+	$("#updatebcmasuk").click();
+});
 $("#updatebcmasuk").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();

@@ -584,7 +584,7 @@ class Ib extends CI_Controller
 
         $databalik = json_decode($result,true);
         print_r($databalik);
-        if($databalik['status']=='Success'){
+        if($databalik['status']=='success'){
             $data = [
                 'token' => $databalik['item']['access_token'],
                 'refresh_token' => $databalik['item']['refresh_token']
