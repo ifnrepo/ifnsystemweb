@@ -36,6 +36,7 @@ class Ib extends CI_Controller
         $data['depbbl'] = $this->deptmodel->getdata_dept_bbl(1);
         $kode = $this->session->userdata('depttuju');
         $data['data'] = $this->ibmodel->getdata($kode);
+        $data['datatoken'] = $this->ibmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ib';
         $this->load->view('layouts/header', $header);

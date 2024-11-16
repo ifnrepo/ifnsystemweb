@@ -7,6 +7,16 @@ $(window).on("load", function () {
 });
 $(document).ready(function () {
 	NProgress.done();
+
+	var arrurl = window.location.href.split("/");
+	addnumber = arrurl[2] == "localhost" ? 0 : 0;
+	// alert(arrurl[4 + addnumber]);
+	if (
+		$("#paramload").val() != "" &&
+		(arrurl[4 + addnumber] == "bcwip" || arrurl[4 + addnumber] == "bcwip#")
+	) {
+		loadtable();
+	}
 	var jmlrek = $("#jumlahrek").text();
 	var jmlpc = $("#jumlahpc").text();
 	var jmlkg = $("#jumlahkg").text();
@@ -138,53 +148,81 @@ $("#updateinvwip").click(function () {
 		},
 	});
 });
+$("#updateinvwipbaru").click(function () {
+	var tglawal = $("#tglawal").val();
+	var tglakhir = $("#tglakhir").val();
+	var currdept = $("#currdept").val();
+	var katbar = $("#katbar").val();
+	// var katcari = document.getElementById("caribar").innerHTML;
+	var katcari = $("input:radio[name=radios-inline]:checked").val();
+	// $("#textcari").val("");
+	var textcari = $("#textcari").val();
+
+	// alert(gbg);
+	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
+		pesan("Tanggal awal lebih besar dari tanggal akhir", "info");
+		return false;
+	}
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "inv/getdatawipbaru",
+		data: {
+			tga: tglawal,
+			tgk: tglakhir,
+			dpt: currdept,
+			kat: katbar,
+			kcari: katcari,
+			cari: textcari,
+		},
+		success: function (data) {
+			// alert(data);
+			window.location.reload();
+			// $("#body-table").html(data.datagroup).show();
+			// loadtable();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
+var table;
+function loadtable() {
+	var table = $("#tabelnya").DataTable({
+		processing: true,
+		serverSide: true,
+		order: [],
+		ajax: {
+			url: base_url + "bcwip/get_data_wip",
+			type: "POST",
+			data: function (d) {
+				d.filter_kategori = $("#katbar").val();
+				console.log("Filter kategori:", d.filter_kategori);
+			},
+		},
+		columnDefs: [
+			{
+				targets: [0],
+				orderable: false,
+			},
+		],
+		pageLength: 50,
+		scrollY: 500,
+		paging: false,
+		searching: false,
+		// info: false,
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
+	});
+	// $("#katbar").on("change", function () {
+	// 	table.ajax.reload();
+	// });
+}
 $("#tglawal").change(function () {
 	// alert("CUY");
 });
 $("#buttoncari").click(function () {
 	$("#updateinv").click();
-	// var tglawal = $("#tglawal").val();
-	// var tglakhir = $("#tglakhir").val();
-	// var currdept = $("#currdept").val();
-	// var currdept = $("#currdept").val();
-	// var katbar = $("#katbar").val();
-	// var textcari = $("#textcari").val();
-	// // var katcari = document.getElementById("caribar").innerHTML;
-	// var katcari = $("input:radio[name=radios-inline]:checked").val();
-	// if ($("#gbg").is(":checked")) {
-	// 	var gbg = 1;
-	// } else {
-	// 	var gbg = 0;
-	// }
-	// alert("xxx");
-	// // alert(gbg);
-	// if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
-	// 	pesan("Tanggal awal lebih besar dari tanggal akhir", "info");
-	// 	return false;
-	// }
-	// $.ajax({
-	// 	dataType: "json",
-	// 	type: "POST",
-	// 	url: base_url + "inv/getdata",
-	// 	data: {
-	// 		tga: tglawal,
-	// 		tgk: tglakhir,
-	// 		dpt: currdept,
-	// 		gbn: gbg,
-	// 		kat: katbar,
-	// 		cari: textcari,
-	// 		kcari: katcari,
-	// 	},
-	// 	success: function (data) {
-	// 		// alert(data);
-	// 		window.location.reload();
-	// 		// $("#body-table").html(data.datagroup).show();
-	// 	},
-	// 	error: function (xhr, ajaxOptions, thrownError) {
-	// 		console.log(xhr.status);
-	// 		console.log(thrownError);
-	// 	},
-	// });
 });
 $("#viewinv").change(function () {
 	var load =

@@ -370,6 +370,9 @@ class Ib_model extends CI_Model
         $this->db->where('id',1);
         $this->db->update('token_bc',$data);
     }
+    public function gettokenbc(){
+        return $this->db->get('token_bc');
+    }
     public function getnomoraju($jns){
         $hass = $this->db->get_where('tb_ajuceisa',['jns_bc' => $jns])->row_array();
         $this->helpermodel->isilog("Isi Nomor Aju Otomatis dengan Nomor ".$hass['nomor_aju']);

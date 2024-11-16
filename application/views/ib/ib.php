@@ -29,6 +29,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <a href="<?= base_url() . 'ib/tambahdataib'; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?><?= $disab; ?>" id="adddataib"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <a href="<?= base_url() . 'ib/cekbc'; ?>" class="btn btn-cyan btn-sm <?= cekclosebook(); ?><?= $disab; ?><?= $cekpakaibc; ?>" id="adddataib"><i class="fa fa-h-square"></i><span class="ml-1">Cek BC</span></a>
               <a href="<?= base_url() . 'ib/hosttohost/99'; ?>" class="btn btn-yellow btn-sm <?= cekclosebook(); ?><?= $disab; ?>"><i class="fa fa-cloud"></i><span class="ml-1">H2H Token</span></a>
+              <?php $date = date("Y-m-d H:i:s",strtotime("+2 hours",strtotime($datatoken['update_at']))); ?>
+              <span class="font-kecil text-teal" id="timetoexpired"><?= $date ?></span>
+              <input type="hidden" id="updateon" value="<?= $date; ?>">
             </div>
             <div class="col-sm-6 mb-0 d-flex flex-row-reverse" style="text-align: right;">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
