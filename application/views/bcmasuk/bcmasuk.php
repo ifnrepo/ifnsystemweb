@@ -72,7 +72,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="input-group mb-0">
                     <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
                     <input type="text" class="form-control form-sm font-kecil" placeholder="Cari Nomor Pendaftaran …" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
-                    <button class="btn text-center font-kecil" type="button" id="buttoncari" style="height: 38px;">
+                    <button class="btn text-center font-kecil" type="button" id="buttoncaribcmasuk" style="height: 38px;">
                       Cari
                     </button>
                   </div>
@@ -97,11 +97,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th class="text-left">Info</th>
                 <th class="text-left">Nomor Respon</th>
                 <th class="text-left">Tanggal Respon</th>
+                <th class="text-left">Ket</th>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php  $cntbrg=0; $jmpcs=0; $jmkgs=0; if($data!=null): foreach ($data->result_array() as $detail) { 
                 $suppl = $detail['nama_supplier']=='' ? $detail['nama_rekanan'] : $detail['nama_supplier'];
+                $exbcno = $detail['exnomor_bc']=='' ? '' : '<span class="text-teal font-kecil">EX BC No. '.$detail['exnomor_bc'].'<br> Tgl '.$detail['extgl_bc'].'</span>';
               ?>
                 <tr>
                   <td class="text-center align-middle"><?= 'BC. '.$detail['jns_bc']; ?></td>
@@ -111,6 +113,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td class="text-left"  style="line-height: 14px;"><?= $detail['jml_kemasan'].' '.$detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'],2).' Kgs'; ?></span></td>
                   <td class="text-left"><?= $detail['nomor_sppb']; ?></td>
                   <td class="text-left"><?= $detail['tgl_sppb']; ?></td>
+                  <td class="text-left" style="line-height: 14px;"><?= $exbcno ?></td>
                 </tr>
               <?php $cntbrg++; $jmpcs += $detail['pcs']; $jmkgs += $detail['kgs']; } endif; ?>
             </tbody>

@@ -49,7 +49,7 @@ class Bcwip extends CI_Controller
         } else {
             $data['tglawal'] = $this->session->userdata('tglawal');
             $data['tglakhir'] = $this->session->userdata('tglakhir');
-            $data['data'] = $this->invmodel->getdatawip();
+            // $data['data'] = $this->invmodel->getdatawip();
             $data['kat'] = $this->invmodel->getdatakategoriwip();
             $data['katbece'] = $this->invmodel->getdatabc();
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
@@ -62,11 +62,93 @@ class Bcwip extends CI_Controller
         $this->load->view('layouts/footer', $footer);
     }
     public function clear(){
+        // $tgawal = tglmysql(date('Y-m-d'));
+        // $tgakhir = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
+        // $this->session->set_userdata('tglawal',$tglawal);
+        // $this->session->set_userdata('tglakhir',$tgakhir);
         $this->session->unset_userdata('tglawal');
         $this->session->unset_userdata('tglakhir');
         $this->session->unset_userdata('currdept');
+        $this->session->set_userdata('jmlrek',0);
         $url = base_url() . 'bcwip';
         redirect($url);
+    }
+    public function get_data_wip()
+    {
+        $noke = 0;
+        $this->session->unset_userdata('jmlrec');
+        ob_start(); // buffer output
+        header('Content-Type: application/json');
+
+        $filter_kategori = $this->input->post('katbar');
+        $list = $this->invmodel->get_datatableswip($filter_kategori);
+        $data = array();
+        $no = $_POST['start'];
+        foreach ($list as $field) {
+            $noke++;
+            $isi = 'OME-' . trim(encrypto($field->po)) . '-' . trim(encrypto($field->item)) . '-' . trim($field->dis) . '-' . trim($field->id_barang) . '-' . trim(encrypto($field->nobontr)) . '-' . trim(encrypto($field->insno)) . '-'. trim(encrypto($field->nobale)) . '-';
+            $spekbarang = $field->nama_barang == null ? $field->spek : substr($field->nama_barang, 0, 75);
+            $cx='';
+            if($this->session->userdata('currdept')=='GM' || $this->session->userdata('currdept')=='GS'){
+                if($field->kodesatuan=='KGS'){
+                    if((float) $field->totkgs <= (float) $field->safety_stock){
+                    $cx = 'text-red';
+                    }
+                }else{
+                    if((float) $field->totpcs <= (float) $field->safety_stock){
+                    $cx = 'text-red';
+                    }
+                }
+            }
+            $insno = $this->session->userdata('currdept') == 'GS' ? $field->insno : $field->insno;
+            $nobontr = $this->session->userdata('currdept') == 'GS' ? $field->nobontr : $field->nobontr;
+            $saldo = $field->pcs;
+            $in = $field->pcsin;
+            $out = $field->pcsout;
+            $saldokg = $field->kgs;
+            $inkg = $field->kgsin;
+            $outkg = $field->kgsout;
+            $sak = $saldo + $in - $out;
+            $sakkg = $saldokg + $inkg - $outkg;
+            $no++;
+            if($field->user_verif == 0){
+                $buton = '<a href="'.base_url() . 'inv/confirmverifikasidata/'.$field->idu.'" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data <br> '.$field->nama_barang.'" style="padding: 2px 3px !important" id="verifrek'.$field->idu.'" rel="'.$field->idu.'" title="'.$field->idu.'"><span>Verify</span></a>';
+            }else{
+                if(datauser($this->session->userdata('id'),'cekbatalstok')==1){
+                    $buton = '<a href="'.base_url() . 'inv/batalverifikasidata/'.$field->idu.'" data-bs-toggle="modal" data-bs-target="#canceltask" data-tombol="Ya" data-message="Akan membatalkan verifikasi data <br> '.$field->nama_barang.'" style="padding: 2px 3px !important" id="verifrek'.$field->idu.'" rel="'.$field->idu.'" title="'.$field->idu.'">
+                          verified : '.substr(datauser($field->user_verif,'username'),0,9).'<br>
+                          <span class="font-10">'.$field->tgl_verif.'</span>
+                        </a>';
+                }else{
+                    $buton = 'verified : '.substr(datauser($field->user_verif,'username'),0,9).'<br>
+                          <span class="font-10">'.$field->tgl_verif.'</span>';
+                }
+            }
+            $row = array();
+            $row[] = '<a href="'.base_url() . 'inv/viewdetailwip/' . $isi.'" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail" title="View Detail" id="namabarang" rel="'.$field->id_barang.'" rel2="'.$field->nama_barang.'" rel3="'.$isi.'" style="text-decoration: none;" class="'.$cx.'">'.$spekbarang.'</a>';
+            $row[] = $field->dept_idx;
+            $row[] = viewsku(id: $field->kode, po: $field->po, no: $field->item, dis: $field->dis);
+            $row[] = $field->nobontr;
+            $row[] = $field->insno;
+            $row[] = $field->kodesatuan;
+            $row[] = rupiah($sak, 2);
+            $row[] = rupiah($sakkg, 2);
+            $row[] = $buton;
+
+            $data[] = $row;
+        }
+        $this->session->set_userdata('jmlrec',$this->invmodel->count_filteredwip($filter_kategori));
+        $output = array(
+            "draw" => $_POST['draw'],
+            "recordsTotal" => $this->invmodel->count_allwip(),
+            "recordsFiltered" => $this->invmodel->count_filteredwip($filter_kategori),
+            "data" => $data,
+        );
+
+        ob_clean();
+        echo json_encode($output);
+        ob_end_flush();
+        error_log("Finished fetching data");
     }
     public function tambahdata()
     {
