@@ -6,7 +6,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          IT Inventory WIP - WORK IN PROCESS
+          <?php if(isset($repbeac) && $repbeac==1){ ?>
+              IT Inventory <?= $this->session->userdata('currdept'); ?> - <?= datadepartemen($this->session->userdata('currdept'),'departemen'); ?>
+          <?php }else{ ?>
+            Inventory Barang <?= $this->session->userdata('currdept'); ?>
+          <?php } ?>
           <input type="hidden" id="bukavalid" value="<?= datauser($this->session->userdata('id'),'cekbatalstok'); ?>">
         </h2>
       </div>
@@ -23,10 +27,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 d-flex">
-              <?php $disabel = ''; ?>
-              <!-- <?= json_encode($hakdep); ?> -->
+              <?php $disabel = isset($repbeac) && $repbeac==1 ? 'disabled' : ''; ?>
               <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept" name="currdept" <?= $disabel; ?>>
-                <option value="X">Semua</option>
                 <?php
                 // Mendapatkan nilai 'deptsekarang', jika null nilai default jadi it
                 $selek = $this->session->userdata('currdept') ?? 'IT';
@@ -40,7 +42,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </select>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-1" id="tglawal" name="tglawal" style="width: 95px;" value="<?= $tglawal ?>">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2 hilang" id="tglakhir" name="tglakhir" style="width: 95px;" value="<?= $tglakhir ?>">
-              <a href="#" class="btn btn-success btn-sm font-bold" id="updateinvwipbaru"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
+              <a href="#" class="btn btn-success btn-sm font-bold" id="updateinvgf"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
               <a href="#" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a>
@@ -51,7 +53,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-3">
-                  <h4 class="mb-1 font-kecil">Kategori</h4>
+                  <h4 class="mb-1 font-kecil">Kategori Barang</h4>
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="katbar" name="katbar">
@@ -69,11 +71,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                        
                 </div>
                 <div class="col-3 ">
+
                 </div>
-                <input type="text" id="paramload" class="hilang" value="<?= $this->session->userdata('currdept'); ?>">
                 <div class="col-3 font-kecil">
+                  <input type="text" id="paramload" class="hilang" value="<?= $this->session->userdata('tglawal'); ?>">
                   <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
-                  <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs" style="font-weight: normal;"><?= $this->session->userdata('jumlahpc'); ?></span></div>
+                  <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
                 </div>
                 <div class="col-3">
@@ -94,7 +97,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="input-group mb-0">
                     <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
                     <input type="text" class="form-control form-sm font-kecil" placeholder="Cari…" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
-                    <button class="btn text-center font-kecil" type="button" id="buttoncari" style="height: 38px;">
+                    <button class="btn text-center font-kecil" type="button" id="buttoncarigf" style="height: 38px;">
                       Cari
                     </button>
                   </div>
@@ -108,15 +111,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div>
-          <table id="tabelnya" class="table order-column table-hover mt-1" style="width: 100% !important;">
+          <table id="tabelnya" class="table order-column table-hover" style="width: 100% !important;">
             <thead>
               <tr>
+                <!-- <th>Tgl</th> -->
                 <th>Spesifikasi</th>
-                <th>Lok</th>
                 <th>SKU</th>
                 <th>Nomor IB</th>
                 <th>Insno</th>
                 <th>Satuan</th>
+                <th>BC</th>
+                <!-- <th>Output</th> -->
+                <?php if($this->session->userdata('currdept')=='GF'): ?>
+                  <th>Nobale</th>
+                <?php endif; ?>
                 <th>Qty</th>
                 <th>Kgs</th>
                 <?php if($this->session->userdata('invharga')==1): ?>
@@ -127,7 +135,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-              
+      
             </tbody>
           </table>
         </div>

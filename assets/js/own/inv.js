@@ -17,6 +17,12 @@ $(document).ready(function () {
 	) {
 		loadtable();
 	}
+	if (
+		$("#paramload").val() != "" &&
+		(arrurl[4 + addnumber] == "bcgf" || arrurl[4 + addnumber] == "bcgf#")
+	) {
+		loadtablegf();
+	}
 	var jmlrek = $("#jumlahrek").text();
 	var jmlpc = $("#jumlahpc").text();
 	var jmlkg = $("#jumlahkg").text();
@@ -176,7 +182,42 @@ $("#updateinvwipbaru").click(function () {
 			cari: textcari,
 		},
 		success: function (data) {
-			// alert(data);
+			window.location.reload();
+			// $("#body-table").html(data.datagroup).show();
+			// loadtable();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
+$("#updateinvgf").click(function () {
+	var tglawal = $("#tglawal").val();
+	var tglakhir = $("#tglakhir").val();
+	var currdept = $("#currdept").val();
+	var katbar = $("#katbar").val();
+	var katcari = $("input:radio[name=radios-inline]:checked").val();
+	var textcari = $("#textcari").val();
+
+	// alert(gbg);
+	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
+		pesan("Tanggal awal lebih besar dari tanggal akhir", "info");
+		return false;
+	}
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "inv/getdatagf",
+		data: {
+			tga: tglawal,
+			tgk: tglakhir,
+			dpt: currdept,
+			kat: katbar,
+			kcari: katcari,
+			cari: textcari,
+		},
+		success: function (data) {
 			window.location.reload();
 			// $("#body-table").html(data.datagroup).show();
 			// loadtable();
@@ -198,13 +239,121 @@ function loadtable() {
 			type: "POST",
 			data: function (d) {
 				d.filter_kategori = $("#katbar").val();
+				d.xzzz = "OME";
 				console.log("Filter kategori:", d.filter_kategori);
+				console.log(d.zzz);
+			},
+			callback: function (x) {
+				alert(x);
 			},
 		},
 		columnDefs: [
 			{
 				targets: [0],
 				orderable: false,
+				class: "borderbottomred",
+			},
+			{
+				targets: [1],
+				class: "borderbottomred",
+			},
+			{
+				targets: [2],
+				class: "borderbottomred",
+			},
+			{
+				targets: [3],
+				class: "borderbottomred",
+			},
+			{
+				targets: [4],
+				class: "borderbottomred",
+			},
+			{
+				targets: [5],
+				class: "borderbottomred",
+			},
+			{
+				targets: [6],
+				class: "text-right borderbottomred",
+			},
+			{
+				targets: [7],
+				class: "text-right borderbottomred",
+			},
+			{
+				targets: [8],
+				class: "text-center borderbottomred",
+			},
+		],
+		pageLength: 50,
+		scrollY: 500,
+		paging: false,
+		searching: false,
+		// info: false,
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
+	});
+	// $("#katbar").on("change", function () {
+	// 	table.ajax.reload();
+	// });
+}
+function loadtablegf() {
+	var table = $("#tabelnya").DataTable({
+		processing: true,
+		serverSide: true,
+		order: [],
+		ajax: {
+			url: base_url + "bcgf/get_data_gf",
+			type: "POST",
+			data: function (d) {
+				d.filter_kategori = $("#katbar").val();
+				console.log("Filter kategori:", d.filter_kategori);
+			},
+			callback: function (x) {
+				alert(x);
+			},
+		},
+		columnDefs: [
+			{
+				targets: [0],
+				orderable: false,
+				class: "borderbottomred",
+			},
+			{
+				targets: [1],
+				class: "borderbottomred",
+			},
+			{
+				targets: [2],
+				class: "borderbottomred",
+			},
+			{
+				targets: [3],
+				class: "borderbottomred",
+			},
+			{
+				targets: [4],
+				class: "borderbottomred",
+			},
+			{
+				targets: [5],
+				class: "borderbottomred",
+			},
+			{
+				targets: [6],
+				class: "borderbottomred",
+			},
+			{
+				targets: [7],
+				class: "text-right borderbottomred",
+			},
+			{
+				targets: [8],
+				class: "text-right borderbottomred",
+			},
+			{
+				targets: [9],
+				class: "text-center borderbottomred",
 			},
 		],
 		pageLength: 50,
@@ -223,6 +372,9 @@ $("#tglawal").change(function () {
 });
 $("#buttoncari").click(function () {
 	$("#updateinv").click();
+});
+$("#buttoncarigf").click(function () {
+	$("#updateinvgf").click();
 });
 $("#viewinv").change(function () {
 	var load =
