@@ -27,6 +27,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 d-flex">
+              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="ifndln" name="ifndln" style="width: 15% !important">
+                <option value="X">All</option>
+                <option value="dln" <?php if($ifndln=='dln'){ echo "selected"; } ?>>DLN</option>
+                <option value="ifn" <?php if($ifndln=='ifn'){ echo "selected"; } ?>>IFN</option>
+              </select>
               <?php $disabel = isset($repbeac) && $repbeac==1 ? 'disabled' : ''; ?>
               <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept" name="currdept" <?= $disabel; ?>>
                 <?php

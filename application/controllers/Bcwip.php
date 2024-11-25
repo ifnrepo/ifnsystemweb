@@ -69,17 +69,19 @@ class Bcwip extends CI_Controller
         $this->session->unset_userdata('tglawal');
         $this->session->unset_userdata('tglakhir');
         $this->session->unset_userdata('currdept');
-        $this->session->set_userdata('jmlrek',0);
+        $this->session->set_userdata('jmlrec',0);
+        $this->session->set_userdata('jmlkgs',0);
+        $this->session->set_userdata('jmlpcs',0);
         $url = base_url() . 'bcwip';
         redirect($url);
     }
     public function get_data_wip()
     {
         $noke = 0;
-        $this->session->unset_userdata('jmlrec');
+        $pecees = 0;
         ob_start(); // buffer output
         header('Content-Type: application/json');
-
+        
         $filter_kategori = $this->input->post('katbar');
         $list = $this->invmodel->get_datatableswip($filter_kategori);
         $data = array();
@@ -136,15 +138,17 @@ class Bcwip extends CI_Controller
             $row[] = $buton;
 
             $data[] = $row;
+            $pecees += $sak;
         }
-        $this->session->set_userdata('jmlrec',$this->invmodel->count_filteredwip($filter_kategori));
+        // $kagees = 1000000;
+        $this->session->set_userdata('jmlrec',$this->invmodel->count_allwip());
         $output = array(
+            "zzz" => $this->invmodel->getkgspcswip($filter_kategori),
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->invmodel->count_allwip(),
             "recordsFiltered" => $this->invmodel->count_filteredwip($filter_kategori),
             "data" => $data,
         );
-
         ob_clean();
         echo json_encode($output);
         ob_end_flush();

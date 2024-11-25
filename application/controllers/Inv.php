@@ -41,6 +41,7 @@ class Inv extends CI_Controller
             $data['data'] = null;
             $data['kat'] = null;
             $data['katbece'] = null;
+            $data['ifndln'] = null;
             $data['gbg'] = '';
             $data['kategoricari'] = 'Cari Barang';
         } else {
@@ -49,6 +50,7 @@ class Inv extends CI_Controller
             $data['data'] = $this->invmodel->getdata();
             $data['kat'] = $this->invmodel->getdatakategori();
             $data['katbece'] = $this->invmodel->getdatabc();
+            $data['ifndln'] = $this->session->userdata('ifndln');
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
         }
@@ -69,6 +71,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('invharga', 0);
         $this->session->unset_userdata('katcari');
         $this->session->unset_userdata('nomorbcnya');
+        $this->session->unset_userdata('ifndln');
         $url = base_url('Inv');
         redirect($url);
     }
@@ -81,6 +84,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('filterkat', $_POST['kat']);
         $this->session->set_userdata('kategoricari', $_POST['kcari']);
         $this->session->set_userdata('nomorbcnya', $_POST['nobcnya']);
+        $this->session->set_userdata('ifndln', $_POST['ifndln']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
                 $this->session->unset_userdata('katcari');  
@@ -126,6 +130,32 @@ class Inv extends CI_Controller
         } else {
             $this->session->unset_userdata('katcari');
         }
+        $kuer = $this->invmodel->getkgspcswip($_POST['kat']);
+        $this->session->set_userdata('jmlpcs',$kuer['pecees']);
+        $this->session->set_userdata('jmlkgs',$kuer['kagees']);
+        $this->session->set_userdata('jmlrec',$kuer['rekod']);
+        echo 1;
+    }
+    public function getdatagf()
+    {
+        $this->session->set_userdata('tglawal', $_POST['tga']);
+        $this->session->set_userdata('tglakhir', $_POST['tgk']);
+        $this->session->set_userdata('currdept', $_POST['dpt']);
+        $this->session->set_userdata('filterkat', $_POST['kat']);
+        $this->session->set_userdata('kategoricari', $_POST['kcari']);
+        if (isset($_POST['cari'])) {
+            if ($_POST['cari'] == '') {
+                $this->session->unset_userdata('katcari');  
+            } else {
+                $this->session->set_userdata('katcari', $_POST['cari']);
+            }
+        } else {
+            $this->session->unset_userdata('katcari');
+        }
+        $kuer = $this->invmodel->getkgspcswip($_POST['kat']);
+        $this->session->set_userdata('jmlpcs',$kuer['pecees']);
+        $this->session->set_userdata('jmlkgs',$kuer['kagees']);
+        $this->session->set_userdata('jmlrec',$kuer['rekod']);
         echo 1;
     }
     public function viewharga(){

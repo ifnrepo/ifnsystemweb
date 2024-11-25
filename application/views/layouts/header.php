@@ -645,7 +645,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 11); ?>" href="<?= base_url('bcwip/clear'); ?>">
                       WIP
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 12); ?>" href="<?= base_url('bcgf'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 12); ?>" href="<?= base_url('bcgf/clear'); ?>">
                       Finished Goods
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 3); ?>" href="<?= base_url('invmesin/clear'); ?>">
