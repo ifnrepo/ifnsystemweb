@@ -76,6 +76,7 @@ $("#updateinv").click(function () {
 	var currdept = $("#currdept").val();
 	var currdept = $("#currdept").val();
 	var katbar = $("#katbar").val();
+	var ifndl = $("#ifndln").val();
 	// var katcari = document.getElementById("caribar").innerHTML;
 	var katcari = $("input:radio[name=radios-inline]:checked").val();
 	// $("#textcari").val("");
@@ -104,9 +105,11 @@ $("#updateinv").click(function () {
 			kcari: katcari,
 			cari: textcari,
 			nobcnya: nomorbcnya,
+			ifndln: ifndl,
 		},
 		success: function (data) {
 			// alert(data);
+			console.log("IFNDLN :" + ifndl);
 			window.location.reload();
 			// $("#body-table").html(data.datagroup).show();
 		},

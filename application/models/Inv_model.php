@@ -33,6 +33,11 @@ class inv_model extends CI_Model
             $field = ',stokdept.nomor_bc as nomor_bc';
             $field2 = ',"" as nomor_bc';
             $nobalefiel = '';
+            $ifndln = ''; 
+            if(trim($this->session->userdata('ifndln'))!='X'){
+                $opsidlnin = $this->session->userdata('ifndln')=='dln' ? 1 : 0;
+                $ifndln = ' AND dl='.$opsidlnin; 
+            }
             $join='';$join1='';$join2='';
             if ($this->session->userdata('katcari') != null) {
                 if ($this->session->userdata('kategoricari') == 'Cari Barang') {
@@ -81,7 +86,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = stokdept.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join."
-                                        WHERE kgs_awal+pcs_awal > 0 AND periode = '" . $period . "' AND dept_id = '" . $dpt . "'" . $xinv . $xkat . $xcari . $xbcnya. "
+                                        WHERE kgs_awal+pcs_awal > 0 AND periode = '" . $period . "' AND dept_id = '" . $dpt . "'" . $xinv . $xkat . $xcari . $xbcnya.$ifndln. "
                                         UNION ALL 
                                         SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detailgen.id,tb_detailgen.id_barang,tb_detailgen.po,
                                         tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno," . $noeb2 . ",tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,
@@ -94,7 +99,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detailgen.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join1."
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " . $xinv . $xkat . $xcari2 .$xbcnya.  "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " . $xinv . $xkat . $xcari2 .$xbcnya.$ifndln.  "
                                         UNION ALL   
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno," . $noeb3 . ",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
@@ -106,7 +111,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join2."
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 .$xbcnya.  "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 .$xbcnya.$ifndln.  "
                                         UNION ALL 
                                         SELECT 'ADJ' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno," . $noeb3 . ",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
@@ -118,7 +123,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype ".$join2."
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . $xbcnya. "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . $xbcnya.$ifndln. "
                                         ORDER BY nama_barang,tgl,nome" . $tambah2);
             return $hasil;
         }
