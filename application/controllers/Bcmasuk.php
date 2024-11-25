@@ -106,7 +106,7 @@ class Bcmasuk extends CI_Controller
             $nilaiidr = $data['xmtuang'] != 'USD' ? $data['harga'] * $nilaiqty : ($data['harga'] * $nilaiqty) * $data['kurs_usd'];
             $nilaiusd = $data['xmtuang'] == 'USD' ? $data['harga'] * $nilaiqty : ($data['harga'] * $nilaiqty) * $data['kurs_usd'];
             // Lakukan looping pada variabel      
-            $sheet->setCellValue('A' . $numrow, $data['jns_bc']);
+            $sheet->setCellValue('A' . $numrow, 'BC. ' .  $data['jns_bc']);
             $sheet->setCellValue('B' . $numrow, $data['tgl_bc']);
             $sheet->setCellValue('C' . $numrow, $data['nomor_bc']);
             $sheet->setCellValue('D' . $numrow, $data['tgl']);
