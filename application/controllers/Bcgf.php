@@ -44,6 +44,7 @@ class Bcgf extends CI_Controller
             $data['data'] = null;
             $data['kat'] = null;
             $data['katbece'] = null;
+            $data['ifndln'] = null;
             $data['gbg'] = '';
             $data['kategoricari'] = 'Cari Barang';
         } else {
@@ -52,6 +53,7 @@ class Bcgf extends CI_Controller
             // $data['data'] = $this->invmodel->getdata();
             $data['kat'] = $this->invmodel->getdatakategori();
             $data['katbece'] = $this->invmodel->getdatabc();
+            $data['ifndln'] = $this->session->userdata('ifndln');
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
         }
@@ -79,7 +81,8 @@ class Bcgf extends CI_Controller
         header('Content-Type: application/json');
         
         $filter_kategori = $this->input->post('katbar');
-        $list = $this->invmodel->get_datatablesgf($filter_kategori);
+        $filt_ifndln = $this->input->post('ifndln');
+        $list = $this->invmodel->get_datatablesgf($filter_kategori,$filt_ifndln);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $field) {
@@ -140,10 +143,10 @@ class Bcgf extends CI_Controller
         // $kagees = 1000000;
         $this->session->set_userdata('jmlrec',$this->invmodel->count_allgf());
         $output = array(
-            "zzz" => $this->invmodel->getkgspcsgf($filter_kategori),
+            "zzz" => $this->invmodel->getkgspcsgf($filter_kategori,$filt_ifndln),
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->invmodel->count_allgf(),
-            "recordsFiltered" => $this->invmodel->count_filteredgf($filter_kategori),
+            "recordsFiltered" => $this->invmodel->count_filteredgf($filter_kategori,$filt_ifndln),
             "data" => $data,
         );
         ob_clean();

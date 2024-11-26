@@ -162,10 +162,9 @@ $("#updateinvwipbaru").click(function () {
 	var tglakhir = $("#tglakhir").val();
 	var currdept = $("#currdept").val();
 	var katbar = $("#katbar").val();
-	// var katcari = document.getElementById("caribar").innerHTML;
 	var katcari = $("input:radio[name=radios-inline]:checked").val();
-	// $("#textcari").val("");
 	var textcari = $("#textcari").val();
+	var ifndl = $("#ifndln").val();
 
 	// alert(gbg);
 	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
@@ -183,6 +182,7 @@ $("#updateinvwipbaru").click(function () {
 			kat: katbar,
 			kcari: katcari,
 			cari: textcari,
+			ifndln: ifndl,
 		},
 		success: function (data) {
 			window.location.reload();
@@ -202,6 +202,7 @@ $("#updateinvgf").click(function () {
 	var katbar = $("#katbar").val();
 	var katcari = $("input:radio[name=radios-inline]:checked").val();
 	var textcari = $("#textcari").val();
+	var ifndl = $("#ifndln").val();
 
 	// alert(gbg);
 	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
@@ -219,6 +220,7 @@ $("#updateinvgf").click(function () {
 			kat: katbar,
 			kcari: katcari,
 			cari: textcari,
+			ifndln: ifndl,
 		},
 		success: function (data) {
 			window.location.reload();

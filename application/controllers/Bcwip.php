@@ -44,6 +44,7 @@ class Bcwip extends CI_Controller
             $data['data'] = null;
             $data['kat'] = null;
             $data['katbece'] = null;
+            $data['ifndln'] = null;
             $data['gbg'] = '';
             $data['kategoricari'] = 'Cari Barang';
         } else {
@@ -52,6 +53,7 @@ class Bcwip extends CI_Controller
             // $data['data'] = $this->invmodel->getdatawip();
             $data['kat'] = $this->invmodel->getdatakategoriwip();
             $data['katbece'] = $this->invmodel->getdatabc();
+            $data['ifndln'] = $this->session->userdata('ifndln');
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
         }
@@ -83,7 +85,8 @@ class Bcwip extends CI_Controller
         header('Content-Type: application/json');
         
         $filter_kategori = $this->input->post('katbar');
-        $list = $this->invmodel->get_datatableswip($filter_kategori);
+        $filt_ifndln = $this->input->post('ifndln');
+        $list = $this->invmodel->get_datatableswip($filter_kategori,$filt_ifndln);
         $data = array();
         $no = $_POST['start'];
         foreach ($list as $field) {
@@ -143,10 +146,10 @@ class Bcwip extends CI_Controller
         // $kagees = 1000000;
         $this->session->set_userdata('jmlrec',$this->invmodel->count_allwip());
         $output = array(
-            "zzz" => $this->invmodel->getkgspcswip($filter_kategori),
+            "zzz" => $this->invmodel->getkgspcswip($filter_kategori,$filt_ifndln),
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->invmodel->count_allwip(),
-            "recordsFiltered" => $this->invmodel->count_filteredwip($filter_kategori),
+            "recordsFiltered" => $this->invmodel->count_filteredwip($filter_kategori,$filt_ifndln),
             "data" => $data,
         );
         ob_clean();

@@ -121,6 +121,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('currdept', $_POST['dpt']);
         $this->session->set_userdata('filterkat', $_POST['kat']);
         $this->session->set_userdata('kategoricari', $_POST['kcari']);
+        $this->session->set_userdata('ifndln', $_POST['ifndln']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
                 $this->session->unset_userdata('katcari');  
@@ -130,7 +131,7 @@ class Inv extends CI_Controller
         } else {
             $this->session->unset_userdata('katcari');
         }
-        $kuer = $this->invmodel->getkgspcswip($_POST['kat']);
+        $kuer = $this->invmodel->getkgspcswip($_POST['kat'],$_POST['ifndln']);
         $this->session->set_userdata('jmlpcs',$kuer['pecees']);
         $this->session->set_userdata('jmlkgs',$kuer['kagees']);
         $this->session->set_userdata('jmlrec',$kuer['rekod']);
@@ -143,6 +144,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('currdept', $_POST['dpt']);
         $this->session->set_userdata('filterkat', $_POST['kat']);
         $this->session->set_userdata('kategoricari', $_POST['kcari']);
+        $this->session->set_userdata('ifndln', $_POST['ifndln']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
                 $this->session->unset_userdata('katcari');  
@@ -152,7 +154,7 @@ class Inv extends CI_Controller
         } else {
             $this->session->unset_userdata('katcari');
         }
-        $kuer = $this->invmodel->getkgspcswip($_POST['kat']);
+        $kuer = $this->invmodel->getkgspcsgf($_POST['kat'],$_POST['ifndln']);
         $this->session->set_userdata('jmlpcs',$kuer['pecees']);
         $this->session->set_userdata('jmlkgs',$kuer['kagees']);
         $this->session->set_userdata('jmlrec',$kuer['rekod']);

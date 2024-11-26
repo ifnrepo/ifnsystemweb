@@ -94,35 +94,30 @@ $("#tglakhir").datepicker({
 // 	});
 // });
 $("#butgo").click(function () {
-    var tglawal = $("#tglawal").val();
-    var tglakhir = $("#tglakhir").val();
-    var userlog = $("#userlog").val();
+	var tglawal = $("#tglawal").val();
+	var tglakhir = $("#tglakhir").val();
+	var userlog = $("#userlog").val();
 
-    $.ajax({
-        dataType: "json",
-        type: "POST",
-        url: base_url + "logact/updatetgl",
-        data: {
-            tgaw: tglawal,
-            tgak: tglakhir,
-            usr: userlog,
-        },
-        success: function (data) {
-            var exportExcelUrl = base_url + "logact/excel?tglawal=" + tglawal + "&tglakhir=" + tglakhir + "&userlog=" + userlog;
-            $(".btn-export-excel").attr("href", exportExcelUrl);
-
-            var exportPdfUrl = base_url + "logact/cetakpdf?tglawal=" + tglawal + "&tglakhir=" + tglakhir + "&userlog=" + userlog;
-            $(".btn-export-pdf").attr("href", exportPdfUrl);
-
-            window.location.reload();
-        },
-        error: function (xhr, ajaxOptions, thrownError) {
-            console.log(xhr.status);
-            console.log(thrownError);
-        },
-    });
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "logact/updatetgl",
+		data: {
+			tgaw: tglawal,
+			tgak: tglakhir,
+			usr: userlog,
+		},
+		success: function (data) {
+			window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
 });
 
+function loadtable() {}
 
 // $("#updateinv").click(function () {
 // // 	var tglawal = $("#tglawal").val();
