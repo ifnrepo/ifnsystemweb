@@ -317,7 +317,7 @@ class Out_model extends CI_Model{
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'insno' => $datdet['insno'],
                         'nobontr' => $datdet['nobontr'],
-                        // 'dl' => $datdet['dln'],
+                        'dln' => $datdet['dln'],
                         'nobale' => $datdet['nobale'],
                         'stok' => $datdet['stok'],
                         'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
