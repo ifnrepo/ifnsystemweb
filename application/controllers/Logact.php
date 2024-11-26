@@ -26,17 +26,10 @@ class Logact extends CI_Controller
     public function index()
     {
         $header['header'] = 'other';
-        // $data['data'] = $this->barangmodel->getdata();
-        // $data['kategori_options'] = $this->barangmodel->getFilter();
-        if ($this->session->userdata('tglawallog') == null) {
-            $this->session->set_userdata('tglawallog', date('Y-m-01'));
-        }
-        if ($this->session->userdata('tglakhirlog') == null) {
-            $this->session->set_userdata('tglakhirlog', date('Y-m-t'));
-        }
+        $data['data'] = null;
+        $data['datauser'] = $this->logactmodel->getdatauser();
         if ($this->session->userdata('tglawallog') != null && $this->session->userdata('tglakhirlog') != null) {
             $data['data'] = $this->logactmodel->getdata();
-            $data['datauser'] = $this->logactmodel->getdatauser();
         }
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'logact';

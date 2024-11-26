@@ -30,13 +30,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="mb-1 font-kecil mr-1 mt-1">
             <label class="form-label font-kecil mb-1 font-bold">Tgl Awal</label>
             <div>
-              <input type="email" class="form-control font-kecil" id="tglawal" value="<?= tglmysql($this->session->userdata('tglawallog')); ?>" aria-describedby="emailHelp" placeholder="Tgl Awal">
+              <?php $tgaw = $this->session->userdata('tglawallog')==null ? date('Y-m-01') : $this->session->userdata('tglawallog'); ?>
+              <input type="email" class="form-control font-kecil" id="tglawal" value="<?= tglmysql($tgaw); ?>" aria-describedby="emailHelp" placeholder="Tgl Awal">
             </div>
           </div>
           <div class="mb-1 font-kecil mr-1 mt-1">
             <label class="form-label font-kecil mb-1 font-bold">Tgl Akhir</label>
             <div>
-              <input type="email" class="form-control font-kecil" id="tglakhir" value="<?= tglmysql($this->session->userdata('tglakhirlog')); ?>" aria-describedby="emailHelp" placeholder="Tgl Akhir">
+              <?php $tgak = $this->session->userdata('tglakhirlog')==null ? date('Y-m-t') : $this->session->userdata('tglakhirlog'); ?>
+              <input type="email" class="form-control font-kecil" id="tglakhir" value="<?= tglmysql($tgak); ?>" aria-describedby="emailHelp" placeholder="Tgl Akhir">
             </div>
           </div>
         </div>
@@ -80,7 +82,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" style="font-size: 13px !important;">
-              <?php foreach ($data->result_array() as $det) { ?>
+              <?php if($data!=null): foreach ($data->result_array() as $det) { ?>
                 <tr>
                   <td><?= tglmysql2($det['datetimelog']); ?></td>
                   <td><?= $det['activitylog']; ?></td>
@@ -88,7 +90,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $det['userlog']; ?></td>
                   <td><?= getdevice($det['devicelog']); ?></td>
                 </tr>
-              <?php } ?>
+              <?php } endif; ?>
             </tbody>
           </table>
         </div>
