@@ -359,8 +359,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master9" name="master9" type="checkbox" <?= cekceklis($user['master'], 9); ?>>
                                 <span class="form-check-label">Kategori Departemen</span>
                               </label>
-                            </div>
-                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master10" name="master10" type="checkbox" <?= cekceklis($user['master'], 10); ?>>
                                 <span class="form-check-label">Personil</span>
@@ -369,6 +367,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master11" name="master11" type="checkbox" <?= cekceklis($user['master'], 11); ?>>
                                 <span class="form-check-label">Data Jabatan</span>
                               </label>
+                            </div>
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master12" name="master12" type="checkbox" <?= cekceklis($user['master'], 12); ?>>
                                 <span class="form-check-label">Data Grup</span>
@@ -404,6 +404,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master21" name="master21" type="checkbox" <?= cekceklis($user['master'], 21); ?>>
                                 <span class="form-check-label">Kelompok PO</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master22" name="master22" type="checkbox" <?= cekceklis($user['master'], 22); ?>>
+                                <span class="form-check-label">Data Ket Proses</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master23" name="master23" type="checkbox" <?= cekceklis($user['master'], 23); ?>>
+                                <span class="form-check-label">Data Rekanan</span>
                               </label>
                               <!-- xx -->
                             </div>

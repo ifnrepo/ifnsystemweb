@@ -80,8 +80,6 @@ class Barang extends CI_Controller
         $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
         $data['itemsatuan'] = $this->satuanmodel->getdata();
         $data['itemkategori'] = $this->kategorimodel->getdata();
-        // $data['rekrow'] = $nom - 1;
-
         $data['actionfoto'] = base_url() . 'barang/updatefoto';
         $data['actionkolom'] = base_url() . 'barang/updatebarang/' . $id;
         $data['actiondok'] = base_url() . 'barang/updatedok';
@@ -91,6 +89,13 @@ class Barang extends CI_Controller
         $this->load->view('layouts/header', $header);
         $this->load->view('barang/editdata', $data);
         $this->load->view('layouts/footer', $footer);
+    }
+
+    public function viewdata($id)
+    {
+        $header['header'] = 'master';
+        $data['data'] = $this->barangmodel->getdatabyid($id)->row_array();
+        $this->load->view('barang/viewdata', $data);
     }
 
     // public function updatebrg($id)
@@ -229,7 +234,9 @@ class Barang extends CI_Controller
             $no++;
             $row = array();
             $row[] = $no;
-            $row[] = $field->kodex;
+
+            $row[] = '<a href="' . base_url() . 'barang/viewdata/' . $field->id . '/' . $no . '" rel="' . $field->id . '" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="View data" title="view data Barang">' . $field->kodex . '</a>';
+
             $row[] = $field->nama_barang;
             if ($this->session->userdata('viewalias') == 1) {
                 $row[] = $field->nama_alias;

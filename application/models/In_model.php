@@ -93,7 +93,8 @@ class In_model extends CI_Model{
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
                     'nobale' => $det['nobale'],
-                    'harga' => $det['harga'] 
+                    'harga' => $det['harga'],
+                    'stok' => $det['stok']
                 ];
                 $this->db->where($kondisistok);
                 $adaisi = $this->db->get('stokdept');
@@ -110,6 +111,7 @@ class In_model extends CI_Model{
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
                     'nobale' => $det['nobale'],
+                    'nomor_bc' => $det['nomor_bc'],
                     'harga' => $det['harga'],
                     'pcs_masuk' => $det['pcs'],
                     'pcs_akhir' => $det['pcs'],

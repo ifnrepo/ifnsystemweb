@@ -1,7 +1,7 @@
 <?php
 class Ponet_model extends CI_Model
 {
-    public function cariData($po, $buy, $checked = null)
+    public function cariData($po, $buy, $checked=null)
     {
         $this->db->select('tb_po.id as id_po, tb_po.po_id, tb_po.po, tb_po.item, tb_po.dis, tb_po.id_buyer, 
         tb_po.lim, tb_po.outstand, tb_po.st_piece, tb_po.weight, customer.nama_customer, nettype.name_nettype');
@@ -19,7 +19,7 @@ class Ponet_model extends CI_Model
             $this->db->like('tb_po.ord', $po);
         }
 
-        if (!empty($checked)) {
+        if ($checked=="1") {
             $this->db->where('tb_po.stat_po =', 1);
             $this->db->where('tb_po.outstand >', 0);
             $this->db->where('YEAR(tb_po.lim) >=', date('Y'));

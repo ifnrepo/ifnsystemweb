@@ -21,9 +21,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="card">
             <div class="card-body">
                 <div class="card card-active mb-2">
-                    <div class="card-body p-1 text-right">
-                        <a href="<?= base_url() . 'customer/excel'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export To Excel</span></a>
-                        <a href="<?= base_url() . 'customer/cetakpdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export To PDF</span></a>
+                    <div class="card-body p-1 d-flex justify-content-between">
+                        <div class="row flex-fill">
+                            <div class="col-4">
+                                <div class="row ">
+                                    <label class="col-5 col-form-label font-kecil font-bold px-4">Exdo</label>
+                                    <div class="col">
+                                        <select class="form-select font-kecil btn-flat" name="exdo" id="exdo">
+                                            <option value="export">Export</option>
+                                            <option value="domestik">Domestik</option>
+                                        </select>
+                                        <a href="" class="btn btn-sm btn-flat">Update</a>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-6">
+                            </div>
+                        </div>
+                        <div>
+                            <a href="<?= base_url() . 'customer/excel'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export To Excel</span></a>
+                            <a href="<?= base_url() . 'customer/cetakpdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export To PDF</span></a>
+                        </div>
                     </div>
                 </div>
                 <div id="table-default" class="table-responsive">

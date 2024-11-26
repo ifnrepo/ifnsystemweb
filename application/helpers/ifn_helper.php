@@ -435,7 +435,7 @@ function generatekodebc($jnsbc, $tglbc, $nobc)
         $kode2 = '00000000';
     }
     if (trim($nobc) != '') {
-        $kode3 = str_repeat('0', 6 - strlen(trim($nobc))) . trim($nobc);
+        $kode3 = str_repeat('0', 6 - strlen(trim(substr($nobc,0,6)))) . trim(substr($nobc,0,6));
     } else {
         $kode3 = '000000';
     }
@@ -570,4 +570,18 @@ function nospasi($str){
 }
 function toutf($string){
     return html_entity_decode(preg_replace("/U\+([0-9A-F]{4})/", "&#x\\1;", $string), ENT_NOQUOTES, 'UTF-8');
+}
+function hitungwaktu($dateformat){
+    $date1 = $dateformat; 
+    $date2 = date('Y-m-d H:i:s'); 
+    $diff = abs(strtotime($date2) - strtotime($date1)); 
+    $years   = floor($diff / (365*60*60*24)); 
+    $months  = floor(($diff - $years * 365*60*60*24) / (30*60*60*24)); 
+    $days    = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
+    $hours   = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24)/ (60*60)); 
+    $minuts  = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60)/ 60); 
+    $seconds = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60 - $minuts*60)); 
+    // printf("%d years, %d months, %d days, %d hours, %d minutes\n, %d seconds\n", $years, $months, $days, $hours, $minuts, $seconds);
+    $array = ["tahun"=>$years,"bulan"=>$months,"hari"=>$days,"jam"=>$hours,"menit"=>$minuts,"detik"=>$seconds];
+    return $array;
 }

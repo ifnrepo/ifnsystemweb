@@ -13,8 +13,8 @@ class Ib_model extends CI_Model
         $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier');
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->where($arrkondisi);
+        $this->db->order_by('tgl','desc');
         $this->db->order_by('nomor_dok','asc');
-        $this->db->order_by('tgl','asc');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
@@ -369,6 +369,9 @@ class Ib_model extends CI_Model
     public function isitokenbc($data){
         $this->db->where('id',1);
         $this->db->update('token_bc',$data);
+    }
+    public function gettokenbc(){
+        return $this->db->get('token_bc');
     }
     public function getnomoraju($jns){
         $hass = $this->db->get_where('tb_ajuceisa',['jns_bc' => $jns])->row_array();

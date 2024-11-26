@@ -1,4 +1,3 @@
-
 var table;
 $(document).ready(function () {
 	var table = $("#tabelnya").DataTable({
@@ -95,20 +94,18 @@ $("#simpandata").click(function () {
 	document.formkolom.submit();
 });
 
-var loadFile = function(event) {
-    var output = document.getElementById("gbimage");
-    var isifile = event.target.files[0];
+var loadFile = function (event) {
+	var output = document.getElementById("gbimage");
+	var isifile = event.target.files[0];
 
-    if (!isifile) {
-        output.src = "<?= base_url($path . 'image.jpg'); ?>";  
-        $("#okesubmit").addClass("disabled");
-    } else {
-        output.src = URL.createObjectURL(isifile);
-        output.onload = function() {
-            URL.revokeObjectURL(output.src); 
-        };
-        $("#okesubmit").removeClass("disabled");  
-    }
+	if (!isifile) {
+		output.src = "<?= base_url($path . 'image.jpg'); ?>";
+		$("#okesubmit").addClass("disabled");
+	} else {
+		output.src = URL.createObjectURL(isifile);
+		output.onload = function () {
+			URL.revokeObjectURL(output.src);
+		};
+		$("#okesubmit").removeClass("disabled");
+	}
 };
-
-

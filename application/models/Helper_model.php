@@ -255,9 +255,6 @@ class Helper_model extends CI_Model
          if ($cek['data_ok'] == 1) {
             $ok = 'Dokumen dibuat oleh : ' . datauser($cek['user_ok'], 'name') . ' on ' . $cek['tgl_ok'];
             array_push($hasil,$ok);
-            // array_push($hasil, '1' => $ok);
-            // $hasil['dibuat'] = $cek['tgl'];
-            // $hasil['tgldibuat'] = $ok;
         } else {
             array_push($hasil, 'Dokumen sedang dibuat');
         }

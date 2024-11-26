@@ -36,6 +36,7 @@ class Ib extends CI_Controller
         $data['depbbl'] = $this->deptmodel->getdata_dept_bbl(1);
         $kode = $this->session->userdata('depttuju');
         $data['data'] = $this->ibmodel->getdata($kode);
+        $data['datatoken'] = $this->ibmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ib';
         $this->load->view('layouts/header', $header);
@@ -584,7 +585,7 @@ class Ib extends CI_Controller
 
         $databalik = json_decode($result,true);
         print_r($databalik);
-        if($databalik['status']=='Success'){
+        if($databalik['status']=='success'){
             $data = [
                 'token' => $databalik['item']['access_token'],
                 'refresh_token' => $databalik['item']['refresh_token']

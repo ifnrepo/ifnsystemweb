@@ -79,6 +79,27 @@
                                         </div>
                                     </div>
                                 </div>
+                                <?php $hilangex = $detail['exnomor_bc']=='' ? 'hilang' : ''; ?>
+                               <div class="row mb-0 font-kecil <?= $hilangex; ?>">
+                                    <div class="col-6">
+                                        <div class="mb-0 bg-red-lt p-1">
+                                            <label class="form-label font-kecil mb-0 font-bold text-black">Ex BC Nomor</label>
+                                            <div class="m-0">
+                                                <div class="row">
+                                                    <div class="col-8">
+                                                        <input type="email" class="form-control font-kecil btn-fla bg-yellow font-bold" aria-describedby="emailHelp" value="<?= $detail['exnomor_bc']; ?>" placeholder="Enter email">
+                                                    </div>
+                                                    <div class="col-4">
+                                                        <input type="email" class="form-control font-kecil btn-flat bg-yellow font-bold" aria-describedby="emailHelp" value="<?= $detail['extgl_bc']; ?>" placeholder="Enter email">
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-6">
+    
+                                    </div>
+                                </div>
                             </div>
                             <hr class="m-1">
                             <div class="bg-cyan-lt p-2">
@@ -86,19 +107,22 @@
                                 <div class="row mb-1 font-kecil">
                                     <label class="col-3 col-form-labels font-bold">Nama</label>
                                     <div class="col">
-                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $detail['nama_supplier']; ?>" aria-describedby="emailHelp" placeholder="Enter Nama Pengirim">
+                                        <?php $supp = $detail['nama_supplier']=='' ? $detail['nama_rekanan'] : $detail['nama_supplier']; ?>
+                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $supp; ?>" aria-describedby="emailHelp" placeholder="Enter Nama Pengirim">
                                     </div>
                                 </div>
                                 <div class="row mb-1 font-kecil">
                                     <label class="col-3 col-form-label font-bold">Alamat</label>
                                     <div class="col">
-                                        <textarea class="form-control font-kecil font-bold btn-flat"><?= $detail['alamat']; ?></textarea>
+                                        <?php $suppalamat = $detail['nama_supplier']=='' ? $detail['alamat_rekanan'] : $detail['alamat']; ?>
+                                        <textarea class="form-control font-kecil font-bold btn-flat"><?= $suppalamat; ?></textarea>
                                     </div>
                                 </div>
                                 <div class="row mb-1 font-kecil">
                                     <label class="col-3 col-form-label font-bold">NPWP</label>
                                     <div class="col">
-                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $detail['npwp'] ?>" aria-describedby="emailHelp" placeholder="Enter Npwp Pengirim">
+                                        <?php $suppnpwp = $detail['nama_supplier']=='' ? $detail['npwp_rekanan'] : $detail['npwp']; ?>
+                                        <input type="text" class="form-control font-kecil btn-flat" value="<?= $suppnpwp ?>" aria-describedby="emailHelp" placeholder="Enter Npwp Pengirim">
                                     </div>
                                 </div>
                             </div>
@@ -205,6 +229,23 @@
                             </div>
                             <hr class="m-1">
                             <div>
+                                <div class="row">
+                                    <div class="col-5">
+                                        <div class="row font-kecil">
+                                            <label class="col-3 col-form-label font-bold">Data Kemasan</label>
+                                            <div class="col">
+                                                <div class="col-9 mt-1">
+                                                    <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= rupiah($detail['jml_kemasan'],0).' '.$detail['kemasan'] ?>" placeholder="Kode Kemasan">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-3"></div>
+                                    <div class="col-4"></div>
+                                </div>
+                            </div>
+                            <hr class="m-1">
+                            <div>
                                 <h4 class="font-bold m-1" >Detail Barang</h4>
                                 <table id="tabel" class="table order-column table-hover datatable7 mt-1" style="width: 100% !important;">
                                     <thead>
@@ -212,29 +253,31 @@
                                             <!-- <th>Tgl</th> -->
                                             <th class="text-center">No</th>
                                             <th class="text-left">Spek</th>
+                                            <th class="text-left">SKU</th>
                                             <th class="text-left">Sat</th>
                                             <th class="text-left">Jumlah</th>
                                             <th class="text-left">Berat</th>
-                                            <th class="text-left">SKU</th>
                                             <th class="text-left">HS</th>
                                             <th class="text-left">Nilai</th>
                                             <th class="text-left">Subtotal</th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                        <?php foreach ($databarang->result_array() as $datadet) { 
+                                        <?php $no=1; foreach ($databarang->result_array() as $datadet) { 
                                             $pengali = $datadet['kodesatuan']=='KGS' ? $datadet['kgs'] : $datadet['pcs'];
+                                            $spek = $datadet['nm_alias']=='' ? $datadet['nama_barang'] : $datadet['nm_alias'];
+                                            $sku = viewsku($datadet['po'],$datadet['item'],$datadet['dis'],$datadet['kode']);
                                         ?>
                                             <tr>
-                                                <td></td>
-                                                <td><?= $datadet['nama_barang']; ?></td>
+                                                <td><?= $no++; ?></td>
+                                                <td><?= $spek; ?></td>
+                                                <td><?= $sku; ?></td>
                                                 <td><?= $datadet['kodesatuan']; ?></td>
                                                 <td><?= rupiah($datadet['pcs'],0); ?></td>
                                                 <td><?= rupiah($datadet['kgs'],2); ?></td>
-                                                <td><?= $datadet['kode']; ?></td>
                                                 <td><?= $datadet['nohs']; ?></td>
-                                                <td><?= rupiah($datadet['harga'],4); ?></td>
-                                                <td><?= rupiah($datadet['harga']*$pengali,2); ?></td>
+                                                <td class="text-right"><?= rupiah($datadet['harga'],4); ?></td>
+                                                <td class="text-right"><?= rupiah($datadet['harga']*$pengali,2); ?></td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>

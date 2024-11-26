@@ -56,16 +56,15 @@
                                     $notglaju =  '';
                                     $notglaju .= $header['nomor_aju'];
                                     $notglaju .= $header['tgl_aju']==null ? "" : ' ('.$header['tgl_aju'].')';
+                                    $noaju = $header['jns_bc']=='' ? '' : generatekodebc($header['jns_bc'],$header['tgl_aju'],$header['nomor_aju']);
                                     $notglbc =  '';
                                     $notglbc .= $header['nomor_bc'];
                                     $notglbc .= $header['tgl_bc']==null ? "" : ' ('.$header['tgl_bc'].')';
                                 ?>
                                 Jenis BC : <?= $header['jns_bc']; ?><br>
                                 Nomor Aju : <?= $notglaju ?><br>
+                                <span class='font-bold'><?= $noaju ?></span><br>
                                 No BC : <?= $notglbc; ?>
-                                <div class="bg-red-lt text-center p-1 font-bold">
-                                    <?= generatekodebc($header['jns_bc'],$header['tgl_bc'],$header['nomor_bc']) ?>
-                                </div>
                             </div>
                         </div>
                     </div>
