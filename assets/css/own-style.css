@@ -93,3 +93,8 @@
 .borderbottomred {
 	border-bottom: red;
 }
+.badges {
+	font-size: 11px !important;
+	font-weight: bold;
+	padding: 3px 6px;
+}

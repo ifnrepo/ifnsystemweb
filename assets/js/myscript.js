@@ -306,6 +306,7 @@ $(document).ready(function () {
 	// 		scrollY: 500,
 	// 		ordering: false,
 	// 	});
+	cekNotif();
 });
 var preloader = $("#preloader");
 $(window).on("load", function () {
@@ -615,4 +616,79 @@ async function getIP() {
 	const data = await response.json();
 	cachedIP = data.ip;
 	return cachedIP;
+}
+setInterval(() => {
+	cekNotif();
+}, 10000);
+function cekNotif() {
+	$.ajax({
+		url: base_url + "main/ceknotif",
+		type: "POST",
+		success: function (data, textStatus, jqXHR) {
+			// if ($.trim(data)) {
+			// 	var data = jQuery.parseJSON(data);
+			// 	console.log(data);
+			// 	notification = createNotification(
+			// 		data.title,
+			// 		data.icon,
+			// 		data.body,
+			// 		data.url,
+			// 	);
+			// }
+			if (data != 0) {
+				$("#notiftask").removeClass("hilang");
+			} else {
+				$("#notiftask").addClass("hilang");
+			}
+			document.getElementById("notiftask").innerHTML = data;
+		},
+		error: function (jqXHR, textStatus, errorThrown) {
+			console.log(textStatus);
+		},
+	});
+}
+function pushNotify() {
+	if (!("Notification" in window)) {
+		// checking if the user's browser supports web push Notification
+		alert("Web browser does not support desktop notification");
+	}
+	if (Notification.permission !== "granted") Notification.requestPermission();
+	else {
+		$.ajax({
+			url: base_url + "/push-notify.php",
+			type: "POST",
+			success: function (data, textStatus, jqXHR) {
+				// if PHP call returns data process it and show notification
+				// if nothing returns then it means no notification available for now
+				if ($.trim(data)) {
+					var data = jQuery.parseJSON(data);
+					console.log(data);
+					notification = createNotification(
+						data.title,
+						data.icon,
+						data.body,
+						data.url,
+					);
+					// closes the web browser notification automatically after 5 secs
+					setTimeout(function () {
+						notification.close();
+					}, 5000);
+				}
+			},
+			error: function (jqXHR, textStatus, errorThrown) {},
+		});
+	}
+}
+
+function createNotification(title, icon, body, url) {
+	var notification = new Notification(title, {
+		icon: icon,
+		body: body,
+	});
+	// url that needs to be opened on clicking the notification
+	// finally everything boils down to click and visits right
+	notification.onclick = function () {
+		window.open(url);
+	};
+	return notification;
 }

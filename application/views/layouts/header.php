@@ -455,7 +455,7 @@
                   </svg>
                 </span>
                 <span class="nav-link-title">
-                  Pending Task
+                  Pending Task <span class="badges bg-red hilang" id="notiftask">11</span>
                 </span>
               </a>
             </li>

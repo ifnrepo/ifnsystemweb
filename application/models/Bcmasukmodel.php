@@ -18,6 +18,9 @@ class Bcmasukmodel extends CI_Model
         }else{
             $this->db->where_in("jns_bc",[23,262,40]);
         }
+        if($this->session->userdata('nopen')){ 
+            $this->db->where("nomor_bc",$this->session->userdata('nopen'));
+        }
         $this->db->where('data_ok',1);
         $this->db->where('ok_tuju',1);
         $this->db->where('ok_valid',1);

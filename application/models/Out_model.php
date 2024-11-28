@@ -305,7 +305,7 @@ class Out_model extends CI_Model{
                         'dis' => $datdet['dis'],
                         'id_barang' => $datdet['id_barang'],
                         'dept_id' => $this->session->userdata('deptsekarang'),
-                        // 'dl' => $datdet['dln'],
+                        'stokdept.dln' => $datdet['dln'],
                         'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
                     ];
                 }else{
@@ -317,7 +317,7 @@ class Out_model extends CI_Model{
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'insno' => $datdet['insno'],
                         'nobontr' => $datdet['nobontr'],
-                        'dln' => $datdet['dln'],
+                        'stokdept.dln' => $datdet['dln'],
                         'nobale' => $datdet['nobale'],
                         'stok' => $datdet['stok'],
                         'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
