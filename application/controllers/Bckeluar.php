@@ -51,6 +51,7 @@ class Bckeluar extends CI_Controller
         $this->session->unset_userdata('tglakhir');
         $this->session->unset_userdata('jnsbc');
         $this->session->unset_userdata('filterkat');
+        $this->session->unset_userdata('nopen');
         $url = base_url('bckeluar');
         redirect($url);
     }
@@ -60,6 +61,11 @@ class Bckeluar extends CI_Controller
         $this->session->set_userdata('tglawal', $_POST['tga']);
         $this->session->set_userdata('tglakhir', $_POST['tgk']);
         $this->session->set_userdata('jnsbc', $_POST['jns']);
+        if(isset($_POST['nopen'])){
+            $this->session->set_userdata('nopen', $_POST['nopen']);
+        }else{
+            $this->session->unset_userdata('nopen');
+        }
         echo 1;
     }
     public function viewdetail($id)

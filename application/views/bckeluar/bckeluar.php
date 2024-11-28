@@ -81,9 +81,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </label>
                   </div>
                   <div class="input-group mb-0">
-                    <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
+                    <?php $textcari = $this->session->userdata('nopen') != null ? $this->session->userdata('nopen') : ''; ?>
                     <input type="text" class="form-control form-sm font-kecil" placeholder="Cari Nomor Pendaftaran …" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
-                    <button class="btn text-center font-kecil" type="button" id="buttoncari" style="height: 38px;">
+                    <button class="btn text-center font-kecil" type="button" id="buttoncaribckeluar" style="height: 38px;">
                       Cari
                     </button>
                   </div>

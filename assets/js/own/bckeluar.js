@@ -7,22 +7,26 @@ $(document).ready(function () {
 	$("#jumlahpcs").text(rupiah(jmlpc, ".", ",", 0));
 	$("#jumlahkgs").text(rupiah(jmlkg, ".", ",", 2));
 });
+var butoncari = false;
+$("#buttoncaribckeluar").click(function () {
+	butoncari = true;
+	$("#updatebckeluar").click();
+});
+document.getElementById("textcari").addEventListener("keypress", function (e) {
+	if (e.key == "Enter") {
+		$("#buttoncaribckeluar").click();
+	}
+});
 $("#updatebckeluar").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();
 	var jnsbc = $("#jns_bc").val();
-	// var katbar = $("#katbar").val();
-	// // var katcari = document.getElementById("caribar").innerHTML;
-	// var katcari = $("input:radio[name=radios-inline]:checked").val();
-	// // $("#textcari").val("");
-	// var nomorbcnya = $("#nomorbcnya").val();
-	// var textcari = $("#textcari").val();
-	// if ($("#gbg").is(":checked")) {
-	// 	var gbg = 1;
-	// } else {
-	// 	var gbg = 0;
-	// }
-	// alert(jnsbc);
+	if (butoncari == true) {
+		var carinopen = $("#textcari").val();
+	} else {
+		var carinopen = null;
+		$("#textcari").val("");
+	}
 	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
 		pesan("Tanggal awal lebih besar dari tanggal akhir", "info");
 		return false;
@@ -35,6 +39,7 @@ $("#updatebckeluar").click(function () {
 			tga: tglawal,
 			tgk: tglakhir,
 			jns: jnsbc,
+			nopen: carinopen,
 		},
 		success: function (data) {
 			// alert(data);

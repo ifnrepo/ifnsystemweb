@@ -23,4 +23,7 @@ class Main extends CI_Controller {
         $footer['dataproduksi'] = $dataproduksi;
 		$this->load->view('layouts/footer',$footer);
 	}
+    public function ceknotif(){
+        echo 0;
+    }
 }

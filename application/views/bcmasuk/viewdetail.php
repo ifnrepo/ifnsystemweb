@@ -45,6 +45,7 @@
                 <div class="tab-pane fade active show p-0" id="tabs-profile-8">
                     <div class="card">
                         <div class="card-body p-1">
+                            <span style="position: absolute; right:15px; top: 10px; font-size: 25px;" class="font-bold">BC. <?= $detail['jns_bc']; ?></span>
                             <div class="p-1 m-0">
                                <h4 class="font-bold m-1">Informasi</h4> 
                                <div class="row mb-1 font-kecil">
@@ -230,7 +231,7 @@
                             <hr class="m-1">
                             <div>
                                 <div class="row">
-                                    <div class="col-5">
+                                    <div class="col-6">
                                         <div class="row font-kecil">
                                             <label class="col-3 col-form-label font-bold">Data Kemasan</label>
                                             <div class="col">
@@ -240,8 +241,24 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col-3"></div>
-                                    <div class="col-4"></div>
+                                    <div class="col-6 bg-red-lt">
+                                        <div class="row font-kecil">
+                                            <label class="col-3 col-form-label font-bold text-black">No Kontrak</label>
+                                            <div class="col">
+                                                <div class="row">
+                                                    <div class="col-7 mt-1">
+                                                        <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['nomor_kont'] ?>" placeholder="Nomor Kontrak">
+                                                    </div>
+                                                    <div class="col-5 mt-1">
+                                                        <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= tglmysql($detail['tgl_kont']) ?>" placeholder="Tgl Kontrak">
+                                                    </div>
+                                                </div>
+                                                <!-- <div class="col-9 mt-1">
+                                                </div> -->
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- <div class="col-3"></div> -->
                                 </div>
                             </div>
                             <hr class="m-1">
