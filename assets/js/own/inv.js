@@ -358,6 +358,10 @@ function loadtablegf() {
 			},
 			{
 				targets: [9],
+				class: "text-right borderbottomred",
+			},
+			{
+				targets: [10],
 				class: "text-center borderbottomred",
 			},
 		],

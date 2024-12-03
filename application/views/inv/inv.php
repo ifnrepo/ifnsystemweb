@@ -153,6 +153,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Harga</th>
                 <th>Total</th>
                 <?php endif; ?>
+                <th>Opname</th>
                 <th>Verified</th>
               </tr>
             </thead>
@@ -223,6 +224,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($det['harga'], 2); ?></td>
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($totalharga, 2); ?></td>
                     <?php endif; ?>
+                      <td style="border-bottom: red;" class="text-right"></td>
                       <td style="border-bottom: red;" class="text-center line-12" id="row<?= $det['idu'] ?>">
                       <?php if($det['user_verif']==0){ ?>
                         <a href="<?= base_url() . 'inv/confirmverifikasidata/'.$det['idu']; ?>" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>"><span>Verify</span></a>
