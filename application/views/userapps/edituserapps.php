@@ -171,54 +171,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row">
-                      <span class="col font-bold">GM Purchasing (Validasi BBL)</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekpc'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekpc" id="cekpc" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row bg-teal-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row">
-                      <span class="col font-bold">Validasi BBL Produksi</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekpp'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekpp" id="cekpp" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row">
-                      <span class="col font-bold">Validasi BBL Sparepart Mesin</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekut'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekut" id="cekut" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
               <div class="mb-1 row bg-teal-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
@@ -229,22 +181,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <label class="form-check form-check-single form-switch">
                           <?php $pcaktif = $user['cekbatalstok'] == 1 ? 'checked' : ''; ?>
                           <input class="form-check-input" name="cekbatalstok" id="cekbatalstok" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row">
-                      <span class="col font-bold">Validasi BBL (Kep Dept)</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekbbl'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekbbl" id="cekbbl" type="checkbox" <?= $pcaktif; ?>>
                         </label>
                       </span>
                     </label>
@@ -287,30 +223,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col">
                   <div class="card">
                     <div class="card-header">
-                      <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                      <ul class="nav nav-tabs card-header-tabs" id="headerhakuser" data-bs-toggle="tabs">
                         <li class="nav-item">
-                          <a href="#tabs-departemen-1" class="nav-link active" data-bs-toggle="tab">Hak Departemen</a>
+                          <a href="#tabs-departemen-1" class="nav-link active text-blue mb-1" data-bs-toggle="tab">Hak Departemen</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-home-1" class="nav-link" data-bs-toggle="tab">Master Data</a>
+                          <a href="#tabs-home-1" class="nav-link text-blue" data-bs-toggle="tab">Master Data</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-transaksi-1" class="nav-link" data-bs-toggle="tab">Transaksi</a>
+                          <a href="#tabs-transaksi-1" class="nav-link text-blue" data-bs-toggle="tab">Transaksi</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-other-1" class="nav-link" data-bs-toggle="tab">Report</a>
+                          <a href="#tabs-other-1" class="nav-link text-blue" data-bs-toggle="tab">Report</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-profile-1" class="nav-link" data-bs-toggle="tab">User Manajemen</a>
+                          <a href="#tabs-profile-1" class="nav-link text-blue" data-bs-toggle="tab">User Manajemen</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-setting-1" class="nav-link" data-bs-toggle="tab">Setting</a>
+                          <a href="#tabs-setting-1" class="nav-link text-blue" data-bs-toggle="tab">Setting</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-ceklispb" class="nav-link" data-bs-toggle="tab">Validasi PB</a>
+                          <a href="#tabs-ceklispb" class="nav-link text-blue" data-bs-toggle="tab">Validasi PB</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-ceklisbbl" class="nav-link" data-bs-toggle="tab">Validasi BBL</a>
+                          <a href="#tabs-ceklisbbl" class="nav-link text-blue mb-1" data-bs-toggle="tab">Validasi BBL</a>
                         </li>
                       </ul>
                     </div>
@@ -558,9 +494,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="tab-pane active show" id="tabs-departemen-1">
                           <div class="row">
                             <div class="col-6">
-                              <?php $no = 0;
-                              $jml = $jmldept;
+                              <?php $no = 0; $nox=0;
+                              $jml = $jmldept/2;
                               foreach ($daftardept as $dept) : $no++; ?>
+                              <?php if($no%$jml == 0 && $nox == 0){ $nox=1; ?>
+                                </div><div class="col-6">
+                              <?php } ?>
                                 <label class="form-check mb-1">
                                   <input class="form-check-input" id="<?= $dept['dept_id']; ?>" name="<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['hakdepartemen'], $dept['dept_id']); ?>>
                                   <span class="form-check-label"><?= $dept['departemen']; ?></span>
@@ -573,8 +512,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <div class="row">
                             <div class="col-6">
                               <?php $no = 0;
-                              $jml = $jmldept;
+                              $jml = $jmldept/2;
                               foreach ($deptpb as $dept) : $no++; ?>
+                              <?php if($no%$jml == 0): ?>
+                                </div><div class="col-6">
+                              <?php endif; ?>
                                 <label class="form-check mb-1">
                                   <input class="form-check-input" id="<?= 'X' . $dept['dept_id']; ?>" name="<?= 'X' . $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['cekpb'], $dept['dept_id']); ?>>
                                   <span class="form-check-label"><?= $dept['departemen']; ?></span>
@@ -585,30 +527,71 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </div>
                         <div class="tab-pane" id="tabs-ceklisbbl">
                           <div class="row">
-                            <div class="col-6">
-                              <label class="form-check">
-                                <input class="form-check-input" type="radio" name="ttd" value="0" <?php if ($user['ttd'] == 0) {
-                                                                                                    echo "checked";
-                                                                                                  } ?>>
-                                <span class="form-check-label">NO TTD</span>
+                            <div class="col">
+                              <label class="form-check mb-1">
+                                <?php $pcaktif = $user['cekbbl'] == 1 ? 'checked' : ''; ?>
+                                <input class="form-check-input" id="cekbbl" name="cekbbl" type="checkbox" <?= $pcaktif; ?>>
+                                <span class="form-check-label font-bold">VALIDASI BBL (Kepala Departemen/Pembuat) - Maker 01</span>
                               </label>
-                              <label class="form-check">
-                                <input class="form-check-input" type="radio" name="ttd" value="1" <?php if ($user['ttd'] == 1) {
-                                                                                                    echo "checked";
-                                                                                                  } ?>>
-                                <span class="form-check-label">MANAGER PPIC (Mengetahui)</span>
+                              <label class="form-check mb-1">
+                                <?php $pcaktif = $user['cekpp'] == 1 ? 'checked' : ''; ?>
+                                <input class="form-check-input" id="cekpp" name="cekpp" type="checkbox" <?= $pcaktif; ?>>
+                                <span class="form-check-label font-bold">VALIDASI BBL Produksi (Manager PPIC/Mengetahui) - Maker 02</span>
                               </label>
-                              <label class="form-check">
-                                <input class="form-check-input" type="radio" name="ttd" value="2" <?php if ($user['ttd'] == 2) {
-                                                                                                    echo "checked";
-                                                                                                  } ?>>
-                                <span class="form-check-label">MANAGER PRODUKSI / NON (APPROVER)</span>
+                              <label class="form-check mb-1">
+                                <?php $pcaktif = $user['cekut'] == 1 ? 'checked' : ''; ?>
+                                <input class="form-check-input" id="cekut" name="cekut" type="checkbox" <?= $pcaktif; ?>>
+                                <span class="form-check-label font-bold">VALIDASI BBL Sparepart Mesin (Manager UTILITY/Mengetahui) - Maker 02</span>
                               </label>
-                              <label class="form-check">
-                                <input class="form-check-input" type="radio" name="ttd" value="3" <?php if ($user['ttd'] == 3) {
-                                                                                                    echo "checked";
-                                                                                                  } ?>>
-                                <span class="form-check-label">GM PRODUKSI / NON (RELEASER)</span>
+                              <label class="form-check mb-1">
+                                <?php $pcaktif = $user['bbl_cekmng'] != '' ? 'checked' : ''; ?>
+                                <input class="form-check-input" id="cekmng" name="cekmng" type="checkbox" <?= $pcaktif; ?>>
+                                <span class="form-check-label font-bold">VALIDASI BBL (Manager Departemen/Menyetujui) - Approver</span>
+                              </label>
+                              <div class="p-2 hilang mb-1" id="inicekmng" style="border: 1px dotted gray;">
+                                <div class="row">
+                                  <div class="col-4">
+                                    <?php $no = 0; $nox=0;
+                                    $jml = $jmldept;
+                                    foreach ($daftardept as $dept) : $no++; $nox++; ?>
+                                    <?php if($no%13==0){ $no++; ?>
+                                      </div><div class="col-4">
+                                    <?php } ?>
+                                      <label class="form-check mb-1">
+                                        <input class="form-check-input" id="cekmng<?= $dept['dept_id']; ?>" name="cekmng<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['bbl_cekmng'],$dept['dept_id']); ?>>
+                                        <span class="form-check-label"><?= substr($dept['departemen'],0,20); ?></span>
+                                      </label>
+                                    <?php endforeach; ?>
+                                  </div>
+                                </div>
+                              </div>
+                              <label class="form-check mb-1">
+                                <?php $pcaktif = $user['bbl_ceksgm'] != '' ? 'checked' : ''; ?>
+                                <input class="form-check-input" id="ceksgm" name="ceksgm" type="checkbox" <?= $pcaktif; ?>>
+                                <span class="form-check-label font-bold mb-2">VALIDASI BBL (Manager Departemen/Menerima) - Releaser</span>
+                              </label>
+                              <div class="p-2 hilang mb-1" id="iniceksgm" style="border: 1px dotted gray;">
+                                <div class="row">
+                                  <div class="col-4">
+                                    <?php $no = 0;$nox=0;
+                                    $jml = $jmldept;
+                                    foreach ($daftardept as $dept) : $no++; $nox++; ?>
+                                    <?php if($no%13==0){ $no++; ?>
+                                      </div><div class="col-4">
+                                    <?php } ?>
+                                      <label class="form-check mb-1">
+                                        <input class="form-check-input" id="ceksgm<?= $dept['dept_id']; ?>" name="ceksgm<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['bbl_ceksgm'],$dept['dept_id']); ?>>
+                                        <span class="form-check-label"><?= substr($dept['departemen'],0,20); ?></span>
+                                      </label>
+                                    <?php endforeach; ?>
+                                  </div>
+                                </div>
+                              </div>
+                              <label class="form-check mb-1">
+                                <?php $pcaktif = $user['cekpc'] == 1 ? 'checked' : ''; ?>
+                                <input class="form-check-input" id="cekpc" name="cekpc" type="checkbox" <?= $pcaktif; ?>>
+                                <span class="form-check-label font-bold">VALIDASI BBL (Manager Purchasing/Menyetujui) - Executor</span>
+                                </div>
                               </label>
                             </div>
                           </div>

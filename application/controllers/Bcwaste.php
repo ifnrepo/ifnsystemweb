@@ -45,6 +45,7 @@ class Bcwaste extends CI_Controller
             $data['kat'] = null;
             $data['katbece'] = null;
             $data['gbg'] = '';
+            $data['ifndln'] = null;
             $data['kategoricari'] = 'Cari Barang';
         } else {
             $data['tglawal'] = $this->session->userdata('tglawal');
@@ -52,6 +53,7 @@ class Bcwaste extends CI_Controller
             $data['data'] = $this->invmodel->getdata();
             $data['kat'] = $this->invmodel->getdatakategori();
             $data['katbece'] = $this->invmodel->getdatabc();
+            $data['ifndln'] = $this->session->userdata('ifndln');
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
         }

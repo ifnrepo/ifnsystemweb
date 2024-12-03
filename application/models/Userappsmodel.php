@@ -109,7 +109,29 @@ class Userappsmodel extends CI_Model
         $data['setting'] = $setting;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
-        // $data['cekpc'] = $cekpc;
+        $datdept = $this->deptmodel->getdata();
+        $cekmng = '';
+        foreach ($datdept as $dept) {
+            if(isset($data['cekmng'])){
+                if (isset($data['cekmng'.$dept['dept_id']])) {
+                    $cekmng .= $dept['dept_id'];
+                }
+            }
+            unset($data['cekmng'.$dept['dept_id']]);
+        }
+        $ceksgm = '';
+        foreach ($datdept as $dept) {
+            if(isset($data['ceksgm'])){
+                if (isset($data['ceksgm'.$dept['dept_id']])) {
+                    $ceksgm .= $dept['dept_id'];
+                }
+            }
+            unset($data['ceksgm'.$dept['dept_id']]);
+        }
+        unset($data['cekmng']);
+        unset($data['ceksgm']);
+        $data['bbl_cekmng'] = $cekmng;
+        $data['bbl_ceksgm'] = $ceksgm;
         $hasil = $this->db->insert('user', $data);
         $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
@@ -198,6 +220,29 @@ class Userappsmodel extends CI_Model
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
         // $data['cekpc'] = $cekpc;
+        $datdept = $this->deptmodel->getdata();
+        $cekmng = '';
+        foreach ($datdept as $dept) {
+            if(isset($data['cekmng'])){
+                if (isset($data['cekmng'.$dept['dept_id']])) {
+                    $cekmng .= $dept['dept_id'];
+                }
+            }
+            unset($data['cekmng'.$dept['dept_id']]);
+        }
+        $ceksgm = '';
+        foreach ($datdept as $dept) {
+            if(isset($data['ceksgm'])){
+                if (isset($data['ceksgm'.$dept['dept_id']])) {
+                    $ceksgm .= $dept['dept_id'];
+                }
+            }
+            unset($data['ceksgm'.$dept['dept_id']]);
+        }
+        unset($data['cekmng']);
+        unset($data['ceksgm']);
+        $data['bbl_cekmng'] = $cekmng;
+        $data['bbl_ceksgm'] = $ceksgm;
 
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('user', $data);

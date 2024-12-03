@@ -40,7 +40,7 @@ class Bcgf extends CI_Controller
         }
         if ($this->session->userdata('tglawal') == null) {
             $data['tglawal'] = tglmysql(date('Y-m-d'));
-            $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
+            $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
             $data['data'] = null;
             $data['kat'] = null;
             $data['katbece'] = null;
@@ -135,6 +135,7 @@ class Bcgf extends CI_Controller
             $row[] = $field->nobale;
             $row[] = rupiah($sak, 2);
             $row[] = rupiah($sakkg, 2);
+            $row[] = '';
             $row[] = $buton;
 
             $data[] = $row;

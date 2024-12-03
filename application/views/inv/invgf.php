@@ -136,6 +136,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Harga</th>
                 <th>Total</th>
                 <?php endif; ?>
+                <th>Opname</th>
                 <th>Verified</th>
               </tr>
             </thead>
