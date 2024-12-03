@@ -1,6 +1,108 @@
 <?php
 class Taskmodel extends CI_Model
 {
+    public function getdatabaru($mode){
+        $lvluser = datauser($this->session->userdata('id'),'id_level_user');
+        $hakttdpb = arrdep(datauser($this->session->userdata('id'),'hakdepartemen'));
+        $this->db->where('id_perusahaan', IDPERUSAHAAN);
+        $this->db->where('kode_dok', $mode);
+        if($mode == 'adj'){
+            $this->db->where('data_ok', 1);
+            $this->db->where('ok_valid', 0); 
+        }
+        if($mode == 'po'){
+            $this->db->where('data_ok', 1);
+            $this->db->where('ok_valid', 0);
+        }
+        if($mode == 'pb'){
+            if($lvluser >= 2){
+                $this->db->where('data_ok', 1);
+                $this->db->where('ok_valid', 0);
+                if(count($hakttdpb) > 0){
+                    $this->db->where_in('dept_id', $hakttdpb);
+                }else{
+                    $this->db->where('data_ok', 99);
+                }
+            }else{
+                $this->db->where('data_ok', 99);
+            }
+        }
+        if($mode == 'bbl'){
+            $cekbl = datauser($this->session->userdata('id'),'cekbbl');
+            $cekpp = datauser($this->session->userdata('id'),'cekpp');
+            $cekut = datauser($this->session->userdata('id'),'cekut');
+            $cekpc = datauser($this->session->userdata('id'),'cekpc');
+            $cekmng = arrdep(datauser($this->session->userdata('id'),'bbl_cekmng'));
+            $ceksgm = arrdep(datauser($this->session->userdata('id'),'bbl_ceksgm'));
+            //Untuk Validasi Kepala Departemen
+            if($cekbl==1){
+                $this->db->where('data_ok', 0);
+                $this->db->where('ok_valid', 0);
+                $this->db->where('ok_tuju', 0);
+                $this->db->where('ok_pc', 0);
+                $this->db->where('ok_bb', 1);
+                $this->db->where_in('dept_id',$hakttdpb);
+            }else 
+            //Untuk Validasi Manager PPIC dan UTL
+            if($cekut==1 || $cekpp==1){
+                $this->db->where('data_ok', 1);
+                if($cekpp==1){
+                    $this->db->group_start();
+                        $this->db->where('ok_pp',0);
+                        $this->db->or_group_start();
+                            $this->db->where('ok_pp',0);
+                            $this->db->where('bbl_pp',1);
+                        $this->db->group_end();
+                    $this->db->group_end();
+                }else{
+                    if($cekut==1){
+                        $this->db->group_start();
+                            $this->db->where('ok_pp',0);
+                            $this->db->or_group_start();
+                                $this->db->where('ok_pp',0);
+                                $this->db->where('bbl_pp',2);
+                            $this->db->group_end();
+                        $this->db->group_end();
+                    }else{
+                        $this->db->where('ok_pp',1);
+                        $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
+                    }
+                }
+                $this->db->where('ok_valid', 0);
+                $this->db->where('ok_tuju', 0);
+                $this->db->where('ok_pc', 0);
+            }else 
+            if(count($cekmng) > 0){
+                $this->db->where('data_ok', 1);
+                $this->db->where('ok_valid', 0);
+                $this->db->where('ok_tuju', 0);
+                $this->db->where('ok_pc', 0);
+                $this->db->where('ok_bb', 1);
+                $this->db->where('ok_pp', 1);
+                $this->db->where_in('dept_bbl',$cekmng);
+            }else 
+            if(count($ceksgm) > 0){
+                $this->db->where('data_ok', 1);
+                $this->db->where('ok_valid', 1);
+                $this->db->where('ok_tuju', 0);
+                $this->db->where('ok_pc', 0);
+                $this->db->where('ok_bb', 1);
+                $this->db->where_in('dept_bbl',$ceksgm);
+            }else 
+            //Untuk Validasi Manager Purchasing
+            if($cekpc==1){
+                $this->db->where('data_ok', 1);
+                $this->db->where('ok_pp', 1);
+                $this->db->where('ok_valid', 1);
+                $this->db->where('ok_tuju', 1);
+                $this->db->where('ok_pc', 0);
+            }
+        }
+        $this->db->order_by('tgl','DESC');
+        $query = $this->db->get('tb_header');
+        $this->session->set_flashdata('cekquery',$this->db->get_compiled_select('tb_header',FALSE));
+        return $query;
+    }
     public function getdata($mode)
     {
         $this->db->where('id_perusahaan', IDPERUSAHAAN);
@@ -51,7 +153,7 @@ class Taskmodel extends CI_Model
                     $this->db->where('bbl_pp', 1);
                     // $this->db->where_in('dept_bbl',arrdep($this->session->userdata('hakdepartemen')));
                     break;
-                case 2:
+                case 2: // Masuk
                     $this->db->where('data_ok', 1);
                     if($ttdppic==1){
                         $this->db->group_start();
@@ -88,7 +190,7 @@ class Taskmodel extends CI_Model
                     // $this->db->where('bbl_pp',1);
                     $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
                     break;
-                case 4:
+                case 4: // Masuk
                     $this->db->where('data_ok', 1);
                     $this->db->where('ok_pp', 1);
                     $this->db->where('ok_valid', 1);
@@ -97,7 +199,7 @@ class Taskmodel extends CI_Model
                     // $this->db->where('bbl_pp',1);
                     // $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
                     break;
-                case 5:
+                case 5: //Masuk
                     $this->db->where('data_ok', 0);
                     // $this->db->where('ok_pp', 1);
                     $this->db->where('ok_valid', 0);

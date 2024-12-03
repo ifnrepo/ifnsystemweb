@@ -4,6 +4,8 @@ $(document).ready(function () {
 	} else {
 		$("#master13").attr("disabled", true);
 	}
+	$("#cekmng").change();
+	$("#ceksgm").change();
 });
 $("#tambahuser").click(function () {
 	if ($("#name").val() == "") {
@@ -99,5 +101,19 @@ $("#master3").change(function () {
 	} else {
 		$("#master13").prop("checked", false);
 		$("#master13").attr("disabled", true);
+	}
+});
+$("#cekmng").change(function () {
+	if ($(this).is(":checked")) {
+		$("#inicekmng").removeClass("hilang");
+	} else {
+		$("#inicekmng").addClass("hilang");
+	}
+});
+$("#ceksgm").change(function () {
+	if ($(this).is(":checked")) {
+		$("#iniceksgm").removeClass("hilang");
+	} else {
+		$("#iniceksgm").addClass("hilang");
 	}
 });

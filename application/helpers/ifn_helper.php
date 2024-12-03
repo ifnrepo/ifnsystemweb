@@ -72,7 +72,7 @@ function cekoth($key1, $key2, $key3)
 function arrdep($dep)
 {
     $arrdep = [];
-    if (strlen($dep) > 0) {
+    if (strlen(trim($dep)) > 0) {
         for ($x = 1; $x <= strlen($dep) / 2; $x++) {
             array_push($arrdep, substr($dep, ($x * 2) - 2, 2));
         }

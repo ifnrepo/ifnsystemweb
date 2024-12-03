@@ -98,3 +98,9 @@
 	font-weight: bold;
 	padding: 3px 6px;
 }
+#headerhakuser .nav-item .active {
+	/* color: rgb(255, 68, 0) !important; */
+	color: blue;
+	font-weight: bold;
+	background-color: #e6eef6;
+}

@@ -20,7 +20,7 @@ class Task extends CI_Controller {
 	public function index()
 	{  
         $header['header'] = 'pendingtask';
-        $data['data'] = $this->taskmodel->getdata($this->session->userdata('modetask'));
+        $data['data'] = $this->taskmodel->getdatabaru($this->session->userdata('modetask'));
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'pendingtask';
 		$this->load->view('layouts/header',$header);
