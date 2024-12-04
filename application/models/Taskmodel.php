@@ -48,12 +48,17 @@ class Taskmodel extends CI_Model
                 $this->db->where('data_ok', 1);
                 if($cekpp==1){
                     $this->db->group_start();
-                        $this->db->where('ok_pp',0);
+                        if(count($cekmng)>0){
+                            $this->db->or_where('ok_pp',1);
+                        }
                         $this->db->or_group_start();
                             $this->db->where('ok_pp',0);
                             $this->db->where('bbl_pp',1);
                         $this->db->group_end();
                     $this->db->group_end();
+                    if(count($cekmng)>0){
+                        $this->db->where_in('dept_bbl',$cekmng);
+                    }
                 }else{
                     if($cekut==1){
                         $this->db->group_start();

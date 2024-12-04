@@ -21,10 +21,11 @@ class Po_model extends CI_Model
     }
     public function getdatabyid($kode)
     {
-        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,catatan_po.header_po,catatan_po.catatan1,catatan_po.catatan2,catatan_po.catatan3,term_payment.detail as detterm');
+        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,catatan_po.header_po,catatan_po.catatan1,catatan_po.catatan2,catatan_po.catatan3,term_payment.detail as detterm,ref_mt_uang.mt_uang');
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
         $this->db->join('supplier', 'supplier.id=tb_header.id_pemasok', 'left');
         $this->db->join('catatan_po', 'catatan_po.id_header=tb_header.id', 'left');
+        $this->db->join('ref_mt_uang', 'tb_header.mtuang=ref_mt_uang.id', 'left');
         $this->db->join('term_payment', 'term_payment.id=tb_header.id_term_payment', 'left');
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();

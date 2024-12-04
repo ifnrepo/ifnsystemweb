@@ -145,8 +145,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php for ($x = 1; $x <= 3; $x++) { ?>
                     <?php if ($x == 2) { ?>
                       <li>Setiap Supplier wajib mentaati aturan K3LH dari PT. Indoneptune Net Manufacturing</li>
-                      <li>Our Reff BBL (PG-PC/BB/0824/024) Kalender 2025</li>
-                      <li>Ket=tatakan harian medium (TH 9908+sablon 2 warna)</li>
+                      <!-- <li>Our Reff BBL (PG-PC/BB/0824/024) Kalender 2025</li>
+                      <li>Ket=tatakan harian medium (TH 9908+sablon 2 warna)</li> -->
                       <?php } else {
                       $y = $x > 2 ? $x - 1 : $x;
                       if ($header['catatan' . $y] != '') : ?>
