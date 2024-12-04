@@ -79,7 +79,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <select class="form-control form-select font-kecil font-bold text-primary" id="mt_uang">
                         <option value=""></option>
                         <?php foreach ($mtuang->result_array() as $uang) { ?>
-                        <option value="<?= $uang['mt_uang']; ?>" <?php if($data['mt_uang']== $uang['mt_uang']){ echo "Selected"; } ?>><?= $uang['mt_uang']; ?></option>
+                        <option value="<?= $uang['id']; ?>" <?php if($data['mtuang']== $uang['id']){ echo "Selected"; } ?>><?= $uang['mt_uang']; ?></option>
                         <?php } ?>
                       </select>
                     </div>

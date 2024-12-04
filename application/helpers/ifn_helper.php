@@ -585,3 +585,11 @@ function hitungwaktu($dateformat){
     $array = ["tahun"=>$years,"bulan"=>$months,"hari"=>$days,"jam"=>$hours,"menit"=>$minuts,"detik"=>$seconds];
     return $array;
 }
+function hitunghari($tgl1,$tgl2){
+    $tanggal_1 = date_create($tgl1);
+    $tanggal_2 = date_create($tgl2);
+    $selisih  = date_diff( $tanggal_1, $tanggal_2 );
+    
+    echo $selisih->days;
+    // hasil 10722 Hari
+}

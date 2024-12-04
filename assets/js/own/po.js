@@ -134,7 +134,7 @@ $("#mt_uang").change(function () {
 	$.ajax({
 		dataType: "json",
 		type: "POST",
-		url: base_url + "po/updatebykolom/mt_uang",
+		url: base_url + "po/updatebykolom/mtuang",
 		data: {
 			isinya: $(this).val(),
 			id: $("#id_header").val(),
