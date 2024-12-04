@@ -32,8 +32,8 @@ class Inv extends CI_Controller
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
-        if($this->session->userdata('viewinv')==null){
-            $this->session->set_userdata('viewinv',1);
+        if ($this->session->userdata('viewinv') == null) {
+            $this->session->set_userdata('viewinv', 1);
         }
         if ($this->session->userdata('tglawal') == null) {
             $data['tglawal'] = tglmysql(date('Y-m-d'));
@@ -57,7 +57,7 @@ class Inv extends CI_Controller
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'inv';
         $this->load->view('layouts/header', $header);
-        $this->load->view('inv/inv',$data);
+        $this->load->view('inv/inv', $data);
         $this->load->view('layouts/footer', $footer);
     }
     public function clear()
@@ -87,7 +87,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('ifndln', $_POST['ifndln']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
-                $this->session->unset_userdata('katcari');  
+                $this->session->unset_userdata('katcari');
             } else {
                 $this->session->set_userdata('katcari', $_POST['cari']);
             }
@@ -105,7 +105,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('kategoricari', $_POST['kcari']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
-                $this->session->unset_userdata('katcari');  
+                $this->session->unset_userdata('katcari');
             } else {
                 $this->session->set_userdata('katcari', $_POST['cari']);
             }
@@ -124,17 +124,17 @@ class Inv extends CI_Controller
         $this->session->set_userdata('ifndln', $_POST['ifndln']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
-                $this->session->unset_userdata('katcari');  
+                $this->session->unset_userdata('katcari');
             } else {
                 $this->session->set_userdata('katcari', $_POST['cari']);
             }
         } else {
             $this->session->unset_userdata('katcari');
         }
-        $kuer = $this->invmodel->getkgspcswip($_POST['kat'],$_POST['ifndln']);
-        $this->session->set_userdata('jmlpcs',$kuer['pecees']);
-        $this->session->set_userdata('jmlkgs',$kuer['kagees']);
-        $this->session->set_userdata('jmlrec',$kuer['rekod']);
+        $kuer = $this->invmodel->getkgspcswip($_POST['kat'], $_POST['ifndln']);
+        $this->session->set_userdata('jmlpcs', $kuer['pecees']);
+        $this->session->set_userdata('jmlkgs', $kuer['kagees']);
+        $this->session->set_userdata('jmlrec', $kuer['rekod']);
         echo 1;
     }
     public function getdatagf()
@@ -147,56 +147,63 @@ class Inv extends CI_Controller
         $this->session->set_userdata('ifndln', $_POST['ifndln']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
-                $this->session->unset_userdata('katcari');  
+                $this->session->unset_userdata('katcari');
             } else {
                 $this->session->set_userdata('katcari', $_POST['cari']);
             }
         } else {
             $this->session->unset_userdata('katcari');
         }
-        $kuer = $this->invmodel->getkgspcsgf($_POST['kat'],$_POST['ifndln']);
-        $this->session->set_userdata('jmlpcs',$kuer['pecees']);
-        $this->session->set_userdata('jmlkgs',$kuer['kagees']);
-        $this->session->set_userdata('jmlrec',$kuer['rekod']);
+        $kuer = $this->invmodel->getkgspcsgf($_POST['kat'], $_POST['ifndln']);
+        $this->session->set_userdata('jmlpcs', $kuer['pecees']);
+        $this->session->set_userdata('jmlkgs', $kuer['kagees']);
+        $this->session->set_userdata('jmlrec', $kuer['rekod']);
         echo 1;
     }
-    public function viewharga(){
+    public function viewharga()
+    {
         $isi = $_POST['cek'];
-        $this->session->set_userdata('invharga',$isi);
+        $this->session->set_userdata('invharga', $isi);
         // $url = base_url().'Inv';
         // redirect($url);
         echo 1;
     }
-    public function viewinv(){
+    public function viewinv()
+    {
         $isi = $_POST['cek'];
-        $this->session->set_userdata('viewinv',$isi);
+        $this->session->set_userdata('viewinv', $isi);
         // $url = base_url().'Inv';
         // redirect($url);
         echo 1;
     }
-    public function confirmverifikasidata($id){
+    public function confirmverifikasidata($id)
+    {
         $data['data'] = $this->invmodel->getdatasaldo($id);
-        $this->load->view('inv/konfirmasisaldo',$data);
+        $this->load->view('inv/konfirmasisaldo', $data);
     }
-    public function batalverifikasidata($id){
+    public function batalverifikasidata($id)
+    {
         $data['data'] = $this->invmodel->getdatasaldo($id);
-        $this->load->view('inv/ubahkonfirmasisaldo',$data);
+        $this->load->view('inv/ubahkonfirmasisaldo', $data);
     }
-    public function verifikasidata(){
+    public function verifikasidata()
+    {
         $id = $_POST['id'];
         $simpan = $this->invmodel->verifikasidata($id);
         echo json_encode($simpan);
     }
-    public function cancelverifikasidata(){
+    public function cancelverifikasidata()
+    {
         $id = $_POST['id'];
         $simpan = $this->invmodel->cancelverifikasidata($id);
         echo json_encode($simpan);
     }
-    public function toexcel(){
+    public function toexcel()
+    {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
-        $sheet->setCellValue('A1', "INVENTORY ".$this->session->userdata('currdept')); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->setCellValue('A1', "INVENTORY " . $this->session->userdata('currdept')); // Set kolom A1 dengan tulisan "DATA SISWA"    
         $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
 
         // Buat header tabel nya pada baris ke 3    
@@ -229,8 +236,8 @@ class Inv extends CI_Controller
             $sheet->setCellValue('E' . $numrow, $data['nobontr']);
             $sheet->setCellValue('F' . $numrow, $data['insno']);
             $sheet->setCellValue('G' . $numrow, $data['kodesatuan']);
-            $sheet->setCellValue('H' . $numrow, $data['pcs']+$data['pcsin']-$data['pcsout']);
-            $sheet->setCellValue('I' . $numrow, $data['kgs']+$data['kgsin']-$data['kgsout']);
+            $sheet->setCellValue('H' . $numrow, $data['pcs'] + $data['pcsin'] - $data['pcsout']);
+            $sheet->setCellValue('I' . $numrow, $data['kgs'] + $data['kgsin'] - $data['kgsout']);
             $sheet->setCellValue('J' . $numrow, $data['name_kategori']);
             $no++;
             // Tambah 1 setiap kali looping      
@@ -251,7 +258,59 @@ class Inv extends CI_Controller
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
-        $this->helpermodel->isilog('Download Excel DATA INVENTORY'.$this->session->userdata('currdept'));
+        $this->helpermodel->isilog('Download Excel DATA INVENTORY' . $this->session->userdata('currdept'));
+    }
+
+    public function cetakpdf()
+    {
+        $pdf = new PDF('L', 'mm', 'A4');
+        $pdf->AliasNbPages();
+        // $pdf->setMargins(5,5,5);
+        $pdf->AddFont('Lato', '', 'Lato-Regular.php');
+        $pdf->AddFont('Latob', '', 'Lato-Bold.php');
+        $pdf->SetFillColor(7, 178, 251);
+        $pdf->SetFont('Latob', '', 12);
+        // $isi = $this->jualmodel->getrekap();
+        $pdf->SetFillColor(205, 205, 205);
+        $pdf->AddPage();
+        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 155, 5, 55);
+        $pdf->Cell(30, 18, 'DATA INVENTORY');
+        $pdf->ln(12);
+        $pdf->SetFont('Latob', '', 10);
+        $pdf->Cell(10, 8, 'No', 1, 0, 'C');
+        $pdf->Cell(14, 8, 'Id', 1, 0, 'C');
+        $pdf->Cell(115, 8, 'Spesifikasi', 1, 0, 'C');
+        $pdf->Cell(23, 8, 'Sku', 1, 0, 'C');
+        $pdf->Cell(38, 8, 'No IB', 1, 0, 'C');
+        // $pdf->Cell(25, 8, 'Insno', 1, 0, 'C');
+        $pdf->Cell(12, 8, 'Satuan', 1, 0, 'C');
+        $pdf->Cell(13, 8, 'Qty', 1, 0, 'C');
+        $pdf->Cell(13, 8, 'Kgs', 1, 0, 'C');
+        $pdf->Cell(35, 8, 'Kategori', 1, 0, 'C');
+        $pdf->SetFont('Lato', '', 10);
+        $pdf->ln(8);
+        $inv = $this->invmodel->getdata();
+        $no = 1;
+        foreach ($inv->result_array() as $det) {
+            $spekbarang = $det['nama_barang'] == null ? $det['spek'] : substr($det['nama_barang'], 0, 75);
+            $sku = viewsku(id: $det['kode'], po: $det['po'], no: $det['item'], dis: $det['dis']);
+            $pdf->Cell(10, 6, $no++, 1, 0, 'C');
+            $pdf->Cell(14, 6, $det['id_barang'], 1);
+            $pdf->Cell(115, 6, $spekbarang, 1);
+            $pdf->Cell(23, 6, $sku, 1);
+            $pdf->Cell(38, 6, $det['nobontr'], 1);
+            // $pdf->Cell(25, 6, $det['insno'], 1);
+            $pdf->Cell(12, 6, $det['kodesatuan'], 1);
+            $pdf->Cell(13, 6, $det['pcs'] + $det['pcsin'] - $det['pcsout'], 1);
+            $pdf->Cell(13, 6, $det['kgs'] + $det['kgsin'] - $det['kgsout'], 1);
+            $pdf->Cell(35, 6, $det['name_kategori'], 1);
+            $pdf->ln(6);
+        }
+        $pdf->SetFont('Lato', '', 8);
+        $pdf->ln(10);
+        $pdf->Cell(190, 6, 'Tgl Cetak : ' . date('d-m-Y H:i:s') . ' oleh ' . datauser($this->session->userdata('id'), 'name'), 0, 0, 'R');
+        $pdf->Output('I', 'Data inventory.pdf');
+        $this->helpermodel->isilog('Download PDF DATA INVENTORY');
     }
     //END INV Controllers 
     public function getdatadetailpb()
