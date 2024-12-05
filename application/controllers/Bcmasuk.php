@@ -3,6 +3,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
 
 class Bcmasuk extends CI_Controller
 {
@@ -21,6 +23,7 @@ class Bcmasuk extends CI_Controller
         $this->load->library('Pdf');
         // $this->load->library('Codeqr');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
+        // require_once(APPPATH . 'libraries/Pdf.php');
     }
 
     public function index()
@@ -61,9 +64,9 @@ class Bcmasuk extends CI_Controller
         $this->session->set_userdata('tglawal', $_POST['tga']);
         $this->session->set_userdata('tglakhir', $_POST['tgk']);
         $this->session->set_userdata('jnsbc', $_POST['jns']);
-        if(isset($_POST['nopen'])){
+        if (isset($_POST['nopen'])) {
             $this->session->set_userdata('nopen', $_POST['nopen']);
-        }else{
+        } else {
             $this->session->unset_userdata('nopen');
         }
         echo 1;
@@ -78,40 +81,98 @@ class Bcmasuk extends CI_Controller
     public function excel()
     {
         $spreadsheet = new Spreadsheet();
-        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+        $sheet = $spreadsheet->getActiveSheet();
 
-        $sheet->setCellValue('A1', "BC MASUK " . $this->session->userdata('jnsbc')); // Set kolom A1 dengan tulisan "DATA SISWA"    
-        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
-
-        // Buat header tabel nya pada baris ke 3    
-        $sheet->setCellValue('A2', "JNS DOK"); // Set kolom A3 dengan tulisan "NO"    
-        $sheet->setCellValue('B2', "TGL DOK"); // Set kolom B3 dengan tulisan "KODE"    
-        $sheet->setCellValue('C2', "NOMOR DOK"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('D2', "NO TERIMA");
-        $sheet->setCellValue('E2', "TGL TERIMA");
-        $sheet->setCellValue('F2', "PEMASOK/PENGIRIM");
+        $sheet->setCellValue('A1', "BC MASUK " . $this->session->userdata('jnsbc'));
+        $sheet->mergeCells('A2:A3');
+        $sheet->setCellValue('A2', "JENIS");
+        $sheet->mergeCells('B2:C2');
+        $sheet->setCellValue('B2', "DOKUMEN PABEAN");
+        $sheet->setCellValue('B3', "TGL DOK");
+        $sheet->setCellValue('C3', "NOMOR DOK");
+        $sheet->mergeCells('D2:E2');
+        $sheet->setCellValue('D2', "BUKTI PENERIMAAN BARANG");
+        $sheet->setCellValue('D3', "NO TERIMA");
+        $sheet->setCellValue('E3', "TGL TERIMA");
+        $sheet->mergeCells('F2:F3');
+        $sheet->setCellValue('F2', "PEMASOK");
+        $sheet->mergeCells('G2:G3');
         $sheet->setCellValue('G2', "KODE BARANG");
+        $sheet->mergeCells('H2:H3');
         $sheet->setCellValue('H2', "SPEK BARANG");
+        $sheet->mergeCells('I2:I3');
         $sheet->setCellValue('I2', "URAIAN BARANG");
+        $sheet->mergeCells('J2:J3');
         $sheet->setCellValue('J2', "SAT");
+        $sheet->mergeCells('K2:K3');
         $sheet->setCellValue('K2', "QTY");
-        $sheet->setCellValue('L2', "NILAI IDR");
-        $sheet->setCellValue('M2', "NILAI USD");
-        $sheet->setCellValue('N2', "KGS (BRUTO)");
-        $sheet->setCellValue('O2', "KGS (NETTO)");
-        // Panggil model Get Data   
-        $bcmasuk = $this->bcmasukmodel->getdataexcel();
+        $sheet->mergeCells('L2:M2');
+        $sheet->setCellValue('L2', "NILAI BARANG");
+        $sheet->setCellValue('L3', "NILAI IDR");
+        $sheet->setCellValue('M3', "NILAI USD");
+        $sheet->mergeCells('N2:O2');
+        $sheet->setCellValue('N2', "KILO");
+        $sheet->setCellValue('N3', "KGS (BRUTO)");
+        $sheet->setCellValue('O3', "KGS (NETTO)");
+
+        $sheet->getStyle('A1')->getFont()->setBold(true);
+        $sheet->getStyle('B3')->getFont()->setBold(true);
+        $sheet->getStyle('C3')->getFont()->setBold(true);
+        $sheet->getStyle('D3')->getFont()->setBold(true);
+        $sheet->getStyle('E3')->getFont()->setBold(true);
+        $sheet->getStyle('L3')->getFont()->setBold(true);
+        $sheet->getStyle('M3')->getFont()->setBold(true);
+        $sheet->getStyle('N3')->getFont()->setBold(true);
+        $sheet->getStyle('O3')->getFont()->setBold(true);
+        $sheet->getStyle('A2:A3')->getFont()->setBold(true);
+        $sheet->getStyle('A2:A3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('A2:A3')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('B2:C2')->getFont()->setBold(true);
+        $sheet->getStyle('B2:C2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('B2:C3')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('D2:E2')->getFont()->setBold(true);
+        $sheet->getStyle('D2:E2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('D2:E2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('F2:F3')->getFont()->setBold(true);
+        $sheet->getStyle('F2:F3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('F2:E3')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('G2:G3')->getFont()->setBold(true);
+        $sheet->getStyle('G2:G3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('G2:G3')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('H2:H3')->getFont()->setBold(true);
+        $sheet->getStyle('H2:H3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('H2:H3')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('I2:I3')->getFont()->setBold(true);
+        $sheet->getStyle('I2:I3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('I2:I3')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('J2:J3')->getFont()->setBold(true);
+        $sheet->getStyle('J2:J3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('J2:J3')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('K2:K3')->getFont()->setBold(true);
+        $sheet->getStyle('K2:K3')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('K2:K3')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('L2:M2')->getFont()->setBold(true);
+        $sheet->getStyle('L2:M2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('L2:M2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('N2:O2')->getFont()->setBold(true);
+        $sheet->getStyle('N2:O2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
+        $sheet->getStyle('N2:O2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
+
+        $tglawal = $this->input->get('tglawal');
+        $tglakhir = $this->input->get('tglakhir');
+
+        $this->session->set_userdata('tglawal', $tglawal);
+        $this->session->set_userdata('tglakhir', $tglakhir);
+
+        $bcmasuk = $this->bcmasukmodel->getdataexcel($tglawal, $tglakhir);
         $no = 1;
 
-        // Untuk penomoran tabel, di awal set dengan 1    
-        $numrow = 3;
 
-        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        $numrow = 4;
         foreach ($bcmasuk->result_array() as $data) {
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
             $nilaiidr = $data['xmtuang'] != 'USD' ? $data['harga'] * $nilaiqty : ($data['harga'] * $nilaiqty) * $data['kurs_usd'];
             $nilaiusd = $data['xmtuang'] == 'USD' ? $data['harga'] * $nilaiqty : ($data['harga'] * $nilaiqty) * $data['kurs_usd'];
-            // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, 'BC. ' .  $data['jns_bc']);
             $sheet->setCellValue('B' . $numrow, $data['tgl_bc']);
             $sheet->setCellValue('C' . $numrow, $data['nomor_bc']);
@@ -128,8 +189,7 @@ class Bcmasuk extends CI_Controller
             $sheet->setCellValue('N' . $numrow, $data['bruto']);
             $sheet->setCellValue('O' . $numrow, $data['kgs']);
             $no++;
-            // Tambah 1 setiap kali looping      
-            $numrow++; // Tambah 1 setiap kali looping    
+            $numrow++;
         }
 
 
@@ -156,42 +216,123 @@ class Bcmasuk extends CI_Controller
     {
         $pdf = new PDF('L', 'mm', 'A4');
         $pdf->AliasNbPages();
-        // $pdf->setMargins(5,5,5);
         $pdf->AddFont('Lato', '', 'Lato-Regular.php');
         $pdf->AddFont('Latob', '', 'Lato-Bold.php');
         $pdf->SetFillColor(7, 178, 251);
         $pdf->SetFont('Latob', '', 12);
-        // $isi = $this->jualmodel->getrekap();
         $pdf->SetFillColor(205, 205, 205);
         $pdf->AddPage();
-        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 155, 5, 55);
-        $pdf->Cell(30, 18, 'DATA BC MASUK');
-        $pdf->ln(12);
-        $pdf->SetFont('Latob', '', 10);
-        $pdf->Cell(10, 8, 'No', 1, 0, 'C');
-        $pdf->Cell(15, 8, 'BC', 1, 0, 'C');
-        $pdf->Cell(20, 8, 'DOK', 1, 0, 'C');
-        $pdf->Cell(23, 8, 'TGL DOK', 1, 0, 'C');
-        $pdf->Cell(130, 8, 'SPEK BARANG', 1, 0, 'C');
-        $pdf->Cell(80, 8, 'PEMASOK', 1, 0, 'C');
-        $pdf->SetFont('Lato', '', 10);
-        $pdf->ln(8);
-        $bcmasuk = $this->bcmasukmodel->getdataexcel();
-        $no = 1;
-        foreach ($bcmasuk->result_array() as $det) {
+        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 0, 5, 55);
+        $pdf->SetFont('Arial', 'I', 8);
+        $pdf->Cell(0, 10, 'DATA BC MASUK', 0, 1, 'C');
+        $pdf->Ln(8);
+        $pdf->SetFont('Arial', 'I', 8); // Font untuk nomor halaman
+        $pdf->SetY(14);
+        $pdf->Cell(0, 10, 'Halaman: ' . $pdf->PageNo(), 0, 0, 'C');
+        $pdf->Ln(15);
 
+        // sett lebar kolom
+        $col_no = 10;
+        $col_jenis = 12;
+        $col_dokumen = 39;
+        $col_penerimaan = 58;
+        $col_pemasok = 80;
+        $col_sat = 10;
+        $col_jumlah = 21;
+        $nilai_barang = 50;
+
+        $pdf->Cell($col_no, 13, 'NO', 1, 0, 'C');
+        $pdf->Cell($col_jenis, 13, 'JENIS', 1, 0, 'C');
+        $pdf->Cell($col_dokumen, 6, 'DOKUMEN PABEAN', 1, 0, 'C');
+        $pdf->Cell($col_penerimaan, 6, 'BUKTI PENERIMAAN BRG', 1, 0, 'C');
+        $pdf->Cell($col_pemasok, 13, 'PEMASOK/PENGIRIM', 1, 0, 'C');
+        $pdf->Cell($col_sat, 13, 'SAT', 1, 0, 'C');
+        $pdf->Cell($col_jumlah, 13, 'JUMLAH', 1, 0, 'C');
+        $pdf->Cell($nilai_barang, 6, 'NILAI BARANG', 1, 0, 'C');
+
+        // Sub-header
+        $pdf->SetXY(32, 35);
+        $pdf->Cell(16, 7, 'NOMOR', 1, 0, 'C');
+        $pdf->Cell(23, 7, 'TANGGAL', 1, 0, 'C');
+        $pdf->Cell(35, 7, 'NOMOR', 1, 0, 'C');
+        $pdf->Cell(23, 7, 'TANGGAL', 1, 0, 'C');
+        $pdf->SetXY(240, 35);
+        $pdf->Cell(27, 7, 'IDR', 1, 0, 'C');
+        $pdf->Cell(23, 7, 'USD', 1, 0, 'C');
+        $pdf->Ln(7);
+
+        $tglawal = $this->input->get('tglawal');
+        $tglakhir = $this->input->get('tglakhir');
+
+        $this->session->set_userdata('tglawal', $tglawal);
+        $this->session->set_userdata('tglakhir', $tglakhir);
+        $bcmasuk = $this->bcmasukmodel->getdataexcel();
+
+        $no = 1;
+
+        foreach ($bcmasuk->result_array() as $det) {
+            $nilaiqty = $det['kodesatuan'] == 'KGS' ? $det['kgs'] : $det['pcs'];
+            $nilaiidr = $det['xmtuang'] != 'USD' ? $det['harga'] * $nilaiqty : ($det['harga'] * $nilaiqty) * $det['kurs_usd'];
+            $nilaiusd = $det['xmtuang'] == 'USD' ? $det['harga'] * $nilaiqty : ($det['harga'] * $nilaiqty) * $det['kurs_usd'];
             $pdf->Cell(10, 6, $no++, 1, 0, 'C');
-            $pdf->Cell(15, 6, 'BC. ' . $det['jns_bc'], 1);
-            $pdf->Cell(20, 6, $det['nomor_bc'], 1);
+            $pdf->Cell(12, 6, 'BC. ' . $det['jns_bc'], 1);
+            $pdf->Cell(16, 6, $det['nomor_bc'], 1);
             $pdf->Cell(23, 6, $det['tgl_bc'], 1);
-            $pdf->Cell(130, 6, $det['nama_barang'], 1);
+            $pdf->Cell(35, 6, $det['nomor_dok'], 1);
+            $pdf->Cell(23, 6, $det['tgl_bc'], 1);
             $pdf->Cell(80, 6, $det['nama_supplier'], 1);
-            $pdf->ln(6);
+            $pdf->Cell(10, 6, $det['kodesatuan'], 1);
+            $pdf->Cell(21, 6, $nilaiqty, 1);
+            $pdf->Cell(27, 6, $nilaiidr, 1);
+            $pdf->Cell(23, 6, $nilaiusd, 1);
+            $pdf->Ln(6);
         }
+
         $pdf->SetFont('Lato', '', 8);
-        $pdf->ln(10);
-        $pdf->Cell(190, 6, 'Tgl Cetak : ' . date('d-m-Y H:i:s') . ' oleh ' . datauser($this->session->userdata('id'), 'name'), 0, 0, 'R');
+        $pdf->Ln(10);
         $pdf->Output('I', 'Data Bc Masuk.pdf');
         $this->helpermodel->isilog('Download PDF DATA BC MASUK');
     }
+    // public function cetakpdf()
+    // {
+    //     $pdf = new PDF('L', 'mm', 'A4');
+    //     $pdf->AliasNbPages();
+    //     $pdf->AddFont('Lato', '', 'Lato-Regular.php');
+    //     $pdf->AddFont('Latob', '', 'Lato-Bold.php');
+    //     $pdf->AddPage();
+
+
+    //     $tglawal = $this->input->get('tglawal');
+    //     $tglakhir = $this->input->get('tglakhir');
+
+    //     $this->session->set_userdata('tglawal', $tglawal);
+    //     $this->session->set_userdata('tglakhir', $tglakhir);
+
+    //     $bcmasuk = $this->bcmasukmodel->getdataexcel();
+
+    //     $no = 1;
+
+    //     foreach ($bcmasuk->result_array() as $det) {
+    //         $nilaiqty = $det['kodesatuan'] == 'KGS' ? $det['kgs'] : $det['pcs'];
+    //         $nilaiidr = $det['xmtuang'] != 'USD' ? $det['harga'] * $nilaiqty : ($det['harga'] * $nilaiqty) * $det['kurs_usd'];
+    //         $nilaiusd = $det['xmtuang'] == 'USD' ? $det['harga'] * $nilaiqty : ($det['harga'] * $nilaiqty) * $det['kurs_usd'];
+    //         $pdf->Cell(10, 6, $no++, 1, 0, 'C');
+    //         $pdf->Cell(12, 6, 'BC. ' . $det['jns_bc'], 1);
+    //         $pdf->Cell(16, 6, $det['nomor_bc'], 1);
+    //         $pdf->Cell(23, 6, $det['tgl_bc'], 1);
+    //         $pdf->Cell(35, 6, $det['nomor_dok'], 1);
+    //         $pdf->Cell(23, 6, $det['tgl_bc'], 1);
+    //         $pdf->Cell(80, 6, $det['nama_supplier'], 1);
+    //         $pdf->Cell(10, 6, $det['kodesatuan'], 1);
+    //         $pdf->Cell(21, 6, $nilaiqty, 1);
+    //         $pdf->Cell(27, 6, $nilaiidr, 1);
+    //         $pdf->Cell(23, 6, $nilaiusd, 1);
+    //         $pdf->Ln(6);
+    //     }
+
+    //     $pdf->SetFont('Lato', '', 8);
+    //     $pdf->Ln(10);
+    //     $pdf->Output('I', 'Data Bc Masuk.pdf');
+    //     $this->helpermodel->isilog('Download PDF DATA BC MASUK');
+    // }
 }
