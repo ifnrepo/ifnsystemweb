@@ -126,7 +126,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <label class="form-label" style="text-align: center;">CARI DATA PO/BUYER</label>
                                 <input class="form-control" name="keyword" placeholder="xxxxxx" value="<?= isset($_POST['keyword']) ? htmlspecialchars($_POST['keyword']) : '' ?>">
                             </div>
-                            <div class="mb-3">
+                            <!-- <div class="mb-3">
                                 <label class="form-label">Pilih Kategori</label>
                                 <select id="kategori-select" class="form-select" name="kategori" aria-label="Default select example">
                                     <option value="0" <?= isset($_POST['kategori']) && $_POST['kategori'] == '0' ? 'selected' : '' ?>><b>PO</b></option>
@@ -136,12 +136,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <div class="mb-2" style="margin-top: 10px; margin-right: 350px; width: 100px;">
                                     <label class="form-check">
                                         <label class="form-label" style="color: #1877f2;">
-                                            <input class="form-check-input" type="checkbox" name="checked" id="checked" value="1" id="po-aktif-checkbox" <?php if($this->session->flashdata('msg')=='1'){ echo "checked"; } ?>> po aktiv
-                                            <!-- <input class="form-check-input" type="checkbox" name="checked" value="1" checked> po aktiv -->
+                                            <input class="form-check-input" type="checkbox" name="checked" id="checked" value="1" id="po-aktif-checkbox" <?php if ($this->session->flashdata('msg') == '1') {
+                                                                                                                                                                echo "checked";
+                                                                                                                                                            } ?>> po aktiv
+                                        </label>
+                                    </label>
+                                </div>
+                            </div> -->
+
+                            <div class="mb-3">
+                                <!-- <label class="form-label">Pilih Kategori</label> -->
+                                <select id="kategori-select" class="form-select" name="kategori" aria-label="Default select example">
+                                    <option value="selected">Pilih Kategori</option>
+                                    <option style="color : black ;" value="0" <?= isset($_POST['kategori']) && $_POST['kategori'] == '0' ? 'selected' : '' ?>><b>PO</b></option>
+                                    <option style="color: black;" value="1" <?= isset($_POST['kategori']) && $_POST['kategori'] == '1' ? 'selected' : '' ?>><b>BUYER</b></option>
+                                    <option style="color: black;" value="2" <?= isset($_POST['kategori']) && $_POST['kategori'] == '2' ? 'selected' : '' ?>><b>HIKIAI</b></option>
+                                </select>
+                                <div class="mb-2" style="margin-top: 10px; margin-right: 350px; width: 100px;">
+                                    <label class="form-check">
+                                        <label class="form-label" style="color: #1877f2;">
+                                            <input class="form-check-input" type="checkbox" name="checked" id="po-aktif-checkbox" value="1" <?= $this->session->flashdata('msg') == '1' ? 'checked' : '' ?>>
+                                            PO Aktif
                                         </label>
                                     </label>
                                 </div>
                             </div>
+
+
+
                             <div class="button-group">
                                 <button type="submit" class="btn btn-info">Cari Data</button>
                                 <a href="<?= base_url('ponet'); ?>" class="btn btn-sm btn-red btn-icon text-white" title="Bersihkan data">
@@ -239,11 +261,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 <script>
     document.getElementById('kategori-select').addEventListener('change', function() {
-        var CekAktif = this.value;
+        var selectedCategory = this.value;
         var checkbox = document.getElementById('po-aktif-checkbox');
 
-
-        if (CekAktif == '2') {
+        if (selectedCategory == '2') {
             checkbox.checked = false;
         } else {
             checkbox.checked = true;

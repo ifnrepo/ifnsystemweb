@@ -52,3 +52,19 @@ $("#updatebcmasuk").click(function () {
 		},
 	});
 });
+
+$("#topdf").click(function () {
+    var tglawal = $("#tglawal").val();
+    var tglakhir = $("#tglakhir").val();
+    var url = "<?= base_url('bcmasuk/cetakpdf'); ?>?tglawal=" + tglawal + "&tglakhir=" + tglakhir;
+    $(this).attr("href", url);
+});
+
+
+$("#toexcel").click(function () {
+    var tglawal = $("#tglawal").val();
+    var tglakhir = $("#tglakhir").val();
+    var url = "<?= base_url('bcmasuk/excel'); ?>?tglawal=" + tglawal + "&tglakhir=" + tglakhir;
+    $(this).attr("href", url);
+});
+
