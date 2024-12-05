@@ -23,18 +23,29 @@
                         <tr>
                             <th>No PO</th>
                             <th>Nama Barang</th>
-                            <th>Qty PO</th>
-                            <th>Kgs PO</th>
+                            <th>PO Qty</th>
+                            <th>PO Terima</th>
+                            <th>Sisa</th>
                             <th>Pilih</th>
                         </tr>
                     </thead>
                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                        <?php $no=0; foreach($datadetail->result_array() as $detail){ $no++; ?>
+                        <?php $no=0; foreach($datadetail->result_array() as $detail){ if(($detail['pcs']+$detail['kgs'])> ($detail['pcssudahterima']+$detail['kgssudahterima'])): $no++; ?>
+                        <?php  
+                            if($detail['kodesatuan']!='KGS'){
+                                $pcs = $detail['pcssudahterima'];
+                                $pcspo = $detail['pcs'];
+                            }else{
+                                $pcs = $detail['kgssudahterima'];
+                                $pcspo = $detail['kg'];
+                            }
+                        ?>
                             <tr class="font-kecil">
                                 <td><?= $detail['nodok']; ?></td>
                                 <td><?= $detail['nama_barang']; ?></td>
-                                <td><?= rupiah($detail['pcs'],0); ?></td>
-                                <td><?= rupiah($detail['kgs'],2); ?></td>
+                                <td class="text-center"><?= rupiah($pcspo,2); ?></td>
+                                <td class="text-center"><?= rupiah($pcs,2); ?></td>
+                                <td class="text-center text-blue"><?= rupiah($pcspo-$pcs,2); ?></td>
                                 <td>
                                     <label class="form-check">
                                         <input class="form-check-input" name="cekpilihbarang" id="cekbok<?= $no; ?>" rel="<?= $detail['iddetbbl']; ?>" type="checkbox">
@@ -42,7 +53,7 @@
                                     </label>
                                 </td>
                             </tr>
-                        <?php } ?>
+                        <?php endif; } ?>
                     </tbody>
                 </table>
             </div>
