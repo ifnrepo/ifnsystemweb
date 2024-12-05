@@ -328,7 +328,6 @@ $("#xsimpanib").click(function () {
 		pesan("Nomor/Tgl Surat jalan belum diisi !", "info");
 		return false;
 	}
-	// if($("#tanpa_bc").is(":checked"))
 	if (ikeh == 0) {
 		if ($("#jns_bc").val() == "") {
 			pesan("Jenis BC belum di isi !", "info");

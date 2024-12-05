@@ -126,12 +126,15 @@ class Ib_model extends CI_Model
         return $hasil;
     }
     public function getbarangib($sup=''){
-        $this->db->select('tb_detail.*,tb_detail.id as iddetbbl,a.nomor_dok as nodok,b.nama_barang,d.dept_id');
+        $this->db->select('tb_detail.*,tb_detail.id as iddetbbl,a.nomor_dok as nodok,b.nama_barang,d.dept_id,e.kodesatuan');
+        $this->db->select('(select sum(pcs) from tb_detail z where z.po_id = tb_detail.id) as pcssudahterima');
+        $this->db->select('(select sum(kgs) from tb_detail z where z.po_id = tb_detail.id) as kgssudahterima');
         $this->db->from('tb_detail');
         $this->db->join('tb_header a','a.id = tb_detail.id_header','left');
         $this->db->join('barang b','b.id = tb_detail.id_barang','left');
         $this->db->join('tb_detail c','c.id_po = tb_detail.id','left'); 
         $this->db->join('tb_header d','d.id = c.id_header','left'); 
+        $this->db->join('satuan e','e.id = b.id_satuan','left');
         $this->db->where('a.id_perusahaan',IDPERUSAHAAN);
         $this->db->where('a.data_ok',1);
         $this->db->where('a.ok_valid',1);
@@ -139,7 +142,7 @@ class Ib_model extends CI_Model
         $this->db->where('a.ok_pp',0);
         $this->db->where('a.ok_pc',0);
         $this->db->where('a.kode_dok','PO');
-        $this->db->where('tb_detail.id_ib',0);
+        // $this->db->where('tb_detail.id_ib',0);
         $this->db->where('tb_detail.id_po',0);
         $this->db->where('a.id_pemasok',$sup);
         $this->db->where('d.dept_id',$this->session->userdata('depttuju'));
@@ -182,7 +185,8 @@ class Ib_model extends CI_Model
                 'kgs' => $detail['kgs'],
                 'pcs' => $detail['pcs'],
                 'harga' => $detail['harga'],
-                'nobontr' => $headerx['nomor_dok']
+                'nobontr' => $headerx['nomor_dok'],
+                'po_id' => $arrdat[$x]
             ];
             $this->db->insert('tb_detail', $isi);
             $idsimpan = $this->db->insert_id();
