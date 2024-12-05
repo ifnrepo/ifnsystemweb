@@ -282,9 +282,10 @@ class Bcmasuk extends CI_Controller
             $pdf->Cell(23, 6, $det['tgl_bc'], 1);
             $pdf->Cell(80, 6, $det['nama_supplier'], 1);
             $pdf->Cell(10, 6, $det['kodesatuan'], 1);
-            $pdf->Cell(21, 6, $nilaiqty, 1);
-            $pdf->Cell(27, 6, $nilaiidr, 1);
-            $pdf->Cell(23, 6, $nilaiusd, 1);
+            $pdf->Cell(21, 6, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(27, 6, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(23, 6, number_format($nilaiusd, 2, ',', '.'), 1, 0, 'R');
+
             $pdf->Ln(6);
         }
 

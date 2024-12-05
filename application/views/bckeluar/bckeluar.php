@@ -46,7 +46,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <a href="#" class="btn btn-success btn-sm font-bold" id="updatebckeluar"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
             </div>
             <div class="col-sm-7 d-flex flex-row-reverse" style="text-align: right;">
-              <a href="<?= base_url('bckeluar/cetakpdf'); ?>" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a>
+              <a href="<?= base_url('bckeluar/cetakpdf'); ?>" target="_blank" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a>
               <a href="<?= base_url() . 'bckeluar/excel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
             </div>
           </div>
