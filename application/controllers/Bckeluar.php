@@ -257,31 +257,31 @@ class Bckeluar extends CI_Controller
         $col_no = 10;
         $col_jenis = 12;
         $col_dokumen = 39;
-        $col_penerimaan = 48;
-        $col_pemasok = 75;
+        $col_penerimaan = 58;
+        $col_pemasok = 60;
         $col_sat = 10;
-        $col_jumlah = 17;
+        $col_jumlah = 21;
         $nilai_barang = 63;
 
         $pdf->Cell($col_no, 13, 'NO', 1, 0, 'C');
         $pdf->Cell($col_jenis, 13, 'JENIS', 1, 0, 'C');
-        $pdf->Cell($col_dokumen, 6, 'DOKUMEN PABEAN', 1, 0, 'C');
-        $pdf->Cell($col_penerimaan, 6, 'BUKTI PENERIMAAN BRG', 1, 0, 'C');
+        $pdf->Cell($col_dokumen, 7, 'DOKUMEN PABEAN', 1, 0, 'C');
+        $pdf->Cell($col_penerimaan, 7, 'BUKTI PENERIMAAN BRG', 1, 0, 'C');
         $pdf->Cell($col_pemasok, 13, 'PEMASOK/PENGIRIM', 1, 0, 'C');
         $pdf->Cell($col_sat, 13, 'SAT', 1, 0, 'C');
         $pdf->Cell($col_jumlah, 13, 'JUMLAH', 1, 0, 'C');
-        $pdf->Cell($nilai_barang, 6, 'NILAI BARANG', 1, 0, 'C');
+        $pdf->Cell($nilai_barang, 7, 'NILAI BARANG', 1, 0, 'C');
 
         // Sub-header
-        $pdf->SetXY(32, 35);
-        $pdf->Cell(16, 7, 'NOMOR', 1, 0, 'C');
-        $pdf->Cell(23, 7, 'TANGGAL', 1, 0, 'C');
-        $pdf->Cell(25, 7, 'NOMOR', 1, 0, 'C');
-        $pdf->Cell(23, 7, 'TANGGAL', 1, 0, 'C');
-        $pdf->SetXY(221, 35);
-        $pdf->Cell(32, 7, 'IDR', 1, 0, 'C');
-        $pdf->Cell(31, 7, 'USD', 1, 0, 'C');
-        $pdf->Ln(7);
+        $pdf->SetXY(32, 36);
+        $pdf->Cell(16, 6, 'NOMOR', 1, 0, 'C');
+        $pdf->Cell(23, 6, 'TANGGAL', 1, 0, 'C');
+        $pdf->Cell(35, 6, 'NOMOR', 1, 0, 'C');
+        $pdf->Cell(23, 6, 'TANGGAL', 1, 0, 'C');
+        $pdf->SetXY(220, 36);
+        $pdf->Cell(33, 6, 'IDR', 1, 0, 'C');
+        $pdf->Cell(30, 6, 'USD', 1, 0, 'C');
+        $pdf->Ln(6);
 
         $bc = $this->bckeluarmodel->getdataexcel();
 
@@ -295,13 +295,13 @@ class Bckeluar extends CI_Controller
             $pdf->Cell(12, 6, 'BC. ' . $det['jns_bc'], 1);
             $pdf->Cell(16, 6, $det['nomor_bc'], 1);
             $pdf->Cell(23, 6, $det['tgl_bc'], 1);
-            $pdf->Cell(25, 6, $det['nomor_dok'], 1);
+            $pdf->Cell(35, 6, $det['nomor_dok'], 1);
             $pdf->Cell(23, 6, $det['tgl_bc'], 1);
-            $pdf->Cell(75, 6, $det['nama_supplier'], 1);
+            $pdf->Cell(60, 6, $det['nama_supplier'], 1);
             $pdf->Cell(10, 6, $det['kodesatuan'], 1);
-            $pdf->Cell(17, 6, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(32, 6, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(31, 6, number_format($nilaiusd, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(21, 6, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(33, 6, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(30, 6, number_format($nilaiusd, 2, ',', '.'), 1, 0, 'R');
 
             $pdf->Ln(6);
         }
