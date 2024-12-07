@@ -111,7 +111,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <td class="font-bold font-kecil"><?= $datpb['dept_bbl']; ?></td>
                 <td><?= $datpb['keterangan']; ?></td>
                 <td style="line-height: 13px;"><?= datauser($datpb['user_ok'], 'name'); ?><br><span style="font-size: 10px;"><?= $datpb['tgl_ok'] ?></span></td>
-                <td class="text-right">
+                <td class="text-center">
                   <?php if ($this->session->userdata('modetask') == 'bbl' && $datpb['ok_pp']==1) { ?>
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btnedit ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit Qty</a>
                   <?php } else if ($this->session->userdata('modetask') == 'bbl' && count(arrdep(datauser($this->session->userdata('id'),'bbl_cekmng'))) > 0 && $datpb['ok_pp']==1) { ?>

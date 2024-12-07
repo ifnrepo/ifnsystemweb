@@ -5,7 +5,13 @@ class Taskmodel extends CI_Model
         $lvluser = datauser($this->session->userdata('id'),'id_level_user');
         $hakttdpb = arrdep(datauser($this->session->userdata('id'),'hakdepartemen'));
         $this->db->where('id_perusahaan', IDPERUSAHAAN);
-        $this->db->where('kode_dok', $mode);
+        if($mode != 'cekbc'){
+            $this->db->where('kode_dok', $mode);
+        }else{
+            $this->db->where('kode_dok', 'IB');
+            $this->db->where('data_ok',1);
+            $this->db->where('ok_tuju',0);
+        }
         if($mode == 'adj'){
             $this->db->where('data_ok', 1);
             $this->db->where('ok_valid', 0); 
