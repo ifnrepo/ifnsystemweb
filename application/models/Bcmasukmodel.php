@@ -64,6 +64,8 @@ class Bcmasukmodel extends CI_Model
 
         if ($this->session->userdata('jnsbc') != 'Y') {
             $this->db->where("tb_header.jns_bc", $this->session->userdata('jnsbc'));
+        }else{
+            $this->db->where_in("tb_header.jns_bc", [23, 262, 40]);
         }
 
         $this->db->where('tb_header.data_ok', 1);
