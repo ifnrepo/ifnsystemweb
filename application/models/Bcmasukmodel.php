@@ -48,19 +48,22 @@ class Bcmasukmodel extends CI_Model
         $this->db->where('tb_detail.id_header', $id);
         return $this->db->get('tb_detail');
     }
-    public function getdataexcel()
+    public function getdata_export()
     {
+        $tglawal = $this->session->userdata('tglawal');
+        $tglakhir = $this->session->userdata('tglakhir');
+
         $this->db->select('tb_detail.*, tb_header.*, barang.nama_barang, barang.nama_alias, barang.kode, satuan.kodesatuan, supplier.nama_supplier, ref_mt_uang.mt_uang as xmtuang');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->join('ref_mt_uang', 'ref_mt_uang.id = tb_header.mtuang', 'left');
+        $this->db->where("tb_header.tgl_bc between '" . tglmysql($tglawal) . "' AND '" . tglmysql($tglakhir) . "' ");
         $this->db->where('trim(tb_header.nomor_bc) !=', '');
 
-
         if ($this->session->userdata('jnsbc') != 'Y') {
-            $this->db->where('tb_header.jns_bc', $this->session->userdata('jnsbc'));
+            $this->db->where("tb_header.jns_bc", $this->session->userdata('jnsbc'));
         }
 
         $this->db->where('tb_header.data_ok', 1);
@@ -69,6 +72,8 @@ class Bcmasukmodel extends CI_Model
 
         return $this->db->get('tb_detail');
     }
+
+
 
     // public function getdataexcel()
     // {

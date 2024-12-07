@@ -186,7 +186,7 @@ class Bckeluar extends CI_Controller
         $sheet->getStyle('N2:O2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('N2:O2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
-        $bc = $this->bckeluarmodel->getdataexcel();
+        $bc = $this->bckeluarmodel->getdata_export();
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
@@ -283,7 +283,7 @@ class Bckeluar extends CI_Controller
         $pdf->Cell(30, 6, 'USD', 1, 0, 'C');
         $pdf->Ln(6);
 
-        $bc = $this->bckeluarmodel->getdataexcel();
+        $bc = $this->bckeluarmodel->getdata_export();
 
         $no = 1;
 
