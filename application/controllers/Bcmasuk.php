@@ -158,7 +158,7 @@ class Bcmasuk extends CI_Controller
         $sheet->getStyle('N2:O2')->getAlignment()->setHorizontal(Alignment::HORIZONTAL_CENTER);
         $sheet->getStyle('N2:O2')->getAlignment()->setVertical(Alignment::VERTICAL_CENTER);
 
-        $bcmasuk = $this->bcmasukmodel->getdataexcel();
+        $bcmasuk = $this->bcmasukmodel->getdata_export();
         $no = 1;
 
 
@@ -255,7 +255,7 @@ class Bcmasuk extends CI_Controller
         $pdf->Cell(30, 6, 'USD', 1, 0, 'C');
         $pdf->Ln(6);
 
-        $bcmasuk = $this->bcmasukmodel->getdataexcel();
+        $bcmasuk = $this->bcmasukmodel->getdata_export();
 
         $no = 1;
 
