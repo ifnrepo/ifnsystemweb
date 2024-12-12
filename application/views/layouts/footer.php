@@ -65,7 +65,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1733219849'; ?>
+<?php $updatejs = '1733219852'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->

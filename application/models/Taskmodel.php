@@ -4,6 +4,7 @@ class Taskmodel extends CI_Model
     public function getdatabaru($mode){
         $lvluser = datauser($this->session->userdata('id'),'id_level_user');
         $hakttdpb = arrdep(datauser($this->session->userdata('id'),'hakdepartemen'));
+        $hakcekpb = arrdep(datauser($this->session->userdata('id'),'cekpb'));
         $this->db->where('id_perusahaan', IDPERUSAHAAN);
         if($mode != 'cekbc'){
             $this->db->where('kode_dok', $mode);
@@ -14,7 +15,8 @@ class Taskmodel extends CI_Model
         }
         if($mode == 'adj'){
             $this->db->where('data_ok', 1);
-            $this->db->where('ok_valid', 0); 
+            $this->db->where('ok_valid', 0);
+            $this->db->where_in('dept_id', $hakttdpb);
         }
         if($mode == 'po'){
             $this->db->where('data_ok', 1);
@@ -24,8 +26,8 @@ class Taskmodel extends CI_Model
             if($lvluser >= 2){
                 $this->db->where('data_ok', 1);
                 $this->db->where('ok_valid', 0);
-                if(count($hakttdpb) > 0){
-                    $this->db->where_in('dept_id', $hakttdpb);
+                if(count($hakcekpb) > 0){
+                    $this->db->where_in('dept_id', $hakcekpb);
                 }else{
                     $this->db->where('data_ok', 99);
                 }
@@ -232,6 +234,153 @@ class Taskmodel extends CI_Model
         }
         $this->db->order_by('tgl','DESC');
         $query = $this->db->get('tb_header');
+        return $query;
+    }
+    public function getuntukvalidasi(){
+        $query = 0;
+        $lvluser = datauser($this->session->userdata('id'),'id_level_user');
+        $hakttdpb = arrdep(datauser($this->session->userdata('id'),'hakdepartemen'));
+        $hakcekpb = arrdep(datauser($this->session->userdata('id'),'cekpb'));
+        for($ini=0;$ini<5;$ini++){
+            switch ($ini) {
+                case 0:
+                    $mode = 'pb';
+                    break;
+                case 1:
+                    $mode = 'po';
+                    break;
+                case 2:
+                    $mode = 'adj';
+                    break;
+                case 3:
+                    $mode = 'cekbc';
+                    break;
+                case 4:
+                    $mode = 'bbl';
+                    break;
+                
+                default:
+                    # code...
+                    break;
+            }
+            //Cek Validasi PB
+            if($mode=='pb'){
+                $this->db->where('id_perusahaan', IDPERUSAHAAN);
+                if($lvluser >= 2){
+                    $this->db->where('kode_dok','pb');
+                    $this->db->where('data_ok', 1);
+                    $this->db->where('ok_valid', 0);
+                    if(count($hakttdpb) > 0){
+                        $this->db->where_in('dept_id', $hakcekpb);
+                    }else{
+                        $this->db->where('data_ok', 99);
+                    }
+                }else{
+                    $this->db->where('data_ok', 99);
+                }
+                $query += $this->db->get('tb_header')->num_rows();
+            }
+            //Cek Validasi PO
+            if($mode=='po' && datauser($this->session->userdata('id'),'cekpo')==1){
+                $this->db->where('id_perusahaan', IDPERUSAHAAN);
+                $this->db->where('data_ok', 1);
+                $this->db->where('ok_valid', 0);
+                $query += $this->db->get('tb_header')->num_rows();
+            }
+            //Cek Validasi ADJ
+            if($mode == 'adj' && datauser($this->session->userdata('id'),'cekadj')==1){
+                $this->db->where('data_ok', 1);
+                $this->db->where('ok_valid', 0);
+                $this->db->where_in('dept_id', $hakttdpb);
+                $query += $this->db->get('tb_header')->num_rows();
+            }
+            //Cek Validasi Oleh BC
+            if($mode=='cekbc' && datauser($this->session->userdata('id'),'cekpakaibc')==1){
+                $this->db->where('kode_dok', 'IB');
+                $this->db->where('data_ok',1);
+                $this->db->where('ok_tuju',0);
+                $query += $this->db->get('tb_header')->num_rows();
+            }
+            if($mode == 'bbl'){ 
+                $cekbl = datauser($this->session->userdata('id'),'cekbbl');
+                $cekpp = datauser($this->session->userdata('id'),'cekpp');
+                $cekut = datauser($this->session->userdata('id'),'cekut');
+                $cekpc = datauser($this->session->userdata('id'),'cekpc');
+                $cekmng = arrdep(datauser($this->session->userdata('id'),'bbl_cekmng'));
+                $ceksgm = arrdep(datauser($this->session->userdata('id'),'bbl_ceksgm'));
+                if($cekbl==1 || $cekpp==1 || $cekut==1 || $cekpc==1 || count($cekmng) > 0 || count($ceksgm) > 0 ){
+                    //Untuk Validasi Kepala Departemen
+                    if($cekbl==1){
+                        $this->db->where('data_ok', 0);
+                        $this->db->where('ok_valid', 0);
+                        $this->db->where('ok_tuju', 0);
+                        $this->db->where('ok_pc', 0);
+                        $this->db->where('ok_bb', 1);
+                        $this->db->where_in('dept_id',$hakttdpb);
+                    }else 
+                    //Untuk Validasi Manager PPIC dan UTL
+                    if($cekut==1 || $cekpp==1){
+                        $this->db->where('data_ok', 1);
+                        if($cekpp==1){
+                            $this->db->group_start();
+                                if(count($cekmng)>0){
+                                    $this->db->or_where('ok_pp',1);
+                                }
+                                $this->db->or_group_start();
+                                    $this->db->where('ok_pp',0);
+                                    $this->db->where('bbl_pp',1);
+                                $this->db->group_end();
+                            $this->db->group_end();
+                            if(count($cekmng)>0){
+                                $this->db->where_in('dept_bbl',$cekmng);
+                            }
+                        }else{
+                            if($cekut==1){
+                                $this->db->group_start();
+                                    $this->db->where('ok_pp',0);
+                                    $this->db->or_group_start();
+                                        $this->db->where('ok_pp',0);
+                                        $this->db->where('bbl_pp',2);
+                                    $this->db->group_end();
+                                $this->db->group_end();
+                            }else{
+                                $this->db->where('ok_pp',1);
+                                $this->db->where_in('dept_bbl', arrdep($this->session->userdata('hakdepartemen')));
+                            }
+                        }
+                        $this->db->where('ok_valid', 0);
+                        $this->db->where('ok_tuju', 0);
+                        $this->db->where('ok_pc', 0);
+                    }else 
+                    if(count($cekmng) > 0){
+                        $this->db->where('data_ok', 1);
+                        $this->db->where('ok_valid', 0);
+                        $this->db->where('ok_tuju', 0);
+                        $this->db->where('ok_pc', 0);
+                        $this->db->where('ok_bb', 1);
+                        $this->db->where('ok_pp', 1);
+                        $this->db->where_in('dept_bbl',$cekmng);
+                    }else 
+                    if(count($ceksgm) > 0){
+                        $this->db->where('data_ok', 1);
+                        $this->db->where('ok_valid', 1);
+                        $this->db->where('ok_tuju', 0);
+                        $this->db->where('ok_pc', 0);
+                        $this->db->where('ok_bb', 1);
+                        $this->db->where_in('dept_bbl',$ceksgm);
+                    }else 
+                    //Untuk Validasi Manager Purchasing
+                    if($cekpc==1){
+                        $this->db->where('data_ok', 1);
+                        $this->db->where('ok_pp', 1);
+                        $this->db->where('ok_valid', 1);
+                        $this->db->where('ok_tuju', 1);
+                        $this->db->where('ok_pc', 0);
+                    }
+                    $query += $this->db->get('tb_header')->num_rows();
+                }
+            }
+        }
         return $query;
     }
     public function cekfield($id, $kolom, $nilai)

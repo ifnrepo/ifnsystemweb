@@ -11,6 +11,8 @@ class Main extends CI_Controller {
         }
         // $this->load->model('personilmodel');
         $this->load->model('helper_model','helpermodel');
+        $this->load->model('taskmodel');
+        $this->load->model('userappsmodel','usermodel');
     }
 	public function index()
 	{
@@ -24,6 +26,7 @@ class Main extends CI_Controller {
 		$this->load->view('layouts/footer',$footer);
 	}
     public function ceknotif(){
-        echo 0;
+        $jumlah = $this->taskmodel->getuntukvalidasi();
+        echo $jumlah;
     }
 }

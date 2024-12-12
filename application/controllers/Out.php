@@ -112,7 +112,7 @@ class Out extends CI_Controller {
         echo json_encode($cocok);
     }
     public function getdatadetail($id){
-        $data['header'] = $this->out_model->getdatabyid($id);
+        $data['header'] = $this->out_model->getdatabyid($id)->row_array();
         $data['detail'] = $this->out_model->getdatadetail($id);
         $this->load->view('out/viewdetailout2',$data);
     }
@@ -408,7 +408,7 @@ class Out extends CI_Controller {
         $pdf->ln(6);
         $pdf->Cell(190,1,'',1,0,'',1);
         $pdf->ln(1);
-        $header = $this->out_model->getdatabyid($id);
+        $header = $this->out_model->getdatabyid($id)->row_array();
         $isi = 'Nobon '.$header['nomor_dok']."\r\n".'Dikeluarkan Oleh : '.datauser($header['user_ok'],'name').'@'."\r\n".tglmysql2($header['tgl_ok']);
         $isi .= "\r\n".'Diterima Oleh : '.datauser($header['user_tuju'],'name').'@'."\r\n".tglmysql2($header['tgl_tuju']);
         $qr = $this->cetakqr2($isi,$header['id']);
@@ -470,7 +470,7 @@ class Out extends CI_Controller {
             $pdf->Cell(8,6,'','LRB',0);
             $pdf->Cell(16,6,rupiah($det['pcs'],0),'LRB',0,'R');
             $pdf->Cell(16,6,rupiah($det['kgs'],0),'LBR',0,'R');
-            $pdf->Cell(33,6,$det['keterangan'],'LBR',1,'R');
+            $pdf->Cell(33,6,$det['keterangan'],'LBR',1);
         }
         $pdf->ln(2);
         $pdf->SetFont('Lato','',8);

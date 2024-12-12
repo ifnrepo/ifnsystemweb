@@ -83,6 +83,7 @@ class Bckeluar extends CI_Controller
         $data = $this->bckeluarmodel->getdetailbyid($id);
         $html = "";
         $no = 1;
+        $jmlkgs = 0;$jmlpcs=0;$jmlnilai=0;$jmlxnilai=0;
         foreach ($data->result_array() as $datadet) {
             $sku = ($datadet['po'] == '') ? $datadet['brg_id'] : ($datadet['po'] . '#' . $datadet['item'] . ' ' . ($datadet['dis'] == 0 ? '' : ' dis ' . $datadet['dis']));
             $pengali = $datadet['kodesatuan'] == 'KGS' ? $datadet['kgs'] : $datadet['pcs'];
@@ -99,10 +100,22 @@ class Bckeluar extends CI_Controller
             $html .= "<td class='text-right'>" . rupiah($datadet['pcs'], 0) . "</td>";
             $html .= "<td class='text-right'>" . rupiah($datadet['kgs'], 2) . "</td>";
             $html .= "<td>" . $datadet['nohs'] . "</td>";
-            $html .= "<td class='text-right'>" . rupiah($datadet['harga'], 4) . "</td>";
-            $html .= "<td class='text-right'>" . rupiah($datadet['harga'] * $pengali, 2) . "</td>";
+            $html .= "<td class='text-right'>" . rupiah($datadet['harga']/$pengali, 4) . "</td>";
+            $html .= "<td class='text-right'>" . rupiah($datadet['harga'], 2) . "</td>";
             $html .= "</tr>";
+            $jmlkgs += $datadet['kgs'];
+            $jmlpcs += $datadet['pcs'];
+            $jmlnilai += $datadet['harga']/$pengali;
+            $jmlxnilai += $datadet['harga'];
         }
+        $html .= "<tr class='bg-teal-lt'>";
+        $html .= "<td colspan='4' class='font-bold text-right text-black'>TOTAL</td>";
+        $html .= "<td class='text-right text-black font-bold'>".rupiah($jmlpcs,0)."</td>";
+        $html .= "<td class='text-right text-black font-bold'>".rupiah($jmlkgs,2)."</td>";
+        $html .= "<td class='text-right text-black'></td>";
+        $html .= "<td class='text-right text-black'></td>";
+        $html .= "<td class='text-right text-black font-bold'>".rupiah($jmlxnilai,2)."</td>";
+        $html .= "</tr>";
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }

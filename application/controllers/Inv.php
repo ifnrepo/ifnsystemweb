@@ -41,6 +41,7 @@ class Inv extends CI_Controller
             $data['data'] = null;
             $data['kat'] = null;
             $data['katbece'] = null;
+            $data['kontbece'] = null;
             $data['ifndln'] = null;
             $data['gbg'] = '';
             $data['kategoricari'] = 'Cari Barang';
@@ -50,6 +51,7 @@ class Inv extends CI_Controller
             $data['data'] = $this->invmodel->getdata();
             $data['kat'] = $this->invmodel->getdatakategori();
             $data['katbece'] = $this->invmodel->getdatabc();
+            $data['kontbece'] = $this->invmodel->getdatakontbc();
             $data['ifndln'] = $this->session->userdata('ifndln');
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
@@ -84,6 +86,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('filterkat', $_POST['kat']);
         $this->session->set_userdata('kategoricari', $_POST['kcari']);
         $this->session->set_userdata('nomorbcnya', $_POST['nobcnya']);
+        $this->session->set_userdata('kontrakbcnya', $_POST['kontbc']);
         $this->session->set_userdata('ifndln', $_POST['ifndln']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
