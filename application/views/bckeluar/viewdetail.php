@@ -3,7 +3,10 @@
         <!-- <div class="card-header"> -->
             <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                 <li class="nav-item">
-                <a href="#tabs-profile-8" class="nav-link active text-blue font-bold" data-bs-toggle="tab">Detail Dokumen</a>
+                <a href="#tabs-profile-8" class="nav-link active text-blue font-bold" data-bs-toggle="tab">Header</a>
+                </li>
+                <li class="nav-item">
+                <a href="#tabs-header-8" class="nav-link text-blue font-bold" data-bs-toggle="tab">Detail Barang</a>
                 </li>
                 <li class="nav-item">
                 <a href="#tabs-home-8" class="nav-link text-blue font-bold" data-bs-toggle="tab">Riwayat Dokumen</a>
@@ -24,22 +27,6 @@
                                 <div class="text-secondary"><?= $riw; ?></div>
                             </li>
                         <?php $no++; } ?>
-                      <!-- <li class="step-item">
-                        <div class="h4 m-0">Dibuat Oleh</div>
-                        <div class="text-secondary">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus culpa cum expedita ipsam laborum nam ratione reprehenderit sed sint tenetur!</div>
-                      </li>
-                      <li class="step-item">
-                        <div class="h4 m-0">Disetujui Oleh</div>
-                        <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
-                      </li>
-                      <li class="step-item active">
-                        <div class="h4 m-0">Out for delivery</div>
-                        <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
-                      </li>
-                      <li class="step-item">
-                        <div class="h4 m-0">Finalized</div>
-                        <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
-                      </li> -->
                     </ul>
                 </div>
                 <div class="tab-pane fade active show p-0" id="tabs-profile-8">
@@ -276,43 +263,94 @@
                                         </div>
                                     </div>
                                 </div>
-                            </div>
+                            </div> 
                             <hr class="m-1">
                             <div>
-                                <h4 class="font-bold m-1" >Detail Barang</h4>
-                                <div class="container container-slim py-4" id="syncloader">
-                                    <div class="text-center">
-                                        <div class="mb-3">
+                                <div class="row">
+                                    <div class="col-4">
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-5 col-form-label font-bold">No Segel</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['nomor_segel']; ?>" placeholder="Nomor Segel">
+                                            </div>
                                         </div>
-                                        <div class="text-secondary mb-3">Fetching data, Please wait..</div>
-                                        <div class="progress progress-sm">
-                                        <div class="progress-bar progress-bar-indeterminate"></div>
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-5 col-form-label font-bold">Tanggal Segel</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= tglmysql($detail['tgl_segel']) ?>" placeholder="Tanggal Segel">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-5 col-form-label font-bold">No Kontainer</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['nomor_kontainer']; ?>" placeholder="Nomor Kontainer">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-5 col-form-label font-bold">Ukuran Kontainer</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['ukuran_kontainer'] ?>" placeholder="Ukuran Kontainer">
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-4">
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-5 col-form-label font-bold">No Pengangkutan</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['nomor_pengangkutan'] ?>" placeholder="Pengangkutan">
+                                            </div>
+                                        </div>
+                                        <div class="row mb-0 font-kecil">
+                                            <label class="col-5 col-form-label font-bold">No Seal</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['nomor_seal'] ?>" placeholder="Nomor Seal">
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <table id="tabel" class="table order-column table-hover datatable7 mt-1 hilang" style="width: 100% !important;">
-                                    <thead>
-                                        <tr class="text-left">
-                                            <!-- <th>Tgl</th> -->
-                                            <th class="text-center">No</th>
-                                            <th class="text-left">Spek</th>
-                                            <th class="text-left">SKU</th>
-                                            <th class="text-left">Sat</th>
-                                            <th class="text-left">Jumlah</th>
-                                            <th class="text-left">Berat</th>
-                                            <th class="text-left">HS</th>
-                                            <th class="text-left">Nilai</th>
-                                            <th class="text-left">Subtotal</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                      
-                                    </tbody>
-                                </table>
                             </div>
                         </div>
                     </div>
-                    
+                </div>
+                <div class="tab-pane fade" id="tabs-header-8">
+                    <!-- <div> -->
+                    <div class="card">
+                        <div class="card-body p-1">
+                            <h4 class="font-bold" >Detail Barang</h4>
+                            <div class="container container-slim py-4" id="syncloader">
+                                <div class="text-center">
+                                    <div class="mb-0">
+                                    <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?= base_url() . 'assets/image/logosystem3.png'; ?>" height="30" alt=""></a>
+                                    </div>
+                                    <div class="text-secondary mb-3">Fetching data, Please wait..</div>
+                                    <div class="progress progress-sm">
+                                        <div class="progress-bar progress-bar-indeterminate"></div>
+                                    </div>
+                                </div>
+                            </div>
+                            <table id="tabel" class="table order-column table-hover mt-1 hilang" style="width: 100% !important;">
+                                <thead class="sticky-top">
+                                    <tr class="text-left">
+                                        <!-- <th>Tgl</th> -->
+                                        <th class="text-center bg-blue-lt">No</th>
+                                        <th class="text-left bg-blue-lt">Spek</th>
+                                        <th class="text-left bg-blue-lt">SKU</th>
+                                        <th class="text-left bg-blue-lt">Sat</th>
+                                        <th class="text-left bg-blue-lt">Jumlah</th>
+                                        <th class="text-left bg-blue-lt">Berat</th>
+                                        <th class="text-left bg-blue-lt">HS</th>
+                                        <th class="text-left bg-blue-lt">Nilai (<?= $detail['xmt_uang']; ?>)</th>
+                                        <th class="text-left bg-blue-lt">Subtotal (<?= $detail['xmt_uang']; ?>)</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
+
+                                </tbody>
+                            </table>
+                        </div>   
+                    </div>                   
                 </div>
                 <div class="tab-pane fade" id="tabs-activity-8">
                     <h4>Activity tab</h4>
@@ -327,11 +365,17 @@
 <script>
     $(document).ready(function() {
         $("#tabel").addClass('hilang');
-        $("#syncloader").removeClass('hilang');
-        setTimeout(() => {
-            var det = $("#iddet").val();
-            getdatadetail(det);
-        }, 500);
+        $(document).on('shown.bs.tab', 'a[data-bs-toggle="tab"]', function (e) {
+            var anchor = $(e.target).attr( 'href' );
+            if(anchor=='#tabs-header-8' && $("#tabel").hasClass('hilang')){
+                $("#syncloader").removeClass('hilang');
+                $("#tabel").addClass('hilang');
+                setTimeout(() => {
+                    var det = $("#iddet").val();
+                    getdatadetail(det);
+                }, 500);
+            }
+        })
     })
     $("#viewdokhamat").click(function(){
         if($("#cekkolape").hasClass('hilang')){
