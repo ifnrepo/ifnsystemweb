@@ -211,15 +211,17 @@ class Inv extends CI_Controller
 
         // Buat header tabel nya pada baris ke 3    
         $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
-        $sheet->setCellValue('B2', "ID"); // Set kolom B3 dengan tulisan "KODE"    
-        $sheet->setCellValue('C2', "SPESIFIKASI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('D2', "SKU");
-        $sheet->setCellValue('E2', "NOMOR IB");
-        $sheet->setCellValue('F2', "INSNO");
-        $sheet->setCellValue('G2', "SATUAN");
-        $sheet->setCellValue('H2', "QTY");
-        $sheet->setCellValue('I2', "KGS");
-        $sheet->setCellValue('J2', "NAMA KATEGORI/NETTYPE");
+        $sheet->setCellValue('B2', "KODE BARANG"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C2', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D2', "SATUAN");
+        $sheet->setCellValue('E2', "SALDO AWAL");
+        $sheet->setCellValue('F2', "PEMASUKAN");
+        $sheet->setCellValue('G2', "PENGELUARAN");
+        $sheet->setCellValue('H2', "ADJ");
+        $sheet->setCellValue('I2', "SALDO AKHIR");
+        $sheet->setCellValue('J2', "SO");
+        $sheet->setCellValue('K2', "SELISIH");
+        $sheet->setCellValue('L2', "KETERANGAN");
         // Panggil model Get Data   
         $inv = $this->invmodel->getdata();
         $no = 1;
@@ -230,18 +232,24 @@ class Inv extends CI_Controller
         // Set baris pertama untuk isi tabel adalah baris ke 3    
         foreach ($inv->result_array() as $data) {
             $spekbarang = $data['nama_barang'] == null ? $data['spek'] : substr($data['nama_barang'], 0, 75);
+            $saldo_awal = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : ($data['pcs'] ?? 0);
+            $pemasukan = $data['kodesatuan'] == 'KGS' ? $data['kgsin'] : ($data['pcsin'] ?? 0);
+            $pengeluaran = $data['kodesatuan'] == 'KGS' ? $data['kgsout'] : ($data['pcsout'] ?? 0);
+            $saldo_akhir = $saldo_awal + $pemasukan - $pengeluaran;
             $sku = viewsku(id: $data['kode'], po: $data['po'], no: $data['item'], dis: $data['dis']);
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, $data['id_barang']);
+            $sheet->setCellValue('B' . $numrow, $sku);
             $sheet->setCellValue('C' . $numrow, $spekbarang);
-            $sheet->setCellValue('D' . $numrow, $sku);
-            $sheet->setCellValue('E' . $numrow, $data['nobontr']);
-            $sheet->setCellValue('F' . $numrow, $data['insno']);
-            $sheet->setCellValue('G' . $numrow, $data['kodesatuan']);
-            $sheet->setCellValue('H' . $numrow, $data['pcs'] + $data['pcsin'] - $data['pcsout']);
-            $sheet->setCellValue('I' . $numrow, $data['kgs'] + $data['kgsin'] - $data['kgsout']);
-            $sheet->setCellValue('J' . $numrow, $data['name_kategori']);
+            $sheet->setCellValue('D' . $numrow, $data['kodesatuan']);
+            $sheet->setCellValue('E' . $numrow, $saldo_awal);
+            $sheet->setCellValue('F' . $numrow, $pemasukan);
+            $sheet->setCellValue('G' . $numrow, $pengeluaran);
+            $sheet->setCellValue('H' . $numrow, '-');
+            $sheet->setCellValue('I' . $numrow, $saldo_akhir);
+            $sheet->setCellValue('J' . $numrow, '-');
+            $sheet->setCellValue('K' . $numrow, '-');
+            $sheet->setCellValue('L' . $numrow, '-');
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    
@@ -268,7 +276,6 @@ class Inv extends CI_Controller
     {
         $pdf = new PDF('L', 'mm', 'A4');
         $pdf->AliasNbPages();
-        // $pdf->setMargins(5,5,5);
         $pdf->AddFont('Lato', '', 'Lato-Regular.php');
         $pdf->AddFont('Latob', '', 'Lato-Bold.php');
         $pdf->SetFillColor(7, 178, 251);
@@ -276,37 +283,57 @@ class Inv extends CI_Controller
         // $isi = $this->jualmodel->getrekap();
         $pdf->SetFillColor(205, 205, 205);
         $pdf->AddPage();
-        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 155, 5, 55);
+        $pdf->Image(base_url() . 'assets/image/logodepanK.png', 0, 5, 55);
         $pdf->Cell(30, 18, 'DATA INVENTORY');
         $pdf->ln(12);
-        $pdf->SetFont('Latob', '', 10);
-        $pdf->Cell(10, 8, 'No', 1, 0, 'C');
-        $pdf->Cell(14, 8, 'Id', 1, 0, 'C');
-        $pdf->Cell(115, 8, 'Spesifikasi', 1, 0, 'C');
-        $pdf->Cell(23, 8, 'Sku', 1, 0, 'C');
-        $pdf->Cell(38, 8, 'No IB', 1, 0, 'C');
-        // $pdf->Cell(25, 8, 'Insno', 1, 0, 'C');
-        $pdf->Cell(12, 8, 'Satuan', 1, 0, 'C');
-        $pdf->Cell(13, 8, 'Qty', 1, 0, 'C');
-        $pdf->Cell(13, 8, 'Kgs', 1, 0, 'C');
-        $pdf->Cell(35, 8, 'Kategori', 1, 0, 'C');
-        $pdf->SetFont('Lato', '', 10);
+        $pdf->SetFont('Arial', 'I', 6);
+        $pdf->Cell(7, 8, 'No', 1, 0, 'C');
+        $pdf->Cell(14, 8, 'KODE BRG', 1, 0, 'C');
+        $pdf->Cell(90, 8, 'NAMA BARANG', 1, 0, 'C');
+        $pdf->Cell(7, 8, 'SAT', 1, 0, 'C');
+        $pdf->Cell(19, 8, 'SALDO AWAL', 1, 0, 'C');
+        $pdf->Cell(19, 8, 'PEMASUKAN', 1, 0, 'C');
+        $pdf->Cell(20, 8, 'PENGELUARAN', 1, 0, 'C');
+        $pdf->Cell(19, 8, 'ADJ', 1, 0, 'C');
+        $pdf->Cell(19, 8, 'SALDO AKHIR', 1, 0, 'C');
+        $pdf->Cell(19, 8, 'SO', 1, 0, 'C');
+        $pdf->Cell(19, 8, 'SELISIH', 1, 0, 'C');
+        $pdf->Cell(19, 8, 'KET', 1, 0, 'C');
+        $pdf->SetFont('Arial', 'I', 6);
         $pdf->ln(8);
-        $inv = $this->invmodel->getdata();
+        // $inv = $this->invmodel->getexport_data();
+        $inv = $this->invmodel->getexport_data();
         $no = 1;
         foreach ($inv->result_array() as $det) {
             $spekbarang = $det['nama_barang'] == null ? $det['spek'] : substr($det['nama_barang'], 0, 75);
+            $saldo_awal = $det['kodesatuan'] == 'KGS' ? $det['kgs'] : ($det['pcs'] ?? 0);
+            $pemasukan = $det['kodesatuan'] == 'KGS' ? $det['kgsin'] : ($det['pcsin'] ?? 0);
+            $pengeluaran = $det['kodesatuan'] == 'KGS' ? $det['kgsout'] : ($det['pcsout'] ?? 0);
+            $saldo_akhir = $saldo_awal + $pemasukan - $pengeluaran;
             $sku = viewsku(id: $det['kode'], po: $det['po'], no: $det['item'], dis: $det['dis']);
-            $pdf->Cell(10, 6, $no++, 1, 0, 'C');
-            $pdf->Cell(14, 6, $det['id_barang'], 1);
-            $pdf->Cell(115, 6, $spekbarang, 1);
-            $pdf->Cell(23, 6, $sku, 1);
-            $pdf->Cell(38, 6, $det['nobontr'], 1);
-            // $pdf->Cell(25, 6, $det['insno'], 1);
-            $pdf->Cell(12, 6, $det['kodesatuan'], 1);
-            $pdf->Cell(13, 6, $det['pcs'] + $det['pcsin'] - $det['pcsout'], 1);
-            $pdf->Cell(13, 6, $det['kgs'] + $det['kgsin'] - $det['kgsout'], 1);
-            $pdf->Cell(35, 6, $det['name_kategori'], 1);
+            $pdf->Cell(7, 6, $no++, 1, 0, 'C');
+            $pdf->Cell(14, 6, $sku, 1);
+            $pdf->Cell(90, 6, $spekbarang, 1);
+            $pdf->Cell(7, 6, $det['kodesatuan'], 1);
+            $pdf->Cell(19, 6, $saldo_awal, 1, 0, 'R');
+            $pdf->Cell(19, 6, $pemasukan, 1, 0, 'R');
+            $pdf->Cell(20, 6, $pengeluaran, 1, 0, 'R');
+            $pdf->Cell(19, 6, '-', 1, 0, 'C');
+            $pdf->Cell(19, 6, $saldo_akhir, 1, 0, 'R');
+            $pdf->Cell(19, 6, '-', 1, 0, 'C');
+            $pdf->Cell(19, 6, '', 1, 0, 'C');
+            $pdf->Cell(19, 6, '-', 1, 0, 'C');
+
+
+
+            // $pdf->Cell(18, 6, $saldo_akhir, 1, 0, 'R');
+
+            // $pdf->Cell(25, 6, $det['kgs_awal'], 1);
+            // // $pdf->Cell(25, 6, $det['insno'], 1);
+            // $pdf->Cell(12, 6, $det['kodesatuan'], 1);
+            // $pdf->Cell(13, 6, $det['pcs'] + $det['pcsin'] - $det['pcsout'], 1);
+            // $pdf->Cell(13, 6, $det['kgs'] + $det['kgsin'] - $det['kgsout'], 1);
+            // $pdf->Cell(35, 6, $det['name_kategori'], 1);
             $pdf->ln(6);
         }
         $pdf->SetFont('Lato', '', 8);
