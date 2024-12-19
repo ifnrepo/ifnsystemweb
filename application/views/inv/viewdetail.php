@@ -12,11 +12,15 @@
             <?php $spekbarang = $header['nama_barang'] == null ? $header['spek'] : $header['nama_barang']; ?>
             <?php $hilangtombol = $this->session->userdata('viewharga')==1 ? '' : 'hilang'; ?>
             <?php $nobc = trim($header['nomor_bc'])!='' ? 'BC.'.trim($header['jns_bc']).'-'.$header['nomor_bc'].'('.tglmysql($header['tgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
-            <?php $nobcx = trim($header['xbc'])!='' ? 'No BC. '.$header['xbc'].'('.tglmysql($header['xtgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
+            <?php $nobcx = trim($header['xbc'])!='' && trim($header['nomor_bc'])=='' ? 'No BC. '.$header['xbc'].'('.tglmysql($header['xtgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
             <h4 class="mb-0 text-teal-green"><?= $header['idd'] . " # " . $spekbarang; ?></h4>
             <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?><?= $nobcx; ?></h4>
             <hr class="m-0">
-            <span class="font-12 text-red">KATEGORI : <?= $header['name_kategori']; ?></span><br>
+            <span class="font-12 text-red mr-4">KATEGORI : <?= $header['name_kategori']; ?></span>
+            <?php if($header['safety_stock']>0): ?>
+            <span class="font-12 text-teal">( SAFETY STOCK : <?= rupiah($header['safety_stock'],0).' '.$header['kodesatuan']; ?> )</span>
+            <?php endif; ?>
+            <br>
         </div>
         <div class="col-2 <?php if($this->session->userdata('currdept')=='GM' || $this->session->userdata('currdept')=='SP'){ echo "hilang"; } ?>">
             <a href="#kolap" class="btn btn-sm btn-info" id="cekkolap" data-toggle="collapse" aria-expanded="false">View BOM</a>

@@ -64,6 +64,9 @@ $("#katbar").change(function () {
 $("#nomorbcnya").change(function () {
 	$("#updateinv").click();
 });
+$("#kontrakbcnya").change(function () {
+	$("#updateinv").click();
+});
 $("#tglawal").datepicker({
 	autoclose: true,
 	format: "dd-mm-yyyy",
@@ -81,6 +84,7 @@ $("#updateinv").click(function () {
 	var katcari = $("input:radio[name=radios-inline]:checked").val();
 	// $("#textcari").val("");
 	var nomorbcnya = $("#nomorbcnya").val();
+	var kontrakbcnya = $("#kontrakbcnya").val();
 	var textcari = $("#textcari").val();
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
@@ -106,10 +110,11 @@ $("#updateinv").click(function () {
 			cari: textcari,
 			nobcnya: nomorbcnya,
 			ifndln: ifndl,
+			kontbc: kontrakbcnya,
 		},
 		success: function (data) {
 			// alert(data);
-			console.log("IFNDLN :" + ifndl);
+			console.log("KONTRAK" + kontrakbcnya);
 			window.location.reload();
 			// $("#body-table").html(data.datagroup).show();
 		},

@@ -64,7 +64,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-3">
                   <h4 class="mb-1 font-kecil">Kategori Barang</h4>
                   <span class="font-kecil">
-                    <div class="font-kecil">
+                    <div class="font-kecil" style="margin-bottom: 2px !important;">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="katbar" name="katbar">
                         <option value="X">Semua Kategori</option>
                         <?php if ($kat != null) : foreach ($kat->result_array() as $kate) {
@@ -77,23 +77,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </select>
                     </div>
                   </span>
-
-                </div>
-                <div class="col-3 ">
-                  <label class="form-check mt-1 mb-1 bg-teal-lt <?php if ($this->session->userdata('viewharga') != 1) {
-                                                                  echo "hilang";
-                                                                } ?>">
-                    <input class="form-check-input" type="checkbox" id="viewharga" <?php if ($this->session->userdata('invharga') == 1) {
-                                                                                      echo "checked";
-                                                                                    } ?>>
-                    <span class="form-check-label font-bold">Tampilkan Harga</span>
-                  </label>
-                  <label class="form-check mt-1 mb-1 bg-red-lt">
-                    <input class="form-check-input" type="checkbox" id="viewinv" <?php if ($this->session->userdata('viewinv') == 1) {
-                                                                                    echo "checked";
-                                                                                  } ?>>
-                    <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
-                  </label>
                   <?php $deptampil = ['GM', 'SP']; ?>
                   <select class="form-control form-select font-kecil font-bold bg-cyan-lt <?php if (!in_array($this->session->userdata('currdept'), $deptampil)) {
                                                                                             echo "hilang";
@@ -106,6 +89,38 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         ?>
                         <option value="<?= $bece['nomor_bc']; ?>" <?= $selek; ?>><?= $isi; ?></option>
                     <?php }
+                    endif; ?>
+                  </select>       
+                </div>
+                <div class="col-3 ">
+                  <label class="form-check mt-1 mb-1 bg-teal-lt <?php if ($this->session->userdata('viewharga') != 1) {
+                                                                  echo "hilang";
+                                                                } ?>">
+                    <input class="form-check-input" type="checkbox" id="viewharga" <?php if ($this->session->userdata('invharga') == 1) {
+                                                                                      echo "checked";
+                                                                                    } ?>>
+                    <span class="form-check-label font-bold">Tampilkan Harga</span>
+                  </label>
+                  <label class="form-check mt-1 mb-3 bg-red-lt">
+                    <input class="form-check-input" type="checkbox" id="viewinv" <?php if ($this->session->userdata('viewinv') == 1) {
+                                                                                    echo "checked";
+                                                                                  } ?>>
+                    <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
+                  </label>
+                  <?php $deptampil = ['GM']; ?>
+                  <select class="form-control form-select font-kecil font-bold bg-yellow-lt <?php if (!in_array($this->session->userdata('currdept'), $deptampil)) {
+                                                                                            echo "hilang";
+                                                                                          } ?>" id="kontrakbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
+                    <option value="X">Semua - Kontrak BC</option>
+                    <?php if ($kat != null) : foreach ($kontbece->result_array() as $bece) { ?>
+                        <?php
+                        $isi = trim($bece['nomor_kont']) != '' ? $bece['nomor_kont'] . '(' . $bece['tgl_kont'] . ')' : 'Semua';
+                        $value = trim($bece['nomor_kont']) != '' ? $bece['nomor_kont'] : 'X';
+                        $selek = $this->session->userdata('kontrakbcnya') == $bece['nomor_kont'] ? 'selected' : '';
+                        if($value != 'X'):
+                        ?>
+                        <option value="<?= $value; ?>" <?= $selek; ?>><?= $isi; ?></option>
+                    <?php endif; }
                     endif; ?>
                   </select>
                 </div>
