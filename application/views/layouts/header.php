@@ -639,7 +639,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 5); ?>" href="<?= base_url('bckeluar/clear'); ?>">
                       BC Keluar
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 10); ?>" href="<?= base_url('bcmaterial'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 10); ?>" href="<?= base_url('bcmaterial/clear'); ?>">
                       Material
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 11); ?>" href="<?= base_url('bcwip/clear'); ?>">

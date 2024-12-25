@@ -625,16 +625,6 @@ function cekNotif() {
 		url: base_url + "main/ceknotif",
 		type: "POST",
 		success: function (data, textStatus, jqXHR) {
-			// if ($.trim(data)) {
-			// 	var data = jQuery.parseJSON(data);
-			// 	console.log(data);
-			// 	notification = createNotification(
-			// 		data.title,
-			// 		data.icon,
-			// 		data.body,
-			// 		data.url,
-			// 	);
-			// }
 			if (data != 0) {
 				$("#notiftask").removeClass("hilang");
 			} else {

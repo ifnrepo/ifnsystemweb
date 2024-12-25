@@ -3,10 +3,13 @@
         <!-- <div class="card-header"> -->
             <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                 <li class="nav-item">
-                <a href="#tabs-profile-8" class="nav-link active text-blue font-bold" data-bs-toggle="tab">Detail Dokumen</a>
+                <a href="#tabs-profile-8" class="nav-link active font-bold bg-primary-lt btn-flat" data-bs-toggle="tab">Header</a>
                 </li>
                 <li class="nav-item">
-                <a href="#tabs-home-8" class="nav-link text-blue font-bold" data-bs-toggle="tab">Riwayat Dokumen</a>
+                <a href="#tabs-header-8" class="nav-link font-bold bg-success-lt btn-flat" data-bs-toggle="tab">Detail Barang</a>
+                </li>
+                <li class="nav-item">
+                <a href="#tabs-home-8" class="nav-link font-bold bg-warning-lt btn-flat" data-bs-toggle="tab">Riwayat Dokumen</a>
                 </li>
                 <li class="nav-item">
                 <a href="#tabs-activity-8" class="nav-link text-blue" data-bs-toggle="tab"></a>
@@ -17,6 +20,8 @@
             <div class="tab-content p-4">
                 <div class="tab-pane fade" id="tabs-home-8">
                     <!-- <div>Cursus turpis vestibulum, dui in pharetra vulputate id sed non turpis ultricies fringilla at sed facilisis lacus pellentesque purus nibh</div> -->
+                    <h4 class="font-bold m-1">Riwayat Dokumen</h4> 
+                    <hr class="m-0"></hr>
                     <ul class="steps steps-vertical font-kecil">
                         <?php $no=0; foreach ($riwayat as $riw) { ?>
                             <li class="step-item">
@@ -228,7 +233,6 @@
                                     </div>
                                 </div>
                             </div>
-                            <hr class="m-1">
                             <div>
                                 <div class="row">
                                     <div class="col-6">
@@ -253,50 +257,75 @@
                                                         <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= tglmysql($detail['tgl_kont']) ?>" placeholder="Tgl Kontrak">
                                                     </div>
                                                 </div>
-                                                <!-- <div class="col-9 mt-1">
-                                                </div> -->
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- <div class="col-3"></div> -->
                                 </div>
                             </div>
                             <hr class="m-1">
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane fade p-0" id="tabs-header-8">
+                    <div class="card">
+                        <div class="card-body p-1">
                             <div>
                                 <h4 class="font-bold m-1" >Detail Barang</h4>
-                                <table id="tabel" class="table order-column table-hover datatable7 mt-1" style="width: 100% !important;">
-                                    <thead>
+                                <div class="container container-slim py-4" id="syncloader">
+                                    <div class="text-center">
+                                        <div class="mb-0">
+                                        <a href="." class="navbar-brand navbar-brand-autodark"><img src="<?= base_url() . 'assets/image/logosystem3.png'; ?>" height="30" alt=""></a>
+                                        </div>
+                                        <div class="text-secondary mb-3">Fetching data, Please wait..</div>
+                                        <div class="progress progress-sm">
+                                            <div class="progress-bar progress-bar-indeterminate"></div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <table id="tabel" class="table order-column table-hover datatable7 mt-1 hilang" style="width: 100% !important;">
+                                    <thead class="sticky-top">
                                         <tr class="text-left">
                                             <!-- <th>Tgl</th> -->
-                                            <th class="text-center">No</th>
-                                            <th class="text-left">Spek</th>
-                                            <th class="text-left">SKU</th>
-                                            <th class="text-left">Sat</th>
-                                            <th class="text-left">Jumlah</th>
-                                            <th class="text-left">Berat</th>
-                                            <th class="text-left">HS</th>
-                                            <th class="text-left">Nilai</th>
-                                            <th class="text-left">Subtotal</th>
+                                            <th class="text-center bg-blue-lt">No</th>
+                                            <th class="text-left bg-blue-lt">Spek</th>
+                                            <th class="text-left bg-blue-lt">SKU</th>
+                                            <th class="text-left bg-blue-lt">Sat</th>
+                                            <th class="text-left bg-blue-lt">Jumlah</th>
+                                            <th class="text-left bg-blue-lt">Berat</th>
+                                            <th class="text-left bg-blue-lt">HS</th>
+                                            <th class="text-left bg-blue-lt">Nilai (<?= $detail['xmt_uang']; ?>)</th>
+                                            <th class="text-left bg-blue-lt">Subtotal (<?= $detail['xmt_uang']; ?>)</th>
                                         </tr>
                                     </thead>
                                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                        <?php $no=1; foreach ($databarang->result_array() as $datadet) { 
+                                        <?php $no=1; $jmpcs=0; $jmkgs=0; $jmnilai=0; foreach ($databarang->result_array() as $datadet) { 
                                             $pengali = $datadet['kodesatuan']=='KGS' ? $datadet['kgs'] : $datadet['pcs'];
                                             $spek = $datadet['nm_alias']=='' ? $datadet['nama_barang'] : $datadet['nm_alias'];
                                             $sku = viewsku($datadet['po'],$datadet['item'],$datadet['dis'],$datadet['kode']);
+                                            $jmpcs += $datadet['pcs'];    
+                                            $jmkgs += $datadet['kgs'];    
+                                            $jmnilai += $datadet['harga']*$pengali;    
                                         ?>
                                             <tr>
                                                 <td><?= $no++; ?></td>
                                                 <td><?= $spek; ?></td>
                                                 <td><?= $sku; ?></td>
                                                 <td><?= $datadet['kodesatuan']; ?></td>
-                                                <td><?= rupiah($datadet['pcs'],0); ?></td>
-                                                <td><?= rupiah($datadet['kgs'],2); ?></td>
+                                                <td class="text-right"><?= rupiah($datadet['pcs'],0); ?></td>
+                                                <td class="text-right"><?= rupiah($datadet['kgs'],2); ?></td>
                                                 <td><?= $datadet['nohs']; ?></td>
                                                 <td class="text-right"><?= rupiah($datadet['harga'],4); ?></td>
                                                 <td class="text-right"><?= rupiah($datadet['harga']*$pengali,2); ?></td>
                                             </tr>
                                         <?php } ?>
+                                            <tr class='bg-teal-lt'>
+                                                <td colspan='4' class='font-bold text-right text-black'>TOTAL</td>
+                                                <td class='font-bold text-right text-black'><?= rupiah($jmpcs,0); ?></td>
+                                                <td class='font-bold text-right text-black'><?= rupiah($jmkgs,2); ?></td>
+                                                <td></td>
+                                                <td></td>
+                                                <td class='font-bold text-right text-black'><?= rupiah($jmnilai,2); ?></td>
+                                            </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -321,6 +350,15 @@
         // if($("#keyw").val() != ''){
         //     $("#getbarang").click();
         // }
+         $(document).on('shown.bs.tab', 'a[data-bs-toggle="tab"]', function (e) {
+            var anchor = $(e.target).attr( 'href' );
+            if(anchor=='#tabs-header-8' && $("#tabel").hasClass('hilang')){
+                setTimeout(() => {
+                    $("#syncloader").addClass('hilang');
+                    $("#tabel").removeClass('hilang');
+                }, 500);
+            }
+        });
     })
     $("#viewdokhamat").click(function(){
         if($("#cekkolape").hasClass('hilang')){

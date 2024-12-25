@@ -65,6 +65,13 @@ class Bcmaterial extends CI_Controller
         $this->load->view('inv/inv', $data);
         $this->load->view('layouts/footer', $footer);
     }
+    public function clear(){
+        $this->session->unset_userdata('tglawal');
+        $this->session->set_userdata('th',date('Y'));
+        $this->session->set_userdata('bl',date('m'));
+        $url = base_url().'bcmaterial';
+        redirect($url);
+    }
     public function tambahdata()
     {
         $this->load->view('satuan/addsatuan');
