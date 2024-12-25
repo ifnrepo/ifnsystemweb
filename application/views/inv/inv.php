@@ -225,11 +225,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $cx = '';
                   if ($this->session->userdata('currdept') == 'GM' || $this->session->userdata('currdept') == 'GS') {
                     if ($det['kodesatuan'] == 'KGS') {
-                      if ((float) $det['totkgs'] <= (float) $det['safety_stock']) {
+                      if ((float) $det['totkgs'] < (float) $det['safety_stock']) {
                         $cx = 'text-red';
                       }
                     } else {
-                      if ((float) $det['totpcs'] <= (float) $det['safety_stock']) {
+                      if ((float) $det['totpcs'] < (float) $det['safety_stock']) {
                         $cx = 'text-red';
                       }
                     }

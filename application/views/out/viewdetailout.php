@@ -57,7 +57,7 @@
                             </tbody>
                         </table>
                         <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
-                        <a href="#teskolap" data-toggle="collapse" aria-expanded="false" class="link text-orange">View Detail BOM</a>
+                        <a href="#teskolap" data-toggle="collapse" aria-expanded="false" class="link text-orange <?php if($header['data_ok']==0){ echo "hilang"; } ?>">View Detail BOM</a>
                         <div class="collapse" id="teskolap">
                             <div class="container container-slim py-4" id="syncloader2">
                                 <div class="text-center">

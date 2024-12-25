@@ -3,13 +3,13 @@
         <!-- <div class="card-header"> -->
             <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
                 <li class="nav-item">
-                <a href="#tabs-profile-8" class="nav-link active text-blue font-bold" data-bs-toggle="tab">Header</a>
+                <a href="#tabs-profile-8" class="nav-link active font-bold bg-primary-lt btn-flat" data-bs-toggle="tab">Header</a>
                 </li>
                 <li class="nav-item">
-                <a href="#tabs-header-8" class="nav-link text-blue font-bold" data-bs-toggle="tab">Detail Barang</a>
+                <a href="#tabs-header-8" class="nav-link font-bold bg-success-lt btn-flat" data-bs-toggle="tab">Detail Barang</a>
                 </li>
                 <li class="nav-item">
-                <a href="#tabs-home-8" class="nav-link text-blue font-bold" data-bs-toggle="tab">Riwayat Dokumen</a>
+                <a href="#tabs-home-8" class="nav-link font-bold bg-warning-lt btn-flat" data-bs-toggle="tab">Riwayat Dokumen</a>
                 </li>
                 <li class="nav-item">
                 <a href="#tabs-activity-8" class="nav-link text-blue" data-bs-toggle="tab"></a>
@@ -20,6 +20,8 @@
             <div class="tab-content p-4">
                 <div class="tab-pane fade" id="tabs-home-8">
                     <!-- <div>Cursus turpis vestibulum, dui in pharetra vulputate id sed non turpis ultricies fringilla at sed facilisis lacus pellentesque purus nibh</div> -->
+                    <h4 class="font-bold m-1">Riwayat Dokumen</h4> 
+                    <hr class="m-0"></hr>
                     <ul class="steps steps-vertical font-kecil">
                         <?php $no=0; foreach ($riwayat as $riw) { ?>
                             <li class="step-item">

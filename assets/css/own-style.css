@@ -104,3 +104,11 @@
 	font-weight: bold;
 	background-color: #e6eef6;
 }
+
+/* Login style button  */
+.tombolbulat img {
+	height: 65px !important;
+	width: 65px !important;
+	border-radius: 50%;
+	margin-right: 15px;
+}

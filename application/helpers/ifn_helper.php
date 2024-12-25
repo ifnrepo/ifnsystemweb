@@ -423,24 +423,39 @@ function gethrg($idb, $nobo)
 }
 function generatekodebc($jnsbc, $tglbc, $nobc)
 {
+    $datenow = "2024-01-01";
     $kode = '000000-010017-00000000-000000';
-    if (trim($jnsbc) != '') {
-        $kode1 = str_repeat('0', 6 - strlen(trim($jnsbc))) . trim($jnsbc);
-    } else {
-        $kode1 = '000000';
+    if($tglbc >= $datenow ){
+        if (trim($jnsbc) != '') {
+            $kode1 = str_repeat('0', 6 - strlen(trim($jnsbc))) . trim($jnsbc);
+        } else {
+            $kode1 = '000000';
+        }
+        if ($tglbc != null) {
+            $kode2 = str_replace('-', '', $tglbc);
+        } else {
+            $kode2 = '00000000';
+        }
+        if (trim($nobc) != '') {
+            $kode3 = str_repeat('0', 6 - strlen(trim(substr($nobc,0,6)))) . trim(substr($nobc,0,6));
+        } else {
+            $kode3 = '000000';
+        }
+        // $kode3 = '';
+        $kode = $kode1 . '-010017-' . $kode2 . '-' . $kode3;
+    }else{
+        if ($tglbc != null) {
+            $kode2 = str_replace('-', '', $tglbc);
+        } else {
+            $kode2 = '00000000';
+        }
+        if (trim($nobc) != '') {
+            $kode3 = str_repeat('0', 6 - strlen(trim(substr($nobc,0,6)))) . trim(substr($nobc,0,6));
+        } else {
+            $kode3 = '000000';
+        }
+        $kode = '050500-000307-' . $kode2 . '-' . $kode3;
     }
-    if ($tglbc != null) {
-        $kode2 = str_replace('-', '', $tglbc);
-    } else {
-        $kode2 = '00000000';
-    }
-    if (trim($nobc) != '') {
-        $kode3 = str_repeat('0', 6 - strlen(trim(substr($nobc,0,6)))) . trim(substr($nobc,0,6));
-    } else {
-        $kode3 = '000000';
-    }
-    // $kode3 = '';
-    $kode = $kode1 . '-010017-' . $kode2 . '-' . $kode3;
     return $kode;
     // return  6 - strlen(trim($nobc));
 }

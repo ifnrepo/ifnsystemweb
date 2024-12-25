@@ -57,6 +57,21 @@
       <div class="text-center text-secondary mt-3">
         Belum punya akun? <a href="./" tabindex="-1">Sign up</a>
       </div>
+      <!-- <div class="text-center text-primary mt-3">
+        <b>Other Apps</b>
+        <hr style="width: 25%; display: block;margin:5px auto;">
+        <div style="margin-top: 10px;">
+          <a href="http://localhost/myifn2" class="tombolbulat">
+            <img src="assets/image/bg1.jpg" alt="No Picture" >
+          </a>
+          <a href="#" class="tombolbulat">
+            <img src="assets/image/bg1.jpg" alt="No Picture" >
+          </a>
+          <a href="#" class="tombolbulat">
+            <img src="assets/image/bg1.jpg" alt="No Picture" >
+          </a>
+        </div>
+      </div> -->
     </div>
   </div>
   <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
