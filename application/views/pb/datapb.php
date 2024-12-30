@@ -69,6 +69,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="row font-kecil mb-0 hilang" id="cont-spek">
                 <label class="col-2 col-form-label font-kecil"></label>
                 <div class="col input-group mb-1 text-teal" id="spekbarangnya"></div>
+                
               </div>
               <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label required">Satuan</label>
@@ -127,6 +128,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <textarea class="form-control font-kecil" id="keterangan" name="keterangan" placeholder="Keterangan"></textarea>
                 </div>
               </div>
+              <div class="row font-kecil mb-0 hilang" id="cont-spek2">
+                <label class="col-2 col-form-label font-kecil"></label>
+                <div class="col input-group mb-1 text-teal" id="spekdln"></div>
+              </div>
+              <input type="text" class="hilang" id="dln" name="dln">
             </form>
             <div class="row">
               <div class="col-6">

@@ -82,10 +82,13 @@
         var x = $(this).attr('rel1');
         var y = $(this).attr('rel2');
         var z = $(this).attr('rel3');
+        var w = $(this).attr('rel4');
         // $("#nama_barang").val(x);
-        $("#spekbarangnya").text(x);
+        var spn = w==1 ? " - DLN" : "";
+        $("#spekbarangnya").text(x+spn);
         $("#id_barang").val(y);
-        $("#id_satuan").val(z)
+        $("#id_satuan").val(z);
+        $("#dln").val(w);
         $("#modal-scroll").modal('hide');
         $("#cont-spek").removeClass('hilang');
     })

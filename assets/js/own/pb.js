@@ -92,6 +92,7 @@ $("#resetdetailbarang").click(function () {
 	$("#pcs").val("");
 	$("#kgs").val("");
 	$("#id").val("");
+	$("#dln").val("");
 	$("#keterangan").val("");
 	$("#cont-spek").addClass("hilang");
 });
