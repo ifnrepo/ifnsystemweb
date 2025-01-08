@@ -348,8 +348,7 @@ class Out extends CI_Controller {
         $hasil = $this->out_model->updatecustomer($data);
         echo $hasil;
     }
-    function cetakqr2($isi,$id)
-	{
+    function cetakqr2($isi,$id){
 		$tempdir = "temp/";
 		$namafile = $id;
 		$codeContents = $isi;

@@ -262,6 +262,13 @@ class Ib_model extends CI_Model
             return $this->db->update('tb_header',$kondisi);
         }
     }
+    public function updateib($data)
+    {
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
+        return $query;
+    }
     public function getbcmasuk(){
         $this->db->where('masuk',1);
         return $this->db->get('ref_dok_bc');

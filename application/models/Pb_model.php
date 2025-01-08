@@ -95,6 +95,7 @@ class Pb_model extends CI_Model
     {
         $this->db->select('tb_header.*,user.name,(select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
         $this->db->join('user', 'user.id=tb_header.user_ok', 'left');
+        $this->db->where('kode_dok', 'PB');
         $this->db->where('dept_id', $data['dept_id']);
         $this->db->where('dept_tuju', $data['dept_tuju']);
         if ($data['level'] == 2) {
