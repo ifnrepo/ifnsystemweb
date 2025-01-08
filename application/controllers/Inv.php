@@ -214,14 +214,21 @@ class Inv extends CI_Controller
         $sheet->setCellValue('B2', "KODE BARANG"); // Set kolom B3 dengan tulisan "KODE"    
         $sheet->setCellValue('C2', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
         $sheet->setCellValue('D2', "SATUAN");
-        $sheet->setCellValue('E2', "SALDO AWAL");
-        $sheet->setCellValue('F2', "PEMASUKAN");
-        $sheet->setCellValue('G2', "PENGELUARAN");
-        $sheet->setCellValue('H2', "ADJ");
-        $sheet->setCellValue('I2', "SALDO AKHIR");
-        $sheet->setCellValue('J2', "SO");
-        $sheet->setCellValue('K2', "SELISIH");
-        $sheet->setCellValue('L2', "KETERANGAN");
+        $sheet->setCellValue('E2', "SALDO AWAL QTY");
+        $sheet->setCellValue('F2', "SALDO AWAL KGS");
+        $sheet->setCellValue('G2', "IN QTY");
+        $sheet->setCellValue('H2', "IN KGS");
+        $sheet->setCellValue('I2', "OUT QTY");
+        $sheet->setCellValue('J2', "OUT KGS");
+        $sheet->setCellValue('K2', "ADJ QTY");
+        $sheet->setCellValue('L2', "ADJ PCS");
+        $sheet->setCellValue('M2', "SALDO AKHIR QTY");
+        $sheet->setCellValue('N2', "SALDO AKHIR KGS");
+        $sheet->setCellValue('O2', "SO QTY");
+        $sheet->setCellValue('P2', "SO KGS");
+        $sheet->setCellValue('Q2', "SELISIH QTY");
+        $sheet->setCellValue('R2', "SELISIH KGS");
+        $sheet->setCellValue('S2', "KETERANGAN");
         // Panggil model Get Data   
         $inv = $this->invmodel->getdata();
         $no = 1;
@@ -242,14 +249,21 @@ class Inv extends CI_Controller
             $sheet->setCellValue('B' . $numrow, $sku);
             $sheet->setCellValue('C' . $numrow, $spekbarang);
             $sheet->setCellValue('D' . $numrow, $data['kodesatuan']);
-            $sheet->setCellValue('E' . $numrow, $saldo_awal);
-            $sheet->setCellValue('F' . $numrow, $pemasukan);
-            $sheet->setCellValue('G' . $numrow, $pengeluaran);
-            $sheet->setCellValue('H' . $numrow, '-');
-            $sheet->setCellValue('I' . $numrow, $saldo_akhir);
-            $sheet->setCellValue('J' . $numrow, '-');
+            $sheet->setCellValue('E' . $numrow, $data['pcs']);
+            $sheet->setCellValue('F' . $numrow, $data['kgs']);
+            $sheet->setCellValue('G' . $numrow, $data['pcsin']);
+            $sheet->setCellValue('H' . $numrow, $data['kgsin']);
+            $sheet->setCellValue('I' . $numrow, $data['pcsout']);
+            $sheet->setCellValue('J' . $numrow, $data['kgsout']);
             $sheet->setCellValue('K' . $numrow, '-');
             $sheet->setCellValue('L' . $numrow, '-');
+            $sheet->setCellValue('M' . $numrow, $data['pcs']+$data['pcsin']-$data['pcsout']);
+            $sheet->setCellValue('N' . $numrow, $data['kgs']+$data['kgsin']-$data['kgsout']);
+            $sheet->setCellValue('O' . $numrow, '-');
+            $sheet->setCellValue('P' . $numrow, '-');
+            $sheet->setCellValue('Q' . $numrow, '-');
+            $sheet->setCellValue('R' . $numrow, '-');
+            $sheet->setCellValue('S' . $numrow, '-');
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

@@ -32,7 +32,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" id="id_header" class="hilang" value="<?= $data['id']; ?>">
                   <input type="text" id="errorsimpan" class="hilang" value="<?= $this->session->flashdata('errorsimpan'); ?>">
                   <span class="font-bold" style="font-size:15px;">
-                    <a href="<?= base_url() . 'po/edittgl'; ?>" title="Edit tanggal" id="tglpo" name="tglpo" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan"><?= tglmysql($data['tgl']); ?></a>
+                    <a href="<?= base_url() . 'ib/edittgl'; ?>" title="Edit tanggal" id="tglpo" name="tglpo" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan"><?= tglmysql($data['tgl']); ?></a>
                   </span>
                   <h4 class="mb-0 font-kecil mt-1 font-bold"></h4>
                   <div class="input-icon">

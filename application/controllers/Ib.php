@@ -131,6 +131,15 @@ class Ib extends CI_Controller
         $hasil = $this->ibmodel->updatekolom($_POST['tbl'],$data,'id');
         echo $hasil;
     }
+    public function updateib(){
+        $data = [
+            'tgl' => tglmysql($_POST['tgl']),
+            // 'keterangan' => $_POST['ket'],
+            'id' => $_POST['id']
+        ];
+        $simpan = $this->ibmodel->updateib($data);
+        echo $simpan;
+    }
     public function getbarangib($sup='')
     {
         if($sup==''){
@@ -145,6 +154,10 @@ class Ib extends CI_Controller
         public function editsupplier()
     {
         $this->load->view('ib/editsupplier');
+    }
+    public function edittgl()
+    {
+        $this->load->view('ib/edit_tgl');
     }
     public function adddetailib(){
         $id = $_POST['id'];
