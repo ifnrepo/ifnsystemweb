@@ -37,6 +37,7 @@
             minDate: minDate
         });
     })
+    
     $("#buatpb").click(function() {
         $.ajax({
             dataType: "json",
