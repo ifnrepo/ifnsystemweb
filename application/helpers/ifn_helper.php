@@ -608,3 +608,11 @@ function hitunghari($tgl1,$tgl2){
     echo $selisih->days;
     // hasil 10722 Hari
 }
+function tambahnol($data){
+    $nilai = (int) $data;
+    $hasil = $nilai;
+    if($nilai <= 9){
+        $hasil = '0'.$nilai;
+    }
+    return $hasil;
+}

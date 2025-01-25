@@ -57,6 +57,9 @@
       <div class="text-center text-secondary mt-3">
         Belum punya akun? <a href="./" tabindex="-1">Sign up</a>
       </div>
+      <div class="text-center text-secondary mt-1">
+        <a href="/" tabindex="-1" title="Kembali ke Halaman depan">Kembali</a>
+      </div>
       <!-- <div class="text-center text-primary mt-3">
         <b>Other Apps</b>
         <hr style="width: 25%; display: block;margin:5px auto;">

@@ -84,7 +84,7 @@ class In_model extends CI_Model{
                 $kondisistok = [
                     // 'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
-                    'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
+                    'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
                     'nobontr' => in_array($det['dept_tuju'],$arraynobontr) ? $det['nobontr'] : '',
                     'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],
@@ -102,7 +102,7 @@ class In_model extends CI_Model{
                     $kondisi = [
                     'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
-                    'periode' => $this->session->userdata('bl').$this->session->userdata('th'),
+                    'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
                     'nobontr' => in_array($det['dept_tuju'],$arraynobontr) ? $det['nobontr'] : '',
                     'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],

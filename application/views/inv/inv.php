@@ -112,7 +112,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                                             echo "hilang";
                                                                                           } ?>" id="kontrakbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
                     <option value="X">Semua - Kontrak BC</option>
-                    <?php if ($kat != null) : foreach ($kontbece->result_array() as $bece) { ?>
+                    <?php if ($kat != null && isset($kontbece)) : foreach ($kontbece->result_array() as $bece) { ?>
                         <?php
                         $isi = trim($bece['nomor_kont']) != '' ? $bece['nomor_kont'] . '(' . $bece['tgl_kont'] . ')' : 'Semua';
                         $value = trim($bece['nomor_kont']) != '' ? $bece['nomor_kont'] : 'X';
