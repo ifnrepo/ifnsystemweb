@@ -39,7 +39,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
                 <?php endfor; ?>
-              </select>
+              </select> 
             </div>
           </div>
           <div class="card card-active" style="clear:both;">

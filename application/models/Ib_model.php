@@ -28,7 +28,7 @@ class Ib_model extends CI_Model
     }
     public function getdatadetailib($data)
     {
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');

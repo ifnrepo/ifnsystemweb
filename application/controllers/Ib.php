@@ -604,7 +604,7 @@ class Ib extends CI_Controller
                 'refresh_token' => $databalik['item']['refresh_token']
             ];
             $this->ibmodel->isitokenbc($data);
-            // $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
+            $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
             $this->helpermodel->isilog('Refresh Token CEISA 40');
             if($id=99){
                 $url = base_url().'ib';
@@ -853,13 +853,13 @@ class Ib extends CI_Controller
             "freight" => 0,
             "hargaPenyerahan" => (float) $data['totalharga'],
             "idPengguna" => "",
-            "jabatanTtd" => "MANAGER KEU. & AKT",
+            "jabatanTtd" => $data['jabat_tg_jawab'],
             "jumlahKontainer" => 0,
             "kodeDokumen" => $data['jns_bc'],
             "kodeKantor" => "050500",
             "kodeTujuanPengiriman" => "1",
             "kotaTtd" => "BANDUNG",
-            "namaTtd" => "MIRA AMALIA WULAN",
+            "namaTtd" => $data['tg_jawab'],
             "netto" => (float) $data['netto'],
             "nik" => "",
             "nomorAju" => $noaju,
@@ -877,7 +877,7 @@ class Ib extends CI_Controller
         for($ke=1;$ke<=3;$ke++){
             $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT";
             $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "7" : "9");
-            $nomoridentitas = $ke==1 ? "010017176057000" : (($ke==2) ? "010017176057000" : $data['npwp']);
+            $nomoridentitas = $ke==1 ? "0010017176057000000000" : (($ke==2) ? "0010017176057000000000" : '0'.$data['npwp'].str_repeat('0',str_len(trim($data['npwp']))+1));
             $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
             $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
             $nibidentitas = $ke==1 ? "9120011042693" : "";

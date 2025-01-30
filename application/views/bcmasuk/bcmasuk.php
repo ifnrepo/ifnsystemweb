@@ -103,8 +103,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th class="text-left">No Dokumen / Tgl</th>
                 <th class="text-left">Pengirim</th>
                 <th class="text-left">Info</th>
-                <th class="text-left">Nomor Respon</th>
-                <th class="text-left">Tanggal Respon</th>
+                <th class="text-left">Nomor/Tgl Respon</th>
+                <th class="text-left">Nilai IDR</th>
+                <th class="text-left">Nilai USD</th>
                 <th class="text-left">Ket</th>
               </tr>
             </thead>
@@ -115,15 +116,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
               if ($data != null) : foreach ($data->result_array() as $detail) {
                   $suppl = $detail['nama_supplier'] == '' ? $detail['nama_rekanan'] : $detail['nama_supplier'];
                   $exbcno = $detail['exnomor_bc'] == '' ? '' : '<span class="text-teal font-kecil">EX BC No. ' . $detail['exnomor_bc'] . '<br> Tgl ' . $detail['extgl_bc'] . '</span>';
+                  $pengali = $detail['mtuang']==2 ? $detail['nilai_pab']*$detail['kurs_usd'] : ($detail['mtuang']==3 ? $detail['nilai_pab']*$detail['kurs_yen'] : $detail['nilai_pab']);
+                  $xpengali = $detail['mtuang']==2 ? $detail['nilai_pab'] : ($detail['mtuang']==3 ? ($detail['nilai_pab']*$detail['kurs_yen'])/$detail['kurs_usd'] : 1);
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bcmasuk/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_sj']; ?><br><?= $detail['tgl_sj']; ?></td>
-                    <td class="text-left"><?= ucwords(strtolower($suppl)); ?></td>
+                    <td class="text-left line-12"><?= ucwords(strtolower($suppl)); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
-                    <td class="text-left"><?= $detail['nomor_sppb']; ?></td>
-                    <td class="text-left"><?= $detail['tgl_sppb']; ?></td>
+                    <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
+                    <td class="text-right font-bold font-kecil font-roboto"><?= rupiah($pengali,2); ?></td>
+                    <td class="text-right font-bold font-kecil font-roboto"><?= rupiah($xpengali,2); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $exbcno ?></td>
                   </tr>
               <?php $cntbrg++;

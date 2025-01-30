@@ -106,15 +106,64 @@ $("#jml_kemasan").blur(function () {
 });
 $("#kurs_usd").blur(function () {
 	savedata("kurs_usd", toAngka($(this).val()));
+	setTimeout(() => {
+		hitungdevisa();
+	}, 500);
 });
 $("#kurs_idr").blur(function () {
 	savedata("kurs_idr", toAngka($(this).val()));
+	setTimeout(() => {
+		hitungdevisa();
+	}, 500);
+	// $("#mtuang").change();
 });
 $("#devisa_usd").blur(function () {
 	savedata("devisa_usd", toAngka($(this).val()));
 });
 $("#devisa_idr").blur(function () {
 	savedata("devisa_idr", toAngka($(this).val()));
+});
+$("#nomor_po").blur(function () {
+	savedata("nomor_po", $(this).val());
+});
+$("#tgl_po").change(function () {
+	savedata("tgl_po", tglmysql($(this).val()));
+});
+$("#nomor_inv").blur(function () {
+	savedata("nomor_inv", $(this).val());
+});
+$("#tgl_inv").change(function () {
+	savedata("tgl_inv", tglmysql($(this).val()));
+});
+$("#nomor_pl").blur(function () {
+	savedata("nomor_pl", $(this).val());
+});
+$("#tgl_pl").change(function () {
+	savedata("tgl_pl", tglmysql($(this).val()));
+});
+$("#exnomor_bc").blur(function () {
+	savedata("exnomor_bc", $(this).val());
+});
+$("#extgl_bc").change(function () {
+	savedata("extgl_bc", tglmysql($(this).val()));
+});
+$("#ket_kemasan").blur(function () {
+	savedata("ket_kemasan", $(this).val());
+});
+$("#tg_jawab").blur(function () {
+	savedata("tg_jawab", $(this).val());
+});
+$("#jabat_tg_jawab").blur(function () {
+	savedata("jabat_tg_jawab", $(this).val());
+});
+$("#totalharga").on("keypress", function (e) {
+	if (e.keyCode == 13) {
+		savedata("totalharga", toAngka($(this).val()));
+		$("#totalharga").blur();
+	}
+});
+$("#totalharga").blur(function () {
+	hitungdevisa();
 });
 $("#simpanhakbc").click(function () {
 	if ($("#jns_bc").val() == "") {
@@ -125,31 +174,52 @@ $("#simpanhakbc").click(function () {
 		$("#keteranganerr").text("isi Nomor Aju dan Tanggal Aju !");
 		return false;
 	}
-	if ($("#nomor_bc").val() == "" || $("#tgl_bc").val() == "") {
-		$("#keteranganerr").text("isi Nomor BC dan Tanggal BC !");
+	if (toAngka($("#bruto").val()) == 0 || toAngka($("#netto").val()) == 0) {
+		$("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
 		return false;
 	}
-	$.ajax({
-		dataType: "json",
-		type: "POST",
-		url: base_url + "ib/simpandatanobc",
-		data: {
-			id: $("#id_header").val(),
-			jns: $("#jns_bc").val(),
-			aju: $("#nomor_aju").val(),
-			tglaju: $("#tgl_aju").val(),
-			bc: $("#nomor_bc").val(),
-			tglbc: $("#tgl_bc").val(),
-		},
-		success: function (data) {
-			// window.location.reload();
-			window.location.href = base_url + "ib";
-		},
-		error: function (xhr, ajaxOptions, thrownError) {
-			console.log(xhr.status);
-			console.log(thrownError);
-		},
-	});
+	if ($("#bruto").val() == "0" || $("#netto").val() == "0") {
+		$("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
+		return false;
+	}
+	if ($("#sumdetail").val() != toAngka($("#totalharga").val())) {
+		$("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+		return false;
+	}
+	if ($("#tg_jawab").val() == "") {
+		$("#keteranganerr").text("Isi Nama Penanggung Jawab !");
+		return false;
+	}
+	if ($("#jabat_tg_jawab").val() == "") {
+		$("#keteranganerr").text("Isi Jabatan Penanggung Jawab !");
+		return false;
+	}
+	$("#keteranganerr").text("Dokumen siap di kirim ke CEISA 40 !");
+	// if ($("#nomor_bc").val() == "" || $("#tgl_bc").val() == "") {
+	// 	$("#keteranganerr").text("isi Nomor BC dan Tanggal BC !");
+	// 	return false;
+	// }
+	// $.ajax({
+	// 	dataType: "json",
+	// 	type: "POST",
+	// 	url: base_url + "ib/simpandatanobc",
+	// 	data: {
+	// 		id: $("#id_header").val(),
+	// 		jns: $("#jns_bc").val(),
+	// 		aju: $("#nomor_aju").val(),
+	// 		tglaju: $("#tgl_aju").val(),
+	// 		bc: $("#nomor_bc").val(),
+	// 		tglbc: $("#tgl_bc").val(),
+	// 	},
+	// 	success: function (data) {
+	// 		// window.location.reload();
+	// 		window.location.href = base_url + "ib";
+	// 	},
+	// 	error: function (xhr, ajaxOptions, thrownError) {
+	// 		console.log(xhr.status);
+	// 		console.log(thrownError);
+	// 	},
+	// });
 });
 $("#cekdata").click(function () {
 	if ($("#jns_bc").val() == "") {
@@ -226,20 +296,21 @@ function isikurangnol(val) {
 }
 function hitungdevisa() {
 	var xu = $("#mtuang").val();
+	// alert(xu);
 	switch (xu) {
 		case "1": //IDR
 			tothar = parseFloat(toAngka($("#totalharga").val()));
 			devidr = parseFloat(toAngka($("#kurs_idr").val()));
 			devusd = parseFloat(toAngka($("#kurs_usd").val()));
-			$("#devisa_usd").val(rupiah((tothar / devusd).toFixed(2), ".", ",", 3));
-			$("#devisa_idr").val(rupiah((tothar * devidr).toFixed(2), ".", ",", 2));
+			$("#devisa_usd").val(rupiah(tothar / devusd, ".", ",", 3));
+			$("#devisa_idr").val(rupiah(tothar * devidr, ".", ",", 2));
 			break;
 		case "2": //USD
 			tothar = parseFloat(toAngka($("#totalharga").val()));
 			devidr = parseFloat(toAngka($("#kurs_idr").val()));
 			devusd = parseFloat(toAngka($("#kurs_usd").val()));
-			$("#devisa_idr").val(rupiah((tothar * devusd).toFixed(2), ".", ",", 3));
-			$("#devisa_usd").val(rupiah((tothar / devidr).toFixed(2), ".", ",", 2));
+			$("#devisa_idr").val(rupiah(tothar * devusd, ".", ",", 3));
+			$("#devisa_usd").val(rupiah(tothar / devidr, ".", ",", 2));
 			break;
 		default:
 			break;
