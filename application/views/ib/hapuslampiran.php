@@ -32,6 +32,7 @@
             success: function (data) {
                 // window.location.reload();
                 $("#body-table").html(data.datagroup).show();
+                $("#jmllampiran").val(data.datagroup.length);
                 $('#modal-large').modal('hide');
             },
             error: function (xhr, ajaxOptions, thrownError) {

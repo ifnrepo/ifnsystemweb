@@ -20,7 +20,7 @@ class Ib_model extends CI_Model
     }
     public function getdatabyid($kode)
     {
-        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,supplier.npwp');
+        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,supplier.npwp,supplier.nik,supplier.jns_pkp');
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
         $this->db->join('supplier', 'supplier.id=tb_header.id_pemasok', 'left');
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
@@ -375,7 +375,8 @@ class Ib_model extends CI_Model
     }
     public function getdatanomoraju($id){
         $detail = $this->db->get_where('tb_header',['id'=>$id])->row_array();
-        return '000040010017'.str_replace('-','',$detail['tgl_aju']).$detail['nomor_aju'];
+        $kodeaju = str_repeat('0',6-strlen(trim($detail['jns_bc']))).trim($detail['jns_bc']);
+        return $kodeaju.'010017'.str_replace('-','',$detail['tgl_aju']).$detail['nomor_aju'];
     }
     public function isitokenbc($data){
         $this->db->where('id',1);

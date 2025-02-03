@@ -55,7 +55,14 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Npwp</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="Npwp">
+                    <input type="text" class="form-control font-kecil bg-warning-lt font-hitam" name="npwp" id="npwp" placeholder="Npwp">
+                </div>
+            </div>
+
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">NIK</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil bg-warning-lt font-hitam" title="Nomor Induk Kependudukan" name="nik" id="nik" placeholder="NIK">
                 </div>
             </div>
 
@@ -125,6 +132,16 @@
                     <input type="text" class="form-control font-kecil" name="norek" id="norek" placeholder="No Rekening">
                 </div>
             </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Jenis PKP</label>
+                <div class="col">
+                    <select class="form-select" name="jns_pkp" id="jns_pkp" aria-label="Default select example">
+                        <option value="0" selected>-</option>
+                        <option value="1">PERSEORANGAN</option>
+                        <option value="2">PKP</option>
+                    </select>
+                </div>
+            </div>
             <div class="row mt-2">
                 <label class="col-3 col-form-label pt-0">Aktif</label>
                 <div class="col">
@@ -177,6 +194,8 @@
                 namabank: $("#namabank").val(),
                 atas_nama: $("#atas_nama").val(),
                 norek: $("#norek").val(),
+                nik: $("#nik").val(),
+                jns_pkp: $("#jns_pkp").val(),
                 aktif: aktif
             },
             success: function(data) {

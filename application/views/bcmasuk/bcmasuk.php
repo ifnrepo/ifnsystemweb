@@ -117,7 +117,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $suppl = $detail['nama_supplier'] == '' ? $detail['nama_rekanan'] : $detail['nama_supplier'];
                   $exbcno = $detail['exnomor_bc'] == '' ? '' : '<span class="text-teal font-kecil">EX BC No. ' . $detail['exnomor_bc'] . '<br> Tgl ' . $detail['extgl_bc'] . '</span>';
                   $pengali = $detail['mtuang']==2 ? $detail['nilai_pab']*$detail['kurs_usd'] : ($detail['mtuang']==3 ? $detail['nilai_pab']*$detail['kurs_yen'] : $detail['nilai_pab']);
-                  $xpengali = $detail['mtuang']==2 ? $detail['nilai_pab'] : ($detail['mtuang']==3 ? ($detail['nilai_pab']*$detail['kurs_yen'])/$detail['kurs_usd'] : 1);
+                  $xpengali = $detail['mtuang']==2 ? $detail['nilai_pab'] : ($detail['mtuang']==3 ? ($detail['nilai_pab']*$detail['kurs_yen'])/$detail['kurs_usd'] : $detail['nilai_pab']/$detail['kurs_usd']);
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>

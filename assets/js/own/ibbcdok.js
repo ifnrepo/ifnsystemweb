@@ -6,6 +6,7 @@ $(document).ready(function () {
 	});
 
 	loadlampiran();
+
 	var errosimpan = $("#errorsimpan").val();
 	var pesan = $("#pesanerror").val();
 	if (errosimpan == 1) {
@@ -156,13 +157,13 @@ $("#tg_jawab").blur(function () {
 $("#jabat_tg_jawab").blur(function () {
 	savedata("jabat_tg_jawab", $(this).val());
 });
-$("#totalharga").on("keypress", function (e) {
+$("#nilai_pab").on("keypress", function (e) {
 	if (e.keyCode == 13) {
-		savedata("totalharga", toAngka($(this).val()));
-		$("#totalharga").blur();
+		savedata("nilai_pab", toAngka($(this).val()));
+		$("#nilai_pab").blur();
 	}
 });
-$("#totalharga").blur(function () {
+$("#nilai_pab").blur(function () {
 	hitungdevisa();
 });
 $("#simpanhakbc").click(function () {
@@ -182,7 +183,7 @@ $("#simpanhakbc").click(function () {
 		$("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
 		return false;
 	}
-	if ($("#sumdetail").val() != toAngka($("#totalharga").val())) {
+	if ($("#sumdetail").val() != toAngka($("#nilai_pab").val())) {
 		$("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
 		return false;
 	}
@@ -299,14 +300,14 @@ function hitungdevisa() {
 	// alert(xu);
 	switch (xu) {
 		case "1": //IDR
-			tothar = parseFloat(toAngka($("#totalharga").val()));
+			tothar = parseFloat(toAngka($("#nilai_pab").val()));
 			devidr = parseFloat(toAngka($("#kurs_idr").val()));
 			devusd = parseFloat(toAngka($("#kurs_usd").val()));
 			$("#devisa_usd").val(rupiah(tothar / devusd, ".", ",", 3));
 			$("#devisa_idr").val(rupiah(tothar * devidr, ".", ",", 2));
 			break;
 		case "2": //USD
-			tothar = parseFloat(toAngka($("#totalharga").val()));
+			tothar = parseFloat(toAngka($("#nilai_pab").val()));
 			devidr = parseFloat(toAngka($("#kurs_idr").val()));
 			devusd = parseFloat(toAngka($("#kurs_usd").val()));
 			$("#devisa_idr").val(rupiah(tothar * devusd, ".", ",", 3));
@@ -328,6 +329,7 @@ function loadlampiran() {
 		success: function (data) {
 			// window.location.reload();
 			$("#body-table").html(data.datagroup).show();
+			$("#jmllampiran").val(data.datagroup.length);
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);

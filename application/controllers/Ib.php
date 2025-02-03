@@ -700,8 +700,9 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
+        // print_r($databalik);
         if($databalik['status']=='Success'){
-            if($databalik['dataStatus'][0]['nomorDaftar']!=''){
+            if($databalik['dataStatus'][0]['nomorDaftar']!='' && $databalik['dataRespon'][0]['pdf']!=null){
                 $this->tampilkanpdf($databalik['dataRespon'][0]['pdf'],$id,$mode);
             }else{
                 $this->session->set_flashdata('errorsimpan',1);
@@ -719,6 +720,7 @@ class Ib extends CI_Controller
     }
     public function tampilkanpdf($data,$id,$mode){
         $token = $this->ibmodel->gettoken();
+        $dataaju = $this->ibmodel->getdatanomoraju($id);
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
@@ -736,13 +738,14 @@ class Ib extends CI_Controller
         $result = curl_exec($curl);
         curl_close($curl);
         
-        // print_r($data);
+        // print_r($data);  
         $pisah = explode('/',$data);
         $filename = $data;
         $databalik = $result;
+        $lokfile = $dataaju;
         header('Cache-Control: public'); 
         header('Content-type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$pisah[5].'"');
+        header('Content-Disposition: attachment; filename="'.$lokfile.'"');
         header('Content-Length: '.strlen($databalik));
         echo $databalik;
         if($mode=0){
@@ -853,13 +856,13 @@ class Ib extends CI_Controller
             "freight" => 0,
             "hargaPenyerahan" => (float) $data['totalharga'],
             "idPengguna" => "",
-            "jabatanTtd" => $data['jabat_tg_jawab'],
+            "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
             "jumlahKontainer" => 0,
             "kodeDokumen" => $data['jns_bc'],
             "kodeKantor" => "050500",
             "kodeTujuanPengiriman" => "1",
             "kotaTtd" => "BANDUNG",
-            "namaTtd" => $data['tg_jawab'],
+            "namaTtd" => strtoupper($data['tg_jawab']),
             "netto" => (float) $data['netto'],
             "nik" => "",
             "nomorAju" => $noaju,
@@ -875,9 +878,13 @@ class Ib extends CI_Controller
         ];
         $arrayentitas = [];
         for($ke=1;$ke<=3;$ke++){
-            $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT";
+            $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
             $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "7" : "9");
-            $nomoridentitas = $ke==1 ? "0010017176057000000000" : (($ke==2) ? "0010017176057000000000" : '0'.$data['npwp'].str_repeat('0',str_len(trim($data['npwp']))+1));
+            if($ke == 3){
+                $nomoridentitas = $data['jns_pkp']==1 ? $data['nik'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['nik'])))))) : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1));
+            }else{
+                $nomoridentitas = $ke==1 ? "0010017176057000000000" : (($ke==2) ? "0010017176057000000000" : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1)));
+            }
             $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
             $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
             $nibidentitas = $ke==1 ? "9120011042693" : "";
@@ -885,7 +892,7 @@ class Ib extends CI_Controller
                 "seriEntitas" => $ke,
                 "alamatEntitas" => $alamat,
                 "kodeEntitas" => $kodeentitas,
-                "kodeJenisIdentitas" => "5",
+                "kodeJenisIdentitas" => "6",
                 "namaEntitas" => trim($namaidentitas),
                 "nibEntitas" => $nibidentitas,
                 "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$nomoridentitas))),
@@ -946,7 +953,7 @@ class Ib extends CI_Controller
                 "merk" => "-",
                 "netto" => (float) $detx['kgs'],
                 "nilaiBarang" => 0,
-                "posTarif" => $detx['nohs'], //Nomor HS
+                "posTarif" => trim($detx['nohs']), //Nomor HS
                 "spesifikasiLain" => "",
                 "tipe" => "-",
                 "ukuran" => "",
