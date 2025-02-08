@@ -88,6 +88,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Supplier</th>
                 <th>Jumlah Item</th>
                 <th>Dibuat Oleh</th>
+                <th>BC</th>
                 <th>Keterangan</th>
                 <th>Aksi</th>
               </tr>
@@ -105,7 +106,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $namasup ?></td>
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
-                  <td class="line-12"><a href="<?= base_url().'ib/getresponpdf/'.$datdet['id'].'/1'; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                  <?php if($datdet['tanpa_bc']==0){ ?>
+                    <td style="font-size: 17px" class="text-info"><?= $datdet['jns_bc']; ?></td>
+                      <?php if($datdet['send_ceisa']==1){ ?>
+                        <td class="line-12"><a href="<?= base_url().'ib/isidokbc/'.$datdet['id']; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                        <?php }else{ ?>
+                          <td class="line-12"><?= $isibc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                      <?php } ?>
+                    <?php }else{ ?>
+                      <td style="font-size: 17px" class="text-info">-</td>
+                      <td class="line-12" style='font-size: 11px;'><?= $nomorbc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                  <?php } ?>
                   <td class="text-right line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'ib/dataib/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>

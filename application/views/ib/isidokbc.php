@@ -34,27 +34,36 @@
                         <?php $hilang = ($datheader['send_ceisa']==0  || $datheader['nomor_sppb']!='') ? "hilang" : ""; ?>
                         <?php $hilang2 = $datheader['send_ceisa']==1 ? "hilang" : ""; ?>
                         <?php $hilang3 = $datheader['nomor_sppb']=='' ? "hilang" : ""; ?>
+                        <?php $nonaktif = $datheader['send_ceisa']==1 ? "readonly" : ""; ?>
+                        <?php $hilangbc23 = $datheader['jns_bc']==23 ? "hilang" : ""; ?>
+                        <?php $selectnonaktif = $datheader['send_ceisa']==1 ? "disabled" : ""; ?>
                         <a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url().'ib/getresponpdf/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                         <!-- <a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
+                        <?php if($datheader['send_ceisa']==0 || $datheader['nomor_sppb']==''){ ?>
+                            <a class="btn btn-sm btn-primary" style="color: white;" id="simpanhakbc">Verifikasi Data</a>
+                        <?php }else{ ?>
+                            <a class="btn btn-sm btn-yellow" href="<?= base_url().'ib/uploaddok/'.$datheader['id']; ?>" style="color: white;" id="uploaddok" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Upload Dokumen"><i class="fa fa-file-o mr-1"></i> Upload Dokumen</a>
+                        <?php } ?>
                         <a href="<?= base_url().'ib'; ?>" class="btn btn-sm btn-primary"><i class="fa fa-arrow-left mr-1"></i> Kembali</a></span></div>
                         <input type="hidden" name="id_header" id="id_header" value="<?= $datheader['id']; ?>">
                         <input type="hidden" name="tgl" id="tgl" value="<?= $datheader['tgl']; ?>">
                         <hr class="m-0">
-                        <div class="p-2 font-kecil">
-                            Nama Pengirim : <?= $datheader['namasupplier']; ?><br>
-                            Alamat Pengirim : <?= $datheader['alamat']; ?></br>
-                            NPWP : <?= $datheader['npwp']; ?>
-                            <button href="#" id="kirimkeceisa" data-href="<?= base_url().'ib/kirimdatakeceisa/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
-                    </div>
+                        <div class="d-flex justify-content-between">
+                            <div class="p-2 font-kecil">
+                                Nama Pengirim : <?= $datheader['namasupplier']; ?><br>
+                                Alamat Pengirim : <?= $datheader['alamat']; ?></br>
+                                NPWP : <?= $datheader['npwp']; ?>
+                                <button href="#" id="kirimkeceisa" data-href="<?= base_url().'ib/kirimdatakeceisa'.$datheader['jns_bc'].'/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
+                            </div>
+                        </div>
                     <hr class="m-0">
                     <hr class="m-0">
-                    <div class="col-sm-6">
+                    <div class="col-sm-6 d-flex justify-content-between">
                         <div class="bg-teal-lt px-2 py-1 mt-1">
                             <div class="mb-1 mt-2 row">
-                                <?php $disab = $datheader['send_ceisa']==1 ? "disabled" : ""; ?>
                                 <label class="col-3 col-form-label font-kecil">Jenis DOK BC</label>
                                 <div class="col font-kecil">
-                                    <select class="form-select font-kecil font-bold" name="jns_bc" id="jns_bc" <?= $disab; ?>>
+                                    <select class="form-select font-kecil font-bold" name="jns_bc" id="jns_bc" <?= $selectnonaktif; ?>>
                                         <option value="">Pilih Jenis BC</option>
                                         <?php foreach ($bcmasuk->result_array() as $bcmas) { ?>
                                             <?php $selek = $datheader['jns_bc']==$bcmas['jns_bc'] ? 'selected' : ''; ?>
@@ -67,13 +76,13 @@
                                 <label class="col-3 col-form-label font-kecil">No/Tgl AJU</label>
                                 <div class="col">
                                     <div class="input-group mb-1">
-                                        <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="<?= $datheader['nomor_aju']; ?>"  placeholder="Nomor Aju" <?= $disab; ?>>
-                                        <a href="#" class="btn font-kecil font-bold <?= $disab; ?>" id="getnomoraju">Get</a>
+                                        <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="<?= $datheader['nomor_aju']; ?>"  placeholder="Nomor Aju" <?= $nonaktif; ?>>
+                                        <a href="#" class="btn font-kecil font-bold <?= $selectnonaktif; ?>" id="getnomoraju">Get</a>
                                     </div>
                                     <!-- <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="" aria-describedby="emailHelp" placeholder="No AJU"> -->
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control font-kecil tgl" id="tgl_aju" name="tgl_aju" value="<?= tglmysql($datheader['tgl_aju']); ?>" aria-describedby="emailHelp" placeholder="Tgl AJU" <?= $disab; ?>>
+                                    <input type="text" class="form-control font-kecil tgl" id="tgl_aju" name="tgl_aju" value="<?= tglmysql($datheader['tgl_aju']); ?>" aria-describedby="emailHelp" placeholder="Tgl AJU" <?= $nonaktif; ?>>
                                 </div>
                             </div>
                             <div class="mb-1 row">
@@ -85,9 +94,6 @@
                                     <input type="text" class="form-control font-kecil" id="tgl_bc" name="tgl_bc" value="<?= tglmysql($datheader['tgl_bc']); ?>" aria-describedby="emailHelp" placeholder="Tgl BC" readonly>
                                 </div>
                             </div>
-                        </div>
-                        <div class="font-kecil text-secondary">
-                            
                         </div>
                     </div>
                     <div class="row">
@@ -102,7 +108,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">No SJ</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_sj" name="nomor_sj" value="<?= $datheader['nomor_sj']; ?>" aria-describedby="emailHelp" placeholder="Nomor Surat Jalan">
+                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_sj" name="nomor_sj" value="<?= $datheader['nomor_sj']; ?>" aria-describedby="emailHelp" placeholder="Nomor Surat Jalan" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -110,7 +116,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_sj" name="tgl_sj" value="<?= tglmysql($datheader['tgl_sj']); ?>" aria-describedby="emailHelp" placeholder="Tgl Surat Jalan">
+                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_sj" name="tgl_sj" value="<?= tglmysql($datheader['tgl_sj']); ?>" aria-describedby="emailHelp" placeholder="Tgl Surat Jalan" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -142,7 +148,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">No PO</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_po" name="nomor_po" value="<?= $datheader['nomor_po']; ?>" aria-describedby="emailHelp" placeholder="Nomor PO">
+                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_po" name="nomor_po" value="<?= $datheader['nomor_po']; ?>" aria-describedby="emailHelp" placeholder="Nomor PO" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -150,7 +156,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                 <div class="col"> 
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_po" name="tgl_po" value="<?= tglmysql($datheader['tgl_po']); ?>" aria-describedby="emailHelp" placeholder="Tgl PO">
+                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_po" name="tgl_po" value="<?= tglmysql($datheader['tgl_po']); ?>" aria-describedby="emailHelp" placeholder="Tgl PO" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -162,7 +168,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">No INV</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_inv" name="nomor_inv" value="<?= $datheader['nomor_inv']; ?>" aria-describedby="emailHelp" placeholder="Nomor Invoice">
+                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_inv" name="nomor_inv" value="<?= $datheader['nomor_inv']; ?>" aria-describedby="emailHelp" placeholder="Nomor Invoice" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -170,7 +176,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_inv" name="tgl_inv" value="<?= tglmysql($datheader['tgl_inv']); ?>" aria-describedby="emailHelp" placeholder="Tgl Invoice">
+                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_inv" name="tgl_inv" value="<?= tglmysql($datheader['tgl_inv']); ?>" aria-describedby="emailHelp" placeholder="Tgl Invoice" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -182,7 +188,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">No PL</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_pl" name="nomor_pl" value="<?= $datheader['nomor_pl']; ?>" aria-describedby="emailHelp" placeholder="Nomor Packing List">
+                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_pl" name="nomor_pl" value="<?= $datheader['nomor_pl']; ?>" aria-describedby="emailHelp" placeholder="Nomor Packing List" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -190,27 +196,51 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_pl" name="tgl_pl" value="<?= tglmysql($datheader['tgl_pl']); ?>" aria-describedby="emailHelp" placeholder="Tanggal Packing List">
+                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_pl" name="tgl_pl" value="<?= tglmysql($datheader['tgl_pl']); ?>" aria-describedby="emailHelp" placeholder="Tanggal Packing List" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <!-- Ex BC  -->
-                                    <div class="text-center bg-primary-lt mb-1 font-bold">Ex BC</div>
-                                    <div class="mb-1 row">
-                                        <div class="col">
-                                            <div class="row">
-                                                <label class="col-3 col-form-label font-kecil">No Ex-BC</label>
-                                                <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat" id="exnomor_bc" name="exnomor_bc" value="<?= $datheader['exnomor_bc']; ?>" aria-describedby="emailHelp" placeholder="Ex Nomor BC">
+                                    <div class="<?= $hilangbc23; ?>">
+                                        <div class="text-center bg-danger-lt mb-1 font-bold">Ex BC</div>
+                                        <div class="mb-1 row">
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil">No Ex-BC</label>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control font-kecil btn-flat" id="exnomor_bc" name="exnomor_bc" value="<?= $datheader['exnomor_bc']; ?>" aria-describedby="emailHelp" placeholder="Ex Nomor BC" <?= $nonaktif; ?>>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil">Tgl</label>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control font-kecil btn-flat tgl" id="extgl_bc" name="extgl_bc" value="<?= tglmysql($datheader['extgl_bc']); ?>" aria-describedby="emailHelp" placeholder="Tgl Ex BC" <?= $nonaktif; ?>>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col">
-                                            <div class="row">
-                                                <label class="col-3 col-form-label font-kecil">Tgl</label>
-                                                <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="extgl_bc" name="extgl_bc" value="<?= tglmysql($datheader['extgl_bc']); ?>" aria-describedby="emailHelp" placeholder="Angkutan">
+                                    </div>
+                                    <!-- Ex BC  -->
+                                    <div class="<?php if($datheader['jns_bc']==40){ echo "hilang"; } ?>">
+                                        <div class="text-center bg-primary-lt mb-1 font-bold">Nomor BL / AWB</div>
+                                        <div class="mb-1 row">
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil">Nomor</label>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control font-kecil btn-flat" id="nomor_blawb" name="nomor_blawb" value="<?= $datheader['nomor_blawb']; ?>" aria-describedby="emailHelp" placeholder="Ex Nomor BC" <?= $nonaktif; ?>>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil">Tgl</label>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_blawb" name="tgl_blawb" value="<?= tglmysql($datheader['tgl_blawb']); ?>" aria-describedby="emailHelp" placeholder="Tgl Ex BC" <?= $nonaktif; ?>>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -227,7 +257,7 @@
                                     <div class="mb-1 mt-1 row">
                                         <label class="col-3 col-form-label font-kecil">Angkutan</label>
                                         <div class="col font-kecil">
-                                            <select class="form-select font-kecil font-bold btn-flat" name="jns_angkutan" id="jns_angkutan">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="jns_angkutan" id="jns_angkutan" <?= $selectnonaktif; ?> >
                                                 <option value="">Pilih Angkutan</option>
                                                 <?php foreach ($jnsangkutan->result_array() as $angkut) { ?>
                                                     <option value="<?= $angkut['id']; ?>" <?php if($angkut['id']==$datheader['jns_angkutan']){ echo "selected"; } ?>><?= $angkut['angkutan']; ?></option>
@@ -238,21 +268,21 @@
                                     <div class="mb-1 row">
                                         <label class="col-3 col-form-label font-kecil">Jenis Angkutan</label>
                                         <div class="col">
-                                            <input type="text" class="form-control font-kecil btn-flat" id="angkutan" name="angkutan" value="<?= $datheader['angkutan']; ?>" aria-describedby="emailHelp" placeholder="Angkutan">
+                                            <input type="text" class="form-control font-kecil btn-flat" id="angkutan" name="angkutan" value="<?= $datheader['angkutan']; ?>" aria-describedby="emailHelp" placeholder="Angkutan" <?= $nonaktif; ?>>
                                         </div>
                                         <div class="col">
-                                            <input type="text" class="form-control font-kecil btn-flat" id="no_kendaraan" name="no_kendaraan" value="<?= $datheader['no_kendaraan']; ?>" aria-describedby="emailHelp" placeholder="No Kendaraan">
+                                            <input type="text" class="form-control font-kecil btn-flat" id="no_kendaraan" name="no_kendaraan" value="<?= $datheader['no_kendaraan']; ?>" aria-describedby="emailHelp" placeholder="No Kendaraan" <?= $nonaktif; ?>>
                                         </div>
                                     </div>
                                     <!-- Kemasan -->
                                     <div class="text-center bg-primary-lt mb-1 font-bold">Kemasan & Volume</div>
                                     <div class="mb-1 mt-0 row">
                                         <label class="col-3 col-form-label font-kecil mx-2">Jumlah Kemas</label>
-                                        <div class="col">
-                                            <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="jml_kemasan" name="jml_kemasan" value="<?= rupiah($datheader['jml_kemasan'],0); ?>" aria-describedby="emailHelp" placeholder="Jml Kemas">
+                                        <div class="col-3">
+                                            <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="jml_kemasan" name="jml_kemasan" value="<?= rupiah($datheader['jml_kemasan'],0); ?>" aria-describedby="emailHelp" placeholder="Jml Kemas" <?= $nonaktif; ?>>
                                         </div>
                                         <div class="col">
-                                            <select class="form-select font-kecil font-bold btn-flat" name="kd_kemasan" id="kd_kemasan">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="kd_kemasan" id="kd_kemasan" <?= $selectnonaktif; ?>>
                                                 <option value="">Pilih Kemasan</option>
                                                 <?php foreach ($refkemas->result_array() as $kemas) { ?>
                                                     <option value="<?= $kemas['kdkem']; ?>" <?php if($kemas['kdkem']==$datheader['kd_kemasan']){ echo "selected"; } ?>><?= $kemas['kdkem'].' # '.$kemas['kemasan']; ?></option>
@@ -263,7 +293,7 @@
                                     <div class="mb-1 mt-0 row">
                                         <label class="col-3 col-form-label font-kecil mx-2">Keterangan</label>
                                         <div class="col">
-                                            <input type="text" class="form-control font-kecil btn-flat" id="ket_kemasan" name="ket_kemasan" value="<?= $datheader['ket_kemasan']; ?>" aria-describedby="emailHelp" title="Keterangan" placeholder="Keterangan">
+                                            <input type="text" class="form-control font-kecil btn-flat" id="ket_kemasan" name="ket_kemasan" value="<?= $datheader['ket_kemasan']; ?>" aria-describedby="emailHelp" title="Keterangan" placeholder="Keterangan" <?= $nonaktif; ?>>
                                         </div>
                                     </div>
                                     <hr class="m-0">
@@ -273,7 +303,7 @@
                                             <div class="mb-1 row">
                                                 <label class="col-3 col-form-label font-kecil">Bruto</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="bruto" name="bruto" value="<?= rupiah($datheader['bruto'],2); ?>" aria-describedby="emailHelp" placeholder="Bruto Kgs">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="bruto" name="bruto" value="<?= rupiah($datheader['bruto'],2); ?>" aria-describedby="emailHelp" placeholder="Bruto Kgs" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -281,7 +311,7 @@
                                             <div class="mb-1 row">
                                                 <label class="col-3 col-form-label font-kecil">Netto</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="netto" name="netto" value="<?= rupiah($datheader['netto'],2); ?>" aria-describedby="emailHelp" placeholder="Netto Kgs">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="netto" name="netto" value="<?= rupiah($datheader['netto'],2); ?>" aria-describedby="emailHelp" placeholder="Netto Kgs" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -301,7 +331,7 @@
                                                 <label class="col-3 col-form-label font-kecil">Nilai Pabean / CIF</label>
                                                 <div class="col">
                                                     <!-- <input type="text" class="form-control font-kecil" id="netto" name="netto" aria-describedby="emailHelp" placeholder="Netto Kgs"> -->
-                                                    <select class="form-select font-kecil font-bold btn-flat" name="mtuang" id="mtuang">
+                                                    <select class="form-select font-kecil font-bold btn-flat" name="mtuang" id="mtuang" <?= $selectnonaktif; ?>>
                                                         <option value="">Pilih</option>
                                                         <?php foreach ($refmtuang->result_array() as $mtuang) { ?>
                                                             <option value="<?= $mtuang['id']; ?>" <?php if($mtuang['id']==$datheader['mtuang']){ echo "selected"; } ?>><?= $mtuang['mt_uang']; ?></option>
@@ -309,7 +339,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],0); ?>" aria-describedby="emailHelp" placeholder="Jml Kemas">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],0); ?>" aria-describedby="emailHelp" placeholder="Jml Kemas" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -320,7 +350,7 @@
                                                     <div class="mb-1 row">
                                                         <label class="col-3 col-form-label font-kecil">USD</label>
                                                         <div class="col">
-                                                            <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="kurs_usd" name="kurs_usd" value="<?= rupiah($datheader['kurs_usd'],2); ?>" aria-describedby="emailHelp" placeholder="Kurs USD">
+                                                            <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="kurs_usd" name="kurs_usd" value="<?= rupiah($datheader['kurs_usd'],2); ?>" aria-describedby="emailHelp" placeholder="Kurs USD" <?= $nonaktif; ?>>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -328,7 +358,7 @@
                                                     <div class="mb-1 row">
                                                         <label class="col-3 col-form-label font-kecil">IDR</label>
                                                         <div class="col">
-                                                            <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="kurs_idr" name="kurs_idr" value="<?= rupiah($datheader['kurs_idr'],0); ?>" aria-describedby="emailHelp" placeholder="Kurs IDR">
+                                                            <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="kurs_idr" name="kurs_idr" value="<?= rupiah($datheader['kurs_idr'],0); ?>" aria-describedby="emailHelp" placeholder="Kurs IDR" <?= $nonaktif; ?>>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -366,7 +396,7 @@
                                             <div class="mb-1 mt-0 row">
                                                 <label class="col-3 col-form-label font-kecil mx-2">Nama</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat" id="tg_jawab" name="tg_jawab" value="<?= $datheader['tg_jawab']; ?>" aria-describedby="emailHelp" title="Nama Penanggung Jawab" placeholder="Nama Penanggung Jawab">
+                                                    <input type="text" class="form-control font-kecil btn-flat" id="tg_jawab" name="tg_jawab" value="<?= $datheader['tg_jawab']; ?>" aria-describedby="emailHelp" title="Nama Penanggung Jawab" placeholder="Nama Penanggung Jawab" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -374,7 +404,7 @@
                                             <div class="mb-1 mt-0 row">
                                                 <label class="col-3 col-form-label font-kecil mx-2">Jabatan</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat" id="jabat_tg_jawab" name="jabat_tg_jawab" value="<?= $datheader['jabat_tg_jawab']; ?>" aria-describedby="emailHelp" title="Jabatan Penanggung Jawab" placeholder="Jabatan Penanggung Jawab">
+                                                    <input type="text" class="form-control font-kecil btn-flat" id="jabat_tg_jawab" name="jabat_tg_jawab" value="<?= $datheader['jabat_tg_jawab']; ?>" aria-describedby="emailHelp" title="Jabatan Penanggung Jawab" placeholder="Jabatan Penanggung Jawab" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -389,7 +419,7 @@
                 <div class="m-2 font-bold d-flex justify-content-between">Detail Barang</div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
-                        <table class="table datatable8 w-100">
+                        <table class="table w-100">
                             <thead style="background-color: blue !important">
                                 <tr>
                                     <th>Nama Barang</th>
@@ -403,19 +433,30 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-tablee" style="font-size: 13px !important;" >
-                                    <?php $sumdetail=0; foreach ($header as $data) { $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
-                                        $sumdetail += $data['harga']*$jumlah; ?>
+                                    <?php $sumdetail=0; $sumpcs=0; $sumkgs=0; foreach ($header as $data) { 
+                                        $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
+                                        $sumdetail += $data['harga']*$jumlah;
+                                        $sumpcs += $data['pcs'];
+                                        $sumkgs += $data['kgs'];
+                                         ?>
                                     <tr>
                                         <td><?= $data['nama_barang']; ?></td>
                                         <td class="text-left"><?= $data['kategori_id']; ?></td>
                                         <td class="text-left"><?= $data['nohs']; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
-                                        <td><?= rupiah($data['pcs'],2); ?></td>
-                                        <td><?= rupiah($data['kgs'],2); ?></td>
-                                        <td><?= rupiah($data['harga'],2); ?></td>
-                                        <td><?= rupiah($data['harga']*$jumlah,2); ?></td>
+                                        <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>
+                                        <td class="text-right"><?= rupiah($data['kgs'],2); ?></td>
+                                        <td class="text-right"><?= rupiah($data['harga'],2); ?></td>
+                                        <td class="text-right"><?= rupiah($data['harga']*$jumlah,2); ?></td>
                                     </tr>
                                 <?php } ?>
+                                <tr class="bg-primary-lt">
+                                    <td class="text-black text-center font-bold" colspan="4">TOTAL</td>
+                                    <td class="text-black text-right font-bold"><?= rupiah($sumpcs,0); ?></td>
+                                    <td class="text-black text-right font-bold"><?= rupiah($sumkgs,2); ?></td>
+                                    <td></td>
+                                    <td class="text-black text-right font-bold"><?= rupiah($sumdetail,2); ?></td>
+                                </tr>
                             </tbody>
                         </table>
                         <input type="text" id="sumdetail" class="hilang" value="<?= $sumdetail; ?>">
@@ -450,8 +491,8 @@
     <hr class="m-1"> 
     <div class="modal-footer">
         <button type="button" class="btn btn-link link-secondary me-auto hilang" data-bs-dismiss="modal">Batal</button>
-        <span class="text-red" style="font-size: 12px !important;" id="keteranganerr"></span>
-        <a class="btn btn-sm btn-primary" style="color: white;" id="simpanhakbc">Verifikasi Data</a>
+        <div class="text-red" style="font-size: 12px !important;" id="keteranganerr"></div>
+        <!-- <a class="btn btn-sm btn-primary" style="color: white;" id="simpanhakbc">Verifikasi Data</a> -->
     </div>
     <div>
     </div>

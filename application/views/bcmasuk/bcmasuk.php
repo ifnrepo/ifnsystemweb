@@ -117,7 +117,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $suppl = $detail['nama_supplier'] == '' ? $detail['nama_rekanan'] : $detail['nama_supplier'];
                   $exbcno = $detail['exnomor_bc'] == '' ? '' : '<span class="text-teal font-kecil">EX BC No. ' . $detail['exnomor_bc'] . '<br> Tgl ' . $detail['extgl_bc'] . '</span>';
                   $pengali = $detail['mtuang']==2 ? $detail['nilai_pab']*$detail['kurs_usd'] : ($detail['mtuang']==3 ? $detail['nilai_pab']*$detail['kurs_yen'] : $detail['nilai_pab']);
-                  $xpengali = $detail['mtuang']==2 ? $detail['nilai_pab'] : ($detail['mtuang']==3 ? ($detail['nilai_pab']*$detail['kurs_yen'])/$detail['kurs_usd'] : $detail['nilai_pab']/$detail['kurs_usd']);
+                  $usd = $detail['kurs_usd']==0 ? 1 : $detail['kurs_usd'];
+                  $xpengali = $detail['mtuang']==2 ? $detail['nilai_pab'] : ($detail['mtuang']==3 ? ($detail['nilai_pab']*$detail['kurs_yen'])/$usd : $detail['nilai_pab']/$usd);
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
@@ -126,8 +127,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td class="text-left line-12"><?= ucwords(strtolower($suppl)); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
-                    <td class="text-right font-bold font-kecil font-roboto"><?= rupiah($pengali,2); ?></td>
-                    <td class="text-right font-bold font-kecil font-roboto"><?= rupiah($xpengali,2); ?></td>
+                    <td class="text-right font-kecil "><?= rupiah($pengali,2); ?></td>
+                    <td class="text-right font-kecil"><?= rupiah($xpengali,2); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $exbcno ?></td>
                   </tr>
               <?php $cntbrg++;

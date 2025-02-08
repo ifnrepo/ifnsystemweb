@@ -57,13 +57,13 @@ class In_model extends CI_Model{
             $this->session->set_flashdata('errorsimpan',1);
             return false;
         }else{
-            $data = [
+            $datu = [
                 'verif_oleh' => $this->session->userdata('id'),
                 'verif_tgl' => date('Y-m-d H:i:s')
             ];
             $this->db->where('id',$id);
-            $this->db->update('tb_detail',$data);
-            $this->helpermodel->isilog($this->db->last_query());
+            $this->db->update('tb_detail',$datu);
+            // $this->helpermodel->isilog($this->db->last_query());
 
             $this->db->select('tb_detail.*,user.name');
             $this->db->join('user','tb_detail.verif_oleh=user.id','left');

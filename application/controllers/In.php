@@ -70,7 +70,7 @@ class In extends CI_Controller {
         $norek=0;$jmlpcs=0;$jmlkgs=0;$noreke=0;
         foreach ($query as $que) {
             $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
-            $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('curdept') : 'diKonfirmasi Oleh : '.datauser($que['user_valid'],'name').'@'.tglmysql2($que['tgl_valid']);
+            $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('curdept') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
             $hasil .= "<tr>";
             $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
             if($que['ok_valid']==1){
@@ -86,7 +86,7 @@ class In extends CI_Controller {
             }
             $hasil .= "<td>".$jmlrek."</td>";
             $hasil .= "<td style='line-height: 12px'>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;' class='text-secondary'>".tglmysql2($que['tgl_ok'])."</span></td>";
-            $hasil .= "<td class='font-kecil'>".$kete."</td>";
+            $hasil .= "<td class='font-kecil line-12'>".$kete."</td>";
             $hasil .= "<td>";
             if($que['ok_valid']==0){
                 $hasil .= "<a href='#' data-href=".base_url().'in/cekkonfirmasi/'.$que['id']." data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Konfirmasi Penerimaan Barang,<br> data tidak dapat dirubah kembali' class='btn btn-sm btn-success ".cekclosebook()."' style='padding: 3px 5px !important;' title='Konfirmasi Data'><i class='fa fa-check mr-1'></i> Konfirmasi</a>";

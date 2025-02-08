@@ -128,8 +128,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                                                       } ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
-                    <td class="text-right font-bold font-kecil font-roboto"><?= rupiah($detail['nilai_pab']*$pengali,2); ?></td>
-                    <td class="text-right font-bold font-kecil font-roboto"><?= rupiah($xpengali,2); ?></td>
+                    <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab']*$pengali,2); ?></td>
+                    <td class="text-right font-kecil"><?= rupiah($xpengali,2); ?></td>
                   </tr>
               <?php $cntbrg++;
                   $jmpcs += $detail['pcs'];

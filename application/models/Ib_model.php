@@ -14,15 +14,17 @@ class Ib_model extends CI_Model
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->where($arrkondisi);
         $this->db->order_by('tgl','desc');
-        $this->db->order_by('nomor_dok','asc');
+        $this->db->order_by('nomor_dok','desc');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
     public function getdatabyid($kode)
     {
-        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,supplier.npwp,supplier.nik,supplier.jns_pkp');
+        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,supplier.npwp,supplier.nik,supplier.jns_pkp,supplier.nama_di_ceisa as namaceisa,supplier.alamat_di_ceisa as alamatceisa,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat');
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
         $this->db->join('supplier', 'supplier.id=tb_header.id_pemasok', 'left');
+        $this->db->join('ref_mt_uang', 'ref_mt_uang.id=tb_header.mtuang', 'left');
+        $this->db->join('ref_jns_angkutan', 'ref_jns_angkutan.id=tb_header.jns_angkutan', 'left');
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
@@ -651,4 +653,63 @@ class Ib_model extends CI_Model
         $hasil = $this->db->update('tb_detail', $update);
         return $hasil;
     }
+    public function updatedok()
+	{
+		$data = $_POST;
+		$temp = $this->getdatabyid($data['id_header']);
+		$fotodulu = FCPATH . 'assets/file/dok/' . $temp['filepdf']; //base_url().$gambar.'.png';
+		$id = $data['id_header'];
+		$data['filepdf'] = $this->uploaddok();
+		if ($data['filepdf'] != NULL) {
+			if ($data['filepdf'] == 'kosong') {
+				$data['filepdf'] = NULL;
+			}
+			if (file_exists($fotodulu)) {
+				unlink($fotodulu);
+			}
+			unset($data['logo']);
+			$query = $this->db->query("update tb_header set filepdf = '" . $data['filepdf'] . "' where id = '" . $id . "' ");
+			if ($query) {
+				$this->session->set_flashdata('pesanerror', 'Dokumen Berhasil Diupload');
+			    $this->session->set_flashdata('errorsimpan', 1);
+			}
+		} else {
+			// $this->session->set_flashdata('pesanerror', 'Error Upload Foto Profile ' . $temp['id'] . ' ');
+			$this->session->set_flashdata('errorsimpan', 1);
+		}
+		$url = base_url() . 'ib/isidokbc/' . $id;
+		redirect($url);
+	}
+    public function uploaddok()
+	{
+		$this->load->library('upload');
+		$this->uploadConfig = array(
+			'upload_path' => LOK_UPLOAD_DOK_BC,
+			'allowed_types' => 'pdf',
+			// 'max_size' => max_upload() * 1024,
+		);
+		// Adakah berkas yang disertakan?
+		$adaBerkas = $_FILES['dok']['name'];
+		if (empty($adaBerkas)) {
+			return 'kosong';
+		}
+		$uploadData = NULL;
+		$this->upload->initialize($this->uploadConfig);
+		if ($this->upload->do_upload('dok')) {
+			$uploadData = $this->upload->data();
+			$namaFileUnik = strtolower($uploadData['file_name']);
+			$fileRenamed = rename(
+				$this->uploadConfig['upload_path'] . $uploadData['file_name'],
+				$this->uploadConfig['upload_path'] . $namaFileUnik
+			);
+			$uploadData['file_name'] = $fileRenamed ? $namaFileUnik : $uploadData['file_name'];
+		} else {
+			$_SESSION['success'] = -1;
+			$ext = pathinfo($adaBerkas, PATHINFO_EXTENSION);
+			$ukuran = $_FILES['file']['size'] / 1000000;
+			$tidakupload = $this->upload->display_errors(NULL, NULL);
+			$this->session->set_flashdata('pesanerror', $tidakupload . ' ' . $ext . ' ukuran ' . round($ukuran, 2) . ' MB');
+		}
+		return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
+	}
 }

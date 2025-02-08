@@ -61,6 +61,8 @@ class Supplier extends CI_Controller
             'aktif' => $_POST['aktif'],
             'nik' => $_POST['nik'],
             'jns_pkp' => $_POST['jns_pkp'],
+            'nama_di_ceisa' => $_POST['namaceisa'],
+            'alamat_di_ceisa' => $_POST['alamatceisa'],
         ];
         $hasil = $this->supplier_model->simpansupplier($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -100,6 +102,8 @@ class Supplier extends CI_Controller
             'aktif' => $_POST['aktif'],
             'nik' => $_POST['nik'],
             'jns_pkp' => $_POST['jns_pkp'],
+            'nama_di_ceisa' => $_POST['namaceisa'],
+            'alamat_di_ceisa' => $_POST['alamatceisa'],
         ];
         $hasil = $this->supplier_model->updatesupplier($data);
         $this->helpermodel->isilog($this->db->last_query());

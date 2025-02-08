@@ -27,7 +27,7 @@ $("#getnomoraju").click(function () {
 			jns: $("#jns_bc").val(),
 		},
 		success: function (data) {
-			alert(data);
+			// alert(data);
 			$("#nomor_aju").val(data);
 			savedata("nomor_aju", data);
 		},
@@ -59,6 +59,9 @@ $("#keexcel").click(function () {
 });
 $("#jns_bc").change(function () {
 	savedata("jns_bc", $(this).val());
+	setTimeout(() => {
+		window.location.href = base_url + "ib/isidokbc/" + $("#id_header").val();
+	}, 500);
 });
 $("#mtuang").change(function () {
 	savedata("mtuang", $(this).val());
@@ -168,59 +171,47 @@ $("#nilai_pab").blur(function () {
 });
 $("#simpanhakbc").click(function () {
 	if ($("#jns_bc").val() == "") {
-		$("#keteranganerr").text("Pilih Jenis BC !");
+		// $("#keteranganerr").text("Pilih Jenis BC !");
+		pesan("Pilih Jenis BC !", "warning");
 		return false;
 	}
 	if ($("#nomor_aju").val() == "" || $("#tgl_aju").val() == "") {
-		$("#keteranganerr").text("isi Nomor Aju dan Tanggal Aju !");
+		// $("#keteranganerr").text("isi Nomor Aju dan Tanggal Aju !");
+		pesan("isi Nomor Aju dan Tanggal Aju !", "warning");
 		return false;
 	}
 	if (toAngka($("#bruto").val()) == 0 || toAngka($("#netto").val()) == 0) {
-		$("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
+		// $("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
+		pesan("Jumlah Bruto dan Netto Harus di isi !", "warning");
 		return false;
 	}
 	if ($("#bruto").val() == "0" || $("#netto").val() == "0") {
-		$("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
+		// $("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
+		pesan("Jumlah Bruto dan Netto Harus di isi !", "warning");
 		return false;
 	}
 	if ($("#sumdetail").val() != toAngka($("#nilai_pab").val())) {
-		$("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+		// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+		pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "warning");
 		return false;
 	}
 	if ($("#tg_jawab").val() == "") {
-		$("#keteranganerr").text("Isi Nama Penanggung Jawab !");
+		// $("#keteranganerr").text("Isi Nama Penanggung Jawab !");
+		pesan("Isi Nama Penanggung Jawab !", "warning");
 		return false;
 	}
 	if ($("#jabat_tg_jawab").val() == "") {
-		$("#keteranganerr").text("Isi Jabatan Penanggung Jawab !");
+		// $("#keteranganerr").text("Isi Jabatan Penanggung Jawab !");
+		pesan("Isi Jabatan Penanggung Jawab !", "warning");
 		return false;
 	}
-	$("#keteranganerr").text("Dokumen siap di kirim ke CEISA 40 !");
-	// if ($("#nomor_bc").val() == "" || $("#tgl_bc").val() == "") {
-	// 	$("#keteranganerr").text("isi Nomor BC dan Tanggal BC !");
-	// 	return false;
-	// }
-	// $.ajax({
-	// 	dataType: "json",
-	// 	type: "POST",
-	// 	url: base_url + "ib/simpandatanobc",
-	// 	data: {
-	// 		id: $("#id_header").val(),
-	// 		jns: $("#jns_bc").val(),
-	// 		aju: $("#nomor_aju").val(),
-	// 		tglaju: $("#tgl_aju").val(),
-	// 		bc: $("#nomor_bc").val(),
-	// 		tglbc: $("#tgl_bc").val(),
-	// 	},
-	// 	success: function (data) {
-	// 		// window.location.reload();
-	// 		window.location.href = base_url + "ib";
-	// 	},
-	// 	error: function (xhr, ajaxOptions, thrownError) {
-	// 		console.log(xhr.status);
-	// 		console.log(thrownError);
-	// 	},
-	// });
+	if ($("#jmllampiran").val() == "0") {
+		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
+		pesan("Isi Lampiran Dokumen !", "warning");
+		return false;
+	}
+	// $("#keteranganerr").text("Dokumen siap di kirim ke CEISA 40 !");
+	pesan("Dokumen siap di kirim ke CEISA 40 !", "success");
 });
 $("#cekdata").click(function () {
 	if ($("#jns_bc").val() == "") {
@@ -249,6 +240,7 @@ function savedata(kolom, data) {
 		},
 		success: function (data) {
 			$("#keteranganerr").text("Data Saved ..!");
+			// pesan("Data Saved ..!", "success");
 			setTimeout(() => {
 				$("#keteranganerr").text("");
 			}, 3000);
@@ -321,11 +313,12 @@ function hitungdevisa() {
 }
 function loadlampiran() {
 	var id = $("#id_header").val();
+	var ceksend = $("#nomor_aju").attr("readonly") == "readonly" ? 1 : 0;
 	$.ajax({
 		dataType: "json",
 		type: "POST",
 		url: base_url + "ib/getdatalampiran/" + id,
-		data: {},
+		data: { cek: ceksend },
 		success: function (data) {
 			// window.location.reload();
 			$("#body-table").html(data.datagroup).show();

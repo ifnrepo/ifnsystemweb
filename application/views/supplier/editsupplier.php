@@ -150,13 +150,28 @@
                 </div>
             </div>
         </div>
+        <div class="card mb-2">
+            <div class="card-body font-kecil p-1">
+                <div class="bg-primary-lt p-1 font-bold text-black">Data di CEISA/BC</div>
+                <div class="mb-1 mt-1 row">
+                    <label class="col-3 col-form-label">Nama</label>
+                    <div class="col">
+                        <input type="text" class="form-control font-kecil btn-flat" name="nama_di_ceisa" id="nama_di_ceisa" value="<?= $data['nama_di_ceisa']; ?>" placeholder="Nama">
+                    </div>
+                </div>
+                <div class="mb-1 row">
+                    <label class="col-3 col-form-label">Alamat</label>
+                    <div class="col">
+                        <textarea class="form-control font-kecil btn-flat" name="alamat_di_ceisa" id="alamat_di_ceisa" placeholder="Alamat"><?= $data['alamat_di_ceisa']; ?></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-
-
 <div class="modal-footer">
-    <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
-    <button type="button" class="btn btn-primary" id="updatesupplier">Update</button>
+    <button type="button" class="btn me-auto font-kecil btn-flat" data-bs-dismiss="modal">Close</button>
+    <button type="button" class="btn btn-primary font-kecil btn-flat" id="updatesupplier">Update</button>
 </div>
 <script>
     $("#updatesupplier").click(function() {
@@ -194,6 +209,8 @@
                 norek: $("#norek").val(),
                 nik: $("#nik").val(),
                 jns_pkp: $("#jns_pkp").val(),
+                namaceisa: $("#nama_di_ceisa").val(),
+                alamatceisa: $("#alamat_di_ceisa").val(),
                 aktif: aktif,
                 id: $("#id").val()
             },
