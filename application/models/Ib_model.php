@@ -21,6 +21,8 @@ class Ib_model extends CI_Model
     public function getdatabyid($kode)
     {
         $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,supplier.npwp,supplier.nik,supplier.jns_pkp,supplier.nama_di_ceisa as namaceisa,supplier.alamat_di_ceisa as alamatceisa,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat');
+        $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_muat) as pelmuat");
+        $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_bongkar) as pelbongkar");
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
         $this->db->join('supplier', 'supplier.id=tb_header.id_pemasok', 'left');
         $this->db->join('ref_mt_uang', 'ref_mt_uang.id=tb_header.mtuang', 'left');
@@ -358,6 +360,17 @@ class Ib_model extends CI_Model
     public function getjenisdokumen(){
         return $this->db->order_by('kode')->get('ref_jns_dokumen');
     }
+    public function refbendera(){
+        return $this->db->order_by('kode_negara')->get('ref_negara');
+    }
+    public function refpelabuhan(){
+        return $this->db->order_by('kode_pelabuhan')->get('ref_pelabuhan');
+    }
+    public function getpelabuhanbykode($kode){
+        $this->db->like('kode_pelabuhan',$kode);
+        $this->db->or_like('uraian_pelabuhan',$kode);
+        return $this->db->get('ref_pelabuhan');
+    }
     public function getdatalampiran($id){
         $this->db->select('lampiran.*,lampiran.id as idx,ref_jns_dokumen.nama_dokumen');
         $this->db->from('lampiran');
@@ -365,8 +378,19 @@ class Ib_model extends CI_Model
         $this->db->where('id_header',$id);
         return $this->db->get();
     }
+    public function getdatalampiranbyid($id){
+        $this->db->select('lampiran.*,lampiran.id as idx,ref_jns_dokumen.nama_dokumen');
+        $this->db->from('lampiran');
+        $this->db->join('ref_jns_dokumen','ref_jns_dokumen.kode = lampiran.kode_dokumen','left');
+        $this->db->where('lampiran.id',$id);
+        return $this->db->get();
+    }
     public function tambahlampiran($data){
         return $this->db->insert('lampiran',$data);
+    }
+    public function updatelampiran($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('lampiran',$data);
     }
     public function hapuslampiran($id){
         $this->db->where('id',$id);

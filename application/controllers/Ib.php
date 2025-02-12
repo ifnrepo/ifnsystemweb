@@ -291,15 +291,6 @@ class Ib extends CI_Controller
         echo $hasil;
     }
     public function isidokbc($id){
-        // $header['header'] = 'transaksi';
-        // $data['data'] = $this->ibmodel->getdatabyid($kode);
-        // $data['mtuang'] = $this->mtuangmodel->getdata();
-        // $data['jnsbc'] = $this->ibmodel->getdokbcmasuk();
-        // $footer['fungsi'] = 'ib';
-        // $this->load->view('layouts/header', $header);
-        // $this->load->view('ib/dataib', $data);
-        // $this->load->view('layouts/footer', $footer);
-
         $header['header'] = 'transaksi';
         $data['header'] = $this->ibmodel->getdatadetailib($id);
         $data['datheader'] = $this->ibmodel->getdatabyid($id);
@@ -307,6 +298,8 @@ class Ib extends CI_Controller
         $data['jnsangkutan'] = $this->ibmodel->getjnsangkutan();
         $data['refkemas'] = $this->ibmodel->refkemas();
         $data['refmtuang'] = $this->ibmodel->refmtuang();
+        $data['refbendera'] = $this->ibmodel->refbendera();
+        // $data['refpelabuhan'] = $this->ibmodel->refpelabuhan();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ibx';
         $this->load->view('layouts/header', $header);
@@ -784,7 +777,8 @@ class Ib extends CI_Controller
                 $html .= '<td>'.$que['tgl_dokumen'].'</td>';
                 $html .= '<td>'.$que['keterangan'].'</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data AJU + Nomor BC">Edit</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -807,13 +801,51 @@ class Ib extends CI_Controller
             $html .= '<td>'.$que['keterangan'].'</td>';
             $html .= '<td>';
             if($sendceisa == 0){
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Hapus Lampiran">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
             }
             $html .= '</td>';
             $html .= '</tr>';
         }
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
+    }
+    public function editlampiran($id,$ide){
+        $data['datlampiran'] = $this->ibmodel->getdatalampiranbyid($id)->row_array();
+        $data['lampiran'] = $this->ibmodel->getjenisdokumen();
+        $this->load->view('ib/editlampiran',$data);
+    }
+    public function updatelampiran(){
+        $data = [
+            'id' => $_POST['id'],
+            'kode_dokumen' => $_POST['kode'],
+            'nomor_dokumen' => $_POST['nomor'],
+            'tgl_dokumen' => tglmysql($_POST['tgl']),
+            'keterangan' => $_POST['ket']
+        ];
+        $hasil = $this->ibmodel->updatelampiran($data);
+        if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
+            $html = '';
+            $query = $this->ibmodel->getdatalampiran($_POST['head']);
+            $no = 1;
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td>'.$no++.'</td>';
+                $html .= '<td>'.$que['kode_dokumen'].'</td>';
+                $html .= '<td>'.$que['nama_dokumen'].'</td>';
+                $html .= '<td>'.$que['nomor_dokumen'].'</td>';
+                $html .= '<td>'.$que['tgl_dokumen'].'</td>';
+                $html .= '<td>'.$que['keterangan'].'</td>';
+                $html .= '<td>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data AJU + Nomor BC">Edit</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $cocok = array('datagroup' => $html);
+            echo json_encode($cocok);
+        }
     }
     public function hapuslampiran($id,$ide){
         $data = [
@@ -840,7 +872,8 @@ class Ib extends CI_Controller
                 $html .= '<td>'.$que['tgl_dokumen'].'</td>';
                 $html .= '<td>'.$que['keterangan'].'</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Lampiran" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -1325,5 +1358,19 @@ class Ib extends CI_Controller
     }
     public function simpandokumen(){
         $this->ibmodel->updatedok();
+    }
+    public function caripelabuhan(){
+        $datacari = $_GET['search'];
+        $hasil = $this->ibmodel->getpelabuhanbykode($datacari);
+
+        if($hasil){
+            $dataar = [];
+            foreach ($hasil->result_array() as $key) {
+                $data['id'] = $key['kode_pelabuhan'];
+                $data['text'] = $key['kode_pelabuhan'].' - '.$key['uraian_pelabuhan'];
+                array_push($dataar,$data);
+            }
+        }
+        echo json_encode($dataar);
     }
 }

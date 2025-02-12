@@ -24,7 +24,6 @@
   <!-- <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" /> -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/bootstrap-datepicker/css/bootstrap-datepicker.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/select2/css/select2.css">
-  <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/select2/css/select2-bootstrap4.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 

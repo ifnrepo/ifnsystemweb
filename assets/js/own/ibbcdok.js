@@ -5,6 +5,30 @@ $(document).ready(function () {
 		todayHighlight: true,
 	});
 
+	$(".pelabuhan").select2({
+		selectionCssClass: "btn-flat font-bold text-black",
+		minimumInputLength: 2,
+		tags: [],
+		ajax: {
+			url: base_url + "/Ib/caripelabuhan",
+			dataType: "json",
+			data: function (params) {
+				var query = {
+					search: params.term,
+					type: "user_search",
+				};
+				// Query parameters will be ?search=[term]&type=user_search
+				return query;
+			},
+			processResults: function (data) {
+				return {
+					results: data,
+				};
+			},
+		},
+		cache: true,
+		// placeholder: "Search for a user...",
+	});
 	loadlampiran();
 
 	var errosimpan = $("#errorsimpan").val();
@@ -169,7 +193,37 @@ $("#nilai_pab").on("keypress", function (e) {
 $("#nilai_pab").blur(function () {
 	hitungdevisa();
 });
+$("#pelabuhan_muat").change(function () {
+	savedata("pelabuhan_muat", $(this).val());
+});
+// $("#pelabuhan_muat").val("").trigger("change");
+$("#pelabuhan_bongkar").change(function () {
+	savedata("pelabuhan_bongkar", $(this).val());
+});
 $("#simpanhakbc").click(function () {
+	cekkolom();
+});
+$("#cekdata").click(function () {
+	// if ($("#jns_bc").val() == "") {
+	// 	pesan("Pilih Jenis BC !", "error");
+	// 	return false;
+	// }
+	// if ($("#nomor_aju").val() == "") {
+	// 	pesan("Isi atau Get Nomor AJU !", "error");
+	// 	return false;
+	// }
+	// if ($("#tgl_aju").val() == "") {
+	// 	pesan("Isi Tanggal AJU", "error");
+	// 	return false;
+	// }
+	var cek = cekkolom(1);
+	if (cek == 1) {
+		$("#kirimkeceisa").click();
+	} else {
+		cekkolom();
+	}
+});
+function cekkolom(mode) {
 	if ($("#jns_bc").val() == "") {
 		// $("#keteranganerr").text("Pilih Jenis BC !");
 		pesan("Pilih Jenis BC !", "warning");
@@ -210,24 +264,38 @@ $("#simpanhakbc").click(function () {
 		pesan("Isi Lampiran Dokumen !", "warning");
 		return false;
 	}
+	// Untuk cek BC 23
+	if ($("#jns_bc").val() == "23") {
+		if ($("#pelabuhan_muat").val() == "") {
+			pesan("Pelabuhan Muat harus di isi", "warning");
+			return false;
+		}
+		if ($("#pelabuhan_bongkar").val() == "") {
+			pesan("Pelabuhan Bongkar harus di isi", "warning");
+			return false;
+		}
+		if ($("#nomor_blawb").val() == "") {
+			pesan("Nomor BL/AWB harus di isi", "warning");
+			return false;
+		}
+		if ($("#bc11").val() == "") {
+			pesan("Untuk BC 23 Nomor BC11 harus di isi", "warning");
+			return false;
+		}
+	}
+	// Untuk cek BC 226
+	if ($("#jns_bc").val() == "262") {
+		if ($("#exnomor_bc").val() == "") {
+			pesan("Nomor Ex BC harus di isi", "warning");
+			return false;
+		}
+	}
 	// $("#keteranganerr").text("Dokumen siap di kirim ke CEISA 40 !");
-	pesan("Dokumen siap di kirim ke CEISA 40 !", "success");
-});
-$("#cekdata").click(function () {
-	if ($("#jns_bc").val() == "") {
-		pesan("Pilih Jenis BC !", "error");
-		return false;
+	if (mode != 1) {
+		pesan("Dokumen siap di kirim ke CEISA 40 !", "success");
 	}
-	if ($("#nomor_aju").val() == "") {
-		pesan("Isi atau Get Nomor AJU !", "error");
-		return false;
-	}
-	if ($("#tgl_aju").val() == "") {
-		pesan("Isi Tanggal AJU", "error");
-		return false;
-	}
-	$("#kirimkeceisa").click();
-});
+	return 1;
+}
 function savedata(kolom, data) {
 	$("#keteranganerr").text("Loading ..!");
 	$.ajax({

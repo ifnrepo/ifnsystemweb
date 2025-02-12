@@ -38,7 +38,7 @@ $("#dept_kirim").change(function () {
 			kode: $(this).val(),
 		},
 		success: function (data) {
-			if (kirim == "GM" || kirim == "GS" || kirim == "GP") {
+			if (kirim == "GS" || kirim == "GP") {
 				$("#adddataout").removeClass("hilang");
 				$("#buttonpilih2").addClass("hilang");
 			} else {

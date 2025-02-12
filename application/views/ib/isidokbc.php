@@ -36,6 +36,8 @@
                         <?php $hilang3 = $datheader['nomor_sppb']=='' ? "hilang" : ""; ?>
                         <?php $nonaktif = $datheader['send_ceisa']==1 ? "readonly" : ""; ?>
                         <?php $hilangbc23 = $datheader['jns_bc']==23 ? "hilang" : ""; ?>
+                        <?php $hilangbc40 = $datheader['jns_bc']==40 ? "hilang" : ""; ?>
+                        <?php $hilangbc262 = $datheader['jns_bc']==262 ? "hilang" : ""; ?>
                         <?php $selectnonaktif = $datheader['send_ceisa']==1 ? "disabled" : ""; ?>
                         <a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url().'ib/getresponpdf/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                         <!-- <a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
@@ -202,7 +204,7 @@
                                         </div>
                                     </div>
                                     <!-- Ex BC  -->
-                                    <div class="<?= $hilangbc23; ?>">
+                                    <div class="<?= $hilangbc23; ?><?= $hilangbc40; ?>">
                                         <div class="text-center bg-danger-lt mb-1 font-bold">Ex BC</div>
                                         <div class="mb-1 row">
                                             <div class="col">
@@ -223,8 +225,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <!-- Ex BC  -->
-                                    <div class="<?php if($datheader['jns_bc']==40){ echo "hilang"; } ?>">
+                                    <!-- BL AWB  -->
+                                    <div class="<?= $hilangbc40; ?> <?= $hilangbc262; ?>">
                                         <div class="text-center bg-primary-lt mb-1 font-bold">Nomor BL / AWB</div>
                                         <div class="mb-1 row">
                                             <div class="col">
@@ -245,6 +247,28 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- BL AWB  -->
+                                    <div class="<?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                        <div class="text-center bg-danger-lt mb-1 font-bold"><span class="text-black">BC 1.1</span></div>
+                                        <div class="mb-1 row">
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil">Nomor</label>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control font-kecil btn-flat" id="bc11" name="bc11" value="<?= $datheader['bc11']; ?>" aria-describedby="emailHelp" placeholder="BC 1.1" <?= $nonaktif; ?>>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil">Tgl</label>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_bc11" name="tgl_bc11" value="<?= tglmysql($datheader['tgl_bc11']); ?>" aria-describedby="emailHelp" placeholder="Tgl BC 1.1" <?= $nonaktif; ?>>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -253,7 +277,39 @@
                                 <div class="bg-info-lt px-2 py-1 font-bold">Sarana Angkut & Kemasan</div>
                                 <div class="card-body p-1">
                                     <!-- SARANA ANGKUT -->
-                                    <div class="text-center bg-primary-lt mb-1 font-bold">Sarana Angkutan</div>
+                                    <div class="text-center bg-primary-lt mb-1 font-bold <?= $hilangbc40; ?> <?= $hilangbc262; ?>">Pelabuhan & Tempat Penimbunan</div>
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                        <label class="col-3 col-form-label font-kecil">Pelabuhan Muat</label>
+                                        <div class="col font-kecil">
+                                            <select class="form-select font-kecil font-bold btn-flat pelabuhan" name="pelabuhan_muat" data-placeholder="Pilih Pelabuhan" id="pelabuhan_muat" <?= $selectnonaktif; ?> >
+                                                <!-- <option value="">Pilih Pelabuhan Muat</option> -->
+                                                 <option value="<?= $datheader['pelabuhan_muat']; ?>"><?= $datheader['pelabuhan_muat'].' - '.$datheader['pelmuat']; ?></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                        <label class="col-3 col-form-label font-kecil">Pelabuhan Bongkar</label>
+                                        <div class="col font-kecil">
+                                            <select class="form-select font-kecil btn-flat pelabuhan" name="pelabuhan_bongkar" data-placeholder="Pilih Pelabuhan" id="pelabuhan_bongkar" <?= $selectnonaktif; ?>>
+                                                <option value="<?= $datheader['pelabuhan_bongkar']; ?>"><?= $datheader['pelabuhan_bongkar'].' - '.$datheader['pelbongkar']; ?></option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="text-center bg-primary-lt mb-1 font-bold">Sarana / Cara Angkutan</div>
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                        <label class="col-3 col-form-label font-kecil">No & Tipe Peti Kemas</label>
+                                        <div class="col-3 font-kecil">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="ukuran_kontainer" id="ukuran_kontainer" <?= $selectnonaktif; ?> >
+                                                <option value="">-</option>
+                                                <option value="20">20 Feet</option>
+                                                <option value="40">40 Feet</option>
+                                                <option value="60">60 Feet</option>
+                                            </select>
+                                        </div>
+                                        <div class="col font-kecil">
+                                            <input type="text" class="form-control font-kecil btn-flat" id="nomor_kontainer" name="nomor_kontainer" value="<?= $datheader['nomor_kontainer']; ?>" aria-describedby="emailHelp" placeholder="Nomor Kontainer" <?= $nonaktif; ?>>
+                                        </div>
+                                    </div>
                                     <div class="mb-1 mt-1 row">
                                         <label class="col-3 col-form-label font-kecil">Angkutan</label>
                                         <div class="col font-kecil">
@@ -272,6 +328,18 @@
                                         </div>
                                         <div class="col">
                                             <input type="text" class="form-control font-kecil btn-flat" id="no_kendaraan" name="no_kendaraan" value="<?= $datheader['no_kendaraan']; ?>" aria-describedby="emailHelp" placeholder="No Kendaraan" <?= $nonaktif; ?>>
+                                        </div>
+                                    </div>
+                                    <hr class="m-0">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                        <label class="col-3 col-form-label font-kecil">Bendera</label>
+                                        <div class="col">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="bendera_angkutan" id="bendera_angkutan" <?= $selectnonaktif; ?> >
+                                                <option value="">Pilih Bendera Angkutan</option>
+                                                <?php foreach ($refbendera->result_array() as $bendera) { ?>
+                                                    <option value="<?= $bendera['id']; ?>" <?php if($datheader['bendera_angkutan']==$bendera['id']){ echo "selected"; } ?>><?= $bendera['kode_negara'].'-'.$bendera['uraian_negara']; ?></option>
+                                                <?php } ?>
+                                            </select>
                                         </div>
                                     </div>
                                     <!-- Kemasan -->
@@ -464,7 +532,7 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2 bg-red-lt" id="tabs-profile-8">
-                <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen <span><a href="<?= base_url().'ib/addlampiran/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" id="keexcel" class="btn btn-sm btn-primary"><i class="fa fa-plus mr-1"></i> Tambah Data</a><span></div>
+                <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen <span><a href="<?= base_url().'ib/addlampiran/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary"><i class="fa fa-plus mr-1"></i> Tambah Data</a><span></div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
                         <table class="table datatable8 w-100">
