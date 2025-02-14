@@ -145,6 +145,20 @@
                                                                     <input style="background-color: floralwhite;" type="text" class="form-control font-kecil" name="norek" id="norek" value="<?= $data['norek']; ?>" readonly>
                                                                 </div>
                                                             </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Kode Negara</label>
+                                                                <div class="col">
+                                                                    <select name="kode_negara" id="kode_negara" class="form-control" disabled>
+                                                                        <?php foreach ($negara as $key) : ?>
+                                                                            <?php if ($key['kode_negara'] == $data['kode_negara']) : ?>
+                                                                                <option value="<?= $key['kode_negara']; ?>" selected><?= $key['uraian_negara']; ?></option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?= $key['kode_begara']; ?>"><?= $key['uraian_negara']; ?></option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
                                                             <div class="row mt-2">
                                                                 <label class="col-3 col-form-label pt-0">Aktif</label>
                                                                 <div class="col">

@@ -26,14 +26,16 @@ class Supplier extends CI_Controller
     {
         $header['header'] = 'master';
         $data['supplier'] = $this->supplier_model->getdata();
+
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $this->load->view('layouts/header', $header);
         $this->load->view('supplier/index', $data);
-        $this->load->view('layouts/footer',$footer);
+        $this->load->view('layouts/footer', $footer);
     }
 
     public function tambahdata()
     {
+        $data['negara'] = $this->db->get('ref_negara')->result_array();
         $this->load->view('supplier/addsupplier');
     }
 
@@ -61,6 +63,7 @@ class Supplier extends CI_Controller
             'aktif' => $_POST['aktif'],
             'nik' => $_POST['nik'],
             'jns_pkp' => $_POST['jns_pkp'],
+            'kode_negara' => $_POST['kode_negara'],
             'nama_di_ceisa' => $_POST['namaceisa'],
             'alamat_di_ceisa' => $_POST['alamatceisa'],
         ];
@@ -72,6 +75,7 @@ class Supplier extends CI_Controller
     {
 
         $header['header'] = 'master';
+        $data['negara'] = $this->db->get('ref_negara')->result_array();
         $data['data'] = $this->supplier_model->getdatabyid($id);
         // $this->load->view('layouts/header', $header);
         $this->load->view('supplier/editsupplier', $data);
@@ -102,6 +106,7 @@ class Supplier extends CI_Controller
             'aktif' => $_POST['aktif'],
             'nik' => $_POST['nik'],
             'jns_pkp' => $_POST['jns_pkp'],
+            'kode_negara' => $_POST['kode_negara'],
             'nama_di_ceisa' => $_POST['namaceisa'],
             'alamat_di_ceisa' => $_POST['alamatceisa'],
         ];
@@ -123,6 +128,7 @@ class Supplier extends CI_Controller
     public function viewsupplier($id)
     {
         $data['data'] = $this->supplier_model->getdatabyid($id);
+        $data['negara'] = $this->db->get('ref_negara')->result_array();
         $this->load->view('supplier/viewsupplier', $data);
     }
 
