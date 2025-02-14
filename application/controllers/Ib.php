@@ -300,6 +300,7 @@ class Ib extends CI_Controller
         $data['refmtuang'] = $this->ibmodel->refmtuang();
         $data['refbendera'] = $this->ibmodel->refbendera();
         // $data['refpelabuhan'] = $this->ibmodel->refpelabuhan();
+        $data['datatoken'] = $this->ibmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ibx';
         $this->load->view('layouts/header', $header);
@@ -920,7 +921,7 @@ class Ib extends CI_Controller
             if($ke == 3){
                 $nomoridentitas = $data['jns_pkp']==1 ? $data['nik'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['nik'])))))) : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1));
                 $namaidentitas = $data['jns_pkp']==1 ? $data['namaceisa'] : $data['namasupplier'];
-                $alamat = $data['jns_pkp']==1 ? $data['alamatceisa'] : upper($data['alamat']);
+                $alamat = $data['jns_pkp']==1 ? $data['alamatceisa'] : strtoupper($data['alamat']);
             }else{
                 $nomoridentitas = $ke==1 ? "0010017176057000000000" : (($ke==2) ? "0010017176057000000000" : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1)));
                 $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
@@ -1245,24 +1246,24 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        // print_r($databalik);
-        if($databalik['status']=='OK'){
-            $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
-            $this->session->set_flashdata('errorsimpan',2);
-            $this->session->set_flashdata('pesanerror',$databalik['message']);
-            $this->ibmodel->updatesendceisa($id);
-            $url = base_url().'ib/isidokbc/'.$id;
-            redirect($url);
-        }else{
-            // echo '<script>alert("'.$databalik['status'].'");</script>';
-            // $url = base_url().'ib/kosong';
-            print_r($databalik);
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.var_dump($databalik['Exception']));
-            // $this->session->set_flashdata('pesanerror',print_r($databalik));
-            $url = base_url().'ib/isidokbc/'.$id;
-            redirect($url);
-        }
+        print_r($databalik);
+        // if($databalik['status']=='OK'){
+        //     $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
+        //     $this->session->set_flashdata('errorsimpan',2);
+        //     $this->session->set_flashdata('pesanerror',$databalik['message']);
+        //     $this->ibmodel->updatesendceisa($id);
+        //     $url = base_url().'ib/isidokbc/'.$id;
+        //     redirect($url);
+        // }else{
+        //     // echo '<script>alert("'.$databalik['status'].'");</script>';
+        //     // $url = base_url().'ib/kosong';
+        //     print_r($databalik);
+        //     $this->session->set_flashdata('errorsimpan',1);
+        //     $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.var_dump($databalik['Exception']));
+        //     // $this->session->set_flashdata('pesanerror',print_r($databalik));
+        //     $url = base_url().'ib/isidokbc/'.$id;
+        //     redirect($url);
+        // }
     }
 
     public function getnomoraju(){

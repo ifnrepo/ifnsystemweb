@@ -12,6 +12,7 @@
                 <a href="#tabs-profile-8" class="nav-link bg-red-lt btn-flat font-bold" data-bs-toggle="tab">Lampiran Dokumen</a>
             </li>
         </ul>
+        <span class="font-kecil text-teal" id="timetoexpired"></span>
     </div>
     <div class="card-body">
         <div class="tab-content">
@@ -19,16 +20,11 @@
                 <div class="row">
                     <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
                     <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
+                    <?php $date = date("Y-m-d H:i:s",strtotime("+2 hours",strtotime($datatoken['update_at']))); ?>
+                    <input type="hidden" id="updateon" value="<?= $date; ?>">
                     <div class="m-2 font-bold d-flex justify-content-between">
-                    <span class="mt-2 text-info">
-                        <?php
-                            if($this->session->userdata('datatokenbeacukai')!=''){
-                                echo "DATA TOKEN ALREADY SET ";
-                                // echo $this->session->userdata('datatokenbeacukai');
-                            } else {
-                                echo "DATA TOKEN NOT SET";
-                            }
-                        ?>
+                    <span class="mt-2 text-info" id="adaapadengantoken">
+
                     </span>
                     <span>
                         <?php $hilang = ($datheader['send_ceisa']==0  || $datheader['nomor_sppb']!='') ? "hilang" : ""; ?>
@@ -39,7 +35,7 @@
                         <?php $hilangbc40 = $datheader['jns_bc']==40 ? "hilang" : ""; ?>
                         <?php $hilangbc262 = $datheader['jns_bc']==262 ? "hilang" : ""; ?>
                         <?php $selectnonaktif = $datheader['send_ceisa']==1 ? "disabled" : ""; ?>
-                        <a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url().'ib/getresponpdf/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
+                        <a href="<?= base_url().'ib/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'ib/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow text-black <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url().'ib/getresponpdf/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                         <!-- <a href="<?= base_url().'ib/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
                         <?php if($datheader['send_ceisa']==0 || $datheader['nomor_sppb']==''){ ?>
                             <a class="btn btn-sm btn-primary" style="color: white;" id="simpanhakbc">Verifikasi Data</a>
