@@ -11,8 +11,8 @@ class My404 extends CI_Controller
  { 
     // $this->output->set_status_header('404'); 
     $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
-    $this->load->view('layouts/header.php');
-    $this->load->view('layouts/my404.php');
-    $this->load->view('layouts/footer.php',$footer);
+   //  $this->load->view('layouts/header.php');
+    $this->load->view('layouts/my404x.php');
+   //  $this->load->view('layouts/footer.php',$footer);
  } 
 }

@@ -45,7 +45,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php $no=1; foreach ($data->result_array() as $dat) { ?>
                     <tr>
                       <td class="text-left"><?= $no++; ?></td>
-                      <td style="line-height: 11px"><a href='<?= base_url().'ib/viewbc/'.$dat['id'] ?>' data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Customer"  class='font-bold'><?= $dat['nomor_dok']; ?><br><span style='font-size: 10px;'><?= $dat['tgl']; ?></span></a></td>
+                      <td style="line-height: 11px"><a href='<?= base_url().'ib/viewbc/'.$dat['id'] ?>' data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Cek Beacukai"  class='font-bold'><?= $dat['nomor_dok']; ?><br><span style='font-size: 10px;'><?= $dat['tgl']; ?></span></a></td>
                       <td style="line-height: 11px"><?= datauser($dat['user_ok'],'name'); ?><br><span style='font-size: 10px;'><?= $dat['tgl_ok']; ?></span></td>
                       <td class="text-center">
                         <a href="<?= base_url().'ib/viewbc/'.$dat['id'] ?>" class="btn btn-sm btn-teal" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Cek Beacukai" style="padding: 2px 3px !important">Cek Beacukai</a>

@@ -306,7 +306,7 @@ class Out_model extends CI_Model{
                         'id_barang' => $datdet['id_barang'],
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'stokdept.dln' => $datdet['dln'],
-                        'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+                        'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
                     ];
                 }else{
                     $kondisi = [
@@ -320,7 +320,7 @@ class Out_model extends CI_Model{
                         'stokdept.dln' => $datdet['dln'],
                         'nobale' => $datdet['nobale'],
                         'stok' => $datdet['stok'],
-                        'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+                        'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
                     ];
                 }
                 $this->db->select('stokdept.*,sum(stokdept.pcs_akhir) as xpcs_akhir,sum(stokdept.kgs_akhir) as xkgs_akhir,barang.nama_barang');
@@ -505,7 +505,7 @@ class Out_model extends CI_Model{
     }
     public function getdatagm($idbarang){
         $kondisi = [
-            'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+            'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
             'dept_id' => 'GM',
             'id_barang' => $idbarang
         ];
@@ -525,7 +525,7 @@ class Out_model extends CI_Model{
     }
     public function getdatagp($idbarang){
         $kondisi = [
-            'periode' => kodebulan($this->session->userdata('bl')).$this->session->userdata('th'),
+            'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
             'dept_id' => 'GP',
             'id_barang' => $idbarang
         ];

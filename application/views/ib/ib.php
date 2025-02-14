@@ -39,7 +39,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
                 <?php endfor; ?>
-              </select>
+              </select> 
             </div>
           </div>
           <div class="card card-active" style="clear:both;">
@@ -88,6 +88,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Supplier</th>
                 <th>Jumlah Item</th>
                 <th>Dibuat Oleh</th>
+                <th>BC</th>
                 <th>Keterangan</th>
                 <th>Aksi</th>
               </tr>
@@ -105,16 +106,29 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $namasup ?></td>
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
-                  <td class="line-12"><a href="<?= base_url().'ib/getresponpdf/'.$datdet['id'].'/1'; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                  <?php if($datdet['tanpa_bc']==0){ ?>
+                    <td style="font-size: 17px" class="text-info"><?= $datdet['jns_bc']; ?></td>
+                      <?php if($datdet['send_ceisa']==1){ ?>
+                        <td class="line-12"><a href="<?= base_url().'ib/isidokbc/'.$datdet['id']; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                        <?php }else{ ?>
+                          <td class="line-12"><?= $isibc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                      <?php } ?>
+                    <?php }else{ ?>
+                      <td style="font-size: 17px" class="text-info">-</td>
+                      <td class="line-12" style='font-size: 11px;'><?= $nomorbc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                  <?php } ?>
                   <td class="text-right line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'ib/dataib/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
                       <a href="#" data-href="<?= base_url() . 'ib/hapusib/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus IB <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==0 && $datdet['tanpa_bc']==0) { ?>
-                      Pengecekan Beacukai /<a href="#" class="text-danger" data-href="<?= base_url() . 'ib/editib/' . $datdet['id'] ?>" style='padding: 3px 8px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit IB <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'>Edit</a>
-                    <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && $datdet['tanpa_bc']==0 && $datdet['nomor_bc']=='') { ?>
+                      Sedang Dicek Oleh BC /<a href="#" class="text-danger" data-href="<?= base_url() . 'ib/editib/' . $datdet['id'] ?>" style='padding: 3px 8px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit IB <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'>Edit</a>
+                    <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && $datdet['tanpa_bc']==0 && $datdet['nomor_bc']=='') { 
+                      $sudahkirim = $datdet['send_ceisa']==0 ? 'btn-danger' : 'btn-info';
+                      $textsudahkirim = $datdet['send_ceisa']==0 ? 'Isi Dok BC' : 'Tunggu Respon';
+                       ?>
                       <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
-                      <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm btn-danger' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
+                      <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { ?>
                       <span class="text-teal">Tunggu Verifikasi <b>IN</b> Departemen</span>
                     <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>

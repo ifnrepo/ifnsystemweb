@@ -101,6 +101,7 @@ class Ib extends CI_Controller
     {
         $data['header'] = $this->ibmodel->getdatabyid($id);
         $data['detail'] = $this->ibmodel->getdatadetailib($id);
+        $data['lampiran'] = $this->ibmodel->getdatalampiran($id);
         $this->load->view('ib/viewdetailib', $data);
     }
     public function dataib($kode)
@@ -290,15 +291,6 @@ class Ib extends CI_Controller
         echo $hasil;
     }
     public function isidokbc($id){
-        // $header['header'] = 'transaksi';
-        // $data['data'] = $this->ibmodel->getdatabyid($kode);
-        // $data['mtuang'] = $this->mtuangmodel->getdata();
-        // $data['jnsbc'] = $this->ibmodel->getdokbcmasuk();
-        // $footer['fungsi'] = 'ib';
-        // $this->load->view('layouts/header', $header);
-        // $this->load->view('ib/dataib', $data);
-        // $this->load->view('layouts/footer', $footer);
-
         $header['header'] = 'transaksi';
         $data['header'] = $this->ibmodel->getdatadetailib($id);
         $data['datheader'] = $this->ibmodel->getdatabyid($id);
@@ -306,6 +298,8 @@ class Ib extends CI_Controller
         $data['jnsangkutan'] = $this->ibmodel->getjnsangkutan();
         $data['refkemas'] = $this->ibmodel->refkemas();
         $data['refmtuang'] = $this->ibmodel->refmtuang();
+        $data['refbendera'] = $this->ibmodel->refbendera();
+        // $data['refpelabuhan'] = $this->ibmodel->refpelabuhan();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ibx';
         $this->load->view('layouts/header', $header);
@@ -597,14 +591,14 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        print_r($databalik);
+        // print_r($databalik);
         if($databalik['status']=='success'){
             $data = [
                 'token' => $databalik['item']['access_token'],
                 'refresh_token' => $databalik['item']['refresh_token']
             ];
             $this->ibmodel->isitokenbc($data);
-            // $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
+            $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
             $this->helpermodel->isilog('Refresh Token CEISA 40');
             if($id=99){
                 $url = base_url().'ib';
@@ -649,7 +643,7 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        print_r($databalik);
+        // print_r($databalik);
         if($databalik['status']=='Success'){
             if($databalik['dataStatus'][0]['nomorDaftar']!=''){
                 $data = [
@@ -700,8 +694,9 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
+        // print_r($databalik);
         if($databalik['status']=='Success'){
-            if($databalik['dataStatus'][0]['nomorDaftar']!=''){
+            if($databalik['dataStatus'][0]['nomorDaftar']!='' && $databalik['dataRespon'][0]['pdf']!=null){
                 $this->tampilkanpdf($databalik['dataRespon'][0]['pdf'],$id,$mode);
             }else{
                 $this->session->set_flashdata('errorsimpan',1);
@@ -719,6 +714,7 @@ class Ib extends CI_Controller
     }
     public function tampilkanpdf($data,$id,$mode){
         $token = $this->ibmodel->gettoken();
+        $dataaju = $this->ibmodel->getdatanomoraju($id);
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
@@ -736,13 +732,14 @@ class Ib extends CI_Controller
         $result = curl_exec($curl);
         curl_close($curl);
         
-        // print_r($data);
+        // print_r($data);  
         $pisah = explode('/',$data);
         $filename = $data;
         $databalik = $result;
+        $lokfile = $dataaju;
         header('Cache-Control: public'); 
         header('Content-type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$pisah[5].'"');
+        header('Content-Disposition: attachment; filename="'.$lokfile.'"');
         header('Content-Length: '.strlen($databalik));
         echo $databalik;
         if($mode=0){
@@ -780,7 +777,8 @@ class Ib extends CI_Controller
                 $html .= '<td>'.$que['tgl_dokumen'].'</td>';
                 $html .= '<td>'.$que['keterangan'].'</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data AJU + Nomor BC">Edit</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -790,6 +788,7 @@ class Ib extends CI_Controller
     }
     public function getdatalampiran($id){
         $html = '';
+        $sendceisa = $_POST['cek'];
         $query = $this->ibmodel->getdatalampiran($id);
         $no = 1;
         foreach ($query->result_array() as $que) {
@@ -801,12 +800,52 @@ class Ib extends CI_Controller
             $html .= '<td>'.$que['tgl_dokumen'].'</td>';
             $html .= '<td>'.$que['keterangan'].'</td>';
             $html .= '<td>';
-            $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+            if($sendceisa == 0){
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Hapus Lampiran">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
+            }
             $html .= '</td>';
             $html .= '</tr>';
         }
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
+    }
+    public function editlampiran($id,$ide){
+        $data['datlampiran'] = $this->ibmodel->getdatalampiranbyid($id)->row_array();
+        $data['lampiran'] = $this->ibmodel->getjenisdokumen();
+        $this->load->view('ib/editlampiran',$data);
+    }
+    public function updatelampiran(){
+        $data = [
+            'id' => $_POST['id'],
+            'kode_dokumen' => $_POST['kode'],
+            'nomor_dokumen' => $_POST['nomor'],
+            'tgl_dokumen' => tglmysql($_POST['tgl']),
+            'keterangan' => $_POST['ket']
+        ];
+        $hasil = $this->ibmodel->updatelampiran($data);
+        if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
+            $html = '';
+            $query = $this->ibmodel->getdatalampiran($_POST['head']);
+            $no = 1;
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td>'.$no++.'</td>';
+                $html .= '<td>'.$que['kode_dokumen'].'</td>';
+                $html .= '<td>'.$que['nama_dokumen'].'</td>';
+                $html .= '<td>'.$que['nomor_dokumen'].'</td>';
+                $html .= '<td>'.$que['tgl_dokumen'].'</td>';
+                $html .= '<td>'.$que['keterangan'].'</td>';
+                $html .= '<td>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data AJU + Nomor BC">Edit</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $cocok = array('datagroup' => $html);
+            echo json_encode($cocok);
+        }
     }
     public function hapuslampiran($id,$ide){
         $data = [
@@ -833,7 +872,8 @@ class Ib extends CI_Controller
                 $html .= '<td>'.$que['tgl_dokumen'].'</td>';
                 $html .= '<td>'.$que['keterangan'].'</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Lampiran" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -841,7 +881,7 @@ class Ib extends CI_Controller
             echo json_encode($cocok);
         }
     }
-    function kirimdatakeceisa($id){
+    function kirimdatakeceisa40($id){
         $data = $this->ibmodel->getdatabyid($id);
         $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
         $arrayheader = [
@@ -853,13 +893,13 @@ class Ib extends CI_Controller
             "freight" => 0,
             "hargaPenyerahan" => (float) $data['totalharga'],
             "idPengguna" => "",
-            "jabatanTtd" => "MANAGER KEU. & AKT",
+            "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
             "jumlahKontainer" => 0,
             "kodeDokumen" => $data['jns_bc'],
             "kodeKantor" => "050500",
             "kodeTujuanPengiriman" => "1",
             "kotaTtd" => "BANDUNG",
-            "namaTtd" => "MIRA AMALIA WULAN",
+            "namaTtd" => strtoupper($data['tg_jawab']),
             "netto" => (float) $data['netto'],
             "nik" => "",
             "nomorAju" => $noaju,
@@ -875,17 +915,23 @@ class Ib extends CI_Controller
         ];
         $arrayentitas = [];
         for($ke=1;$ke<=3;$ke++){
-            $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT";
+            $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
             $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "7" : "9");
-            $nomoridentitas = $ke==1 ? "010017176057000" : (($ke==2) ? "010017176057000" : $data['npwp']);
-            $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
-            $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
+            if($ke == 3){
+                $nomoridentitas = $data['jns_pkp']==1 ? $data['nik'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['nik'])))))) : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1));
+                $namaidentitas = $data['jns_pkp']==1 ? $data['namaceisa'] : $data['namasupplier'];
+                $alamat = $data['jns_pkp']==1 ? $data['alamatceisa'] : upper($data['alamat']);
+            }else{
+                $nomoridentitas = $ke==1 ? "0010017176057000000000" : (($ke==2) ? "0010017176057000000000" : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1)));
+                $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
+                $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
+            }
             $nibidentitas = $ke==1 ? "9120011042693" : "";
             $arrayke = [
                 "seriEntitas" => $ke,
                 "alamatEntitas" => $alamat,
                 "kodeEntitas" => $kodeentitas,
-                "kodeJenisIdentitas" => "5",
+                "kodeJenisIdentitas" => "6",
                 "namaEntitas" => trim($namaidentitas),
                 "nibEntitas" => $nibidentitas,
                 "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$nomoridentitas))),
@@ -946,7 +992,7 @@ class Ib extends CI_Controller
                 "merk" => "-",
                 "netto" => (float) $detx['kgs'],
                 "nilaiBarang" => 0,
-                "posTarif" => $detx['nohs'], //Nomor HS
+                "posTarif" => trim($detx['nohs']), //Nomor HS
                 "spesifikasiLain" => "",
                 "tipe" => "-",
                 "ukuran" => "",
@@ -991,6 +1037,194 @@ class Ib extends CI_Controller
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
         $this->kirim40($arrayheader,$id);
     }
+    function kirimdatakeceisa23($id){
+        $data = $this->ibmodel->getdatabyid($id);
+        $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
+        $arrayheader = [
+            "asalData" => "S",
+            "asuransi" => 0,
+            "bruto" => (float) $data['bruto'],
+            "cif" => 0,
+            "fob" => 0,
+            "freight" => 0,
+            "hargaPenyerahan" => (float) $data['totalharga'],
+            "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
+            "jumlahKontainer" => 0,
+            "kodeAsuransi" => "LN",
+            "kodeDokumen" => $data['jns_bc'],
+            "kodeIncoterm" => "CIF",
+            "kodeKantor" => "050500",
+            "kodeKantorBongkar" => "040300",
+            "kodePelBongkar" => $data['pelabuhan_bongkar'],
+            "kodePelMuat"  => $data['pelabuhan_muat'],
+            "kodePelTransit" => "",
+            "kodeTps" => "NCT1",
+            "kodeTujuanTpb" => "1",
+            "kodeTutupPu" => "11",
+            "kodeValuta" => $data['mt_uang'],
+            "kotaTtd" => "BANDUNG",
+            "namaTtd" => strtoupper($data['tg_jawab']),
+            "ndpbm" => (float) $data['kurs_usd'],
+            "netto" => (float) $data['netto'],
+            "nik" => "",
+            "nilaiBarang" => (float) $data['nilai_pab'],
+            "nomorAju" => $noaju,
+            "nomorBc11" => $data['bc11'],
+            "posBc11" => $data['nomor_posbc11'],
+            "seri" => 1,
+            "subposBc11" => $data['nomor_posbc11'],
+            "tanggalBc11" => $data['tgl_bc11'],
+            "tanggalTiba" => $data['tgl'],
+            "tanggalTtd" => $data['tgl_aju'],
+            "biayaTambahan" => 0,
+            "biayaPengurang" => 0,
+            "kodeKenaPajak" => "1"
+        ];
+        $ke=1;
+        $arrayentitas = [];
+        for($ke=1;$ke<=3;$ke++){
+            $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
+            $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "5" : "7");
+            if($ke == 3){
+                $nomoridentitas = $data['jns_pkp']==1 ? $data['nik'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['nik'])))))) : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1));
+            }else{
+                $nomoridentitas = $ke==1 ? "0010017176057000000000" : (($ke==2) ? "0010017176057000000000" : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1)));
+            }
+            $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
+            $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
+            $nibidentitas = $ke==1 ? "9120011042693" : "";
+            $kodejeniden = $ke==3 ? "4" : "5";
+            $arrayke = [
+                "seriEntitas" => $ke,
+                "alamatEntitas" => $alamat,
+                "kodeEntitas" => $kodeentitas,
+                "kodeJenisIdentitas" => $kodejeniden,
+                "namaEntitas" => trim($namaidentitas),
+                "nibEntitas" => $nibidentitas,
+                "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$nomoridentitas))),
+                "kodeNegara" => "ID",
+                "kodeStatus" => "5"
+            ];
+            if($ke==2){
+                $arrayke["kodeJenisApi"] = "2";
+            }
+            if($ke == 1){
+                $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
+                $arrayke["tanggalIjinEntitas"] = "2017-07-10";
+            }
+            array_push($arrayentitas,$arrayke);
+        }
+        $arraydokumen = [];
+        $dokmen = $this->ibmodel->getdatadokumen($id);
+        $no = 1;
+        foreach ($dokmen->result_array() as $doku) {
+            $arrayke = [
+                "kodeDokumen" => $doku['kode_dokumen'],
+                "nomorDokumen" => $doku['nomor_dokumen'],
+                "seriDokumen" => $no++,
+                "tanggalDokumen" => $doku['tgl_dokumen']
+            ];
+            array_push($arraydokumen,$arrayke);
+        }
+        $arrangkut = [];
+        $arrayangkutan = [
+            "namaPengangkut" => $data['angkutan'],
+            "nomorPengangkut" => $data['no_kendaraan'],
+            "seriPengangkut" => 1,
+            "kodeBendera" => $data['kode_negara'],
+            "kodeCaraAngkut" => $data['jns_angkutan']
+        ];
+        array_push($arrangkut,$arrayangkutan);
+        $arrkemas = [];
+        $arraykemasan = [
+            "jumlahKemasan" => (int) $data['jml_kemasan'],
+            "kodeJenisKemasan" => $data['kd_kemasan'],
+            "merkKemasan" => "-",
+            "seriKemasan" => 1
+        ];
+        array_push($arrkemas,$arraykemasan);
+        $arraybarang = [];
+        $datadet = $this->ibmodel->getdatadetailib($id);
+        $no = 0;
+        $jumlahfasilitas = 0;
+        foreach ($datadet as $detx) {
+            $no++;
+            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
+            $arrayke = [
+                "seriBarang" => $no,
+                "asuransi" => 0,
+                "cif" => (float) $detx['harga']*$jumlah,
+                "diskon" => 0,
+                "fob" => 0,
+                "freight" => 0,
+                "hargaEkspor" => 0,
+                "hargaSatuan" => (float) $detx['harga'],
+                "bruto" => 0,
+                "hargaPenyerahan" => (float) $detx['harga']*$jumlah,
+                "jumlahSatuan" => (int) $jumlah,
+                "kodeBarang" => $detx['brg_id'],
+                "kodeDokumen" => "40",
+                "kodeJenisKemasan" => $data['kd_kemasan'],
+                "isiPerKemasan" => 0,
+                "kodeSatuanBarang" => $detx['satbc'],
+                "kodeKategoriBarang" => "11",
+                "kodeNegaraAsal" => $data['kodenegara'],
+                "kodePerhitungan" => "1",
+                "merk" => "-",
+                "netto" => (float) $detx['kgs'],
+                "nilaiBarang" => 0,
+                "nilaiTambah" => 0,
+                "posTarif" => trim($detx['nohs']), //Nomor HS
+                "spesifikasiLain" => "",
+                "tipe" => "-",
+                "ukuran" => "",
+                "uraian" => "",
+                "ndpbm" => (float) $data['kurs_usd'],
+                "cifRupiah" => (float) $data['kurs_usd']*$jumlah,
+                "hargaPerolehan" => (float) $detx['harga']*$jumlah,
+                "kodeAsalBahanBaku" => "0",
+                "volume" => 0,
+                "jumlahKemasan" => (int) $data['jml_kemasan'],
+                "uraian" => trim($detx['nama_barang']),
+            ];
+            $arraytarif = [];
+            $barangtarif = [
+                "seriBarang" => $no,
+                "jumlahSatuan" => (int) $jumlah,
+                "kodeFasilitasTarif" => "3",
+                "kodeSatuanBarang" => $detx['kodesatuan'],
+                "nilaiBayar" => 0,
+                "nilaiFasilitas" => round(($detx['harga']*$jumlah)*0.11,0),
+                "nilaiSudahDilunasi" => 0,
+                "tarif" => 11,
+                "tarifFasilitas" => 100,
+                "kodeJenisPungutan" => "BM",
+                "kodeJenisTarif" => "1"
+            ];
+            $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
+            $arraybarangdokumen = [];
+            array_push($arraytarif,$barangtarif);
+            $arrayke['barangTarif'] = $arraytarif;
+            $arrayke['barangDokumen'] = $arraybarangdokumen;
+            array_push($arraybarang,$arrayke);
+        }
+        $arraypungutan = [];
+        $pungutanarray = [
+            "kodeFasilitasTarif" => "3",
+            "kodeJenisPungutan" => "PPN",
+            "nilaiPungutan" => round($jumlahfasilitas,0)
+        ];
+        array_push($arraypungutan,$pungutanarray);
+
+        $arrayheader['entitas'] = $arrayentitas;
+        $arrayheader['dokumen'] = $arraydokumen;
+        $arrayheader['pengangkut'] = $arrangkut;
+        $arrayheader['kemasan'] = $arrkemas;
+        $arrayheader['barang'] = $arraybarang;
+        $arrayheader['pungutan'] = $arraypungutan;
+        // echo '<pre>'.json_encode($arrayheader)."</pre>";
+        $this->kirim40($arrayheader,$id);
+    }
     public function kirim40($data,$id){
         $token = $this->ibmodel->gettoken();
         $curl = curl_init();
@@ -1011,7 +1245,7 @@ class Ib extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        print_r($databalik);
+        // print_r($databalik);
         if($databalik['status']=='OK'){
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
             $this->session->set_flashdata('errorsimpan',2);
@@ -1022,8 +1256,10 @@ class Ib extends CI_Controller
         }else{
             // echo '<script>alert("'.$databalik['status'].'");</script>';
             // $url = base_url().'ib/kosong';
+            print_r($databalik);
             $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.var_dump($databalik['Exception']));
+            // $this->session->set_flashdata('pesanerror',print_r($databalik));
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }
@@ -1033,6 +1269,35 @@ class Ib extends CI_Controller
         $jns = $_POST['jns'];
         $hasil = $this->ibmodel->getnomoraju($jns);
         echo json_encode($hasil);
+    }
+    public function getdoklampiran(){
+        $id = $_POST['id'];
+        $bc = $_POST['bc'];
+        $query = $this->ibmodel->getdatadokumen($id);
+        $arrdok = [];
+        foreach($query->result_array() as $que){
+            array_push($arrdok,$que['kode_dokumen']);
+        }
+        $hasil = 1;
+        if($bc == 40){
+            if(count($arrdok) > 0){
+                $hasil = 1;
+            }else{
+                $hasil = 'Lengkapi Lampiran Dokumen';
+            }
+        }
+        if($bc == 23){
+            if(count($arrdok) > 0){
+                if(in_array('380',$arrdok) && (in_array('740',$arrdok) || in_array('705',$arrdok))){
+                    $hasil = 1;
+                }else{
+                    $hasil = 'Dokumen Invoice, BL/AWB Belum di input';
+                }
+            }else{
+                $hasil = 'Lengkapi Lampiran Dokumen';
+            }
+        }
+        echo $hasil;
     }
     //End IB Controller
   
@@ -1146,5 +1411,27 @@ class Ib extends CI_Controller
         $pdf->Cell(15, 5, 'Catatan : ', 0);
         $pdf->Cell(19, 5, 'Dokumen ini sudah ditanda tangani secara digital', 0);
         $pdf->Output('I', 'FM-GD-05.pdf');
+    }
+    public function uploaddok($id){
+        $data['data'] = $this->ibmodel->getdatabyid($id);
+        $data['actiondok'] = base_url().'ib/simpandokumen';
+        $this->load->view('ib/uploaddok',$data);
+    }
+    public function simpandokumen(){
+        $this->ibmodel->updatedok();
+    }
+    public function caripelabuhan(){
+        $datacari = $_GET['search'];
+        $hasil = $this->ibmodel->getpelabuhanbykode($datacari);
+
+        if($hasil){
+            $dataar = [];
+            foreach ($hasil->result_array() as $key) {
+                $data['id'] = $key['kode_pelabuhan'];
+                $data['text'] = $key['kode_pelabuhan'].' - '.$key['uraian_pelabuhan'];
+                array_push($dataar,$data);
+            }
+        }
+        echo json_encode($dataar);
     }
 }
