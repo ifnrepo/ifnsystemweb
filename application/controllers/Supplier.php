@@ -36,7 +36,7 @@ class Supplier extends CI_Controller
     public function tambahdata()
     {
         $data['negara'] = $this->db->get('ref_negara')->result_array();
-        $this->load->view('supplier/addsupplier');
+        $this->load->view('supplier/addsupplier',$data);
     }
 
     public function simpansupplier()

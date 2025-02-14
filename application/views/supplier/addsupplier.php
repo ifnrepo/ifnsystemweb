@@ -145,7 +145,8 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kode Negara</label>
                 <div class="col">
-                    <select name="kode_negara" id="kode_negara" class="form-control">
+                    <select name="kode_negara" id="kode_negara" class="form-select">
+                        <option value=""></option>
                         <?php foreach ($negara as $key) : ?>
                             <option value="<?= $key['kode_negara']; ?>"><?= $key['uraian_negara']; ?></option>
                         <?php endforeach; ?>
