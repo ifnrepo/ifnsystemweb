@@ -141,6 +141,21 @@
                     </select>
                 </div>
             </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Kode Negara</label>
+                <div class="col">
+                    <select name="kode_negara" id="kode_negara" class="form-control">
+                        <!-- <option value="">Status</option> -->
+                        <?php foreach ($negara as $key) : ?>
+                            <?php if ($key['kode_negara'] == $data['kode_negara']) : ?>
+                                <option value="<?= $key['kode_negara']; ?>" selected><?= $key['uraian_negara']; ?></option>
+                            <?php else : ?>
+                                <option value="<?= $key['kode_negara']; ?>"><?= $key['uraian_negara']; ?></option>
+                            <?php endif; ?>
+                        <?php endforeach; ?>
+                    </select>
+                </div>
+            </div>
             <div class="row mt-2">
                 <label class="col-3 col-form-label pt-0">Aktif</label>
                 <div class="col">
@@ -209,6 +224,7 @@
                 norek: $("#norek").val(),
                 nik: $("#nik").val(),
                 jns_pkp: $("#jns_pkp").val(),
+                kode_negara: $("#kode_negara").val(),
                 namaceisa: $("#nama_di_ceisa").val(),
                 alamatceisa: $("#alamat_di_ceisa").val(),
                 aktif: aktif,

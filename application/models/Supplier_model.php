@@ -1,18 +1,28 @@
 <?php
 class Supplier_model extends CI_Model
 {
+
     public function getdata()
     {
-        $query = $this->db->get('supplier')->result_array();
-        // $query = $this->db->query("Select * from satuan");
-        return $query;
+        $this->db->select('supplier.*, ref_negara.kode_negara');
+        $this->db->from('supplier');
+        $this->db->join('ref_negara', 'ref_negara.kode_negara = supplier.kode_negara', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
     }
+
+
     public function getdatabyid($id)
     {
-        // $query = $this->db->query("Select * from kategori where id =" . $id);
-        // return $query;
-        return $this->db->get_where('supplier', ['id' => $id])->row_array();
+        $this->db->select('supplier.*, ref_negara.kode_negara');
+        $this->db->from('supplier');
+        $this->db->join('ref_negara', 'ref_negara.kode_negara = supplier.kode_negara', 'left');
+        $this->db->where('supplier.id', $id);
+        $query = $this->db->get();
+        return $query->row_array();
     }
+
+
     public function getdatabyname($nama)
     {
         $this->db->like('nama_supplier', $nama);
