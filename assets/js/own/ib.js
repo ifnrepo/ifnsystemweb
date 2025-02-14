@@ -65,11 +65,14 @@ $(document).ready(function () {
 		// Display the result in the element with id="demo"
 		document.getElementById("timetoexpired").innerHTML =
 			"Token Expired On 0" + hours + ":" + minutes + ":" + seconds;
-
+		if (!$("#addtoken").hasClass("disabled")) {
+			$("#addtoken").addClass("disabled");
+		}
 		// If the count down is finished, write some text
 		if (distance < 0) {
 			clearInterval(x);
 			document.getElementById("timetoexpired").innerHTML = "TOKEN EXPIRED";
+			$("#addtoken").removeClass("disabled");
 		}
 	}, 1000);
 });
