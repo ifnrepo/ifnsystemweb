@@ -120,6 +120,15 @@ $("#angkutan").blur(function () {
 $("#no_kendaraan").blur(function () {
 	savedata("no_kendaraan", $(this).val());
 });
+$("#ukuran_kontainer").change(function () {
+	savedata("ukuran_kontainer", $(this).val());
+});
+$("#nomor_kontainer").blur(function () {
+	savedata("nomor_kontainer", $(this).val());
+});
+$("#bendera_angkutan").change(function () {
+	savedata("bendera_angkutan", $(this).val());
+});
 $("#bruto").blur(function () {
 	savedata("bruto", toAngka($(this).val()));
 });
@@ -169,6 +178,24 @@ $("#nomor_pl").blur(function () {
 $("#tgl_pl").change(function () {
 	savedata("tgl_pl", tglmysql($(this).val()));
 });
+$("#nomor_blawb").blur(function () {
+	savedata("nomor_blawb", $(this).val());
+});
+$("#tgl_blawb").change(function () {
+	savedata("tgl_blawb", tglmysql($(this).val()));
+});
+$("#bc11").blur(function () {
+	savedata("bc11", $(this).val());
+});
+$("#tgl_bc11").change(function () {
+	savedata("tgl_bc11", tglmysql($(this).val()));
+});
+$("#nomor_posbc11").blur(function () {
+	savedata("nomor_posbc11", $(this).val());
+});
+$("#nomor_subposbc11").change(function () {
+	savedata("nomor_subposbc11", $(this).val());
+});
 $("#exnomor_bc").blur(function () {
 	savedata("exnomor_bc", $(this).val());
 });
@@ -204,18 +231,6 @@ $("#simpanhakbc").click(function () {
 	cekkolom();
 });
 $("#cekdata").click(function () {
-	// if ($("#jns_bc").val() == "") {
-	// 	pesan("Pilih Jenis BC !", "error");
-	// 	return false;
-	// }
-	// if ($("#nomor_aju").val() == "") {
-	// 	pesan("Isi atau Get Nomor AJU !", "error");
-	// 	return false;
-	// }
-	// if ($("#tgl_aju").val() == "") {
-	// 	pesan("Isi Tanggal AJU", "error");
-	// 	return false;
-	// }
 	var cek = cekkolom(1);
 	if (cek == 1) {
 		$("#kirimkeceisa").click();
@@ -266,6 +281,7 @@ function cekkolom(mode) {
 	}
 	// Untuk cek BC 23
 	if ($("#jns_bc").val() == "23") {
+		// $("#pesanerror").val("");
 		if ($("#pelabuhan_muat").val() == "") {
 			pesan("Pelabuhan Muat harus di isi", "warning");
 			return false;
@@ -282,8 +298,28 @@ function cekkolom(mode) {
 			pesan("Untuk BC 23 Nomor BC11 harus di isi", "warning");
 			return false;
 		}
+		if ($("#nomor_subposbc11").val() == "") {
+			pesan("Nomor Subpos BC11 harus di isi", "warning");
+			return false;
+		}
+		if ($("#nomor_posbc11").val() == "") {
+			pesan("Nomor Pos BC11 harus di isi", "warning");
+			return false;
+		}
+		if ($("#bendera_angkutan").val() == "") {
+			pesan("Negara Asal angkutan harus di isi", "warning");
+			return false;
+		}
+		if ($("#ukuran_kontainer").val() == "") {
+			pesan("Ukuran peti kemas harus di isi", "warning");
+			return false;
+		}
+		if ($("#nomor_kontainer").val() == "") {
+			pesan("Nomor peti kemas harus di isi", "warning");
+			return false;
+		}
 	}
-	// Untuk cek BC 226
+	// Untuk cek BC 262
 	if ($("#jns_bc").val() == "262") {
 		if ($("#exnomor_bc").val() == "") {
 			pesan("Nomor Ex BC harus di isi", "warning");
@@ -397,4 +433,24 @@ function loadlampiran() {
 			console.log(thrownError);
 		},
 	});
+}
+function ceklampiranbc23() {
+	var ide = $("#id_header").val();
+	$("#pesanerror").val("");
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "ib/getdoklampiran/",
+		data: { id: ide, bc: $("#jns_bc").val() },
+		success: function (data) {
+			$("#pesanerror").val(data);
+			// alert(data);
+			// return false;
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+	// return callbak;
 }

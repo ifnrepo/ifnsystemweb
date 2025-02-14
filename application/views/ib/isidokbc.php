@@ -106,6 +106,14 @@
                                     <!-- Surat Jalan  -->
                                     <div class="text-center bg-primary-lt mb-1 font-bold">Surat Jalan</div>
                                     <div class="mb-1 row">
+                                        <!-- <div class="col">
+                                            <div>
+                                                <label class="form-label font-kecil font-bold m-0">No SJ</label>
+                                                <div>
+                                                    <input type="text" class="form-control font-kecil btn-flat" aria-describedby="emailHelp" placeholder="Enter email">
+                                                </div>
+                                            </div>
+                                        </div> -->
                                         <div class="col">
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">No SJ</label>
@@ -233,7 +241,7 @@
                                                 <div class="row">
                                                     <label class="col-3 col-form-label font-kecil">Nomor</label>
                                                     <div class="col">
-                                                        <input type="text" class="form-control font-kecil btn-flat" id="nomor_blawb" name="nomor_blawb" value="<?= $datheader['nomor_blawb']; ?>" aria-describedby="emailHelp" placeholder="Ex Nomor BC" <?= $nonaktif; ?>>
+                                                        <input type="text" class="form-control font-kecil btn-flat" id="nomor_blawb" name="nomor_blawb" value="<?= $datheader['nomor_blawb']; ?>" aria-describedby="emailHelp" placeholder="Nomor BL / AWB" <?= $nonaktif; ?>>
                                                     </div>
                                                 </div>
                                             </div>
@@ -241,7 +249,7 @@
                                                 <div class="row">
                                                     <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                     <div class="col">
-                                                        <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_blawb" name="tgl_blawb" value="<?= tglmysql($datheader['tgl_blawb']); ?>" aria-describedby="emailHelp" placeholder="Tgl Ex BC" <?= $nonaktif; ?>>
+                                                        <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_blawb" name="tgl_blawb" value="<?= tglmysql($datheader['tgl_blawb']); ?>" aria-describedby="emailHelp" placeholder="Tgl BL / AWB" <?= $nonaktif; ?>>
                                                     </div>
                                                 </div>
                                             </div>
@@ -266,6 +274,18 @@
                                                         <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_bc11" name="tgl_bc11" value="<?= tglmysql($datheader['tgl_bc11']); ?>" aria-describedby="emailHelp" placeholder="Tgl BC 1.1" <?= $nonaktif; ?>>
                                                     </div>
                                                 </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <label class="col-3 col-form-label font-kecil">Nomor Pos BC11</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-flat" id="nomor_posbc11" name="nomor_posbc11" value="<?= $datheader['nomor_posbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Pos" <?= $nonaktif; ?>>
+                                            </div>
+                                        </div>
+                                        <div class="row mt-1">
+                                            <label class="col-3 col-form-label font-kecil">Nomor Subpos BC11</label>
+                                            <div class="col">
+                                                <input type="text" class="form-control font-kecil btn-flat" id="nomor_subposbc11" name="nomor_subposbc11" value="<?= $datheader['nomor_subposbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Subpos" <?= $nonaktif; ?>>
                                             </div>
                                         </div>
                                     </div>
@@ -301,9 +321,9 @@
                                         <div class="col-3 font-kecil">
                                             <select class="form-select font-kecil font-bold btn-flat" name="ukuran_kontainer" id="ukuran_kontainer" <?= $selectnonaktif; ?> >
                                                 <option value="">-</option>
-                                                <option value="20">20 Feet</option>
-                                                <option value="40">40 Feet</option>
-                                                <option value="60">60 Feet</option>
+                                                <option value="20" <?php if($datheader['ukuran_kontainer']=='20'){ echo "selected"; } ?>>20 Feet</option>
+                                                <option value="40" <?php if($datheader['ukuran_kontainer']=='40'){ echo "selected"; } ?>>40 Feet</option>
+                                                <option value="60" <?php if($datheader['ukuran_kontainer']=='60'){ echo "selected"; } ?>>60 Feet</option>
                                             </select>
                                         </div>
                                         <div class="col font-kecil">

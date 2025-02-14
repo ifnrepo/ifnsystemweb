@@ -54,24 +54,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-3">
-                  <!-- <h4 class="mb-1 font-kecil">Kategori Barang</h4>
-                  <span class="font-kecil">
-                    <div class="font-kecil">
-                      <select class="form-select form-control form-sm font-kecil font-bold" id="katbar" name="katbar">
-                        <option value="X">Semua Kategori</option>
-                        
-                      </select>
-                    </div>
-                  </span> -->
-
-                </div>
-                <div class="col-3 ">
-
-                </div>
-                <div class="col-3 font-kecil">
                   <div class="text-blue font-bold mt-2 ">Jumlah Dok : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Qty : <span id="jumlahpcs" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
+                </div>
+                <div class="col-3 ">
+                  <div class="text-blue font-bold mt-2 ">Jumlah IDR : <span id="jumlahidr" style="font-weight: normal;">Loading ..</span></div>
+                  <div class="text-blue font-bold">Jumlah USD : <span id="jumlahusd" style="font-weight: normal;">Loading ..</span></div>
+                </div>
+                <div class="col-3 font-kecil">
+                  
                 </div>
                 <div class="col-3">
                   <div class="">
@@ -115,6 +107,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php $cntbrg = 0;
               $jmpcs = 0;
               $jmkgs = 0;
+              $jmidr = 0;
+              $jmusd = 0;
               $no = 0;
               if ($data != null) : foreach ($data->result_array() as $detail) { 
                 $pengali = $detail['mtuang']==2 ? $detail['kurs_usd'] : ($detail['mtuang']==3 ? $detail['kurs_yen'] : 1);
@@ -122,7 +116,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bckeluar/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
-                    <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_sj']; ?><br><?= $detail['tgl_sj']; ?></td>
+                    <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl']; ?></td>
                     <td class="text-left line-12"><?= ucwords(strtolower(trim($detail['nama_customer']))); ?><?php if ($detail['port'] != '') {
                                                                                                         echo '- ' . ucwords(strtolower($detail['port']));
                                                                                                       } ?></td>
@@ -134,6 +128,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php $cntbrg++;
                   $jmpcs += $detail['pcs'];
                   $jmkgs += $detail['kgs'];
+                  $jmidr += $detail['nilai_pab']*$pengali;
+                  $jmusd += $xpengali;
                 }
               endif; ?>
             </tbody>
@@ -142,6 +138,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div id="jumlahrek" class="hilang"><?= $cntbrg; ?></div>
         <div id="jumlahpc" class="hilang"><?= $jmpcs; ?></div>
         <div id="jumlahkg" class="hilang"><?= $jmkgs; ?></div>
+        <div id="jumlahid" class="hilang"><?= $jmidr; ?></div>
+        <div id="jumlahus" class="hilang"><?= $jmusd; ?></div>
         <div class="card card-active hilang" style="clear:both;">
           <div class="card-body p-2 font-kecil">
             <div class="row">
