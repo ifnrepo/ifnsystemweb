@@ -315,6 +315,31 @@ function cekkolom(mode) {
 		pesan("Isi Lampiran Dokumen !", "warning");
 		return false;
 	}
+	if ($("#jns_angkutan").val() == "") {
+		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
+		pesan("Jenis Angkutan harus di isi !", "warning");
+		return false;
+	}
+	if ($("#angkutan").val() == "") {
+		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
+		pesan("Angkutan harus di isi !", "warning");
+		return false;
+	}
+	if ($("#no_kendaraan").val() == "") {
+		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
+		pesan("Nomor Angkutan harus di isi !", "warning");
+		return false;
+	}
+	if ($("#jml_kemasan").val() == "0") {
+		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
+		pesan("Jumlah Kemasan harus di isi !", "warning");
+		return false;
+	}
+	if ($("#kd_kemasan").val() == "") {
+		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
+		pesan("Jenis Kemasan harus di isi !", "warning");
+		return false;
+	}
 	// Untuk cek BC 23
 	if ($("#jns_bc").val() == "23") {
 		// $("#pesanerror").val("");
