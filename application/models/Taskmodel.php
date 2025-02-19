@@ -9,7 +9,13 @@ class Taskmodel extends CI_Model
         if($mode != 'cekbc'){
             $this->db->where('kode_dok', $mode);
         }else{
+            $this->db->group_start();
             $this->db->where('kode_dok', 'IB');
+                $this->db->or_group_start();
+                    $this->db->where('kode_dok', 'T');
+                    $this->db->where('dept_tuju', 'CU');
+                $this->db->group_end();
+            $this->db->group_end();
             $this->db->where('data_ok',1);
             $this->db->where('ok_tuju',0);
         }
@@ -296,7 +302,14 @@ class Taskmodel extends CI_Model
             }
             //Cek Validasi Oleh BC
             if($mode=='cekbc' && datauser($this->session->userdata('id'),'cekpakaibc')==1){
-                $this->db->where('kode_dok', 'IB');
+                // $this->db->where('kode_dok', 'IB');
+                $this->db->group_start();
+                    $this->db->where('kode_dok', 'IB');
+                    $this->db->or_group_start();
+                        $this->db->where('kode_dok', 'T');
+                        $this->db->where('dept_tuju', 'CU');
+                    $this->db->group_end();
+                $this->db->group_end();
                 $this->db->where('data_ok',1);
                 $this->db->where('ok_tuju',0);
                 $query += $this->db->get('tb_header')->num_rows();

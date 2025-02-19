@@ -28,6 +28,7 @@ $(document).ready(function () {
 	modalBoxXl();
 	modalBoxSc();
 	modalBoxlgSc();
+	modalBoxlgSc2();
 	modalBoxFull();
 	cancelTask();
 	verifTask();
@@ -361,6 +362,17 @@ function modalBoxSc() {
 
 function modalBoxlgSc() {
 	$("#modal-largescroll").on("show.bs.modal", function (e) {
+		var link = $(e.relatedTarget);
+		var title = link.data("title");
+		var modal = $(this);
+		modal.find(".modal-title").text(title);
+		$(this).find(".fetched-data").load(link.attr("href"));
+	});
+	return false;
+}
+
+function modalBoxlgSc2() {
+	$("#modal-largescroll2").on("show.bs.modal", function (e) {
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);

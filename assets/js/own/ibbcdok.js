@@ -380,6 +380,30 @@ function cekkolom(mode) {
 			return false;
 		}
 	}
+	// Untuk cek BC 30
+	if ($("#jns_bc").val() == "30") {
+		// $("#pesanerror").val("");
+		if ($("#pelabuhan_muat").val() == "") {
+			pesan("Pelabuhan Muat harus di isi", "warning");
+			return false;
+		}
+		if ($("#pelabuhan_bongkar").val() == "") {
+			pesan("Pelabuhan Bongkar harus di isi", "warning");
+			return false;
+		}
+		if ($("#bendera_angkutan").val() == "") {
+			pesan("Negara Asal angkutan harus di isi", "warning");
+			return false;
+		}
+		// if ($("#ukuran_kontainer").val() == "") {
+		// 	pesan("Ukuran peti kemas harus di isi", "warning");
+		// 	return false;
+		// }
+		// if ($("#nomor_kontainer").val() == "") {
+		// 	pesan("Nomor peti kemas harus di isi", "warning");
+		// 	return false;
+		// }
+	}
 	// Untuk cek BC 262
 	if ($("#jns_bc").val() == "262") {
 		if ($("#exnomor_bc").val() == "") {

@@ -11,12 +11,12 @@
             </tr>
         </thead>
         <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;" >
-            <?php foreach ($header as $data) { ?>
+            <?php $tampung = ''; foreach ($header as $data) {  $tampung = $data['po'] !='' ? $data['spek'] : $data['nama_barang']; ?>
                 <tr>
-                    <td><?= $data['nama_barang']; ?></td>
+                    <td><?= $tampung; ?></td>
                     <td><?= $data['nama_kategori']; ?></td>
                     <td><?= $data['namasatuan']; ?></td>
-                    <td><?= rupiah($data['pcs'],2); ?></td>
+                    <td><?= rupiah($data['pcs'],0); ?></td>
                     <td><?= rupiah($data['kgs'],2); ?></td>
                 </tr>
             <?php } ?>
@@ -41,7 +41,7 @@
         </div>
         <!-- <hr class="m-1"> -->
         <div class="modal-footer">
-            <button type="button" class="btn btn-link link-secondary me-auto" data-bs-dismiss="modal">Batal</button>
+            <button type="button" class="btn btn-link btn-sm link-secondary me-auto" data-bs-dismiss="modal">Batal</button>
             <span class="text-red" style="font-size: 12px !important;" id="keteranganerr"></span>
             <a class="btn btn-sm btn-primary" style="color: white;" id="simpanhakbc">Simpan</a>
         </div>
