@@ -1,4 +1,5 @@
 <div class="row font-kecil">
+
     <div class="col-6">
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Kode</label>
@@ -67,6 +68,7 @@
                 <input type="text" class="form-control font-kecil" name="propinsi" id="propinsi" placeholder="propinsi">
             </div>
         </div>
+
         <div class="mb-1 row">
             <label class="col-3 col-form-label font-kecil required">Kode Pos</label>
             <div class="col">
@@ -167,6 +169,17 @@
                 <input type="text" class="form-control font-kecil" name="region" id="region" placeholder="Region">
             </div>
         </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Kode Negara</label>
+            <div class="col">
+                <select name="kode_negara" id="kode_negara" class="form-select font-kecil">
+                    <option>Pilih Kode</option>
+                    <?php foreach ($negara as $key) : ?>
+                        <option value="<?= $key['kode_negara']; ?>"><?= $key['uraian_negara']; ?></option>
+                    <?php endforeach; ?>
+                </select>
+            </div>
+        </div>
 
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">InCode</label>
@@ -224,6 +237,7 @@
                 jcode2: $("#jcode2").val(),
                 benua: $("#benua").val(),
                 region: $("#region").val(),
+                kode_negara: $("#kode_negara").val(),
                 cust_id: $("#cust_id").val(),
 
             },

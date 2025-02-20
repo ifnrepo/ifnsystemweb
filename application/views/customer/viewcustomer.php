@@ -216,6 +216,21 @@
                                                                     <input type="text" class="form-control font-kecil" name="region" id="region" placeholder="Region" value="<?= $data['region']; ?>" readonly>
                                                                 </div>
                                                             </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Kode Negara</label>
+                                                                <div class="col">
+                                                                    <select name="kode_negara" id="kode_negara" class="form-control" disabled>
+                                                                        <option value=""></option>
+                                                                        <?php foreach ($negara as $key) : ?>
+                                                                            <?php if ($key['kode_negara'] == $data['kode_negara']) : ?>
+                                                                                <option value="<?= $key['kode_negara']; ?>" selected><?= $key['kode_negara']; ?></option>
+                                                                            <?php else : ?>
+                                                                                <option value="<?= $key['kode_negara']; ?>"><?= $key['kode_negara']; ?></option>
+                                                                            <?php endif; ?>
+                                                                        <?php endforeach; ?>
+                                                                    </select>
+                                                                </div>
+                                                            </div>
 
                                                             <div class="mb-1 row">
                                                                 <label class="col-3 col-form-label required">CustId</label>

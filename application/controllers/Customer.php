@@ -35,7 +35,8 @@ class Customer extends CI_Controller
 
     public function tambahdata()
     {
-        $this->load->view('customer/addcustomer');
+        $data['negara'] = $this->db->get('ref_negara')->result_array();
+        $this->load->view('customer/addcustomer', $data);
     }
 
     public function simpancustomer()
@@ -63,6 +64,7 @@ class Customer extends CI_Controller
             'jcode2' => $_POST['jcode2'],
             'benua' => $_POST['benua'],
             'region' => $_POST['region'],
+            'kode_negara' => $_POST['kode_negara'],
             'cust_id' => $_POST['cust_id']
         ];
         $hasil = $this->customer_model->simpancustomer($data);
@@ -75,6 +77,7 @@ class Customer extends CI_Controller
 
         $header['header'] = 'master';
         $data['data'] = $this->customer_model->getdatabyid($id);
+        $data['negara'] = $this->db->get('ref_negara')->result_array();
         // $this->load->view('layouts/header', $header);
         $this->load->view('customer/editcustomer', $data);
         // $this->load->view('layouts/footer');
@@ -105,6 +108,7 @@ class Customer extends CI_Controller
             'jcode2' => $_POST['jcode2'],
             'benua' => $_POST['benua'],
             'region' => $_POST['region'],
+            'kode_negara' => $_POST['kode_negara'],
             'cust_id' => $_POST['cust_id']
         ];
         $hasil = $this->customer_model->updatecustomer($data);
@@ -130,6 +134,7 @@ class Customer extends CI_Controller
 
     public function viewcustomer($id)
     {
+        $data['negara'] = $this->db->get('ref_negara')->result_array();
         $data['data'] = $this->customer_model->getdatabyid($id);
         $this->load->view('customer/viewcustomer', $data);
     }
