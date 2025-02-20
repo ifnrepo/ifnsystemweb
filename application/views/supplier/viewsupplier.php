@@ -152,9 +152,9 @@
                                                                         <option value=""></option>
                                                                         <?php foreach ($negara as $key) : ?>
                                                                             <?php if ($key['kode_negara'] == $data['kode_negara']) : ?>
-                                                                                <option value="<?= $key['kode_negara']; ?>" selected><?= $key['uraian_negara']; ?></option>
+                                                                                <option value="<?= $key['kode_negara']; ?>" selected><?= $key['kode_negara']; ?></option>
                                                                             <?php else : ?>
-                                                                                <option value="<?= $key['kode_negara']; ?>"><?= $key['uraian_negara']; ?></option>
+                                                                                <option value="<?= $key['kode_negara']; ?>"><?= $key['kode_negara']; ?></option>
                                                                             <?php endif; ?>
                                                                         <?php endforeach; ?>
                                                                     </select>
