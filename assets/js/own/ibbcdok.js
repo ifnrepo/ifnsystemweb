@@ -263,6 +263,9 @@ $("#pelabuhan_muat").change(function () {
 $("#pelabuhan_bongkar").change(function () {
 	savedata("pelabuhan_bongkar", $(this).val());
 });
+$("#kode_incoterm").change(function () {
+	savedata("kode_incoterm", $(this).val());
+});
 $("#simpanhakbc").click(function () {
 	cekkolom();
 });
@@ -395,10 +398,10 @@ function cekkolom(mode) {
 			pesan("Negara Asal angkutan harus di isi", "warning");
 			return false;
 		}
-		// if ($("#ukuran_kontainer").val() == "") {
-		// 	pesan("Ukuran peti kemas harus di isi", "warning");
-		// 	return false;
-		// }
+		if ($("#kode_incoterm").val() == "") {
+			pesan("Kode Cara Bayar harus di isi", "error");
+			return false;
+		}
 		// if ($("#nomor_kontainer").val() == "") {
 		// 	pesan("Nomor peti kemas harus di isi", "warning");
 		// 	return false;
