@@ -3,15 +3,20 @@ class Customer_model extends CI_Model
 {
     public function getdata()
     {
-        $query = $this->db->get('customer')->result_array();
-        // $query = $this->db->query("Select * from satuan");
-        return $query;
+        $this->db->select('customer.*, ref_negara.kode_negara');
+        $this->db->from('customer');
+        $this->db->join('ref_negara', 'ref_negara.kode_negara = customer.kode_negara', 'left');
+        $query = $this->db->get();
+        return $query->result_array();
     }
+
     public function getdatabyid($id)
     {
-        // $query = $this->db->query("Select * from kategori where id =" . $id);
-        // return $query;
-        return $this->db->get_where('customer', ['id' => $id])->row_array();
+        $this->db->select('customer.*, ref_negara.kode_negara');
+        $this->db->from('customer');
+        $this->db->join('ref_negara', 'ref_negara.kode_negara = customer.kode_negara', 'left');
+        $this->db->where('customer.id', $id);
+        return $this->db->get()->row_array();
     }
     public function simpancustomer($data)
     {
@@ -30,7 +35,7 @@ class Customer_model extends CI_Model
         $query = $this->db->query("Delete from customer where id =" . $id);
         return $query;
     }
-        public function getdatabyname($nama)
+    public function getdatabyname($nama)
     {
         $this->db->like('nama_customer', $nama);
         return $this->db->get('customer');
