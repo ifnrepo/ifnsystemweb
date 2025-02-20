@@ -65,7 +65,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1739780183'; ?>
+<?php $updatejs = '1739780202'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -104,6 +104,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'ibx') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/ibbcdok.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'akb') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/akb.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'adj') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/adj.js?<?= $updatejs; ?>"></script>

@@ -208,6 +208,10 @@ class Out extends CI_Controller {
 		$this->load->view('out/dataout',$data);
 		$this->load->view('layouts/footer',$footer);
     }
+    public function addbarangout(){
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $this->load->view('out/addbarangout',$data);
+    }
     public function simpanout($id){
         $data = [
             'ok_tuju' => 1,
@@ -309,6 +313,23 @@ class Out extends CI_Controller {
     public function simpandetailbarang()
     {
         $hasil = $this->out_model->simpandetailbarang();
+        if ($hasil) {
+            $kode = $hasil['id'];
+            $url = base_url() . 'out/dataout/' . $kode;
+            redirect($url);
+        }
+    }
+    public function simpandetailbarangx()
+    {
+        $data = [
+            'id_header' => $_POST['id_header'],
+            'id_barang' => $_POST['id_barang'],
+            'id_satuan' => $_POST['id_satuan'],
+            'pcs' => $_POST['pcs'],
+            'kgs' => $_POST['kgs'],
+            'keterangan' => $_POST['keterangan']
+        ];
+        $hasil = $this->out_model->simpandetailbarangx($data);
         if ($hasil) {
             $kode = $hasil['id'];
             $url = base_url() . 'out/dataout/' . $kode;

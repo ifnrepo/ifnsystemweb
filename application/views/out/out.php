@@ -118,15 +118,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php } else { ?>
                     <td class='font-bold'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important"><?= $datdet['nodok'] ?></span></a></td>
                   <?php } ?>
-                  <td><?= $jmlrek; ?><br><span class="badge badge-outline text-pink"><?= rupiah($datdet['jumlahpcs'],0); ?> Pcs, <?= rupiah($datdet['netto'],2); ?> Kgs</span></td>
+                  <td class="line-12"><?= $jmlrek; ?><br><span class="badge badge-outline text-pink"><?= rupiah($datdet['jumlahpcs'],0); ?> Pcs, <?= rupiah($datdet['netto'],2); ?> Kgs</span></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
                   <td><?= $datdet['keterangan']; ?></td>
                   <td class="text-end"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
                       <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini <br> <?= $datdet['nomor_dok']; ?>" data-href="<?= base_url() . 'out/hapusdataout/' . $datdet['id']; ?>" class='btn btn-sm btn-danger <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Hapus Transaksi'><i class='fa fa-trash-o mr-1'></i> Hapus</a>
-                    <?php } else if ($datdet['data_ok'] == 1) { ?>
+                    <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_tuju']==1 && $datdet['nomor_bc']!='') { ?>
                       <a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
+                    <?php }else { ?>
+                      <span class="text-teal font-kecil">Menunggu Persetujuan Keluar Barang</span>
                     <?php } ?>
                   </td>
                 </tr>

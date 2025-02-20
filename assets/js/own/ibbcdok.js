@@ -263,6 +263,9 @@ $("#pelabuhan_muat").change(function () {
 $("#pelabuhan_bongkar").change(function () {
 	savedata("pelabuhan_bongkar", $(this).val());
 });
+$("#kode_incoterm").change(function () {
+	savedata("kode_incoterm", $(this).val());
+});
 $("#simpanhakbc").click(function () {
 	cekkolom();
 });
@@ -379,6 +382,30 @@ function cekkolom(mode) {
 			pesan("Nomor peti kemas harus di isi", "warning");
 			return false;
 		}
+	}
+	// Untuk cek BC 30
+	if ($("#jns_bc").val() == "30") {
+		// $("#pesanerror").val("");
+		if ($("#pelabuhan_muat").val() == "") {
+			pesan("Pelabuhan Muat harus di isi", "warning");
+			return false;
+		}
+		if ($("#pelabuhan_bongkar").val() == "") {
+			pesan("Pelabuhan Bongkar harus di isi", "warning");
+			return false;
+		}
+		if ($("#bendera_angkutan").val() == "") {
+			pesan("Negara Asal angkutan harus di isi", "warning");
+			return false;
+		}
+		if ($("#kode_incoterm").val() == "") {
+			pesan("Kode Cara Bayar harus di isi", "error");
+			return false;
+		}
+		// if ($("#nomor_kontainer").val() == "") {
+		// 	pesan("Nomor peti kemas harus di isi", "warning");
+		// 	return false;
+		// }
 	}
 	// Untuk cek BC 262
 	if ($("#jns_bc").val() == "262") {

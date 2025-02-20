@@ -1,17 +1,20 @@
 <?php
-class Ib_model extends CI_Model
+class Akb_model extends CI_Model
 {
     public function getdata($kode)
     {
         $arrkondisi = [
             'id_perusahaan' => IDPERUSAHAAN,
-            'kode_dok' => 'IB',
-            'dept_tuju' => $kode,
+            'kode_dok' => 'T',
+            // 'dept_tuju' => $kode,
+            'dept_tuju' => 'CU',
             'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th')
+            'year(tgl)' => $this->session->userdata('th'),
+            'tanpa_bc' => 0,
+            'ok_tuju' => 1
         ];
-        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier');
-        $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
+        $this->db->select('tb_header.*,customer.nama_customer as namacustomer');
+        $this->db->join('customer', 'customer.id = tb_header.id_buyer', 'left');
         $this->db->where($arrkondisi);
         $this->db->order_by('tgl','desc');
         $this->db->order_by('nomor_dok','desc');
@@ -20,11 +23,11 @@ class Ib_model extends CI_Model
     }
     public function getdatabyid($kode)
     {
-        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,supplier.npwp,supplier.nik,supplier.jns_pkp,supplier.nama_di_ceisa as namaceisa,supplier.alamat_di_ceisa as alamatceisa,supplier.kode_negara as kodenegara,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat,ref_negara.kode_negara');
+        $this->db->select('tb_header.*,customer.nama_customer as namacustomer,customer.alamat,customer.kontak,customer.npwp,customer.kode_negara as negaracustomer,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat,ref_negara.kode_negara');
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_muat) as pelmuat");
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_bongkar) as pelbongkar");
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
-        $this->db->join('supplier', 'supplier.id=tb_header.id_pemasok', 'left');
+        $this->db->join('customer', 'customer.id=tb_header.id_buyer', 'left');
         $this->db->join('ref_mt_uang', 'ref_mt_uang.id=tb_header.mtuang', 'left');
         $this->db->join('ref_jns_angkutan', 'ref_jns_angkutan.id=tb_header.jns_angkutan', 'left');
         $this->db->join('ref_negara', 'ref_negara.id=tb_header.bendera_angkutan', 'left');
@@ -33,7 +36,7 @@ class Ib_model extends CI_Model
     }
     public function getdatadetailib($data)
     {
-        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id");
+        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
@@ -43,6 +46,7 @@ class Ib_model extends CI_Model
         $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
         $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left');
         $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
+        $this->db->join('tb_klppo h', 'h.id = g.klppo', 'left');
         $this->db->where('a.id_header', $data);
         return $this->db->get()->result_array();
     }
@@ -274,8 +278,8 @@ class Ib_model extends CI_Model
         $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
-    public function getbcmasuk(){
-        $this->db->where('masuk',1);
+    public function getbckeluar(){
+        $this->db->where('masuk',0);
         return $this->db->get('ref_dok_bc');
     }
     public function simpandatanobc(){
@@ -366,6 +370,9 @@ class Ib_model extends CI_Model
     }
     public function refpelabuhan(){
         return $this->db->order_by('kode_pelabuhan')->get('ref_pelabuhan');
+    }
+    public function refincoterm(){
+        return $this->db->order_by('kode_incoterm')->get('ref_incoterm');
     }
     public function getpelabuhanbykode($kode){
         $this->db->like('kode_pelabuhan',$kode);

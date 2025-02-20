@@ -604,6 +604,35 @@ class Out_model extends CI_Model{
         }
         return $que;
     }
+    public function simpandetailbarangx($data)
+    {
+        $hasil =  $this->db->insert('tb_detail', $data);
+        $idnya = $this->db->insert_id();
+        $this->helpermodel->isilog($this->db->last_query());
+        $data['id_detail'] = $idnya;
+        $hasil =  $this->db->insert('tb_detailgen', $data);
+        $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
+        // Isi data detmaterial
+        $cek = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
+        if ($cek->num_rows() > 0) {
+            foreach ($cek->result_array() as $kec) {
+                $xdata = [
+                    'id_header' => $data['id_header'],
+                    'id_detail' => $idnya['id'],
+                    'id_barang' => $kec['id_barang_bom'],
+                    'persen' => $kec['persen'],
+                    'kgs' => ($kec['persen'] / 100) * $data['kgs']
+                ];
+                $this->db->insert('tb_detmaterial', $xdata);
+                $this->helpermodel->isilog($this->db->last_query());
+            }
+        }
+        if ($hasil) {
+            $this->db->where('id', $data['id_header']);
+            $que = $this->db->get('tb_header')->row_array();
+        }
+        return $que;
+    }
     public function updatecustomer($data){
         $this->db->where('id',$data['id']);
         return $this->db->update('tb_header',['id_buyer'=>$data['id_buyer']]);
