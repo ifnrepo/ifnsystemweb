@@ -148,7 +148,7 @@
                     <select name="kode_negara" id="kode_negara" class="form-select">
                         <option value=""></option>
                         <?php foreach ($negara as $key) : ?>
-                            <option value="<?= $key['kode_negara']; ?>"><?= $key['uraian_negara']; ?></option>
+                            <option value="<?= $key['kode_negara']; ?>"><?= $key['kode_negara']; ?> (<?= $key['uraian_negara']; ?>)</option>
                         <?php endforeach; ?>
                     </select>
                 </div>
