@@ -175,7 +175,7 @@
                 <select name="kode_negara" id="kode_negara" class="form-select font-kecil">
                     <option>Pilih Kode</option>
                     <?php foreach ($negara as $key) : ?>
-                        <option value="<?= $key['kode_negara']; ?>"><?= $key['uraian_negara']; ?></option>
+                        <option value="<?= $key['kode_negara']; ?>"><?= $key['kode_negara']; ?> (<?= $key['uraian_negara']; ?>)</option>
                     <?php endforeach; ?>
                 </select>
             </div>
