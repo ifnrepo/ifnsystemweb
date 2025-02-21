@@ -890,12 +890,12 @@ class Akb extends CI_Controller
         $arrayheader = [
             "asalData" => "S",
             "kodeDokumen" => $data['jns_bc'],
-            "asuransi" => 0,
+            "asuransi" => (float) $data['asuransi'],
             "bruto" => (float) $data['bruto'],
             "flagCurah" => "2",
             "flagMigas" => "2",
             "fob" => (float) $data['nilai_pab'],
-            "freight" => 0,
+            "freight" => (float) $data['freight'],
             "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
             "jumlahKontainer" => 1,
             "kodeAsuransi" => "DN",
@@ -905,7 +905,7 @@ class Akb extends CI_Controller
             "kodeKantor" => "040300",
             "kodeKantorEkspor" => "040300",
             "kodeKantorMuat" => "040300",
-            "kodeKantorPeriksa" => "040300",
+            "kodeKantorPeriksa" => "050500",
             "kodeKategoriEkspor" => "41",
             "kodeLokasi" => "6",
             "kodeNegaraTujuan" => $data['negaracustomer'],
@@ -924,12 +924,12 @@ class Akb extends CI_Controller
             "tanggalPeriksa" => $data['tgl_aju'],
             "tanggalTtd" => $data['tgl_aju'],
             "kodeIncoterm" => $data['kode_incoterm'],
-            "kesiapanBarang" => [],
-            "bankDevisa" => []
+            // "kesiapanBarang" => [],
+            // "bankDevisa" => []
         ];
         $arrayentitas = [];
         for($ke=1;$ke<=4;$ke++){
-            $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
+            $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,DESA CANGKUANG 004/001 CANGKUANG,RANCAEKEK, BANDUNG, JAWA BARAT";
             $serient = $ke==1 ? "2" : (($ke==2) ? "8" : (($ke==3) ? "6" : "13"));
             $kodeentitas = $ke==1 ? "2" : (($ke==2) ? "7" : (($ke==3) ? "8" : "6"));
             $kodejnent = $ke==1 ? "6" : (($ke==4) ? "6" : "");
@@ -953,7 +953,7 @@ class Akb extends CI_Controller
                 $negara = '';
                 $status = "5";
             }
-            $nibidentitas = $ke==1 ? "9120011042693" : (($ke==4) ? "9120011042693" : "");
+            $nibidentitas = $ke==1 ? "9120011042693" : (($ke==2) ? "9120011042693" : "");
             $arrayke = [
                 "seriEntitas" => (int) $serient,
                 "kodeEntitas" => $kodeentitas,
@@ -990,10 +990,10 @@ class Akb extends CI_Controller
         array_push($arrangkut,$arrayangkutan);
         $arraykonta = [];
         $arraykontainer = [
-            "kodeTipeKontainer" => 1,
+            "kodeTipeKontainer" => $data['tipe_kontainer'],
             "kodeUkuranKontainer" => $data['ukuran_kontainer'],
             "nomorKontainer" => $data['nomor_kontainer'],
-            "kodeJenisKontainer" => 4
+            "kodeJenisKontainer" => $data['jenis_kontainer']
         ];
         array_push($arraykonta,$arraykontainer);
         $arrkemas = [];
@@ -1041,20 +1041,20 @@ class Akb extends CI_Controller
             ];
             $arraytarif = [];
             $barangtarif = [
-                "seriBarang" => $no,
-                "jumlahSatuan" => (int) $jumlah,
-                "kodeFasilitasTarif" => "3",
-                "kodeSatuanBarang" => $detx['kodesatuan'],
-                "nilaiBayar" => 0,
-                "nilaiFasilitas" => round(($detx['harga']*$jumlah)*0.11,0),
-                "nilaiSudahDilunasi" => 0,
-                "tarif" => 11,
-                "tarifFasilitas" => 100,
-                "kodeJenisPungutan" => "PPN",
-                "kodeJenisTarif" => "1"
+                // "seriBarang" => $no,
+                // "jumlahSatuan" => (int) $jumlah,
+                // "kodeFasilitasTarif" => "3",
+                // "kodeSatuanBarang" => $detx['kodesatuan'],
+                // "nilaiBayar" => 0,
+                // "nilaiFasilitas" => round(($detx['harga']*$jumlah)*0.11,0),
+                // "nilaiSudahDilunasi" => 0,
+                // "tarif" => 11,
+                // "tarifFasilitas" => 100,
+                // "kodeJenisPungutan" => "PPN",
+                // "kodeJenisTarif" => "1"
             ];
             $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
-            array_push($arraytarif,$barangtarif);
+            // array_push($arraytarif,$barangtarif);
             $arrayke['barangTarif'] = $arraytarif;
             array_push($arraybarang,$arrayke);
         }
@@ -1065,14 +1065,35 @@ class Akb extends CI_Controller
             "nilaiPungutan" => round($jumlahfasilitas,0)
         ];
         array_push($arraypungutan,$pungutanarray);
+        $arrayBank = [];
+        $bankarray = [
+            "kodeBank" => "213",
+            "seriBank" => 1
+        ];
+        array_push($arrayBank,$bankarray);
+        $arrsiapbar = [];
+        $arraysiapbarang = [
+            "kodeJenisBarang" => "2",
+            "kodeJenisGudang" => "2",
+            "namaPic" => "MR. AWAN KURNIAWAN",
+            "alamat" => "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,DESA CANGKUANG 004/001 CANGKUANG,RANCAEKEK, BANDUNG, JAWA BARAT",
+            "nomorTelpPic" => "022-7798042",
+            "lokasiSiapPeriksa" => "PT. INDONEPTUNE NET MANUFACTURING",
+            "tanggalPkb" => $data['tgl_aju'],
+            "waktuSiapPeriksa" => (new \DateTime('Asia/Jakarta'))->format(DATE_ATOM),
+            "kodeCaraStuffing" => $data['jenis_kontainer']
+        ];
+        array_push($arrsiapbar,$arraysiapbarang);
 
         $arrayheader['entitas'] = $arrayentitas;
         $arrayheader['dokumen'] = $arraydokumen;
         $arrayheader['pengangkut'] = $arrangkut;
+        // $arrayheader['kontainer'] = $arraykontainer;
         $arrayheader['kemasan'] = $arrkemas;
         $arrayheader['barang'] = $arraybarang;
+        $arrayheader['bankDevisa'] = $arrayBank;
+        $arrayheader['kesiapanBarang'] = $arrsiapbar;
         // $arrayheader['pungutan'] = $arraypungutan;
-        // $arrayheader['kontainer'] = $arraykontainer;
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
         $this->kirim30($arrayheader,$id);
     }
@@ -1293,12 +1314,9 @@ class Akb extends CI_Controller
             $url = base_url().'akb/isidokbc/'.$id;
             redirect($url);
         }else{
-            // echo '<script>alert("'.$databalik['status'].'");</script>';
-            // $url = base_url().'ib/kosong';
-            print_r($databalik);
+            // print_r($databalik);
             $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.var_dump($databalik['Exception']));
-            // $this->session->set_flashdata('pesanerror',print_r($databalik));
+            $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
             $url = base_url().'akb/isidokbc/'.$id;
             redirect($url);
         }

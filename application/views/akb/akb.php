@@ -45,10 +45,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-2">
-
+                  <h4 class="mb-1 font-kecil">Dept Pengirim</h4>
+                  <span class="font-kecil">
+                    <div class="font-kecil">
+                      <select class="form-select form-control form-sm font-kecil font-bold" id="dept_id" name="dept_id">
+                        <?php foreach ($hakdep as $dep) { if($dep['bbl']==1):?>
+                          <option value="<?= $dep['dept_id']; ?>" <?php if($this->session->userdata('depttuju')==$dep['dept_id']){ echo "selected"; } ?>><?= $dep['departemen']; ?></option>
+                        <?php endif; } ?>
+                      </select>
+                    </div>
+                  </span>
                 </div>
                 <div class="col-3">
-                 
+                 <h4 class="mb-1 font-kecil">.</h4>
+                  <span class="font-kecil">
+                    <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
+                  </span>
                 </div>
                 <div class="col-5">
                   <h4 class="mb-1"></h4>
@@ -96,7 +108,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php if($datdet['tanpa_bc']==0){ ?>
                     <td style="font-size: 17px" class="text-info"><?= $datdet['jns_bc']; ?></td>
                       <?php if($datdet['send_ceisa']==1){ ?>
-                        <td class="line-12"><a href="<?= base_url().'ib/isidokbc/'.$datdet['id']; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                        <td class="line-12"><a href="<?= base_url().'akb/isidokbc/'.$datdet['id']; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
                         <?php }else{ ?>
                           <td class="line-12"><?= $isibc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
                       <?php } ?>
@@ -106,8 +118,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php } ?>
                   <td class="text-right line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
-                      <a href="<?= base_url() . 'ib/dataib/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
-                      <a href="#" data-href="<?= base_url() . 'ib/hapusib/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus IB <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
+                      <a href="<?= base_url() . 'akb/dataib/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
+                      <a href="#" data-href="<?= base_url() . 'akb/hapusib/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus IB <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==0 && $datdet['tanpa_bc']==0) { ?>
                       Sedang Dicek Oleh BC /<a href="#" class="text-danger" data-href="<?= base_url() . 'ib/editib/' . $datdet['id'] ?>" style='padding: 3px 8px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit IB <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'>Edit</a>
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && $datdet['tanpa_bc']==0 && $datdet['nomor_bc']=='') { 
