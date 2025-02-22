@@ -162,4 +162,10 @@ class Dept_model extends CI_Model
         }
         return $this->db->order_by('departemen','ASC')->get()->result_array();
     }
+    public function getdeptkirim(){
+        return $this->db->get_where('dept',['akb'=>1]);
+    }
+    public function getdeptmasuk(){
+        return $this->db->get_where('dept',['amb'=>1]);
+    }
 }

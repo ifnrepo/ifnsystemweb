@@ -31,10 +31,10 @@ class Akb extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['level'] = $this->usermodel->getdatalevel();
-        $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
+        $data['hakdep'] = $this->deptmodel->getdeptkirim();
         $data['dephak'] = $this->deptmodel->getdata();
         $data['depbbl'] = $this->deptmodel->getdata_dept_bbl(1);
-        $kode = $this->session->userdata('depttuju');
+        $kode = $this->session->userdata('deptdari');
         $data['data'] = $this->akbmodel->getdata($kode);
         $data['datatoken'] = $this->akbmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
@@ -47,7 +47,7 @@ class Akb extends CI_Controller
     {
         $this->session->set_userdata('bl', (int)date('m'));
         $this->session->set_userdata('th', date('Y'));
-        $this->session->set_userdata('depttuju', 'CU');
+        $this->session->unset_userdata('deptdari');
         $url = base_url() . 'akb';
         redirect($url);
     }
@@ -57,9 +57,9 @@ class Akb extends CI_Controller
         $this->session->set_userdata('th', $_POST['th']);
         echo 1;
     }
-    public function getdataib()
+    public function getdataakb()
     {
-        $this->session->set_userdata('depttuju', $_POST['dept']);
+        $this->session->set_userdata('deptdari', $_POST['dept']);
         echo 1;
     }
     public function tambahdataib()

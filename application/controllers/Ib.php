@@ -31,7 +31,8 @@ class Ib extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['level'] = $this->usermodel->getdatalevel();
-        $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
+        // $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
+        $data['hakdep'] = $this->deptmodel->getdeptmasuk();
         $data['dephak'] = $this->deptmodel->getdata();
         $data['depbbl'] = $this->deptmodel->getdata_dept_bbl(1);
         $kode = $this->session->userdata('depttuju');

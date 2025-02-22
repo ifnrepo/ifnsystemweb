@@ -451,13 +451,13 @@
                                             <div class="mb-1 row" id="kolomfreight">
                                                 <label class="col-3 col-form-label font-kecil mx-2">Freight</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="freight" name="freight" value="<?= rupiah($datheader['freight'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Freight">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="freight" name="freight" value="<?= rupiah($datheader['freight'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Freight" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                             <div class="mb-1 row" id="kolomasuransi">
                                                 <label class="col-3 col-form-label font-kecil mx-2">Insurance</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="asuransi" name="asuransi" value="<?= rupiah($datheader['asuransi'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Insurance">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="asuransi" name="asuransi" value="<?= rupiah($datheader['asuransi'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Insurance" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                             <div class="mb-1 mt-1 row">

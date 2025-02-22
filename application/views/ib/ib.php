@@ -50,9 +50,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="dept_tuju" name="dept_tuju">
-                        <?php foreach ($hakdep as $dep) { if($dep['bbl']==1):?>
+                        <?php foreach ($hakdep->result_array() as $dep) {?>
                           <option value="<?= $dep['dept_id']; ?>" <?php if($this->session->userdata('depttuju')==$dep['dept_id']){ echo "selected"; } ?>><?= $dep['departemen']; ?></option>
-                        <?php endif; } ?>
+                        <?php } ?>
                       </select>
                     </div>
                   </span>
