@@ -62,6 +62,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <input class="form-check-input" name="adj" id="adj" type="checkbox" <?php if($data['adj']=='1'){ echo "checked"; } ?> >
                         <span class="form-check-label">Bon Adjustment / <strong>ADJ</strong></span>
                     </label>
+                    <label class="form-check mt-1 mb-1">
+                        <input class="form-check-input" name="amb" id="amb" type="checkbox" <?php if($data['amb']=='1'){ echo "checked"; } ?> >
+                        <span class="form-check-label">Aju Masuk Barang / <strong>AMB</strong></span>
+                    </label>
+                    <label class="form-check mt-1 mb-1">
+                        <input class="form-check-input" name="akb" id="akb" type="checkbox" <?php if($data['akb']=='1'){ echo "checked"; } ?> >
+                        <span class="form-check-label">Aju Keluar Barang / <strong>AKB</strong></span>
+                    </label>
                 </div>
             </div>
               <div class="hr mt-2 mb-1"></div>

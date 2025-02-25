@@ -36,7 +36,7 @@
                         </tr>
                     <?php } }else{?>
                         <tr>
-                            <td colspan="4" class="text-center">No Data / Data tidak Ada</td>
+                            <td colspan="4" class="text-center">No Data / Data tidak Ada (<?= $data->num_rows(); ?>)</td>
                         </tr>
                     <?php } ?>
                 </tbody>

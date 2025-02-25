@@ -77,6 +77,18 @@ $(document).ready(function () {
 			}
 		}
 	}, 1000);
+
+	$("#kolomasuransi").removeClass("hilang");
+	$("#kolomfreight").removeClass("hilang");
+	if ($("#kode_incoterm").val() == "CFR") {
+		$("#kolomasuransi").addClass("hilang");
+	} else if (
+		$("#kode_incoterm").val() == "FOB" ||
+		$("#kode_incoterm").val() == ""
+	) {
+		$("#kolomfreight").addClass("hilang");
+		$("#kolomasuransi").addClass("hilang");
+	}
 });
 $("#getnomoraju").click(function () {
 	$.ajax({
@@ -254,6 +266,7 @@ $("#nilai_pab").on("keypress", function (e) {
 	}
 });
 $("#nilai_pab").blur(function () {
+	savedata("nilai_pab", toAngka($(this).val()));
 	hitungdevisa();
 });
 $("#pelabuhan_muat").change(function () {
@@ -265,6 +278,29 @@ $("#pelabuhan_bongkar").change(function () {
 });
 $("#kode_incoterm").change(function () {
 	savedata("kode_incoterm", $(this).val());
+	$("#kolomasuransi").removeClass("hilang");
+	$("#kolomfreight").removeClass("hilang");
+	if ($(this).val() == "CFR") {
+		savedata("asuransi", 0);
+		$("#kolomasuransi").addClass("hilang");
+	} else if ($(this).val() == "FOB" || $(this).val() == "") {
+		savedata("asuransi", 0);
+		savedata("freight", 0);
+		$("#kolomfreight").addClass("hilang");
+		$("#kolomasuransi").addClass("hilang");
+	}
+});
+$("#freight").change(function () {
+	savedata("freight", toAngka($(this).val()));
+});
+$("#asuransi").change(function () {
+	savedata("asuransi", toAngka($(this).val()));
+});
+$("#jenis_kontainer").change(function () {
+	savedata("jenis_kontainer", $(this).val());
+});
+$("#tipe_kontainer").change(function () {
+	savedata("tipe_kontainer", $(this).val());
 });
 $("#simpanhakbc").click(function () {
 	cekkolom();
@@ -280,106 +316,106 @@ $("#cekdata").click(function () {
 function cekkolom(mode) {
 	if ($("#jns_bc").val() == "") {
 		// $("#keteranganerr").text("Pilih Jenis BC !");
-		pesan("Pilih Jenis BC !", "warning");
+		pesan("Pilih Jenis BC !", "error");
 		return false;
 	}
 	if ($("#nomor_aju").val() == "" || $("#tgl_aju").val() == "") {
 		// $("#keteranganerr").text("isi Nomor Aju dan Tanggal Aju !");
-		pesan("isi Nomor Aju dan Tanggal Aju !", "warning");
+		pesan("isi Nomor Aju dan Tanggal Aju !", "error");
 		return false;
 	}
 	if (toAngka($("#bruto").val()) == 0 || toAngka($("#netto").val()) == 0) {
 		// $("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
-		pesan("Jumlah Bruto dan Netto Harus di isi !", "warning");
+		pesan("Jumlah Bruto dan Netto Harus di isi !", "error");
 		return false;
 	}
 	if ($("#bruto").val() == "0" || $("#netto").val() == "0") {
 		// $("#keteranganerr").text("Jumlah Bruto dan Netto Harus di isi !");
-		pesan("Jumlah Bruto dan Netto Harus di isi !", "warning");
+		pesan("Jumlah Bruto dan Netto Harus di isi !", "error");
 		return false;
 	}
 	if ($("#sumdetail").val() != toAngka($("#nilai_pab").val())) {
 		// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
-		pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "warning");
+		pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
 		return false;
 	}
 	if ($("#tg_jawab").val() == "") {
 		// $("#keteranganerr").text("Isi Nama Penanggung Jawab !");
-		pesan("Isi Nama Penanggung Jawab !", "warning");
+		pesan("Isi Nama Penanggung Jawab !", "error");
 		return false;
 	}
 	if ($("#jabat_tg_jawab").val() == "") {
 		// $("#keteranganerr").text("Isi Jabatan Penanggung Jawab !");
-		pesan("Isi Jabatan Penanggung Jawab !", "warning");
+		pesan("Isi Jabatan Penanggung Jawab !", "error");
 		return false;
 	}
 	if ($("#jmllampiran").val() == "0") {
 		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
-		pesan("Isi Lampiran Dokumen !", "warning");
+		pesan("Isi Lampiran Dokumen !", "error");
 		return false;
 	}
 	if ($("#jns_angkutan").val() == "") {
 		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
-		pesan("Jenis Angkutan harus di isi !", "warning");
+		pesan("Jenis Angkutan harus di isi !", "error");
 		return false;
 	}
 	if ($("#angkutan").val() == "") {
 		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
-		pesan("Angkutan harus di isi !", "warning");
+		pesan("Angkutan harus di isi !", "error");
 		return false;
 	}
 	if ($("#no_kendaraan").val() == "") {
 		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
-		pesan("Nomor Angkutan harus di isi !", "warning");
+		pesan("Nomor Angkutan harus di isi !", "error");
 		return false;
 	}
 	if ($("#jml_kemasan").val() == "0") {
 		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
-		pesan("Jumlah Kemasan harus di isi !", "warning");
+		pesan("Jumlah Kemasan harus di isi !", "error");
 		return false;
 	}
 	if ($("#kd_kemasan").val() == "") {
 		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
-		pesan("Jenis Kemasan harus di isi !", "warning");
+		pesan("Jenis Kemasan harus di isi !", "error");
 		return false;
 	}
 	// Untuk cek BC 23
 	if ($("#jns_bc").val() == "23") {
 		// $("#pesanerror").val("");
 		if ($("#pelabuhan_muat").val() == "") {
-			pesan("Pelabuhan Muat harus di isi", "warning");
+			pesan("Pelabuhan Muat harus di isi", "error");
 			return false;
 		}
 		if ($("#pelabuhan_bongkar").val() == "") {
-			pesan("Pelabuhan Bongkar harus di isi", "warning");
+			pesan("Pelabuhan Bongkar harus di isi", "error");
 			return false;
 		}
 		if ($("#nomor_blawb").val() == "") {
-			pesan("Nomor BL/AWB harus di isi", "warning");
+			pesan("Nomor BL/AWB harus di isi", "error");
 			return false;
 		}
 		if ($("#bc11").val() == "") {
-			pesan("Untuk BC 23 Nomor BC11 harus di isi", "warning");
+			pesan("Untuk BC 23 Nomor BC11 harus di isi", "error");
 			return false;
 		}
 		if ($("#nomor_subposbc11").val() == "") {
-			pesan("Nomor Subpos BC11 harus di isi", "warning");
+			pesan("Nomor Subpos BC11 harus di isi", "error");
 			return false;
 		}
 		if ($("#nomor_posbc11").val() == "") {
-			pesan("Nomor Pos BC11 harus di isi", "warning");
+			pesan("Nomor Pos BC11 harus di isi", "error");
 			return false;
 		}
 		if ($("#bendera_angkutan").val() == "") {
-			pesan("Negara Asal angkutan harus di isi", "warning");
+			pesan("Negara Asal angkutan harus di isi", "error");
 			return false;
 		}
 		if ($("#ukuran_kontainer").val() == "") {
-			pesan("Ukuran peti kemas harus di isi", "warning");
+			pesan("Ukuran peti kemas harus di isi", "error");
 			return false;
 		}
 		if ($("#nomor_kontainer").val() == "") {
-			pesan("Nomor peti kemas harus di isi", "warning");
+			pesan("Nomor peti kemas harus di isi", "error");
 			return false;
 		}
 	}
@@ -387,30 +423,54 @@ function cekkolom(mode) {
 	if ($("#jns_bc").val() == "30") {
 		// $("#pesanerror").val("");
 		if ($("#pelabuhan_muat").val() == "") {
-			pesan("Pelabuhan Muat harus di isi", "warning");
+			pesan("Pelabuhan Muat harus di isi", "error");
 			return false;
 		}
 		if ($("#pelabuhan_bongkar").val() == "") {
-			pesan("Pelabuhan Bongkar harus di isi", "warning");
+			pesan("Pelabuhan Bongkar harus di isi", "error");
 			return false;
 		}
 		if ($("#bendera_angkutan").val() == "") {
-			pesan("Negara Asal angkutan harus di isi", "warning");
+			pesan("Negara Asal angkutan harus di isi", "error");
 			return false;
 		}
 		if ($("#kode_incoterm").val() == "") {
 			pesan("Kode Cara Bayar harus di isi", "error");
 			return false;
 		}
+		// alert($("#freight").val());
+		if ($("#kode_incoterm").val() == "CFR") {
+			if (
+				$("#freight").val() == "0" ||
+				$("#freight").val() == "" ||
+				$("#freight").val().trim() == "-"
+			) {
+				pesan("Nilai Freight harus di isi !", "error");
+				return false;
+			}
+		}
+		if ($("#kode_incoterm").val() == "CIF") {
+			if (
+				$("#freight").val() == "0" ||
+				$("#freight").val() == "" ||
+				$("#freight").val().trim() == "-" ||
+				$("#asuransi").val() == "0" ||
+				$("#asuransi").val() == "" ||
+				$("#asuransi").val().trim() == "-"
+			) {
+				pesan("Nilai Freight & Asuransi harus di isi !", "error");
+				return false;
+			}
+		}
 		// if ($("#nomor_kontainer").val() == "") {
-		// 	pesan("Nomor peti kemas harus di isi", "warning");
+		// 	pesan("Nomor peti kemas harus di isi", "error");
 		// 	return false;
 		// }
 	}
 	// Untuk cek BC 262
 	if ($("#jns_bc").val() == "262") {
 		if ($("#exnomor_bc").val() == "") {
-			pesan("Nomor Ex BC harus di isi", "warning");
+			pesan("Nomor Ex BC harus di isi", "error");
 			return false;
 		}
 	}

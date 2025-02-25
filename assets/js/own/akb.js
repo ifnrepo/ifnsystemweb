@@ -101,7 +101,7 @@ $("#th").change(function () {
 });
 $("#butgo").click(function () {
 	// $("#dept_tuju").change();
-	getdataib();
+	getdataakb();
 });
 $("#jn_ib").change(function () {
 	var isinya =
@@ -295,7 +295,7 @@ function updatekolom(idx, tabel, kolom, isi) {
 		},
 	});
 }
-$("#dept_tuju").change(function () {
+$("#dept_id").change(function () {
 	// alert("XXX");
 	$("#butgo").click();
 });
@@ -369,14 +369,14 @@ $("#xsimpanib").click(function () {
 		},
 	});
 });
-function getdataib() {
-	// alert($("#dept_tuju").val());
+function getdataakb() {
+	// alert($("#dept_id").val());
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
-		url: base_url + "ib/getdataib",
+		url: base_url + "akb/getdataakb",
 		data: {
-			dept: $("#dept_tuju").val(),
+			dept: $("#dept_id").val(),
 		},
 		success: function (data) {
 			// alert(data.datagroup);

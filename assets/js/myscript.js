@@ -481,9 +481,15 @@ function pesan(pesan, jenis) {
 			var bek = "#1cc88a";
 			var teksColor = "black";
 		} else {
-			var head = "Error";
-			var bek = "#ff6f69";
-			var teksColor = "black";
+			if (jenis == "warning") {
+				var head = "Warning";
+				var bek = "#F7B233";
+				var teksColor = "black";
+			} else {
+				var head = "Error";
+				var bek = "#ff6f69";
+				var teksColor = "black";
+			}
 		}
 	}
 	$.toast({

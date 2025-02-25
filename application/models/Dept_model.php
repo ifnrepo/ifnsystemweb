@@ -80,6 +80,8 @@ class Dept_model extends CI_Model
         $data['pb'] = isset($data['pb']) ? '1' : '0';
         $data['bbl'] = isset($data['bbl']) ? '1' : '0';
         $data['adj'] = isset($data['adj']) ? '1' : '0';
+        $data['amb'] = isset($data['amb']) ? '1' : '0';
+        $data['akb'] = isset($data['akb']) ? '1' : '0';
 
         $pengeluaran = '';
         $penerimaan = '';
@@ -161,5 +163,11 @@ class Dept_model extends CI_Model
             $this->db->where_in('dept_id',$dept);
         }
         return $this->db->order_by('departemen','ASC')->get()->result_array();
+    }
+    public function getdeptkirim(){
+        return $this->db->get_where('dept',['akb'=>1]);
+    }
+    public function getdeptmasuk(){
+        return $this->db->get_where('dept',['amb'=>1]);
     }
 }

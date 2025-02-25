@@ -40,6 +40,14 @@
                         <input class="form-check-input" name="adj" id="adj" type="checkbox" >
                         <span class="form-check-label">Bon Adjustment / <strong>ADJ</strong></span>
                     </label>
+                    <label class="form-check mt-1 mb-1">
+                        <input class="form-check-input" name="amb" id="amb" type="checkbox" >
+                        <span class="form-check-label">Aju Masuk Barang / <strong>AMB</strong></span>
+                    </label>
+                    <label class="form-check mt-1 mb-1">
+                        <input class="form-check-input" name="akb" id="akb" type="checkbox" >
+                        <span class="form-check-label">Aju Keluar Barang / <strong>AKB</strong></span>
+                    </label>
                 </div>
             </div>
         </div>

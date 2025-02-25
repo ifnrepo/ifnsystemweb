@@ -6,7 +6,7 @@ class Akb_model extends CI_Model
         $arrkondisi = [
             'id_perusahaan' => IDPERUSAHAAN,
             'kode_dok' => 'T',
-            // 'dept_tuju' => $kode,
+            'dept_id' => $kode,
             'dept_tuju' => 'CU',
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),

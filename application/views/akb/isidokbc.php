@@ -112,7 +112,7 @@
                                         </div> -->
                                         <div class="col">
                                             <div class="row">
-                                                <label class="col-3 col-form-label font-kecil">No SJ</label>
+                                                <label class="col-3 col-form-label font-kecil mx-2">No SJ</label>
                                                 <div class="col">
                                                     <input type="text" class="form-control font-kecil btn-flat" id="nomor_sj" name="nomor_sj" value="<?= $datheader['nomor_sj']; ?>" aria-describedby="emailHelp" placeholder="Nomor Surat Jalan" <?= $nonaktif; ?>>
                                                 </div>
@@ -132,7 +132,7 @@
                                     <div class="mb-1 row">
                                         <div class="col">
                                             <div class="row">
-                                                <label class="col-3 col-form-label font-kecil">No Dok</label>
+                                                <label class="col-3 col-form-label font-kecil mx-2">No Dok</label>
                                                 <div class="col">
                                                     <input type="text" class="form-control font-kecil btn-flat" id="nomor_dok" name="nomor_dok" value="<?= $datheader['nomor_dok']; ?>" aria-describedby="emailHelp" placeholder="Nomor Dokumen" disabled>
                                                 </div>
@@ -152,7 +152,7 @@
                                     <div class="mb-1 row">
                                         <div class="col">
                                             <div class="row">
-                                                <label class="col-3 col-form-label font-kecil">No PO</label>
+                                                <label class="col-3 col-form-label font-kecil mx-2">No PO</label>
                                                 <div class="col">
                                                     <input type="text" class="form-control font-kecil btn-flat" id="nomor_po" name="nomor_po" value="<?= $datheader['nomor_po']; ?>" aria-describedby="emailHelp" placeholder="Nomor PO" <?= $nonaktif; ?>>
                                                 </div>
@@ -172,7 +172,7 @@
                                     <div class="mb-1 row">
                                         <div class="col">
                                             <div class="row">
-                                                <label class="col-3 col-form-label font-kecil">No INV</label>
+                                                <label class="col-3 col-form-label font-kecil mx-2">No INV</label>
                                                 <div class="col">
                                                     <input type="text" class="form-control font-kecil btn-flat" id="nomor_inv" name="nomor_inv" value="<?= $datheader['nomor_inv']; ?>" aria-describedby="emailHelp" placeholder="Nomor Invoice" <?= $nonaktif; ?>>
                                                 </div>
@@ -192,7 +192,7 @@
                                     <div class="mb-1 row">
                                         <div class="col">
                                             <div class="row">
-                                                <label class="col-3 col-form-label font-kecil">No PL</label>
+                                                <label class="col-3 col-form-label font-kecil mx-2">No PL</label>
                                                 <div class="col">
                                                     <input type="text" class="form-control font-kecil btn-flat" id="nomor_pl" name="nomor_pl" value="<?= $datheader['nomor_pl']; ?>" aria-describedby="emailHelp" placeholder="Nomor Packing List" <?= $nonaktif; ?>>
                                                 </div>
@@ -213,7 +213,7 @@
                                         <div class="mb-1 row">
                                             <div class="col">
                                                 <div class="row">
-                                                    <label class="col-3 col-form-label font-kecil">No Ex-BC</label>
+                                                    <label class="col-3 col-form-label font-kecil mx-2">No Ex-BC</label>
                                                     <div class="col">
                                                         <input type="text" class="form-control font-kecil btn-flat" id="exnomor_bc" name="exnomor_bc" value="<?= $datheader['exnomor_bc']; ?>" aria-describedby="emailHelp" placeholder="Ex Nomor BC" <?= $nonaktif; ?>>
                                                     </div>
@@ -235,7 +235,7 @@
                                         <div class="mb-1 row">
                                             <div class="col">
                                                 <div class="row">
-                                                    <label class="col-3 col-form-label font-kecil">Nomor</label>
+                                                    <label class="col-3 col-form-label font-kecil mx-2">Nomor</label>
                                                     <div class="col">
                                                         <input type="text" class="form-control font-kecil btn-flat" id="nomor_blawb" name="nomor_blawb" value="<?= $datheader['nomor_blawb']; ?>" aria-describedby="emailHelp" placeholder="Nomor BL / AWB" <?= $nonaktif; ?>>
                                                     </div>
@@ -257,7 +257,7 @@
                                         <div class="mb-1 row">
                                             <div class="col">
                                                 <div class="row">
-                                                    <label class="col-3 col-form-label font-kecil">Nomor</label>
+                                                    <label class="col-3 col-form-label font-kecil mx-2">Nomor</label>
                                                     <div class="col">
                                                         <input type="text" class="form-control font-kecil btn-flat" id="bc11" name="bc11" value="<?= $datheader['bc11']; ?>" aria-describedby="emailHelp" placeholder="BC 1.1" <?= $nonaktif; ?>>
                                                     </div>
@@ -273,13 +273,13 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <label class="col-3 col-form-label font-kecil">Nomor Pos BC11</label>
+                                            <label class="col-3 col-form-label font-kecil mx-2">Nomor Pos BC11</label>
                                             <div class="col">
                                                 <input type="text" class="form-control font-kecil btn-flat" id="nomor_posbc11" name="nomor_posbc11" value="<?= $datheader['nomor_posbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Pos" <?= $nonaktif; ?>>
                                             </div>
                                         </div>
                                         <div class="row mt-1">
-                                            <label class="col-3 col-form-label font-kecil">Nomor Subpos BC11</label>
+                                            <label class="col-3 col-form-label font-kecil mx-2">Nomor Subpos BC11</label>
                                             <div class="col">
                                                 <input type="text" class="form-control font-kecil btn-flat" id="nomor_subposbc11" name="nomor_subposbc11" value="<?= $datheader['nomor_subposbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Subpos" <?= $nonaktif; ?>>
                                             </div>
@@ -295,7 +295,7 @@
                                     <!-- SARANA ANGKUT -->
                                     <div class="text-center bg-primary-lt mb-1 font-bold <?= $hilangbc40; ?> <?= $hilangbc262; ?>">Pelabuhan & Tempat Penimbunan</div>
                                     <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
-                                        <label class="col-3 col-form-label font-kecil">Pelabuhan Muat</label>
+                                        <label class="col-3 col-form-label font-kecil mx-2">Pelabuhan Muat</label>
                                         <div class="col font-kecil">
                                             <select class="form-select font-kecil font-bold btn-flat pelabuhan" name="pelabuhan_muat" data-placeholder="Pilih Pelabuhan" id="pelabuhan_muat" <?= $selectnonaktif; ?> >
                                                 <!-- <option value="">Pilih Pelabuhan Muat</option> -->
@@ -304,7 +304,7 @@
                                         </div>
                                     </div>
                                     <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
-                                        <label class="col-3 col-form-label font-kecil">Pelabuhan Bongkar</label>
+                                        <label class="col-3 col-form-label font-kecil mx-2">Pelabuhan Bongkar</label>
                                         <div class="col font-kecil">
                                             <select class="form-select font-kecil btn-flat pelabuhan" name="pelabuhan_bongkar" data-placeholder="Pilih Pelabuhan" id="pelabuhan_bongkar" <?= $selectnonaktif; ?>>
                                                 <option value="<?= $datheader['pelabuhan_bongkar']; ?>"><?= $datheader['pelabuhan_bongkar'].' - '.$datheader['pelbongkar']; ?></option>
@@ -313,7 +313,32 @@
                                     </div>
                                     <div class="text-center bg-primary-lt mb-1 font-bold">Sarana / Cara Angkutan</div>
                                     <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
-                                        <label class="col-3 col-form-label font-kecil">No & Tipe Peti Kemas</label>
+                                        <label class="col-3 col-form-label font-kecil mx-2 py-0 px-2">Jenis & Tipe<br> Peti Kemas</label>
+                                        <div class="col-3 font-kecil">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="jenis_kontainer" id="jenis_kontainer" <?= $selectnonaktif; ?> >
+                                                <option value="">-</option>
+                                                <option value="4" <?php if($datheader['jenis_kontainer']=='4'){ echo "selected"; } ?>>Empty</option>
+                                                <option value="8" <?php if($datheader['jenis_kontainer']=='8'){ echo "selected"; } ?>>FCL</option>
+                                                <option value="7" <?php if($datheader['jenis_kontainer']=='7'){ echo "selected"; } ?>>LCL</option>
+                                            </select>
+                                        </div>
+                                        <div class="col font-kecil">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="tipe_kontainer" id="tipe_kontainer" <?= $selectnonaktif; ?> >
+                                                <option value="">-</option>
+                                                <option value="1" <?php if($datheader['tipe_kontainer']=='1'){ echo "selected"; } ?>>General / Dry Cargo</option>
+                                                <option value="2" <?php if($datheader['tipe_kontainer']=='2'){ echo "selected"; } ?>>Tunne Type</option>
+                                                <option value="3" <?php if($datheader['tipe_kontainer']=='3'){ echo "selected"; } ?>>Open Top Steel</option>
+                                                <option value="4" <?php if($datheader['tipe_kontainer']=='4'){ echo "selected"; } ?>>Flat Rack</option>
+                                                <option value="5" <?php if($datheader['tipe_kontainer']=='5'){ echo "selected"; } ?>>Reefer/Refregete</option>
+                                                <option value="6" <?php if($datheader['tipe_kontainer']=='6'){ echo "selected"; } ?>>Barge Container</option>
+                                                <option value="7" <?php if($datheader['tipe_kontainer']=='7'){ echo "selected"; } ?>>Bulk Container</option>
+                                                <option value="8" <?php if($datheader['tipe_kontainer']=='8'){ echo "selected"; } ?>>Isotank</option>
+                                                <option value="99" <?php if($datheader['tipe_kontainer']=='99'){ echo "selected"; } ?>>Lain-lain</option>
+                                            </select>
+                                        </div>
+                                    </div>
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                        <label class="col-3 col-form-label font-kecil mx-2 py-0 px-2">Ukuran & No <br> Peti Kemas</label>
                                         <div class="col-3 font-kecil">
                                             <select class="form-select font-kecil font-bold btn-flat" name="ukuran_kontainer" id="ukuran_kontainer" <?= $selectnonaktif; ?> >
                                                 <option value="">-</option>
@@ -326,8 +351,9 @@
                                             <input type="text" class="form-control font-kecil btn-flat" id="nomor_kontainer" name="nomor_kontainer" value="<?= $datheader['nomor_kontainer']; ?>" aria-describedby="emailHelp" placeholder="Nomor Kontainer" <?= $nonaktif; ?>>
                                         </div>
                                     </div>
+                                    <hr class="m-0">
                                     <div class="mb-1 mt-1 row">
-                                        <label class="col-3 col-form-label font-kecil">Angkutan</label>
+                                        <label class="col-3 col-form-label font-kecil mx-2">Angkutan</label>
                                         <div class="col font-kecil">
                                             <select class="form-select font-kecil font-bold btn-flat" name="jns_angkutan" id="jns_angkutan" <?= $selectnonaktif; ?> >
                                                 <option value="">Pilih Angkutan</option>
@@ -338,7 +364,7 @@
                                         </div>
                                     </div>
                                     <div class="mb-1 row">
-                                        <label class="col-3 col-form-label font-kecil">Jenis Angkutan</label>
+                                        <label class="col-3 col-form-label font-kecil mx-2">Jenis Angkutan</label>
                                         <div class="col">
                                             <input type="text" class="form-control font-kecil btn-flat" id="angkutan" name="angkutan" value="<?= $datheader['angkutan']; ?>" aria-describedby="emailHelp" placeholder="Angkutan" <?= $nonaktif; ?>>
                                         </div>
@@ -346,9 +372,8 @@
                                             <input type="text" class="form-control font-kecil btn-flat" id="no_kendaraan" name="no_kendaraan" value="<?= $datheader['no_kendaraan']; ?>" aria-describedby="emailHelp" placeholder="No Kendaraan" <?= $nonaktif; ?>>
                                         </div>
                                     </div>
-                                    <hr class="m-0">
                                     <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
-                                        <label class="col-3 col-form-label font-kecil">Bendera</label>
+                                        <label class="col-3 col-form-label font-kecil mx-2">Bendera</label>
                                         <div class="col">
                                             <select class="form-select font-kecil font-bold btn-flat" name="bendera_angkutan" id="bendera_angkutan" <?= $selectnonaktif; ?> >
                                                 <option value="">Pilih Bendera Angkutan</option>
@@ -411,8 +436,8 @@
                                 <div class="card-body p-1">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="mb-1 mt-1 row">
-                                                <label class="col-3 col-form-label font-kecil">Kode Cara Bayar</label>
+                                            <div class="mb-1 row">
+                                                <label class="col-3 col-form-label font-kecil mx-2">Kode Cara Bayar</label>
                                                 <div class="col">
                                                     <!-- <input type="text" class="form-control font-kecil" id="netto" name="netto" aria-describedby="emailHelp" placeholder="Netto Kgs"> -->
                                                     <select class="form-select font-kecil font-bold btn-flat" name="kode_incoterm" id="kode_incoterm" <?= $selectnonaktif; ?>>
@@ -423,8 +448,20 @@
                                                     </select>
                                                 </div>
                                             </div>
+                                            <div class="mb-1 row" id="kolomfreight">
+                                                <label class="col-3 col-form-label font-kecil mx-2">Freight</label>
+                                                <div class="col">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="freight" name="freight" value="<?= rupiah($datheader['freight'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Freight" <?= $nonaktif; ?>>
+                                                </div>
+                                            </div>
+                                            <div class="mb-1 row" id="kolomasuransi">
+                                                <label class="col-3 col-form-label font-kecil mx-2">Insurance</label>
+                                                <div class="col">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="asuransi" name="asuransi" value="<?= rupiah($datheader['asuransi'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Insurance" <?= $nonaktif; ?>>
+                                                </div>
+                                            </div>
                                             <div class="mb-1 mt-1 row">
-                                                <label class="col-3 col-form-label font-kecil">Nilai Pabean / CIF</label>
+                                                <label class="col-3 col-form-label font-kecil mx-2">Nilai Pabean</label>
                                                 <div class="col">
                                                     <!-- <input type="text" class="form-control font-kecil" id="netto" name="netto" aria-describedby="emailHelp" placeholder="Netto Kgs"> -->
                                                     <select class="form-select font-kecil font-bold btn-flat" name="mtuang" id="mtuang" <?= $selectnonaktif; ?>>
@@ -435,7 +472,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],2); ?>" aria-describedby="emailHelp" placeholder="Jml Kemas" <?= $nonaktif; ?>>
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -531,7 +568,7 @@
                             <tbody class="table-tbody" id="body-tablee" style="font-size: 13px !important;" >
                                     <?php $sumdetail=0; $sumpcs=0; $sumkgs=0; foreach ($header as $data) { 
                                         $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
-                                        $sumdetail += $data['harga_satuan']*$jumlah;
+                                        $sumdetail += $data['harga']; //*$jumlah;
                                         $sumpcs += $data['pcs'];
                                         $sumkgs += $data['kgs'];
                                         $nambar = $data['po']!='' ? $data['spek'] : $data['nama_barang'];
@@ -546,8 +583,8 @@
                                         <td><?= $data['kodesatuan']; ?></td>
                                         <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>
                                         <td class="text-right"><?= rupiah($data['kgs'],2); ?></td>
-                                        <td class="text-right"><?= rupiah($data['harga_satuan'],2); ?></td>
-                                        <td class="text-right"><?= rupiah($data['harga_satuan']*$jumlah,2); ?></td>
+                                        <td class="text-right"><?= rupiah($data['harga']/$jumlah,2); ?></td>
+                                        <td class="text-right"><?= rupiah($data['harga'],2); ?></td>
                                     </tr>
                                 <?php } ?>
                                 <tr class="bg-primary-lt">
