@@ -503,15 +503,15 @@ class Out_model extends CI_Model{
         }
         return !$iniquery;
     }
-    public function getdatagm($idbarang){
+    public function getdatagm($idbarang,$periode){
         $kondisi = [
-            'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
-            'dept_id' => 'GM',
-            'id_barang' => $idbarang
+            'stokdept.periode' => $periode,
+            'stokdept.dept_id' => 'GM',
+            'stokdept.id_barang' => (int) $idbarang
         ];
         $kondisi2 = [
-            'pcs_akhir > ' => 0,
-            'kgs_akhir > ' => 0 
+            'stokdept.pcs_akhir > ' => 0,
+            'stokdept.kgs_akhir > ' => 0 
         ];
         $this->db->select('stokdept.*,barang.nama_barang,barang.kode',FALSE);
         $this->db->from('stokdept');
@@ -636,5 +636,9 @@ class Out_model extends CI_Model{
     public function updatecustomer($data){
         $this->db->where('id',$data['id']);
         return $this->db->update('tb_header',['id_buyer'=>$data['id_buyer']]);
+    }
+    public function gethead($id){
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        return $this->db->get_where('tb_detail',['tb_detail.id' => $id]);
     }
 }

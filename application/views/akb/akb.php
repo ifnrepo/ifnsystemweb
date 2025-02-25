@@ -24,7 +24,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div id="sisipkan" class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
-              <?php $disab=''; if($this->session->userdata('depttuju')=='' || $this->session->userdata('depttuju')==null){ $disab = 'disabled';} ?>
+              <?php $disab=''; if($this->session->userdata('deptdari')=='' || $this->session->userdata('deptdari')==null){ $disab = 'disabled';} ?>
               <?php $cekpakaibc = datauser($this->session->userdata('id'),'cekpakaibc')==1 ? '' : 'hilang'; ?>
               <a href="<?= base_url() . 'akb/cekbc'; ?>" class="btn btn-cyan btn-sm hilang <?= cekclosebook(); ?><?= $disab; ?><?= $cekpakaibc; ?>" id="adddataib"><i class="fa fa-h-square"></i><span class="ml-1">Cek BC</span></a>
               <a href="<?= base_url() . 'akb/hosttohost/99'; ?>" class="btn btn-yellow btn-sm text-black <?= cekclosebook(); ?><?= $disab; ?>" id="addtoken"><i class="fa fa-cloud"></i><span class="ml-1">H2H Token</span></a>

@@ -52,9 +52,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <a href="<?= base_url() . 'dept/edit_new/' . $key['dept_id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="edituser" rel="<?= $key['dept_id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <!-- <a href="<?= base_url() . 'dept/editdept/' . $key['dept_id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="editkategori" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit Data Departemen" rel="<?= $key['dept_id']; ?>" title="Edit data">
-                                            <i class="fa fa-edit"></i>
-                                        </a> -->
                                         <a class="btn btn-sm btn-danger btn-icon text-white" id="hapusdept" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'dept/hapusdept/' . $key['dept_id']; ?>" title="Hapus data">
                                             <i class="fa fa-trash-o"></i>
                                         </a>

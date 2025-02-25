@@ -80,6 +80,8 @@ class Dept_model extends CI_Model
         $data['pb'] = isset($data['pb']) ? '1' : '0';
         $data['bbl'] = isset($data['bbl']) ? '1' : '0';
         $data['adj'] = isset($data['adj']) ? '1' : '0';
+        $data['amb'] = isset($data['amb']) ? '1' : '0';
+        $data['akb'] = isset($data['akb']) ? '1' : '0';
 
         $pengeluaran = '';
         $penerimaan = '';

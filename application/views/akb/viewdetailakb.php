@@ -161,16 +161,20 @@
                                 <?php $jmlpcs=0;$jmlkgs=0;$Jmltotal=0; foreach ($detail as $val) {  
                                     $jumlah = $val['kodesatuan']=='KGS' ? $val['kgs'] : $val['pcs'];
                                     $jmlpcs += $val['pcs']; $jmlkgs += $val['kgs'];
-                                    $Jmltotal += $val['harga']*$jumlah;
+                                    $Jmltotal += $val['harga']; //*$jumlah;
+                                    $nambar = $val['nama_barang'];
+                                    if($header['jns_bc']==30){
+                                        $nambar = $val['engklp'];
+                                    }
                                      ?>
                                     <tr>
-                                        <td><?= $val['nama_barang']; ?></td>
+                                        <td><?= $nambar; ?></td>
                                         <td><?= $val['brg_id']; ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= rupiah($val['pcs'],0); ?></td>
                                         <td><?= rupiah($val['kgs'],2); ?></td>
+                                        <td><?= rupiah($val['harga']/$jumlah,2); ?></td>
                                         <td><?= rupiah($val['harga'],2); ?></td>
-                                        <td><?= rupiah($val['harga']*$jumlah,2); ?></td>
                                         <td><?= $val['keter']; ?></td>
                                     </tr>
                                 <?php } ?>

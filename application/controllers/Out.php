@@ -158,7 +158,9 @@ class Out extends CI_Controller {
         $this->load->view('out/editdetailout',$data);
     }
     public function addnobontr($id,$idbarang){
-        $data['data'] = $this->out_model->getdatagm($idbarang);
+        $head = $this->out_model->gethead($id)->row_array();
+        $periode = date('m',strtotime($head['tgl'])).date('Y',strtotime($head['tgl']));
+        $data['data'] = $this->out_model->getdatagm($idbarang,$periode);
         $data['iddetail'] = $id;
         $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
         $this->load->view('out/addnobontr',$data);
@@ -283,7 +285,7 @@ class Out extends CI_Controller {
         $html .= "<td>".$val['brg_id']."</td>";
         $html .= "<td>".$val['namasatuan']."</td>";
         $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
-        $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
+        $html .= "<td class='text-right'>".rupiah($val['kgs'],4)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";
        }
