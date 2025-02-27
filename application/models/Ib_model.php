@@ -426,6 +426,13 @@ class Ib_model extends CI_Model
         $this->db->where('id',$id);
         $this->db->update('tb_header',['send_ceisa' => 1]);
     }
+    public function updatebc11($data){
+        $caribendera = $this->db->get_where('ref_negara',['kode_negara' => $data['bendera_angkutan']])->row_array();
+        $data['bendera_angkutan'] = $caribendera['id'];
+        $this->db->where('id',$data['id']);
+        $hasil = $this->db->update('tb_header',$data);
+        return $hasil;
+    }
     public function simpanresponbc($data){
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_header',$data);
@@ -434,6 +441,20 @@ class Ib_model extends CI_Model
     public function gettoken(){
         $query = $this->db->get_where('token_bc',['id'=>1])->row_array();
         return $query['token'];
+    }
+    public function tambahkontainer($data){
+        return $this->db->insert('tb_kontainer',$data);
+    }
+    public function getdatakontainer($id){
+        $this->db->select('tb_kontainer.*,ref_ukuran_kontainer.uraian_kontainer as ukurkontainer,ref_jenis_kontainer.uraian_jenis_kontainer as jeniskontainer');
+        $this->db->join('ref_ukuran_kontainer','ref_ukuran_kontainer.ukuran_kontainer = tb_kontainer.ukuran_kontainer','left');
+        $this->db->join('ref_jenis_kontainer','ref_jenis_kontainer.jenis_kontainer = tb_kontainer.jenis_kontainer','left');
+        $this->db->where('tb_kontainer.id_header',$id);
+        return $this->db->get('tb_kontainer');
+    }
+    public function hapuskontainer($id){
+        $this->db->where('id',$id);
+        return $this->db->delete('tb_kontainer');
     }
     //End IB Models
     public function updatepo($data)

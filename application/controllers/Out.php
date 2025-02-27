@@ -41,6 +41,8 @@ class Out extends CI_Controller {
 		$this->load->view('layouts/footer',$footer);
     }
     public function clear(){
+        $this->session->unset_userdata('deptsekarang');
+        $this->session->unset_userdata('tujusekarang');
         $this->session->set_userdata('bl',(int)date('m'));
         $this->session->set_userdata('th',date('Y'));
         $url = base_url().'out';
@@ -58,8 +60,8 @@ class Out extends CI_Controller {
         echo $hasil;
     }
     public function ubahperiode(){
-        $this->session->unset_userdata('deptsekarang');
-        $this->session->unset_userdata('tujusekarang');
+        // $this->session->unset_userdata('deptsekarang');
+        // $this->session->unset_userdata('tujusekarang');
         $this->session->set_userdata('bl',$_POST['bl']);
         $this->session->set_userdata('th',$_POST['th']);
         echo 1;
@@ -278,6 +280,8 @@ class Out extends CI_Controller {
         $data = $this->out_model->getdatadetail($id);
         $html = "";
         $no=1;
+        $pcs =0;
+        $kgs = 0;
        foreach ($data as $val) { 
         $ketbc = $val['bcnomor']!=null ? 'BC. '.trim($val['jns_bc']).'-'.$val['bcnomor'].'('.$val['bctgl'].')' : '';
         $html .= "<tr>";
@@ -288,7 +292,16 @@ class Out extends CI_Controller {
         $html .= "<td class='text-right'>".rupiah($val['kgs'],4)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";
+
+        $pcs += $val['pcs'];
+        $kgs += $val['kgs'];
        }
+        $html .= "<tr>";
+        $html .= "<td colspan='3' class='text-end'>TOTAL</td>";
+        $html .= "<td class='text-right'>".rupiah($pcs)."</td>";
+        $html .= "<td class='text-right'>".rupiah($kgs,0)."</td>";
+        $html .= "<td></td>";
+        $html .= "</tr>";
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }

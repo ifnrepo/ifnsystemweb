@@ -71,7 +71,10 @@ class Taskmodel extends CI_Model
                         $this->db->group_end();
                     $this->db->group_end();
                     if(count($cekmng)>0){
+                        $this->db->group_start();
                         $this->db->where_in('dept_bbl',$cekmng);
+                        $this->db->or_where('ok_pp',0);
+                        $this->db->group_end();
                     }
                 }else{
                     if($cekut==1){
@@ -276,7 +279,7 @@ class Taskmodel extends CI_Model
                     $this->db->where('kode_dok','pb');
                     $this->db->where('data_ok', 1);
                     $this->db->where('ok_valid', 0);
-                    if(count($hakttdpb) > 0){
+                    if(count($hakcekpb) > 0){
                         $this->db->where_in('dept_id', $hakcekpb);
                     }else{
                         $this->db->where('data_ok', 99);
@@ -345,7 +348,11 @@ class Taskmodel extends CI_Model
                                 $this->db->group_end();
                             $this->db->group_end();
                             if(count($cekmng)>0){
+                                // $this->db->where_in('dept_bbl',$cekmng);
+                                $this->db->group_start();
                                 $this->db->where_in('dept_bbl',$cekmng);
+                                $this->db->or_where('ok_pp',0);
+                                $this->db->group_end();
                             }
                         }else{
                             if($cekut==1){

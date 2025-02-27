@@ -163,6 +163,7 @@ $(document).ready(function () {
 	$(".datatable").DataTable({
 		responsive: true,
 		pageLength: 50,
+		// ordering: false,
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 	$(".datatable2").DataTable({

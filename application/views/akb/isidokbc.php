@@ -1,5 +1,6 @@
 <div class="container-xl"> 
-    <div class="m-2 font-bold">DATA BC - NO <span class="text-blue"><?= $datheader['nomor_dok']; ?></span></div>
+    <div class="mx-2 font-bold">AJU KELUAR BARANG</div>
+    <div class="mx-2 mb-2 font-bold">DATA BC - NO <span class="text-blue"><?= $datheader['nomor_dok']; ?></span></div>
     <div class="card-header font-kecil">
         <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" style="background-color: #F6F8FB">
             <li class="nav-item">
@@ -20,6 +21,7 @@
                 <div class="row">
                     <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
                     <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
+                    <input type="hidden" id="namahalaman" value="akb">
                     <?php $date = date("Y-m-d H:i:s",strtotime("+2 hours",strtotime($datatoken['update_at']))); ?>
                     <input type="hidden" id="updateon" value="<?= $date; ?>">
                     <div class="m-2 font-bold d-flex justify-content-between">
@@ -313,42 +315,24 @@
                                     </div>
                                     <div class="text-center bg-primary-lt mb-1 font-bold">Sarana / Cara Angkutan</div>
                                     <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
-                                        <label class="col-3 col-form-label font-kecil mx-2 py-0 px-2">Jenis & Tipe<br> Peti Kemas</label>
-                                        <div class="col-3 font-kecil">
-                                            <select class="form-select font-kecil font-bold btn-flat" name="jenis_kontainer" id="jenis_kontainer" <?= $selectnonaktif; ?> >
-                                                <option value="">-</option>
-                                                <option value="4" <?php if($datheader['jenis_kontainer']=='4'){ echo "selected"; } ?>>Empty</option>
-                                                <option value="8" <?php if($datheader['jenis_kontainer']=='8'){ echo "selected"; } ?>>FCL</option>
-                                                <option value="7" <?php if($datheader['jenis_kontainer']=='7'){ echo "selected"; } ?>>LCL</option>
-                                            </select>
-                                        </div>
+                                        <label class="col-3 col-form-label font-kecil mx-2">No & Tipe Peti Kemas</label>
                                         <div class="col font-kecil">
-                                            <select class="form-select font-kecil font-bold btn-flat" name="tipe_kontainer" id="tipe_kontainer" <?= $selectnonaktif; ?> >
-                                                <option value="">-</option>
-                                                <option value="1" <?php if($datheader['tipe_kontainer']=='1'){ echo "selected"; } ?>>General / Dry Cargo</option>
-                                                <option value="2" <?php if($datheader['tipe_kontainer']=='2'){ echo "selected"; } ?>>Tunne Type</option>
-                                                <option value="3" <?php if($datheader['tipe_kontainer']=='3'){ echo "selected"; } ?>>Open Top Steel</option>
-                                                <option value="4" <?php if($datheader['tipe_kontainer']=='4'){ echo "selected"; } ?>>Flat Rack</option>
-                                                <option value="5" <?php if($datheader['tipe_kontainer']=='5'){ echo "selected"; } ?>>Reefer/Refregete</option>
-                                                <option value="6" <?php if($datheader['tipe_kontainer']=='6'){ echo "selected"; } ?>>Barge Container</option>
-                                                <option value="7" <?php if($datheader['tipe_kontainer']=='7'){ echo "selected"; } ?>>Bulk Container</option>
-                                                <option value="8" <?php if($datheader['tipe_kontainer']=='8'){ echo "selected"; } ?>>Isotank</option>
-                                                <option value="99" <?php if($datheader['tipe_kontainer']=='99'){ echo "selected"; } ?>>Lain-lain</option>
-                                            </select>
-                                        </div>
-                                    </div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
-                                        <label class="col-3 col-form-label font-kecil mx-2 py-0 px-2">Ukuran & No <br> Peti Kemas</label>
-                                        <div class="col-3 font-kecil">
-                                            <select class="form-select font-kecil font-bold btn-flat" name="ukuran_kontainer" id="ukuran_kontainer" <?= $selectnonaktif; ?> >
-                                                <option value="">-</option>
-                                                <option value="20" <?php if($datheader['ukuran_kontainer']=='20'){ echo "selected"; } ?>>20 Feet</option>
-                                                <option value="40" <?php if($datheader['ukuran_kontainer']=='40'){ echo "selected"; } ?>>40 Feet</option>
-                                                <option value="60" <?php if($datheader['ukuran_kontainer']=='60'){ echo "selected"; } ?>>60 Feet</option>
-                                            </select>
-                                        </div>
-                                        <div class="col font-kecil">
-                                            <input type="text" class="form-control font-kecil btn-flat" id="nomor_kontainer" name="nomor_kontainer" value="<?= $datheader['nomor_kontainer']; ?>" aria-describedby="emailHelp" placeholder="Nomor Kontainer" <?= $nonaktif; ?>>
+                                            <div class="mb-1 text-right">
+                                                <a href="<?= base_url().'ib/addkontainer/'.$datheader['id']; ?>" class="btn btn-success py-0 px-1 btn-flat" title="Add Kontainer" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Kontainer"><i class="fa fa-plus"></i></a>
+                                            </div>
+                                            <table class="table table-bordered mb-0">
+                                                <tr class="bg-info-lt">
+                                                    <td class="p-1 text-center font-bold">Jenis</td>
+                                                    <td class="p-1 text-center font-bold">Nomor</td>
+                                                    <td class="p-1 text-center font-bold">Ukuran</td>
+                                                    <td class="p-1 text-center font-bold">Act</td>
+                                                </tr>
+                                                <tbody class="table-tbody" id="body-table-kontainer">
+                                                    <tr>
+                                                        <td colspan="4" class="text-center p-1">- Data tidak Ada -</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
                                     </div>
                                     <hr class="m-0">

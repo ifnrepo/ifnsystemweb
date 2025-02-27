@@ -1,5 +1,6 @@
 <div class="container-xl"> 
-    <div class="m-2 font-bold">DATA BC - IB NO <span class="text-blue"><?= $datheader['nomor_dok']; ?></span></div>
+    <div class="mx-2 font-bold">AJU MASUK BARANG</div>
+    <div class="mx-2 mb-2 font-bold">DATA BC - IB NO <span class="text-blue"><?= $datheader['nomor_dok']; ?></span></div>
     <div class="card-header font-kecil">
         <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" style="background-color: #F6F8FB">
             <li class="nav-item">
@@ -20,6 +21,7 @@
                 <div class="row">
                     <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
                     <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
+                    <input type="hidden" id="namahalaman" value="ib">
                     <?php $date = date("Y-m-d H:i:s",strtotime("+2 hours",strtotime($datatoken['update_at']))); ?>
                     <input type="hidden" id="updateon" value="<?= $date; ?>">
                     <div class="m-2 font-bold d-flex justify-content-between">
@@ -250,6 +252,8 @@
                                                 </div>
                                             </div>
                                         </div>
+                                        <a class="btn btn-sm btn-success mb-1 font-bold" id="getblawb" style="width: 100%;">Get Data By Nomor BL</a>
+                                        <hr class="m-1">
                                     </div>
                                     <!-- BL AWB  -->
                                     <div class="<?= $hilangbc40; ?> <?= $hilangbc262; ?>">
@@ -259,7 +263,7 @@
                                                 <div class="row">
                                                     <label class="col-3 col-form-label font-kecil">Nomor</label>
                                                     <div class="col">
-                                                        <input type="text" class="form-control font-kecil btn-flat" id="bc11" name="bc11" value="<?= $datheader['bc11']; ?>" aria-describedby="emailHelp" placeholder="BC 1.1" <?= $nonaktif; ?>>
+                                                        <input type="text" class="form-control font-kecil btn-flat" id="bc11" name="bc11" value="<?= $datheader['bc11']; ?>" aria-describedby="emailHelp" placeholder="BC 1.1" <?= $nonaktif; ?> readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -267,7 +271,7 @@
                                                 <div class="row">
                                                     <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                     <div class="col">
-                                                        <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_bc11" name="tgl_bc11" value="<?= tglmysql($datheader['tgl_bc11']); ?>" aria-describedby="emailHelp" placeholder="Tgl BC 1.1" <?= $nonaktif; ?>>
+                                                        <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_bc11" name="tgl_bc11" value="<?= tglmysql($datheader['tgl_bc11']); ?>" aria-describedby="emailHelp" placeholder="Tgl BC 1.1" <?= $nonaktif; ?> readonly>
                                                     </div>
                                                 </div>
                                             </div>
@@ -275,13 +279,13 @@
                                         <div class="row">
                                             <label class="col-3 col-form-label font-kecil">Nomor Pos BC11</label>
                                             <div class="col">
-                                                <input type="text" class="form-control font-kecil btn-flat" id="nomor_posbc11" name="nomor_posbc11" value="<?= $datheader['nomor_posbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Pos" <?= $nonaktif; ?>>
+                                                <input type="text" class="form-control font-kecil btn-flat" id="nomor_posbc11" name="nomor_posbc11" value="<?= $datheader['nomor_posbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Pos" <?= $nonaktif; ?> readonly>
                                             </div>
                                         </div>
                                         <div class="row mt-1">
                                             <label class="col-3 col-form-label font-kecil">Nomor Subpos BC11</label>
                                             <div class="col">
-                                                <input type="text" class="form-control font-kecil btn-flat" id="nomor_subposbc11" name="nomor_subposbc11" value="<?= $datheader['nomor_subposbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Subpos" <?= $nonaktif; ?>>
+                                                <input type="text" class="form-control font-kecil btn-flat" id="nomor_subposbc11" name="nomor_subposbc11" value="<?= $datheader['nomor_subposbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Subpos" <?= $nonaktif; ?> readonly>
                                             </div>
                                         </div>
                                     </div>
@@ -314,17 +318,33 @@
                                     <div class="text-center bg-primary-lt mb-1 font-bold">Sarana / Cara Angkutan</div>
                                     <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
                                         <label class="col-3 col-form-label font-kecil">No & Tipe Peti Kemas</label>
-                                        <div class="col-3 font-kecil">
-                                            <select class="form-select font-kecil font-bold btn-flat" name="ukuran_kontainer" id="ukuran_kontainer" <?= $selectnonaktif; ?> >
+                                        <div class="col font-kecil">
+                                            <!-- <select class="form-select font-kecil font-bold btn-flat" name="ukuran_kontainer" id="ukuran_kontainer" <?= $selectnonaktif; ?> >
                                                 <option value="">-</option>
                                                 <option value="20" <?php if($datheader['ukuran_kontainer']=='20'){ echo "selected"; } ?>>20 Feet</option>
                                                 <option value="40" <?php if($datheader['ukuran_kontainer']=='40'){ echo "selected"; } ?>>40 Feet</option>
                                                 <option value="60" <?php if($datheader['ukuran_kontainer']=='60'){ echo "selected"; } ?>>60 Feet</option>
-                                            </select>
+                                            </select> -->
+                                            <div class="mb-1 text-right">
+                                                <a href="<?= base_url().'ib/addkontainer/'.$datheader['id']; ?>" class="btn btn-success py-0 px-1 btn-flat" title="Add Kontainer" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Kontainer"><i class="fa fa-plus"></i></a>
+                                            </div>
+                                            <table class="table table-bordered mb-0">
+                                                <tr class="bg-info-lt">
+                                                    <td class="p-1 text-center font-bold">Jenis</td>
+                                                    <td class="p-1 text-center font-bold">Nomor</td>
+                                                    <td class="p-1 text-center font-bold">Ukuran</td>
+                                                    <td class="p-1 text-center font-bold">Act</td>
+                                                </tr>
+                                                <tbody class="table-tbody" id="body-table-kontainer">
+                                                    <tr>
+                                                        <td colspan="4" class="text-center p-1">- Data tidak Ada -</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
                                         </div>
-                                        <div class="col font-kecil">
+                                        <!-- <div class="col font-kecil">
                                             <input type="text" class="form-control font-kecil btn-flat" id="nomor_kontainer" name="nomor_kontainer" value="<?= $datheader['nomor_kontainer']; ?>" aria-describedby="emailHelp" placeholder="Nomor Kontainer" <?= $nonaktif; ?>>
-                                        </div>
+                                        </div> -->
                                     </div>
                                     <div class="mb-1 mt-1 row">
                                         <label class="col-3 col-form-label font-kecil">Angkutan</label>
@@ -423,7 +443,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],0); ?>" aria-describedby="emailHelp" placeholder="Jml Kemas" <?= $nonaktif; ?>>
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],0); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>

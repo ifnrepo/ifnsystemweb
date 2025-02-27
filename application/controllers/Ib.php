@@ -883,6 +883,99 @@ class Ib extends CI_Controller
             echo json_encode($cocok);
         }
     }
+    public function addkontainer($id){
+        $data['datheader'] = $this->ibmodel->getdatabyid($id);
+        $data['lampiran'] = $this->ibmodel->getjenisdokumen();
+        $this->load->view('ib/addkontainer',$data);
+    }
+    public function tambahkontainer(){
+        $data = [
+            'id_header' => $_POST['id'],
+            'nomor_kontainer' => $_POST['nomor'],
+            'ukuran_kontainer' => $_POST['ukuran'],
+            'jenis_kontainer' => $_POST['jenis'],
+            'tipe_kontainer' => 1
+        ];
+        $header = $_POST['id'];
+        $hasil = $this->ibmodel->tambahkontainer($data);
+        if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
+            $html = '';
+            $query = $this->ibmodel->getdatakontainer($header);
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td>'.$que['jeniskontainer'].'</td>';
+                $html .= '<td>'.$que['nomor_kontainer'].'</td>';
+                $html .= '<td>'.$que['ukurkontainer'].'</td>';
+                $html .= '<td class="text-center">';
+                $html .= '<a href="'.base_url().'ib/hapuskontainer/'.$que['id'].'/'.$que['id_header'].'" class="btn btn-danger py-0 px-1 btn-flat" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Kontainer"><i class="fa fa-minus"></i></a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $cocok = array('datagroup' => $html);
+            echo json_encode($cocok);
+        }
+    }
+    public function getdatakontainer($id){
+        $html = '';
+        $query = $this->ibmodel->getdatakontainer($id);
+        $jumlahrek = $query->num_rows();
+        if($jumlahrek > 0){
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td>'.$que['jeniskontainer'].'</td>';
+                $html .= '<td>'.$que['nomor_kontainer'].'</td>';
+                $html .= '<td>'.$que['ukurkontainer'].'</td>';
+                $html .= '<td class="text-center">';
+                $html .= '<a href="'.base_url().'ib/hapuskontainer/'.$que['id'].'/'.$que['id_header'].'" class="btn btn-danger py-0 px-1 btn-flat" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Kontainer"><i class="fa fa-minus"></i></a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+        }else{
+           $html .= '<tr>';
+            $html .= '<td colspan="4" class="text-center p-1">- Data tidak Ada -</td>';
+            $html .= '</tr>'; 
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function hapuskontainer($id,$ide){
+        $data = [
+            'id' => $id,
+            'header' => $ide
+        ];
+        $this->load->view('ib/hapuskontainer',$data);
+    }
+    public function hapuskont(){
+        $data = $_POST['id'];
+        $header = $_POST['head'];
+        $hasil = $this->ibmodel->hapuskontainer($data);
+        if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
+            $html = '';
+            $query = $this->ibmodel->getdatakontainer($header);
+            $no = 1;
+            $jumlahrek = $query->num_rows();
+            if($jumlahrek > 0){
+                foreach ($query->result_array() as $que) {
+                    $html .= '<tr>';
+                    $html .= '<td>'.$que['jeniskontainer'].'</td>';
+                    $html .= '<td>'.$que['nomor_kontainer'].'</td>';
+                    $html .= '<td>'.$que['ukurkontainer'].'</td>';
+                    $html .= '<td class="text-center">';
+                    $html .= '<a href="'.base_url().'ib/hapuskontainer/'.$que['id'].'/'.$que['id_header'].'" class="btn btn-danger py-0 px-1 btn-flat" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Kontainer"><i class="fa fa-minus"></i></a>';
+                    $html .= '</td>';
+                    $html .= '</tr>';
+                }
+            }else{
+                $html .= '<tr>';
+                $html .= '<td colspan="4" class="text-center p-1">- Data tidak Ada -</td>';
+                $html .= '</tr>';
+            }
+            $cocok = array('datagroup' => $html);
+            echo json_encode($cocok);
+        }
+    }
     function kirimdatakeceisa40($id){
         $data = $this->ibmodel->getdatabyid($id);
         $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
@@ -1145,6 +1238,17 @@ class Ib extends CI_Controller
             "seriKemasan" => 1
         ];
         array_push($arrkemas,$arraykemasan);
+        $datakont = $this->ibmodel->getdatakontainer($id);
+        $arraykontainer = [];
+        foreach ($datakont->result_array() as $kont) {
+            $arrkont = [
+                'kodeTipeKontainer' => "1",
+                'kodeUkuranKontainer' => $kont['ukuran_kontainer'],
+                'nomorKontainer' => $kont['nomor_kontainer'],
+                'kodeJenisKontainer' => $kont['jenis_kontainer']
+            ];
+            array_push($arraykontainer,$arrkont);
+        }
         $arraybarang = [];
         $datadet = $this->ibmodel->getdatadetailib($id);
         $no = 0;
@@ -1222,6 +1326,7 @@ class Ib extends CI_Controller
         $arrayheader['dokumen'] = $arraydokumen;
         $arrayheader['pengangkut'] = $arrangkut;
         $arrayheader['kemasan'] = $arrkemas;
+        $arrayheader['kontainer'] = $arraykontainer;
         $arrayheader['barang'] = $arraybarang;
         $arrayheader['pungutan'] = $arraypungutan;
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
@@ -1265,6 +1370,77 @@ class Ib extends CI_Controller
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
         }
+    }
+    public function getdatablawb($nomorbl,$tglbl,$id){
+        $token = $this->ibmodel->gettoken();
+        // $token = 'XXX';
+        $namaimpor = urlencode('INDONEPTUNE NET MANUFACTURING');
+        $kodekantor = urlencode('040300');  
+        $tglurl = urlencode($tglbl);
+        $blurl = urlencode($nomorbl);
+        $curl = curl_init();
+        // $token = $consID;
+        $headers = array(
+            "Content-Type: application/json",
+            "Authorization: Bearer ".$token,
+        );
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/manifes-bc11?noHostBl='.$blurl.'&tglHostBl='.$tglurl.'&kodeKantor='.$kodekantor.'&nama='.$namaimpor);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        $databalik = json_decode($result,true);
+        // print_r($databalik);
+        if($databalik['respon']=='' && array_key_exists('respon',$databalik)){
+            $isidata = [
+                'id' => $id,
+                'bc11' => $databalik['noBc11'],
+                'tgl_bc11' => tglmysql($databalik['tglBc11']),
+                'pelabuhan_bongkar' => $databalik['pelBongkar'],
+                'pelabuhan_muat' => $databalik['pelAsal'],
+                'nomor_posbc11' => $databalik['noPos'],
+                'jns_angkutan' => $databalik['caraPengangkutan'],
+                'angkutan' => $databalik['namaSaranaPengangkut'],
+                'no_kendaraan' => $databalik['noVoyage'],
+                'bendera_angkutan' => $databalik['bendera']
+            ];
+            $this->ibmodel->updatebc11($isidata);
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }else{
+            print_r($databalik);
+            $this->session->set_flashdata('errorsimpan',1);
+            if(array_key_exists('respon',$databalik)){
+                $this->session->set_flashdata('pesanerror',$databalik['respon'].'[EXCEPTION]');
+            }else{
+                $this->session->set_flashdata('pesanerror','[EXCEPTION]'.$databalik['Exception']);
+            }
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }
+        // if($databalik['status']=='OK'){
+        //     $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
+        //     $this->session->set_flashdata('errorsimpan',2);
+        //     $this->session->set_flashdata('pesanerror',$databalik['message']);
+        //     $this->ibmodel->updatesendceisa($id);
+        //     $url = base_url().'ib/isidokbc/'.$id;
+        //     redirect($url);
+        // }else{
+        //     // echo '<script>alert("'.$databalik['status'].'");</script>';
+        //     // $url = base_url().'ib/kosong';
+        //     print_r($databalik);
+        //     $this->session->set_flashdata('errorsimpan',1);
+        //     $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.var_dump($databalik['Exception']));
+        //     // $this->session->set_flashdata('pesanerror',print_r($databalik));
+        //     $url = base_url().'ib/isidokbc/'.$id;
+        //     redirect($url);
+        // }
     }
 
     public function getnomoraju(){
