@@ -182,6 +182,16 @@
         </div>
 
         <div class="mb-1 row">
+            <label class="col-3 col-form-label pt-0"></label>
+            <div class="col">
+                <label class="form-check">
+                    <input class="form-check-input" id="pembeli" name="pembeli" type="checkbox">
+                    <span class="form-check-label">Sama Dengan Pembeli</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-1 row">
             <label class="col-3 col-form-label required">InCode</label>
             <div class="col">
                 <input type="text" class="form-control font-kecil" name="incode" id="incode" placeholder="Incode">
@@ -202,6 +212,8 @@
 <script>
     // validasi
     $("#simpancustomer").click(function() {
+        var pembeli = $("#pembeli").prop('checked') ? 1 : 0;
+
         if ($("#kode_customer").val() == '') {
             pesan('Kode harus di isi !', 'error');
             return;
@@ -238,6 +250,7 @@
                 benua: $("#benua").val(),
                 region: $("#region").val(),
                 kode_negara: $("#kode_negara").val(),
+                pembeli: pembeli,
                 cust_id: $("#cust_id").val(),
 
             },
