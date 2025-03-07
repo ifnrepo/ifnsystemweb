@@ -50,6 +50,10 @@ class Akb_model extends CI_Model
         $this->db->where('a.id_header', $data);
         return $this->db->get()->result_array();
     }
+    public function getdatakontainer($id){
+        $this->db->where('id_header',$id);
+        return $this->db->get('tb_kontainer')->row_array();
+    }
     public function getdepttuju($kode)
     {
         $xkode = [];

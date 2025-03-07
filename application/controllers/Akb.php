@@ -936,10 +936,14 @@ class Akb extends CI_Controller
             $status = "";
             if($ke > 2){
                 if ($ke == 4){
+                    // $nomoridentitas = "";
+                    // $namaidentitas = "MOMOI FISHING NET MFG CO.,LTD";
+                    // $alamat = "10TH FL.KOBE ASAHI BLDG 59 NANIWA MACHI CHUO KU KOBE 6500035";
+                    // $negara = "JP";
                     $nomoridentitas = "";
-                    $namaidentitas = "MOMOI FISHING NET MFG CO.,LTD";
-                    $alamat = "10TH FL.KOBE ASAHI BLDG 59 NANIWA MACHI CHUO KU KOBE 6500035";
-                    $negara = "JP";
+                    $namaidentitas = $data['namacustomer'];
+                    $alamat = strtoupper($data['alamat']);
+                    $negara = $data['negaracustomer'];
                 }else{
                     $nomoridentitas = "";
                     $namaidentitas = $data['namacustomer'];
@@ -1027,7 +1031,7 @@ class Akb extends CI_Controller
                 "kodeDaerahAsal" => "3204",
                 "kodeJenisKemasan" => $data['kd_kemasan'],
                 "kodeNegaraAsal" => "ID",
-                "kodeSatuanBarang" => $detx['kodesatuan'],
+                "kodeSatuanBarang" => $detx['satbc'],
                 "merk" => "MOMOI",
                 "ndpbm" => (float) $kurs,
                 "netto" => (float) $detx['kgs'],
@@ -1053,9 +1057,14 @@ class Akb extends CI_Controller
                 // "kodeJenisPungutan" => "PPN",
                 // "kodeJenisTarif" => "1"
             ];
+            $arraypemilik = [];
+            $arrpemilik = [
+                'seriEntitas' => 8
+            ];
             $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
-            // array_push($arraytarif,$barangtarif);
+            array_push($arraypemilik,$arrpemilik);
             $arrayke['barangTarif'] = $arraytarif;
+            $arrayke['barangPemilik'] = $arraypemilik;
             array_push($arraybarang,$arrayke);
         }
         $arraypungutan = [];
@@ -1071,6 +1080,7 @@ class Akb extends CI_Controller
             "seriBank" => 1
         ];
         array_push($arrayBank,$bankarray);
+        $datakon = $this->akbmodel->getdatakontainer($id);
         $arrsiapbar = [];
         $arraysiapbarang = [
             "kodeJenisBarang" => "2",
@@ -1081,7 +1091,7 @@ class Akb extends CI_Controller
             "lokasiSiapPeriksa" => "PT. INDONEPTUNE NET MANUFACTURING",
             "tanggalPkb" => $data['tgl_aju'],
             "waktuSiapPeriksa" => (new \DateTime('Asia/Jakarta'))->format(DATE_ATOM),
-            "kodeCaraStuffing" => $data['jenis_kontainer']
+            "kodeCaraStuffing" => $datakon['jenis_kontainer']
         ];
         array_push($arrsiapbar,$arraysiapbarang);
 
@@ -1305,21 +1315,21 @@ class Akb extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        // print_r($databalik);
-        if($databalik['status']=='OK'){
-            $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
-            $this->session->set_flashdata('errorsimpan',2);
-            $this->session->set_flashdata('pesanerror',$databalik['message']);
-            $this->akbmodel->updatesendceisa($id);
-            $url = base_url().'akb/isidokbc/'.$id;
-            redirect($url);
-        }else{
-            // print_r($databalik);
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
-            $url = base_url().'akb/isidokbc/'.$id;
-            redirect($url);
-        }
+        print_r($databalik);
+        // if($databalik['status']=='OK'){
+        //     $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
+        //     $this->session->set_flashdata('errorsimpan',2);
+        //     $this->session->set_flashdata('pesanerror',$databalik['message']);
+        //     $this->akbmodel->updatesendceisa($id);
+        //     $url = base_url().'akb/isidokbc/'.$id;
+        //     redirect($url);
+        // }else{
+        //     // print_r($databalik);
+        //     $this->session->set_flashdata('errorsimpan',1);
+        //     $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
+        //     $url = base_url().'akb/isidokbc/'.$id;
+        //     redirect($url);
+        // }
     }
 
     public function getnomoraju(){
