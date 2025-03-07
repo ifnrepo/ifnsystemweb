@@ -33,7 +33,7 @@
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                <?php foreach ($detail as $val) { ?>
+                <?php $pcs=0;$kgs=0; foreach ($detail as $val) { $pcs += $val['pcs']; $kgs +=  $val['kgs']; ?>
                     <tr>
                         <td style="line-height: 12px;"><?= $val['nama_barang'].' <br><span class="text-teal" style="font-style: italic; font-size: 12px;">'.$val['nobontr'].'</span>'; ?></td>
                         <td><?= $val['brg_id']; ?></td>
@@ -43,6 +43,12 @@
                         <td><?= $val['nodok']; ?></td>
                     </tr>
                 <?php } ?>
+                <tr class="bg-info-lt">
+                    <td colspan="3" class="font-bold text-right">TOTAL</td>
+                    <td class="font-bold text-right"><?= rupiah($pcs,0); ?></td>
+                    <td class="font-bold text-right"><?= rupiah($kgs,2); ?></td>
+                    <td></td>
+                </tr>
                 </tbody>
             </table>
             <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>

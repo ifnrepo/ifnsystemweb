@@ -14,6 +14,7 @@ class Out_model extends CI_Model{
         $this->db->select('(SELECT SUM(pcs) AS pcs FROM tb_detail WHERE tb_detail.id_header = tb_header.id GROUP BY id_header ) AS jumlahpcs');
         $this->db->join('(select distinct id_header from tb_detail) as tb_detail','tb_detail.id_header = tb_header.id','left');
         $this->db->where($arrkondisi);
+        // $this->db->order_by('tb_header.tgl DESC');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }

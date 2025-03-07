@@ -30,6 +30,7 @@ $(document).ready(function () {
 		// placeholder: "Search for a user...",
 	});
 	loadlampiran();
+	loadkontainer();
 
 	var errosimpan = $("#errorsimpan").val();
 	var pesan = $("#pesanerror").val();
@@ -130,9 +131,11 @@ $("#keexcel").click(function () {
 	}
 });
 $("#jns_bc").change(function () {
+	var halaman = $("#namahalaman").val();
 	savedata("jns_bc", $(this).val());
 	setTimeout(() => {
-		window.location.href = base_url + "ib/isidokbc/" + $("#id_header").val();
+		window.location.href =
+			base_url + halaman + "/isidokbc/" + $("#id_header").val();
 	}, 500);
 });
 $("#mtuang").change(function () {
@@ -304,6 +307,37 @@ $("#tipe_kontainer").change(function () {
 });
 $("#simpanhakbc").click(function () {
 	cekkolom();
+});
+$("#getblawb").click(function () {
+	if ($("#nomor_blawb").val() == "") {
+		pesan("Isi Nomor BL", "error");
+		return;
+	}
+	if ($("#tgl_blawb").val() == "" || $("#tgl_blawb").val() == "00-00-0000") {
+		pesan("Isi Tanggal BL", "error");
+		return;
+	}
+	// $("#getblawbasli").attr(
+	// 	"href",
+	// 	base_url +
+	// 		"ib/getdatablawb/" +
+	// 		$("#nomor_blawb").val() +
+	// 		"/" +
+	// 		$("#tgl_blawb").val() +
+	// 		"/" +
+	// 		$("#id_header").val(),
+	// );
+	setTimeout(() => {
+		// alert("PASANG");
+		window.location.href =
+			base_url +
+			"ib/getdatablawb/" +
+			$("#nomor_blawb").val() +
+			"/" +
+			$("#tgl_blawb").val() +
+			"/" +
+			$("#id_header").val();
+	}, 500);
 });
 $("#cekdata").click(function () {
 	var cek = cekkolom(1);
@@ -575,6 +609,24 @@ function loadlampiran() {
 			// window.location.reload();
 			$("#body-table").html(data.datagroup).show();
 			$("#jmllampiran").val(data.datagroup.length);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
+function loadkontainer() {
+	var id = $("#id_header").val();
+	var ceksend = $("#nomor_aju").attr("readonly") == "readonly" ? 1 : 0;
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "ib/getdatakontainer/" + id,
+		data: { cek: ceksend },
+		success: function (data) {
+			// window.location.reload();
+			$("#body-table-kontainer").html(data.datagroup).show();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
