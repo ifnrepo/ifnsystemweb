@@ -222,6 +222,18 @@
         </div>
 
         <div class="mb-1 row">
+            <label class="col-3 col-form-label pt-0"></label>
+            <div class="col">
+                <label class="form-check">
+                    <input class="form-check-input" id="pembeli" name="pembeli" type="checkbox" <?php if ($data['pembeli'] == 1) {
+                                                                                                    echo 'checked';
+                                                                                                } ?>>
+                    <span class="form-check-label">Sama Dengan Pembeli</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="mb-1 row">
             <label class="col-3 col-form-label required">CustId</label>
             <div class="col">
                 <input type="text" class="form-control font-kecil" name="cust_id" id="cust_id" placeholder="CustId" value="<?= $data['cust_id']; ?>">
@@ -235,6 +247,7 @@
 </div>
 <script>
     $("#updatecustomer").click(function() {
+        var pembeli = $("#pembeli").prop('checked') ? 1 : 0;
         if ($("#kode_customer").val() == '') {
             pesan('Kode harus di isi !', 'error');
             return;
@@ -271,6 +284,7 @@
                 benua: $("#benua").val(),
                 region: $("#region").val(),
                 kode_negara: $("#kode_negara").val(),
+                pembeli: pembeli,
                 cust_id: $("#cust_id").val(),
                 id: $("#id").val()
             },

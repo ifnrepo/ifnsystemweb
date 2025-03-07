@@ -65,6 +65,7 @@ class Customer extends CI_Controller
             'benua' => $_POST['benua'],
             'region' => $_POST['region'],
             'kode_negara' => $_POST['kode_negara'],
+            'pembeli' => $_POST['pembeli'],
             'cust_id' => $_POST['cust_id']
         ];
         $hasil = $this->customer_model->simpancustomer($data);
@@ -109,6 +110,7 @@ class Customer extends CI_Controller
             'benua' => $_POST['benua'],
             'region' => $_POST['region'],
             'kode_negara' => $_POST['kode_negara'],
+            'pembeli' => $this->input->post('pembeli') ? 1 : 0,
             'cust_id' => $_POST['cust_id']
         ];
         $hasil = $this->customer_model->updatecustomer($data);
