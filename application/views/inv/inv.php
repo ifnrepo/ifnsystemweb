@@ -36,6 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                       echo "selected";
                                     } ?>>IFN</option>
               </select>
+
               <?php $disabel = isset($repbeac) && $repbeac == 1 ? 'disabled' : ''; ?>
               <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept" name="currdept" <?= $disabel; ?>>
                 <?php
@@ -125,6 +126,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </select>
                 </div>
                 <div class="col-3 font-kecil">
+                  <input type="text" id="paramload" class="hilang" value="">
                   <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
@@ -274,9 +276,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </tbody>
           </table>
         </div>
-        <div id="jumlahrek" class="hilang"><?= $cntbrg; ?></div>
-        <div id="jumlahpc" class="hilang"><?= $jmpcs; ?></div>
-        <div id="jumlahkg" class="hilang"><?= $jmkgs; ?></div>
+        <input type="text" id="jumlahrek" class="hilang" value="<?= $cntbrg; ?>">
+        <input type="text" id="jumlahpc" class="hilang" value="<?= $jmpcs; ?>">
+        <input type="text" id="jumlahkg" class="hilang" value="<?= $jmkgs; ?>">
         <div class="card card-active hilang" style="clear:both;">
           <div class="card-body p-2 font-kecil">
             <div class="row">

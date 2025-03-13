@@ -1,35 +1,64 @@
-$(window).on("load", function () {
-	NProgress.start();
-	NProgress.inc(0.5);
-	$("#jumlahrekod").text("Load data ..");
-	$("#jumlahpcs").text("Load data ..");
-	$("#jumlahkgs").text("Load data ..");
-});
-$(document).ready(function () {
-	NProgress.done();
-
+// $(window).on("load", function () {
+// 	// NProgress.start();
+// 	// NProgress.inc(0.5);
+// 	$("#jumlahrekod").text("Load data ..");
+// 	$("#jumlahpcs").text("Load data ..");
+// 	$("#jumlahkgs").text("Load data ..");
+// });
+$(function () {
+	// NProgress.done();
+	// alert("XXX");
 	var arrurl = window.location.href.split("/");
-	addnumber = arrurl[2] == "localhost" ? 0 : 0;
+	let addnumber = arrurl[2] == "localhost" ? 0 : 0;
 	// alert(arrurl[4 + addnumber]);
 	if (
 		$("#paramload").val() != "" &&
-		(arrurl[4 + addnumber] == "bcwip" || arrurl[4 + addnumber] == "bcwip#")
+		(arrurl[4] == "bcwip" || arrurl[4] == "bcwip#")
 	) {
+		// alert(addnumber);
 		loadtable();
 	}
 	if (
 		$("#paramload").val() != "" &&
-		(arrurl[4 + addnumber] == "bcgf" || arrurl[4 + addnumber] == "bcgf#")
+		(arrurl[4] == "bcgf" || arrurl[4] == "bcgf#")
 	) {
 		loadtablegf();
 	}
-	var jmlrek = $("#jumlahrek").text();
-	var jmlpc = $("#jumlahpc").text();
-	var jmlkg = $("#jumlahkg").text();
-	$("#jumlahrekod").text(rupiah(jmlrek, ".", ",", 0));
-	$("#jumlahpcs").text(rupiah(jmlpc, ".", ",", 2));
-	$("#jumlahkgs").text(rupiah(jmlkg, ".", ",", 2));
+
+	var jmlrek = $("#jumlahrek").val();
+	var jmlpc = $("#jumlahpc").val();
+	var jmlkg = $("#jumlahkg").val();
+	$("#jumlahrekod").html(rupiah(jmlrek, ".", ",", 0));
+	$("#jumlahpcs").html(rupiah(jmlpc, ".", ",", 2));
+	$("#jumlahkgs").html(rupiah(jmlkg, ".", ",", 2));
 });
+// $(document).ready(function () {
+// 	NProgress.done();
+// 	// alert("XXX");
+
+// 	var arrurl = window.location.href.split("/");
+// 	let addnumber = arrurl[2] == "localhost" ? 0 : 0;
+// 	// alert(arrurl[4 + addnumber]);
+// 	// if (
+// 	// 	$("#paramload").val() != "" &&
+// 	// 	(arrurl[4] == "bcwip" || arrurl[4] == "bcwip#")
+// 	// ) {
+// 	// 	loadtable();
+// 	// }
+// 	// if (
+// 	// 	$("#paramload").val() != "" &&
+// 	// 	(arrurl[4] == "bcgf" || arrurl[4] == "bcgf#")
+// 	// ) {
+// 	// 	loadtablegf();
+// 	// }
+// 	var jmlrek = $("#jumlahrek").val();
+// 	var jmlpc = $("#jumlahpc").val();
+// 	var jmlkg = $("#jumlahkg").val();
+// 	// alert(jmlrek);
+// 	$("#jumlahrekod").html(rupiah(jmlrek, ".", ",", 0));
+// 	$("#jumlahpcs").html(rupiah(jmlpc, ".", ",", 2));
+// 	$("#jumlahkgs").html(rupiah(jmlkg, ".", ",", 2));
+// });
 $("#textcari").blur(function () {
 	var isi = $(this).val().trim();
 	$(this).val(isi);
