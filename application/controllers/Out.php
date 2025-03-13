@@ -90,7 +90,7 @@ class Out extends CI_Controller {
                 $hasil .= "<td class='text-primary'>".$que['nobontr']."</td>";
             }else{
                 if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']==''){
-                    $hasil .= "<td class='text-primary'><a href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
+                    $hasil .= "<td class='text-primary'><a class='text-info' href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
                 }
             }
             if($this->session->userdata('deptsekarang')=='GP' && $que['insno']!=''){
@@ -298,7 +298,7 @@ class Out extends CI_Controller {
        }
         $html .= "<tr>";
         $html .= "<td colspan='3' class='text-end'>TOTAL</td>";
-        $html .= "<td class='text-right'>".rupiah($pcs)."</td>";
+        $html .= "<td class='text-right'>".rupiah($pcs,0)."</td>";
         $html .= "<td class='text-right'>".rupiah($kgs,0)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";

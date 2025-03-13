@@ -929,10 +929,10 @@ class Akb extends CI_Controller
         ];
         $arrayentitas = [];
         for($ke=1;$ke<=4;$ke++){
-            $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,DESA CANGKUANG 004/001 CANGKUANG,RANCAEKEK, BANDUNG, JAWA BARAT";
+            $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
             $serient = $ke==1 ? "2" : (($ke==2) ? "8" : (($ke==3) ? "6" : "13"));
             $kodeentitas = $ke==1 ? "2" : (($ke==2) ? "7" : (($ke==3) ? "8" : "6"));
-            $kodejnent = $ke==1 ? "6" : (($ke==4) ? "6" : "");
+            $kodejnent = $ke==1 ? "6" : (($ke==4) ? "6" : (($ke==2) ? "6" : ""));
             $status = "";
             if($ke > 2){
                 if ($ke == 4){
@@ -992,12 +992,14 @@ class Akb extends CI_Controller
             "kodeBendera" => $data['kode_negara']
         ];
         array_push($arrangkut,$arrayangkutan);
+        $datakon = $this->akbmodel->getdatakontainer($id);
         $arraykonta = [];
         $arraykontainer = [
-            "kodeTipeKontainer" => $data['tipe_kontainer'],
-            "kodeUkuranKontainer" => $data['ukuran_kontainer'],
-            "nomorKontainer" => $data['nomor_kontainer'],
-            "kodeJenisKontainer" => $data['jenis_kontainer']
+            "kodeTipeKontainer" => $datakon['tipe_kontainer'],
+            "kodeUkuranKontainer" => $datakon['ukuran_kontainer'],
+            "nomorKontainer" => $datakon['nomor_kontainer'],
+            "kodeJenisKontainer" => $datakon['jenis_kontainer'],
+            "seriKontainer" => 1
         ];
         array_push($arraykonta,$arraykontainer);
         $arrkemas = [];
@@ -1098,7 +1100,7 @@ class Akb extends CI_Controller
         $arrayheader['entitas'] = $arrayentitas;
         $arrayheader['dokumen'] = $arraydokumen;
         $arrayheader['pengangkut'] = $arrangkut;
-        // $arrayheader['kontainer'] = $arraykontainer;
+        $arrayheader['kontainer'] = $arraykonta;
         $arrayheader['kemasan'] = $arrkemas;
         $arrayheader['barang'] = $arraybarang;
         $arrayheader['bankDevisa'] = $arrayBank;
@@ -1315,21 +1317,21 @@ class Akb extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        print_r($databalik);
-        // if($databalik['status']=='OK'){
-        //     $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
-        //     $this->session->set_flashdata('errorsimpan',2);
-        //     $this->session->set_flashdata('pesanerror',$databalik['message']);
-        //     $this->akbmodel->updatesendceisa($id);
-        //     $url = base_url().'akb/isidokbc/'.$id;
-        //     redirect($url);
-        // }else{
-        //     // print_r($databalik);
-        //     $this->session->set_flashdata('errorsimpan',1);
-        //     $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
-        //     $url = base_url().'akb/isidokbc/'.$id;
-        //     redirect($url);
-        // }
+        // print_r($databalik);
+        if($databalik['status']=='OK'){
+            $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
+            $this->session->set_flashdata('errorsimpan',2);
+            $this->session->set_flashdata('pesanerror',$databalik['message']);
+            $this->akbmodel->updatesendceisa($id);
+            $url = base_url().'akb/isidokbc/'.$id;
+            redirect($url);
+        }else{
+            // print_r($databalik);
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
+            $url = base_url().'akb/isidokbc/'.$id;
+            redirect($url);
+        }
     }
 
     public function getnomoraju(){

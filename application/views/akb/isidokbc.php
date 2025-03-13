@@ -588,7 +588,7 @@
                 <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen <span><a href="<?= base_url().'ib/addlampiran/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary"><i class="fa fa-plus mr-1"></i> Tambah Data</a><span></div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
-                        <table class="table datatable8 w-100">
+                        <table class="table w-100">
                             <thead style="background-color: blue !important">
                                 <tr>
                                     <th>No</th>
