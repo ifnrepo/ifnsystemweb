@@ -160,7 +160,7 @@ class Out_model extends CI_Model{
         $this->db->join('tb_header e','e.id = d.id_header','left');
         $this->db->join('tb_hargamaterial f','f.id_barang = c.id and f.nobontr = a.nobontr','left');
         $this->db->where('a.id_header',$data);
-        $this->db->group_by('c.nama_barang');
+        // $this->db->group_by('c.nama_barang,e.nomor_dok');
         $this->db->order_by('c.nama_barang','asc');
         return $this->db->get()->result_array();    
     }
