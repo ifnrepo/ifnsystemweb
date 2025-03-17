@@ -31,6 +31,7 @@ $(document).ready(function () {
 	});
 	loadlampiran();
 	loadkontainer();
+	loadentitas();
 
 	var errosimpan = $("#errorsimpan").val();
 	var pesan = $("#pesanerror").val();
@@ -244,9 +245,9 @@ $("#tgl_bc11").change(function () {
 $("#nomor_posbc11").blur(function () {
 	savedata("nomor_posbc11", $(this).val());
 });
-$("#nomor_subposbc11").change(function () {
-	savedata("nomor_subposbc11", $(this).val());
-});
+// $("#nomor_subposbc11").change(function () {
+// 	savedata("nomor_subposbc11", $(this).val());
+// });
 $("#exnomor_bc").blur(function () {
 	savedata("exnomor_bc", $(this).val());
 });
@@ -432,10 +433,10 @@ function cekkolom(mode) {
 			pesan("Untuk BC 23 Nomor BC11 harus di isi", "error");
 			return false;
 		}
-		if ($("#nomor_subposbc11").val() == "") {
-			pesan("Nomor Subpos BC11 harus di isi", "error");
-			return false;
-		}
+		// if ($("#nomor_subposbc11").val() == "") {
+		// 	pesan("Nomor Subpos BC11 harus di isi", "error");
+		// 	return false;
+		// }
 		if ($("#nomor_posbc11").val() == "") {
 			pesan("Nomor Pos BC11 harus di isi", "error");
 			return false;
@@ -627,6 +628,24 @@ function loadkontainer() {
 		success: function (data) {
 			// window.location.reload();
 			$("#body-table-kontainer").html(data.datagroup).show();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
+function loadentitas() {
+	var id = $("#id_header").val();
+	var ceksend = $("#nomor_aju").attr("readonly") == "readonly" ? 1 : 0;
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "ib/getdataentitas/" + id,
+		data: { cek: ceksend },
+		success: function (data) {
+			// window.location.reload();
+			$("#body-table-entitas").html(data.datagroup).show();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
