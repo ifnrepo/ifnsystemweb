@@ -362,7 +362,7 @@ class Ib_model extends CI_Model
         return $this->db->order_by('kode')->get('ref_jns_dokumen');
     }
     public function refbendera(){
-        return $this->db->order_by('kode_negara')->get('ref_negara');
+        return $this->db->order_by('uraian_negara')->get('ref_negara');
     }
     public function refpelabuhan(){
         return $this->db->order_by('kode_pelabuhan')->get('ref_pelabuhan');
@@ -455,6 +455,19 @@ class Ib_model extends CI_Model
     public function hapuskontainer($id){
         $this->db->where('id',$id);
         return $this->db->delete('tb_kontainer');
+    }
+    public function getdataentitas($id){
+        $this->db->select('tb_entitas.*,ref_negara.uraian_negara as negara');
+        $this->db->join('ref_negara','ref_negara.id = tb_entitas.kode_negara','left');
+        $this->db->where('tb_entitas.id_header',$id);
+        return $this->db->get('tb_entitas');
+    }
+    public function tambahentitas($data){
+        return $this->db->insert('tb_entitas',$data);
+    }
+    public function hapusenti($id){
+        $this->db->where('id',$id);
+        return $this->db->delete('tb_entitas');
     }
     //End IB Models
     public function updatepo($data)

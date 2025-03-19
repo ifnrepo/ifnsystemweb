@@ -96,6 +96,30 @@
                             </div>
                         </div>
                     </div>
+                    <div class="row <?= $hilangbc40; ?>">
+                        <div class="col-sm-12">
+                            <div class="card font-kecil mt-1">
+                                <div class="bg-warning-lt px-2 py-1 font-bold"><span class="text-black">Entitas Dokumen</span><span style="float: right;"><a href="<?= base_url().'ib/addentitas/'.$datheader['id']; ?>" class="btn btn-success py-0 px-1 btn-flat" title="Add Entitas" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Entitas"><i class="fa fa-plus"></i></a></span></div>
+                                <div class="card-body p-1">
+                                    <table class="table table-bordered mb-0">
+                                        <tr class="bg-info-lt">
+                                            <td class="p-1 font-bold">Kode</td>
+                                            <td class="p-1 font-bold">No Identitas</td>
+                                            <td class="p-1 font-bold">Nama</td>
+                                            <td class="p-1 font-bold">Alamat</td>
+                                            <td class="p-1 font-bold">Negara</td>
+                                            <td class="p-1 text-center font-bold">Act</td>
+                                        </tr>
+                                        <tbody class="table-tbody" id="body-table-entitas">
+                                            <tr>
+                                                <td colspan="6" class="text-center p-1">- Data tidak Ada -</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                     <div class="row">
                         <div class="col-sm-6">
                             <div class="card font-kecil mt-1">
@@ -282,7 +306,7 @@
                                                 <input type="text" class="form-control font-kecil btn-flat" id="nomor_posbc11" name="nomor_posbc11" value="<?= $datheader['nomor_posbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Pos" <?= $nonaktif; ?> readonly>
                                             </div>
                                         </div>
-                                        <div class="row mt-1">
+                                        <div class="row mt-1 hilang">
                                             <label class="col-3 col-form-label font-kecil">Nomor Subpos BC11</label>
                                             <div class="col">
                                                 <input type="text" class="form-control font-kecil btn-flat" id="nomor_subposbc11" name="nomor_subposbc11" value="<?= $datheader['nomor_subposbc11']; ?>" aria-describedby="emailHelp" placeholder="Nomor Subpos" <?= $nonaktif; ?> readonly>
@@ -443,7 +467,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],0); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -563,7 +587,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input type="text" id="sumdetail" class="hilang" value="<?= $sumdetail; ?>">
+                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail,2); ?>">
                     </div>
                 </div>
             </div>

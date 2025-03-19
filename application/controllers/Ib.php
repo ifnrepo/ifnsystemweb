@@ -976,6 +976,110 @@ class Ib extends CI_Controller
             echo json_encode($cocok);
         }
     }
+    public function getdataentitas($id){
+        $html = '';
+        $query = $this->ibmodel->getdataentitas($id);
+        $jumlahrek = $query->num_rows();
+        if($jumlahrek > 0){
+            foreach ($query->result_array() as $que) {
+                $kodentitas = $que['kode_entitas']==7 ? 'PEMILIK' : ($que['kode_entitas']==5 ? 'PEMASOK' : '');
+                $html .= '<tr>';
+                $html .= '<td class="font-bold">'.$kodentitas.'</td>';
+                $html .= '<td>'.$que['no_identitas'].'</td>';
+                $html .= '<td>'.$que['nama'].'</td>';
+                $html .= '<td>'.$que['alamat'].'</td>';
+                $html .= '<td>'.$que['negara'].'</td>';
+                $html .= '<td class="text-center">';
+                $html .= '<a href="'.base_url().'ib/hapusentitas/'.$que['id'].'/'.$que['id_header'].'" class="btn btn-danger py-0 px-1 btn-flat" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Kontainer"><i class="fa fa-minus"></i></a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+        }else{
+           $html .= '<tr>';
+            $html .= '<td colspan="6" class="text-center p-1">- Data tidak Ada -</td>';
+            $html .= '</tr>'; 
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function addentitas($id){
+        // $data['datheader'] = $this->ibmodel->getdatabyid($id);
+        $data['datheader'] = $id;
+        $data['negara'] = $this->ibmodel->refbendera();
+        $this->load->view('ib/addentitas',$data);
+    }
+    public function tambahentitas(){
+        $data = [
+            'id_header' => $_POST['id'],
+            'kode_entitas' => $_POST['kode'],
+            'no_identitas' => $_POST['no'],
+            'nama' => $_POST['nama'],
+            'alamat' => $_POST['alamat'],
+            'kode_negara' => $_POST['negara'],
+        ];
+        $header = $_POST['id'];
+        $hasil = $this->ibmodel->tambahentitas($data);
+        if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
+            $html = '';
+            $query = $this->ibmodel->getdataentitas($header);
+            foreach ($query->result_array() as $que) {
+                $kodentitas = $que['kode_entitas']==7 ? 'PEMILIK' : ($que['kode_entitas']==5 ? 'PEMASOK' : '');
+                $html .= '<tr>';
+                $html .= '<td>'.$kodentitas.'</td>';
+                $html .= '<td>'.$que['no_identitas'].'</td>';
+                $html .= '<td>'.$que['nama'].'</td>';
+                $html .= '<td>'.$que['alamat'].'</td>';
+                $html .= '<td>'.$que['negara'].'</td>';
+                $html .= '<td class="text-center">';
+                $html .= '<a href="'.base_url().'ib/hapusentitas/'.$que['id'].'/'.$que['id_header'].'" class="btn btn-danger py-0 px-1 btn-flat" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Kontainer"><i class="fa fa-minus"></i></a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $cocok = array('datagroup' => $html);
+            echo json_encode($cocok);
+        }
+    }
+    public function hapusentitas($id,$ide){
+        $data = [
+            'id' => $id,
+            'header' => $ide
+        ];
+        $this->load->view('ib/hapusentitas',$data);
+    }
+    public function hapusenti(){
+        $data = $_POST['id'];
+        $header = $_POST['head'];
+        $hasil = $this->ibmodel->hapusenti($data);
+        if($hasil){
+            $this->helpermodel->isilog($this->db->last_query());
+            $html = '';
+            $query = $this->ibmodel->getdataentitas($header);
+            $no = 1;
+            $jumlahrek = $query->num_rows();
+            if($jumlahrek > 0){
+                foreach ($query->result_array() as $que) {
+                    $kodentitas = $que['kode_entitas']==7 ? 'PEMILIK' : ($que['kode_entitas']==5 ? 'PEMASOK' : '');
+                $html .= '<tr>';
+                $html .= '<td>'.$kodentitas.'</td>';
+                $html .= '<td>'.$que['no_identitas'].'</td>';
+                $html .= '<td>'.$que['nama'].'</td>';
+                $html .= '<td>'.$que['alamat'].'</td>';
+                $html .= '<td>'.$que['negara'].'</td>';
+                $html .= '<td class="text-center">';
+                $html .= '<a href="'.base_url().'ib/hapusentitas/'.$que['id'].'/'.$que['id_header'].'" class="btn btn-danger py-0 px-1 btn-flat" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Kontainer"><i class="fa fa-minus"></i></a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+                }
+            }else{
+                $html .= '<tr>';
+                $html .= '<td colspan="6" class="text-center p-1">- Data tidak Ada -</td>';
+                $html .= '</tr>';
+            }
+            $cocok = array('datagroup' => $html);
+            echo json_encode($cocok);
+        }
+    }
     function kirimdatakeceisa40($id){
         $data = $this->ibmodel->getdatabyid($id);
         $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
@@ -1188,7 +1292,7 @@ class Ib extends CI_Controller
             $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
             $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
             $nibidentitas = $ke==1 ? "9120011042693" : "";
-            $kodejeniden = $ke==3 ? "4" : "5";
+            $kodejeniden = $ke==3 ? "4" : "6";
             $arrayke = [
                 "seriEntitas" => $ke,
                 "alamatEntitas" => $alamat,
@@ -1240,12 +1344,14 @@ class Ib extends CI_Controller
         array_push($arrkemas,$arraykemasan);
         $datakont = $this->ibmodel->getdatakontainer($id);
         $arraykontainer = [];
-        foreach ($datakont->result_array() as $kont) {
+        $ke = 0;
+        foreach ($datakont->result_array() as $kont) { $ke++;
             $arrkont = [
                 'kodeTipeKontainer' => "1",
                 'kodeUkuranKontainer' => $kont['ukuran_kontainer'],
                 'nomorKontainer' => $kont['nomor_kontainer'],
-                'kodeJenisKontainer' => $kont['jenis_kontainer']
+                'kodeJenisKontainer' => $kont['jenis_kontainer'],
+                'seriKontainer' => $ke
             ];
             array_push($arraykontainer,$arrkont);
         }
@@ -1274,7 +1380,7 @@ class Ib extends CI_Controller
                 "isiPerKemasan" => 0,
                 "kodeSatuanBarang" => $detx['satbc'],
                 "kodeKategoriBarang" => "11",
-                "kodeNegaraAsal" => $data['kodenegara'],
+                "kodeNegaraAsal" => "TH", //$data['kodenegara'],
                 "kodePerhitungan" => "1",
                 "merk" => "-",
                 "netto" => (float) $detx['kgs'],
@@ -1309,7 +1415,7 @@ class Ib extends CI_Controller
             ];
             $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
             $arraybarangdokumen = [];
-            array_push($arraytarif,$barangtarif);
+            // array_push($arraytarif,$barangtarif);
             $arrayke['barangTarif'] = $arraytarif;
             $arrayke['barangDokumen'] = $arraybarangdokumen;
             array_push($arraybarang,$arrayke);
@@ -1320,7 +1426,7 @@ class Ib extends CI_Controller
             "kodeJenisPungutan" => "PPN",
             "nilaiPungutan" => round($jumlahfasilitas,0)
         ];
-        array_push($arraypungutan,$pungutanarray);
+        // array_push($arraypungutan,$pungutanarray);
 
         $arrayheader['entitas'] = $arrayentitas;
         $arrayheader['dokumen'] = $arraydokumen;
@@ -1329,8 +1435,8 @@ class Ib extends CI_Controller
         $arrayheader['kontainer'] = $arraykontainer;
         $arrayheader['barang'] = $arraybarang;
         $arrayheader['pungutan'] = $arraypungutan;
-        // echo '<pre>'.json_encode($arrayheader)."</pre>";
-        $this->kirim40($arrayheader,$id);
+        echo '<pre>'.json_encode($arrayheader)."</pre>";
+        // $this->kirim40($arrayheader,$id);
     }
     public function kirim40($data,$id){
         $token = $this->ibmodel->gettoken();

@@ -52,7 +52,7 @@ class Akb_model extends CI_Model
     }
     public function getdatakontainer($id){
         $this->db->where('id_header',$id);
-        return $this->db->get('tb_kontainer')->row_array();
+        return $this->db->get('tb_kontainer');
     }
     public function getdepttuju($kode)
     {
