@@ -580,7 +580,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input type="text" id="sumdetail" class="hilang" value="<?= round($sumdetail,2); ?>">
+                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail,2); ?>">
                     </div>
                 </div>
             </div>

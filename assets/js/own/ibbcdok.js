@@ -369,7 +369,7 @@ function cekkolom(mode) {
 		pesan("Jumlah Bruto dan Netto Harus di isi !", "error");
 		return false;
 	}
-	if ($("#sumdetail").val() != toAngka($("#nilai_pab").val())) {
+	if ($("#sumdetail").val() != $("#nilai_pab").val()) {
 		// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
 		pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
 		return false;

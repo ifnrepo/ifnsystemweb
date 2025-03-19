@@ -467,7 +467,7 @@
                                                     </select>
                                                 </div>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],0); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -587,7 +587,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input type="text" id="sumdetail" class="hilang" value="<?= $sumdetail; ?>">
+                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail,2); ?>">
                     </div>
                 </div>
             </div>

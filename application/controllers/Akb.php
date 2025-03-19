@@ -622,8 +622,8 @@ class Akb extends CI_Controller
         }
     }
     public function getresponhost($id){
-        $dataaju = $this->ibmodel->getdatanomoraju($id);
-        $token = $this->ibmodel->gettoken();
+        $dataaju = $this->akbmodel->getdatanomoraju($id);
+        $token = $this->akbmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
@@ -655,7 +655,7 @@ class Akb extends CI_Controller
                     'nomor_sppb' => $databalik['dataRespon'][0]['nomorRespon'],
                     'tgl_sppb' => $databalik['dataRespon'][0]['tanggalRespon']
                 ];
-                $hasil = $this->ibmodel->simpanresponbc($data);
+                $hasil = $this->akbmodel->simpanresponbc($data);
                 if($hasil){
                     $this->helpermodel->isilog("Berhasil GET RESPON AJU ".$dataaju." (".$databalik['dataStatus'][0]['nomorDaftar'].")");
                     $this->session->set_flashdata('errorsimpan',2);
@@ -665,13 +665,13 @@ class Akb extends CI_Controller
                 $this->session->set_flashdata('errorsimpan',1);
                 $this->session->set_flashdata('pesanerror','Nomor Pendaftaran Masih kosong, '.$databalik['dataStatus'][0]['keterangan']);
             }
-            $url = base_url().'ib/isidokbc/'.$id;
+            $url = base_url().'akb/isidokbc/'.$id;
             redirect($url);
         }else{
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
             // $url = base_url().'ib/isidokbc/'.$id;
-            $url = base_url().'ib/isidokbc/'.$id;
+            $url = base_url().'akb/isidokbc/'.$id;
             redirect($url);
         }
     }
@@ -885,6 +885,7 @@ class Akb extends CI_Controller
     }
     function kirimdatakeceisa30($id){
         $data = $this->akbmodel->getdatabyid($id);
+        $datakon = $this->akbmodel->getdatakontainer($id);
         $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
         $kurs = $data['mtuang']==2 ? $data['kurs_usd'] : $data['kurs_yen'];
         $arrayheader = [
@@ -897,7 +898,7 @@ class Akb extends CI_Controller
             "fob" => (float) $data['nilai_pab'],
             "freight" => (float) $data['freight'],
             "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
-            "jumlahKontainer" => 1,
+            "jumlahKontainer" => $datakon->num_rows(),
             "kodeAsuransi" => "DN",
             "kodeCaraBayar" => "4",
             "kodeCaraDagang" => "15",
@@ -932,7 +933,7 @@ class Akb extends CI_Controller
             $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
             $serient = $ke==1 ? "2" : (($ke==2) ? "8" : (($ke==3) ? "6" : "13"));
             $kodeentitas = $ke==1 ? "2" : (($ke==2) ? "7" : (($ke==3) ? "8" : "6"));
-            $kodejnent = $ke==1 ? "6" : (($ke==4) ? "6" : (($ke==2) ? "6" : ""));
+            $kodejnent = $ke==1 ? "6" : (($ke==4) ? "" : (($ke==2) ? "6" : ""));
             $status = "";
             if($ke > 2){
                 if ($ke == 4){
@@ -992,16 +993,20 @@ class Akb extends CI_Controller
             "kodeBendera" => $data['kode_negara']
         ];
         array_push($arrangkut,$arrayangkutan);
-        $datakon = $this->akbmodel->getdatakontainer($id);
+        $datakont = $this->akbmodel->getdatakontainer($id);
         $arraykonta = [];
-        $arraykontainer = [
-            "kodeTipeKontainer" => $datakon['tipe_kontainer'],
-            "kodeUkuranKontainer" => $datakon['ukuran_kontainer'],
-            "nomorKontainer" => $datakon['nomor_kontainer'],
-            "kodeJenisKontainer" => $datakon['jenis_kontainer'],
-            "seriKontainer" => 1
-        ];
-        array_push($arraykonta,$arraykontainer);
+        $ke = 0;
+        foreach ($datakont->result_array() as $kont) { $ke++;
+            $arrkont = [
+                'kodeTipeKontainer' => "1",
+                'kodeUkuranKontainer' => $kont['ukuran_kontainer'],
+                'nomorKontainer' => $kont['nomor_kontainer'],
+                'kodeJenisKontainer' => $kont['jenis_kontainer'],
+                'seriKontainer' => $ke
+            ];
+            array_push($arraykonta,$arrkont);
+        }
+        // array_push($arraykonta,$arraykontainer);
         $arrkemas = [];
         $arraykemasan = [
             "jumlahKemasan" => (int) $data['jml_kemasan'],
@@ -1083,17 +1088,23 @@ class Akb extends CI_Controller
         ];
         array_push($arrayBank,$bankarray);
         $datakon = $this->akbmodel->getdatakontainer($id);
+        if($datakon->num_rows() > 0){
+            $konn = $datakon->row_array();
+            $carastuffing = $konn['jenis_kontainer'];
+        }else{
+            $carastuffing = "7";
+        }
         $arrsiapbar = [];
         $arraysiapbarang = [
             "kodeJenisBarang" => "2",
             "kodeJenisGudang" => "2",
             "namaPic" => "MR. AWAN KURNIAWAN",
-            "alamat" => "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,DESA CANGKUANG 004/001 CANGKUANG,RANCAEKEK, BANDUNG, JAWA BARAT",
+            "alamat" => "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT",
             "nomorTelpPic" => "022-7798042",
             "lokasiSiapPeriksa" => "PT. INDONEPTUNE NET MANUFACTURING",
             "tanggalPkb" => $data['tgl_aju'],
             "waktuSiapPeriksa" => (new \DateTime('Asia/Jakarta'))->format(DATE_ATOM),
-            "kodeCaraStuffing" => $datakon['jenis_kontainer']
+            "kodeCaraStuffing" => $carastuffing
         ];
         array_push($arrsiapbar,$arraysiapbarang);
 
