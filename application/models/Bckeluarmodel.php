@@ -66,7 +66,7 @@ class bckeluarmodel extends CI_Model
 
         if ($this->session->userdata('jnsbc') != 'Y') {
             $this->db->where("tb_header.jns_bc", $this->session->userdata('jnsbc'));
-        }else{
+        } else {
             $this->db->where_in("tb_header.jns_bc", [25, 30, 261, 41]);
         }
 
