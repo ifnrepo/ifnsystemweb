@@ -169,7 +169,7 @@
                                      ?>
                                     <tr>
                                         <td><?= $nambar; ?></td>
-                                        <td><?= $val['brg_id']; ?></td>
+                                        <td><?= formatsku($val['po'],$val['item'],$val['dis'],$val['brg_id']); ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= rupiah($val['pcs'],0); ?></td>
                                         <td><?= rupiah($val['kgs'],2); ?></td>
@@ -256,7 +256,29 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2" id="tabs-riwayat-8">
-                <div style="width:100%;height:700px;" class="text-center font-bold m-0"><h3>NOT FOUND</h3></div>
+                <!-- <div style="width:100%;height:700px;" class="text-center font-bold m-0"><h3>NOT FOUND</h3></div> -->
+                 <div class="card">
+                    <div class="card-body">
+                        <ul class="steps steps-vertical steps-green">
+                            <li class="step-item">
+                            <div class="h4 m-0">Dibuat Oleh</div>
+                            <div class="text-secondary ln-12">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus culpa cum expedita ipsam laborum nam ratione reprehenderit sed sint tenetur!</div>
+                            </li>
+                            <li class="step-item">
+                            <div class="h4 m-0">Diajukan Oleh</div>
+                            <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
+                            </li>
+                            <li class="step-item">
+                            <div class="h4 m-0">Out for delivery</div>
+                            <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
+                            </li>
+                            <li class="step-item">
+                            <div class="h4 m-0">Finalized</div>
+                            <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
+                            </li>
+                        </ul>
+                    </div>
+                 </div>
             </div>
         </div>
     </div>

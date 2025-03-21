@@ -540,7 +540,7 @@
                             <thead style="background-color: blue !important">
                                 <tr>
                                     <th>Nama Barang</th>
-                                    <th class="text-left">Kategori</th>
+                                    <th class="text-left">SKU</th>
                                     <th class="text-left">HS Code</th>
                                     <th>Satuan</th>
                                     <th>Pcs</th>
@@ -562,7 +562,7 @@
                                          ?>
                                     <tr>
                                         <td><?= $nambar; ?></td>
-                                        <td class="text-left"><?= $data['kategori_id']; ?></td>
+                                        <td class="text-left"><?= formatsku($data['po'],$data['item'],$data['dis'],$data['id_barang']); ?></td>
                                         <td class="text-left"><?= substr($data['nohs'],0,8) ; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
                                         <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>

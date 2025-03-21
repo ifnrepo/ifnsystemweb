@@ -618,3 +618,15 @@ function tambahnol($data){
     }
     return $hasil;
 }
+function formatsku($po,$item,$dis,$brg){
+    $isi = '';
+    if($po==''){
+        $CI = &get_instance();
+        $hasil = $CI->barangmodel->getdatabyid($brg)->row_array();
+        $isi = $hasil['kode'];
+    }else{
+        $dise = $dis > 0 ? ' (dis) '.$dis : '';
+        $isi = trim($po).'#'.trim($item).$dise;
+    }
+    return $isi;
+}
