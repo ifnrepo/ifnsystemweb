@@ -676,8 +676,8 @@ class Akb extends CI_Controller
         }
     }
     public function getresponpdf($id,$mode=0){
-        $dataaju = $this->ibmodel->getdatanomoraju($id);
-        $token = $this->ibmodel->gettoken();
+        $dataaju = $this->akbmodel->getdatanomoraju($id);
+        $token = $this->akbmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
@@ -704,13 +704,13 @@ class Akb extends CI_Controller
                 $this->session->set_flashdata('errorsimpan',1);
                 $this->session->set_flashdata('pesanerror','PDF Belum ada');
             }
-            $url = $mode = 0 ? base_url().'ib/isidokbc/'.$id : base_url().'ib';
+            $url = $mode = 0 ? base_url().'akb/isidokbc/'.$id : base_url().'akb';
             redirect($url);
         }else{
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
             // $url = base_url().'ib/isidokbc/'.$id;
-            $url = $mode = 0 ? base_url().'ib/isidokbc/'.$id : base_url().'ib';
+            $url = $mode = 0 ? base_url().'akb/isidokbc/'.$id : base_url().'akb';
             redirect($url);
         }
     }
@@ -986,7 +986,7 @@ class Akb extends CI_Controller
         }
         $arrangkut = [];
         $arrayangkutan = [
-            "namaPengangkut" => $data['angkutan'],
+            "namaPengangkut" => trim($data['angkutan']),
             "nomorPengangkut" => $data['no_kendaraan'],
             "seriPengangkut" => 1,
             "kodeCaraAngkut" => $data['jns_angkutan'],
@@ -1036,7 +1036,7 @@ class Akb extends CI_Controller
                 "jumlahSatuan" => (float) $jumlah,
                 "kodeBarang" => trim($detx['po']).'#'.trim($detx['item']),
                 "kodeDaerahAsal" => "3204",
-                "kodeJenisKemasan" => $data['kd_kemasan'],
+                "kodeJenisKemasan" => $detx['kdkem'],
                 "kodeNegaraAsal" => "ID",
                 "kodeSatuanBarang" => $detx['satbc'],
                 "merk" => "MOMOI",
@@ -1045,7 +1045,7 @@ class Akb extends CI_Controller
                 "posTarif" =>  substr($detx['nohs'],0,8),
                 "spesifikasiLain" => "1",
                 "tipe" => "-",
-                "ukuran" => "",
+                "ukuran" => "-",
                 "uraian" => $detx['engklp'],
                 "volume" => 0,
                 "nilaiDanaSawit" => 0
@@ -1493,7 +1493,7 @@ class Akb extends CI_Controller
         $pdf->Output('I', 'FM-GD-05.pdf');
     }
     public function uploaddok($id){
-        $data['data'] = $this->ibmodel->getdatabyid($id);
+        $data['data'] = $this->akbmodel->getdatabyid($id);
         $data['actiondok'] = base_url().'ib/simpandokumen';
         $this->load->view('ib/uploaddok',$data);
     }

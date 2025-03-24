@@ -101,7 +101,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
-                  <td class='font-bold'><a href="<?= base_url().'akb/viewdetail/'.$datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail IB (AJU Keluar Barang)"><?= $datdet['nomor_dok'] ?></a></td>
+                  <td class='font-bold'><a href="<?= base_url().'akb/viewdetail/'.$datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail OUT (AJU Keluar Barang)"><?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $namasup ?></td>
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
@@ -129,7 +129,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
                       <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { ?>
-                      <span class="text-teal">Tunggu Verifikasi <b>IN</b> Departemen</span>
+                      <span class="text-teal">Tunggu Verifikasi <b>Out</b> Departemen</span>
                     <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>
                       <?= $katakata.datauser($datdet['user_valid'], 'name') ?><br>
                       <span style='font-size: 11px;'><?= ' on '.tglmysql2($datdet['tgl_valid']) ?></span>

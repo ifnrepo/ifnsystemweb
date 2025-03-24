@@ -1182,7 +1182,7 @@ class Ib extends CI_Controller
                 "seriBarang" => $no,
                 "asuransi" => 0,
                 "bruto" => 0,
-                "hargaPenyerahan" => (float) $detx['harga']*$jumlah,
+                "hargaPenyerahan" => round((float) $detx['harga']*$jumlah,2),
                 "jumlahSatuan" => (int) $jumlah,
                 "kodeBarang" => $detx['brg_id'],
                 "kodeDokumen" => "40",
