@@ -1036,7 +1036,7 @@ class Akb extends CI_Controller
                 "jumlahSatuan" => (float) $jumlah,
                 "kodeBarang" => trim($detx['po']).'#'.trim($detx['item']),
                 "kodeDaerahAsal" => "3204",
-                "kodeJenisKemasan" => $data['kd_kemasan'],
+                "kodeJenisKemasan" => $detx['kdkem'],
                 "kodeNegaraAsal" => "ID",
                 "kodeSatuanBarang" => $detx['satbc'],
                 "merk" => "MOMOI",
