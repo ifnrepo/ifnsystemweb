@@ -28,7 +28,8 @@
                 </div>
                 <div class="col-sm-6 mb-1">
                     <label class="form-label mb-0 font-kecil">Qty Real</label>
-                    <input type="text" class="form-control font-kecil mt-1 font-bold text-right" id="pcsreal" placeholder="Input placeholder" value="<?= $data['pcs']; ?>">
+                    <input type="text" class="form-control font-kecil mt-1 font-bold text-right" id="pcsreal" placeholder="Masukan Nilai" value="<?= $data['pcs']; ?>">
+                    <input type="text" class="form-control font-kecil mt-1 font-bold text-right hilang" id="pcsreal2" placeholder="Masukan Nilai" value="">
                 </div>
             </div>
             <div class="row">
@@ -38,14 +39,25 @@
                 </div>
                 <div class="col-sm-6 mb-1">
                     <label class="form-label mb-0 font-kecil">Kgs Real</label>
-                    <input type="text" class="form-control font-kecil mt-1 font-bold text-right" id="kgsreal" placeholder="Input placeholder" value="<?= rupiah($data['kgs'],0); ?>">
+                    <input type="text" class="form-control font-kecil mt-1 font-bold text-right" id="kgsreal" placeholder="Masukan Nilai" value="<?= rupiah($data['kgs'],0); ?>">
+                    <input type="text" class="form-control font-kecil mt-1 font-bold text-right hilang" id="kgsreal2" placeholder="Masukan Nilai" value="">
                 </div>
             </div>
             <hr class="m-1">
-            <label class="form-check mb-1 font-bold text-danger">
-                <input class="form-check-input" id="tempbbl" name="tempbbl" type="checkbox">
-                <span class="form-check-label">Sisanya Buat Bon Pembelian (BBL)</span>
-            </label>
+            <div class="row">
+                <div class="col-sm-6">
+                    <label class="form-check mb-1 font-bold text-info">
+                        <input class="form-check-input" id="bagidua" name="bagidua" type="checkbox" title="Split Qty menjadi 2">
+                        <span class="form-check-label">Bagi dua Permintaan</span>
+                    </label>
+                </div>
+                <div class="col-sm-6">
+                    <label class="form-check mb-1 font-bold text-danger">
+                        <input class="form-check-input" id="tempbbl" name="tempbbl" type="checkbox" title="Sisa jadi BBL">
+                        <span class="form-check-label">Sisanya Buat Bon Pembelian (BBL)</span>
+                    </label>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -57,38 +69,94 @@
     $(document).ready(function(){
         // $("#departemenasal").val($("#dept_tuju option:selected").attr('rel'));
     })
-    $("#updatedetail").click(function(){
-        var pcs1 = parseFloat($("#pcsminta").val());
-        var pcs2 = parseFloat($("#pcsreal").val());
-        var kgs1 = parseFloat($("#kgsminta").val());
-        var kgs2 = parseFloat($("#kgsreal").val());
-        var bbl = $("#tempbbl").is(':checked') ? 1 : null;
-        if(pcs1 < pcs2){
-            pesan('Pcs Real tidak boleh lebih besar dari Pcs minta','error');
-            return false;
+    $("#bagidua").click(function(){
+        var cek = $(this).prop('checked');
+        $("#tempbbl").prop('checked',false);
+        if(cek){
+            $("#pcsreal2").removeClass('hilang');
+            $("#kgsreal2").removeClass('hilang');
+        }else{
+            $("#pcsreal2").addClass('hilang');
+            $("#kgsreal2").addClass('hilang');
         }
-        if(kgs1 < kgs2){
-            pesan('Kgs Real tidak boleh lebih besar dari Kgs minta','error');
-            return false;
-        }
-        $.ajax({
-            dataType: "json",
-            type: "POST",
-            url: base_url + "out/updatedetail",
-            data: {
-                id: $("#id").val(),
-                pcs: $("#pcsreal").val(),
-                kgs: $("#kgsreal").val(),
-                tempbbl: bbl
-            },
-            success: function (data) {
-                // alert(data.jmlrek);
-                window.location.reload();
-            },
-            error: function (xhr, ajaxOptions, thrownError) {
-                console.log(xhr.status);
-                console.log(thrownError);
-            },
-	    });
     })
+    $("#updatedetail").click(function(){
+        var cek = $("#bagidua").prop('checked');
+        if(!cek){
+            var pcs1 = parseFloat($("#pcsminta").val());
+            var pcs2 = parseFloat($("#pcsreal").val());
+            var kgs1 = parseFloat(toAngka($("#kgsminta").val()));
+            var kgs2 = parseFloat(toAngka($("#kgsreal").val()));
+            var bbl = $("#tempbbl").is(':checked') ? 1 : null;
+            if(pcs1 < pcs2){
+                pesan('Pcs Real tidak boleh lebih besar dari Pcs minta','error');
+                return false;
+            }
+            if(kgs1 < kgs2){
+                pesan('Kgs Real tidak boleh lebih besar dari Kgs minta','error');
+                return false;
+            }
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: base_url + "out/updatedetail",
+                data: {
+                    id: $("#id").val(),
+                    pcs: toAngka($("#pcsreal").val()),
+                    kgs: toAngka($("#kgsreal").val()),
+                    tempbbl: bbl
+                },
+                success: function (data) {
+                    // alert(data.jmlrek);
+                    window.location.reload();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                },
+            });
+        }else{
+            var pcstot = parseFloat($("#pcsminta").val());
+            var kgstot = parseFloat(toAngka($("#kgsminta").val()));
+            var pcs1 = parseFloat($("#pcsreal").val());
+            var kgs1 = parseFloat(toAngka($("#kgsreal").val()));
+            var pcs2 = parseFloat($("#pcsreal2").val());
+            var kgs2 = parseFloat(toAngka($("#kgsreal2").val()));
+            if(pcstot != (pcs1+pcs2)){
+                pesan('Pcs Minta dan Jumlah Pcs Real tidak sama','error');
+                return false;
+            }
+            if(kgstot != (kgs1+kgs2)){
+                pesan('Kgs Minta dan Jumlah Kgs Real tidak sama','error');
+                return false;
+            }
+            $.ajax({
+                dataType: "json",
+                type: "POST",
+                url: base_url + "out/bagi2permintaan",
+                data: {
+                    id: $("#id").val(),
+                    pcs1: toAngka($("#pcsreal").val()),
+                    kgs1: toAngka($("#kgsreal").val()),
+                    pcs2: toAngka($("#pcsreal2").val()),
+                    kgs2: toAngka($("#kgsreal2").val()),
+                },
+                success: function (data) {
+                    // alert(data.jmlrek);
+                    window.location.reload();
+                },
+                error: function (xhr, ajaxOptions, thrownError) {
+                    console.log(xhr.status);
+                    console.log(thrownError);
+                },
+            });
+        }
+    })
+    function toAngka(rp) {
+        if (rp == "" || rp.trim() == "-") {
+            return 0;
+        } else {
+            return rp.replace(/,*|\D/g, "");
+        }
+    }
 </script>

@@ -201,6 +201,17 @@ class Out extends CI_Controller {
         $query = $this->out_model->updatedetail($data);
         echo $query;
     }
+    public function bagi2permintaan(){
+        $data = [
+            'id' => $_POST['id'],
+            'kgs1' => $_POST['kgs1'],
+            'pcs1' => $_POST['pcs1'],
+            'kgs2' => $_POST['kgs2'],
+            'pcs2' => $_POST['pcs2']
+        ];
+        $query = $this->out_model->bagi2permintaan($data);
+        echo $query;
+    }
     public function dataout($kode){
         $header['header'] = 'transaksi';
         $data['data'] = $this->out_model->getdatabyid($kode)->row_array();
@@ -298,8 +309,8 @@ class Out extends CI_Controller {
        }
         $html .= "<tr>";
         $html .= "<td colspan='3' class='text-end'>TOTAL</td>";
-        $html .= "<td class='text-right'>".rupiah($pcs,0)."</td>";
-        $html .= "<td class='text-right'>".rupiah($kgs,0)."</td>";
+        $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
+        $html .= "<td class='text-right font-bold'>".rupiah($kgs,4)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";
         $cocok = array('datagroup' => $html);
