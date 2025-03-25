@@ -161,6 +161,7 @@ class Out_model extends CI_Model{
         $this->db->join('tb_hargamaterial f','f.id_barang = c.id and f.nobontr = a.nobontr','left');
         $this->db->where('a.id_header',$data);
         // $this->db->group_by('c.nama_barang,e.nomor_dok');
+        $this->db->group_by('a.id');
         $this->db->order_by('c.nama_barang','asc');
         return $this->db->get()->result_array();    
     }
@@ -206,6 +207,29 @@ class Out_model extends CI_Model{
         $this->db->update('tb_detailgen',$data);
         $this->db->where('id',$data['id']);
         $query = $this->db->update('tb_detail',$data);
+        return $query;
+    }
+    public function bagi2permintaan($data){
+        $id = $data['id'];
+        $isi = [
+            'id' => $id,
+            'pcs' => $data['pcs1'],
+            'kgs' => $data['kgs1'],
+        ];
+        $this->db->where('id_detail',$isi['id']);
+        $this->db->update('tb_detailgen',$isi);
+        $this->db->where('id',$isi['id']);
+        $this->db->update('tb_detail',$isi);
+        $dataisi = $this->db->get_where('tb_detail',['id'=>$id])->row_array();
+        $dataisi2 = $this->db->get_where('tb_detailgen',['id_detail'=>$id])->row_array();
+        unset($dataisi['id']);
+        unset($dataisi2['id']);
+        $dataisi['pcs'] = $data['pcs2'];
+        $dataisi['kgs'] = $data['kgs2'];
+        $this->db->insert('tb_detail',$dataisi);
+        $iddetail = $this->db->insert_id();
+        $dataisi['id_detail'] = $iddetail;
+        $query = $this->db->insert('tb_detailgen',$dataisi);
         return $query;
     }
     public function simpanout($data){

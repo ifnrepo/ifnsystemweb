@@ -18,7 +18,7 @@ $(document).ready(function () {
 		var ini = $("#errornya").val();
 		var isipesan = "Periksa Stok Barang " + ini + " !";
 		if (ini == "Nobontr Kosong") {
-			var isipesan = "Masih ada data yang belum pakai Nobontr, cek data !";
+			var isipesan = "Masih ada data yang belum pakai Nomor IB, cek data !";
 		}
 		pesan(isipesan, "info");
 	}
