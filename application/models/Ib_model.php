@@ -457,9 +457,10 @@ class Ib_model extends CI_Model
         return $this->db->delete('tb_kontainer');
     }
     public function getdataentitas($id){
-        $this->db->select('tb_entitas.*,ref_negara.uraian_negara as negara');
+        $this->db->select('tb_entitas.*,ref_negara.uraian_negara as negara,ref_negara.kode_negara as kodenegara');
         $this->db->join('ref_negara','ref_negara.id = tb_entitas.kode_negara','left');
         $this->db->where('tb_entitas.id_header',$id);
+        $this->db->order_by('tb_entitas.kode_entitas');
         return $this->db->get('tb_entitas');
     }
     public function tambahentitas($data){
