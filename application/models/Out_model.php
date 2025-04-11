@@ -448,6 +448,7 @@ class Out_model extends CI_Model{
                             $pcskurangi = $datdet['pcs'] > 0 ? $kurangpcs : $kurangkgs;
                             $pcsnya -= $pcskurangi;
                         } while ($pcsnya > 0);
+                        $this->helpermodel->cekstokdeptraw($this->session->userdata('deptsekarang'),$datdet['nobontr'],$datdet['id_barang'],$datdet['kgs'],$datdet['pcs'],1);
                     }else{
                         $iniquery = true;
                         $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();

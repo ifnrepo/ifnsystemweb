@@ -936,20 +936,23 @@ class Akb extends CI_Controller
             $kodejnent = $ke==1 ? "6" : (($ke==4) ? "" : (($ke==2) ? "6" : ""));
             $status = "";
             if($ke > 2){
-                if ($ke == 4){
-                    // $nomoridentitas = "";
-                    // $namaidentitas = "MOMOI FISHING NET MFG CO.,LTD";
-                    // $alamat = "10TH FL.KOBE ASAHI BLDG 59 NANIWA MACHI CHUO KU KOBE 6500035";
-                    // $negara = "JP";
+                if ($ke == 3){
                     $nomoridentitas = "";
                     $namaidentitas = $data['namacustomer'];
                     $alamat = strtoupper($data['alamat']);
                     $negara = $data['negaracustomer'];
                 }else{
-                    $nomoridentitas = "";
-                    $namaidentitas = $data['namacustomer'];
-                    $alamat = strtoupper($data['alamat']);
-                    $negara = $data['negaracustomer'];
+                    if($data['dirsell']==1){
+                        $nomoridentitas = "";
+                        $namaidentitas = $data['namacustomer'];
+                        $alamat = strtoupper($data['alamat']);
+                        $negara = $data['negaracustomer'];
+                    }else{
+                        $nomoridentitas = "";
+                        $namaidentitas = "MOMOI FISHING NET MFG CO.,LTD";
+                        $alamat = "10TH FL.KOBE ASAHI BLDG 59 NANIWA MACHI CHUO KU KOBE 6500035";
+                        $negara = "JP";
+                    }
                 }
             }else{
                 $nomoridentitas = $ke==1 ? "0010017176057000000000" : "0010017176057000000000";
@@ -984,12 +987,24 @@ class Akb extends CI_Controller
             ];
             array_push($arraydokumen,$arrayke);
         }
+        $carangkut = $data['jns_angkutan'];
+        switch ($carangkut) {
+            case 2:
+                $carangkut = "3";
+                break;
+            case 3:
+                $carangkut = "4";
+                break;
+            case 4:
+                $carangkut = "9";
+                break;
+        }
         $arrangkut = [];
         $arrayangkutan = [
             "namaPengangkut" => trim($data['angkutan']),
             "nomorPengangkut" => $data['no_kendaraan'],
             "seriPengangkut" => 1,
-            "kodeCaraAngkut" => $data['jns_angkutan'],
+            "kodeCaraAngkut" => $carangkut,
             "kodeBendera" => $data['kode_negara']
         ];
         array_push($arrangkut,$arrayangkutan);

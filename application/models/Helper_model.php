@@ -389,4 +389,40 @@ class Helper_model extends CI_Model
     public function getdatafooter(){
         return $this->db->get('page_footer');
     }
+    public function cekstokdeptraw($dept,$nobontr,$idbarang,$kgs,$pcs,$jns=0){
+        $allowdept = ['SP','GM']; //Departemen Sementara yang diperbolehkan
+        if(in_array($dept,$allowdept)){
+            $kondisi = [
+                'dept_id' => $dept,
+                'nobontr' => $nobontr,
+                'id_barang' => $idbarang,
+            ];
+            $this->db->where($kondisi);
+            $adaisi = $this->db->get('stokdeptraw');
+            if($adaisi->num_rows()==0){
+                if($jns==0){
+                    $kondisiinput = [
+                        'dept_id' => $dept,
+                        'nobontr' => $nobontr,
+                        'id_barang' => $idbarang,
+                        'kgs' => $kgs,
+                        'pcs' => $pcs
+                    ];
+                    $this->db->insert('stokdeptraw',$kondisiinput);
+                }
+            }else{
+                if($jns==0){
+                    $this->db->set('pcs','pcs +'.$pcs,false);
+                    $this->db->set('kgs','kgs +'.$kgs,false);
+                }else{
+                    $this->db->set('pcs','pcs -'.$pcs,false);
+                    $this->db->set('kgs','kgs -'.$kgs,false);
+                }
+                $this->db->where('dept_id',$dept);
+                $this->db->where('nobontr',$nobontr);
+                $this->db->where('id_barang',$idbarang);
+                $this->db->update('stokdeptraw');
+            }
+        }
+    }
 }

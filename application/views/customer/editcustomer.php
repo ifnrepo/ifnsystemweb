@@ -228,7 +228,7 @@
                     <input class="form-check-input" id="pembeli" name="pembeli" type="checkbox" <?php if ($data['pembeli'] == 1) {
                                                                                                     echo 'checked';
                                                                                                 } ?>>
-                    <span class="form-check-label">Sama Dengan Pembeli</span>
+                    <span class="form-check-label font-bold font-primary">DIRECT SELL</span>
                 </label>
             </div>
         </div>

@@ -1279,9 +1279,10 @@ class Ib extends CI_Controller
             "biayaPengurang" => 0,
             "kodeKenaPajak" => "1"
         ];
+        $dataentitas = $this->ibmodel->getdataentitas($id);
         $ke=1;
         $arrayentitas = [];
-        for($ke=1;$ke<=3;$ke++){
+        for($ke=1;$ke<=1;$ke++){
             $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
             $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "5" : "7");
             if($ke == 3){
@@ -1302,7 +1303,7 @@ class Ib extends CI_Controller
                 "nibEntitas" => $nibidentitas,
                 "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$nomoridentitas))),
                 "kodeNegara" => "ID",
-                "kodeStatus" => "5"
+                // "kodeStatus" => "5"
             ];
             if($ke==2){
                 $arrayke["kodeJenisApi"] = "2";
@@ -1311,6 +1312,24 @@ class Ib extends CI_Controller
                 $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
                 $arrayke["tanggalIjinEntitas"] = "2017-07-10";
             }
+            array_push($arrayentitas,$arrayke);
+        }
+        //add kode Entitas 
+        $ke=1;
+        foreach ($dataentitas->result_array() as $dataenti) {
+            $ke++;
+            $kodejeniden = $dataenti['kode_entitas']==7 ? "6" : "";
+            $arrayke = [
+                "seriEntitas" => $ke,
+                "alamatEntitas" => $dataenti['alamat'],
+                "kodeEntitas" => $dataenti['kode_entitas'],
+                "kodeJenisIdentitas" => $kodejeniden,
+                "namaEntitas" => trim($dataenti['nama']),
+                "nibEntitas" => "",
+                "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$dataenti['no_identitas']))),
+                "kodeNegara" => $dataenti['kodenegara']==null ? "" : $dataenti['kodenegara'],
+                "kodeStatus" => $kodejeniden
+            ];
             array_push($arrayentitas,$arrayke);
         }
         $arraydokumen = [];
@@ -1435,8 +1454,8 @@ class Ib extends CI_Controller
         $arrayheader['kontainer'] = $arraykontainer;
         $arrayheader['barang'] = $arraybarang;
         $arrayheader['pungutan'] = $arraypungutan;
-        echo '<pre>'.json_encode($arrayheader)."</pre>";
-        // $this->kirim40($arrayheader,$id);
+        // echo '<pre>'.json_encode($arrayheader)."</pre>";
+        $this->kirim40($arrayheader,$id);
     }
     public function kirim40($data,$id){
         $token = $this->ibmodel->gettoken();

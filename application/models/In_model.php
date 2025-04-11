@@ -129,6 +129,7 @@ class In_model extends CI_Model{
                     $this->db->where('id',$detil['id']);
                     $this->db->update('stokdept');
                 }
+                $this->helpermodel->cekstokdeptraw($det['dept_tuju'],$det['nobontr'],$det['id_barang'],$det['kgs'],$det['pcs'],0);
             }
             $dataubah = [
                 'ok_valid' => 1,
