@@ -186,7 +186,7 @@
             <div class="col">
                 <label class="form-check">
                     <input class="form-check-input" id="pembeli" name="pembeli" type="checkbox">
-                    <span class="form-check-label">Sama Dengan Pembeli</span>
+                    <span class="form-check-label font-bold">DIRECT SELL</span>
                 </label>
             </div>
         </div>
