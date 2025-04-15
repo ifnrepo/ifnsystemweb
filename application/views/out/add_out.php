@@ -3,8 +3,23 @@
         <div class="col-12">
             <div class="mb-1 input-group">
                 <!-- <label class="form-label mb-0 font-kecil">Departemen</label> -->
-                <input type="text" class="form-control font-kecil mt-1 mr-2" id="departemenasal" placeholder="Input data" readonly>
+                <input type="text" class="form-control font-kecil mt-1 mr-2 font-bold" id="departemenasal" placeholder="Input data" readonly>
                 <button type="button" class="btn btn-primary btn-sm font-kecil mt-1" style="height: 35px !important;" id="simpanout">Simpan Barang</button>
+            </div>
+            <hr class="m-1">
+            <div class="mb-1">
+                <select class="form-control font-kecil form-select bg-primary-lt btn-flat" id="bonpb">
+                    <option value="">Pilih BON</option>
+                    <?php foreach ($bonpb->result_array() as $bonpb) { ?>
+                        <option value="<?= $bonpb['nomor_dok']; ?>"><?= $bonpb['nomor_dok'].' Tgl. '.tglmysql($bonpb['tgl']); ?></option>
+                    <?php } ?>
+                </select>
+            </div>
+            <div class="mb-1">
+                <input type="text" class="form-control font-kecil mt-1 mr-2" id="namabarang" placeholder="Cari Nama Barang">
+            </div>
+            <div class="text-center">
+                <button type="button" class="btn btn-success btn-sm font-kecil mt-1" style="height: 35px !important;" id="caribarangpb">Cari Barang</button>
             </div>
             <hr class="m-1">
             <table class="table datatable6 nowrap">
@@ -35,7 +50,7 @@
                     <?php } ?>
                     <?php if(count($bon)==0): ?>
                         <tr>
-                            <td colspan="5" class="text-center">Tidak ada Data</td>
+                            <td colspan="5" class="text-center">No Data / Cari dahulu data</td>
                         </tr>
                     <?php endif; ?>
                 </tbody>
@@ -85,5 +100,26 @@
             pesan('Tidak ada data yang dipilih','info');
             $("#modal-largescroll").modal('hide');
         }
+    })
+    $("#caribarangpb").click(function(){
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: base_url + "out/getbondengankey",
+            data: {
+                bon: $("#bonpb").val(),
+                barang: $("#namabarang").val()
+            },
+            success: function(data) {
+                // alert(data);
+                $("#body-table").html(data.datagroup).show();
+                // window.location.href = base_url + "out/dataout/" + data;
+                // $("#butbatal").click();
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        })
     })
 </script>

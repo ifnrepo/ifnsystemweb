@@ -119,8 +119,39 @@ class Out extends CI_Controller {
         $this->load->view('out/viewdetailout2',$data);
     }
     public function tambahdata(){
-        $data['bon'] = $this->out_model->getbon();
+        $data['bon'] = []; //$this->out_model->getbon()->result_array();
+        $data['bonpb'] = $this->out_model->getnobonpb();
         $this->load->view('out/add_out',$data);
+    }
+    public function getbondengankey(){
+        $bon = $_POST['bon'];
+        $key = $_POST['barang'];
+        $data = $this->out_model->getbondengankey($bon,$key);
+        $html = '';
+        if($data->num_rows() > 0){
+            $no=1;
+            foreach ($data->result_array() as $datkey) {
+                $no++;
+                $html .= '<tr>';
+                $html .= '<td>'.$datkey['nama_barang'].'</td>';
+                $html .= '<td style="font-size: 10px !important">'.tglmysql($datkey['tgl']).'</td>';
+                $html .= '<td>'.$datkey['nomor_dok'].'</td>';
+                $html .= '<td style="font-size: 10px !important">'.$datkey['keteranganx'].'</td>';
+                $html .= '<td>';
+                $html .= '<label class="form-check">';
+                $html .= '<input class="form-check-input" name="cekpilihbarang" id="cekbok'.$no.'" rel="'.$datkey['idx'].'" type="checkbox" title="'.$datkey['idx'].'">';
+                $html .= '<span class="form-check-label">Pilih</span>';
+                $html .= '</label>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+        }else{
+            $html .= '</tr>';
+            $html .= '<td colspan="5" class="text-center">Tidak ada Data</td>';
+            $html .= '</tr>';
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
     }
     public function adddata($jn){
         if(($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null) && ($this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null)){
