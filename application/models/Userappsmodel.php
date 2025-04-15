@@ -61,6 +61,14 @@ class Userappsmodel extends CI_Model
                 unset($data['transaksi' . $x]);
             }
         }
+        // Set modul hakprogram
+        $hakprogram = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['hakprogram' . $x])) {
+                $hakprogram = substr_replace($hakprogram, '10', ($x * 2) - 2, 2);
+                unset($data['hakprogram' . $x]);
+            }
+        }
         // Set Modul Other
         $other = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -105,6 +113,7 @@ class Userappsmodel extends CI_Model
         }
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
+        $data['hakprogram'] = $hakprogram;
         $data['manajemen'] = $manajemen;
         $data['setting'] = $setting;
         $data['hakdepartemen'] = $hakdepartemen;
@@ -112,21 +121,21 @@ class Userappsmodel extends CI_Model
         $datdept = $this->deptmodel->getdata();
         $cekmng = '';
         foreach ($datdept as $dept) {
-            if(isset($data['cekmng'])){
-                if (isset($data['cekmng'.$dept['dept_id']])) {
+            if (isset($data['cekmng'])) {
+                if (isset($data['cekmng' . $dept['dept_id']])) {
                     $cekmng .= $dept['dept_id'];
                 }
             }
-            unset($data['cekmng'.$dept['dept_id']]);
+            unset($data['cekmng' . $dept['dept_id']]);
         }
         $ceksgm = '';
         foreach ($datdept as $dept) {
-            if(isset($data['ceksgm'])){
-                if (isset($data['ceksgm'.$dept['dept_id']])) {
+            if (isset($data['ceksgm'])) {
+                if (isset($data['ceksgm' . $dept['dept_id']])) {
                     $ceksgm .= $dept['dept_id'];
                 }
             }
-            unset($data['ceksgm'.$dept['dept_id']]);
+            unset($data['ceksgm' . $dept['dept_id']]);
         }
         unset($data['cekmng']);
         unset($data['ceksgm']);
@@ -168,6 +177,15 @@ class Userappsmodel extends CI_Model
             }
         }
 
+        // Set modul hakprogram
+        $hakprogram = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['hakprogram' . $x])) {
+                $hakprogram = substr_replace($hakprogram, '10', ($x * 2) - 2, 2);
+                unset($data['hakprogram' . $x]);
+            }
+        }
+
         // Set Modul Other
         $other = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -213,6 +231,7 @@ class Userappsmodel extends CI_Model
             }
         }
         $data['master'] = $master;
+        $data['hakprogram'] = $hakprogram;
         $data['transaksi'] = $transaksi;
         $data['other'] = $other;
         $data['manajemen'] = $manajemen;
@@ -223,21 +242,21 @@ class Userappsmodel extends CI_Model
         $datdept = $this->deptmodel->getdata();
         $cekmng = '';
         foreach ($datdept as $dept) {
-            if(isset($data['cekmng'])){
-                if (isset($data['cekmng'.$dept['dept_id']])) {
+            if (isset($data['cekmng'])) {
+                if (isset($data['cekmng' . $dept['dept_id']])) {
                     $cekmng .= $dept['dept_id'];
                 }
             }
-            unset($data['cekmng'.$dept['dept_id']]);
+            unset($data['cekmng' . $dept['dept_id']]);
         }
         $ceksgm = '';
         foreach ($datdept as $dept) {
-            if(isset($data['ceksgm'])){
-                if (isset($data['ceksgm'.$dept['dept_id']])) {
+            if (isset($data['ceksgm'])) {
+                if (isset($data['ceksgm' . $dept['dept_id']])) {
                     $ceksgm .= $dept['dept_id'];
                 }
             }
-            unset($data['ceksgm'.$dept['dept_id']]);
+            unset($data['ceksgm' . $dept['dept_id']]);
         }
         unset($data['cekmng']);
         unset($data['ceksgm']);
@@ -251,6 +270,7 @@ class Userappsmodel extends CI_Model
             $cek = $this->getdatabyid($data['id'])->row_array();
             $this->session->set_userdata('master', $cek['master']);
             $this->session->set_userdata('transaksi', $cek['transaksi']);
+            $this->session->set_userdata('hakprogram', $cek['hakprogram']);
             $this->session->set_userdata('other', $cek['other']);
             $this->session->set_userdata('manajemen', $cek['manajemen']);
             $this->session->set_userdata('setting', $cek['setting']);

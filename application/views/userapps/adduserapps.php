@@ -213,7 +213,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="card-header">
                       <ul class="nav nav-tabs card-header-tabs" id="headerhakuser" data-bs-toggle="tabs">
                         <li class="nav-item">
-                          <a href="#tabs-departemen-1" class="nav-link active text-blue mb-1" data-bs-toggle="tab">Hak Departemen</a>
+                          <a href="#tabs-hakprogram-1" class="nav-link active text-blue mb-1" data-bs-toggle="tab">Hak Program</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#tabs-departemen-1" class="nav-link  text-blue " data-bs-toggle="tab">Hak Departemen</a>
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-home-1" class="nav-link text-blue" data-bs-toggle="tab">Master Data</a>
@@ -240,6 +243,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                     <div class="card-body">
                       <div class="tab-content">
+                        <div class="tab-pane" id="tabs-hakprogram-1">
+                          <div class="row">
+                            <div class="col-6">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakprogram1" name="hakprogram1" type="checkbox">
+                                <span class="form-check-label">Ifn System Web</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakprogram2" name="hakprogram2" type="checkbox">
+                                <span class="form-check-label">Surat Hrd</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakprogram3" name="hakprogram3" type="checkbox">
+                                <span class="form-check-label">Environmental</span>
+                              </label>
+
+                            </div>
+
+                          </div>
+                        </div>
+
                         <div class="tab-pane" id="tabs-home-1">
                           <div class="row">
                             <div class="col-6">
@@ -532,17 +556,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <div class="p-2 hilang mb-1" id="inicekmng" style="border: 1px dotted gray;">
                                 <div class="row">
                                   <div class="col-4">
-                                    <?php $no = 0; $nox=0;
+                                    <?php $no = 0;
+                                    $nox = 0;
                                     $jml = $jmldept;
-                                    foreach ($daftardept as $dept) : $no++; $nox++; ?>
-                                    <?php if($no%13==0){ $no++; ?>
-                                      </div><div class="col-4">
-                                    <?php } ?>
-                                      <label class="form-check mb-1">
-                                        <input class="form-check-input" id="cekmng<?= $dept['dept_id']; ?>" name="cekmng<?= $dept['dept_id']; ?>" type="checkbox">
-                                        <span class="form-check-label"><?= substr($dept['departemen'],0,20); ?></span>
-                                      </label>
-                                    <?php endforeach; ?>
+                                    foreach ($daftardept as $dept) : $no++;
+                                      $nox++; ?>
+                                      <?php if ($no % 13 == 0) {
+                                        $no++; ?>
+                                  </div>
+                                  <div class="col-4">
+                                  <?php } ?>
+                                  <label class="form-check mb-1">
+                                    <input class="form-check-input" id="cekmng<?= $dept['dept_id']; ?>" name="cekmng<?= $dept['dept_id']; ?>" type="checkbox">
+                                    <span class="form-check-label"><?= substr($dept['departemen'], 0, 20); ?></span>
+                                  </label>
+                                <?php endforeach; ?>
                                   </div>
                                 </div>
                               </div>
@@ -553,28 +581,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <div class="p-2 hilang mb-1" id="iniceksgm" style="border: 1px dotted gray;">
                                 <div class="row">
                                   <div class="col-4">
-                                    <?php $no = 0;$nox=0;
+                                    <?php $no = 0;
+                                    $nox = 0;
                                     $jml = $jmldept;
-                                    foreach ($daftardept as $dept) : $no++; $nox++; ?>
-                                    <?php if($no%13==0){ $no++; ?>
-                                      </div><div class="col-4">
-                                    <?php } ?>
-                                      <label class="form-check mb-1">
-                                        <input class="form-check-input" id="ceksgm<?= $dept['dept_id']; ?>" name="ceksgm<?= $dept['dept_id']; ?>" type="checkbox">
-                                        <span class="form-check-label"><?= substr($dept['departemen'],0,20); ?></span>
-                                      </label>
-                                    <?php endforeach; ?>
+                                    foreach ($daftardept as $dept) : $no++;
+                                      $nox++; ?>
+                                      <?php if ($no % 13 == 0) {
+                                        $no++; ?>
+                                  </div>
+                                  <div class="col-4">
+                                  <?php } ?>
+                                  <label class="form-check mb-1">
+                                    <input class="form-check-input" id="ceksgm<?= $dept['dept_id']; ?>" name="ceksgm<?= $dept['dept_id']; ?>" type="checkbox">
+                                    <span class="form-check-label"><?= substr($dept['departemen'], 0, 20); ?></span>
+                                  </label>
+                                <?php endforeach; ?>
                                   </div>
                                 </div>
                               </div>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="cekpc" name="cekpc" type="checkbox">
                                 <span class="form-check-label font-bold">VALIDASI BBL (Manager Purchasing/Menyetujui) - Executor</span>
-                                </div>
-                              </label>
                             </div>
+                            </label>
                           </div>
-                          <!-- <div class="row">
+                        </div>
+                        <!-- <div class="row">
                             <div class="col-6">
                               <label class="form-check">
                                 <input class="form-check-input" type="radio" name="ttd" value="0">
@@ -592,14 +624,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" type="radio" name="ttd" value="3">
                                 <span class="form-check-label">GM PRODUKSI / NON (RELEASER)</span>
                               </label> -->
-                              <!-- <label class="form-check">
+                        <!-- <label class="form-check">
                                 <input class="form-check-input" type="radio" 
           name="ttd" value="4">
                                 <span class="form-check-label">MANAGER PURCHASING</span>
                               </label> -->
-                            <!-- </div> -->
-                          </div>
-                        </div>
+                        <!-- </div> -->
                       </div>
                     </div>
                   </div>
@@ -607,8 +637,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </div>
             </div>
           </div>
-        </form>
       </div>
     </div>
+    </form>
   </div>
+</div>
+</div>
 </div>
