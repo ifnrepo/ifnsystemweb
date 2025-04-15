@@ -96,7 +96,56 @@ class Out_model extends CI_Model{
         $this->db->where($kondisi);
         $this->db->order_by('b.tgl','DESC');
         $query = $this->db->get();
-        return $query->result_array();
+        return $query;
+    }
+    public function getnobonpb(){
+        $kondisi = [
+            'b.dept_id' => $this->session->userdata('tujusekarang'),
+            'b.dept_tuju' => $this->session->userdata('deptsekarang'),
+            'b.kode_dok' => 'PB',
+            'a.id_out' => 0,
+            'b.data_ok' => 1,
+            'b.ok_valid' => 1,
+            'b.ok_tuju' => 0,
+            'month(b.tgl) <=' => $this->session->userdata('bl'),
+            'year(b.tgl) <=' => $this->session->userdata('th')
+        ];
+        $this->db->select('b.nomor_dok,b.tgl');
+        $this->db->from('tb_detail a');
+        $this->db->join('tb_header b','b.id = a.id_header','left');
+        $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->where($kondisi);
+        $this->db->order_by('b.tgl','DESC');
+        $this->db->group_by('b.nomor_dok');
+        $query = $this->db->get();
+        return $query;
+    }
+    public function getbondengankey($bon,$key){
+        $kondisi = [
+            'b.dept_id' => $this->session->userdata('tujusekarang'),
+            'b.dept_tuju' => $this->session->userdata('deptsekarang'),
+            'b.kode_dok' => 'PB',
+            'a.id_out' => 0,
+            'b.data_ok' => 1,
+            'b.ok_valid' => 1,
+            'b.ok_tuju' => 0,
+            'month(b.tgl) <=' => $this->session->userdata('bl'),
+            'year(b.tgl) <=' => $this->session->userdata('th')
+        ];
+        $this->db->select('*,a.keterangan as keteranganx,a.id as idx');
+        $this->db->from('tb_detail a');
+        $this->db->join('tb_header b','b.id = a.id_header','left');
+        $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->where($kondisi);
+        if($bon != ''){
+            $this->db->where('b.nomor_dok',$bon);
+        }
+        if($key != ''){
+            $this->db->like('c.nama_barang',$key);
+        }
+        $this->db->order_by('b.tgl','DESC');
+        $query = $this->db->get();
+        return $query;
     }
     public function getnomorout($bl,$th,$asal,$tuju){
         if($asal=='DL' && $tuju=='GM'){
