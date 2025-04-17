@@ -143,7 +143,7 @@ class Out_model extends CI_Model{
         if($key != ''){
             $this->db->like('c.nama_barang',$key);
         }
-        $this->db->order_by('b.tgl','DESC');
+        $this->db->order_by('b.nomor_dok','DESC');
         $query = $this->db->get();
         return $query;
     }
@@ -201,6 +201,20 @@ class Out_model extends CI_Model{
         return $dataheader['id'];
     }
     public function getdatadetail($data){
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.nomor_bc as bcnomor,f.tgl_bc as bctgl,f.jns_bc");
+        $this->db->from('tb_detailgen a');
+        $this->db->join('satuan b','b.id = a.id_satuan','left');
+        $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->join('tb_detail d','a.id = d.id_out','left');
+        $this->db->join('tb_header e','e.id = d.id_header','left');
+        $this->db->join('tb_hargamaterial f','f.id_barang = c.id and f.nobontr = a.nobontr','left');
+        $this->db->where('a.id_detail',$data);
+        // $this->db->group_by('c.nama_barang,e.nomor_dok');
+        $this->db->group_by('a.id');
+        $this->db->order_by('c.nama_barang','asc');
+        return $this->db->get()->result_array();    
+    }
+    public function getdatadetailall($data){
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.nomor_bc as bcnomor,f.tgl_bc as bctgl,f.jns_bc");
         $this->db->from('tb_detailgen a');
         $this->db->join('satuan b','b.id = a.id_satuan','left');
