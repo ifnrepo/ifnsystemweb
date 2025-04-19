@@ -1381,6 +1381,7 @@ class Ib extends CI_Controller
         foreach ($datadet as $detx) {
             $no++;
             $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
+            $cifrupiah = (float) $data['kurs_usd']*($detx['harga']*$jumlah);
             $arrayke = [
                 "seriBarang" => $no,
                 "asuransi" => 0,
@@ -1411,7 +1412,7 @@ class Ib extends CI_Controller
                 "ukuran" => "",
                 "uraian" => "",
                 "ndpbm" => (float) $data['kurs_usd'],
-                "cifRupiah" => (float) $data['kurs_usd']*$jumlah,
+                "cifRupiah" => $cifrupiah,
                 "hargaPerolehan" => (float) $detx['harga']*$jumlah,
                 "kodeAsalBahanBaku" => "0",
                 "volume" => 0,
@@ -1419,23 +1420,28 @@ class Ib extends CI_Controller
                 "uraian" => trim($detx['nama_barang']),
             ];
             $arraytarif = [];
-            $barangtarif = [
-                "seriBarang" => $no,
-                "jumlahSatuan" => (int) $jumlah,
-                "kodeFasilitasTarif" => "3",
-                "kodeSatuanBarang" => $detx['kodesatuan'],
-                "nilaiBayar" => 0,
-                "nilaiFasilitas" => round(($detx['harga']*$jumlah)*0.11,0),
-                "nilaiSudahDilunasi" => 0,
-                "tarif" => 11,
-                "tarifFasilitas" => 100,
-                "kodeJenisPungutan" => "BM",
-                "kodeJenisTarif" => "1"
-            ];
+            for($ik=1;$ik<=3;$ik++){
+                $kodeJenisPungutan = $ik==1 ? "BM" : ($ik==2 ? "PPN" : "PPH");
+                $kodeFasilitasTarif = $ik==1 ? "3" : ($ik==2 ? "6" : "6");
+                $tarif = $ik==1 ? 5 : ($ik==2 ? 11 : 2.5);
+                $nilaiFasilitas = round($cifrupiah*($tarif/100),2);
+                $arraytarifx = [];
+                $barangtarif = [
+                    "seriBarang" => $no,
+                    "kodeJenisTarif" => "1",
+                    "kodeFasilitasTarif" => $kodeFasilitasTarif,
+                    "kodeJenisPungutan" => $kodeJenisPungutan,
+                    "tarifFasilitas" => 100,
+                    "nilaiBayar" => 0,
+                    "tarif" => $tarif,
+                    "nilaiFasilitas" => $nilaiFasilitas
+                ];
+                array_push($arraytarif,$barangtarif);
+            }
             $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
-            $arraybarangdokumen = [];
             // array_push($arraytarif,$barangtarif);
             $arrayke['barangTarif'] = $arraytarif;
+            $arraybarangdokumen = [];
             $arrayke['barangDokumen'] = $arraybarangdokumen;
             array_push($arraybarang,$arrayke);
         }

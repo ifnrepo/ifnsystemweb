@@ -76,12 +76,13 @@ class Out extends CI_Controller {
         $id = $_POST['id_header'];
         $query = $this->out_model->getdatadetailout($id);
         $jumlah=0;
+        $deptinsno = ['GP','RR'];
         foreach ($query as $que) {
             $tandakurang = $this->session->userdata('barangerror')==$que['id_barang'] ? 'text-danger' : '';
             $hasil .= "<tr>";
-            $hasil .= "<td><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang']."'>".$que['nama_barang']."</a></td>";
+            $hasil .= "<td><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang']."'>".$que['nama_barang']."</a></td>";
             $hasil .= "<td>".$que['brg_id']."</td>";
-            $hasil .= "<td>".$que['namasatuan']."</td>";
+            $hasil .= "<td>".$que['kodesatuan']."</td>";
                 $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
                 $hasil .= "<td>".rupiah($que['kgsminta'],2)."</td>";
             $hasil .= "<td class='text-primary'>".rupiah($que['pcs'],0)."</td>";
@@ -93,10 +94,10 @@ class Out extends CI_Controller {
                     $hasil .= "<td class='text-primary'><a class='text-info' href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
                 }
             }
-            if($this->session->userdata('deptsekarang')=='GP' && $que['insno']!=''){
+            if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && $que['insno']!=''){
                 $hasil .= "<td class='text-primary'>".$que['insno']."</td>";
             }else{
-                if($this->session->userdata('deptsekarang')=='GP' && $que['insno']==''){
+                if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && $que['insno']==''){
                     $hasil .= "<td class='text-primary'><a href='".base_url().'out/addinsno/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data insno'>Pilih Insno</a></td>";
                 }
             }
@@ -113,9 +114,9 @@ class Out extends CI_Controller {
         $cocok = array('datagroup' => $hasil,'jmlrek' => $jumlah);
         echo json_encode($cocok);
     }
-    public function getdatadetail($id){
+    public function getdatadetail($id,$id2){
         $data['header'] = $this->out_model->getdatabyid($id)->row_array();
-        $data['detail'] = $this->out_model->getdatadetail($id);
+        $data['detail'] = $this->out_model->getdatadetail($id2);
         $this->load->view('out/viewdetailout2',$data);
     }
     public function tambahdata(){
@@ -319,7 +320,7 @@ class Out extends CI_Controller {
     }
     public function loaddetailout2(){
         $id = $_POST['id'];
-        $data = $this->out_model->getdatadetail($id);
+        $data = $this->out_model->getdatadetailall($id);
         $html = "";
         $no=1;
         $pcs =0;
@@ -327,7 +328,7 @@ class Out extends CI_Controller {
        foreach ($data as $val) { 
         $ketbc = $val['bcnomor']!=null ? 'BC. '.trim($val['jns_bc']).'-'.$val['bcnomor'].'('.$val['bctgl'].')' : '';
         $html .= "<tr>";
-        $html .= "<td style='line-height: 13px;'>".$val['nama_barang']." # <span class='text-teal'>".$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
+        $html .= "<td style='line-height: 13px;'>".$val['nama_barang']." # <span class='text-teal'>".$val['insno'].' '.$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
         $html .= "<td>".$val['brg_id']."</td>";
         $html .= "<td>".$val['namasatuan']."</td>";
         $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";

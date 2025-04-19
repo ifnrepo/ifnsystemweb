@@ -473,7 +473,7 @@
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="mb-1 pt-1 row bg-cyan-lt">
-                                                <label class="col-3 col-form-label font-kecil">NDPBM</label>
+                                                <label class="col-3 col-form-label font-kecil" style="cursor: pointer" id="cekndpbm">NDPBM</label>
                                                 <div class="col">
                                                     <div class="mb-1 row">
                                                         <label class="col-3 col-form-label font-kecil">USD</label>
