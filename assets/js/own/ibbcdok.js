@@ -348,6 +348,9 @@ $("#cekdata").click(function () {
 		cekkolom();
 	}
 });
+$("#cekndpbm").click(function () {
+	// alert("Akan dicek kemudian");
+});
 function cekkolom(mode) {
 	if ($("#jns_bc").val() == "") {
 		// $("#keteranganerr").text("Pilih Jenis BC !");

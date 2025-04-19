@@ -37,7 +37,7 @@
                                 $pcspo = $detail['pcs'];
                             }else{
                                 $pcs = $detail['kgssudahterima'];
-                                $pcspo = $detail['kg'];
+                                $pcspo = $detail['kgs'];
                             }
                         ?>
                             <tr class="font-kecil">

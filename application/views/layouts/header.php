@@ -187,7 +187,19 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body fetched-data p-1">
-          Fetching Data ..
+          <!-- Fetching Data .. -->
+           <div>
+              <div class="container container-slim py-4" id="syncloader">
+                    <div class="text-center">
+                        <div class="mb-3">
+                        </div>
+                        <div class="text-secondary mb-3">Fetching data, Please wait..</div>
+                        <div class="progress progress-sm">
+                        <div class="progress-bar progress-bar-indeterminate"></div>
+                        </div>
+                    </div>
+                </div>
+           </div>
         </div>
         <!-- <div class="modal-footer">
             <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
@@ -204,7 +216,19 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body fetched-data p-1">
-          Fetching Data ..
+          <!-- <div class="text-center">Fetching Data ..</div> -->
+           <div>
+              <div class="container container-slim py-4" id="syncloader">
+                    <div class="text-center">
+                        <div class="mb-3">
+                        </div>
+                        <div class="text-secondary mb-3">Fetching data, Please wait..</div>
+                        <div class="progress progress-sm">
+                        <div class="progress-bar progress-bar-indeterminate"></div>
+                        </div>
+                    </div>
+                </div>
+           </div>
         </div>
         <!-- <div class="modal-footer">
             <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
@@ -221,7 +245,19 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body fetched-data p-1">
-          Fetching Data ..
+          <!-- Fetching Data .. -->
+           <div>
+              <div class="container container-slim py-4" id="syncloader">
+                    <div class="text-center">
+                        <div class="mb-3">
+                        </div>
+                        <div class="text-secondary mb-3">Fetching data, Please wait..</div>
+                        <div class="progress progress-sm">
+                        <div class="progress-bar progress-bar-indeterminate"></div>
+                        </div>
+                    </div>
+                </div>
+           </div>
         </div>
         <!-- <div class="modal-footer">
             <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
