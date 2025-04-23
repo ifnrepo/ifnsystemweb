@@ -48,7 +48,7 @@
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
                             <?php $no=0; foreach ($detail as $val) { $no++; ?>
                                 <tr>
-                                    <td><?= $no.'. '.$val['nama_barang']; ?></td>
+                                    <td class="line-12"><?= $no.'. '.$val['nama_barang'].'<br><span class="font-kecil text-teal">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
                                     <td><?= $val['brg_id']; ?></td>
                                     <td><?= $val['namasatuan']; ?></td>
                                     <td><?= rupiah($val['pcs'],0); ?></td>

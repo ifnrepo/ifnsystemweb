@@ -33,7 +33,7 @@
     <hr class='m-1'>
     <div class="card card-lg" id="cekkolape">
         <div class="card-body p-2">
-            <table class="table datatable6 table-hover table-bordered" id="cobasisip">
+            <table class="table datatable6 table-hover table-bordered mb-0" id="cobasisip">
                 <thead style="background-color: blue !important">
                     <tr class="text-center">
                         <th rowspan="2">Tanggal</th>
@@ -67,6 +67,8 @@
                     $saldoawalkgs = 0;
                     $saldo = 0;
                     $saldokgs = 0;
+                    $saldo_akhirkgs = 0;
+                    $saldo_akhirpcs = 0;
                     foreach ($detail->result_array() as $det) {
 
                         if ($det['nome'] == 1) {
@@ -76,14 +78,17 @@
                             $saldoawal = $saldo;
                             $saldoawalkgs = $saldokgs;
                         }
-                        $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'] - $det['pcsadj'];
-                        $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout']- $det['kgsadj'];
+                        $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'] + $det['pcsadj'];
+                        $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout']+ $det['kgsadj'];
                         $pilihtampil = $saldo==0 ? $saldokgs : $saldo;
                         $depnobontr = ['GM','SP'];
                         $boninsno = in_array($this->session->userdata('currdept'),$depnobontr) ? $det['nobontr'] : $det['insno'];
+                        $saldo_akhirkgs += $saldokgs;
+                        $saldo_akhirpcs += $saldo;
+                        $warnatek = $det['mode']=='ADJ' ? '' : '';
                     ?>
                         <tr>
-                            <td class="font-italic text-primary"><?= tgl_indo($det['tgl'], 0); ?></td>
+                            <td class="font-italic text-primary <?= $warnatek; ?>"><?= tgl_indo($det['tgl'], 0); ?></td>
                             <td><?= $boninsno; ?></td>
                             <td><?= rupiah($saldoawal, 0); ?></td>
                             <td><?= rupiah($saldoawalkgs, 2); ?></td>
@@ -91,8 +96,8 @@
                             <td><?= rupiah($det['kgsin'], 2); ?></td>
                             <td><?= rupiah($det['pcsout'], 0); ?></td>
                             <td><?= rupiah($det['kgsout'], 2); ?></td>
-                            <td><?= rupiah($det['pcsadj'], 0); ?></td>
-                            <td><?= rupiah($det['kgsadj'], 2); ?></td>
+                            <td class="text-pink"><?= rupiah($det['pcsadj'], 0); ?></td>
+                            <td class="text-pink"><?= rupiah($det['kgsadj'], 2); ?></td>
                             <td class="font-bold text-primary"><?= rupiah($saldo, 0); ?></td>
                             <td><?= rupiah($saldokgs, 2); ?></td>
                             <?php if($this->session->userdata('invharga')): ?>
@@ -104,6 +109,12 @@
                     <?php } ?>
                 </tbody>
             </table>
+            <div class="text-center m-0 p-0 font-bold">
+                Saldo Barang Saat Ini 
+                <br> <span class="text-primary ml-1"><?= rupiah($saldokgs, 2).' Kgs'; ?></span>
+                <br> <span class="text-primary ml-1"><?= rupiah($saldo, 2).' Pcs'; ?></span>
+            </div>
+             
         </div>
     </div>
     <div class="card hilang" id="dokfile">

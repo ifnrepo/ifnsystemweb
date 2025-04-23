@@ -105,7 +105,7 @@ class Adj_model extends CI_Model
         $this->db->where('id_header', $data);
         return $this->db->get()->result_array();
     }
-    public function getdatadetailadjbyid($data)
+    public function getdetailadjbyid($data)
     {
         $this->db->select("tb_detail.*,satuan.namasatuan,barang.kode,barang.nama_barang,satuan.id as id_satuan");
         $this->db->from('tb_detail');
@@ -165,6 +165,12 @@ class Adj_model extends CI_Model
     {
         $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
         $data['jumlah_barang'] = $jmlrec['jml'];
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
+        return $query;
+    }
+    public function validasiadj($data){
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_header', $data);
         $this->helpermodel->isilog($this->db->last_query());

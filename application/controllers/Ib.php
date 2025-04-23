@@ -1421,9 +1421,9 @@ class Ib extends CI_Controller
             ];
             $arraytarif = [];
             for($ik=1;$ik<=3;$ik++){
-                $kodeJenisPungutan = $ik==1 ? "BM" : ($ik==2 ? "PPN" : "PPH");
+                $kodeJenisPungutan = $ik==1 ? "BM" : ($ik==2 ? "PPH" : "PPN");
                 $kodeFasilitasTarif = $ik==1 ? "3" : ($ik==2 ? "6" : "6");
-                $tarif = $ik==1 ? 5 : ($ik==2 ? 11 : 2.5);
+                $tarif = $ik==1 ? 5 : ($ik==2 ? 2.5 : 11);
                 $nilaiFasilitas = round($cifrupiah*($tarif/100),2);
                 $arraytarifx = [];
                 $barangtarif = [
@@ -1434,7 +1434,10 @@ class Ib extends CI_Controller
                     "tarifFasilitas" => 100,
                     "nilaiBayar" => 0,
                     "tarif" => $tarif,
-                    "nilaiFasilitas" => $nilaiFasilitas
+                    "nilaiFasilitas" => $nilaiFasilitas,
+                    "jumlahSatuan" => (float) $jumlah,
+                    "kodeSatuanBarang" => $detx['satbc'],
+                    "nilaiSudahDilunasi" => 0
                 ];
                 array_push($arraytarif,$barangtarif);
             }
@@ -1742,5 +1745,10 @@ class Ib extends CI_Controller
             }
         }
         echo json_encode($dataar);
+    }
+    public function isilampiran23(){
+        $id = $_POST['id'];
+        $cek = $this->ibmodel->isilampiran23($id);
+        echo $cek;
     }
 }

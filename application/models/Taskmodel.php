@@ -437,7 +437,7 @@ class Taskmodel extends CI_Model
             $this->db->where('dis',$dtl['dis']);
             $this->db->where('insno',$dtl['insno']);
             $this->db->where('nobontr',$dtl['nobontr']);
-            $this->db->where('dl',$dtl['dl']);
+            $this->db->where('dln',$dtl['dln']);
             $this->db->where('nobale',$dtl['nobale']);
             $hasil = $this->db->get('stokdept');
             if($hasil->num_rows() > 0){
@@ -446,7 +446,7 @@ class Taskmodel extends CI_Model
                 $this->db->set('pcs_adj','pcs_adj + '.$dtl['pcs'],FALSE);
                 $this->db->set('kgs_adj','kgs_adj + '.$dtl['kgs'],FALSE);
                 $this->db->set('pcs_akhir','pcs_akhir +'.$dtl['pcs'],FALSE);
-                $this->db->set('kgs_akhir','kgs_akhir +'.$dtl['kgss'],FALSE);
+                $this->db->set('kgs_akhir','kgs_akhir +'.$dtl['kgs'],FALSE);
                 $this->db->where('id',$stokdept['id']);
                 $this->db->update('stokdept');
             }else{
@@ -459,7 +459,7 @@ class Taskmodel extends CI_Model
                     'dis' => $dtl['dis'],
                     'insno' => $dtl['insno'],
                     'id_barang' => $dtl['id_barang'],
-                    'dl' => $dtl['dl'],
+                    'dln' => $dtl['dln'],
                     'nobale' => $dtl['nobale'],
                     'stok' => $dtl['stok'],
                     'pcs_adj' => $dtl['pcs'],

@@ -89,6 +89,10 @@ $("#simpandetailbarang").click(function () {
 		pesan("Isi Qty atau Kgs", "error");
 		return;
 	}
+	if ($("#keterangan").val() == "") {
+		pesan("Keterangan detail barang Harus di isi", "error");
+		return;
+	}
 	document.formbarangpb.submit();
 });
 $("#butgo").click(function () {
@@ -126,6 +130,7 @@ $(document).on("click", "#editdetailadj", function () {
 			$("#id_satuan").val(data[0].id_satuan);
 			$("#pcs").val(data[0].pcs);
 			$("#kgs").val(data[0].kgs);
+			$("#keterangan").val(data[0].keterangan);
 			$("#formbarangpb").attr("action", base_url + "adj/updatedetailbarang");
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
