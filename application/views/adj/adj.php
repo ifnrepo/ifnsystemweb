@@ -122,8 +122,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td class="text-right">
                     <?php
                     if ($datdet['data_ok'] == 0) {
-                      echo "<a href=" . base_url() . 'adj/dataadj/' . $datdet["id"] . " class='btn btn-sm btn-primary btn-flat mr-1' title='Edit data'><i class='fa fa-edit mr-1'></i> Lanjutkan transaksi</a>";
-                      echo "<a href='#' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' data-href=" . base_url() . 'adj/hapusdataadj/' . $datdet["id"] . " title='Hapus data'><i class='fa fa-trash-o'></i></a>";
+                      echo "<a href=" . base_url() . 'adj/dataadj/' . $datdet["id"] . " class='btn btn-sm btn-primary btn-flat mr-1' style='padding: 3px 5px !important;' title='Edit data'><i class='fa fa-edit mr-1'></i> Lanjutkan transaksi</a>";
+                      echo "<a href='#' class='btn btn-sm btn-danger btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-danger' data-message='Akan menghapus data ini' style='padding: 3px 5px !important;' data-href=" . base_url() . 'adj/hapusdataadj/' . $datdet["id"] . " title='Hapus data'><i class='fa fa-trash-o'></i> Hapus</a>";
                     } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0) {
                       echo "<a href='#' style='padding: 3px 6px !important' class='btn btn-sm btn-info btn-flat mr-1' data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Edit data ini' data-href=" . base_url() . 'adj/editokadj/' . $datdet["id"] . " title='Validasi data'><i class='fa fa-refresh mr-1'></i> Edit ADJ</a>";
                     } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 1 && $this->session->userdata('levelsekarang') == 1) {

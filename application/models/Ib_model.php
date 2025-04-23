@@ -772,4 +772,21 @@ class Ib_model extends CI_Model
 		}
 		return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
 	}
+    public function isilampiran23($id){
+        $cekdata = $this->db->get_where('lampiran',['id_header' => $id]);
+        $hasil = 1;
+        if($cekdata->num_rows() == 0){
+            $this->db->trans_start();
+            for ($i=0; $i <= 1; $i++) { 
+                $kodelampiran = $i==0 ? '380' : '705';
+                $data = [
+                    'id_header' => $id,
+                    'kode_dokumen' => $kodelampiran
+                ];
+                $this->db->insert('lampiran',$data);
+            }
+            $hasil = $this->db->trans_complete();
+        }
+        return $hasil;
+    }
 }

@@ -134,10 +134,14 @@ $("#keexcel").click(function () {
 $("#jns_bc").change(function () {
 	var halaman = $("#namahalaman").val();
 	savedata("jns_bc", $(this).val());
-	setTimeout(() => {
-		window.location.href =
-			base_url + halaman + "/isidokbc/" + $("#id_header").val();
-	}, 500);
+	if ($(this).val() == "23") {
+		isilampiran($("#id_header").val());
+	} else {
+		setTimeout(() => {
+			window.location.href =
+				base_url + halaman + "/isidokbc/" + $("#id_header").val();
+		}, 500);
+	}
 });
 $("#mtuang").change(function () {
 	savedata("mtuang", $(this).val());
@@ -351,6 +355,29 @@ $("#cekdata").click(function () {
 $("#cekndpbm").click(function () {
 	// alert("Akan dicek kemudian");
 });
+function isilampiran(ide) {
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "ib/isilampiran23",
+		data: {
+			id: ide,
+		},
+		success: function (data) {
+			var halaman = $("#namahalaman").val();
+			$("#keteranganerr").text("Data Saved ..!");
+			// pesan("Data Saved ..!", "success");
+			setTimeout(() => {
+				window.location.href =
+					base_url + halaman + "/isidokbc/" + $("#id_header").val();
+			}, 500);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
 function cekkolom(mode) {
 	if ($("#jns_bc").val() == "") {
 		// $("#keteranganerr").text("Pilih Jenis BC !");

@@ -57,11 +57,12 @@ class Adj extends CI_Controller
         $jmlkgs = 0;$jmlpcs=0;
         foreach ($data as $dt) {
             $hasil .= "<tr>";
-            $hasil .= "<td>" . $dt['nama_barang'] . "</td>";
+            $hasil .= "<td class='line-12 font-kecil' style='white-space: nowrap;'>" . $dt['nama_barang'] . "<br><span class='text-primary font-kecil'>".$dt['insno'].' '.$dt['nobontr']."</span></td>";
             $hasil .= "<td>" . $dt['kode'] . "</td>";
-            $hasil .= "<td>" . $dt['namasatuan'] . "</td>";
+            $hasil .= "<td>" . $dt['kodesatuan'] . "</td>";
             $hasil .= "<td class='text-center'>" . rupiah($dt['pcs'], 0) . "</td>";
             $hasil .= "<td>" . rupiah($dt['kgs'],2) . "</td>";
+            $hasil .= "<td class='line-12 font-kecil'>" . $dt['keterangan'] . "</td>";
             $hasil .= "<td class='text-center'>";
             $hasil .= "<a href='#' id='editdetailadj' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
             $hasil .= "<a href='" . base_url() . 'adj/hapusdetailadj/' . $dt['id'] . "' class='btn btn-sm btn-danger' title='Hapus data'><i class='fa fa-trash-o'></i></a>";
@@ -147,7 +148,7 @@ class Adj extends CI_Controller
     public function getdetailadjbyid()
     {
         $data = $_POST['id'];
-        $hasil = $this->adjmodel->getdatadetailadjbyid($data);
+        $hasil = $this->adjmodel->getdetailadjbyid($data);
         echo json_encode($hasil);
     }
     public function updatedetailbarang()
@@ -215,11 +216,11 @@ class Adj extends CI_Controller
         $data['detail'] = $this->adjmodel->getdatadetailadj($id);
         $this->load->view('adj/viewdetailadj', $data);
     }
-    //END ADJ Controllers
     public function edittgl()
     {
-        $this->load->view('pb/edit_tgl');
+        $this->load->view('adj/edit_tgl');
     }
+    //END ADJ Controllers
     public function tambahpb()
     {
         $data = [

@@ -25,16 +25,18 @@
                     <th>Satuan</th>
                     <th>Qty</th>
                     <th>Kgs</th>
+                    <th>Keterangan</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
                 <?php foreach ($detail as $val) { ?>
                     <tr>
-                        <td><?= $val['nama_barang']; ?></td>
+                        <td class="line-12"><?= $val['nama_barang'].'<br><span class="font-kecil text-teal">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
                         <td><?= $val['brg_id']; ?></td>
                         <td><?= $val['namasatuan']; ?></td>
                         <td><?= rupiah($val['pcs'],0); ?></td>
                         <td><?= rupiah($val['kgs'],2); ?></td>
+                        <td><?= $val['keterangan']; ?></td>
                     </tr>
                 <?php } ?>
                 </tbody>

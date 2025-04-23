@@ -31,7 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <?= tglmysql($data['tgl']); ?>
-                    <a href="<?= base_url() . 'pb/edittgl'; ?>" title="Edit tanggal" id="tglpb" name="tglpb" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                    <a href="<?= base_url() . 'adj/edittgl'; ?>" title="Edit tanggal" id="tglpb" name="tglpb" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
                       <i class="fa fa-edit"></i>
                     </a>
                   </span>
@@ -41,7 +41,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" id="catat" class="hilang" value="<?= $data['keterangan']; ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <?= $data['keterangan']; ?>
-                    <a href="<?= base_url() . 'pb/edittgl'; ?>" title="Edit tanggal" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                    <a href="<?= base_url() . 'adj/edittgl'; ?>" title="Edit tanggal" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
                       <i class="fa fa-edit"></i>
                     </a>
                     <input type="hidden" id="ketbon" value="<?= $data['keterangan']; ?>">
@@ -71,7 +71,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">Satuan</label>
                 <div class="col">
-                  <select name="id_satuan" id="id_satuan" class="form-control font-kecil">
+                  <select name="id_satuan" id="id_satuan" class="form-control font-kecil form-select">
                     <option value="">Pilih Satuan</option>
                     <?php foreach ($satuan as $sat) { ?>
                       <option value="<?= $sat['id']; ?>"><?= $sat['namasatuan']; ?></option>
@@ -89,6 +89,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-2 col-form-label">Kgs</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil text-right" id="kgs" name="kgs" autocomplete="off" aria-describedby="emailHelp" placeholder="Kgs">
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Nomor IB</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" style="text-transform: uppercase;" id="nobontr" name="nobontr" autocomplete="off" aria-describedby="emailHelp" placeholder="Nomor IB">
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Ins No</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" style="text-transform: uppercase;" id="insno" name="insno" autocomplete="off" aria-describedby="emailHelp" placeholder="Ins No">
+                </div>
+              </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Ket</label>
+                <div class="col">
+                  <textarea class="form-control font-kecil" id="keterangan" name="keterangan"></textarea>
                 </div>
               </div>
             </form>
@@ -112,6 +130,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Satuan</th>
                     <th>Qty</th>
                     <th>Kgs</th>
+                    <th>Ket</th>
                     <th>Aksi</th>
                   </tr>
                 </thead>
@@ -125,7 +144,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <hr class="m-1">
         <div class="form-tombol mt-1 text-right">
           <div>
-          <span id="jmpcs">XXXX</span>
+          <span id="jmpcs"></span>
                     </div>
           <input type="text" id="jmlrek" class="hilang">
           <a href="#" class="btn btn-sm btn-primary" id="simpanadj" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'adj/simpanadj/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>

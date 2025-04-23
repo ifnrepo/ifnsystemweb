@@ -925,6 +925,8 @@ class Akb extends CI_Controller
             "tanggalPeriksa" => $data['tgl_aju'],
             "tanggalTtd" => $data['tgl_aju'],
             "kodeIncoterm" => $data['kode_incoterm'],
+            "flagBarkir" => "T",
+            "kodeJenisPengangkutan" => "1"
             // "kesiapanBarang" => [],
             // "bankDevisa" => []
         ];
@@ -1063,7 +1065,8 @@ class Akb extends CI_Controller
                 "ukuran" => "-",
                 "uraian" => $detx['engklp'],
                 "volume" => 0,
-                "nilaiDanaSawit" => 0
+                "nilaiDanaSawit" => 0,
+                "kodeJenisEkspor" => "1"
             ];
             $arraytarif = [];
             $barangtarif = [
