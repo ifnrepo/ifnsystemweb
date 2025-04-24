@@ -103,6 +103,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0) {
                   $tunggukonfirmasi = 'Menunggu Konfirmasi Manager';
                 }
+                if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 1) {
+                  $tunggukonfirmasi = $datdet['keterangan'];
+                }
                 if ($datdet['ok_valid'] == 2) {
                   $cancel = '(CANCEL) ' . $datdet['ketcancel'];
                   $tekred = 'text-red';
@@ -116,8 +119,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= tglmysql($datdet['tgl']); ?></td>
                   <td><a href='<?= base_url() . 'pb/viewdetailpb/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $jmlrec; ?></td>
-                  <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
-                  <td style="line-height: 14px;"><?= $usersetuju . "<br><span style='font-size: 10px;'>" . $tglsetuju . "</span>" ?></td>
+                  <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span class='text-teal' style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
+                  <td style="line-height: 14px;"><?= $usersetuju . "<br><span class='text-teal' style='font-size: 10px;'>" . $tglsetuju . "</span>" ?></td>
                   <td><?= $tunggukonfirmasi . $tungguoke . $cancel ?></td>
                   <td class="text-right">
                     <?php

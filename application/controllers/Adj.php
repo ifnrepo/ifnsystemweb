@@ -16,7 +16,7 @@ class Adj extends CI_Controller
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('adj_model', 'adjmodel');
-        $this->load->model('helper_model','helpermodel');
+        $this->load->model('helper_model', 'helpermodel');
 
         $this->load->library('Pdf');
         // $this->load->library('Codeqr');
@@ -54,14 +54,15 @@ class Adj extends CI_Controller
         $hasil = '';
         $no = 1;
         $jml = count($data);
-        $jmlkgs = 0;$jmlpcs=0;
+        $jmlkgs = 0;
+        $jmlpcs = 0;
         foreach ($data as $dt) {
             $hasil .= "<tr>";
-            $hasil .= "<td class='line-12 font-kecil' style='white-space: nowrap;'>" . $dt['nama_barang'] . "<br><span class='text-primary font-kecil'>".$dt['insno'].' '.$dt['nobontr']."</span></td>";
+            $hasil .= "<td class='line-12 font-kecil' style='white-space: nowrap;'>" . $dt['nama_barang'] . "<br><span class='text-primary font-kecil'>" . $dt['insno'] . ' ' . $dt['nobontr'] . "</span></td>";
             $hasil .= "<td>" . $dt['kode'] . "</td>";
             $hasil .= "<td>" . $dt['kodesatuan'] . "</td>";
             $hasil .= "<td class='text-center'>" . rupiah($dt['pcs'], 0) . "</td>";
-            $hasil .= "<td>" . rupiah($dt['kgs'],2) . "</td>";
+            $hasil .= "<td>" . rupiah($dt['kgs'], 2) . "</td>";
             $hasil .= "<td class='line-12 font-kecil'>" . $dt['keterangan'] . "</td>";
             $hasil .= "<td class='text-center'>";
             $hasil .= "<a href='#' id='editdetailadj' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
@@ -71,13 +72,13 @@ class Adj extends CI_Controller
             $jmlpcs += $dt['pcs'];
             $jmlkgs += $dt['kgs'];
         }
-        $cocok = array('datagroup' => $hasil, 'jmlrek' => $jml, 'jmlpcs' => $jmlpcs,'jmlkgs'=>$jmlkgs);
+        $cocok = array('datagroup' => $hasil, 'jmlrek' => $jml, 'jmlpcs' => $jmlpcs, 'jmlkgs' => $jmlkgs);
         echo json_encode($cocok);
     }
     public function tambahdata()
     {
         // $this->load->view('pb/add_pb');
-        if($this->session->userdata('currdept')!=''){
+        if ($this->session->userdata('currdept') != '') {
             $data = [
                 'dept_id' => $this->session->userdata('currdept'),
                 'dept_tuju' => $this->session->userdata('currdept'),
@@ -87,13 +88,13 @@ class Adj extends CI_Controller
                 'nomor_dok' => nomoradj(date('Y-m-d'), $this->session->userdata('currdept'))
             ];
             $simpan = $this->adjmodel->tambahadj($data);
-            if($simpan){
-                $url = base_url().'adj/dataadj/'.$simpan;
+            if ($simpan) {
+                $url = base_url() . 'adj/dataadj/' . $simpan;
                 redirect($url);
             }
-        }else{
-            $this->session->set_flashdata('errorparam',1);
-            $url = base_url().'adj';
+        } else {
+            $this->session->set_flashdata('errorparam', 1);
+            $url = base_url() . 'adj';
             redirect($url);
         }
     }
@@ -108,7 +109,7 @@ class Adj extends CI_Controller
     {
         $hasil = $this->adjmodel->hapusdataadj($id);
         if ($hasil) {
-            $this->session->set_flashdata('errorparam',2);
+            $this->session->set_flashdata('errorparam', 2);
             $url = base_url() . 'adj';
             redirect($url);
         }
@@ -127,7 +128,7 @@ class Adj extends CI_Controller
             $html .= "<tr>";
             $html .= "<td>" . $que['nama_barang'] . "</td>";
             $html .= "<td>" . $que['kode'] . "</td>";
-            $html .= "<td>".$que['kodesatuan']."</td>";
+            $html .= "<td>" . $que['kodesatuan'] . "</td>";
             $html .= "<td>";
             $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $que['nama_barang'] . "' rel2='" . $que['idx'] . "' rel3=" . $que['id_satuan'] . ">Pilih</a>";
             $html .= "</td>";
@@ -171,12 +172,12 @@ class Adj extends CI_Controller
     }
     public function simpanadj($id)
     {
-        $cek = $this->adjmodel->cekfield($id,'keterangan','');
-        if($cek->num_rows() > 0){
-            $this->session->set_flashdata('errorparam',4);
-            $url = base_url() . 'adj/dataadj/'.$id;
+        $cek = $this->adjmodel->cekfield($id, 'keterangan', '');
+        if ($cek->num_rows() > 0) {
+            $this->session->set_flashdata('errorparam', 4);
+            $url = base_url() . 'adj/dataadj/' . $id;
             redirect($url);
-        }else{
+        } else {
             $data = [
                 'data_ok' => 1,
                 'tgl_ok' => date('Y-m-d H:i:s'),
@@ -192,8 +193,8 @@ class Adj extends CI_Controller
     }
     public function editokadj($id)
     {
-        $cek = $this->adjmodel->cekfield($id,'ok_valid',0)->num_rows();
-        if($cek==1){
+        $cek = $this->adjmodel->cekfield($id, 'ok_valid', 0)->num_rows();
+        if ($cek == 1) {
             $data = [
                 'data_ok' => 0,
                 'tgl_ok' => null,
@@ -201,8 +202,8 @@ class Adj extends CI_Controller
                 'id' => $id
             ];
             $simpan = $this->adjmodel->validasiadj($data);
-        }else{
-            $this->session->set_flashdata('errorparam',3);
+        } else {
+            $this->session->set_flashdata('errorparam', 3);
             $simpan = 1;
         }
         if ($simpan) {
@@ -230,7 +231,7 @@ class Adj extends CI_Controller
             'kode_dok' => 'ADJ',
             'id_perusahaan' => IDPERUSAHAAN,
             'pb_sv' => $_POST['jn'],
-            'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'],$_POST['jn'])
+            'nomor_dok' => nomorpb(tglmysql($_POST['tgl']), $_POST['dept_id'], $_POST['dept_tuju'], $_POST['jn'])
         ];
         $simpan = $this->pb_model->tambahpb($data);
         echo $simpan['id'];
@@ -248,8 +249,8 @@ class Adj extends CI_Controller
 
     public function validasipb($id)
     {
-        $cek = $this->pb_model->cekfield($id,'data_ok',1)->num_rows();
-        if($cek==1){
+        $cek = $this->pb_model->cekfield($id, 'data_ok', 1)->num_rows();
+        if ($cek == 1) {
             $data = [
                 'ok_valid' => 1,
                 'tgl_valid' => date('Y-m-d H:i:s'),
@@ -257,7 +258,7 @@ class Adj extends CI_Controller
                 'id' => $id
             ];
             $simpan = $this->pb_model->validasipb($data);
-        }else{
+        } else {
             $simpan = 1;
         }
         if ($simpan) {
@@ -279,7 +280,7 @@ class Adj extends CI_Controller
             redirect($url);
         }
     }
-    
+
     public function cancelpb($id)
     {
         $data['id'] = $id;
@@ -308,7 +309,7 @@ class Adj extends CI_Controller
         $this->load->view('adj/dataadj', $data);
         $this->load->view('layouts/footer', $footer);
     }
-    
+
 
 
 

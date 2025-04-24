@@ -72,6 +72,8 @@ class Adj_model extends CI_Model
     public function simpandetailbarang()
     {
         $data = $_POST;
+        $databarang = $this->db->get_where('barang',['id' => $data['id_barang']])->row_array();
+        $data['dln'] = $databarang['dln'];
         unset($data['nama_barang']);
         $hasil =  $this->db->insert('tb_detail', $data);
         $this->helpermodel->isilog($this->db->last_query());

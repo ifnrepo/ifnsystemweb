@@ -498,7 +498,7 @@ function pesan(pesan, jenis) {
 		text: pesan,
 		showHideTransition: "fade", //slide, fade, plain
 		icon: jenis,
-		hideAfter: 3500,
+		hideAfter: 4000,
 		position: "bottom-right",
 		bgColor: bek,
 		textColor: teksColor,
