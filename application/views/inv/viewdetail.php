@@ -63,20 +63,33 @@
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                    <?php $saldoawal = 0;
+                    <?php 
+                    $jmpcin = 0;
+                    $jmkgin = 0;
+                    $jmpcout = 0;
+                    $jmkgout = 0;
+                    $jmpcadj = 0;
+                    $jmkgadj = 0;
+                    $saldoawal = 0;
                     $saldoawalkgs = 0;
                     $saldo = 0;
                     $saldokgs = 0;
                     $saldo_akhirkgs = 0;
                     $saldo_akhirpcs = 0;
+                    $init = 0;
+                    $xsaldo=0;$xsaldokgs=0;
                     foreach ($detail->result_array() as $det) {
-
+                        $init++;
                         if ($det['nome'] == 1) {
                             $saldoawal = $det['pcs'] + $det['pcsin'] - $det['pcsout']-$det['pcsadj'];
                             $saldoawalkgs = $det['kgs'] + $det['kgsin'] - $det['kgsout']-$det['kgsadj'];
                         } else {
                             $saldoawal = $saldo;
                             $saldoawalkgs = $saldokgs;
+                        }
+                        if($init==1){
+                            $xsaldo = $saldoawal;
+                            $xsaldokgs = $saldoawalkgs;
                         }
                         $saldo += $det['pcs'] + $det['pcsin'] - $det['pcsout'] + $det['pcsadj'];
                         $saldokgs += $det['kgs'] + $det['kgsin'] - $det['kgsout']+ $det['kgsadj'];
@@ -86,20 +99,26 @@
                         $saldo_akhirkgs += $saldokgs;
                         $saldo_akhirpcs += $saldo;
                         $warnatek = $det['mode']=='ADJ' ? '' : '';
+                        $jmpcin += $det['pcsin'];
+                        $jmkgin += $det['kgsin'];
+                        $jmpcout += $det['pcsout'];
+                        $jmkgout += $det['kgsout'];
+                        $jmpcadj += $det['pcsadj'];
+                        $jmkgadj += $det['kgsadj'];
                     ?>
                         <tr>
                             <td class="font-italic text-primary <?= $warnatek; ?>"><?= tgl_indo($det['tgl'], 0); ?></td>
                             <td><?= $boninsno; ?></td>
-                            <td><?= rupiah($saldoawal, 0); ?></td>
-                            <td><?= rupiah($saldoawalkgs, 2); ?></td>
-                            <td><?= rupiah($det['pcsin'], 0); ?></td>
-                            <td><?= rupiah($det['kgsin'], 2); ?></td>
-                            <td><?= rupiah($det['pcsout'], 0); ?></td>
-                            <td><?= rupiah($det['kgsout'], 2); ?></td>
-                            <td class="text-pink"><?= rupiah($det['pcsadj'], 0); ?></td>
-                            <td class="text-pink"><?= rupiah($det['kgsadj'], 2); ?></td>
-                            <td class="font-bold text-primary"><?= rupiah($saldo, 0); ?></td>
-                            <td><?= rupiah($saldokgs, 2); ?></td>
+                            <td class="text-right"><?= rupiah($saldoawal, 0); ?></td>
+                            <td class="text-right"><?= rupiah($saldoawalkgs, 2); ?></td>
+                            <td class="text-right"><?= rupiah($det['pcsin'], 0); ?></td>
+                            <td class="text-right"><?= rupiah($det['kgsin'], 2); ?></td>
+                            <td class="text-right"><?= rupiah($det['pcsout'], 0); ?></td>
+                            <td class="text-right"><?= rupiah($det['kgsout'], 2); ?></td>
+                            <td class="text-right text-pink" ><?= rupiah($det['pcsadj'], 0); ?></td>
+                            <td class="text-right text-pink" ><?= rupiah($det['kgsadj'], 2); ?></td>
+                            <td class="text-right" class="font-bold text-primary"><?= rupiah($saldo, 0); ?></td>
+                            <td class="text-right"><?= rupiah($saldokgs, 2); ?></td>
                             <?php if($this->session->userdata('invharga')): ?>
                             <td class="text-right"><?= rupiah($det['harga'], 2); ?></td>
                             <td class="text-right"><?= rupiah($det['harga']*$pilihtampil, 2); ?></td>
@@ -107,6 +126,20 @@
                             <td><?= $det['nomor_dok']; ?></td>
                         </tr>
                     <?php } ?>
+                    <tr>
+                        <td colspan="2" class="text-center font-bold">TOTAL</td>
+                        <td class="text-right font-bold"><?= rupiah($xsaldo,0); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($xsaldokgs,2); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($jmpcin,0); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($jmkgin,2); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($jmpcout,0); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($jmkgout,2); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($jmpcadj,0); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($jmkgadj,2); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($xsaldo+$jmpcin+$jmpcadj-$jmpcout,0); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($xsaldokgs+$jmkgin+$jmkgadj-$jmkgout,2); ?></td>
+                        <td></td>
+                    </tr>
                 </tbody>
             </table>
             <div class="text-center m-0 p-0 font-bold">
