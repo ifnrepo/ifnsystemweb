@@ -102,7 +102,7 @@ $("#tglawal").datepicker({
 	todayHighlight: true,
 	maxDate: 0,
 });
-$("#updateinv").click(function () {
+$("#buttoncari").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();
 	var currdept = $("#currdept").val();
@@ -112,6 +112,57 @@ $("#updateinv").click(function () {
 	// var katcari = document.getElementById("caribar").innerHTML;
 	var katcari = $("input:radio[name=radios-inline]:checked").val();
 	// $("#textcari").val("");
+	var nomorbcnya = $("#nomorbcnya").val();
+	var kontrakbcnya = $("#kontrakbcnya").val();
+	var textcari = $("#textcari").val();
+	if ($("#gbg").is(":checked")) {
+		var gbg = 1;
+	} else {
+		var gbg = 0;
+	}
+	// alert(gbg);
+	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
+		pesan("Tanggal awal lebih besar dari tanggal akhir", "info");
+		return false;
+	}
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "inv/getdata",
+		data: {
+			tga: tglawal,
+			tgk: tglakhir,
+			dpt: currdept,
+			gbn: gbg,
+			kat: katbar,
+			kcari: katcari,
+			cari: textcari,
+			nobcnya: nomorbcnya,
+			ifndln: ifndl,
+			kontbc: kontrakbcnya,
+		},
+		success: function (data) {
+			// alert(data);
+			console.log("KONTRAK" + kontrakbcnya);
+			window.location.reload();
+			// $("#body-table").html(data.datagroup).show();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
+$("#updateinv").click(function () {
+	var tglawal = $("#tglawal").val();
+	var tglakhir = $("#tglakhir").val();
+	var currdept = $("#currdept").val();
+	var currdept = $("#currdept").val();
+	var katbar = $("#katbar").val();
+	var ifndl = $("#ifndln").val();
+	// var katcari = document.getElementById("caribar").innerHTML;
+	var katcari = $("input:radio[name=radios-inline]:checked").val();
+	$("#textcari").val("");
 	var nomorbcnya = $("#nomorbcnya").val();
 	var kontrakbcnya = $("#kontrakbcnya").val();
 	var textcari = $("#textcari").val();
@@ -412,9 +463,6 @@ function loadtablegf() {
 }
 $("#tglawal").change(function () {
 	// alert("CUY");
-});
-$("#buttoncari").click(function () {
-	$("#updateinv").click();
 });
 $("#buttoncarigf").click(function () {
 	$("#updateinvgf").click();

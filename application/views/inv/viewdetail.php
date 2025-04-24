@@ -126,7 +126,7 @@
                             <td><?= $det['nomor_dok']; ?></td>
                         </tr>
                     <?php } ?>
-                    <tr>
+                    <tr class="bg-dark-lt">
                         <td colspan="2" class="text-center font-bold">TOTAL</td>
                         <td class="text-right font-bold"><?= rupiah($xsaldo,0); ?></td>
                         <td class="text-right font-bold"><?= rupiah($xsaldokgs,2); ?></td>
