@@ -74,6 +74,8 @@ $("#dept_kirim").change(function () {
 // 	}
 // });
 $("#simpandetailbarang").click(function () {
+	var insno = $("#insno").val();
+	var nobontr = $("#nobontr").val();
 	if ($("#id_barang").val() == "") {
 		pesan("Isi / Cari nama barang", "error");
 		return;
@@ -92,6 +94,33 @@ $("#simpandetailbarang").click(function () {
 	if ($("#keterangan").val() == "") {
 		pesan("Keterangan detail barang Harus di isi", "error");
 		return;
+	}
+	// Cek salah masuk nobontr ke insno
+	if (insno != "") {
+		if (insno.includes("SU-GM") || insno.includes("DLN-IFN")) {
+			pesan(
+				"Cek kembali nomor instruksi, (Sepertinya Nomor IB yang di input)",
+				"error",
+			);
+			return;
+		}
+	}
+	// Cek salah masuk insno ke nobontr
+	if (nobontr != "") {
+		var cek = false;
+		if (nobontr.includes("SU-GM") && !cek) {
+			cek = true;
+		}
+		if (nobontr.includes("DLN-IFN") && !cek) {
+			cek = true;
+		}
+		if (!cek) {
+			pesan(
+				"Cek kembali nomor IB, (Sepertinya Nomor Instruksi yang di input)",
+				"error",
+			);
+			return;
+		}
 	}
 	document.formbarangpb.submit();
 });

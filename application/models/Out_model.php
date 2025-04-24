@@ -617,11 +617,19 @@ class Out_model extends CI_Model{
         $kondisi = [
             'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
             'dept_id' => 'GP',
-            'id_barang' => $idbarang
+            'id_barang' => $idbarang,
         ];
         $kondisi2 = [
             'pcs_akhir > ' => 0,
-            'kgs_akhir > ' => 0 
+            'kgs_akhir > ' => 0
+        ];
+        $kondisi2 = [
+            'pcs_akhir > ' => 0,
+            'kgs_akhir > ' => 0
+        ];
+        $kondisi3 = [
+            'insno != ' => "",
+            'nobontr != ' => ""
         ];
         $this->db->select('stokdept.*,barang.nama_barang,barang.kode',FALSE);
         $this->db->from('stokdept');
@@ -629,6 +637,9 @@ class Out_model extends CI_Model{
         $this->db->where($kondisi);
         $this->db->group_start();
         $this->db->or_where($kondisi2);
+        $this->db->group_end();
+        $this->db->group_start();
+        $this->db->or_where($kondisi3);
         $this->db->group_end();
         $hasil = $this->db->get();
         return $hasil;
