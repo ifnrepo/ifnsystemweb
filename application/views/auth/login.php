@@ -79,7 +79,7 @@
   </div>
   <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">
     <!-- Photo -->
-    <div class="bg-cover h-100 min-vh-100 d-flex d-flex-column" style="background-image: url(<?= base_url(); ?>assets/image/bg.png)">
+    <div class="bg-cover h-100 min-vh-100 d-flex d-flex-column" style="background-image: url(<?= base_url(); ?>assets/image/bgx.jpg)">
       <div class="text-center w-100 p-4 d-flex d-flex-column" style="background-color: rgba(255,255,255,.25);">
         <div class="w-100 p-4 align-self-lg-center pb-4" style="background-color: rgba(255,255,255,.5);font-size: 24px;">
           Selamat Datang, Pengguna Aplikasi <br>

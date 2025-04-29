@@ -491,7 +491,7 @@
                 </span>
               </a>
             </li>
-            <li class="nav-item <?php if (($this->session->userdata('level_user') <= 1) && (count($this->session->userdata('hak_ttd_pb')) == 0) && ($this->session->userdata('cekpo') == 0)) {
+            <li class="nav-item <?php if (($this->session->userdata('level_user') <= 1) && (count((array)$this->session->userdata('hak_ttd_pb')) == 0) && ($this->session->userdata('cekpo') == 0)) {
                                   echo "hilang";
                                 } ?>">
               <a class="nav-link <?php if (isset($header) && $header == 'pendingtask') {
