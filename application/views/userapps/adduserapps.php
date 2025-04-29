@@ -86,12 +86,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="password" class="form-control font-kecil" name="password" id="password" placeholder="Password">
                 </div>
               </div>
-              <div class="mb-1 row">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col">Aktif</span>
+                      <span class="col font-bold">User Aktif</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="aktif" id="aktif" type="checkbox">
@@ -101,7 +101,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-teal-lt">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -116,12 +116,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col">Validator ADJ</span>
+                      <span class="col font-bold">Validator ADJ</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="cekadj" id="cekadj" type="checkbox">
@@ -131,12 +131,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-teal-lt">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col">Validator Purchase Order (PO)</span>
+                      <span class="col font-bold">Validator Purchase Order (PO)</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="cekpo" id="cekpo" type="checkbox">
@@ -146,12 +146,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col">GM Purchasing</span>
+                      <span class="col font-bold">GM Purchasing</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="cekpc" id="cekpc" type="checkbox">
@@ -161,12 +161,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-teal-lt">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col">Batalkan Verifikasi Stock</span>
+                      <span class="col font-bold">Batalkan Verifikasi Stock</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="cekbatalstok" id="cekbatalstok" type="checkbox">
@@ -176,15 +176,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col">Konfirmasi Hanggar</span>
+                      <span class="col font-bold">Konfirmasi Hanggar</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="cekpakaibc" id="cekpakaibc" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row">
+                      <span class="col font-bold">Close/Open Project RD</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekrd" id="cekrd" type="checkbox">
                         </label>
                       </span>
                     </label>
