@@ -107,12 +107,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </span>
                 </div>
               </div> -->
-              <div class="mb-1 row">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
                     <label class="row">
-                      <span class="col font-bold">Aktif</span>
+                      <span class="col font-bold">User Aktif</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <?php $stsaktif = $user['aktif'] == 1 ? 'checked' : ''; ?>
@@ -123,7 +123,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="row bg-teal-lt">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -139,7 +139,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="row">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -155,7 +155,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="row bg-teal-lt">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -171,7 +171,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-teal-lt">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -187,7 +187,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -197,6 +197,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <label class="form-check form-check-single form-switch">
                           <?php $pcaktif = $user['cekpakaibc'] == 1 ? 'checked' : ''; ?>
                           <input class="form-check-input" name="cekpakaibc" id="cekpakaibc" type="checkbox" <?= $pcaktif; ?>>
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                <div class="col-11">
+                    <label class="row">
+                      <span class="col font-bold">Close/Open Project RD</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <?php $pcaktif = $user['cekrd'] == 1 ? 'checked' : ''; ?>
+                          <input class="form-check-input" name="cekrd" id="cekrd" type="checkbox" <?= $pcaktif; ?>>
                         </label>
                       </span>
                     </label>
@@ -225,10 +241,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="card-header">
                       <ul class="nav nav-tabs card-header-tabs" id="headerhakuser" data-bs-toggle="tabs">
                         <li class="nav-item">
-                          <a href="#tabs-departemen-1" class="nav-link active text-blue" data-bs-toggle="tab">Hak Departemen</a>
+                          <a href="#tabs-hakprogram-1" class="nav-link active text-blue mb-1" data-bs-toggle="tab">Hak Program</a>
                         </li>
                         <li class="nav-item">
-                          <a href="#tabs-hakprogram-1" class="nav-link  text-blue mb-1" data-bs-toggle="tab">Hak Program</a>
+                          <a href="#tabs-departemen-1" class="nav-link text-blue" data-bs-toggle="tab">Hak Departemen</a>
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-home-1" class="nav-link text-blue" data-bs-toggle="tab">Master Data</a>
@@ -238,6 +254,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-other-1" class="nav-link text-blue" data-bs-toggle="tab">Report</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#tabs-rfid-1" class="nav-link text-blue" data-bs-toggle="tab">RFID</a>
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-profile-1" class="nav-link text-blue" data-bs-toggle="tab">User Manajemen</a>
@@ -358,7 +377,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           </div>
                         </div>
 
-                        <div class="tab-pane" id="tabs-hakprogram-1">
+                        <div class="tab-pane active show" id="tabs-hakprogram-1">
                           <div class="row">
                             <div class="col-6">
                               <label class="form-check mb-1">
@@ -375,7 +394,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="hakprogram4" name="hakprogram4" type="checkbox" <?= cekceklis($user['hakprogram'], 4); ?>>
-                                <span class="form-check-label">Labolatorium</span>
+                                <span class="form-check-label">Laboratorium</span>
                               </label>
                             </div>
                           </div>
@@ -507,6 +526,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           </div>
                         </div>
 
+                        <div class="tab-pane" id="tabs-rfid-1">
+                          <div class="row">
+                            <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
+                            <div class="col">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="rfid1" name="rfid1" type="checkbox" <?= cekceklis($user['rfid'], 1); ?>>
+                                <span class="form-check-label">Finishing OUT</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="rfid2" name="rfid2" type="checkbox" <?= cekceklis($user['rfid'], 2); ?>>
+                                <span class="form-check-label">Finished Goods IN</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="rfid3" name="rfid3" type="checkbox" <?= cekceklis($user['rfid'], 3); ?>>
+                                <span class="form-check-label">Container IN</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="tab-pane" id="tabs-setting-1">
                           <div class="row">
                             <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
@@ -518,7 +557,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                           </div>
                         </div>
-                        <div class="tab-pane active show" id="tabs-departemen-1">
+                        <div class="tab-pane" id="tabs-departemen-1">
                           <div class="row">
                             <div class="col-6">
                               <?php $no = 0;
