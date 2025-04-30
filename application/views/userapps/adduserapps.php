@@ -243,6 +243,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <a href="#tabs-other-1" class="nav-link text-blue" data-bs-toggle="tab">Report</a>
                         </li>
                         <li class="nav-item">
+                          <a href="#tabs-rfid-1" class="nav-link text-blue" data-bs-toggle="tab">RFID</a>
+                        </li>
+                        <li class="nav-item">
                           <a href="#tabs-profile-1" class="nav-link text-blue" data-bs-toggle="tab">User Manajemen</a>
                         </li>
                         <li class="nav-item">
@@ -258,7 +261,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                     <div class="card-body">
                       <div class="tab-content">
-                        <div class="tab-pane" id="tabs-hakprogram-1">
+                        <div class="tab-pane active show" id="tabs-hakprogram-1">
                           <div class="row">
                             <div class="col-6">
                               <label class="form-check mb-1">
@@ -495,6 +498,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           </div>
                         </div>
 
+                        <div class="tab-pane" id="tabs-rfid-1">
+                          <div class="row">
+                            <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
+                            <div class="col">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="rfid1" name="rfid1" type="checkbox">
+                                <span class="form-check-label">Finishing OUT</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="rfid2" name="rfid2" type="checkbox">
+                                <span class="form-check-label">Finished Goods IN</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="rfid3" name="rfid3" type="checkbox">
+                                <span class="form-check-label">Container IN</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
+
                         <div class="tab-pane" id="tabs-profile-1">
                           <div class="row">
                             <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
@@ -523,7 +546,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           </div>
                         </div>
 
-                        <div class="tab-pane active show" id="tabs-departemen-1">
+                        <div class="tab-pane" id="tabs-departemen-1">
                           <div class="row">
                             <div class="col-6">
                               <?php $no = 0;

@@ -719,6 +719,38 @@
                 </div>
               </div>
             </li>
+            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('rfid')); ?>">
+              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'rfid') {
+                                                    echo 'active';
+                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <svg  xmlns="http://www.w3.org/2000/svg"  width="24"  height="24"  viewBox="0 0 24 24"  fill="none"  stroke="currentColor"  stroke-width="2"  stroke-linecap="round"  stroke-linejoin="round"  class="icon icon-tabler icons-tabler-outline icon-tabler-layout-collage">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
+                    <path d="M10 4l4 16" /><path d="M12 12l-8 2" />
+                  </svg>
+                </span>
+                <span class="nav-link-title ">
+                  RFID
+                </span>
+              </a>
+              <div class="dropdown-menu <?php if (isset($header) && $header == 'rfid') {
+                                          echo 'show active';
+                                        } ?>">
+                <div class="dropdown-menu-columns">
+                  <div class="dropdown-menu-column">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 1); ?>" href="<?= base_url('rfid/fn'); ?>">
+                      Finishing OUT
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 2); ?>" href="<?= base_url('rfid/fg'); ?>">
+                      Finished Goods IN
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 3); ?>" href="<?= base_url('rfid/out'); ?>">
+                      Container IN
+                    </a>
+                  </div>
+                </div>
+              </div>
+            </li>
             <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('manajemen')); ?>">
               <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'manajemen') {
                                                     echo 'active';

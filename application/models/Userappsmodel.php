@@ -112,12 +112,22 @@ class Userappsmodel extends CI_Model
                 unset($data['X' . $dept['dept_id']]);
             }
         }
+        // Set hak RFID
+        $rfid = str_repeat('0', 00);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['rfid' . $x])) {
+                $rfid = substr_replace($rfid, '10', ($x * 2) - 2, 2);
+                unset($data['rfid' . $x]);
+            }
+        }
+
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
         $data['hakprogram'] = $hakprogram;
         $data['manajemen'] = $manajemen;
         $data['setting'] = $setting;
         $data['hakdepartemen'] = $hakdepartemen;
+        $data['rfid'] = $rfid;
         $data['cekpb'] = $cekpb;
         $datdept = $this->deptmodel->getdata();
         $cekmng = '';
@@ -232,12 +242,25 @@ class Userappsmodel extends CI_Model
                 unset($data['X' . $dept['dept_id']]);
             }
         }
+        // Set hak RFID
+        $rfid = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['rfid' . $x])) {
+                $rfid = substr_replace($rfid, '10', ($x * 2) - 2, 2);
+                unset($data['rfid' . $x]);
+            }
+        }
+        // if(str_contains($rfid,'10')){
+        //     $rfid = '10'.$rfid;
+        // }
+
         $data['master'] = $master;
         $data['hakprogram'] = $hakprogram;
         $data['transaksi'] = $transaksi;
         $data['other'] = $other;
         $data['manajemen'] = $manajemen;
         $data['setting'] = $setting;
+        $data['rfid'] = $rfid;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
         // $data['cekpc'] = $cekpc;
@@ -276,6 +299,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('other', $cek['other']);
             $this->session->set_userdata('manajemen', $cek['manajemen']);
             $this->session->set_userdata('setting', $cek['setting']);
+            $this->session->set_userdata('rfid', $cek['rfid']);
             $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
             $this->session->set_userdata('arrdep', arrdep($cek['hakdepartemen']));
             $this->session->set_userdata('hak_ttd_pb', arrdep($cek['cekpb']));
@@ -299,6 +323,7 @@ class Userappsmodel extends CI_Model
         $this->session->set_userdata('other', $cek['other']);
         $this->session->set_userdata('manajemen', $cek['manajemen']);
         $this->session->set_userdata('setting', $cek['setting']);
+        $this->session->set_userdata('rfid', $cek['rfid']);
         $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
         $this->session->set_userdata('arrdep', arrdep($cek['hakdepartemen']));
         $this->session->set_userdata('hak_ttd_pb', arrdep($cek['cekpb']));
