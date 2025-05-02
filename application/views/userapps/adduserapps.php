@@ -90,7 +90,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row">
+                    <label class="row" title="User Aktif/Tidak">
                       <span class="col font-bold">User Aktif</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
@@ -105,7 +105,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row">
+                    <label class="row" title="Hak View Harga terakhir Pembelian">
                       <span class="col font-bold">View Harga</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
@@ -120,7 +120,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row">
+                    <label class="row" title="Hak Validasi Adjustment">
                       <span class="col font-bold">Validator ADJ</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
@@ -135,7 +135,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row">
+                    <label class="row" title="Validasi PO">
                       <span class="col font-bold">Validator Purchase Order (PO)</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
@@ -150,7 +150,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row">
+                    <label class="row" title="Verifikasi BON BBL">
                       <span class="col font-bold">GM Purchasing</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
@@ -165,7 +165,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row">
+                    <label class="row" title="Hak Membatalkan Verifikasi Stock di Modul Inventory">
                       <span class="col font-bold">Batalkan Verifikasi Stock</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
@@ -180,7 +180,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row">
+                    <label class="row" title="Menentukan Dokumen Masuk/Keluar Harus Memakai Dokumen BC Atau Tidak">
                       <span class="col font-bold">Konfirmasi Hanggar</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
@@ -195,7 +195,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row">
+                    <label class="row" title="Kunci dan Edit Data Project RND">
                       <span class="col font-bold">Close/Open Project RD</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
