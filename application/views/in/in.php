@@ -33,6 +33,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </select>
               <div class="font-kecil font-bold mr-2 align-middle" style="padding-top: 11px;">Periode</div>
             </div>
+            
+            <input type="text" class="hilang" value="<?= $this->session->userdata('curdept'); ?>">
+            <input type="text" class="hilang" value="<?= $this->session->userdata('todept'); ?>">
           </div>
           <div class="card card-active" style="clear:both;" >
             <div class="card-body p-2">
