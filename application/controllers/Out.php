@@ -79,9 +79,11 @@ class Out extends CI_Controller {
         $deptinsno = ['GP','RR'];
         foreach ($query as $que) {
             $tandakurang = $this->session->userdata('barangerror')==$que['id_barang'] ? 'text-danger' : '';
+            $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
+            $sku = $que['brg_id']=='' ? $que['po'].'#'.$que['item'].$dis : $que['brg_id'];
             $hasil .= "<tr>";
-            $hasil .= "<td><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang']."'>".$que['nama_barang']."</a></td>";
-            $hasil .= "<td>".$que['brg_id']."</td>";
+            $hasil .= "<td><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['nama_barang'].$que['spek']."</a></td>";
+            $hasil .= "<td>".$sku."</td>";
             $hasil .= "<td>".$que['kodesatuan']."</td>";
                 $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
                 $hasil .= "<td>".rupiah($que['kgsminta'],2)."</td>";
@@ -299,7 +301,11 @@ class Out extends CI_Controller {
         $data = $this->out_model->getdatadetailout($id);
         $html = "";
         $no=1;
+        $pcs =0;
+        $kgs = 0;
          foreach ($data as $val) {
+            $pcs += $val['pcs'];
+            $kgs += $val['kgs'];
             $sku =($val['po']=='') ?$val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
             if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
                 $spek = $val['po']=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
@@ -307,7 +313,7 @@ class Out extends CI_Controller {
                 $spek = $val['po']=='' ? $val['nama_barang'] : $val['spek'];
             }
             $html .= "<tr>";
-            $html .= "<td>".$spek."</td>";
+            $html .= "<td>".$val['seri_barang'].'. '.$spek."</td>";
             $html .= "<td>".$sku."</td>";
             $html .= "<td>".$val['namasatuan']."</td>";
             $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
@@ -315,6 +321,12 @@ class Out extends CI_Controller {
             $html .= "<td>".$val['nodok']."</td>";
             $html .= "</tr>";
         }
+        $html .= "<tr>";
+        $html .= "<td colspan='3' class='text-end'>TOTAL</td>";
+        $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
+        $html .= "<td class='text-right font-bold'>".rupiah($kgs,4)."</td>";
+        $html .= "<td></td>";
+        $html .= "</tr>";
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
@@ -328,7 +340,7 @@ class Out extends CI_Controller {
        foreach ($data as $val) { 
         $ketbc = $val['bcnomor']!=null ? 'BC. '.trim($val['jns_bc']).'-'.$val['bcnomor'].'('.$val['bctgl'].')' : '';
         $html .= "<tr>";
-        $html .= "<td style='line-height: 13px;'>".$val['nama_barang']." # <span class='text-teal'>".$val['insno'].' '.$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
+        $html .= "<td style='line-height: 13px;'>".$val['seri_barang'].'. '.$val['nama_barang']." # <span class='text-teal'>".$val['insno'].' '.$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
         $html .= "<td>".$val['brg_id']."</td>";
         $html .= "<td>".$val['namasatuan']."</td>";
         $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
