@@ -225,7 +225,8 @@ class Out_model extends CI_Model{
         $this->db->where('a.id_header',$data);
         // $this->db->group_by('c.nama_barang,e.nomor_dok');
         $this->db->group_by('a.id');
-        $this->db->order_by('c.nama_barang','asc');
+        // $this->db->order_by('c.nama_barang','asc');
+        $this->db->order_by('a.seri_barang','asc');
         return $this->db->get()->result_array();    
     }
     public function getdatadetailout($data){
@@ -247,7 +248,9 @@ class Out_model extends CI_Model{
         $this->db->join('tb_po f','f.po = a.po and f.item = a.item '.$nofilt,'left');
         $this->db->join('tb_klppo g','g.id = f.klppo','left');
         $this->db->where('a.id_header'.$this->session->flashdata('barangerror'),$data);
-        $this->db->order_by('c.nama_barang','asc');
+        $this->db->order_by('a.seri_barang','asc');
+        // $this->db->group_by('po,item,dis,id_barang')
+        // $this->db->order_by('c.nama_barang','asc');
         return $this->db->get()->result_array();
     }
     public function getdatadetailoutbyid($data){
