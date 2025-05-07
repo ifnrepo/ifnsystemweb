@@ -306,11 +306,11 @@ class Out extends CI_Controller {
          foreach ($data as $val) {
             $pcs += $val['pcs'];
             $kgs += $val['kgs'];
-            $sku =($val['po']=='') ?$val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
+            $sku =(trim($val['po'])=='') ? $val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
             if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
-                $spek = $val['po']=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
+                $spek = trim($val['po'])=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
             }else{
-                $spek = $val['po']=='' ? $val['nama_barang'] : $val['spek'];
+                $spek = trim($val['po'])=='' ? $val['nama_barang'] : $val['spek'];
             }
             $html .= "<tr>";
             $html .= "<td>".$val['seri_barang'].'. '.$spek."</td>";
