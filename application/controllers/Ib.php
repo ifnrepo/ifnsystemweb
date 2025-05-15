@@ -229,7 +229,7 @@ class Ib extends CI_Controller
     public function simpanib($id)
     {
         $cekdetail = $this->ibmodel->cekdetail($id);
-        if($cekdetail['xharga']==0 && $cekdetail['xkgs']==0){
+        if($cekdetail['xharga']==0 && $cekdetail['kosong']==0){
             $data = [
                 'user_ok' => $this->session->userdata('id'),
                 'data_ok' => 1,
@@ -1271,7 +1271,7 @@ class Ib extends CI_Controller
             "nomorBc11" => $data['bc11'],
             "posBc11" => $data['nomor_posbc11'],
             "seri" => 1,
-            "subposBc11" => $data['nomor_posbc11'],
+            "subposBc11" => $data['nomor_subposbc11'],
             "tanggalBc11" => $data['tgl_bc11'],
             "tanggalTiba" => $data['tgl'],
             "tanggalTtd" => $data['tgl_aju'],
@@ -1538,7 +1538,8 @@ class Ib extends CI_Controller
                 'tgl_bc11' => tglmysql($databalik['tglBc11']),
                 'pelabuhan_bongkar' => $databalik['pelBongkar'],
                 'pelabuhan_muat' => $databalik['pelAsal'],
-                'nomor_posbc11' => $databalik['noPos'],
+                'nomor_posbc11' => substr($databalik['noPos'],0,4),
+                'nomor_subposbc11' => substr($databalik['noPos'],4,8),
                 'jns_angkutan' => $databalik['caraPengangkutan'],
                 'angkutan' => $databalik['namaSaranaPengangkut'],
                 'no_kendaraan' => $databalik['noVoyage'],
