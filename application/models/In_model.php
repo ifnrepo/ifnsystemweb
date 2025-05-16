@@ -34,12 +34,13 @@ class In_model extends CI_Model{
         return $query;
     }
     public function getdatadetail($data){
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,d.spek");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
         $this->db->join('satuan b','b.id = a.id_satuan','left');
         $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->join('tb_po d','d.po = a.po and d.item = a.item and d.dis = a.dis','left');
         $this->db->where('a.id_header',$data);
         return $this->db->get()->result_array();
     }
