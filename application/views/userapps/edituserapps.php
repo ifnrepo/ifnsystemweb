@@ -221,7 +221,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <div class="mb-1 row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
-                <div class="col-11">
+                  <div class="col-11">
                     <label class="row" title="Kunci dan Edit Data Project RND">
                       <span class="col font-bold">Close/Open Project RD</span>
                       <span class="col-auto">
@@ -410,6 +410,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="hakprogram4" name="hakprogram4" type="checkbox" <?= cekceklis($user['hakprogram'], 4); ?>>
                                 <span class="form-check-label">Laboratorium</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakprogram5" name="hakprogram5" type="checkbox" <?= cekceklis($user['hakprogram'], 5); ?>>
+                                <span class="form-check-label">Downtime Mesin</span>
                               </label>
                             </div>
                           </div>
