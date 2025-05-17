@@ -522,7 +522,7 @@ class Out_model extends CI_Model{
                         }else{
                             $iniquery = true;
                             $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
-                            $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. '('.$hasilnya['kode'].')');
+                            $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. ' ('.$hasilnya['kode'].')');
                             $this->session->set_userdata('barangerror',$datdet['id_barang']);
                             break;
                         }
@@ -546,30 +546,10 @@ class Out_model extends CI_Model{
                     $this->db->where($kondisistok);
                     $adaisi = $this->db->get('stokdept');
                     if($adaisi->num_rows()==0){
-                        // $kondisi = [
-                        // // 'tgl' => $datdet['tgl'],
-                        // 'dept_id' => $this->session->userdata('deptsekarang'),
-                        // 'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
-                        // 'nobontr' => $datdet['nobontr'],
-                        // 'insno' => $datdet['insno'],
-                        // 'id_barang' => $datdet['id_barang'],
-                        // 'po' => $datdet['po'],
-                        // 'item' => $datdet['item'],
-                        // 'dis' => $datdet['dis'],
-                        // 'dln' => $datdet['dln'],
-                        // 'nobale' => $datdet['nobale'],
-                        // // 'nomor_bc' => $datdet['nomor_bc'],
-                        // 'harga' => $datdet['harga'],
-                        // 'pcs_masuk' => $datdet['pcs'],
-                        // 'pcs_akhir' => $datdet['pcs'],
-                        // 'kgs_masuk' => $datdet['kgs'],
-                        // 'kgs_akhir' => $datdet['kgs'],
-                        // ];
-                        // $this->db->insert('stokdept',$kondisi);
-                        // $cekid = $this->db->insert_id();
                         $iniquery = true;
                         $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
-                        $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. '('.$hasilnya['kode'].')');
+                        $insno = trim($datdet['insno'])=='' ? '' : 'Insno. '.$datdet['insno'];
+                        $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno. '<br> ID. '.$hasilnya['kode']);
                         $this->session->set_userdata('barangerror',$datdet['id_barang']);
                         break;
                     }else{
@@ -584,7 +564,9 @@ class Out_model extends CI_Model{
                         }else{
                             $iniquery = true;
                             $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
-                            $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. '('.$hasilnya['kode'].')');
+                            $insno = trim($datdet['insno'])=='' ? '' : 'Insno. '.$datdet['insno'];
+                            // $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].' '.$insno. ' ('.$hasilnya['kode'].')');
+                            $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno. '<br> ID. '.$hasilnya['kode']);
                             $this->session->set_userdata('barangerror',$datdet['id_barang']);
                             break;
                         }

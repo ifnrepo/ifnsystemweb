@@ -123,6 +123,7 @@ class In_model extends CI_Model{
                     ];
                     $this->db->insert('stokdept',$kondisi);
                     $cekid = $this->db->insert_id();
+                    $this->helpermodel->isilog($this->db->last_query());
                 }else{
                     $detil = $adaisi->row_array();
                     $this->db->set('pcs_masuk','pcs_masuk +'.$det['pcs'],false);
@@ -131,6 +132,7 @@ class In_model extends CI_Model{
                     $this->db->set('kgs_akhir','kgs_akhir +'.$det['kgs'],false);
                     $this->db->where('id',$detil['id']);
                     $this->db->update('stokdept');
+                    $this->helpermodel->isilog($this->db->last_query());
                 }
                 $this->helpermodel->cekstokdeptraw($det['dept_tuju'],$det['nobontr'],$det['id_barang'],$det['kgs'],$det['pcs'],0);
             }

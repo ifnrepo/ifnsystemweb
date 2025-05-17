@@ -131,7 +131,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <?php if($datdet['nomor_bc']==''){  ?>
                         <span class="text-teal font-kecil">Tunggu Persetujuan Keluar Barang </span>
                         <?php }else{ ?>
-                        <span class="text-teal font-kecil line-12">Barang Sudah Setuju Keluar <br><span class="text-black"><?= $datdet['nomor_sppb']; ?></span></span>
+                        <span class="text-teal font-kecil line-12"><a href='#'>Barang Sudah Setuju Keluar</a><br><span class="text-black"><?= $datdet['nomor_sppb']; ?></span></span>
                       <?php } ?>
                     <?php }else{ ?>
                         <span class="text-teal font-kecil">Tunggu Verifikasi <b>IN</b> Departemen</span>
