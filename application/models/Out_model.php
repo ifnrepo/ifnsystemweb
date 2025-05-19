@@ -795,4 +795,15 @@ class Out_model extends CI_Model{
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         return $this->db->get_where('tb_detail',['tb_detail.id' => $id]);
     }
+    public function validasimarketing($id){
+        $data = [
+            'ok_valid' => 1,
+            'user_valid' => $this->session->userdata('id'),
+            'tgl_valid' => date('Y-m-d H:i:s'),
+            'id' => $id,
+        ];
+        $this->db->where('id',$id);
+        $hasil = $this->db->update('tb_header',$data);
+        return $hasil;
+    }
 }

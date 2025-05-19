@@ -414,6 +414,13 @@ class Out extends CI_Controller {
             redirect($url);
         }
     }
+    public function validasimarketing($id){
+        $hasil = $this->out_model->validasimarketing($id);
+        if ($hasil) {
+            $url = base_url() . 'out';
+            redirect($url);
+        }
+    }
     public function editcustomer()
     {
         $this->load->view('out/editcustomer');

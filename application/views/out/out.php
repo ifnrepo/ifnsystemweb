@@ -128,13 +128,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_tuju']==1 && $datdet['ok_valid']==1) { ?>
                       <a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
                     <?php }else { if($datdet['dept_tuju']=='CU'){  ?>
-                      <?php if($datdet['nomor_bc']==''){  ?>
+                      <?php if($datdet['nomor_bc']==''){ $inoleh = $datdet['dept_tuju']=='CU' ? 'Marketing' : 'Departemen';  ?>
                         <span class="text-teal font-kecil">Tunggu Persetujuan Keluar Barang </span>
                         <?php }else{ ?>
-                        <span class="text-teal font-kecil line-12"><a href='#'>Barang Sudah Setuju Keluar</a><br><span class="text-black"><?= $datdet['nomor_sppb']; ?></span></span>
+                        <span class="text-teal font-kecil line-12"><a href='#' title="Klik untuk menyetujui" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Validasi OUT <br><?= $datdet['nomor_dok']; ?>" data-href="<?= base_url() . 'out/validasimarketing/' . $datdet['id'] ?>">Barang Sudah Setuju Keluar</a><br><span class="text-black"><?= $datdet['nomor_sppb']; ?></span></span>
                       <?php } ?>
                     <?php }else{ ?>
-                        <span class="text-teal font-kecil">Tunggu Verifikasi <b>IN</b> Departemen</span>
+                        <span class="text-teal font-kecil">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>
                     <?php }} ?>
                   </td>
                 </tr>

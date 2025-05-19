@@ -71,8 +71,8 @@ class Ib_model extends CI_Model
     }
     public function getnomorib($bl, $th)
     {
-        $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,14,3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'IB' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_tuju = '" . $this->session->userdata('depttuju') . "' ")->row_array();
+        $hasil = $this->db->query("SELECT MAX(substr(nomor_dok,14,3)) AS maxkode FROM tb_header 
+        WHERE kode_dok = 'IB' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_tuju = '" . $this->session->userdata('depttuju') . "' " )->row_array();
         return $hasil;
     }
     public function tambahdataib()
