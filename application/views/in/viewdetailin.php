@@ -45,9 +45,12 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                <?php foreach ($detail as $val) { ?>
+                                <?php 
+                                    foreach ($detail as $val) { 
+                                    $namabar = trim($val['po'])=='' ? $val['nama_barang'] : $val['spek'];
+                                ?>
                                     <tr>
-                                        <td><?= $val['nama_barang']; ?></td>
+                                        <td><?= $val['seri_barang'].'. '.$namabar; ?></td>
                                         <td><?= $val['brg_id']; ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= rupiah($val['pcs'], 0); ?></td>

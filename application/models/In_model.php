@@ -34,12 +34,13 @@ class In_model extends CI_Model{
         return $query;
     }
     public function getdatadetail($data){
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,d.spek");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
         $this->db->join('satuan b','b.id = a.id_satuan','left');
         $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->join('tb_po d','d.po = a.po and d.item = a.item and d.dis = a.dis','left');
         $this->db->where('a.id_header',$data);
         return $this->db->get()->result_array();
     }
@@ -94,7 +95,8 @@ class In_model extends CI_Model{
                     'dln' => $det['dln'],
                     'nobale' => $det['nobale'],
                     'harga' => $det['harga'],
-                    'stok' => $det['stok']
+                    'stok' => $det['stok'],
+                    'exnet' => $det['exnet']
                 ];
                 $this->db->where($kondisistok);
                 $adaisi = $this->db->get('stokdept');
@@ -113,6 +115,7 @@ class In_model extends CI_Model{
                     'nobale' => $det['nobale'],
                     'nomor_bc' => $det['nomor_bc'],
                     'harga' => $det['harga'],
+                    'exnet' => $det['exnet'],
                     'pcs_masuk' => $det['pcs'],
                     'pcs_akhir' => $det['pcs'],
                     'kgs_masuk' => $det['kgs'],
@@ -120,6 +123,7 @@ class In_model extends CI_Model{
                     ];
                     $this->db->insert('stokdept',$kondisi);
                     $cekid = $this->db->insert_id();
+                    $this->helpermodel->isilog($this->db->last_query());
                 }else{
                     $detil = $adaisi->row_array();
                     $this->db->set('pcs_masuk','pcs_masuk +'.$det['pcs'],false);
@@ -128,6 +132,7 @@ class In_model extends CI_Model{
                     $this->db->set('kgs_akhir','kgs_akhir +'.$det['kgs'],false);
                     $this->db->where('id',$detil['id']);
                     $this->db->update('stokdept');
+                    $this->helpermodel->isilog($this->db->last_query());
                 }
                 $this->helpermodel->cekstokdeptraw($det['dept_tuju'],$det['nobontr'],$det['id_barang'],$det['kgs'],$det['pcs'],0);
             }

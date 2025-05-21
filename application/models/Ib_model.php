@@ -71,8 +71,8 @@ class Ib_model extends CI_Model
     }
     public function getnomorib($bl, $th)
     {
-        $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,14,3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'IB' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_tuju = '" . $this->session->userdata('depttuju') . "' ")->row_array();
+        $hasil = $this->db->query("SELECT MAX(substr(nomor_dok,14,3)) AS maxkode FROM tb_header 
+        WHERE kode_dok = 'IB' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_tuju = '" . $this->session->userdata('depttuju') . "' " )->row_array();
         return $hasil;
     }
     public function tambahdataib()
@@ -312,7 +312,8 @@ class Ib_model extends CI_Model
             'xkgs' => 0,
             'xpcs' => 0,
             'totalharga' => 0,
-            'kgs' => 0.00
+            'kgs' => 0.00,
+            'kosong' => 0,
         ];
         $qry = $this->db->where('id_header',$id)->get('tb_detail');
         foreach ($qry->result_array() as $isidata) {
@@ -326,8 +327,12 @@ class Ib_model extends CI_Model
             }
             if($isidata['pcs']==0){
                 $cekarr['totalharga'] += $isidata['kgs']*$isidata['harga'];
+                $cekarr['xpcs']++;
             }else{
                 $cekarr['totalharga'] += $isidata['pcs']*$isidata['harga'];
+            }
+            if($isidata['pcs']==0 && $isidata['kgs']==0){
+                $cekerr['kosong']++;
             }
         }
         // $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
@@ -777,8 +782,26 @@ class Ib_model extends CI_Model
         $hasil = 1;
         if($cekdata->num_rows() == 0){
             $this->db->trans_start();
-            for ($i=0; $i <= 1; $i++) { 
+            for ($i=0; $i <= 3; $i++) { 
                 $kodelampiran = $i==0 ? '380' : '705';
+                $kodelampiran = $i==0 ? '380' : '705';
+                switch ($i) {
+                    case 0:
+                        $kodelampiran = '380';
+                        break;
+                    case 1:
+                        $kodelampiran = '705';
+                        break;
+                    case 2:
+                        $kodelampiran = '217';
+                        break;
+                    case 3:
+                        $kodelampiran = '860';
+                        break;
+                    default:
+                        # code...
+                        break;
+                }
                 $data = [
                     'id_header' => $id,
                     'kode_dokumen' => $kodelampiran

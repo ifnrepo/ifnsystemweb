@@ -148,8 +148,8 @@ class Po extends CI_Controller
             $hasil .= "<td>" . $que['brg_id'] . "</td>";
             $hasil .= "<td>" . rupiah($tampil, 0) . "</td>";
             $hasil .= "<td>" . $que['namasatuan'] . "</td>";
-            $hasil .= "<td>" . rupiah($que['harga'], 0) . "</td>";
-            $hasil .= "<td>" . rupiah($que['harga']*$tampil, 0) . "</td>";
+            $hasil .= "<td>" . rupiah($que['harga'], 4) . "</td>";
+            $hasil .= "<td>" . rupiah($que['harga']*$tampil, 2) . "</td>";
             $hasil .= "<td>";
             $hasil .= "<a href=" . base_url() . 'po/editdetailpo/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
             $hasil .= "<a href='#' data-href=" . base_url() . 'po/hapusdetailpo/' . $que['id'] .'/'.$que['id_header']. " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";

@@ -81,8 +81,12 @@ class Out extends CI_Controller {
             $tandakurang = $this->session->userdata('barangerror')==$que['id_barang'] ? 'text-danger' : '';
             $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
             $sku = $que['brg_id']=='' ? $que['po'].'#'.$que['item'].$dis : $que['brg_id'];
+            $infoinsno = '';
+            if($this->session->userdata('deptsekarang')=='NT'){
+                $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
+            }
             $hasil .= "<tr>";
-            $hasil .= "<td><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['nama_barang'].$que['spek']."</a></td>";
+            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['nama_barang'].$que['spek'].$infoinsno."</a></td>";
             $hasil .= "<td>".$sku."</td>";
             $hasil .= "<td>".$que['kodesatuan']."</td>";
                 $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
@@ -306,14 +310,18 @@ class Out extends CI_Controller {
          foreach ($data as $val) {
             $pcs += $val['pcs'];
             $kgs += $val['kgs'];
-            $sku =($val['po']=='') ?$val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
+            $infoinsno = '';
+            $sku =(trim($val['po'])=='') ? $val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
             if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
-                $spek = $val['po']=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
+                $spek = trim($val['po'])=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
             }else{
-                $spek = $val['po']=='' ? $val['nama_barang'] : $val['spek'];
+                $spek = trim($val['po'])=='' ? $val['nama_barang'] : $val['spek'];
+            }
+            if($this->session->userdata('deptsekarang')=='NT'){
+                $infoinsno = "<br><span class='text-teal font-kecil'>".$val['insno']."</span>";
             }
             $html .= "<tr>";
-            $html .= "<td>".$val['seri_barang'].'. '.$spek."</td>";
+            $html .= "<td class='line-12'>".$val['seri_barang'].'. '.$spek.$infoinsno."</td>";
             $html .= "<td>".$sku."</td>";
             $html .= "<td>".$val['namasatuan']."</td>";
             $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
@@ -403,6 +411,13 @@ class Out extends CI_Controller {
         if ($hasil) {
             $kode = $hasil['id'];
             $url = base_url() . 'out/dataout/' . $kode;
+            redirect($url);
+        }
+    }
+    public function validasimarketing($id){
+        $hasil = $this->out_model->validasimarketing($id);
+        if ($hasil) {
+            $url = base_url() . 'out';
             redirect($url);
         }
     }

@@ -24,8 +24,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="card">
       <div class="card-body">
         <div id="sisipkan">
-          <div class="mb-1">
-          </div>
+          <?php if($this->session->flashdata('errornya')!=''): ?>
+            <div class="alert alert-important alert-danger alert-dismissible bg-danger-lt mb-1" role="alert">
+              <div class="d-flex"> 
+                <div class="font-kecil">
+                  <span class="text-black font-bold">INFORMATION</span><br>
+                  <?= $this->session->flashdata('errornya'); ?>
+                </div>
+              </div>
+              <a class="btn-close text-black font-bold" data-bs-dismiss="alert" aria-label="close"></a>
+            </div>
+            <?php endif; ?>
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
               <div class="row">

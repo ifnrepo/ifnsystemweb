@@ -10,7 +10,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
-        <a href="<?= base_url().'in/clear'; ?>" class="btn btn-primary btn-sm" ><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+        <a href="<?= base_url().'in'; ?>" class="btn btn-primary btn-sm" ><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
       </div>
     </div>
   </div>
@@ -67,12 +67,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-            <?php $no=1; $noverif=0; foreach ($detail as $datdet) { $noverif += $datdet['verif_oleh']==null ? 0 : 1; ?>
+            <?php $no=1; $noverif=0; foreach ($detail as $datdet) { $noverif += $datdet['verif_oleh']==null ? 0 : 1; 
+              $namabar = trim($datdet['po'])=='' ? $datdet['nama_barang'] : $datdet['spek']; 
+              $dis = $datdet['dis']==0 ? '' : ' dis '.$datdet['dis'];
+              $sku = trim($datdet['po'])=='' ? $datdet['kode'] : $datdet['po'].'#'.$datdet['item'].$dis;
+              $satuan = $datdet['id_satuan']==0 ? 'PCS' : $datdet['namasatuan'];
+              ?>
               <tr>
                 <td><?= $no++; ?></td>
-                <td><?=$datdet['nama_barang'] ?></td>
-                <td><?=$datdet['kode'] ?></td>
-                <td><?=$datdet['namasatuan'] ?></td>
+                <td><?= $namabar; ?></td>
+                <td><?= $sku; ?></td>
+                <td><?= $satuan; ?></td>
                 <td><?=rupiah($datdet['pcs'],0) ?></td>
                 <td><?=rupiah($datdet['kgs'],2) ?></td>
                 <td class="text-center">
