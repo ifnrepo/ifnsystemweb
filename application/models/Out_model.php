@@ -107,8 +107,9 @@ class Out_model extends CI_Model{
             'b.data_ok' => 1,
             'b.ok_valid' => 1,
             'b.ok_tuju' => 0,
-            'month(b.tgl) <=' => $this->session->userdata('bl'),
-            'year(b.tgl) <=' => $this->session->userdata('th')
+            // 'month(b.tgl) <=' => $this->session->userdata('bl'),
+            // 'year(b.tgl) <=' => $this->session->userdata('th')
+            'b.tgl <= ' => date('Y-m-d')
         ];
         $this->db->select('b.nomor_dok,b.tgl');
         $this->db->from('tb_detail a');
@@ -129,8 +130,9 @@ class Out_model extends CI_Model{
             'b.data_ok' => 1,
             'b.ok_valid' => 1,
             'b.ok_tuju' => 0,
-            'month(b.tgl) <=' => $this->session->userdata('bl'),
-            'year(b.tgl) <=' => $this->session->userdata('th')
+            // 'month(b.tgl) <=' => $this->session->userdata('bl'),
+            // 'year(b.tgl) <=' => $this->session->userdata('th')
+            'b.tgl <= ' => date('Y-m-d')
         ];
         $this->db->select('*,a.keterangan as keteranganx,a.id as idx');
         $this->db->from('tb_detail a');
@@ -540,7 +542,7 @@ class Out_model extends CI_Model{
                         'dis' => $datdet['dis'],
                         'dln' => $datdet['dln'],
                         'nobale' => $datdet['nobale'],
-                        'exnet' => $datdet['exnet'],
+                        // 'exnet' => $datdet['exnet'], // Sementara untuk Ex-Netting diabaikan dulu
                         'stok' => $datdet['stok']
                     ];
                     $this->db->where($kondisistok);

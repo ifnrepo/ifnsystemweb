@@ -29,7 +29,7 @@
             <div class="row mt-1">
                 <label class="col-3 col-form-label">Harga / Satuan</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil inputangka" id="harga" placeholder="Harga" value="<?php if($data['harga']!=0) { echo rupiah($data['harga'],2); } ?>" autocomplete="off">
+                    <input type="text" class="form-control font-kecil inputangka" id="harga" placeholder="Harga" value="<?php if($data['harga']!=0) { echo rupiah($data['harga'],4); } ?>" autocomplete="off">
                 </div>
             </div>
         </div>
@@ -48,7 +48,7 @@
             return value
                 .replace(/(?!\.)\D/g, "")
                 .replace(/(?<=\..*)\./g, "")
-                .replace(/(?<=\.\d\d).*/g, "")
+                .replace(/(?<=\.\d\d\d\d).*/g, "")
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });

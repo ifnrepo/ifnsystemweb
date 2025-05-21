@@ -171,6 +171,8 @@ class Bbl_model extends CI_Model
         $this->db->join('tb_detail b','b.id_bbl = a.id','left');
         $this->db->join('tb_header c','c.id = b.id_header','left');
         $this->db->where('a.id_header', $data);
+        $this->db->group_by('a.id');
+        $this->db->order_by('barang.nama_barang,a.id');
         return $this->db->get();
     }
 
@@ -263,7 +265,7 @@ class Bbl_model extends CI_Model
     public function getdata_byid($id_header, $id_barang)
     {
         $this->db->where('id_header', $id_header);
-        $this->db->where('id_barang', $id_barang);
+        $this->db->where('id', $id_barang);
         $query = $this->db->get('tb_detail');
         return $query->row_array();
     }
@@ -279,7 +281,7 @@ class Bbl_model extends CI_Model
 
     public function update_id_bbl($id_barang, $new_id_bbl,$id_header)
     {
-        $this->db->where('id_barang', $id_barang);
+        $this->db->where('id', $id_barang);
         $this->db->where('id_header', $id_header);
         $this->db->update('tb_detail', array('id_bbl' => $new_id_bbl));
     }

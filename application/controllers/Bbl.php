@@ -217,7 +217,7 @@ class Bbl extends CI_Controller
         $id_header_session = $this->input->post('id_header_session');
         $id_barang = $this->input->post('id_barang');
         $iddetail = $this->input->post('id_detail_barang');
-        $data_barang = $this->bbl_model->getdata_byid($id_header, $id_barang);
+        $data_barang = $this->bbl_model->getdata_byid($id_header, $iddetail);
         $url = base_url() . 'bbl/databbl/';
 
         if ($data_barang) {
@@ -228,7 +228,7 @@ class Bbl extends CI_Controller
 
             if ($insert_data) {
                 foreach ($insert_data as $item) {
-                    $this->bbl_model->update_id_bbl($id_barang, $item['id'],$id_header);
+                    $this->bbl_model->update_id_bbl($iddetail, $item['id'],$id_header);
                 }
                 redirect($url . $id_header_session);
             } else {
