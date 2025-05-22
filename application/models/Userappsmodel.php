@@ -121,6 +121,14 @@ class Userappsmodel extends CI_Model
                 unset($data['rfid' . $x]);
             }
         }
+        // set hakdowntime
+        $hakdowntime = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['hakdowntime' . $x])) {
+                $hakdowntime = substr_replace($hakdowntime, '10', ($x * 2) - 2, 2);
+                unset($data['hakdowntime' . $x]);
+            }
+        }
 
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
@@ -129,6 +137,7 @@ class Userappsmodel extends CI_Model
         $data['setting'] = $setting;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['rfid'] = $rfid;
+        $data['hakdowntimw'] = $hakdowntime;
         $data['cekpb'] = $cekpb;
         $datdept = $this->deptmodel->getdata();
         $cekmng = '';
@@ -252,6 +261,15 @@ class Userappsmodel extends CI_Model
                 unset($data['rfid' . $x]);
             }
         }
+
+        // Set modul hakdowntime
+        $hakdowntime = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['hakdowntime' . $x])) {
+                $hakdowntime = substr_replace($hakdowntime, '10', ($x * 2) - 2, 2);
+                unset($data['hakdowntime' . $x]);
+            }
+        }
         // if(str_contains($rfid,'10')){
         //     $rfid = '10'.$rfid;
         // }
@@ -263,6 +281,7 @@ class Userappsmodel extends CI_Model
         $data['manajemen'] = $manajemen;
         $data['setting'] = $setting;
         $data['rfid'] = $rfid;
+        $data['hakdowntime'] = $hakdowntime;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['cekpb'] = $cekpb;
         // $data['cekpc'] = $cekpc;
@@ -302,6 +321,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('manajemen', $cek['manajemen']);
             $this->session->set_userdata('setting', $cek['setting']);
             $this->session->set_userdata('rfid', $cek['rfid']);
+            $this->session->set_userdata('hakdowntime', $cek['hakdowntime']);
             $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
             $this->session->set_userdata('arrdep', arrdep($cek['hakdepartemen']));
             $this->session->set_userdata('hak_ttd_pb', arrdep($cek['cekpb']));

@@ -272,6 +272,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <li class="nav-item">
                           <a href="#tabs-ceklisbbl" class="nav-link text-blue mb-1" data-bs-toggle="tab">Validasi BBL</a>
                         </li>
+                        <li class="nav-item">
+                          <a href="#tabs-hakdowntime-1" class="nav-link text-blue mb-1" data-bs-toggle="tab">Hak Downtime</a>
+                        </li>
                       </ul>
                     </div>
                     <div class="card-body">
@@ -301,7 +304,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
 
                             </div>
-
                           </div>
                         </div>
 
@@ -665,6 +667,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="form-check-label font-bold">VALIDASI BBL (Manager Purchasing/Menyetujui) - Executor</span>
                             </div>
                             </label>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane" id="tabs-hakdowntime-1">
+                          <div class="row">
+                            <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
+                            <div class="col">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakdowntime1" name="hakdowntime1" type="checkbox">
+                                <span class="form-check-label">Finishing</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakdowntime2" name="hakdowntime2" type="checkbox">
+                                <span class="form-check-label">Netting</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakdowntime3" name="hakdowntime3" type="checkbox">
+                                <span class="form-check-label">Ringrope</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakdowntime4" name="hakdowntime4" type="checkbox">
+                                <span class="form-check-label">Spinning</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakdowntime5" name="hakdowntime5" type="checkbox">
+                                <span class="form-check-label">Utility</span>
+                              </label>
+                            </div>
                           </div>
                         </div>
                         <!-- <div class="row">
