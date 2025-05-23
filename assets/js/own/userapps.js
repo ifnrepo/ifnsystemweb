@@ -6,6 +6,7 @@ $(document).ready(function () {
 	}
 	$("#cekmng").change();
 	$("#ceksgm").change();
+	$("#hakprogram4").change();
 });
 $("#tambahuser").click(function () {
 	if ($("#name").val() == "") {
@@ -115,5 +116,12 @@ $("#ceksgm").change(function () {
 		$("#iniceksgm").removeClass("hilang");
 	} else {
 		$("#iniceksgm").addClass("hilang");
+	}
+});
+$("#hakprogram4").change(function () {
+	if ($(this).is(":checked")) {
+		$("#cekeventrahasia").removeClass("hilang");
+	} else {
+		$("#cekeventrahasia").addClass("hilang");
 	}
 });
