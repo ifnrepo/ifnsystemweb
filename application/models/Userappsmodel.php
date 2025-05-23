@@ -137,7 +137,7 @@ class Userappsmodel extends CI_Model
         $data['setting'] = $setting;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['rfid'] = $rfid;
-        $data['hakdowntimw'] = $hakdowntime;
+        $data['hakdowntime'] = $hakdowntime;
         $data['cekpb'] = $cekpb;
         $datdept = $this->deptmodel->getdata();
         $cekmng = '';
