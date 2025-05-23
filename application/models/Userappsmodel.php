@@ -69,6 +69,9 @@ class Userappsmodel extends CI_Model
             if (isset($data['hakprogram' . $x])) {
                 $hakprogram = substr_replace($hakprogram, '10', ($x * 2) - 2, 2);
                 unset($data['hakprogram' . $x]);
+                if($x==4){
+                    $data['hakeventrahasia'] = isset($data['hakeventrahasia']) ? 1 : 0;
+                }
             }
         }
         // Set Modul Other
@@ -206,6 +209,9 @@ class Userappsmodel extends CI_Model
             if (isset($data['hakprogram' . $x])) {
                 $hakprogram = substr_replace($hakprogram, '10', ($x * 2) - 2, 2);
                 unset($data['hakprogram' . $x]);
+                if($x==4){
+                    $data['hakeventrahasia'] = isset($data['hakeventrahasia']) ? 1 : 0;
+                }
             }
         }
 

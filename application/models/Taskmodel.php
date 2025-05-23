@@ -250,7 +250,7 @@ class Taskmodel extends CI_Model
         $lvluser = datauser($this->session->userdata('id'),'id_level_user');
         $hakttdpb = arrdep(datauser($this->session->userdata('id'),'hakdepartemen'));
         $hakcekpb = arrdep(datauser($this->session->userdata('id'),'cekpb'));
-        for($ini=0;$ini<5;$ini++){
+        for($ini=0;$ini<=4;$ini++){
             switch ($ini) {
                 case 0:
                     $mode = 'pb';
@@ -291,6 +291,7 @@ class Taskmodel extends CI_Model
             }
             //Cek Validasi PO
             if($mode=='po' && datauser($this->session->userdata('id'),'cekpo')==1){
+                $this->db->where('kode_dok','PO');
                 $this->db->where('id_perusahaan', IDPERUSAHAAN);
                 $this->db->where('data_ok', 1);
                 $this->db->where('ok_valid', 0);
@@ -298,6 +299,7 @@ class Taskmodel extends CI_Model
             }
             //Cek Validasi ADJ
             if($mode == 'adj' && datauser($this->session->userdata('id'),'cekadj')==1){
+                $this->db->where('kode_dok','ADJ');
                 $this->db->where('data_ok', 1);
                 $this->db->where('ok_valid', 0);
                 $this->db->where_in('dept_id', $hakttdpb);

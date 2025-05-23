@@ -191,7 +191,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-primary-lt">
+              <div class="row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -297,6 +297,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="hakprogram4" name="hakprogram4" type="checkbox">
                                 <span class="form-check-label">Laboratorium</span>
+                              </label>
+                              <label class="row" title="Hak View Event" id="cekeventrahasia">
+                                <span class="col-auto">
+                                  <label class="form-check form-check-single form-switch">
+                                    <input class="form-check-input" name="hakeventrahasia" id="hakeventrahasia" type="checkbox" >
+                                  </label>
+                                </span>
+                                <span class="col font-bold ml-4">View Rahasia</span>
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="hakprogram5" name="hakprogram5" type="checkbox">
