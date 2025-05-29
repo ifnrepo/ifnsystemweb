@@ -60,11 +60,19 @@
       <div class="text-center text-secondary mt-1">
         <a href="/" tabindex="-1" title="Kembali ke Halaman depan">Kembali</a>
       </div>
-      <!-- <div class="text-center text-primary mt-3">
+      <div class="text-center text-primary mt-3">
         <b>Other Apps</b>
         <hr style="width: 25%; display: block;margin:5px auto;">
         <div style="margin-top: 10px;">
-          <a href="http://localhost/myifn2" class="tombolbulat">
+          <!-- <span class="bg-danger text-center"> -->
+            <div class="divtombolbulat">
+              <a href="/downtime" class="tombolbulat text-center">
+                <img src="assets/image/logo4.png" alt="No Picture" >
+                <div>DOWNTIME</div>
+              </a>
+            </div>
+          <!-- </span> -->
+          <!-- <a href="#" class="tombolbulat">
             <img src="assets/image/bg1.jpg" alt="No Picture" >
           </a>
           <a href="#" class="tombolbulat">
@@ -72,9 +80,9 @@
           </a>
           <a href="#" class="tombolbulat">
             <img src="assets/image/bg1.jpg" alt="No Picture" >
-          </a>
+          </a> -->
         </div>
-      </div> -->
+      </div>
     </div>
   </div>
   <div class="col-12 col-lg-6 col-xl-8 d-none d-lg-block">

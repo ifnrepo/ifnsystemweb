@@ -41,7 +41,21 @@ $("#tambahuser").click(function () {
 		pesan("Password tidak boleh kosong !", "error");
 		return;
 	}
-	document.formtambahuser.submit();
+	$.ajax({
+		url: base_url + "userapps/cekusername", // Ubah ke URL controller yang tepat
+		type: "POST",
+		data: { data: $("#username").val() },
+		success: function (response) {
+			if (response == 0) {
+				document.formtambahuser.submit();
+			} else {
+				pesan("Username sudah ada yang memakai, ganti Username !", "error");
+			}
+		},
+		error: function (xhr, status, error) {
+			console.error("AJAX Error: ", status, error);
+		},
+	});
 });
 
 $("#edituser").click(function () {

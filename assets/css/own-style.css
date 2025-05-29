@@ -106,11 +106,28 @@
 }
 
 /* Login style button  */
+.divtombolbulat {
+	display: flex;
+	justify-content: center !important;
+}
+.divtombolbulat a {
+	margin: 0 3px;
+	text-decoration-color: rgb(68, 67, 67);
+}
+.tombolbulat {
+	font-weight: bold !important;
+	font-size: 12px !important;
+	text-align: center;
+}
 .tombolbulat img {
 	height: 65px !important;
 	width: 65px !important;
 	border-radius: 50%;
-	margin-right: 15px;
+	/* margin-right: 15px; */
+	border: 2px solid black;
+}
+.tombolbulat div {
+	color: rgb(68, 67, 67);
 }
 .font-hitam {
 	color: black !important;
