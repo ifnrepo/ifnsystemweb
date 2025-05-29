@@ -166,7 +166,6 @@ class Userappsmodel extends CI_Model
         $data['bbl_cekmng'] = $cekmng;
         $data['bbl_ceksgm'] = $ceksgm;
         $hasil = $this->db->insert('user', $data);
-        $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
     public function updatedata()
@@ -361,5 +360,8 @@ class Userappsmodel extends CI_Model
         $this->session->set_userdata('cekpo', $cek['cekpo']);
         $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
         return 1;
+    }
+    public function cekusername($data){
+        return $this->db->get_where('user',['username'=>$data])->num_rows();
     }
 }

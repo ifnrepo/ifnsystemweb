@@ -12,7 +12,7 @@
     <link href="<?= base_url(); ?>assets/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
     <link href="<?= base_url(); ?>assets/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
     <link href="<?= base_url(); ?>assets/css/demo.min.css?1692870487" rel="stylesheet"/>
-    <link href="<?= base_url(); ?>assets/css/own-style.css?1692870487" rel="stylesheet"/>
+    <link href="<?= base_url(); ?>assets/css/own-style.css?1748502555" rel="stylesheet"/>
     <style>
       /* @import url('https://rsms.me/inter/inter.css'); */
       :root {

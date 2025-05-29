@@ -271,9 +271,11 @@ class Out_model extends CI_Model{
         return $query;
     }
     public function updatedetail($data){
-        $this->db->where('id_detail',$data['id']);
+        $id = $data['id'];
+        unset($data['id']);
+        $this->db->where('id_detail',$id);
         $this->db->update('tb_detailgen',$data);
-        $this->db->where('id',$data['id']);
+        $this->db->where('id',$id);
         $query = $this->db->update('tb_detail',$data);
         return $query;
     }
@@ -416,7 +418,7 @@ class Out_model extends CI_Model{
                         'dis' => $datdet['dis'],
                         'dln' => $datdet['dln'],
                         'nobale' => $datdet['nobale'],
-                        'harga' => $datdet['harga'],
+                        // 'harga' => $datdet['harga'],
                         'stok' => $datdet['stok'],
                     ];
                 }
@@ -474,9 +476,9 @@ class Out_model extends CI_Model{
                                 if($loopke > 1){
                                     // insert ke tabel detail apabila stokdept menguragi 2 rekord
                                     unset($datdet['id']);
-                                    unset($datdet['id_detail']);
-                                    $this->db->insert('tb_detail',$datdet);
-                                    $idinsert = $this->db->insert_id();
+                                    // unset($datdet['id_detail']);
+                                    // $this->db->insert('tb_detail',$datdet);
+                                    $idinsert = $datdet['id_detail']; //$this->db->insert_id();
                                     $this->db->insert('tb_detailgen',$datdet);
                                     $idinsertx = $this->db->insert_id();
 
@@ -484,11 +486,11 @@ class Out_model extends CI_Model{
                                     if($this->session->userdata('deptsekarang')=='GM'){
                                         $this->db->set('nobontr',$nobontr);
                                     }
-                                    $this->db->set('pcs',$kurangpcs);
-                                    $this->db->set('kgs',$kurangkgs);
-                                    $this->db->set('harga',$deta['harga']);
-                                    $this->db->where('id',$idinsert);
-                                    $this->db->update('tb_detail');
+                                    // $this->db->set('pcs',$kurangpcs);
+                                    // $this->db->set('kgs',$kurangkgs);
+                                    // $this->db->set('harga',$deta['harga']);
+                                    // $this->db->where('id',$idinsert);
+                                    // $this->db->update('tb_detail');
 
                                     $this->db->set('id_stokdept',$stokid);
                                     $this->db->set('nobontr',$nobontr);
@@ -524,7 +526,10 @@ class Out_model extends CI_Model{
                         }else{
                             $iniquery = true;
                             $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
-                            $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. ' ('.$hasilnya['kode'].')');
+                            $insno = trim($datdet['insno'])=='' ? '' : 'Insno. '.$datdet['insno'];
+                            $nobontr = trim($datdet['nobontr'])=='' ? '' : ' IB. '.$datdet['nobontr'];
+                            // $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. ' ('.$hasilnya['kode'].')');
+                            $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
                             $this->session->set_userdata('barangerror',$datdet['id_barang']);
                             break;
                         }
@@ -551,7 +556,8 @@ class Out_model extends CI_Model{
                         $iniquery = true;
                         $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
                         $insno = trim($datdet['insno'])=='' ? '' : 'Insno. '.$datdet['insno'];
-                        $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno. '<br> ID. '.$hasilnya['kode']);
+                        $nobontr = trim($datdet['nobontr'])=='' ? '' : ' IB. '.$datdet['nobontr'];
+                        $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
                         $this->session->set_userdata('barangerror',$datdet['id_barang']);
                         break;
                     }else{
@@ -566,9 +572,10 @@ class Out_model extends CI_Model{
                         }else{
                             $iniquery = true;
                             $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
-                            $insno = trim($datdet['insno'])=='' ? '' : 'Insno. '.$datdet['insno'];
+                            $insno = trim($datdet['insno'])=='' ? '' : ' Insno. '.$datdet['insno'];
+                            $nobontr = trim($datdet['nobontr'])=='' ? '' : ' IB. '.$datdet['nobontr'];
                             // $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].' '.$insno. ' ('.$hasilnya['kode'].')');
-                            $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno. '<br> ID. '.$hasilnya['kode']);
+                            $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
                             $this->session->set_userdata('barangerror',$datdet['id_barang']);
                             break;
                         }

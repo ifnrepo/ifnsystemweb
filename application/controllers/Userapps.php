@@ -99,4 +99,9 @@ class Userapps extends CI_Controller
 			redirect($url);
 		}
 	}
+	public function cekusername(){
+		$data = $_POST['data'];
+		$hasil = $this->userappsmodel->cekusername($data);
+		echo $hasil;
+	}
 }
