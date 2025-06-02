@@ -427,49 +427,94 @@ class Taskmodel extends CI_Model
         public function validasiadj($data)
     {
         $this->db->trans_start();
+        // $detail = $this->db->get_where('tb_detail',['id_header'=>$data['id']]);
+        // foreach ($detail->result_array() as $dtl) {
+        //     // Cek Stok Barang untuk departemen ini
+        //     $header = $this->db->get_where('tb_header',['id'=>$data['id']])->row_array();
+        //     $this->db->where('dept_id',$header['dept_id']);
+        //     $this->db->where('periode',date('m').date('Y'));
+        //     $this->db->where('id_barang',$dtl['id_barang']);
+        //     $this->db->where('po',$dtl['po']);
+        //     $this->db->where('item',$dtl['item']);
+        //     $this->db->where('dis',$dtl['dis']);
+        //     $this->db->where('insno',$dtl['insno']);
+        //     $this->db->where('nobontr',$dtl['nobontr']);
+        //     $this->db->where('dln',$dtl['dln']);
+        //     $this->db->where('nobale',$dtl['nobale']);
+        //     $hasil = $this->db->get('stokdept');
+        //     if($hasil->num_rows() > 0){
+        //         $stokdept = $hasil->row_array();
+        //         // update kgs_akhir di tabel stokdept
+        //         $this->db->set('pcs_adj','pcs_adj + '.$dtl['pcs'],FALSE);
+        //         $this->db->set('kgs_adj','kgs_adj + '.$dtl['kgs'],FALSE);
+        //         $this->db->set('pcs_akhir','pcs_akhir +'.$dtl['pcs'],FALSE);
+        //         $this->db->set('kgs_akhir','kgs_akhir +'.$dtl['kgs'],FALSE);
+        //         $this->db->where('id',$stokdept['id']);
+        //         $this->db->update('stokdept');
+        //     }else{
+        //         $opto = [
+        //             'dept_id' => $header['dept_id'],
+        //             'periode' => date('m').date('Y'),
+        //             'nobontr' => $dtl['nobontr'],
+        //             'po' => $dtl['po'],
+        //             'item' => $dtl['item'],
+        //             'dis' => $dtl['dis'],
+        //             'insno' => $dtl['insno'],
+        //             'id_barang' => $dtl['id_barang'],
+        //             'dln' => $dtl['dln'],
+        //             'nobale' => $dtl['nobale'],
+        //             'stok' => $dtl['stok'],
+        //             'pcs_adj' => $dtl['pcs'],
+        //             'kgs_adj' => $dtl['kgs'],
+        //             'pcs_akhir' => $dtl['pcs'],
+        //             'kgs_akhir' => $dtl['kgs']
+        //         ];
+        //         $this->db->insert('stokdept',$opto);
+        //     }
+        // }
+        $header = $this->db->get_where('tb_header',['id'=>$data['id']])->row_array();
         $detail = $this->db->get_where('tb_detail',['id_header'=>$data['id']]);
-        foreach ($detail->result_array() as $dtl) {
-            // Cek Stok Barang untuk departemen ini
-            $header = $this->db->get_where('tb_header',['id'=>$data['id']])->row_array();
-            $this->db->where('dept_id',$header['dept_id']);
-            $this->db->where('periode',date('m').date('Y'));
-            $this->db->where('id_barang',$dtl['id_barang']);
-            $this->db->where('po',$dtl['po']);
-            $this->db->where('item',$dtl['item']);
-            $this->db->where('dis',$dtl['dis']);
-            $this->db->where('insno',$dtl['insno']);
-            $this->db->where('nobontr',$dtl['nobontr']);
-            $this->db->where('dln',$dtl['dln']);
-            $this->db->where('nobale',$dtl['nobale']);
-            $hasil = $this->db->get('stokdept');
-            if($hasil->num_rows() > 0){
-                $stokdept = $hasil->row_array();
-                // update kgs_akhir di tabel stokdept
-                $this->db->set('pcs_adj','pcs_adj + '.$dtl['pcs'],FALSE);
-                $this->db->set('kgs_adj','kgs_adj + '.$dtl['kgs'],FALSE);
-                $this->db->set('pcs_akhir','pcs_akhir +'.$dtl['pcs'],FALSE);
-                $this->db->set('kgs_akhir','kgs_akhir +'.$dtl['kgs'],FALSE);
-                $this->db->where('id',$stokdept['id']);
+        $periode = cekperiodedaritgl($header['tgl']);
+        foreach ($detail->result_array() as $datdet) {
+            $kondisi = [
+                'dept_id' => $this->session->userdata('currdept'),
+                'periode' => $periode,
+                'po' => $datdet['po'],
+                'item' => $datdet['item'],
+                'dis' => $datdet['dis'],
+                'id_barang' => $datdet['id_barang'],
+                'insno' => $datdet['insno'],
+                'nobontr' => $datdet['nobontr'],
+                'dln' => $datdet['dln'],
+            ];
+            $cekdetail = $this->db->get_where('stokdept',$kondisi);
+            if($cekdetail->num_rows() > 0){
+                $datadetail = $cekdetail->row_array();
+                $this->db->set('pcs_adj','pcs_adj +'.$datdet['pcs'],false);
+                $this->db->set('kgs_adj','kgs_adj +'.$datdet['kgs'],false);
+                $this->db->set('pcs_akhir','pcs_akhir +'.$datdet['pcs'],false);
+                $this->db->set('kgs_akhir','kgs_akhir +'.$datdet['kgs'],false);
+                $this->db->where('id',$datadetail['id']);
                 $this->db->update('stokdept');
             }else{
-                $opto = [
-                    'dept_id' => $header['dept_id'],
-                    'periode' => date('m').date('Y'),
-                    'nobontr' => $dtl['nobontr'],
-                    'po' => $dtl['po'],
-                    'item' => $dtl['item'],
-                    'dis' => $dtl['dis'],
-                    'insno' => $dtl['insno'],
-                    'id_barang' => $dtl['id_barang'],
-                    'dln' => $dtl['dln'],
-                    'nobale' => $dtl['nobale'],
-                    'stok' => $dtl['stok'],
-                    'pcs_adj' => $dtl['pcs'],
-                    'kgs_adj' => $dtl['kgs'],
-                    'pcs_akhir' => $dtl['pcs'],
-                    'kgs_akhir' => $dtl['kgs']
+                $isi = [
+                    'dept_id' => $this->session->userdata('currdept'),
+                    'periode' => $periode,
+                    'po' => $datdet['po'],
+                    'item' => $datdet['item'],
+                    'dis' => $datdet['dis'],
+                    'id_barang' => $datdet['id_barang'],
+                    'insno' => $datdet['insno'],
+                    'nobontr' => $datdet['nobontr'],
+                    'dln' => $datdet['dln'],
+                    'pcs_adj' => $datdet['pcs'],
+                    'pcs_akhir' => $datdet['pcs'],
+                    'kgs_adj' => $datdet['kgs'],
+                    'kgs_akhir' => $datdet['kgs'],
                 ];
-                $this->db->insert('stokdept',$opto);
+                $this->db->insert('stokdept',$isi);
+                $cekid = $this->db->insert_id();
+                $this->helpermodel->isilog($this->db->last_query());
             }
         }
         $this->db->where('id', $data['id']);

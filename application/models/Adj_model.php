@@ -165,12 +165,59 @@ class Adj_model extends CI_Model
     }
     public function simpanadj($data)
     {
+        $this->db->trans_start();
+        $header = $this->db->get_where('tb_header',['id'=>$data['id']])->row_array();
+        $detail = $this->db->get_where('tb_detail',['id'=>$data['id']]);
+        $periode = cekperiodedaritgl($header['tgl']);
+        // foreach ($detail->result_array() as $datdet) {
+        //     $kondisi = [
+        //         'dept_id' => $this->session->userdata('currdept'),
+        //         'periode' => $periode,
+        //         'po' => $datdet['po'],
+        //         'item' => $datdet['item'],
+        //         'dis' => $datdet['dis'],
+        //         'id_barang' => $datdet['id_barang'],
+        //         'insno' => $datdet['insno'],
+        //         'nobontr' => $datdet['nobontr'],
+        //         'dln' => $datdet['dln'],
+        //     ];
+        //     $cekdetail = $this->db->get_where('stokdept',$kondisi);
+        //     if($cekdetail->num_rows() > 0){
+        //         $datadetail = $cekdetail->row_array();
+        //         $this->db->set('pcs_adj','pcs_adj +'.$datdet['pcs'],false);
+        //         $this->db->set('kgs_adj','kgs_adj +'.$datdet['kgs'],false);
+        //         $this->db->set('pcs_akhir','pcs_akhir +'.$datdet['pcs'],false);
+        //         $this->db->set('kgs_akhir','kgs_akhir +'.$datdet['kgs'],false);
+        //         $this->db->where('id',$datadetail['id']);
+        //         $this->db->update('stokdept');
+        //     }else{
+        //         $isi = [
+        //             'dept_id' => $this->session->userdata('currdept'),
+        //             'periode' => $periode,
+        //             'po' => $datdet['po'],
+        //             'item' => $datdet['item'],
+        //             'dis' => $datdet['dis'],
+        //             'id_barang' => $datdet['id_barang'],
+        //             'insno' => $datdet['insno'],
+        //             'nobontr' => $datdet['nobontr'],
+        //             'dln' => $datdet['dln'],
+        //             'pcs_adj' => $datdet['pcs'],
+        //             'pcs_akhir' => $datdet['pcs'],
+        //             'kgs_adj' => $datdet['kgs'],
+        //             'kgs_akhir' => $datdet['kgs'],
+        //         ];
+        //         $this->db->insert('stokdept',$isi);
+        //         $cekid = $this->db->insert_id();
+        //         $this->helpermodel->isilog($this->db->last_query());
+        //     }
+        // }
         $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
         $data['jumlah_barang'] = $jmlrec['jml'];
         $this->db->where('id', $data['id']);
-        $query = $this->db->update('tb_header', $data);
+        $this->db->update('tb_header', $data);
         $this->helpermodel->isilog($this->db->last_query());
-        return $query;
+        $hasil = $this->db->trans_complete();
+        return $hasil;
     }
     public function validasiadj($data){
         $this->db->where('id', $data['id']);
@@ -179,40 +226,6 @@ class Adj_model extends CI_Model
         return $query;
     }
     //End Adj Model
-    public function depttujupb($kode)
-    {
-        $hasil = '';
-        $depo = '';
-        if ($kode == 'GW') {
-            $depo = 'GS,';
-        } else {
-            $depo = 'GM,GP,GF,GW,GS,';
-            if ($kode == 'RR' || $kode == 'FG') {
-                $depo .= 'FN,';
-            }
-        }
-        $cek = $this->db->get_where('dept', ['dept_id' => $kode])->row_array();
-        for ($i = 1; $i <= strlen($cek['penerimaan']) / 2; $i++) {
-            $kodex = substr($cek['penerimaan'], ($i * 2) - 2, 2);
-            $pos = strpos($depo, $kodex);
-            if ($pos !== false) {
-                $this->db->where('dept_id', $kodex);
-                $gudang = $this->db->get('dept')->row_array();
-                if ($gudang) {
-                    $selek = $this->session->userdata('tujusekarang') == $gudang['dept_id'] ? 'selected' : '';
-                    $hasil .= "<option value='" . $gudang['dept_id'] . "' rel='" . $gudang['departemen'] . "' " . $selek . ">" . $gudang['departemen'] . "</option>";
-                }
-            }
-        }
-        return $hasil;
-    }
-
-    public function updatepb($data)
-    {
-        $this->db->where('id', $data['id']);
-        $query = $this->db->update('tb_header', $data);
-        return $query;
-    }
 
 
 

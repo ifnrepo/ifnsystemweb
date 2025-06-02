@@ -79,13 +79,16 @@ class Adj extends CI_Controller
     {
         // $this->load->view('pb/add_pb');
         if ($this->session->userdata('currdept') != '') {
+            $tglini = date('d');
+            $ini = $this->session->userdata('th').'-'.$this->session->userdata('bl').'-'.$tglini;
+            $bulan = date('Y-m-d',strtotime($ini));
             $data = [
                 'dept_id' => $this->session->userdata('currdept'),
                 'dept_tuju' => $this->session->userdata('currdept'),
-                'tgl' => date('Y-m-d'),
+                'tgl' => $bulan,
                 'kode_dok' => 'ADJ',
                 'id_perusahaan' => IDPERUSAHAAN,
-                'nomor_dok' => nomoradj(date('Y-m-d'), $this->session->userdata('currdept'))
+                'nomor_dok' => nomoradj($bulan, $this->session->userdata('currdept'))
             ];
             $simpan = $this->adjmodel->tambahadj($data);
             if ($simpan) {

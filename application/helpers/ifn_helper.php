@@ -630,3 +630,7 @@ function formatsku($po,$item,$dis,$brg){
     }
     return $isi;
 }
+function cekperiodedaritgl($tgl){
+    $unt = strtotime($tgl);
+    return date('m',$unt).date('Y',$unt);
+}
