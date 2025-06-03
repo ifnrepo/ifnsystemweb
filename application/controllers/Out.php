@@ -36,6 +36,7 @@ class Out extends CI_Controller {
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'out';
         $this->session->unset_userdata('barangerror');
+        $this->session->unset_userdata('serierror');
 		$this->load->view('layouts/header',$header);
 		$this->load->view('out/out',$data);
 		$this->load->view('layouts/footer',$footer);
@@ -78,13 +79,13 @@ class Out extends CI_Controller {
         $jumlah=0;
         $deptinsno = ['GP','RR'];
         foreach ($query as $que) {
-            $tandakurang = $this->session->userdata('barangerror')==$que['id_barang'] ? 'text-danger' : '';
+            $tandakurang = trim($this->session->userdata('serierror'))==trim($que['seri_barang']) ? 'text-danger' : '';
             $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
             $sku = $que['brg_id']=='' ? $que['po'].'#'.$que['item'].$dis : $que['brg_id'];
-            $infoinsno = '';
-            if($this->session->userdata('deptsekarang')=='NT'){
+            // $infoinsno = '';
+            // if($this->session->userdata('deptsekarang')=='NT'){
                 $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
-            }
+            // }
             $hasil .= "<tr>";
             $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['nama_barang'].$que['spek'].$infoinsno."</a></td>";
             $hasil .= "<td>".$sku."</td>";
@@ -376,6 +377,7 @@ class Out extends CI_Controller {
         }
     }
     public function simpanheaderout($id){
+        $this->session->unset_userdata('serierror');
         $query = $this->out_model->simpanheaderout($id);
         if($query){
             $url = base_url().'out';

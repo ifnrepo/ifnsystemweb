@@ -531,6 +531,7 @@ class Out_model extends CI_Model{
                             // $this->session->set_flashdata('errornya',$hasilnya['nama_barang']. ' ('.$hasilnya['kode'].')');
                             $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
                             $this->session->set_userdata('barangerror',$datdet['id_barang']);
+                            $this->session->set_userdata('serierror',$datdet['seri_barang']);
                             break;
                         }
                     }
@@ -559,6 +560,7 @@ class Out_model extends CI_Model{
                         $nobontr = trim($datdet['nobontr'])=='' ? '' : ' IB. '.$datdet['nobontr'];
                         $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
                         $this->session->set_userdata('barangerror',$datdet['id_barang']);
+                        $this->session->set_userdata('serierror',$datdet['seri_barang']);
                         break;
                     }else{
                         $detil = $adaisi->row_array();
@@ -577,6 +579,7 @@ class Out_model extends CI_Model{
                             // $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].' '.$insno. ' ('.$hasilnya['kode'].')');
                             $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].'<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
                             $this->session->set_userdata('barangerror',$datdet['id_barang']);
+                            $this->session->set_userdata('serierror',$datdet['seri_barang']);
                             break;
                         }
                     }
