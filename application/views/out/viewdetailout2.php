@@ -33,9 +33,10 @@
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;" >
-                <?php $jmlbarang=0; $pcs=0;$kgs=0; foreach ($detail as $val) { $jmlbarang++; $pcs += $val['pcs']; $kgs +=  $val['kgs']; ?>
+                <?php $jmlbarang=0; $pcs=0;$kgs=0; foreach ($detail as $val) { $jmlbarang++; $pcs += $val['pcs']; $kgs +=  $val['kgs']; 
+                    $namabarang = trim($val['po'])=='' ? $val['nama_barang'] : spekpo($val['po'],$val['item'],$val['dis']);  ?>
                     <tr>
-                        <td style="line-height: 12px;"><?= $val['nama_barang'].' <br><span class="text-teal" style="font-style: italic; font-size: 12px;">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
+                        <td style="line-height: 12px;"><?= $namabarang.' <br><span class="text-teal" style="font-style: italic; font-size: 12px;">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
                         <td><?= $val['brg_id']; ?></td>
                         <td><?= $val['namasatuan']; ?></td>
                         <td class="text-end"><?= rupiah($val['pcs'],0); ?></td>

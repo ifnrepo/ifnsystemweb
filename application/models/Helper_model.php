@@ -425,4 +425,20 @@ class Helper_model extends CI_Model
             }
         }
     }
+    public function spekpo($po,$item,$dis){
+        $nilai = '';
+        $data = [
+            'po' => trim($po),
+            'trim(item)' => trim($item),
+            'dis' => $dis
+        ];
+        $hasil  = $this->db->get_where('tb_po',$data);
+        if($hasil->num_rows() == 0){
+            $nilai = '';
+        }else{
+            $hasilnya = $hasil->row_array();
+            $nilai = $hasilnya['spek'];
+        }
+        return $nilai;
+    }
 }

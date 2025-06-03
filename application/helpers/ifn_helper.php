@@ -634,3 +634,7 @@ function cekperiodedaritgl($tgl){
     $unt = strtotime($tgl);
     return date('m',$unt).date('Y',$unt);
 }
+function spekpo($po,$item,$dis){
+    $CI = &get_instance();
+    return $CI->helpermodel->spekpo($po,$item,$dis);
+}
