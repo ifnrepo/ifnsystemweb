@@ -301,7 +301,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="row" title="Hak View Event" id="cekeventrahasia">
                                 <span class="col-auto">
                                   <label class="form-check form-check-single form-switch">
-                                    <input class="form-check-input" name="hakeventrahasia" id="hakeventrahasia" type="checkbox" >
+                                    <input class="form-check-input" name="hakeventrahasia" id="hakeventrahasia" type="checkbox">
                                   </label>
                                 </span>
                                 <span class="col font-bold ml-4">View Rahasia</span>
@@ -701,6 +701,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="hakdowntime5" name="hakdowntime5" type="checkbox">
                                 <span class="form-check-label">Utility</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakdowntime6" name="hakdowntime6" type="checkbox">
+                                <span class="form-check-label">Gudang</span>
                               </label>
                             </div>
                           </div>
