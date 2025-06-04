@@ -420,6 +420,7 @@ class Out_model extends CI_Model{
                         'nobale' => $datdet['nobale'],
                         // 'harga' => $datdet['harga'],
                         'stok' => $datdet['stok'],
+                        'exnet' => $det['exnet']
                     ];
                 }
                 if($this->session->userdata('deptsekarang')=='GS'){ // Untuk Looping pengeluaran Dept GS
@@ -548,7 +549,7 @@ class Out_model extends CI_Model{
                         'dis' => $datdet['dis'],
                         'dln' => $datdet['dln'],
                         'nobale' => $datdet['nobale'],
-                        // 'exnet' => $datdet['exnet'], // Sementara untuk Ex-Netting diabaikan dulu
+                        'exnet' => $datdet['exnet'], // Sementara untuk Ex-Netting diabaikan dulu
                         'stok' => $datdet['stok']
                     ];
                     $this->db->where($kondisistok);
