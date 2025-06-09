@@ -45,6 +45,8 @@
 </div>
 <script>
     $(document).ready(function(){
+        var pilih = $('input[name = "radios-inline"]:checked').val();
+        $("#cari_by").val(pilih);
         $("#keyw").focus();
         $("#keyw").val($("#nama_barang").val());
         if($("#keyw").val() != ''){
@@ -79,13 +81,39 @@
         })
     })
     $(document).on('click','.pilihbarang',function(){
-        var x = $(this).attr('rel1');
-        var y = $(this).attr('rel2');
-        var z = $(this).attr('rel3');
-        $("#nama_barang").val(x);
-        $("#id_barang").val(y);
-        $("#id_satuan").val(z)
-        $("#pcs").focus();
+        var pilih = $("#cari_by").val();
+        if(pilih < 2){
+            var x = $(this).attr('rel1');
+            var y = $(this).attr('rel2');
+            var z = $(this).attr('rel3');
+            $("#nama_barang").val(x);
+            $("#id_barang").val(y);
+            $("#id_satuan").val(z)
+            $("#pcs").focus();
+        }else{
+            var x = $(this).attr('rel2');
+            $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: base_url+'adj/getdatapo',
+            data: {
+                data: x,
+            },
+            success: function(data){
+                // alert(data['sku']);
+                $("#nama_barang").val(data['sku']);
+                $("#po").val(data['po']);
+                $("#item").val(data['item'])
+                $("#dis").val(data['dis'])
+                $("#id_satuan").val('21')
+                $("#pcs").focus();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        })
+        }
         $("#modal-scroll").modal('hide');
     })
     // $("#simpanbarang").click(function(){

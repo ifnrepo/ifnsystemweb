@@ -46,10 +46,13 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                            <?php $no=0; foreach ($detail as $val) { $no++; ?>
+                            <?php $no=0; foreach ($detail as $val) { $no++; 
+                                $kode = formatsku($val['po'],$val['item'],$val['dis'],$val['id_barang']);
+                                $spek = $val['po'] == '' ? $val['nama_barang'] : spekpo($val['po'],$val['item'],$val['dis']);
+                                 ?>
                                 <tr>
-                                    <td class="line-12"><?= $no.'. '.$val['nama_barang'].'<br><span class="font-kecil text-teal">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
-                                    <td><?= $val['brg_id']; ?></td>
+                                    <td class="line-12"><?= $no.'. '.$spek.'<br><span class="font-kecil text-teal">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
+                                    <td><?= $kode; ?></td>
                                     <td><?= $val['namasatuan']; ?></td>
                                     <td><?= rupiah($val['pcs'],0); ?></td>
                                     <td><?= rupiah($val['kgs'],2); ?></td>

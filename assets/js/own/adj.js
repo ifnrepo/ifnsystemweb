@@ -57,28 +57,52 @@ $("#dept_kirim").change(function () {
 		},
 	});
 });
-// $("#dept_tuju").change(function () {
-// 	$("#adddatapb").removeClass("disabled");
-// 	$("#level").removeClass("bg-primary");
-// 	$("#level").removeClass("bg-success");
-// 	if ($("#level").val() <= 1) {
-// 		$("#level").addClass("bg-primary");
-// 	} else {
-// 		$("#level").addClass("bg-success");
-// 	}
-// 	var ix = $(this).val();
-// 	if (ix != null) {
-// 		getdatapb();
-// 	} else {
-// 		$("#adddatapb").addClass("disabled");
-// 	}
-// });
+$('input[name="radios-inline"]').on("change", function (e) {
+	var radio = e.target.value;
+	// alert(radio);
+	$("#id_barang").val("");
+	$("#po").val("");
+	$("#item").val("");
+	$("#dis").val("");
+	$("#nama_barang").val("");
+	$("#nama_barang").attr("placeholer", "XXXX").blur();
+});
+$("#pcs").change(function () {
+	var po = $("#po").val();
+	var item = $("#item").val();
+	var dis = $("#dis").val();
+	if (po != "" && ($(this).val() != "" || $(this).val() != "0")) {
+		$.ajax({
+			dataType: "json",
+			type: "POST",
+			url: base_url + "adj/getberatjala",
+			data: {
+				po: po,
+				item: item,
+				dis: dis,
+			},
+			success: function (data) {
+				// alert(data);
+				var pcs = parseFloat($("#pcs").val());
+				var jmlkgs = pcs * data["berat"];
+				$("#kgs").val(jmlkgs);
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(thrownError);
+			},
+		});
+	}
+});
 $("#simpandetailbarang").click(function () {
 	var insno = $("#insno").val();
 	var nobontr = $("#nobontr").val();
-	if ($("#id_barang").val() == "") {
-		pesan("Isi / Cari nama barang", "error");
-		return;
+	// alert($("#po").val());
+	if ($("#po").val() == "") {
+		if ($("#id_barang").val() == "") {
+			pesan("Isi / Cari nama barang", "error");
+			return;
+		}
 	}
 	if ($("#id_satuan").val() == "") {
 		pesan("Isi Satuan barang", "error");
@@ -155,7 +179,14 @@ $(document).on("click", "#editdetailadj", function () {
 		success: function (data) {
 			$("#id").val(data[0].id);
 			$("#id_barang").val(data[0].id_barang);
-			$("#nama_barang").val(data[0].nama_barang);
+			$("#po").val(data[0].po);
+			$("#item").val(data[0].item);
+			$("#dis").val(data[0].dis);
+			if (data[0].po == "") {
+				$("#nama_barang").val(data[0].nama_barang);
+			} else {
+				$("#nama_barang").val(data[0].sku);
+			}
 			$("#id_satuan").val(data[0].id_satuan);
 			$("#pcs").val(data[0].pcs);
 			$("#kgs").val(data[0].kgs);

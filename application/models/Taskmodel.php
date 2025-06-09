@@ -453,6 +453,7 @@ class Taskmodel extends CI_Model
                 $this->db->set('kgs_akhir','kgs_akhir +'.$datdet['kgs'],false);
                 $this->db->where('id',$datadetail['id']);
                 $this->db->update('stokdept');
+                $this->helpermodel->isilog($this->db->last_query());
             }else{
                 $isi = [
                     'dept_id' => $header['dept_id'],

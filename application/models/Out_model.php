@@ -420,7 +420,7 @@ class Out_model extends CI_Model{
                         'nobale' => $datdet['nobale'],
                         // 'harga' => $datdet['harga'],
                         'stok' => $datdet['stok'],
-                        'exnet' => $det['exnet']
+                        'exnet' => $datdet['exnet']
                     ];
                 }
                 if($this->session->userdata('deptsekarang')=='GS'){ // Untuk Looping pengeluaran Dept GS

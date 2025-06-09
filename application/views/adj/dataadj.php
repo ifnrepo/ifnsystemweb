@@ -59,11 +59,49 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="col-sm-4 mt-2">
             <form method="post" action="<?= base_url() . 'adj/simpandetailbarang'; ?>" name="formbarangpb" id="formbarangpb">
               <input type="text" id="id" name="id" value="" class="hilang">
+              <!-- <div class="row font-kecil mb-0">
+                <div class="col-2 col-form-label">Inline Radios</div>
+                  <div class="col input-group">
+                    <label class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="radios-inline"  checked>
+                      <span class="form-check-label">Option 1</span>
+                    </label>
+                    <label class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="radios-inline" >
+                      <span class="form-check-label">Option 2</span>
+                    </label>
+                    <label class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" name="radios-inline"  disabled>
+                      <span class="form-check-label">Option 3</span>
+                    </label>
+                  </div>
+                </div>
+              </div> -->
+              <div class="row font-kecil mb-0">
+                <label class="col-2 col-form-label font-kecil">Mode</label>
+                <div class="col mb-1 pt-2">
+                    <label class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" value="0" name="radios-inline" checked>
+                      <span class="form-check-label">Spek Barang</span>
+                    </label>
+                    <label class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" value="1" name="radios-inline">
+                      <span class="form-check-label">ID</span>
+                    </label>
+                    <label class="form-check form-check-inline">
+                      <input class="form-check-input" type="radio" value="2" name="radios-inline">
+                      <span class="form-check-label">PO</span>
+                    </label>
+                </div>
+              </div>
               <div class="row font-kecil mb-0">
                 <label class="col-2 col-form-label font-kecil required">Specific</label>
                 <div class="col input-group mb-1">
                   <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
                   <input type="text" id="id_barang" name="id_barang" class="hilang">
+                  <input type="text" id="po" name="po" class="hilang">
+                  <input type="text" id="item" name="item" class="hilang">
+                  <input type="text" id="dis" name="dis" class="hilang">
                   <input type="text" class="form-control font-kecil" id="nama_barang" name="nama_barang" placeholder="Spec Barang">
                   <button href="<?= base_url() . 'adj/addspecbarang'; ?>" id="caribarang" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="Add Transaksi" class="btn font-kecil bg-success text-white" type="button">Cari!</button>
                 </div>
