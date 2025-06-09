@@ -55,26 +55,50 @@ class Adj_model extends CI_Model
     public function getspecbarang($mode, $spec)
     {
         if ($mode == 0) {
-            $this->db->select('*,barang.id as idx');
+            $this->db->select('*,barang.id as idx,0 as tbpo');
             $this->db->join('satuan','satuan.id = barang.id_satuan','left');
             $this->db->like('nama_barang', $spec);
             $this->db->order_by('nama_barang', 'ASC');
             $query = $this->db->get_where('barang', array('act' => 1))->result_array();
-        } else {
-            $this->db->select('*,barang.id as idx');
+        } else if($mode == 1) {
+            $this->db->select('*,barang.id as idx,0 as tbpo');
             $this->db->join('satuan','satuan.id = barang.id_satuan','left');
             $this->db->like('kode', $spec);
             $this->db->order_by('kode', 'ASC');
             $query = $this->db->get_where('barang', array('act' => 1))->result_array();
+        } else {
+            $this->db->select('tb_po.spek as nama_barang,id as idx,CONCAT(TRIM(po),"#",TRIM(item),IF(dis > 0," dis ",""),if(dis > 0,dis,"")) AS kode,"PCS" as kodesatuan,21 as id_satuan,1 as tbpo');
+            // $this->db->join('satuan','satuan.id = tb_po.id_satuan','left');
+            $this->db->like('po', $spec);
+            $this->db->order_by('spek', 'ASC');
+            $query = $this->db->get('tb_po')->result_array();
         }
+        return $query;
+    }
+    public function getdatapo($id){
+        $this->db->select('*,CONCAT(TRIM(po),"#",TRIM(item),IF(dis > 0," dis ",""),if(dis > 0,dis,"")) AS sku');
+        $query = $this->db->get_where('tb_po',['id' =>  $id])->row_array();
+        return $query;
+    }
+    public function getberatjala($po,$item,$dis){
+        $kondisi = [
+            'po' => $po,
+            'Trim(item)' => trim($item),
+            'dis' => $dis
+        ];
+        $this->db->select('jala+mimi as berat',false);
+        $query = $this->db->get_where('tb_po',$kondisi)->row_array();
         return $query;
     }
     public function simpandetailbarang()
     {
         $data = $_POST;
         $databarang = $this->db->get_where('barang',['id' => $data['id_barang']])->row_array();
-        $data['dln'] = $databarang['dln'];
+        if(trim($data['po'])==""){
+            $data['dln'] = $databarang['dln'];
+        }
         unset($data['nama_barang']);
+        unset($data['radios-inline']);
         $hasil =  $this->db->insert('tb_detail', $data);
         $this->helpermodel->isilog($this->db->last_query());
         $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
@@ -100,7 +124,7 @@ class Adj_model extends CI_Model
     }
     public function getdatadetailadj($data)
     {
-        $this->db->select("tb_detail.*,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id");
+        $this->db->select("tb_detail.*,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id,CONCAT(TRIM(po),'#',TRIM(item),IF(dis > 0,' dis ',''),if(dis > 0,dis,'')) AS sku");
         $this->db->from('tb_detail');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
@@ -109,7 +133,7 @@ class Adj_model extends CI_Model
     }
     public function getdetailadjbyid($data)
     {
-        $this->db->select("tb_detail.*,satuan.namasatuan,barang.kode,barang.nama_barang,satuan.id as id_satuan");
+        $this->db->select("tb_detail.*,satuan.namasatuan,barang.kode,barang.nama_barang,satuan.id as id_satuan,CONCAT(TRIM(po),'#',TRIM(item),IF(dis > 0,' dis ',''),if(dis > 0,dis,'')) AS sku ");
         $this->db->from('tb_detail');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
@@ -120,6 +144,7 @@ class Adj_model extends CI_Model
     {
         $data = $_POST;
         unset($data['nama_barang']);
+        unset($data['radios-inline']);
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_detail', $data);
         $this->helpermodel->isilog($this->db->last_query());

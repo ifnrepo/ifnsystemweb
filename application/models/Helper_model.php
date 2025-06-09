@@ -47,7 +47,11 @@ class Helper_model extends CI_Model
         $hasil2 = [];
         foreach ($detail->result_array() as $det) {
             $barang = $this->db->get_where('barang', ['id' => $det['id_barang']])->row_array();
-            $kata = $barang['nama_barang'];
+            if(trim($det['po'])==""){
+                $kata = $barang['nama_barang'];
+            }else{
+                $kata = spekpo($det['po'],$det['item'],$det['dis']);
+            }
             array_push($hasil2, $kata);
             $hasil3 = [];
             $kepalanya = 0;

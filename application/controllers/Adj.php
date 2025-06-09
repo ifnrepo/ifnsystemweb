@@ -57,9 +57,11 @@ class Adj extends CI_Controller
         $jmlkgs = 0;
         $jmlpcs = 0;
         foreach ($data as $dt) {
+            $kode = formatsku($dt['po'],$dt['item'],$dt['dis'],$dt['id_barang']);
+            $spek = $dt['po'] == '' ? $dt['nama_barang'] : spekpo($dt['po'],$dt['item'],$dt['dis']);
             $hasil .= "<tr>";
-            $hasil .= "<td class='line-12 font-kecil' style='white-space: nowrap;'>" . $dt['nama_barang'] . "<br><span class='text-primary font-kecil'>" . $dt['insno'] . ' ' . $dt['nobontr'] . "</span></td>";
-            $hasil .= "<td>" . $dt['kode'] . "</td>";
+            $hasil .= "<td class='line-12 font-kecil' style='white-space: nowrap;'>" . $spek . "<br><span class='text-primary font-kecil'>" . $dt['insno'] . ' ' . $dt['nobontr'] . "</span></td>";
+            $hasil .= "<td>" . $kode . "</td>";
             $hasil .= "<td>" . $dt['kodesatuan'] . "</td>";
             $hasil .= "<td class='text-center'>" . rupiah($dt['pcs'], 0) . "</td>";
             $hasil .= "<td>" . rupiah($dt['kgs'], 2) . "</td>";
@@ -133,12 +135,24 @@ class Adj extends CI_Controller
             $html .= "<td>" . $que['kode'] . "</td>";
             $html .= "<td>" . $que['kodesatuan'] . "</td>";
             $html .= "<td>";
-            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $que['nama_barang'] . "' rel2='" . $que['idx'] . "' rel3=" . $que['id_satuan'] . ">Pilih</a>";
+            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $que['nama_barang'] . "' rel2='" . $que['idx'] . "' rel4='" . $que['tbpo'] . "' rel3=" . $que['id_satuan'] . ">Pilih</a>";
             $html .= "</td>";
             $html .= "</tr>";
         }
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
+    }
+    public function getdatapo(){
+        $data = $_POST['data'];
+        $query = $this->adjmodel->getdatapo($data);
+        echo json_encode($query);
+    }
+    public function getberatjala(){
+        $po = $_POST['po'];
+        $item = $_POST['item'];
+        $dis = $_POST['dis'];
+        $query = $this->adjmodel->getberatjala($po,$item,$dis);
+        echo json_encode($query);
     }
     public function simpandetailbarang()
     {
