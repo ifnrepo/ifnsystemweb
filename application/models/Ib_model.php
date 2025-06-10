@@ -150,7 +150,7 @@ class Ib_model extends CI_Model
         // $this->db->where('tb_detail.id_ib',0);
         $this->db->where('tb_detail.id_po',0);
         $this->db->where('a.id_pemasok',$sup);
-        $this->db->where('d.dept_id',$this->session->userdata('depttuju'));
+        // $this->db->where('d.dept_id',$this->session->userdata('depttuju'));
         return $this->db->get();
     }
     public function getbarangibl()

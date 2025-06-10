@@ -537,8 +537,8 @@ class Out_model extends CI_Model{
                         }
                     }
                 }else{
+                    // Untuk pengeluaran selain dari departemen GS
                     $kondisistok = [
-                        // 'tgl' => $det['tgl'],
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
                         'nobontr' => $datdet['nobontr'],
@@ -548,8 +548,8 @@ class Out_model extends CI_Model{
                         'item' => $datdet['item'],
                         'dis' => $datdet['dis'],
                         'dln' => $datdet['dln'],
-                        'nobale' => $datdet['nobale'],
-                        'exnet' => $datdet['exnet'], // Sementara untuk Ex-Netting diabaikan dulu
+                        // 'nobale' => $datdet['nobale'],
+                        'exnet' => $datdet['exnet'], 
                         'stok' => $datdet['stok']
                     ];
                     $this->db->where($kondisistok);
@@ -688,6 +688,35 @@ class Out_model extends CI_Model{
         $kondisi2 = [
             'pcs_akhir > ' => 0,
             'kgs_akhir > ' => 0
+        ];
+        $kondisi2 = [
+            'pcs_akhir > ' => 0,
+            'kgs_akhir > ' => 0
+        ];
+        $kondisi3 = [
+            'insno != ' => "",
+            'nobontr != ' => ""
+        ];
+        $this->db->select('stokdept.*,barang.nama_barang,barang.kode',FALSE);
+        $this->db->from('stokdept');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->where($kondisi);
+        $this->db->group_start();
+        $this->db->or_where($kondisi2);
+        $this->db->group_end();
+        $this->db->group_start();
+        $this->db->or_where($kondisi3);
+        $this->db->group_end();
+        $hasil = $this->db->get();
+        return $hasil;
+    }
+    public function getdatapo($po,$item,$dis){
+        $kondisi = [
+            'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
+            'dept_id' => $this->session->userdata('deptsekarang'),
+            'po' => $po,
+            'trim(item)' => $item,
+            'dis' => $dis,
         ];
         $kondisi2 = [
             'pcs_akhir > ' => 0,

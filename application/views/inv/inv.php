@@ -163,7 +163,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div>
-          <table id="tabel" class="table order-column table-hover datatable7" style="width: 100% !important;">
+          <table id="tabel" class="table order-column table-hover datatable6" style="width: 100% !important;">
             <thead>
               <tr>
                 <!-- <th>Tgl</th> -->
