@@ -114,7 +114,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php if($this->session->userdata('deptsekarang')=='GM'){ ?>
                     <th>Nobontr</th>
                     <?php } ?>
-                    <?php if($this->session->userdata('deptsekarang')=='GP' || $this->session->userdata('deptsekarang')=='RR'){ ?>
+                    <?php if($this->session->userdata('deptsekarang')=='GP' || $this->session->userdata('deptsekarang')=='RR' || $this->session->userdata('deptsekarang')=='FN'){ ?>
                     <th>Insno</th>
                     <?php } ?>
                     <?php if($this->session->userdata('deptsekarang')=='GS'){ ?>

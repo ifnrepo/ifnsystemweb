@@ -77,11 +77,13 @@ class Out extends CI_Controller {
         $id = $_POST['id_header'];
         $query = $this->out_model->getdatadetailout($id);
         $jumlah=0;
-        $deptinsno = ['GP','RR'];
+        $deptinsno = ['GP','RR','FN'];
         foreach ($query as $que) {
             $tandakurang = trim($this->session->userdata('serierror'))==trim($que['seri_barang']) ? 'text-danger' : '';
             $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
             $sku = $que['brg_id']=='' ? $que['po'].'#'.$que['item'].$dis : $que['brg_id'];
+            $modecari = trim($que['po'])=='' ? 0 : 1; // Jika 0 pencarian ID Barang, jika 1 pencarian PO
+            $kodecari = trim($que['po'])=='' ? $que['id_barang'] : trim($que['po']).'_'.trim($que['item']).'_'.$que['dis'];
             // $infoinsno = '';
             // if($this->session->userdata('deptsekarang')=='NT'){
                 $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
@@ -101,11 +103,11 @@ class Out extends CI_Controller {
                     $hasil .= "<td class='text-primary'><a class='text-info' href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
                 }
             }
-            if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && $que['insno']!=''){
+            if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && trim($que['insno'])!=''){
                 $hasil .= "<td class='text-primary'>".$que['insno']."</td>";
             }else{
-                if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && $que['insno']==''){
-                    $hasil .= "<td class='text-primary'><a href='".base_url().'out/addinsno/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data insno'>Pilih Insno</a></td>";
+                if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && trim($que['insno'])==''){
+                    $hasil .= "<td class='text-primary'><a href='".base_url().'out/addinsno/'.$que['id'].'/'.$modecari.'/'.$kodecari."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data insno'>Pilih Insno</a></td>";
                 }
             }
             if($this->session->userdata('deptsekarang')=='GS'){
@@ -206,10 +208,21 @@ class Out extends CI_Controller {
         $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
         $this->load->view('out/addnobontr',$data);
     }
-    public function addinsno($id,$idbarang){
-        $data['data'] = $this->out_model->getdatagp($idbarang);
-        $data['iddetail'] = $id;
-        $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
+    public function addinsno($id,$mode,$idbarang){
+        if($mode==0){
+            $data['data'] = $this->out_model->getdatagp($idbarang);
+            $data['iddetail'] = $id;
+            $data['header'] = $this->out_model->getdatabarang($idbarang)->row_array();
+        }else{
+            $data['iddetail'] = $id;
+            $pisah = explode("_",$idbarang);
+            $xheader = [
+                'nama_barang' => spekpo($pisah[0],$pisah[1],$pisah[2]),
+                'kode' => formatsku($pisah[0],$pisah[1],$pisah[2],'')
+            ];
+            $data['header'] = $xheader;
+            $data['data'] = $this->out_model->getdatapo($pisah[0],$pisah[1],$pisah[2]);
+        }
         $this->load->view('out/addinsno',$data);
     }
     public function editnobontr(){
