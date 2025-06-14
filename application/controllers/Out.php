@@ -81,15 +81,16 @@ class Out extends CI_Controller {
         foreach ($query as $que) {
             $tandakurang = trim($this->session->userdata('serierror'))==trim($que['seri_barang']) ? 'text-danger' : '';
             $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
-            $sku = $que['brg_id']=='' ? $que['po'].'#'.$que['item'].$dis : $que['brg_id'];
+            $sku =trim($que['po'])=='' ? $que['kode'] : formatsku($que['po'],$que['item'],$que['dis'],$que['id_barang']);
             $modecari = trim($que['po'])=='' ? 0 : 1; // Jika 0 pencarian ID Barang, jika 1 pencarian PO
-            $kodecari = trim($que['po'])=='' ? $que['id_barang'] : trim($que['po']).'_'.trim($que['item']).'_'.$que['dis'];
+            $kodecari = trim($que['po'])=='' ? $que['kode'] : trim($que['po']).'_'.trim($que['item']).'_'.$que['dis'];
+            $nmbarang = trim($que['po'])==''? $que['nama_barang'] : spekpo($que['po'],$que['item'],$que['dis']);
             // $infoinsno = '';
             // if($this->session->userdata('deptsekarang')=='NT'){
                 $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
             // }
             $hasil .= "<tr>";
-            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['nama_barang'].$que['spek'].$infoinsno."</a></td>";
+            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$nmbarang.$infoinsno."</a></td>";
             $hasil .= "<td>".$sku."</td>";
             $hasil .= "<td>".$que['kodesatuan']."</td>";
                 $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
@@ -468,6 +469,10 @@ class Out extends CI_Controller {
         ];
         $hasil = $this->out_model->updatecustomer($data);
         echo $hasil;
+    }
+    public function viewrekapbom($id){
+        $data['data'] = $this->out_model->viewrekapbom($id);
+        $this->load->view('out/viewrekapbom',$data);
     }
     function cetakqr2($isi,$id){
 		$tempdir = "temp/";

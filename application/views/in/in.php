@@ -41,7 +41,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="card-body p-2">
               <div class="row">
                 <div class="col-2">
-                  <h4 class="mb-1 font-kecil">Dept</h4>
+                  <h4 class="mb-1 font-kecil">Dept </h4>
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-control form-sm font-kecil font-bold" id="dept_kirim"  name="dept_kirim">

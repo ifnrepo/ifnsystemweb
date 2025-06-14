@@ -118,7 +118,7 @@
                             <td class="text-right text-pink" ><?= rupiah($det['pcsadj'], 0); ?></td>
                             <td class="text-right text-pink" ><?= rupiah($det['kgsadj'], 2); ?></td>
                             <td class="text-right" class="font-bold text-primary"><?= rupiah($saldo, 0); ?></td>
-                            <td class="text-right"><?= rupiah($saldokgs, 2); ?></td>
+                            <td class="text-right"><?= rupiah($saldokgs, 4); ?></td>
                             <?php if($this->session->userdata('invharga')): ?>
                             <td class="text-right"><?= rupiah($det['harga'], 2); ?></td>
                             <td class="text-right"><?= rupiah($det['harga']*$pilihtampil, 2); ?></td>
@@ -137,7 +137,7 @@
                         <td class="text-right font-bold"><?= rupiah($jmpcadj,0); ?></td>
                         <td class="text-right font-bold"><?= rupiah($jmkgadj,2); ?></td>
                         <td class="text-right font-bold"><?= rupiah($xsaldo+$jmpcin+$jmpcadj-$jmpcout,0); ?></td>
-                        <td class="text-right font-bold"><?= rupiah($xsaldokgs+$jmkgin+$jmkgadj-$jmkgout,2); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($xsaldokgs+$jmkgin+$jmkgadj-$jmkgout,4); ?></td>
                         <td></td>
                     </tr>
                 </tbody>
