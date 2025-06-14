@@ -848,4 +848,16 @@ class Out_model extends CI_Model{
         $hasil = $this->db->update('tb_header',$data);
         return $hasil;
     }
+    public function viewrekapbom($id){
+        $this->db->select('tb_detailgen.*,sum(pcs) as totpcs,sum(kgs) as totkgs,barang.nama_barang,satuan.kodesatuan as kode');
+        $this->db->select('(SELECT kgs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND po = tb_detailgen.po AND item = tb_detailgen.item AND dis = tb_detailgen.dis AND insno = tb_detailgen.insno AND nobontr = tb_detailgen.nobontr AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND periode = "062025") as kgsstok');
+        $this->db->from('tb_detailgen');
+        $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
+        $this->db->where('tb_detailgen.id_header',$id);
+        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln');
+        $this->db->order_by('po,item,dis,nama_barang,id_barang');
+        return $this->db->get();
+    }
 }

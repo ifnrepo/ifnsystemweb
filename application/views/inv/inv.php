@@ -250,7 +250,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php endif; ?>
                     <!-- <td style="border-bottom: red;"></td> -->
                     <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 2); ?></td>
-                    <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg, 2); ?></td>
+                    <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg, 4); ?></td>
                     <?php if ($this->session->userdata('invharga') == 1) : ?>
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($det['harga'], 2); ?></td>
                       <td style="border-bottom: red;" class="text-right"><?= rupiah($totalharga, 2); ?></td>

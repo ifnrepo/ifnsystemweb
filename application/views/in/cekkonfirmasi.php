@@ -7,6 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <div class="col-md-6">
         <h2 class="page-title p-2">
           Konfirmasi Input Barang
+          <?= $this->session->userdata('curdept'); ?> X <?= $this->session->userdata('todept'); ?>
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">

@@ -40,7 +40,7 @@
                         <td><?= $val['brg_id']; ?></td>
                         <td><?= $val['namasatuan']; ?></td>
                         <td class="text-end"><?= rupiah($val['pcs'],0); ?></td>
-                        <td class="text-end"><?= rupiah($val['kgs'],2); ?></td>
+                        <td class="text-end"><?= rupiah($val['kgs'],4); ?></td>
                         <td><?= $val['nodok']; ?></td>
                     </tr>
                 <?php } ?>

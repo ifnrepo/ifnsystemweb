@@ -99,6 +99,8 @@ class Adj_model extends CI_Model
         }
         unset($data['nama_barang']);
         unset($data['radios-inline']);
+        $data['insno'] = trim($data['insno']);
+        $data['nobontr'] = trim($data['nobontr']);
         $hasil =  $this->db->insert('tb_detail', $data);
         $this->helpermodel->isilog($this->db->last_query());
         $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
@@ -145,6 +147,8 @@ class Adj_model extends CI_Model
         $data = $_POST;
         unset($data['nama_barang']);
         unset($data['radios-inline']);
+        $data['insno'] = trim($data['insno']);
+        $data['nobontr'] = trim($data['nobontr']);
         $this->db->where('id', $data['id']);
         $query = $this->db->update('tb_detail', $data);
         $this->helpermodel->isilog($this->db->last_query());

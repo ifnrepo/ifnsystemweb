@@ -620,7 +620,7 @@ function tambahnol($data){
 }
 function formatsku($po,$item,$dis,$brg){
     $isi = '';
-    if($po==''){
+    if(trim($po)==''){
         $CI = &get_instance();
         $hasil = $CI->barangmodel->getdatabyid($brg)->row_array();
         $isi = $hasil['kode'];
