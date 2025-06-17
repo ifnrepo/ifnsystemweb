@@ -83,7 +83,7 @@ class Out extends CI_Controller {
             $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
             $sku =trim($que['po'])=='' ? $que['kode'] : formatsku($que['po'],$que['item'],$que['dis'],$que['id_barang']);
             $modecari = trim($que['po'])=='' ? 0 : 1; // Jika 0 pencarian ID Barang, jika 1 pencarian PO
-            $kodecari = trim($que['po'])=='' ? $que['kode'] : trim($que['po']).'_'.trim($que['item']).'_'.$que['dis'];
+            $kodecari = trim($que['po'])=='' ? $que['id_barang'] : trim($que['po']).'_'.trim($que['item']).'_'.$que['dis'];
             $nmbarang = trim($que['po'])==''? $que['nama_barang'] : spekpo($que['po'],$que['item'],$que['dis']);
             // $infoinsno = '';
             // if($this->session->userdata('deptsekarang')=='NT'){
@@ -362,9 +362,11 @@ class Out extends CI_Controller {
         $kgs = 0;
        foreach ($data as $val) { 
         $ketbc = $val['bcnomor']!=null ? 'BC. '.trim($val['jns_bc']).'-'.$val['bcnomor'].'('.$val['bctgl'].')' : '';
+        $sku = trim($val['po'])=='' ? $val['brg_id'] : formatsku($val['po'],$val['item'],$val['dis'],$val['id_barang']);
+        $spek = trim($val['po'])=='' ? $val['nama_barang'] : spekpo($val['po'],$val['item'],$val['dis']);
         $html .= "<tr>";
-        $html .= "<td style='line-height: 13px;'>".$val['seri_barang'].'. '.$val['nama_barang']." # <span class='text-teal'>".$val['insno'].' '.$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
-        $html .= "<td>".$val['brg_id']."</td>";
+        $html .= "<td style='line-height: 13px;'>".$val['seri_barang'].'. '.$spek." # <span class='text-teal'>".$val['insno'].' '.$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
+        $html .= "<td>".$sku."</td>";
         $html .= "<td>".$val['namasatuan']."</td>";
         $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
         $html .= "<td class='text-right'>".rupiah($val['kgs'],4)."</td>";
@@ -471,6 +473,7 @@ class Out extends CI_Controller {
         echo $hasil;
     }
     public function viewrekapbom($id){
+        $data['header'] = $this->out_model->getdatabyid($id)->row_array();
         $data['data'] = $this->out_model->viewrekapbom($id);
         $this->load->view('out/viewrekapbom',$data);
     }

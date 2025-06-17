@@ -638,7 +638,7 @@ async function getIP() {
 }
 setInterval(() => {
 	cekNotif();
-}, 10000);
+}, 20000);
 function cekNotif() {
 	$.ajax({
 		url: base_url + "main/ceknotif",

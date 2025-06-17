@@ -436,7 +436,7 @@ class Akb_model extends CI_Model
     }
     public function updatesendceisa($id){
         $this->db->where('id',$id);
-        $this->db->update('tb_header',['send_ceisa' => 1]);
+        $this->db->update('tb_header',['send_ceisa' => 1,'user_tuju' => $this->session->userdata('id'),'tgl_tuju' => date("Y-m-d H:i:s")]);
     }
     public function simpanresponbc($data){
         $this->db->where('id',$data['id']);

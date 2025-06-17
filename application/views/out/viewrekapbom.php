@@ -2,6 +2,7 @@
     <div class="row">
         <div class="col-12">
             <input id="iddetail" class="btn btn-sm btn-danger hilang" value="">
+            <div class="mb-1"><h4 class="mb-1">Nomor Dokumen : <?= $header['nomor_dok']; ?></h4></div>
             <div id="table-default" class="table-responsive mb-1">
               <table class="table datatable" id="cobasisip">
                 <thead style="background-color: blue !important">
@@ -11,7 +12,8 @@
                     <th>Satuan</th>
                     <th class="text-right">Qty</th>
                     <th class="text-right">Kgs</th>
-                    <th class="text-right">Stok</th>
+                    <th class="text-center">Stok<br>Qty</th>
+                    <th class="text-center">Stok<br>Kgs</th>
                   </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
@@ -29,6 +31,7 @@
                             <td><?= $detail['kode']; ?></td>
                             <td class="text-right"><?= rupiah($detail['totpcs'],0); ?></td>
                             <td class="text-right"><?= rupiah($detail['totkgs'],4); ?></td>
+                            <td class="text-right"><?= rupiah($detail['pcsstok'],0); ?></td>
                             <td class="text-right"><?= rupiah($detail['kgsstok'],4); ?></td>
                         </tr>
                     <?php endforeach; ?>
@@ -36,6 +39,7 @@
                         <td colspan="3" class="font-black text-center font-bold">TOTAL</td>
                         <td class="text-right font-bold"><?= rupiah($totpcs,0); ?></td>
                         <td class="text-right font-bold"><?= rupiah($totkgs,4); ?></td>
+                        <td></td>
                         <td></td>
                     </tr>
                 </tbody>
