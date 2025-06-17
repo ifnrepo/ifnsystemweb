@@ -82,6 +82,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php endif; ?>
                 </div>
                 <div class="col-5">
+                  <div class="text-right"><h4><?= $this->session->userdata('deptsekarang'); ?> to <?= $this->session->userdata('tujusekarang'); ?></h4></div>
                   <div style="position:absolute;bottom:0px;right:10px;">
                     <?php if($data['jn_bbl']==1){ ?>
                       <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>

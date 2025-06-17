@@ -171,19 +171,19 @@
                                         <td><?= $nambar; ?></td>
                                         <td><?= formatsku($val['po'],$val['item'],$val['dis'],$val['brg_id']); ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
-                                        <td><?= rupiah($val['pcs'],0); ?></td>
-                                        <td><?= rupiah($val['kgs'],2); ?></td>
-                                        <td><?= rupiah($val['harga']/$jumlah,2); ?></td>
-                                        <td><?= rupiah($val['harga'],2); ?></td>
+                                        <td class="text-right"><?= rupiah($val['pcs'],0); ?></td>
+                                        <td class="text-right"><?= rupiah($val['kgs'],2); ?></td>
+                                        <td class="text-right"><?= rupiah($val['harga']/$jumlah,2); ?></td>
+                                        <td class="text-right"><?= rupiah($val['harga'],2); ?></td>
                                         <td><?= $val['keter']; ?></td>
                                     </tr>
                                 <?php } ?>
                                 <tr class="bg-success-lt">
                                     <td colspan="3" class="text-center font-bold text-black">TOTAL</td>
-                                    <td class="text-black font-bold"><?= rupiah($jmlpcs,0); ?></td>
-                                    <td class="text-black font-bold"><?= rupiah($jmlkgs,2); ?></td>
+                                    <td class="text-black font-bold text-right"><?= rupiah($jmlpcs,0); ?></td>
+                                    <td class="text-black font-bold text-right"><?= rupiah($jmlkgs,2); ?></td>
                                     <td></td>
-                                    <td class="text-black font-bold"><?= rupiah($Jmltotal,2); ?></td>
+                                    <td class="text-black font-bold text-right"><?= rupiah($Jmltotal,2); ?></td>
                                     <td></td>
                                 </tr>
                             </tbody>
@@ -262,19 +262,19 @@
                         <ul class="steps steps-vertical steps-green">
                             <li class="step-item">
                             <div class="h4 m-0">Dibuat Oleh</div>
-                            <div class="text-secondary ln-12">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Accusamus culpa cum expedita ipsam laborum nam ratione reprehenderit sed sint tenetur!</div>
+                            <div class="text-secondary font-kecil"><?= datauser($header['user_ok'],'name').' on '.tglmysql2($header['tgl_ok']); ?></div>
                             </li>
                             <li class="step-item">
                             <div class="h4 m-0">Diajukan Oleh</div>
-                            <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
+                            <div class="text-secondary font-kecil"><?= datauser($header['user_tuju'],'name').' on '.tglmysql2($header['tgl_tuju']); ?></div>
                             </li>
-                            <li class="step-item">
+                            <!-- <li class="step-item">
                             <div class="h4 m-0">Out for delivery</div>
                             <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
-                            </li>
+                            </li> -->
                             <li class="step-item">
                             <div class="h4 m-0">Finalized</div>
-                            <div class="text-secondary">Lorem ipsum dolor sit amet.</div>
+                            <div class="text-secondary">-</div>
                             </li>
                         </ul>
                     </div>
