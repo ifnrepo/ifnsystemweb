@@ -77,7 +77,7 @@ class Out extends CI_Controller {
         $id = $_POST['id_header'];
         $query = $this->out_model->getdatadetailout($id);
         $jumlah=0;
-        $deptinsno = ['GP','RR','FN'];
+        $deptinsno = ['GP','RR'];
         foreach ($query as $que) {
             $tandakurang = trim($this->session->userdata('serierror'))==trim($que['seri_barang']) ? 'text-danger' : '';
             $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
@@ -90,7 +90,7 @@ class Out extends CI_Controller {
                 $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
             // }
             $hasil .= "<tr>";
-            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$nmbarang.$infoinsno."</a></td>";
+            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['seri_barang'].'. '.$nmbarang.$infoinsno."</a></td>";
             $hasil .= "<td>".$sku."</td>";
             $hasil .= "<td>".$que['kodesatuan']."</td>";
                 $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
@@ -326,6 +326,7 @@ class Out extends CI_Controller {
             $pcs += $val['pcs'];
             $kgs += $val['kgs'];
             $infoinsno = '';
+            $xnet = $val['exnet']==0 ? '' : 'Y';
             $sku =(trim($val['po'])=='') ? $val['brg_id'] : ($val['po'].'#'.$val['item'].' '.($val['dis']==0 ? '' : ' dis '.$val['dis']));
             if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
                 $spek = trim($val['po'])=='' ? $val['nama_barang'] : (($val['engklp']=='') ? $val['spek'] : $val['engklp']);
@@ -339,6 +340,8 @@ class Out extends CI_Controller {
             $html .= "<td class='line-12'>".$val['seri_barang'].'. '.$spek.$infoinsno."</td>";
             $html .= "<td>".$sku."</td>";
             $html .= "<td>".$val['namasatuan']."</td>";
+            $html .= "<td class='text-center'>".$val['nobale']."</td>";
+            $html .= "<td class='text-center'>".$xnet."</td>";
             $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
             $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
             $html .= "<td>".$val['nodok']."</td>";
@@ -346,6 +349,8 @@ class Out extends CI_Controller {
         }
         $html .= "<tr>";
         $html .= "<td colspan='3' class='text-end'>TOTAL</td>";
+        $html .= "<td></td>";
+        $html .= "<td></td>";
         $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
         $html .= "<td class='text-right font-bold'>".rupiah($kgs,4)."</td>";
         $html .= "<td></td>";

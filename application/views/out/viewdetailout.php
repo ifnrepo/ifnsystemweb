@@ -47,6 +47,8 @@
                                     <th>Specific</th>
                                     <th>SKU</th>
                                     <th>Satuan</th>
+                                    <th class="text-center">No Bale</th>
+                                    <th class="text-center">Exnet</th>
                                     <th>Qty</th>
                                     <th>Kgs</th>
                                     <th>Keterangan</th>
@@ -79,6 +81,7 @@
                                 <th>Qty</th>
                                 <th>Kgs</th>
                                 <th>Keterangan</th>
+                                <th>XXX</th>
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table2" style="font-size: 13px !important;" >

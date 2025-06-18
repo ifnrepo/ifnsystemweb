@@ -441,7 +441,7 @@ class Taskmodel extends CI_Model
                 'insno' => $datdet['insno'],
                 'nobontr' => $datdet['nobontr'],
                 'dln' => $datdet['dln'],
-                'nobale' => $datdet['nobale'],
+                'trim(nobale)' => trim($datdet['nobale']),
                 'exnet' => $datdet['exnet'],
             ];
             $cekdetail = $this->db->get_where('stokdept',$kondisi);
@@ -469,6 +469,8 @@ class Taskmodel extends CI_Model
                     'pcs_akhir' => $datdet['pcs'],
                     'kgs_adj' => $datdet['kgs'],
                     'kgs_akhir' => $datdet['kgs'],
+                    'nobale' => trim($datdet['nobale']),
+                    'exnet' => $datdet['exnet'],
                 ];
                 $this->db->insert('stokdept',$isi);
                 $cekid = $this->db->insert_id();

@@ -93,7 +93,7 @@ class In_model extends CI_Model{
                     'item' => $det['item'],
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
-                    'nobale' => $det['nobale'],
+                    'trim(nobale)' => trim($det['nobale']),
                     // 'harga' => $det['harga'],
                     // 'stok' => $det['stok'],
                     // 'exnet' => $det['exnet']
@@ -112,7 +112,7 @@ class In_model extends CI_Model{
                     'item' => $det['item'],
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
-                    'nobale' => $det['dept_tuju']=='GF' ? $det['nobale'] : '                    ',
+                    'nobale' => $det['dept_tuju']=='GF' ? trim($det['nobale']) : '',
                     // 'nomor_bc' => $det['nomor_bc'],
                     // 'harga' => $det['harga'],
                     // 'exnet' => $det['exnet'],

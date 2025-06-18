@@ -548,7 +548,7 @@ class Out_model extends CI_Model{
                         'item' => $datdet['item'],
                         'dis' => $datdet['dis'],
                         'dln' => $datdet['dln'],
-                        // 'nobale' => $datdet['nobale'],
+                        'trim(nobale)' => $datdet['dept_tuju']=='GF' ? trim($datdet['nobale']) : '',
                         // 'exnet' => $datdet['exnet'],
                         'stok' => $datdet['stok']
                     ];
@@ -857,7 +857,7 @@ class Out_model extends CI_Model{
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
         $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
         $this->db->where('tb_detailgen.id_header',$id);
-        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln');
+        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln,nobale,exnet');
         $this->db->order_by('po,item,dis,nama_barang,id_barang');
         return $this->db->get();
     }
