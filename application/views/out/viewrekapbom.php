@@ -9,7 +9,9 @@
                   <tr>
                     <th>Specific</th>
                     <th>Sku</th>
-                    <th>Satuan</th>
+                    <th>Sat</th>
+                    <th class='text-center'>No<br>bale</th>
+                    <th class='text-center'>Ex<br>net</th>
                     <th class="text-right">Qty</th>
                     <th class="text-right">Kgs</th>
                     <th class="text-center">Stok<br>Qty</th>
@@ -24,11 +26,14 @@
                         $totpcs += $detail['totpcs'];
                         $totkgs += $detail['totkgs'];
                         $cekkurang = $detail['totkgs'] > $detail['kgsstok'] ? 'text-danger' : '';
+                        $xnet = $detail['exnet']==0 ? '' : 'Y';
                     ?>
                         <tr class="font-kecil">
                             <td class="line-12 <?= $cekkurang; ?>"><?= $namabarang.'<br><span class="text-success">'.$detail['insno'].$detail['nobontr'].'</span>' ?></td>
                             <td><?= $sku ?></td>
                             <td><?= $detail['kode']; ?></td>
+                            <td class='text-center'><?= $detail['nobale']; ?></td>
+                            <td class='text-center text-success font-bold'><?= $xnet; ?></td>
                             <td class="text-right"><?= rupiah($detail['totpcs'],0); ?></td>
                             <td class="text-right"><?= rupiah($detail['totkgs'],4); ?></td>
                             <td class="text-right"><?= rupiah($detail['pcsstok'],0); ?></td>
@@ -37,6 +42,8 @@
                     <?php endforeach; ?>
                     <tr class="bg-info-lt">
                         <td colspan="3" class="font-black text-center font-bold">TOTAL</td>
+                        <td></td>
+                        <td></td>
                         <td class="text-right font-bold"><?= rupiah($totpcs,0); ?></td>
                         <td class="text-right font-bold"><?= rupiah($totkgs,4); ?></td>
                         <td></td>

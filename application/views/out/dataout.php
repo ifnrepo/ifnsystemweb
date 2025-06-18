@@ -110,12 +110,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Qty MINTA</th>
                     <th>Kgs MINTA</th>
                     <?php endif; ?>
-                    <th>Qty REAL</th>
-                    <th>Kgs REAL</th>
+                    <th>Qty</th>
+                    <th>Kgs</th>
                     <?php if($this->session->userdata('deptsekarang')=='GM'){ ?>
                     <th>Nobontr</th>
                     <?php } ?>
-                    <?php if($this->session->userdata('deptsekarang')=='GP' || $this->session->userdata('deptsekarang')=='RR' || $this->session->userdata('deptsekarang')=='FN'){ ?>
+                    <?php if($this->session->userdata('deptsekarang')=='GP' || $this->session->userdata('deptsekarang')=='RR'){ ?>
                     <th>Insno</th>
                     <?php } ?>
                     <?php if($this->session->userdata('deptsekarang')=='GS'){ ?>
