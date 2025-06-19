@@ -445,4 +445,23 @@ class Helper_model extends CI_Model
         }
         return $nilai;
     }
+    public function getpros($kode){
+        if(trim($kode)==''){
+            $hasil = '';
+        }else{
+            $arrhasil = '';
+            $pisah = explode(',',$kode);
+            $jumlaharr = count($pisah);
+            for($x=1;$x<=$jumlaharr;$x++){
+                $query = $this->db->get_where('tb_proses',['kode' => $pisah[$x-1]]);
+                if($query->num_rows() > 0){
+                    $xhasil = $query->row_array();
+                    $spasi = $x > 1 ? ' ' : '';
+                    $arrhasil .= $spasi.trim($xhasil['ket']);
+                }
+            }
+            $hasil = ucwords(strtolower($arrhasil));
+        }
+        return $hasil;
+    }
 }

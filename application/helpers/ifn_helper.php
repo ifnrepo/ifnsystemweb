@@ -638,3 +638,7 @@ function spekpo($po,$item,$dis){
     $CI = &get_instance();
     return $CI->helpermodel->spekpo($po,$item,$dis);
 }
+function getpros($kode){
+    $CI = &get_instance();
+    return $CI->helpermodel->getpros($kode);
+}
