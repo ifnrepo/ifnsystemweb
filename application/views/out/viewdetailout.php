@@ -81,7 +81,6 @@
                                 <th>Qty</th>
                                 <th>Kgs</th>
                                 <th>Keterangan</th>
-                                <th>XXX</th>
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table2" style="font-size: 13px !important;" >
