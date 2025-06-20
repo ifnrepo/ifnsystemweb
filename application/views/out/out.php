@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
   <div class="container-xl">
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
@@ -15,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
@@ -91,7 +91,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </h4>
                 </div>
               </div>
-              <!-- <div class="hr m-1"></div> -->
+              <div class="hr m-1"></div>
+              <div class="row">
+                <h5 class="m-0">Filter</h5>
+                <div class="col-2 mt-0">
+                  <div class="font-kecil">
+                      <select class="form-select form-control form-sm font-kecil font-bold" style="height: 30px; padding-top: 4.5px;" id="filterbon" name="filterbon">
+                        <option value="0" <?php if($this->session->userdata('filterbon')==0) { echo "selected"; } ?>>Semua Bon</option>
+                        <option value="1" <?php if($this->session->userdata('filterbon')==1) { echo "selected"; } ?>>Bon Belum Validasi</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="col-10"></div>
+              </div>
             </div>
           </div>
 
