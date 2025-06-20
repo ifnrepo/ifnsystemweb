@@ -48,10 +48,11 @@
                                 <?php 
                                     foreach ($detail as $val) { 
                                     $namabar = trim($val['po'])=='' ? $val['nama_barang'] : $val['spek'];
+                                    $sku = trim($val['po'])=='' ? $val['brg_id'] : formatsku($val['po'],$val['item'],$val['dis'],$val['brg_id']);
                                 ?>
                                     <tr>
-                                        <td><?= $val['seri_barang'].'. '.$namabar; ?></td>
-                                        <td><?= $val['brg_id']; ?></td>
+                                        <td class="line-12"><?= $val['seri_barang'].'. '.$namabar; ?><br><span class="font-kecil text-success"><?= $val['insno'] ?></span></td>
+                                        <td><?= $sku ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= rupiah($val['pcs'], 0); ?></td>
                                         <td><?= rupiah($val['kgs'], 2); ?></td>

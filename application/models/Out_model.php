@@ -7,8 +7,11 @@ class Out_model extends CI_Model{
             'dept_tuju' => $kode['dept_tuju'],
             'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th')
+            'year(tgl)' => $this->session->userdata('th'),
         ];
+        if($kode['filterbon']==1){
+            $arrkondisi['data_ok'] = 0;
+        }
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->select('(SELECT SUM(pcs) AS pcs FROM tb_detail WHERE tb_detail.id_header = tb_header.id GROUP BY id_header ) AS jumlahpcs');
@@ -27,12 +30,12 @@ class Out_model extends CI_Model{
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
         ];
+        $arrkondisi['data_ok'] = $kode['filterbon']==1 ? 0 : 1;
         $this->db->select('count(distinct nomor_dok) as jmrek,sum(tb_detail.pcs) as pcs, sum(tb_detail.kgs) as kgs');
         $this->db->from('tb_header');
         $this->db->join('tb_detail','tb_header.id = tb_detail.id_header','left');
         $this->db->where($arrkondisi);
-        $this->db->where('tb_header.data_ok',1);
-        // $this->db->where('tb_header.ok_tuju',1);
+        // $this->db->where('tb_header.data_ok',1);
         $hasil = $this->db->get();
         return $hasil->row_array();
     }
@@ -49,8 +52,6 @@ class Out_model extends CI_Model{
         $this->db->from('tb_header');
         $this->db->join('tb_detail','tb_header.id = tb_detail.id_header','left');
         $this->db->where($arrkondisi);
-        // $this->db->where('tb_header.data_ok',1);
-        // $this->db->where('tb_header.ok_tuju',1);
         $hasil = $this->db->get();
         return $hasil->row_array();
     }

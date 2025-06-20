@@ -29,6 +29,7 @@ class Out extends CI_Controller {
         $kode = [
             'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
             'dept_tuju' => $this->session->userdata('tujusekarang') == null ? '' : $this->session->userdata('tujusekarang'),
+            'filterbon' => $this->session->userdata('filterbon') == null ? 0 : $this->session->userdata('filterbon'),
         ];
         $data['data'] = $this->out_model->getdata($kode);
         $data['jumlahpcskgs'] = $this->out_model->getdatapcskgs($kode);
@@ -44,6 +45,7 @@ class Out extends CI_Controller {
     public function clear(){
         $this->session->unset_userdata('deptsekarang');
         $this->session->unset_userdata('tujusekarang');
+        $this->session->unset_userdata('filterbon');
         $this->session->set_userdata('bl',(int)date('m'));
         $this->session->set_userdata('th',date('Y'));
         $url = base_url().'out';
@@ -70,6 +72,7 @@ class Out extends CI_Controller {
     public function getdata(){
         $this->session->set_userdata('deptsekarang',$_POST['dept_id']);
         $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
+        $this->session->set_userdata('filterbon',$_POST['filterbon']);
         echo 1;
     }
     public function getdatadetailout(){
@@ -333,9 +336,9 @@ class Out extends CI_Controller {
             }else{
                 $spek = trim($val['po'])=='' ? $val['nama_barang'] : $val['spek'];
             }
-            if($this->session->userdata('deptsekarang')=='NT'){
-                $infoinsno = "<br><span class='text-teal font-kecil'>".$val['insno']."</span>";
-            }
+            // if($this->session->userdata('deptsekarang')=='NT'){
+                $infoinsno = "<br><span class='text-teal font-kecil'>".$val['insno'].' '.$val['nobontr']."</span>";
+            // }
             $html .= "<tr>";
             $html .= "<td class='line-12'>".$val['seri_barang'].'. '.$spek.$infoinsno."</td>";
             $html .= "<td>".$sku."</td>";
