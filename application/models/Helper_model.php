@@ -464,4 +464,19 @@ class Helper_model extends CI_Model
         }
         return $hasil;
     }
+    public function getkontrakrekanan(){
+        $data = $this->db->get_where('apps_config',['key' => 'tuju_kontrak'])->row_array();
+        $arrrekan = [];
+        $kali = strlen(trim($data['value']))/2;
+        for($ke=0;$ke<$kali;$ke++){
+            $hasil_dept = substr($data['value'],(($ke+1)*2)-2,2);
+            $dept = $this->db->get_where('dept',['dept_id'=>$hasil_dept])->row_array();
+            $arr = [
+                'dept_id' => $dept['dept_id'],
+                'departemen' => $dept['departemen'],
+            ];
+            array_push($arrrekan,$arr);
+        }
+        return $arrrekan;
+    }
 }
