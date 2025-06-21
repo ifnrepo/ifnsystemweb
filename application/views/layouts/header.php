@@ -648,7 +648,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 8); ?>" href="<?= base_url('akb/clear'); ?>">
                       AKB (AJU Keluar Barang)
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 9); ?>" href="<?= base_url('kontrak'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 9); ?>" href="<?= base_url('kontrak/clear'); ?>">
                       Kontrak
                     </a>
                   </div>

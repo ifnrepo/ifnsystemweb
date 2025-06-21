@@ -21,6 +21,9 @@ $(document).ready(function () {
 	$("#belum").click(function () {
 		pesan("Fasilitas belum ada, Hubungi Programmer Untuk Diskusi !", "error");
 	});
+	$(".onprogress").click(function () {
+		pesan("Dalam tahap pembuatan, Tunggu konfirmasi !", "info");
+	});
 
 	modalBoxSm();
 	modalBoxLg();
