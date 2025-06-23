@@ -29,6 +29,7 @@ class Kontrak extends CI_Controller
             'dept_id' => $this->session->userdata('deptkontrak') == null ? '' : $this->session->userdata('deptkontrak'),
             'jnsbc' => $this->session->userdata('jnsbckontrak') == null ? '' : $this->session->userdata('jnsbckontrak'),
         ];
+        $this->session->unset_userdata('sesikontrak');
         $data['data'] = $this->kontrakmodel->getdatakontrak($kode);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'kontrak';
@@ -45,12 +46,77 @@ class Kontrak extends CI_Controller
         $url = base_url('Kontrak');
         redirect($url);
     }
+    public function adddata()
+    {
+        $header['header'] = 'transaksi';
+        $data['mode'] = 'INPUT';
+        if($this->session->userdata('sesikontrak')==''){
+            $data['data'] = $this->kontrakmodel->adddata()->row_array();
+        }else{
+            $data['data'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
+        }
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'kontrak';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('kontrak/addkontrak',$data);
+        $this->load->view('layouts/footer', $footer);
+    }
+    public function editdata($sesi)
+    {
+        $header['header'] = 'transaksi';
+        $data['mode'] = 'EDIT';
+        $this->session->set_userdata('sesikontrak',$sesi);
+        $data['data'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'kontrak';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('kontrak/addkontrak',$data);
+        $this->load->view('layouts/footer', $footer);
+    }
     public function getdata()
     {
         $this->session->set_userdata('deptkontrak', $_POST['dept_id']);
         $this->session->set_userdata('jnsbckontrak', $_POST['jnsbc']);
         $url = base_url('kontrak');
         redirect($url);
+    }
+
+    public function hapuskontrak($id){
+        $hapus = $this->kontrakmodel->hapuskontrak($id);
+        if($hapus){
+            $url = base_url('kontrak');
+            redirect($url);
+        }
+    }
+    public function simpankontrak(){
+        $data = $_POST;
+        $simpan = $this->kontrakmodel->simpankontrak($data);
+        if($simpan){
+            $url = base_url('kontrak');
+            redirect($url);
+        }
+    }
+    public function loaddetailkontrak(){
+        $id = $_POST['id'];
+        $data = $this->kontrakmodel->loaddetailkontrak($id);
+        $html = '';
+        foreach ($data->result_array() as $det) {
+            $html .= '<tr>';
+            $html .= '<td>'.$det['kategori'].'</td>';
+            $html .= '<td>'.$det['uraian'].'</td>';
+            $html .= '<td>'.$det['hscode'].'</td>';
+            $html .= '<td class="text-right">'.rupiah($det['pcs'],0).'</td>';
+            $html .= '<td class="text-right">'.rupiah($det['kgs'],2).'</td>';
+            $html .= '<td class="text-center"><a href="#" class="btn btn-sm btn-danger btn-flat p-0" style="padding: 2px 3px !important;" data-href="'.base_url() . 'kontrak/hapusdetkontrak/' . $det['id'].'" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Detail Kontrak">Hapus</a></td>';
+            $html .= '</tr>';
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function adddetail($idkontrak)
+    {
+        $data['idkontrak'] = $idkontrak;
+        $this->load->view('kontrak/adddetail',$data);
     }
     public function view($id)
     {
@@ -63,10 +129,6 @@ class Kontrak extends CI_Controller
         $data['header'] = $this->kontrakmodel->getDetail_nomor($id, $kode);
         $this->load->view('kontrak/view', $data);
     }
-
-
-
-
     public function getdatadetailpb()
     {
         $kode = $_POST['id_header'];
@@ -90,10 +152,6 @@ class Kontrak extends CI_Controller
         }
         $cocok = array('datagroup' => $hasil, 'jmlrek' => $jml);
         echo json_encode($cocok);
-    }
-    public function tambahdata()
-    {
-        $this->load->view('pb/add_pb');
     }
     public function edittgl()
     {

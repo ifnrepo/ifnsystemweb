@@ -642,3 +642,36 @@ function getpros($kode){
     $CI = &get_instance();
     return $CI->helpermodel->getpros($kode);
 }
+function nomorkontrak(){
+    // $xkode = trim($kode);
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->nomorkontrak();
+    $xhasil = (int) $getkode['maks'] + 1;
+    $hasil = $xhasil < 10 ? '00'.$xhasil : ($xhasil < 100 ? '0'.$xhasil : $xhasil);
+    return $hasil.'/INM-KB/'.romawi(date('m')).'/'.date('y');
+}
+function romawi($number) {
+    $map = [
+        'M' => 1000,
+        'CM' => 900,
+        'D' => 500,
+        'CD' => 400,
+        'C' => 100,
+        'XC' => 90,
+        'L' => 50,
+        'XL' => 40,
+        'X' => 10,
+        'IX' => 9,
+        'V' => 5,
+        'IV' => 4,
+        'I' => 1
+    ];
+    $result = '';
+    foreach ($map as $roman => $integer) {
+        while ($number >= $integer) {
+            $result .= $roman;
+            $number -= $integer;
+        }
+    }
+    return $result;
+}
