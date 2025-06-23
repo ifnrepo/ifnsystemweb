@@ -1,19 +1,21 @@
 <?php
 class Kontrak_model extends CI_Model
 {
-    public function cekfield($id,$kolom,$nilai){
-        $this->db->where('id',$id);
-        $this->db->where($kolom,$nilai);
+    public function cekfield($id, $kolom, $nilai)
+    {
+        $this->db->where('id', $id);
+        $this->db->where($kolom, $nilai);
         $hasil = $this->db->get('tb_header');
         return $hasil;
     }
 
-    public function getdatakontrak($kode){
+    public function getdatakontrak($kode)
+    {
         $this->db->select('*');
         $this->db->from('tb_kontrak');
-        $this->db->where('dept_id',$kode['dept_id']);
-        $this->db->where('jns_bc',$kode['jnsbc']);
-        $this->db->where('year(tgl_awal) >= '.$this->session->userdata('th')-1);
+        $this->db->where('dept_id', $kode['dept_id']);
+        $this->db->where('jns_bc', $kode['jnsbc']);
+        $this->db->where('year(tgl_awal) >= ' . $this->session->userdata('th') - 1);
         return $this->db->get();
     }
 
@@ -31,7 +33,17 @@ class Kontrak_model extends CI_Model
         return $this->db->get_where('tb_kontrak',['id' => $hasil]);
     }
 
-    public function getdata($id)
+    public function getDetail_nomor($id, $kode)
+    {
+        $this->db->from('tb_kontrak');
+        $this->db->where('id', $id);
+        $this->db->where('dept_id', $kode['dept_id']);
+        $this->db->where('jns_bc', $kode['jnsbc']);
+        return $this->db->get()->row_array();
+    }
+
+
+    public function getdatabyid($id)
     {
         return $this->db->get_where('tb_kontrak',['id' => $id]);
     }
@@ -117,12 +129,12 @@ class Kontrak_model extends CI_Model
         $this->helpermodel->isilog($this->db->last_query());
 
         //Isi data ke detailgen 
-        if($this->session->userdata('tujusekarang')=='GS' || $this->session->userdata('tujusekarang')=='GM'){
-            $datadet = $this->db->get_where('tb_detail',['id_header'=>$data['id']]);
+        if ($this->session->userdata('tujusekarang') == 'GS' || $this->session->userdata('tujusekarang') == 'GM') {
+            $datadet = $this->db->get_where('tb_detail', ['id_header' => $data['id']]);
             foreach ($datadet->result_array() as $keydet) {
                 $keydet['id_detail'] = $keydet['id'];
                 unset($keydet['id']);
-                $this->db->insert('tb_detailgen',$keydet);
+                $this->db->insert('tb_detailgen', $keydet);
             }
         }
         return $query;
@@ -175,16 +187,16 @@ class Kontrak_model extends CI_Model
     public function getspecbarang($mode, $spec)
     {
         if ($mode == 0) {
-            $pek = explode(' ',$spec);
-            $spekjadi= '';
-            if(count($pek)>0){
-                for($x=0;$x<count($pek);$x++){
-                    $spekjadi .= $pek[$x].'%';
+            $pek = explode(' ', $spec);
+            $spekjadi = '';
+            if (count($pek) > 0) {
+                for ($x = 0; $x < count($pek); $x++) {
+                    $spekjadi .= $pek[$x] . '%';
                 }
-            }else{
-                $spekjadi = $spec.'%';
+            } else {
+                $spekjadi = $spec . '%';
             }
-            $queryx = $this->db->query("Select * from barang where nama_barang like '%".substr($spekjadi,0,strlen($spekjadi)-1)."%' and act=1 order by nama_barang ");
+            $queryx = $this->db->query("Select * from barang where nama_barang like '%" . substr($spekjadi, 0, strlen($spekjadi) - 1) . "%' and act=1 order by nama_barang ");
             // $this->db->like('nama_barange', substr($spekjadi,0,strlen($spekjadi)-1));
             // $this->db->order_by('nama_barang', 'ASC');
             // $query = $this->db->get_where('barang', array('act' => 1))->result_array();

@@ -10,7 +10,7 @@ class Kontrak extends CI_Controller
             $url = base_url('Auth');
             redirect($url);
         }
-        $this->load->model('kontrak_model','kontrakmodel');
+        $this->load->model('kontrak_model', 'kontrakmodel');
         $this->load->model('barangmodel');
         $this->load->model('dept_model', 'deptmodel');
         $this->load->model('satuanmodel');
@@ -80,6 +80,7 @@ class Kontrak extends CI_Controller
         $url = base_url('kontrak');
         redirect($url);
     }
+
     public function hapuskontrak($id){
         $hapus = $this->kontrakmodel->hapuskontrak($id);
         if($hapus){
@@ -117,6 +118,17 @@ class Kontrak extends CI_Controller
         $data['idkontrak'] = $idkontrak;
         $this->load->view('kontrak/adddetail',$data);
     }
+    public function view($id)
+    {
+        $kode = [
+            'dept_id' => $this->session->userdata('deptkontrak') ?? '',
+            'jnsbc' => $this->session->userdata('jnsbckontrak') ?? '',
+        ];
+        $data['detail'] = $this->db->get_where('tb_kontrak_detail', ['id_kontrak' => $id])->result_array();
+
+        $data['header'] = $this->kontrakmodel->getDetail_nomor($id, $kode);
+        $this->load->view('kontrak/view', $data);
+    }
     public function getdatadetailpb()
     {
         $kode = $_POST['id_header'];
@@ -152,6 +164,9 @@ class Kontrak extends CI_Controller
         $cekdata = $this->pb_model->depttujupb($kode);
         echo $cekdata;
     }
+
+
+
     public function tambahpb()
     {
         if ($this->session->userdata('deptsekarang') == '' || $this->session->userdata('deptsekarang') == null || $this->session->userdata('tujusekarang') == '' || $this->session->userdata('tujusekarang') == null) {

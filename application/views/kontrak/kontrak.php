@@ -43,7 +43,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="deptkontrak" name="deptkontrak">
-                        <?php foreach ($deprekanan as $deptrekanan) { $selek = $this->session->userdata('deptkontrak')==$deptrekanan['dept_id'] ? 'selected' : ''; ?>
+                        <?php foreach ($deprekanan as $deptrekanan) {
+                          $selek = $this->session->userdata('deptkontrak') == $deptrekanan['dept_id'] ? 'selected' : ''; ?>
                           <option value="<?= $deptrekanan['dept_id']; ?>" <?= $selek; ?>><?= $deptrekanan['departemen']; ?></option>
                         <?php } ?>
                       </select>
@@ -55,8 +56,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="jns_bc" name="jns_bc">
-                        <option value="261" <?php if($this->session->userdata('jnsbckontrak')=="261"){ echo "selected"; } ?>>BC 2.6.1</option>
-                        <option value="40" <?php if($this->session->userdata('jnsbckontrak')=="40"){ echo "selected"; } ?>>BC 4.0</option>
+                        <option value="261" <?php if ($this->session->userdata('jnsbckontrak') == "261") {
+                                              echo "selected";
+                                            } ?>>BC 2.6.1</option>
+                        <option value="40" <?php if ($this->session->userdata('jnsbckontrak') == "40") {
+                                              echo "selected";
+                                            } ?>>BC 4.0</option>
                       </select>
                     </div>
                   </span>
@@ -72,8 +77,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1">
-                    <?php if($disab!=''){ ?>
-                    <small class="text-pink text-center">Tekan <b>GO</b> untuk Load Data</small>
+                    <?php if ($disab != '') { ?>
+                      <small class="text-pink text-center">Tekan <b>GO</b> untuk Load Data</small>
                     <?php } ?>
                   </h4>
                 </div>
@@ -114,7 +119,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <td class="line-12"><span class="font-kecil text-info"><?= tglmysql($datdet['tgl_ssb']); ?></span><br><?= $datdet['nomor_ssb']; ?></td>
                 <td class="line-12"><span class="font-kecil text-info"><?= tglmysql($datdet['tgl_bpj']); ?></span><br><?= $datdet['nomor_bpj']; ?></td>
                 <td>
-                  <a href="#" class="onprogress btn btn-sm btn-success btn-icon p-0" style="padding: 3px 5px !important;">View</a>
+                  <a href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" class="onprogress btn btn-sm btn-success btn-icon p-0">View</a>
                   <a href="<?= base_url().'kontrak/editdata/'.$datdet['id']; ?>" class="onprogress btn btn-sm btn-primary btn-icon p-0" style="padding: 3px 5px !important;">Edit</a>
                   <a href="#" class="btn btn-sm btn-danger btn-icon p-0" data-href="<?= base_url() . 'kontrak/hapuskontrak/' . $datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Kontrak <br><?= $datdet['nomor']; ?>" style="padding: 3px 5px !important;">Delete</a>
                 </td>
