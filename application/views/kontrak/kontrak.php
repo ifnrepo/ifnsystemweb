@@ -22,7 +22,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
-              <?php $disab=''; if($this->session->userdata('deptkontrak')=='' || $this->session->userdata('deptkontrak')==null || $this->session->userdata('jnsbckontrak')=='' || $this->session->userdata('jnsbckontrak')==null){ $disab = 'disabled';} ?>
+              <?php $disab = '';
+              if ($this->session->userdata('deptkontrak') == '' || $this->session->userdata('deptkontrak') == null || $this->session->userdata('jnsbckontrak') == '' || $this->session->userdata('jnsbckontrak') == null) {
+                $disab = 'disabled';
+              } ?>
               <a href="<?= base_url(); ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm <?= $disab; ?>" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
@@ -43,7 +46,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="deptkontrak" name="deptkontrak">
-                        <?php foreach ($deprekanan as $deptrekanan) { $selek = $this->session->userdata('deptkontrak')==$deptrekanan['dept_id'] ? 'selected' : ''; ?>
+                        <?php foreach ($deprekanan as $deptrekanan) {
+                          $selek = $this->session->userdata('deptkontrak') == $deptrekanan['dept_id'] ? 'selected' : ''; ?>
                           <option value="<?= $deptrekanan['dept_id']; ?>" <?= $selek; ?>><?= $deptrekanan['departemen']; ?></option>
                         <?php } ?>
                       </select>
@@ -55,8 +59,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="jns_bc" name="jns_bc">
-                        <option value="261" <?php if($this->session->userdata('jnsbckontrak')=="261"){ echo "selected"; } ?>>BC 2.6.1</option>
-                        <option value="40" <?php if($this->session->userdata('jnsbckontrak')=="40"){ echo "selected"; } ?>>BC 4.0</option>
+                        <option value="261" <?php if ($this->session->userdata('jnsbckontrak') == "261") {
+                                              echo "selected";
+                                            } ?>>BC 2.6.1</option>
+                        <option value="40" <?php if ($this->session->userdata('jnsbckontrak') == "40") {
+                                              echo "selected";
+                                            } ?>>BC 4.0</option>
                       </select>
                     </div>
                   </span>
@@ -72,8 +80,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1">
-                    <?php if($disab!=''){ ?>
-                    <small class="text-pink text-center">Tekan <b>GO</b> untuk Load Data</small>
+                    <?php if ($disab != '') { ?>
+                      <small class="text-pink text-center">Tekan <b>GO</b> untuk Load Data</small>
                     <?php } ?>
                   </h4>
                 </div>
@@ -103,22 +111,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php
               foreach ($data->result_array() as $datdet) :
               ?>
-              <tr>
-                <td><?= $datdet['nomor']; ?></td>
-                <td><?= $datdet['proses']; ?></td>
-                <td><?= $datdet['nomor_aju']; ?></td>
-                <td><?= tglmysql($datdet['tgl_awal']); ?></td>
-                <td><?= tglmysql($datdet['tgl_akhir']); ?></td>
-                <td class="text-right"><?= rupiah($datdet['pcs'],2); ?></td>
-                <td class="text-right"><?= rupiah($datdet['kgs'],2); ?></td>
-                <td class="line-12"><span class="font-kecil"><?= tglmysql($datdet['tgl_ssb']); ?></span><br><?= $datdet['nomor_ssb']; ?></td>
-                <td class="line-12"><span class="font-kecil"><?= tglmysql($datdet['tgl_bpj']); ?></span><br><?= $datdet['nomor_bpj']; ?></td>
-                <td>
-                  <a href="#" class="onprogress btn btn-sm btn-success btn-icon p-0">View</a>
-                  <a href="#" class="onprogress btn btn-sm btn-primary btn-icon p-0">Edit</a>
-                  <a href="#" class="onprogress btn btn-sm btn-danger btn-icon p-0">Delete</a>
-                </td>
-              </tr>
+                <tr>
+                  <td><?= $datdet['nomor']; ?></td>
+                  <td><?= $datdet['proses']; ?></td>
+                  <td><?= $datdet['nomor_aju']; ?></td>
+                  <td><?= tglmysql($datdet['tgl_awal']); ?></td>
+                  <td><?= tglmysql($datdet['tgl_akhir']); ?></td>
+                  <td class="text-right"><?= rupiah($datdet['pcs'], 2); ?></td>
+                  <td class="text-right"><?= rupiah($datdet['kgs'], 2); ?></td>
+                  <td class="line-12"><span class="font-kecil"><?= tglmysql($datdet['tgl_ssb']); ?></span><br><?= $datdet['nomor_ssb']; ?></td>
+                  <td class="line-12"><span class="font-kecil"><?= tglmysql($datdet['tgl_bpj']); ?></span><br><?= $datdet['nomor_bpj']; ?></td>
+                  <td>
+                    <!-- <td class='font-bold'><a href="<?= base_url() . 'akb/viewdetail/' . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail OUT (AJU Keluar Barang)"><?= $datdet['nomor_dok'] ?></a></td> -->
+                    <a href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" class="onprogress btn btn-sm btn-success btn-icon p-0">View</a>
+                    <a href="#" class="onprogress btn btn-sm btn-primary btn-icon p-0">Edit</a>
+                    <a href="#" class="onprogress btn btn-sm btn-danger btn-icon p-0">Delete</a>
+                  </td>
+                </tr>
               <?php endforeach; ?>
             </tbody>
           </table>
