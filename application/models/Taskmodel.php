@@ -449,8 +449,8 @@ class Taskmodel extends CI_Model
                 $datadetail = $cekdetail->row_array();
                 $this->db->set('pcs_adj','pcs_adj +'.$datdet['pcs'],false);
                 $this->db->set('kgs_adj','kgs_adj +'.$datdet['kgs'],false);
-                $this->db->set('pcs_akhir','pcs_akhir +'.$datdet['pcs'],false);
-                $this->db->set('kgs_akhir','kgs_akhir +'.$datdet['kgs'],false);
+                $this->db->set('pcs_akhir','pcs_awal + pcs_masuk + pcs_adj +'.$datdet['pcs'],false);
+                $this->db->set('kgs_akhir','kgs_awal + kgs_masuk + kgs_adj +'.$datdet['kgs'],false);
                 $this->db->where('id',$datadetail['id']);
                 $this->db->update('stokdept');
                 $this->helpermodel->isilog($this->db->last_query());

@@ -17,12 +17,51 @@ class Kontrak_model extends CI_Model
         return $this->db->get();
     }
 
-    public function getdatabyid($id)
+    public function adddata(){
+        $arrinput = [
+            'tgl_awal' => date('Y-m-d'),
+            'tgl_akhir' => date('Y-m-d', strtotime("+60 day")),
+            'dept_id' => $this->session->userdata('deptkontrak'),
+            'jns_bc' => $this->session->userdata('jnsbckontrak'),
+            'nomor' => nomorkontrak()
+        ];
+        $this->db->insert('tb_kontrak',$arrinput);
+        $hasil = $this->db->insert_id();
+        $this->session->set_userdata('sesikontrak',$hasil);
+        return $this->db->get_where('tb_kontrak',['id' => $hasil]);
+    }
+
+    public function getdata($id)
     {
-        $this->db->select('tb_header.*,dept.departemen');
-        $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
-        $this->db->where('tb_header.id', $id);
-        return $this->db->get('tb_header')->row_array();
+        return $this->db->get_where('tb_kontrak',['id' => $id]);
+    }
+    public function hapuskontrak($id){
+        $this->db->trans_start();
+        $this->db->where('id_kontrak',$id);
+        $this->db->delete('tb_kontrak_detail');
+
+        $this->db->where('id',$id);
+        $this->db->delete('tb_kontrak');
+
+        return $this->db->trans_complete();
+    }
+    public function simpankontrak($data){
+        unset($data['mode']);
+        $data['pcs'] = toangka($data['pcs']);
+        $data['kgs'] = toangka($data['kgs']);
+        $data['tgl_awal'] = tglmysql($data['tgl_awal']);
+        $data['tgl_akhir'] = tglmysql($data['tgl_akhir']);
+        $data['tgl_expired'] = tglmysql($data['tgl_expired']);
+        $data['tgl_ssb'] = tglmysql($data['tgl_ssb']);
+        $data['tgl_bpj'] = tglmysql($data['tgl_bpj']);
+        $data['tgl_kep'] = tglmysql($data['tgl_kep']);
+        $data['tgl_dok_lain'] = tglmysql($data['tgl_dok_lain']);
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_kontrak',$data);
+    }
+    public function loaddetailkontrak($id){
+        $this->db->where('id_kontrak',$id);
+        return $this->db->get('tb_kontrak_detail');
     }
     public function depttujupb($kode)
     {

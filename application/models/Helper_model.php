@@ -479,4 +479,13 @@ class Helper_model extends CI_Model
         }
         return $arrrekan;
     }
+    public function nomorkontrak(){
+        $tahun = date('y');
+        $this->db->select('MAX(LEFT(nomor,3)) AS maks');
+        $this->db->from('tb_kontrak');
+        $this->db->where('RIGHT(TRIM(nomor),2)',$tahun);
+        $this->db->where('LEFT(nomor,3) != ','000');
+        $this->db->where('jns_bc',$this->session->userdata('jnsbckontrak'));
+        return $this->db->get()->row_array();
+    }
 }

@@ -469,7 +469,7 @@ $(".inputangka").on("change click keyup input paste", function (event) {
 		return value
 			.replace(/(?!\.)\D/g, "")
 			.replace(/(?<=\..*)\./g, "")
-			.replace(/(?<=\.\d\d).*/g, "")
+			.replace(/(?<=\.\d\d\d\d).*/g, "")
 			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	});
 });

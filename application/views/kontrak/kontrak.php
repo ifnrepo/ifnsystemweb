@@ -6,11 +6,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
         <h2 class="page-title p-2">
-          Kontrak
+          Kontrak Makloon
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
-        <a href="<?= base_url(); ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+
       </div>
     </div>
   </div>
@@ -19,11 +19,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
-        <div class="sticky-top bg-white">
+        <div class="sticky-top bg-white mb-2">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
               <?php $disab=''; if($this->session->userdata('deptkontrak')=='' || $this->session->userdata('deptkontrak')==null || $this->session->userdata('jnsbckontrak')=='' || $this->session->userdata('jnsbckontrak')==null){ $disab = 'disabled';} ?>
-              <a href="<?= base_url(); ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm <?= $disab; ?>" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <a href="<?= base_url().'kontrak/adddata'; ?>" class="btn btn-primary btn-sm <?= $disab; ?>" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
@@ -83,13 +83,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
 
         </div>
-        <div>
-          <table id="pbtabel" class="table nowrap order-column mt-1" style="width: 100% !important;">
+        <div >
+          <table id="pbtabel" class="table nowrap order-column datatable mt-1" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Nomor</th>
                 <th>Proses</th>
-                <th>Nomor<br>AJU</th>
+                <th class="text-start">Nomor<br>AJU</th>
                 <th>Tgl<br>Berlaku</th>
                 <th>Tgl<br>Berakhir</th>
                 <th>Pcs</th>
@@ -106,17 +106,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <tr>
                 <td><?= $datdet['nomor']; ?></td>
                 <td><?= $datdet['proses']; ?></td>
-                <td><?= $datdet['nomor_aju']; ?></td>
+                <td class="text-start"><?= $datdet['nomor_aju']; ?></td>
                 <td><?= tglmysql($datdet['tgl_awal']); ?></td>
                 <td><?= tglmysql($datdet['tgl_akhir']); ?></td>
                 <td class="text-right"><?= rupiah($datdet['pcs'],2); ?></td>
                 <td class="text-right"><?= rupiah($datdet['kgs'],2); ?></td>
-                <td class="line-12"><span class="font-kecil"><?= tglmysql($datdet['tgl_ssb']); ?></span><br><?= $datdet['nomor_ssb']; ?></td>
-                <td class="line-12"><span class="font-kecil"><?= tglmysql($datdet['tgl_bpj']); ?></span><br><?= $datdet['nomor_bpj']; ?></td>
+                <td class="line-12"><span class="font-kecil text-info"><?= tglmysql($datdet['tgl_ssb']); ?></span><br><?= $datdet['nomor_ssb']; ?></td>
+                <td class="line-12"><span class="font-kecil text-info"><?= tglmysql($datdet['tgl_bpj']); ?></span><br><?= $datdet['nomor_bpj']; ?></td>
                 <td>
-                  <a href="#" class="onprogress btn btn-sm btn-success btn-icon p-0">View</a>
-                  <a href="#" class="onprogress btn btn-sm btn-primary btn-icon p-0">Edit</a>
-                  <a href="#" class="onprogress btn btn-sm btn-danger btn-icon p-0">Delete</a>
+                  <a href="#" class="onprogress btn btn-sm btn-success btn-icon p-0" style="padding: 3px 5px !important;">View</a>
+                  <a href="<?= base_url().'kontrak/editdata/'.$datdet['id']; ?>" class="onprogress btn btn-sm btn-primary btn-icon p-0" style="padding: 3px 5px !important;">Edit</a>
+                  <a href="#" class="btn btn-sm btn-danger btn-icon p-0" data-href="<?= base_url() . 'kontrak/hapuskontrak/' . $datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Kontrak <br><?= $datdet['nomor']; ?>" style="padding: 3px 5px !important;">Delete</a>
                 </td>
               </tr>
               <?php endforeach; ?>
