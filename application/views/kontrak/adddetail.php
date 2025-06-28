@@ -1,5 +1,5 @@
 <div class="container-xl font-kecil">
-    <input type="text" class="hilang" name="id_kontrak" id="id_kontrak" value="<?= $idkontrak; ?>">
+    <input type="text" class="" name="id_kontrak" id="id_kontrak" value="<?= $idkontrak; ?>">
     <div class="row">
         <div class="col-12">
             <div class="mb-1 row">
@@ -28,13 +28,13 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Pcs</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil inputangka text-right" name="pcs" id="pcs" placeholder="Qty">
+                    <input type="text" class="form-control font-kecil inputangka text-right" name="pcskontrak" id="pcskontrak" placeholder="Qty">
                 </div>
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Kgs</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil inputangka text-right" name="kgs" id="kgs" placeholder="Kgs">
+                    <input type="text" class="form-control font-kecil inputangka text-right" name="kgskontrak" id="kgskontrak" placeholder="Kgs">
                 </div>
             </div>
         </div>
@@ -71,11 +71,33 @@
         return false;
        }
        if (
-		($("#pcs").val() == "" || $("#pcs").val() == "0") &&
-		($("#kgs").val() == "" || $("#kgs").val() == "0")
+		($("#pcskontrak").val() == "" || $("#pcskontrak").val() == "0" || $("#pcskontrak").val().trim() == "-") &&
+		($("#kgskontrak").val() == "" || $("#kgskontrak").val() == "0" || $("#kgskontrak").val().trim() == "-")
         ) {
             pesan("Pcs / Kgs Kosong", "info");
             return false;
         }
+        // document.formdetailkontrak.submit();
+        $.ajax({
+            // dataType: "json",
+            type: "POST",
+            url: base_url + "kontrak/simpandetailkontrak",
+            data: {
+                id_kontrak: $("#id_kontrak").val(),
+                kode_kategori: $("#kode_kategori").val(),
+                kategori: $("#kode_kategori option:selected").text(),
+                hscode: $("#hscode").val(),
+                uraian: $("#uraian").val(),
+                pcs: $("#pcskontrak").val(),
+                kgs: $("#kgskontrak").val(),
+            },
+            success: function (data) {
+                window.location.reload();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            },
+        });
     })
 </script>

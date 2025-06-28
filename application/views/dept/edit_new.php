@@ -46,6 +46,39 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </select>
                 </div>
               </div>
+              <div id="jikasubkon" class="">
+              <div class="hr m-0"></div>
+                  <div class="mb-1 row mt-1">
+                      <label class="col-3 col-form-label required">Nama Subkon</label>
+                      <div class="col">
+                          <input type="text" class="form-control font-kecil" name="nama_subkon" id="nama_subkon" value="<?= $data['nama_subkon']; ?>" placeholder="Nama">
+                      </div>
+                  </div>
+                  <div class="mb-1 row">
+                      <label class="col-3 col-form-label required">Alamat</label>
+                      <div class="col">
+                          <textarea name="alamat_subkon" id="alamat_subkon" class="form-control font-kecil" placeholder="Alamat"><?= $data['alamat_subkon']; ?></textarea>
+                      </div>
+                  </div>
+                  <div class="mb-1 row">
+                      <label class="col-3 col-form-label required">NPWP</label>
+                      <div class="col">
+                          <input type="text" class="form-control font-kecil" name="npwp" id="npwp" value="<?= $data['npwp']; ?>" placeholder="NPWP">
+                      </div>
+                  </div>
+                  <div class="mb-1 row">
+                      <label class="col-3 col-form-label required">PIC</label>
+                      <div class="col">
+                          <input type="text" class="form-control font-kecil" name="pic" id="pic" value="<?= $data['pic']; ?>" placeholder="PIC">
+                      </div>
+                  </div>
+                  <div class="mb-1 row">
+                      <label class="col-3 col-form-label required">Jabatan</label>
+                      <div class="col">
+                          <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" value="<?= $data['jabatan']; ?>" placeholder="Jabatan PIC">
+                      </div>
+                  </div>
+              </div>
               <div class="hr m-0"></div>
             <div class="mt-1 row">
                 <label class="col-3 col-form-label"></label>

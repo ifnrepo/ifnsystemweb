@@ -133,11 +133,20 @@ class Helper_model extends CI_Model
                 array_push($hasil, $ok_bb);
             }
         }
+        if ($cek['ok_pp'] == 1) {
+            $ok_bb = 'Dokumen diapprove oleh : ' . datauser($cek['user_pp'], 'name') . ' on ' . $cek['tgl_pp'];
+            array_push($hasil, $ok_bb);
+        } else {
+            if ($cek['ok_bb'] == 1 && $cek['ok_pp']==0) {
+                $ok_bb = 'Menunggu Approve Manager PP ';
+                array_push($hasil, $ok_bb);
+            }
+        }
         if ($cek['ok_valid'] == 1) {
             $ok_valid = 'Dokumen divalidasi oleh : ' . datauser($cek['user_valid'], 'name') . ' on ' . $cek['tgl_valid'];
             array_push($hasil, $ok_valid);
         } else {
-            if ($cek['data_ok'] == 1) {
+            if ($cek['data_ok'] == 1 && $cek['ok_pp']==1) {
                 $ok_bb = 'Menunggu Validasi Manager ' . $cek['dept_bbl'];
                 array_push($hasil, $ok_bb);
             }

@@ -675,3 +675,35 @@ function romawi($number) {
     }
     return $result;
 }
+function formatnpwp($kata){
+    $panjang = strlen($kata);
+    $hasil = '';
+    if($panjang>=15){
+        for($x=1;$x<=6;$x++){
+            switch ($x) {
+                case 1:
+                    $hasil = substr($kata,0,2).".";
+                    break;
+                case 2:
+                    $hasil .= substr($kata,2,3).".";
+                    break;
+                case 3:
+                    $hasil .= substr($kata,5,3).".";
+                    break;
+                case 4:
+                    $hasil .= substr($kata,8,1)."-";
+                    break;
+                case 5:
+                    $hasil .= substr($kata,9,3).".";
+                    break;
+                case 6:
+                    $hasil .= substr($kata,12,3);
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+        }
+    }
+    return $hasil;
+}

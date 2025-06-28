@@ -1,6 +1,6 @@
 <div class="container-xl">
     <div class="card">
-        <div class="col-12">
+        <div class="col-12 m-1">
             <div class="row">
                 <div class="col-md-6 text-primary font-bold font-kecil">
                     <div class="mb-1 row">
@@ -98,8 +98,8 @@
                             <thead>
                                 <tr>
                                     <th class="text-danger text-center">No</th>
-                                    <th class="text-danger text-center">Kode</th>
-                                    <th class="text-danger text-center">Kode Kategori</th>
+                                    <!-- <th class="text-danger text-center">Kode</th> -->
+                                    <!-- <th class="text-danger text-center">Kode Kategori</th> -->
                                     <th class="text-danger text-center">Kategori</th>
                                     <th class="text-danger text-center">Uraian</th>
                                     <th class="text-danger text-center">HsCode</th>
@@ -113,13 +113,11 @@
                                 foreach ($detail as $key) : $no++; ?>
                                     <tr>
                                         <td style="text-align: center;"><?= $no; ?></td>
-                                        <td style="text-align: center;"><?= $key['kode']; ?></td>
-                                        <td style="text-align: center;"><?= $key['kode_kategori']; ?></td>
                                         <td style="text-align: center;"><?= $key['kategori']; ?></td>
                                         <td style="text-align: center;"><?= $key['uraian']; ?></td>
                                         <td style="text-align: center;"><?= $key['hscode']; ?></td>
-                                        <td style="text-align: center;"><?= $key['pcs']; ?></td>
-                                        <td style="text-align: center;"><?= $key['kgs']; ?></td>
+                                        <td style="text-align: right;"><?= $key['pcs']; ?></td>
+                                        <td style="text-align: right;"><?= $key['kgs']; ?></td>
                                     </tr>
                                 <?php endforeach; ?>
                             </tbody>
