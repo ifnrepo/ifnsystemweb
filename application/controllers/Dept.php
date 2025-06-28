@@ -44,6 +44,11 @@ class Dept extends CI_Controller
             'dept_id' => strtoupper($_POST['dept_id']),
             'departemen' => strtoupper($_POST['departemen']),
             'katedept_id' => strtoupper($_POST['kat']),
+            'nama_subkon' => strtoupper($_POST['sbk']),
+            'alamat_subkon' => $_POST['alamat_sbk'],
+            'npwp' => $_POST['npwp'],
+            'pic' => $_POST['pic'],
+            'jabatan' => $_POST['jabatan'],
             'pb' => $_POST['pb'],
             'bbl' => $_POST['bbl'],
             'adj' => $_POST['adj']

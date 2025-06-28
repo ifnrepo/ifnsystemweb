@@ -25,9 +25,13 @@ class Kontrak extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['deprekanan'] = $this->helpermodel->getkontrakrekanan();
+        if($this->session->userdata('statuskontrak')==""){
+            $this->session->set_userdata('statuskontrak',1);
+        }
         $kode = [
             'dept_id' => $this->session->userdata('deptkontrak') == null ? '' : $this->session->userdata('deptkontrak'),
             'jnsbc' => $this->session->userdata('jnsbckontrak') == null ? '' : $this->session->userdata('jnsbckontrak'),
+            'status' => $this->session->userdata('statuskontrak')
         ];
         $this->session->unset_userdata('sesikontrak');
         $data['data'] = $this->kontrakmodel->getdatakontrak($kode);
@@ -41,6 +45,7 @@ class Kontrak extends CI_Controller
     {
         $this->session->unset_userdata('deptkontrak');
         $this->session->unset_userdata('jnsbckontrak');
+        $this->session->unset_userdata('statuskontrak');
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
         $url = base_url('Kontrak');
@@ -77,6 +82,7 @@ class Kontrak extends CI_Controller
     {
         $this->session->set_userdata('deptkontrak', $_POST['dept_id']);
         $this->session->set_userdata('jnsbckontrak', $_POST['jnsbc']);
+        $this->session->set_userdata('statuskontrak', $_POST['status']);
         $url = base_url('kontrak');
         redirect($url);
     }
@@ -98,6 +104,8 @@ class Kontrak extends CI_Controller
     }
     public function loaddetailkontrak(){
         $id = $_POST['id'];
+        $mode = $_POST['mode'];
+        $part_of_url = $mode=='INPUT' ? 'adddata' : 'editdata';
         $data = $this->kontrakmodel->loaddetailkontrak($id);
         $html = '';
         foreach ($data->result_array() as $det) {
@@ -107,7 +115,7 @@ class Kontrak extends CI_Controller
             $html .= '<td>'.$det['hscode'].'</td>';
             $html .= '<td class="text-right">'.rupiah($det['pcs'],0).'</td>';
             $html .= '<td class="text-right">'.rupiah($det['kgs'],2).'</td>';
-            $html .= '<td class="text-center"><a href="#" class="btn btn-sm btn-danger btn-flat p-0" style="padding: 2px 3px !important;" data-href="'.base_url() . 'kontrak/hapusdetkontrak/' . $det['id'].'" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Detail Kontrak">Hapus</a></td>';
+            $html .= '<td class="text-center"><a href="#" class="btn btn-sm btn-danger btn-flat p-0" style="padding: 2px 3px !important;" data-href="'.base_url() . 'kontrak/hapusdetailkontrak/' . $det['id'].'/'.$part_of_url.'" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Detail Kontrak">Hapus</a></td>';
             $html .= '</tr>';
         }
         $cocok = array('datagroup' => $html);
@@ -128,6 +136,36 @@ class Kontrak extends CI_Controller
 
         $data['header'] = $this->kontrakmodel->getDetail_nomor($id, $kode);
         $this->load->view('kontrak/view', $data);
+    }
+    public function simpandetailkontrak(){
+        $data = [
+            'id_kontrak' => $_POST['id_kontrak'],
+            'kode_kategori' => $_POST['kode_kategori'],
+            'kategori' => $_POST['kategori'],
+            'uraian' => $_POST['uraian'],
+            'hscode' => $_POST['hscode'],
+            'pcs' => toangka($_POST['pcs']),
+            'kgs' => toangka($_POST['kgs']),
+        ];
+        $simpan = $this->kontrakmodel->simpandetailkontrak($data);
+        echo $simpan;
+    }
+    public function hapusdetailkontrak($id,$id2){
+        $hapus = $this->kontrakmodel->hapusdetailkontrak($id);
+        if($hapus){
+            $url = base_url('kontrak/'.$id2);
+            redirect($url);
+        }
+    }
+    public function simpankedatabase(){
+        $data = [
+            'tabel' => $_POST['tbl'],
+            'kolom' => $_POST['kolom'],
+            'isi' => $_POST['data'],
+            'id' => $_POST['aidi']
+        ];
+        $hasil = $this->kontrakmodel->simpankedatabase($data);
+        echo $hasil;
     }
     public function getdatadetailpb()
     {

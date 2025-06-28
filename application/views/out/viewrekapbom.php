@@ -26,6 +26,7 @@
                         $totpcs += $detail['totpcs'];
                         $totkgs += $detail['totkgs'];
                         $cekkurang = $detail['totkgs'] > $detail['kgsstok'] ? 'text-danger' : '';
+                        $cekkurang = $detail['totpcs'] > $detail['pcsstok'] ? 'text-danger' : '';
                         $xnet = $detail['exnet']==0 ? '' : 'Y';
                     ?>
                         <tr class="font-kecil">

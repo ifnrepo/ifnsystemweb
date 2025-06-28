@@ -27,6 +27,7 @@ class Bbl_model extends CI_Model
         }
         $this->db->where('tb_header.kode_dok', 'bbl');
         $this->db->where_in('dept_id', $arrdep);
+        $this->db->order_by('tb_header.tgl','desc');
         return $this->db->get()->result_array();
     }
 

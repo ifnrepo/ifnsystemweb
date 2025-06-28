@@ -438,11 +438,11 @@ class Taskmodel extends CI_Model
                 'item' => $datdet['item'],
                 'dis' => $datdet['dis'],
                 'id_barang' => $datdet['id_barang'],
-                'insno' => $datdet['insno'],
-                'nobontr' => $datdet['nobontr'],
+                'trim(insno)' => trim($datdet['insno']),
+                'trim(nobontr)' => trim($datdet['nobontr']),
                 'dln' => $datdet['dln'],
                 'trim(nobale)' => trim($datdet['nobale']),
-                'exnet' => $datdet['exnet'],
+                // 'exnet' => $datdet['exnet'],
             ];
             $cekdetail = $this->db->get_where('stokdept',$kondisi);
             if($cekdetail->num_rows() > 0){

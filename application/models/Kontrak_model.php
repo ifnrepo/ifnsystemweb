@@ -13,9 +13,17 @@ class Kontrak_model extends CI_Model
     {
         $this->db->select('*');
         $this->db->from('tb_kontrak');
-        $this->db->where('dept_id', $kode['dept_id']);
+        $this->db->join('dept','dept.dept_id = tb_kontrak.dept_id');
+        if($kode['dept_id']!=""){
+            $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
+        }
         $this->db->where('jns_bc', $kode['jnsbc']);
-        $this->db->where('year(tgl_awal) >= ' . $this->session->userdata('th') - 1);
+        if($kode['status']==1){
+            $this->db->where("tgl_akhir >= '" . date('Y-m-d')."'");
+        }else if($kode['status']==2){
+            $this->db->where("tgl_akhir < '" . date('Y-m-d')."'");
+        }
+        $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }
 
@@ -37,11 +45,19 @@ class Kontrak_model extends CI_Model
     {
         $this->db->from('tb_kontrak');
         $this->db->where('id', $id);
-        $this->db->where('dept_id', $kode['dept_id']);
+        // $this->db->where('dept_id', $kode['dept_id']);
         $this->db->where('jns_bc', $kode['jnsbc']);
         return $this->db->get()->row_array();
     }
 
+    public function getdata($id)
+    {
+        $this->db->select("*");
+        $this->db->from('tb_kontrak');
+        $this->db->join('dept','dept.dept_id = tb_kontrak.dept_id','left');
+        $this->db->where('tb_kontrak.id',$id);
+        return $this->db->get();
+    }
 
     public function getdatabyid($id)
     {
@@ -61,12 +77,17 @@ class Kontrak_model extends CI_Model
         unset($data['mode']);
         $data['pcs'] = toangka($data['pcs']);
         $data['kgs'] = toangka($data['kgs']);
+        $data['bea_masuk'] = toangka($data['bea_masuk']);
+        $data['ppn'] = toangka($data['ppn']);
+        $data['pph'] = toangka($data['pph']);
+        $data['jml_ssb'] = toangka($data['jml_ssb']);
         $data['tgl_awal'] = tglmysql($data['tgl_awal']);
         $data['tgl_akhir'] = tglmysql($data['tgl_akhir']);
         $data['tgl_expired'] = tglmysql($data['tgl_expired']);
         $data['tgl_ssb'] = tglmysql($data['tgl_ssb']);
         $data['tgl_bpj'] = tglmysql($data['tgl_bpj']);
         $data['tgl_kep'] = tglmysql($data['tgl_kep']);
+        $data['tgl_surat'] = tglmysql($data['tgl_surat']);
         $data['tgl_dok_lain'] = tglmysql($data['tgl_dok_lain']);
         $this->db->where('id',$data['id']);
         return $this->db->update('tb_kontrak',$data);
@@ -74,6 +95,18 @@ class Kontrak_model extends CI_Model
     public function loaddetailkontrak($id){
         $this->db->where('id_kontrak',$id);
         return $this->db->get('tb_kontrak_detail');
+    }
+    public function simpandetailkontrak($data){
+        $hasil = $this->db->insert('tb_kontrak_detail',$data);
+        return $hasil;
+    }
+    public function hapusdetailkontrak($id){
+        $this->db->where('id',$id);
+        return $this->db->delete('tb_kontrak_detail');
+    }
+    public function simpankedatabase($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update($data['tabel'],[$data['kolom']=>$data['isi']]);
     }
     public function depttujupb($kode)
     {

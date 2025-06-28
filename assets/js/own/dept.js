@@ -1,4 +1,6 @@
-$(document).ready(function () {});
+$(document).ready(function () {
+	$("#katedept_id").change();
+});
 
 $("#editdept").click(function () {
 	if ($("#dept_id").val() == "") {
@@ -13,6 +15,15 @@ $("#editdept").click(function () {
 		pesan("Kategori tidak boleh kosong !", "error");
 		return;
 	}
-	
+
 	document.formatedit.submit();
+});
+
+$("#katedept_id").change(function () {
+	var x = $(this).val();
+	if (x == 3) {
+		$("#jikasubkon").removeClass("hilang");
+	} else {
+		$("#jikasubkon").addClass("hilang");
+	}
 });

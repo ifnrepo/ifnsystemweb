@@ -542,14 +542,14 @@ class Out_model extends CI_Model{
                     $kondisistok = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
-                        'nobontr' => $datdet['nobontr'],
-                        'insno' => $datdet['insno'],
+                        'trim(nobontr)' => trim($datdet['nobontr']),
+                        'trim(insno)' => trim($datdet['insno']),
                         'id_barang' => $datdet['id_barang'],
-                        'po' => $datdet['po'],
-                        'item' => $datdet['item'],
+                        'trim(po)' => trim($datdet['po']),
+                        'trim(item)' => trim($datdet['item']),
                         'dis' => $datdet['dis'],
                         'dln' => $datdet['dln'],
-                        'trim(nobale)' => $datdet['dept_tuju']=='GF' ? trim($datdet['nobale']) : '',
+                        'trim(nobale)' => ($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='FN') ? trim($datdet['nobale']) : '',
                         // 'exnet' => $datdet['exnet'],
                         'stok' => $datdet['stok']
                     ];

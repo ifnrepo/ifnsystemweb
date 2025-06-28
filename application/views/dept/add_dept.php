@@ -24,6 +24,39 @@
                   </select>
                 </div>
             </div>
+            <div id="jikasubkon" class="hilang">
+            <div class="hr m-0"></div>
+                <div class="mb-1 row mt-1">
+                    <label class="col-3 col-form-label required">Nama Subkon</label>
+                    <div class="col">
+                        <input type="text" class="form-control font-kecil" name="nama_subkon" id="nama_subkon" placeholder="Nama">
+                    </div>
+                </div>
+                <div class="mb-1 row">
+                    <label class="col-3 col-form-label required">Alamat</label>
+                    <div class="col">
+                        <textarea name="alamat_subkon" id="alamat_subkon" class="form-control font-kecil" placeholder="Alamat"></textarea>
+                    </div>
+                </div>
+                <div class="mb-1 row">
+                    <label class="col-3 col-form-label required">NPWP</label>
+                    <div class="col">
+                        <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="NPWP">
+                    </div>
+                </div>
+                <div class="mb-1 row">
+                    <label class="col-3 col-form-label required">PIC</label>
+                    <div class="col">
+                        <input type="text" class="form-control font-kecil" name="pic" id="pic" placeholder="PIC">
+                    </div>
+                </div>
+                <div class="mb-1 row">
+                    <label class="col-3 col-form-label required">Jabatan</label>
+                    <div class="col">
+                        <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" placeholder="Jabatan PIC">
+                    </div>
+                </div>
+            </div>
             <div class="hr m-0"></div>
             <div class="mt-1 row">
                 <label class="col-3 col-form-label"></label>
@@ -58,6 +91,9 @@
     <button type="button" class="btn btn-primary" id="simpandept">Simpan</button>
 </div>
 <script>
+    $(document).ready(function(){
+        $("#katedept_id").change();
+    })
     $("#simpandept").click(function() {
         var cekpb = $("#pb").prop('checked') ? '1' : '0';
         var cekbbl = $("#bbl").prop('checked') ? '1' : '0';
@@ -70,6 +106,11 @@
                 dept_id: $("#dept_id").val(),
                 departemen: $("#departemen").val(),
                 kat: $("#katedept_id").val(),
+                sbk: $("#nama_subkon").val(),
+                alamat_sbk: $("#alamat_subkon").val(),
+                npwp: $("#npwp").val(),
+                pic: $("#pic").val(),
+                jabatan: $("#jabatan").val(),
                 pb: cekpb,
                 bbl: cekbbl,
                 adj: cekadj
@@ -82,5 +123,13 @@
                 console.log(thrownError);
             }
         })
+    })
+    $("#katedept_id").change(function(){
+        var x = $(this).val();
+        if(x==3){
+            $("#jikasubkon").removeClass('hilang');
+        }else{
+            $("#jikasubkon").addClass('hilang');
+        }
     })
 </script>
