@@ -77,7 +77,7 @@ class In_model extends CI_Model{
         $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
         $arraynobontr = ['SP','GM'];
         if($cek==1){
-            $this->db->select('*');
+            $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl');
             $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
             $this->db->where('id_header',$id);
             $detail = $this->db->get('tb_detail')->result_array();

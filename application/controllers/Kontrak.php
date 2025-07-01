@@ -35,6 +35,7 @@ class Kontrak extends CI_Controller
         ];
         $this->session->unset_userdata('sesikontrak');
         $data['data'] = $this->kontrakmodel->getdatakontrak($kode);
+        $data['jmlpcskgs'] = $this->kontrakmodel->getdatapcskgskontrak($kode)->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'kontrak';
         $this->load->view('layouts/header', $header);

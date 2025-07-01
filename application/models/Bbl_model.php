@@ -308,8 +308,9 @@ class Bbl_model extends CI_Model
         $this->db->from('tb_detail');
         $this->db->join('tb_header','tb_header.id=tb_detail.id_header','left');
         $this->db->where('id_barang',$idbarang);
-        $this->db->where('nobontr',$nobontr);
+        // $this->db->where('nobontr',$nobontr);
         $this->db->where('kode_dok','IB');
+        $this->db->where('ok_tuju',1);
         $hasil = $this->db->order_by('tgl','DESC')->get();
         if($hasil->num_rows() > 0){
             $xhasil = $hasil->row_array();
@@ -317,6 +318,17 @@ class Bbl_model extends CI_Model
         }else{
             return 0;
         }
-
+    }
+    public function hargaterakhir($idbarang){
+        $this->db->select("*,ref_mt_uang.mt_uang,supplier.nama_supplier");
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id=tb_detail.id_header','left');
+        $this->db->join('ref_mt_uang','tb_header.mtuang=ref_mt_uang.id','left');
+        $this->db->join('supplier','tb_header.id_pemasok=supplier.id','left');
+        $this->db->where('id_barang',$idbarang);
+        $this->db->where('kode_dok','IB');
+        $this->db->where('ok_tuju',1);
+        $hasil = $this->db->order_by('tgl','DESC')->get();
+        return $hasil;
     }
 }
