@@ -22,8 +22,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white mb-2">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
-              <?php $disab=''; if($this->session->userdata('deptkontrak')=='' || $this->session->userdata('deptkontrak')==null || $this->session->userdata('jnsbckontrak')=='' || $this->session->userdata('jnsbckontrak')==null){ $disab = 'disabled';} ?>
-              <a href="<?= base_url().'kontrak/adddata'; ?>" class="btn btn-primary btn-sm <?= $disab; ?>" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <?php 
+                $disab=''; if($this->session->userdata('jnsbckontrak')=='' || $this->session->userdata('jnsbckontrak')==null){ $disab = 'disabled';} 
+                $disabe=''; if($this->session->userdata('deptkontrak')=='' || $this->session->userdata('deptkontrak')==null){ $disabe = 'disabled';} 
+              ?>
+              <a href="<?= base_url().'kontrak/adddata'; ?>" class="btn btn-primary btn-sm <?= $disabe; ?>" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
@@ -95,6 +98,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <h4 class="mb-1">
                     <?php if ($disab != '') { ?>
                       <small class="text-pink text-center">Tekan <b>GO</b> untuk Load Data</small>
+                    <?php }else{ ?>
+                      <div class="text-blue font-kecil" style="line-height: 10px;">
+                        <label style="width: 70px;">Jumlah Rec</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['jmlrek'],0); ?></label><br>
+                        <label style="width: 70px;">Jumlah Pcs</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['pcs'],0); ?></label><br>
+                        <label style="width: 70px;">Jumlah Kgs</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['kgs'],2); ?></label>
+                      </div>
                     <?php } ?>
                   </h4>
                 </div>
@@ -116,6 +125,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Pcs</th>
                 <th>Kgs</th>
                 <th>Realisasi</th>
+                <th>Pengembalian</th>
+                <th>Saldo</th>
                 <th>Aksi</th>
               </tr>
             </thead>
@@ -130,6 +141,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <td><?= tglmysql($datdet['tgl_akhir']); ?></td>
                 <td class="text-right"><?= rupiah($datdet['pcs'],2); ?></td>
                 <td class="text-right"><?= rupiah($datdet['kgs'],2); ?></td>
+                <td class="text-right"></td>
+                <td class="text-right"></td>
                 <td class="text-right"></td>
                 <td>
                   <a href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" style="padding: 3px 5px !important;" class="btn btn-sm btn-success btn-icon p-0">View</a>

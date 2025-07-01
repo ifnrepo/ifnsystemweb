@@ -26,6 +26,23 @@ class Kontrak_model extends CI_Model
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }
+    public function getdatapcskgskontrak($kode)
+    {
+        $this->db->select('count(*) as jmlrek,sum(pcs) as pcs,sum(kgs) as kgs');
+        $this->db->from('tb_kontrak');
+        $this->db->join('dept','dept.dept_id = tb_kontrak.dept_id');
+        if($kode['dept_id']!=""){
+            $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
+        }
+        $this->db->where('jns_bc', $kode['jnsbc']);
+        if($kode['status']==1){
+            $this->db->where("tgl_akhir >= '" . date('Y-m-d')."'");
+        }else if($kode['status']==2){
+            $this->db->where("tgl_akhir < '" . date('Y-m-d')."'");
+        }
+        $this->db->order_by('tgl_akhir');
+        return $this->db->get();
+    }
 
     public function adddata(){
         $arrinput = [
@@ -37,8 +54,16 @@ class Kontrak_model extends CI_Model
         ];
         $this->db->insert('tb_kontrak',$arrinput);
         $hasil = $this->db->insert_id();
+        $this->helpermodel->isilog($this->db->last_query());
         $this->session->set_userdata('sesikontrak',$hasil);
-        return $this->db->get_where('tb_kontrak',['id' => $hasil]);
+
+        $this->db->select("*");
+        $this->db->from('tb_kontrak');
+        $this->db->join('dept','dept.dept_id = tb_kontrak.dept_id','left');
+        $this->db->where('tb_kontrak.id',$hasil);
+        return $this->db->get();
+
+        // return $this->db->get_where('tb_kontrak',['id' => $hasil]);
     }
 
     public function getDetail_nomor($id, $kode)
@@ -72,6 +97,7 @@ class Kontrak_model extends CI_Model
         $this->db->delete('tb_kontrak');
 
         return $this->db->trans_complete();
+        $this->helpermodel->isilog($this->db->last_query());
     }
     public function simpankontrak($data){
         unset($data['mode']);
@@ -90,7 +116,9 @@ class Kontrak_model extends CI_Model
         $data['tgl_surat'] = tglmysql($data['tgl_surat']);
         $data['tgl_dok_lain'] = tglmysql($data['tgl_dok_lain']);
         $this->db->where('id',$data['id']);
-        return $this->db->update('tb_kontrak',$data);
+        $hasil = $this->db->update('tb_kontrak',$data);
+        $this->helpermodel->isilog($this->db->last_query());
+        return $hasil;
     }
     public function loaddetailkontrak($id){
         $this->db->where('id_kontrak',$id);
@@ -98,11 +126,14 @@ class Kontrak_model extends CI_Model
     }
     public function simpandetailkontrak($data){
         $hasil = $this->db->insert('tb_kontrak_detail',$data);
+        $this->helpermodel->isilog($this->db->last_query());
         return $hasil;
     }
     public function hapusdetailkontrak($id){
         $this->db->where('id',$id);
-        return $this->db->delete('tb_kontrak_detail');
+        $hasil = $this->db->delete('tb_kontrak_detail');
+        $this->helpermodel->isilog($this->db->last_query());
+        return $hasil;
     }
     public function simpankedatabase($data){
         $this->db->where('id',$data['id']);

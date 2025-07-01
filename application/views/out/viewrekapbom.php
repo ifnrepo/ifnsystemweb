@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12">
             <input id="iddetail" class="btn btn-sm btn-danger hilang" value="">
-            <div class="mb-1"><h4 class="mb-1">Nomor Dokumen : <?= $header['nomor_dok']; ?></h4></div>
+            <div class="mb-1 line-12"><h4 class="mb-1">Nomor Dokumen : <?= $header['nomor_dok']; ?></h4><span class="text-pink" style="font-style: italic;">Periode Inventory : "<?= tambahnol($this->session->userdata('bl')).'-'.$this->session->userdata('th'); ?>"</span></div>
             <div id="table-default" class="table-responsive mb-1">
               <table class="table datatable" id="cobasisip">
                 <thead style="background-color: blue !important">
@@ -26,11 +26,11 @@
                         $totpcs += $detail['totpcs'];
                         $totkgs += $detail['totkgs'];
                         $cekkurang = $detail['totkgs'] > $detail['kgsstok'] ? 'text-danger' : '';
-                        $cekkurang = $detail['totpcs'] > $detail['pcsstok'] ? 'text-danger' : '';
+                        $cekkurangpcs = $detail['totpcs'] > $detail['pcsstok'] ? 'text-danger' : '';
                         $xnet = $detail['exnet']==0 ? '' : 'Y';
                     ?>
                         <tr class="font-kecil">
-                            <td class="line-12 <?= $cekkurang; ?>"><?= $namabarang.'<br><span class="text-success">'.$detail['insno'].$detail['nobontr'].'</span>' ?></td>
+                            <td class="line-12 <?= $cekkurang; ?><?= $cekkurangpcs; ?>"><?= $namabarang.'<br><span class="text-success">'.$detail['insno'].$detail['nobontr'].'</span>' ?></td>
                             <td><?= $sku ?></td>
                             <td><?= $detail['kode']; ?></td>
                             <td class='text-center'><?= $detail['nobale']; ?></td>

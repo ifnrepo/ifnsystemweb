@@ -47,14 +47,18 @@
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
                                 <?php foreach ($detail->result_array() as $val) { $tampil = $val['pcs']!=0 ? $val['pcs'] : $val['kgs']; ?>
                                     <tr>
-                                        <td class="line-12"><?= $val['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span></td>
+                                        <?php if($this->session->userdata('viewharga')==1){ ?>
+                                            <td class="line-12"><a href="<?= base_url().'bbl/hargaterakhir/'.$val['id_barang']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Harga Terakhir <?= $val['nama_barang']; ?>"><?= $val['nama_barang']; ?></a><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span></td>
+                                        <?php }else{ ?>
+                                            <td class="line-12"><?= $val['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span></td>
+                                        <?php } ?>
                                         <td><?= $val['brg_id']; ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= rupiah($val['pcs'], 0); ?></td>
                                         <td><?= rupiah($val['kgs'], 2); ?></td>
                                         <?php if($this->session->userdata('viewharga')==1): ?>
-                                            <td class="text-danger"><?= rupiah(gethrg($val['id_barang'], $val['nobontr']),2); ?></td>
-                                            <td class="text-danger"><?= rupiah(gethrg($val['id_barang'], $val['nobontr'])*$tampil,2); ?></td>
+                                            <td class="text-danger text-right"><?= rupiah(gethrg($val['id_barang'], $val['nobontr']),2); ?></td>
+                                            <td class="text-danger text-right"><?= rupiah(gethrg($val['id_barang'], $val['nobontr'])*$tampil,2); ?></td>
                                         <?php endif; ?>
                                     </tr>
                                 <?php } ?>

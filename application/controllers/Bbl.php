@@ -434,4 +434,8 @@ class Bbl extends CI_Controller
             redirect($url);
         }
     }
+    public function hargaterakhir($id){
+        $hasil['data'] = $this->bbl_model->hargaterakhir($id);
+        $this->load->view('bbl/hargaterakhir', $hasil);
+    }
 }
