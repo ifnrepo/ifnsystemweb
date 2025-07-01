@@ -102,7 +102,7 @@ function nomorbbl($tgl, $asal, $tuju)
     $kode = $CI->bbl_model->getnomorbbl($bl, $thp, $asal, $tuju);
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return $asal . "-" . $tuju . "/BBL/" . $bl . $th . "/" . sprintf("%03s", $urut);
+    return $asal . "-" . $tuju . "/BB/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
 function nomorout($tgl, $asal, $tuju)
 {
