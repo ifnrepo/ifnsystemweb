@@ -96,6 +96,9 @@ class Adj_model extends CI_Model
         $databarang = $this->db->get_where('barang',['id' => $data['id_barang']])->row_array();
         if(trim($data['po'])==""){
             $data['dln'] = $databarang['dln'];
+        }else{
+            $datapo = $this->db->get_where('tb_po',['trim(po)' => trim($data['po']),'trim(item)' => trim($data['item'],'dis' => $data['dis'])])->row_array();
+            $data['dln'] = $datapo['dln'];
         }
         unset($data['nama_barang']);
         unset($data['radios-inline']);
