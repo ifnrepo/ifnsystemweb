@@ -569,8 +569,11 @@ class Out_model extends CI_Model{
                         if($detil['pcs_akhir'] >= $datdet['pcs'] && $detil['kgs_akhir'] >= $datdet['kgs']){
                             $this->db->set('pcs_keluar','pcs_keluar +'.$datdet['pcs'],false);
                             $this->db->set('kgs_keluar','kgs_keluar +'.$datdet['kgs'],false);
-                            $this->db->set('pcs_akhir','pcs_awal + pcs_masuk + pcs_adj -'.$datdet['pcs'],false);
-                            $this->db->set('kgs_akhir','kgs_awal + kgs_masuk + kgs_adj -'.$datdet['kgs'],false);
+                            $this->db->where('id',$detil['id']);
+                            $this->db->update('stokdept');
+
+                            $this->db->set('pcs_akhir','pcs_awal + pcs_masuk + pcs_adj - pcs_keluar',false);
+                            $this->db->set('kgs_akhir','kgs_awal + kgs_masuk + kgs_adj - kgs_keluar',false);
                             $this->db->where('id',$detil['id']);
                             $this->db->update('stokdept');
                         }else{

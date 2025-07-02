@@ -19,6 +19,7 @@
   <!-- datatables -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/datatables.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/css/responsive.bootstrap.min.css">
+  <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/css/scroller.dataTables.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/fixheader/css/fixedHeader.bootstrap.min.css">
   <!-- amchart css -->
   <!-- <link rel="stylesheet" href="https://www.amcharts.com/lib/3/plugins/export/export.css" type="text/css" media="all" /> -->

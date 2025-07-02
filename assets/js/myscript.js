@@ -226,6 +226,12 @@ $(document).ready(function () {
 		order: [[1, "asc"]],
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
+	// $(".datatable50000").DataTable({
+	// 	// data: data,
+	// 	scrollCollapse: true,
+	// 	scroller: true,
+	// 	scrollY: 200,
+	// });
 	$("#modal-danger").on("show.bs.modal", function (e) {
 		document.getElementById("message").innerHTML = $(e.relatedTarget).data(
 			"message",
