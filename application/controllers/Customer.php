@@ -44,6 +44,7 @@ class Customer extends CI_Controller
         $data = [
             'kode_customer' => $_POST['kode_customer'],
             'nama_customer' => $_POST['nama_customer'],
+            'buyer' => $_POST['buyer'],
             'exdo' => $_POST['exdo'],
             'port' => $_POST['port'],
             'country' => $_POST['country'],
@@ -89,6 +90,7 @@ class Customer extends CI_Controller
             'id' => $_POST['id'],
             'kode_customer' => $_POST['kode_customer'],
             'nama_customer' => $_POST['nama_customer'],
+            'buyer' => $_POST['buyer'],
             'exdo' => $_POST['exdo'],
             'port' => $_POST['port'],
             'country' => $_POST['country'],

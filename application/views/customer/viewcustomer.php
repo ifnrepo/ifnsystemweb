@@ -31,6 +31,13 @@
                                                                 <label class="col-3 col-form-label required">Nama </label>
                                                                 <div class="col">
                                                                     <input type="text" class="form-control font-kecil" name="nama_customer" id="nama_customer" value="<?= $data['nama_customer']; ?>" readonly>
+                                                                    <span class="text-secondary" style="font-size: 10px;">Data ini yang akan muncul di AKB/AMB</span>
+                                                                </div>
+                                                            </div>
+                                                            <div class="mb-1 row">
+                                                                <label class="col-3 col-form-label required">Alias </label>
+                                                                <div class="col">
+                                                                    <input type="text" class="form-control font-kecil" name="alias" id="alias" value="<?= $data['buyer']; ?>" readonly>
                                                                 </div>
                                                             </div>
                                                             <div class="mb-1 row">

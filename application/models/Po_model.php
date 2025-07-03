@@ -56,7 +56,7 @@ class Po_model extends CI_Model
     public function getnomorpo($bl, $th, $jnpo)
     {
         $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,15,3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'PO' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND SUBSTR(nomor_dok,4,6) = '" . $jnpo . "' ")->row_array();
+        WHERE kode_dok = 'PO' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' ")->row_array();
         return $hasil;
     }
     public function tambahdatapo()

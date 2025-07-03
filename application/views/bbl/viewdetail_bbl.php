@@ -42,10 +42,15 @@
                                         <th>Harga terakhir</th>
                                         <th>Total</th>
                                     <?php endif; ?>
+                                    <th title="Buffer Stok">Buffer</th>
+                                    <th title="Stok Terkini">Stok</th>
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                <?php foreach ($detail->result_array() as $val) { $tampil = $val['pcs']!=0 ? $val['pcs'] : $val['kgs']; ?>
+                                <?php foreach ($detail->result_array() as $val) { $tampil = $val['pcs']!=0 ? $val['pcs'] : $val['kgs']; 
+                                    $stoksaatini = getstokbarangsaatini($val['id_barang'],substr($header['nomor_dok'],0,2));
+                                    $stok = $stoksaatini['id_satuan']==22 ? rupiah($stoksaatini['kgs_akhir'],0) : rupiah($stoksaatini['pcs_akhir'],0);
+                                    ?>
                                     <tr>
                                         <?php if($this->session->userdata('viewharga')==1){ ?>
                                             <td class="line-12"><a href="<?= base_url().'bbl/hargaterakhir/'.$val['id_barang']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Harga Terakhir <?= $val['nama_barang']; ?>"><?= $val['nama_barang']; ?></a><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span></td>
@@ -60,6 +65,8 @@
                                             <td class="text-danger text-right"><?= rupiah(gethrg($val['id_barang'], $val['nobontr']),2); ?></td>
                                             <td class="text-danger text-right"><?= rupiah(gethrg($val['id_barang'], $val['nobontr'])*$tampil,2); ?></td>
                                         <?php endif; ?>
+                                        <td class="text-right text-blue"><?= rupiah($val['kgs'],0); ?></td>
+                                        <td class="text-right text-blue"><?= $stok; ?></td>
                                     </tr>
                                 <?php } ?>
                             </tbody>
@@ -131,73 +138,6 @@
 </div>
 <script>
     $(document).ready(function() {
-        // $("#keyw").focus();
-        // $("#keyw").val($("#nama_barang").val());
-        // if($("#keyw").val() != ''){
-        //     $("#getbarang").click();
-        // }
+
     })
-    // $("#keyw").on('keyup',function(e){
-    //     if(e.key == 'Enter' || e.keycode === 13){
-    //         $("#getbarang").click();
-    //     }
-    // })
-    // $("#getbarang").click(function(){
-    //     if($("#keyw").val() == ''){
-    //         pesan('Isi dahulu keyword pencarian barang','info');
-    //         return;
-    //     }
-    //     $.ajax({
-    //         dataType: "json",
-    //         type: "POST",
-    //         url: base_url+'pb/getspecbarang',
-    //         data: {
-    //             mode: $("#cari_by").val(),
-    //             data: $("#keyw").val(),
-    //         },
-    //         success: function(data){
-    //             $("#body-table").html(data.datagroup).show();
-    //         },
-    //         error: function (xhr, ajaxOptions, thrownError) {
-    //             console.log(xhr.status);
-    //             console.log(thrownError);
-    //         }
-    //     })
-    // })
-    // $(document).on('click','.pilihbarang',function(){
-    //     var x = $(this).attr('rel1');
-    //     var y = $(this).attr('rel2');
-    //     var z = $(this).attr('rel3');
-    //     $("#nama_barang").val(x);
-    //     $("#id_barang").val(y);
-    //     $("#id_satuan").val(z)
-    //     $("#modal-scroll").modal('hide');
-    // })
-    // $("#simpanbarang").click(function(){
-    // if($("#id_barang_bom").val() == ''){
-    //     pesan('Nama Barang harus di isi !','error');
-    //     return;
-    // }
-    // if($("#persen").val() == '' || $("#persen").val()==0){
-    //     pesan('Persem harus di isi !','error');
-    //     return;
-    // }
-    // $.ajax({
-    //     dataType: "json",
-    //     type: "POST",
-    //     url: base_url+'barang/simpanbombarang',
-    //     data: {
-    //         id_barang: $("#id_barang").val(),
-    //         id_bbom: $("#id_barang_bom").val(),
-    //         psn: toAngka($("#persen").val())
-    //     },
-    //     success: function(data){
-    //         window.location.reload();
-    //     },
-    //     error: function (xhr, ajaxOptions, thrownError) {
-    //         console.log(xhr.status);
-    //         console.log(thrownError);
-    //     }
-    // })
-    // })
 </script>

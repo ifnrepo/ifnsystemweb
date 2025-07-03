@@ -707,3 +707,9 @@ function formatnpwp($kata){
     }
     return $hasil;
 }
+function getstokbarangsaatini($data,$dept){
+    // $xkode = trim($kode);
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->stoksaatini($data,$dept);
+    return $getkode;
+}
