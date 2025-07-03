@@ -97,7 +97,7 @@ class Adj_model extends CI_Model
         if(trim($data['po'])==""){
             $data['dln'] = $databarang['dln'];
         }else{
-            $datapo = $this->db->get_where('tb_po',['trim(po)' => trim($data['po']),'trim(item)' => trim($data['item'],'dis' => $data['dis'])])->row_array();
+            $datapo = $this->db->get_where('tb_po',['trim(po)' => trim($data['po']),'trim(item)' => trim($data['item']),'dis' => $data['dis']])->row_array();
             $data['dln'] = $datapo['dln'];
         }
         unset($data['nama_barang']);

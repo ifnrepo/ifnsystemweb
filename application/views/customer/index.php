@@ -51,6 +51,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>No</th>
                                 <th>Kode Customer</th>
                                 <th>Nama Customer</th>
+                                <th>Buyer/Alias</th>
                                 <th>Exdo</th>
                                 <th>Port</th>
                                 <th>Country</th>
@@ -64,6 +65,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= $no; ?></td>
                                     <td><?= $key['kode_customer']; ?></td>
                                     <td><?= $key['nama_customer']; ?></td>
+                                    <td><?= $key['buyer']; ?></td>
                                     <td><?= $key['exdo']; ?></td>
                                     <td><?= $key['port']; ?></td>
                                     <td><?= $key['country']; ?></td>

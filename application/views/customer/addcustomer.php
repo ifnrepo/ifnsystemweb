@@ -11,9 +11,15 @@
             <label class="col-3 col-form-label required">Customer</label>
             <div class="col">
                 <input type="text" class="form-control font-kecil" name="nama_customer" id="nama_customer" placeholder="Nama Customer">
+                <span class="text-secondary" style="font-size: 10px;">Data ini yang akan muncul di AKB/AMB</span>
             </div>
         </div>
-
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Buyer</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="buyer" id="buyer" placeholder="Alias">
+            </div>
+        </div>
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Exdo</label>
             <div class="col">
@@ -229,6 +235,7 @@
             data: {
                 kode_customer: $("#kode_customer").val(),
                 nama_customer: $("#nama_customer").val(),
+                buyer: $("#buyer").val(),
                 exdo: $("#exdo").val(),
                 port: $("#port").val(),
                 country: $("#country").val(),

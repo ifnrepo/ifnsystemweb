@@ -497,4 +497,19 @@ class Helper_model extends CI_Model
         $this->db->where('jns_bc',$this->session->userdata('jnsbckontrak'));
         return $this->db->get()->row_array();
     }
+    public function stoksaatini($idbar,$dept){
+        $data = [
+            'dept_id' => $dept,
+            'periode' => date('m').date('Y'),
+            'trim(po)' => '',
+            'trim(item)' => '',
+            'dis' => 0,
+            'id_barang' => $idbar
+        ];
+        $this->db->select('stokdept.*,barang.id_satuan');
+        $this->db->from('stokdept');
+        $this->db->where($data);
+        $this->db->join('barang','barang.id = '.$idbar,'left');
+        return $this->db->get()->row_array();
+    }
 }
