@@ -340,11 +340,12 @@ class Po extends CI_Controller
             redirect($url);
         }
     }
-    public function viewdetail($id)
+    public function viewdetail($id,$mode=0)
     {
         $data['header'] = $this->pomodel->getdatabyid($id);
         $data['detail'] = $this->pomodel->getdatadetailpo($id);
         $data['riwayat'] = riwayatpo($id);
+        $data['mode'] = $mode;
         $this->load->view('po/viewdetailpo', $data);
     }
     public function resetdetail($id)

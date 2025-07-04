@@ -37,6 +37,7 @@ class Adj_model extends CI_Model
         $this->db->where('dept_id',$this->session->userdata('currdept'));
         $this->db->where('month(tgl)', $this->session->userdata('bl'));
         $this->db->where('year(tgl)', $this->session->userdata('th'));
+        $this->db->order_by('tgl','DESC');
         return $this->db->get('tb_header')->result_array();
     }
     public function hapusdataadj($id)

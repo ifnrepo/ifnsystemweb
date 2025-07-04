@@ -228,10 +228,11 @@ class Adj extends CI_Controller
             redirect($url);
         }
     }
-    public function viewdetailadj($id)
+    public function viewdetailadj($id,$mode=0)
     {
         $data['header'] = $this->adjmodel->getdatabyid($id);
         $data['detail'] = $this->adjmodel->getdatadetailadj($id);
+        $data['mode'] = $mode;
         $this->load->view('adj/viewdetailadj', $data);
     }
     public function edittgl()

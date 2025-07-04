@@ -133,7 +133,7 @@ class Helper_model extends CI_Model
                 array_push($hasil, $ok_bb);
             }
         }
-        if ($cek['ok_pp'] == 1) {
+        if ($cek['ok_pp'] == 1 && !is_null($cek['user_pp'])) {
             $ok_bb = 'Dokumen diapprove oleh : ' . datauser($cek['user_pp'], 'name') . ' on ' . $cek['tgl_pp'];
             array_push($hasil, $ok_bb);
         } else {
@@ -510,6 +510,6 @@ class Helper_model extends CI_Model
         $this->db->from('stokdept');
         $this->db->where($data);
         $this->db->join('barang','barang.id = '.$idbar,'left');
-        return $this->db->get()->row_array();
+        return $this->db->get();
     }
 }
