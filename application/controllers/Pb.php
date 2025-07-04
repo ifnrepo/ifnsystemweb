@@ -287,11 +287,12 @@ class Pb extends CI_Controller
             redirect($url);
         }
     }
-    public function viewdetailpb($id)
+    public function viewdetailpb($id,$mode=0)
     {
         $data['header'] = $this->pb_model->getdatabyid($id);
         $data['detail'] = $this->pb_model->getdatadetailpb($id);
         $data['riwayat'] = riwayatdok($id);
+        $data['mode'] = $mode;
         $this->load->view('pb/viewdetailpb', $data);
     }
     public function ubahperiode()

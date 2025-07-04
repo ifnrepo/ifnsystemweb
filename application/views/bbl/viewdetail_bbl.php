@@ -48,8 +48,13 @@
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
                                 <?php foreach ($detail->result_array() as $val) { $tampil = $val['pcs']!=0 ? $val['pcs'] : $val['kgs']; 
-                                    $stoksaatini = getstokbarangsaatini($val['id_barang'],substr($header['nomor_dok'],0,2));
-                                    $stok = $stoksaatini['id_satuan']==22 ? rupiah($stoksaatini['kgs_akhir'],0) : rupiah($stoksaatini['pcs_akhir'],0);
+                                    $getstok = getstokbarangsaatini($val['id_barang'],substr($header['nomor_dok'],0,2));
+                                    if($getstok->num_rows() > 0){
+                                        $stoksaatini = $getstok->row_array();
+                                        $stok = $stoksaatini['id_satuan']==22 ? rupiah($stoksaatini['kgs_akhir'],0) : rupiah($stoksaatini['pcs_akhir'],0);
+                                    }else{
+                                        $stok = rupiah(0,0);
+                                    }
                                     ?>
                                     <tr>
                                         <?php if($this->session->userdata('viewharga')==1){ ?>
@@ -133,6 +138,14 @@
                 <hr class="m-1">
             </div>
         </div>
+        <?php if($mode==1): 
+            $ttdke = $header['data_ok']+$header['ok_pp']+$header['ok_valid']+$header['ok_tuju']+$header['ok_pc']+1; 
+            $hilang = datauser($this->session->userdata('id'),'cekpc')==1 ? "hilang" : ""; ?>     
+            <div class="text-center mt-0">
+            <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan validasi bon <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'task/validasibbl/' . $header['id'] . '/' . $ttdke; ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve Dokumen</a>
+            <a href="<?= base_url() . 'task/canceltask/' . $header['id'] . '/' . $ttdke ?>" style="padding: 5px !important" data-bs-target="#canceltask" data-message="Anda yakin akan membatalkan bon <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'task/canceltask/' . $header['id'] . '/' . $ttdke ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-danger <?= $hilang; ?>">Cancel</a>
+            </div>           
+        <?php endif; ?>
     </div>
     <hr class="m-1">
 </div>

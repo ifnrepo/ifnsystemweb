@@ -354,11 +354,12 @@ class Bbl extends CI_Controller
         }
     }
 
-    public function viewdetail_bbl($id)
+    public function viewdetail_bbl($id,$ttd=0,$mode=0)
     {
         $data['header'] = $this->bbl_model->getdatabyid($id);
         $data['detail'] = $this->bbl_model->getdatadetail_bbl($id);
         $data['riwayat'] = riwayatbbl($id);
+        $data['mode'] = $mode;
         $this->load->view('bbl/viewdetail_bbl', $data);
     }
 

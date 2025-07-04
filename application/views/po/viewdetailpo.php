@@ -158,6 +158,15 @@
                 <hr class="m-1">
             </div>
         </div>
+        <?php if($mode==1): 
+            $ttdke = $header['data_ok']+$header['ok_pp']+$header['ok_valid']+$header['ok_tuju']+$header['ok_pc']+1; 
+            $hilang = datauser($this->session->userdata('id'),'cekpc')==1 ? "hilang" : ""; ?>     
+            <div class="text-center mt-0">
+            <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan validasi PO <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'task/validasipo/' . $header['id'] . '/3' ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve Dokumen</a>
+            <a href="<?= base_url() . 'task/canceltask/' . $header['id'] . '/3' ?>" style="padding: 5px !important" data-bs-target="#canceltask" data-message="Anda yakin akan membatalkan bon <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'task/canceltask/' . $header['id'] . '/3' ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-danger <?= $hilang; ?>">Cancel</a>
+            </div>     
+            <hr class="m-1">      
+        <?php endif; ?>
     </div>
 </div>
 <script>

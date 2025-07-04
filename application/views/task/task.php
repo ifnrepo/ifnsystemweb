@@ -96,25 +96,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php foreach ($data->result_array() as $datpb) {
                 if($this->session->userdata('modetask') == 'adj'){
-                  $viewdetail = base_url() . 'adj/viewdetailadj/' . $datpb['id'];
+                  $viewdetail = base_url() . 'adj/viewdetailadj/' . $datpb['id'].'/1';
                   $btnok = base_url() . 'task/validasiadj/' . $datpb['id'];
                   // $btnno = base_url() . 'task/canceladj/' . $datpb['id'];
                   $btnno = base_url() . 'task/canceltask/' . $datpb['id'];
                 }else {
                   if ($this->session->userdata('modetask') == 'pb') {
-                    $viewdetail = base_url() . 'pb/viewdetailpb/' . $datpb['id'];
+                    $viewdetail = base_url() . 'pb/viewdetailpb/' . $datpb['id'].'/1';
                     $btnok = base_url() . 'task/validasipb/' . $datpb['id'];
                     // $btnno = base_url() . 'task/cancelpb/' . $datpb['id'];
                     $btnno = base_url().'task/canceltask/'.$datpb['id'];
                   } else {
                     $ttdke = $datpb['data_ok']+$datpb['ok_pp']+$datpb['ok_valid']+$datpb['ok_tuju']+$datpb['ok_pc']+1;
                     if($this->session->userdata('modetask')=='po'){
-                      $viewdetail = base_url() . 'po/viewdetail/' . $datpb['id'];
+                      $viewdetail = base_url() . 'po/viewdetail/' . $datpb['id'].'/1';
                       $btnok = base_url() . 'task/validasipo/' . $datpb['id'] . '/3';
                       // $btnno = base_url() . 'task/cancelpo/' . $datpb['id'] . '/3';
                       $btnno = base_url() . 'task/canceltask/' . $datpb['id'] . '/3';
                     }else{
-                      $viewdetail = base_url() . 'bbl/viewdetail_bbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
+                      $viewdetail = base_url() . 'bbl/viewdetail_bbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd').'/1';
                       $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $ttdke;
                       // $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $ttdke;
                       $btnno = base_url() . 'task/canceltask/' . $datpb['id'] . '/' . $ttdke;
