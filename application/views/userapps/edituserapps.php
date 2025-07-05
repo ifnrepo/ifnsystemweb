@@ -82,6 +82,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Telp/Wa</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" name="telp" id="telp" placeholder="Telp/Wa" value="<?= $user['telp']; ?>">
+                </div>
+              </div>
+              <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Username</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil" name="username" id="username" placeholder="Username" value="<?= $user['username']; ?>">
