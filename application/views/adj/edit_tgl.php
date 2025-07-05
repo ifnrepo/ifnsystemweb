@@ -25,9 +25,12 @@
         $("#tgl").val($("#tgldok").val());
         $("#catatan").val($("#catat").val());
         $("#tgl").datepicker({
+            changeMonth: false,
+            changeYear: false,
+            stepMonths: false,
             autoclose: true,
             format : "dd-mm-yyyy",
-            todayHighlight: true
+            todayHighlight: true,
         });
     })
     $("#buatadj").click(function() {
