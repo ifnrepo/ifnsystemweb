@@ -434,8 +434,8 @@ class Taskmodel extends CI_Model
             $kondisi = [
                 'dept_id' => $header['dept_id'],
                 'periode' => $periode,
-                'po' => $datdet['po'],
-                'item' => $datdet['item'],
+                'trim(po)' => trim($datdet['po']),
+                'trim(item)' => trim($datdet['item']),
                 'dis' => $datdet['dis'],
                 'id_barang' => $datdet['id_barang'],
                 'trim(insno)' => trim($datdet['insno']),
@@ -449,8 +449,13 @@ class Taskmodel extends CI_Model
                 $datadetail = $cekdetail->row_array();
                 $this->db->set('pcs_adj','pcs_adj +'.$datdet['pcs'],false);
                 $this->db->set('kgs_adj','kgs_adj +'.$datdet['kgs'],false);
-                $this->db->set('pcs_akhir','pcs_awal + pcs_masuk + pcs_adj +'.$datdet['pcs'],false);
-                $this->db->set('kgs_akhir','kgs_awal + kgs_masuk + kgs_adj +'.$datdet['kgs'],false);
+                $this->db->where('id',$datadetail['id']);
+                $this->db->update('stokdept');
+
+                // $this->db->set('pcs_akhir','pcs_awal + pcs_masuk + pcs_adj +'.$datdet['pcs'],false);
+                // $this->db->set('kgs_akhir','kgs_awal + kgs_masuk + kgs_adj +'.$datdet['kgs'],false);
+                $this->db->set('pcs_akhir','(pcs_awal + pcs_masuk + pcs_adj - pcs_keluar)',false);
+                $this->db->set('kgs_akhir','(kgs_awal + kgs_masuk + kgs_adj - kgs_keluar)',false);
                 $this->db->where('id',$datadetail['id']);
                 $this->db->update('stokdept');
                 $this->helpermodel->isilog($this->db->last_query());

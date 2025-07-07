@@ -58,7 +58,7 @@
                                     ?>
                                     <tr>
                                         <?php if($this->session->userdata('viewharga')==1){ ?>
-                                            <td class="line-12"><a href="<?= base_url().'bbl/hargaterakhir/'.$val['id_barang']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Harga Terakhir <?= $val['nama_barang']; ?>"><?= $val['nama_barang']; ?></a><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span></td>
+                                            <td class="line-12"><a href="<?= base_url().'bbl/hargaterakhir/'.$val['id_barang']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Harga Terakhir <?= $val['nama_barang']; ?>"><?= $val['nama_barang']; ?></a><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span><br><span style="font-size: 11px" class="text-success"><?= $val['ketpb']; ?></span></td>
                                         <?php }else{ ?>
                                             <td class="line-12"><?= $val['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $val['id_pb']; ?></span></td>
                                         <?php } ?>

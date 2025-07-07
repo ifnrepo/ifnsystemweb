@@ -163,7 +163,7 @@ class Bbl_model extends CI_Model
         // $this->db->where('e.kode_dok = "IB" and a.id_barang = d.id_barang and a.nobontr = d.nobontr');
         // $kueri = $this->db->get_compiled_select();
 
-        $this->db->select("a.*,tb_header.id AS id_header_bbl,c.nomor_dok as id_pb,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id,barang.safety_stock as buff");
+        $this->db->select("a.*,tb_header.id AS id_header_bbl,c.nomor_dok as id_pb,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id,barang.safety_stock as buff,b.keterangan as ketpb");
         $this->db->select('0 as hrgtrh');
         $this->db->from('tb_detail a');
         $this->db->join('tb_header', 'tb_header.id = a.id_header', 'left');

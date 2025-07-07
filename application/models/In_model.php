@@ -128,8 +128,13 @@ class In_model extends CI_Model{
                     $detil = $adaisi->row_array();
                     $this->db->set('pcs_masuk','pcs_masuk +'.$det['pcs'],false);
                     $this->db->set('kgs_masuk','kgs_masuk +'.$det['kgs'],false);
-                    $this->db->set('pcs_akhir','pcs_awal + pcs_masuk + pcs_adj +'.$det['pcs'],false);
-                    $this->db->set('kgs_akhir','kgs_awal + kgs_masuk + kgs_adj +'.$det['kgs'],false);
+                    $this->db->where('id',$detil['id']);
+                    $this->db->update('stokdept');
+
+                    // $this->db->set('pcs_akhir','pcs_awal + pcs_masuk + pcs_adj +'.$det['pcs'],false);
+                    // $this->db->set('kgs_akhir','kgs_awal + kgs_masuk + kgs_adj +'.$det['kgs'],false);
+                    $this->db->set('pcs_akhir','(pcs_awal + pcs_masuk + pcs_adj - pcs_keluar)',false);
+                    $this->db->set('kgs_akhir','(kgs_awal + kgs_masuk + kgs_adj - kgs_keluar)',false);
                     $this->db->where('id',$detil['id']);
                     $this->db->update('stokdept');
                     $this->helpermodel->isilog($this->db->last_query());
