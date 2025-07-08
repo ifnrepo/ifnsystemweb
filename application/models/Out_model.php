@@ -399,8 +399,8 @@ class Out_model extends CI_Model{
                 $no++;
                 if($this->session->userdata('deptsekarang')=='GS'){
                     $kondisi = [
-                        'po' => $datdet['po'],
-                        'item' => $datdet['item'],
+                        'trim(po)' => trim($datdet['po']),
+                        'trim(item)' => trim($datdet['item']),
                         'dis' => $datdet['dis'],
                         'id_barang' => $datdet['id_barang'],
                         'dept_id' => $this->session->userdata('deptsekarang'),
@@ -411,17 +411,17 @@ class Out_model extends CI_Model{
                     $kondisi = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
-                        'nobontr' => $datdet['nobontr'],
-                        'insno' => $datdet['insno'],
+                        'trim(nobontr)' => trim($datdet['nobontr']),
+                        'trim(insno)' => trim($datdet['insno']),
                         'id_barang' => $datdet['id_barang'],
-                        'po' => $datdet['po'],
-                        'item' => $datdet['item'],
+                        'trim(po)' => trim($datdet['po']),
+                        'trim(item)' => trim($datdet['item']),
                         'dis' => $datdet['dis'],
                         'dln' => $datdet['dln'],
-                        'nobale' => $datdet['nobale'],
+                        'trim(nobale)' => trim($datdet['nobale']),
                         // 'harga' => $datdet['harga'],
-                        'stok' => $datdet['stok'],
-                        'exnet' => $datdet['exnet']
+                        // 'stok' => $datdet['stok'],
+                        // 'exnet' => $datdet['exnet']
                     ];
                 }
                 if($this->session->userdata('deptsekarang')=='GS'){ // Untuk Looping pengeluaran Dept GS
