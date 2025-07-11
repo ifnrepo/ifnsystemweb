@@ -31,7 +31,8 @@ class Kontrak extends CI_Controller
         $kode = [
             'dept_id' => $this->session->userdata('deptkontrak') == null ? '' : $this->session->userdata('deptkontrak'),
             'jnsbc' => $this->session->userdata('jnsbckontrak') == null ? '' : $this->session->userdata('jnsbckontrak'),
-            'status' => $this->session->userdata('statuskontrak')
+            'status' => $this->session->userdata('statuskontrak'),
+            'thkontrak' => $this->session->userdata('thkontrak') == null ? '' : $this->session->userdata('thkontrak'),
         ];
         $this->session->unset_userdata('sesikontrak');
         $data['data'] = $this->kontrakmodel->getdatakontrak($kode);
@@ -47,6 +48,7 @@ class Kontrak extends CI_Controller
         $this->session->unset_userdata('deptkontrak');
         $this->session->unset_userdata('jnsbckontrak');
         $this->session->unset_userdata('statuskontrak');
+        $this->session->set_userdata('thkontrak', date('Y'));
         $this->session->set_userdata('bl', date('m'));
         $this->session->set_userdata('th', date('Y'));
         $url = base_url('Kontrak');
@@ -84,6 +86,7 @@ class Kontrak extends CI_Controller
         $this->session->set_userdata('deptkontrak', $_POST['dept_id']);
         $this->session->set_userdata('jnsbckontrak', $_POST['jnsbc']);
         $this->session->set_userdata('statuskontrak', $_POST['status']);
+        $this->session->set_userdata('thkontrak', $_POST['thkontrak']);
         $url = base_url('kontrak');
         redirect($url);
     }

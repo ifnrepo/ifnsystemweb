@@ -35,10 +35,10 @@
                             <td><?= $detail['kode']; ?></td>
                             <td class='text-center'><?= $detail['nobale']; ?></td>
                             <td class='text-center text-success font-bold'><?= $xnet; ?></td>
-                            <td class="text-right"><?= rupiah($detail['totpcs'],0); ?></td>
-                            <td class="text-right"><?= rupiah($detail['totkgs'],4); ?></td>
-                            <td class="text-right"><?= rupiah($detail['pcsstok'],0); ?></td>
-                            <td class="text-right"><?= rupiah($detail['kgsstok'],4); ?></td>
+                            <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($detail['totpcs'],0); ?></td>
+                            <td class="text-right <?= $cekkurang; ?>"><?= rupiah($detail['totkgs'],4); ?></td>
+                            <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($detail['pcsstok'],0); ?></td>
+                            <td class="text-right <?= $cekkurang; ?>"><?= rupiah($detail['kgsstok'],4); ?></td>
                         </tr>
                     <?php endforeach; ?>
                     <tr class="bg-info-lt">
