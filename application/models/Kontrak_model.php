@@ -23,6 +23,9 @@ class Kontrak_model extends CI_Model
         }else if($kode['status']==2){
             $this->db->where("tgl_akhir < '" . date('Y-m-d')."'");
         }
+        if($kode['thkontrak']!=''){
+            $this->db->where("year(tgl_awal)",$kode['thkontrak']);
+        }
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }

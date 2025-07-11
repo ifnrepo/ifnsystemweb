@@ -30,7 +30,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-              <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
+              <select class="form-control form-sm form-select font-kecil font-bold mr-1" id="th" name="th" style="width: 100px;">
+                <option value="">Semua Tahun</option>
+                <?php $yr=date('Y')-5; $yd=date('Y'); for ($x = $yr; $x <= $yd; $x++) : ?>
+                  <option value="<?= $x; ?>" <?php if ($this->session->userdata('thkontrak') == $x) echo "selected"; ?>><?= $x; ?></option>
+                <?php endfor; ?>
+              </select>
+              <input type="text" class="form-control form-sm font-kecil font-bold mr-2 hilang" id="the" name="the" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
               <select class="form-control form-sm font-kecil font-bold mr-1 hilang" id="bl" name="bl" style="width: 100px;">
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>

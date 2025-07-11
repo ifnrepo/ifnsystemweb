@@ -30,6 +30,7 @@ $("#butgo").click(function () {
 			dept_id: dept,
 			jnsbc: $("#jns_bc").val(),
 			status: $("#statuskontrak").val(),
+			thkontrak: $("#th").val(),
 		},
 		success: function (data) {
 			window.location.reload();

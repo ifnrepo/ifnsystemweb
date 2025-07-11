@@ -77,7 +77,7 @@ class In_model extends CI_Model{
         $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
         $arraynobontr = ['SP','GM'];
         if($cek==1){
-            $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl');
+            $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id');
             $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
             $this->db->where('id_header',$id);
             $detail = $this->db->get('tb_detail')->result_array();
@@ -93,9 +93,10 @@ class In_model extends CI_Model{
                     'trim(item)' => trim($det['item']),
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
-                    'trim(nobale)' => trim($det['nobale']),
+                    'trim(nobale)' => ($det['dept_id']=='FN' && $det['dept_tuju']=='GF') ? trim($datdet['nobale']) : '',
+                    // 'trim(nobale)' => trim($det['nobale']),
                     // 'harga' => $det['harga'],
-                    // 'stok' => $det['stok'],
+                    'stok' => $det['stok'],
                     // 'exnet' => $det['exnet']
                 ];
                 $this->db->where($kondisistok);
