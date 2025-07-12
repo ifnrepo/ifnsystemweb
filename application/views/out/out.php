@@ -108,6 +108,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
 
         </div>
+        <?= in_array('AR',daftardeptsubkon()); ?>
         <div class="mt-2">
           <table id="pbtabel" class="table nowrap order-column datatable" style="width: 100% !important;">
             <thead>
@@ -122,9 +123,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php foreach ($data as $datdet) {
-                $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item'; ?>
+                $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item'; 
+                $inoleh = $datdet['dept_tuju']=='CU' ? ' Marketing' : ' '.datadepartemen($datdet['dept_tuju'],'departemen'); 
+                $deptsubkon = daftardeptsubkon(); ?>
                 <tr>
-                  <td><?= tglmysql($datdet['tgl']); ?></td>
+                  <td><?= tglmysql($datdet['tgl']).$datdet['dept_tuju']; ?></td>
                   <?php if ($datdet['data_ok'] == 1) { ?>
                     <td class='font-bold'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="font-kecil"><?= $datdet['nodok'] ?></span></a></td>
                   <?php } else { ?>
@@ -139,15 +142,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini <br> <?= $datdet['nomor_dok']; ?>" data-href="<?= base_url() . 'out/hapusdataout/' . $datdet['id']; ?>" class='btn btn-sm btn-danger <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Hapus Transaksi'><i class='fa fa-trash-o mr-1'></i> Hapus</a>
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_tuju']==1 && $datdet['ok_valid']==1) { ?>
                       <a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
-                    <?php }else { $inoleh = $datdet['dept_tuju']=='CU' ? ' Marketing' : ' Departemen'; if($datdet['dept_tuju']=='CU'){  ?>
+                    <?php }else { if($datdet['dept_tuju']=='CU'){  ?>
                       <?php if($datdet['nomor_bc']==''){  ?>
                         <span class="text-teal font-kecil">Tunggu Persetujuan Keluar Barang </span>
                         <?php }else{ ?>
                         <span class="text-teal font-kecil line-12"><a href='#' title="Klik untuk menyetujui" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Validasi OUT <br><?= $datdet['nomor_dok']; ?>" data-href="<?= base_url() . 'out/validasimarketing/' . $datdet['id'] ?>">Barang Sudah Setuju Keluar</a><br><span class="text-black"><?= $datdet['nomor_sppb']; ?></span></span>
                       <?php } ?>
                     <?php }else{ ?>
-                        <span class="text-teal font-kecil">Tunggu Verifikasi <b>IN</b><?= $inoleh; ?></span>
-                    <?php }} ?>
+                      <?php if(in_array($datdet['dept_tuju'],daftardeptsubkon())){ ?>
+                        <?php if($datdet['data_ok']==1 && $datdet['ok_tuju']==0){ ?>
+                          <span class="text-teal font-kecil line-12">Menunggu Pembuatan Dokumen Pengeluaran</span>
+                        <?php }else{ ?>
+                          <span class="text-teal font-kecil line-12">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>
+                        <?php } ?>
+                      <?php }else{  ?>
+                        <span class="text-teal font-kecil line-12">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>
+                    <?php }}} ?>
                   </td>
                 </tr>
               <?php } ?>

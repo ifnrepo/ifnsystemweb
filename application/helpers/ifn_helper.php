@@ -713,3 +713,9 @@ function getstokbarangsaatini($data,$dept){
     $getkode = $CI->helpermodel->stoksaatini($data,$dept);
     return $getkode;
 }
+function daftardeptsubkon(){
+    // $xkode = trim($kode);
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->deptsubkon();
+    return $getkode;
+}
