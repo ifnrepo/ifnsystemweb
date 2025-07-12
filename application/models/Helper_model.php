@@ -512,4 +512,16 @@ class Helper_model extends CI_Model
         $this->db->join('barang','barang.id = '.$idbar,'left');
         return $this->db->get();
     }
+    public function deptsubkon(){
+        $arr = [];
+        $this->db->select('dept.dept_id');
+        $this->db->from('dept');
+        $this->db->where('katedept_id',3);
+        $this->db->order_by('dept_id');
+        $cek = $this->db->get();
+        foreach ($cek->result_array() as $value) {
+            array_push($arr,$value['dept_id']);
+        }
+        return $arr;
+    }
 }

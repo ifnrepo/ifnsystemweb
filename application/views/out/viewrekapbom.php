@@ -25,8 +25,13 @@
                         $namabarang = trim($detail['po'])=='' ? $detail['nama_barang'] : spekpo($detail['po'],$detail['item'],$detail['dis']);
                         $totpcs += $detail['totpcs'];
                         $totkgs += $detail['totkgs'];
-                        $cekkurang = $detail['totkgs'] > $detail['kgsstok'] ? ' text-danger' : '';
-                        $cekkurangpcs = $detail['totpcs'] > $detail['pcsstok'] ? ' text-danger' : '';
+                        if($sku=='P6974831'){
+                            $cekkurang =  '';
+                            $cekkurangpcs =  '';
+                        }else{
+                            $cekkurang = $detail['totkgs'] > $detail['kgsstok'] ? ' text-danger' : '';
+                            $cekkurangpcs = $detail['totpcs'] > $detail['pcsstok'] ? ' text-danger' : '';
+                        }
                         $xnet = $detail['exnet']==0 ? '' : 'Y';
                     ?>
                         <tr class="font-kecil">
