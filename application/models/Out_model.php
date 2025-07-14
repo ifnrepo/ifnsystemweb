@@ -118,6 +118,7 @@ class Out_model extends CI_Model{
         $this->db->join('barang c','c.id = a.id_barang','left');
         $this->db->where($kondisi);
         $this->db->order_by('b.tgl','DESC');
+        $this->db->order_by('b.nomor_dok','DESC ');
         $this->db->group_by('b.nomor_dok');
         $query = $this->db->get();
         return $query;
@@ -539,6 +540,7 @@ class Out_model extends CI_Model{
                     }
                 }else{
                     // Untuk pengeluaran selain dari departemen GS
+                    if ($datdet['id_barang'] == 40396) continue; // Spek KARUNG di skip
                     $kondisistok = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),

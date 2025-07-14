@@ -108,7 +108,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
 
         </div>
-        <?= in_array('AR',daftardeptsubkon()); ?>
         <div class="mt-2">
           <table id="pbtabel" class="table nowrap order-column datatable" style="width: 100% !important;">
             <thead>
@@ -129,7 +128,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <tr>
                   <td><?= tglmysql($datdet['tgl']).$datdet['dept_tuju']; ?></td>
                   <?php if ($datdet['data_ok'] == 1) { ?>
-                    <td class='font-bold'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="font-kecil"><?= $datdet['nodok'] ?></span></a></td>
+                    <td class='font-bold line-12'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important; font-weight: normal"><?= getpros($datdet['ketprc']) ?></span></a></td>
                   <?php } else { ?>
                     <td class='font-bold line-12'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important; font-weight: normal"><?= getpros($datdet['ketprc']) ?></span></a></td>
                   <?php } ?>

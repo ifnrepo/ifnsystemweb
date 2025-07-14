@@ -3,16 +3,29 @@ class Akb_model extends CI_Model
 {
     public function getdata($kode)
     {
-        $arrkondisi = [
-            'id_perusahaan' => IDPERUSAHAAN,
-            'kode_dok' => 'T',
-            'dept_id' => $kode,
-            'dept_tuju' => 'CU',
-            'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th'),
-            'tanpa_bc' => 0,
-            'ok_tuju' => 1
-        ];
+        if($kode=='FG'){
+            $deptsubkon = daftardeptsubkon();
+            $arrkondisi = [
+                'id_perusahaan' => IDPERUSAHAAN,
+                'kode_dok' => 'T',
+                'dept_id' => $kode,
+                'dept_tuju' => 'AR',
+                'month(tgl)' => $this->session->userdata('bl'),
+                'year(tgl)' => $this->session->userdata('th'),
+                'left(nomor_dok,2)' => 'TR'
+            ];
+        }else{
+            $arrkondisi = [
+                'id_perusahaan' => IDPERUSAHAAN,
+                'kode_dok' => 'T',
+                'dept_id' => $kode,
+                'dept_tuju' => 'CU',
+                'month(tgl)' => $this->session->userdata('bl'),
+                'year(tgl)' => $this->session->userdata('th'),
+                'tanpa_bc' => 0,
+                'ok_tuju' => 1
+            ];
+        }
         $this->db->select('tb_header.*,customer.nama_customer as namacustomer');
         $this->db->join('customer', 'customer.id = tb_header.id_buyer', 'left');
         $this->db->where($arrkondisi);
@@ -21,7 +34,7 @@ class Akb_model extends CI_Model
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
-    public function getdatabyid($kode)
+    public function getdatabyid($kode,$mode=0)
     {
         $this->db->select('tb_header.*,customer.nama_customer as namacustomer,customer.alamat,customer.kontak,customer.npwp,customer.kode_negara as negaracustomer,customer.pembeli as dirsell,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat,ref_negara.kode_negara');
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_muat) as pelmuat");
@@ -34,7 +47,7 @@ class Akb_model extends CI_Model
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
-    public function getdatadetailib($data)
+    public function getdatadetailib($data,$mode=0)
     {
         $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
@@ -48,7 +61,11 @@ class Akb_model extends CI_Model
         $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
         $this->db->join('tb_klppo h', 'h.id = g.klppo', 'left');
         $this->db->join('ref_kemas i', 'i.id = a.kd_kemasan', 'left');
-        $this->db->where('a.id_header', $data);
+        if($mode==0){
+            $this->db->where('a.id_header', $data);
+        }else{
+            $this->db->where('a.id_akb', $data);
+        }
         return $this->db->get()->result_array();
     }
     public function getdatakontainer($id){
