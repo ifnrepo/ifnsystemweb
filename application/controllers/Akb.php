@@ -23,6 +23,7 @@ class Akb extends CI_Controller
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('mtuangmodel');
         $this->load->model('helper_model','helpermodel');
+        $this->load->model('Ib_model','ibmodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -90,17 +91,17 @@ class Akb extends CI_Controller
     }
     public function hapusib($id)
     {
-        $query = $this->ibmodel->hapusib($id);
+        $query = $this->akbmodel->hapusib($id);
         if ($query) {
-            $url = base_url() . 'ib';
+            $url = base_url() . 'akb';
             redirect($url);
         }
     }
 
-    public function viewdetail($id)
+    public function viewdetail($id,$mode=0)
     {
-        $data['header'] = $this->akbmodel->getdatabyid($id);
-        $data['detail'] = $this->akbmodel->getdatadetailib($id);
+        $data['header'] = $this->akbmodel->getdatabyid($id,$mode);
+        $data['detail'] = $this->akbmodel->getdatadetailib($id,$mode);
         $data['lampiran'] = $this->akbmodel->getdatalampiran($id);
         $this->load->view('akb/viewdetailakb', $data);
     }
@@ -290,9 +291,9 @@ class Akb extends CI_Controller
         $hasil = $this->ibmodel->simpandatabc($data,$head);
         echo $hasil;
     }
-    public function isidokbc($id){
+    public function isidokbc($id,$mode=0){
         $header['header'] = 'transaksi';
-        $data['header'] = $this->akbmodel->getdatadetailib($id);
+        $data['header'] = $this->akbmodel->getdatadetailib($id,$mode);
         $data['datheader'] = $this->akbmodel->getdatabyid($id);
         $data['bckeluar'] = $this->akbmodel->getbckeluar();
         $data['jnsangkutan'] = $this->akbmodel->getjnsangkutan();

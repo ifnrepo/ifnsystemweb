@@ -162,14 +162,15 @@
                                     $jumlah = $val['kodesatuan']=='KGS' ? $val['kgs'] : $val['pcs'];
                                     $jmlpcs += $val['pcs']; $jmlkgs += $val['kgs'];
                                     $Jmltotal += $val['harga']; //*$jumlah;
-                                    $nambar = $val['nama_barang'];
+                                    // $nambar = $val['nama_barang'];
+                                    $nambar = trim($val['po'])=='' ? $val['nama_barang'] : spekpo($val['po'],$val['item'],$val['dis']);
                                     if($header['jns_bc']==30){
                                         $nambar = $val['engklp'];
                                     }
                                      ?>
                                     <tr>
                                         <td><?= $nambar; ?></td>
-                                        <td><?= formatsku($val['po'],$val['item'],$val['dis'],$val['brg_id']); ?></td>
+                                        <td><?= formatsku($val['po'],$val['item'],$val['dis'],$val['id_barang']); ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td class="text-right"><?= rupiah($val['pcs'],0); ?></td>
                                         <td class="text-right"><?= rupiah($val['kgs'],2); ?></td>

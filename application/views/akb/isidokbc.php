@@ -555,7 +555,8 @@
                                         $sumdetail += $data['harga']; //*$jumlah;
                                         $sumpcs += $data['pcs'];
                                         $sumkgs += $data['kgs'];
-                                        $nambar = $data['po']!='' ? $data['spek'] : $data['nama_barang'];
+                                        // $nambar = $data['po']!='' ? $data['spek'] : $data['nama_barang'];
+                                        $nambar = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
                                         if($datheader['jns_bc']==30){
                                             $nambar = $data['engklp'];
                                         }
