@@ -565,7 +565,7 @@ class Inv extends CI_Controller
             redirect($url);
         }
     }
-    public function viewdetail($isi = '')
+    public function viewdetail($isi = '',$mode=0)
     {
         $split = explode('-', $isi);
         $array = [

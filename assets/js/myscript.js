@@ -333,6 +333,9 @@ function formAction(formname, action) {
 
 function modalBoxSm() {
 	$("#modal-simple").on("show.bs.modal", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
@@ -355,6 +358,9 @@ function modalBoxLg() {
 
 function modalBoxSc() {
 	$("#modal-scroll").on("show.bs.modal", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
@@ -366,6 +372,9 @@ function modalBoxSc() {
 
 function modalBoxlgSc() {
 	$("#modal-largescroll").on("show.bs.modal", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
@@ -377,6 +386,9 @@ function modalBoxlgSc() {
 
 function modalBoxlgSc2() {
 	$("#modal-largescroll2").on("show.bs.modal", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
@@ -388,6 +400,9 @@ function modalBoxlgSc2() {
 
 function modalBoxLg2() {
 	$("#modalBox-lg2").on("show.bs.modal", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
@@ -399,6 +414,9 @@ function modalBoxLg2() {
 
 function modalBoxXl() {
 	$("#modalBox-xl").on("show.bs.modal", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
@@ -410,6 +428,9 @@ function modalBoxXl() {
 
 function modalBoxFull() {
 	$("#modal-full").on("show.bs.modal", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
@@ -656,6 +677,7 @@ function cekNotif() {
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			console.log(textStatus);
+			// window.location.reload();
 		},
 	});
 }

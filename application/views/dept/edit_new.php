@@ -78,6 +78,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <input type="text" class="form-control font-kecil" name="jabatan" id="jabatan" value="<?= $data['jabatan']; ?>" placeholder="Jabatan PIC">
                       </div>
                   </div>
+                  <div class="mb-1 row">
+                      <label class="col-3 col-form-label required">Nomor Izin</label>
+                      <div class="col">
+                          <input type="text" class="form-control font-kecil" name="noijin" id="noijin" value="<?= $data['noijin']; ?>" placeholder="Nomor Izin Entitas">
+                      </div>
+                  </div>
               </div>
               <div class="hr m-0"></div>
             <div class="mt-1 row">

@@ -130,7 +130,7 @@ class Kontrak extends CI_Controller
         $data['idkontrak'] = $idkontrak;
         $this->load->view('kontrak/adddetail',$data);
     }
-    public function view($id)
+    public function view($id,$mode=0)
     {
         $kode = [
             'dept_id' => $this->session->userdata('deptkontrak') ?? '',
@@ -139,6 +139,7 @@ class Kontrak extends CI_Controller
         $data['detail'] = $this->db->get_where('tb_kontrak_detail', ['id_kontrak' => $id])->result_array();
 
         $data['header'] = $this->kontrakmodel->getDetail_nomor($id, $kode);
+        $data['mode'] = $mode;
         $this->load->view('kontrak/view', $data);
     }
     public function simpandetailkontrak(){

@@ -135,7 +135,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td class="line-12"><?= $jmlrek; ?><br><span class="badge badge-outline text-pink"><?= rupiah($datdet['jumlahpcs'],0); ?> Pcs, <?= rupiah($datdet['netto'],2); ?> Kgs</span></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
                   <td><?= $datdet['keterangan']; ?></td>
-                  <td class="text-end"><span style="color: white;">.</span>
+                  <td class="text-end line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
                       <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini <br> <?= $datdet['nomor_dok']; ?>" data-href="<?= base_url() . 'out/hapusdataout/' . $datdet['id']; ?>" class='btn btn-sm btn-danger <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Hapus Transaksi'><i class='fa fa-trash-o mr-1'></i> Hapus</a>
@@ -150,7 +150,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php }else{ ?>
                       <?php if(in_array($datdet['dept_tuju'],daftardeptsubkon())){ ?>
                         <?php if($datdet['data_ok']==1 && $datdet['ok_tuju']==0){ ?>
-                          <span class="text-teal font-kecil line-12">Menunggu Pembuatan Dokumen Pengeluaran</span>
+                          <span class="text-red font-kecil line-12">Menunggu Pembuatan<br>Dokumen Pengeluaran BC 261</span>
                         <?php }else{ ?>
                           <span class="text-teal font-kecil line-12">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>
                         <?php } ?>

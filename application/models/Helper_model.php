@@ -524,4 +524,281 @@ class Helper_model extends CI_Model
         }
         return $arr;
     }
+    public function showbom($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs){
+        $data = [];
+        $key = $idbarang.$nobontr;
+        if($idbarang > 0 && trim($po)==''){
+            $this->db->select('*');
+            $this->db->from('barang');
+            $this->db->join('bom_barang','bom_barang.id_barang = barang.id','left');
+            $this->db->where('barang.id',$idbarang);
+            $databom = $this->db->get();
+            foreach($databom->result_array() as $datbom){
+                if($datbom['persen']==null){
+                    $isi = [
+                        'po' => $po,
+                        'item' => $item,
+                        'dis' => $dis,
+                        'id_barang' => $idbarang,
+                        'insno' => $insno,
+                        'nobontr' => $nobontr,
+                        'kgs' => $kgs,
+                        'kgs_asli' => $kgs,
+                        'pcs_asli' => $pcs,
+                        'xinsno' => '',
+                        'xinsnox' => '',
+                        'cuy' => '',
+                        'noe' => $noe,
+                        'kunci' => $idbarang.trim($nobontr)
+                    ];
+                    array_push($data,$isi);
+                }else{
+                    $isi = [
+                        'po' => $po,
+                        'item' => $item,
+                        'dis' => $dis,
+                        'id_barang' => $datbom['id_barang_bom'],
+                        'insno' => $insno,
+                        'nobontr' => $nobontr,
+                        'kgs' => $kgs*($datbom['persen']/100),
+                        'kgs_asli' => $kgs*($datbom['persen']/100),
+                        'pcs_asli' => $pcs,
+                        'xinsno' => '',
+                        'xinsnox' => '',
+                        'cuy' => '',
+                        'noe' => $noe,
+                        'kunci' => $datbom['id_barang_bom'].trim($nobontr)
+                    ];
+                    array_push($data,$isi);
+                }
+            }
+        }else{
+            $kondisinet = [
+                'trim(po)' => trim($po),
+                'trim(item)' => trim($item),
+                'dis' => $dis,
+                'trim(insno)' => trim($insno),
+                'trim(nobontr)' => trim($nobontr),
+                'dept_id' => 'NT'
+            ];
+            $this->db->select('tb_detail.*,tb_header.dept_id');
+            $this->db->from('tb_detail');
+            $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+            $this->db->where($kondisinet);
+            $this->db->limit(1);
+            $datanet = $this->db->get();
+            foreach ($datanet->result_array() as $datnet) {
+                $this->db->select("po,item,dis,id_barang,insno,nobontr,sum(kgs) as kgs");
+                $this->db->from('tb_detailgen');
+                $this->db->where('id_header',$datnet['id_header']);
+                $this->db->where('seri_barang',$datnet['seri_barang']);
+                $this->db->group_by('po,item,dis,id_barang,insno,nobontr');
+                $dataraw = $this->db->get();
+
+                foreach ($dataraw->result_array() as $datraw) {
+                    if(trim($datraw['insno'])=="" && trim($datraw['nobontr'])=="" ){
+                        $isi = [
+                            'po' => $po,
+                            'item' => $item,
+                            'dis' => $dis,
+                            'id_barang' => $idbarang,
+                            'insno' => $insno,
+                            'nobontr' => $nobontr,
+                            'kgs' => $kgs,
+                            'kgs_asli' => $kgs,
+                            'pcs_asli' => 0,
+                            'xinsno' => $po,
+                            'xinsnox' => '',
+                            'cuy' => formatsku($po,$item,$dis,$idbarang).'Ins.'.$insno.' (BOM TIDAK DITEMUKAN)',
+                            'noe' => $noe,
+                            'kunci' => $idbarang.trim($nobontr)
+                        ];
+                        if(getarrayindex($idbarang.trim($nobontr),$data,'kunci')){
+                            $index = getarrayindex($idbarang.trim($nobontr),$data,'kunci');
+                            $data[$index]['kgs_asli'] = $data[$index]['kgs_asli']+$kgs;
+                        }else{
+                            array_push($data,$isi);
+                        }
+                        // continue;
+                    }else{
+                        $persen = $datraw['kgs']/$datnet['kgs'];
+                        $kgsbagi = round($kgs*$persen,2);
+                        // $kgsbagi = $datraw['kgs']*$persen;
+                        if(str_contains($datraw['insno'],'/SP')){
+                            // Jika Insno Instruksi SPINNING
+                            $this->db->select("id_header,po,item,dis,id_barang,insno,nobontr,kgs");
+                            $this->db->from('tb_detail');
+                            $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+                            $this->db->where('tb_header.dept_id','SP');
+                            $this->db->where('trim(tb_header.keterangan)','Produksi '.trim($datraw['insno']));
+                            $dataspin = $this->db->get();
+
+                            foreach ($dataspin->result_array() as $spin) {
+                                $this->db->select("po,item,dis,id_barang,insno,nobontr,kgs,persen");
+                                $this->db->from('tb_detailgen');
+                                $this->db->where('id_header',$spin['id_header']);
+                                $dataxspin = $this->db->get();
+                                foreach ($dataxspin->result_array() as $xdataxspin) {
+                                    // $xdataxspin['kgs_asli'] = $datraw['kgs'] * ($xdataxspin['persen']/100);
+                                    if(getarrayindex($xdataxspin['id_barang'].trim($xdataxspin['nobontr']),$data,'kunci')!=''){
+                                        $index = getarrayindex($xdataxspin['id_barang'].trim($xdataxspin['nobontr']),$data,'kunci');
+                                        $data[$index]['kgs_asli'] = $data[$index]['kgs_asli']+($kgsbagi*($xdataxspin['persen']/100));
+                                    }else{
+                                        $xdataxspin['kgs_asli'] = $kgsbagi*($xdataxspin['persen']/100);
+                                        $xdataxspin['xinsno'] = $datraw['insno'];
+                                        $xdataxspin['xinsnox'] = $datraw['insno'];
+                                        $xdataxspin['cuy'] = formatsku($po,$item,$dis,$idbarang);
+                                        $xdataxspin['noe'] = $noe;  
+                                        $xdataxspin['kgs'] = $kgs;
+                                        $xdataxspin['kunci'] = $xdataxspin['id_barang'].trim($xdataxspin['nobontr']);
+                                        $xdataxspin['pcs_asli'] = 0;
+                                        array_push($data,$xdataxspin);
+                                    }
+                                }
+                            }
+                        }else{
+                            if(str_contains($datraw['insno'],'/RR')){
+                                // Jika Insno Instruksi RINGROPE
+                                $datarr = $this->showbomrr($datraw['po'],$datraw['item'],$datraw['dis'],$datraw['id_barang'],$datraw['insno'],$datraw['nobontr'],$kgs*$persen,$noe,$kgs);
+                                foreach ($datarr as $simpanrr) {
+                                    if(getarrayindex($simpanrr['id_barang'].trim($simpanrr['nobontr']),$data,'kunci')!=''){
+                                        $index = getarrayindex($simpanrr['id_barang'].trim($simpanrr['nobontr']),$data,'kunci');
+                                        $data[$index]['kgs_asli'] = $data[$index]['kgs_asli']+$simpanrr['kgs_asli'];
+                                    }else{
+                                        array_push($data,$simpanrr);
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        return $data;
+    }
+    public function showbomrr($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$xkgs){
+        $key = $idbarang.$nobontr;
+        $kondisirr = [
+            'trim(po)' => trim($po),
+            'trim(item)' => trim($item),
+            'dis' => $dis,
+            'trim(insno)' => trim($insno),
+            'trim(nobontr)' => trim($nobontr),
+            // 'id_barang' => $idbarang,
+            'dept_id' => 'RR',
+            'dept_tuju' => 'GP'
+        ];
+        $this->db->select('tb_detail.*,tb_header.dept_id');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->where($kondisirr);
+        $datarr = $this->db->get();
+
+        foreach($datarr->result_array() as $datrr){
+            $pembagi = $datrr['kgs'];
+            $this->db->select('po,item,dis,id_barang,insno,nobontr,sum(kgs) as kgs');
+            $this->db->from('tb_detailgen');
+            $this->db->where('id_header',$datrr['id_header']);
+            $this->db->where('seri_barang',$datrr['seri_barang']);
+            $this->db->group_by('po,item,dis,id_barang,insno,nobontr');
+            $rrbom = $this->db->get();
+            $cekdatrr = $rrbom->row_array();
+            if(trim($cekdatrr['insno'])=='' && trim($cekdatrr['nobontr'])==''){
+                continue;
+            }else{
+                $xdata = [];
+                foreach ($rrbom->result_array() as $xdatrr) {
+                    $persen = $xdatrr['kgs']/$datrr['kgs'];
+                    if($xdatrr['nobontr']!=''){
+                        $xdatrr['kgs_asli'] = $kgs*$persen;
+                        $xdatrr['xinsno'] = $insno;
+                        $xdatrr['xinsnox'] = $xdatrr['insno'];
+                        $xdatrr['cuy'] = formatsku($po,$item,$dis,$idbarang);
+                        $xdatrr['noe'] = $noe;
+                        $xdatrr['kgs'] = $xkgs;
+                        $xdatrr['kunci'] = $xdatrr['id_barang'].trim($xdatrr['nobontr']);
+                        $xdatrr['pcs_asli'] = 0;
+
+                        array_push($xdata,$xdatrr);
+                    }else{
+                        if(str_contains($xdatrr['insno'],'/SP')){
+                            // Jika Insno Instruksi SPINNING
+                            $persen = $xdatrr['kgs']/$datrr['kgs'];
+                            $this->db->select("id_header,po,item,dis,id_barang,insno,nobontr,kgs");
+                            $this->db->from('tb_detail');
+                            $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+                            $this->db->where('tb_header.dept_id','SP');
+                            $this->db->where('trim(tb_header.keterangan)','Produksi '.trim($xdatrr['insno']));
+                            $dataspin = $this->db->get();
+
+                            foreach ($dataspin->result_array() as $spin) {
+                                $this->db->select("po,item,dis,id_barang,insno,nobontr,kgs,persen");
+                                $this->db->from('tb_detailgen');
+                                $this->db->where('id_header',$spin['id_header']);
+                                $dataxspin = $this->db->get()->row_array();
+                                // $dataxspin['kgs_asli'] = $xdatrr['kgs'] * ($dataxspin['persen']/100);
+                                $dataxspin['kgs_asli'] = $kgs*$persen;
+                                $dataxspin['xinsno'] = $insno;
+                                $dataxspin['xinsnox'] = $xdatrr['insno'];
+                                $dataxspin['cuy'] = formatsku($po,$item,$dis,$idbarang);
+                                $dataxspin['noe'] = $noe;
+                                $dataxspin['kgs'] = $xkgs;
+                                $dataxspin['kunci'] = $dataxspin['id_barang'].trim($dataxspin['nobontr']);
+                                $dataxspin['pcs_asli'] = 0;
+
+                                array_push($xdata,$dataxspin);
+                            }
+                        }
+                    }
+                }
+                break;
+            }
+        }
+        return $xdata;
+    }
+    public function ceknomorbc($data){
+        $datahasil= '';
+        $hasil = $this->db->get_where('tb_header',['nomor_dok'=>$data]);
+        if($hasil->num_rows() > 0){
+            $xhasil = $hasil->row_array();
+            $datahasil = $xhasil['jns_bc'];
+        }else{
+            $hasil2 = $this->db->get_where('tb_hargamaterial',['nobontr' => $data]);
+            if($hasil2->num_rows() > 0){
+                $xhasil2 = $hasil2->row_array();
+                $datahasil = $xhasil2['jns_bc'];
+            }
+        }
+        return $datahasil;
+    }
+    public function getjumlahcifbom($id,$no){
+        $this->db->select('tb_bombc.*,barang.nama_barang,barang.kode,barang.nohs,tb_header.nomor_bc,tb_header.jns_bc,satuan.kodesatuan,supplier.kode_negara,tb_header.mtuang');
+        $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tb_hargamaterial.nomor_bc as hamat_nomorbc,tb_hargamaterial.jns_bc as hamat_jnsbc');
+        $this->db->select('tb_hargamaterial.price as hamat_harga,tb_hargamaterial.weight as hamat_weight,tb_hargamaterial.qty as hamat_qty,satuan.kodebc,tb_hargamaterial.mt_uang as hamat_mtuang');
+        $this->db->select('SUM(case when tb_header.jns_bc = "23" then if(mtuang=1,(tb_header.totalharga)/tb_header.kurs_usd,tb_header.totalharga)/tb_header.netto ELSE 0 END) OVER() sum_totalharga,SUM(case when tb_hargamaterial.jns_bc = "23" AND tb_header.totalharga IS NULL then tb_hargamaterial.price ELSE 0 END) OVER() sum_totalharga2');
+        $this->db->from('tb_bombc');
+        $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
+        $this->db->join('tb_header','tb_header.nomor_dok = tb_bombc.nobontr','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->join('supplier','supplier.id = tb_header.id_pemasok','left');
+        $this->db->join('ref_negara','ref_negara.kode_negara = supplier.kode_negara','left');
+        $this->db->join('tb_hargamaterial','tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        // $this->db->where('tb_bombc.id',$id);
+        $this->db->where('tb_bombc.id_header',$id);
+        $this->db->where('tb_bombc.seri_barang',$no);
+        return $this->db->get();
+    }
+    public function getdokumenbcbynomordaftar($nodaf,$mode=0){
+        if($mode==0){
+            $this->db->select("nomor_bc,tgl_bc");
+            $this->db->from('tb_header');
+            $this->db->where('nomor_bc',$nodaf);
+            return $this->db->get();
+        }else{
+            $this->db->select("nomor_bc,tgl_bc");
+            $this->db->from('tb_hargamaterial');
+            $this->db->where('nomor_bc',$nodaf);
+            return $this->db->get();
+        }
+    }
 }

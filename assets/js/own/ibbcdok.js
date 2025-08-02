@@ -133,15 +133,22 @@ $("#keexcel").click(function () {
 });
 $("#jns_bc").change(function () {
 	var halaman = $("#namahalaman").val();
+	var mode = $("#modehalaman").val() != "" ? "/1" : "";
 	savedata("jns_bc", $(this).val());
 	if ($(this).val() == "23") {
 		isilampiran($("#id_header").val());
 	} else {
 		setTimeout(() => {
 			window.location.href =
-				base_url + halaman + "/isidokbc/" + $("#id_header").val();
+				base_url + halaman + "/isidokbc/" + $("#id_header").val() + mode;
 		}, 500);
 	}
+});
+$("#nomor_sj").change(function () {
+	savedata("nomor_sj", $(this).val());
+});
+$("#tgl_sj").change(function () {
+	savedata("tgl_sj", tglmysql($(this).val()));
 });
 $("#mtuang").change(function () {
 	savedata("mtuang", $(this).val());
@@ -157,16 +164,6 @@ $("#nomor_aju").blur(function () {
 $("#tgl_aju").change(function () {
 	savedata("tgl_aju", tglmysql($(this).val()));
 });
-// $("#nomor_bc").blur(function(){
-//     if($(this).val() != ''){
-//         var jadi = isikurangnol($(this).val());
-//         $(this).val(jadi) ;
-//         savedata('nomor_bc',$(this).val());
-//     }
-// });
-// $("#tgl_bc").change(function(){
-//         savedata('tgl_bc',tglmysql($(this).val()));
-// });
 $("#jns_angkutan").change(function () {
 	savedata("jns_angkutan", $(this).val());
 });
@@ -399,10 +396,18 @@ function cekkolom(mode) {
 		pesan("Jumlah Bruto dan Netto Harus di isi !", "error");
 		return false;
 	}
-	if ($("#sumdetail").val() != $("#nilai_pab").val()) {
-		// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
-		pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
-		return false;
+	if ($("#jns_bc").val() == "261") {
+		if ($("#sumdetailbc").val() != $("#nilai_pab").val()) {
+			// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+			pesan("Cek Nilai Pabean (CIF) dengan Detail Harga BC !", "error");
+			return false;
+		}
+	} else {
+		if ($("#sumdetail").val() != $("#nilai_pab").val()) {
+			// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+			pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
+			return false;
+		}
 	}
 	if ($("#tg_jawab").val() == "") {
 		// $("#keteranganerr").text("Isi Nama Penanggung Jawab !");
@@ -536,6 +541,21 @@ function cekkolom(mode) {
 	if ($("#jns_bc").val() == "262") {
 		if ($("#exnomor_bc").val() == "") {
 			pesan("Nomor Ex BC harus di isi", "error");
+			return false;
+		}
+	}
+	// Untuk cek BC 261
+	if ($("#jns_bc").val() == "261") {
+		if ($("#nomorkontrak").val() == "") {
+			pesan("Nomor Kontrak BC harus di isi", "error");
+			return false;
+		}
+		if ($("#jumlahhskosong").val() != "0") {
+			pesan("Masih ada HS Code kosong pada Detail Barang", "error");
+			return false;
+		}
+		if ($("#jumlahnobontrkosong").val() != "0") {
+			pesan("Masih ada Nobontr kosong pada Detail Ver. BC", "error");
 			return false;
 		}
 	}

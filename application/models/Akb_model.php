@@ -8,7 +8,7 @@ class Akb_model extends CI_Model
             $arrkondisi = [
                 'id_perusahaan' => IDPERUSAHAAN,
                 'kode_dok' => 'T',
-                'dept_id' => $kode,
+                'tb_header.dept_id' => $kode,
                 'dept_tuju' => 'AR',
                 'month(tgl)' => $this->session->userdata('bl'),
                 'year(tgl)' => $this->session->userdata('th'),
@@ -18,7 +18,7 @@ class Akb_model extends CI_Model
             $arrkondisi = [
                 'id_perusahaan' => IDPERUSAHAAN,
                 'kode_dok' => 'T',
-                'dept_id' => $kode,
+                'tb_header.dept_id' => $kode,
                 'dept_tuju' => 'CU',
                 'month(tgl)' => $this->session->userdata('bl'),
                 'year(tgl)' => $this->session->userdata('th'),
@@ -26,8 +26,9 @@ class Akb_model extends CI_Model
                 'ok_tuju' => 1
             ];
         }
-        $this->db->select('tb_header.*,customer.nama_customer as namacustomer');
+        $this->db->select('tb_header.*,customer.nama_customer as namacustomer,tb_kontrak.nomor as nomorkontrak');
         $this->db->join('customer', 'customer.id = tb_header.id_buyer', 'left');
+        $this->db->join('tb_kontrak', 'tb_kontrak.id = tb_header.id_kontrak', 'left');
         $this->db->where($arrkondisi);
         $this->db->order_by('tgl','desc');
         $this->db->order_by('nomor_dok','desc');
@@ -36,7 +37,9 @@ class Akb_model extends CI_Model
     }
     public function getdatabyid($kode,$mode=0)
     {
-        $this->db->select('tb_header.*,customer.nama_customer as namacustomer,customer.alamat,customer.kontak,customer.npwp,customer.kode_negara as negaracustomer,customer.pembeli as dirsell,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat,ref_negara.kode_negara');
+        $this->db->select('tb_header.*,customer.nama_customer as namacustomer,customer.alamat,customer.kontak,customer.npwp,customer.kode_negara as negaracustomer,customer.pembeli as dirsell,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat,ref_negara.kode_negara,tb_kontrak.nomor as nomorkontrak');
+        $this->db->select('tb_kontrak.id as idkontrak');
+        $this->db->select('depte.nama_subkon as namasubkon,depte.alamat_subkon as alamatsubkon,depte.npwp as npwpsubkon,depte.noijin,depte.tglijin');
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_muat) as pelmuat");
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_bongkar) as pelbongkar");
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
@@ -44,12 +47,14 @@ class Akb_model extends CI_Model
         $this->db->join('ref_mt_uang', 'ref_mt_uang.id=tb_header.mtuang', 'left');
         $this->db->join('ref_jns_angkutan', 'ref_jns_angkutan.id=tb_header.jns_angkutan', 'left');
         $this->db->join('ref_negara', 'ref_negara.id=tb_header.bendera_angkutan', 'left');
+        $this->db->join('tb_kontrak', 'tb_kontrak.id = tb_header.id_kontrak', 'left');
+        $this->db->join('dept depte', 'depte.dept_id = tb_header.dept_tuju', 'left');
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
     public function getdatadetailib($data,$mode=0)
     {
-        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem");
+        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
@@ -66,6 +71,7 @@ class Akb_model extends CI_Model
         }else{
             $this->db->where('a.id_akb', $data);
         }
+        $this->db->order_by('id_header,seri_barang');
         return $this->db->get()->result_array();
     }
     public function getdatakontainer($id){
@@ -766,4 +772,107 @@ class Akb_model extends CI_Model
 		}
 		return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
 	}
+    public function getdetbom($id){
+        $this->db->select('tb_bombc.*,barang.nama_barang,barang.kode,barang.nohs,tb_header.nomor_bc,tb_header.jns_bc,satuan.kodesatuan,supplier.kode_negara,tb_header.mtuang');
+        $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tb_hargamaterial.nomor_bc as hamat_nomorbc,tb_hargamaterial.jns_bc as hamat_jnsbc');
+        $this->db->select('tb_hargamaterial.price as hamat_harga,tb_hargamaterial.weight as hamat_weight,tb_hargamaterial.qty as hamat_qty,tb_hargamaterial.kurs  as hamat_kurs');
+        $this->db->from('tb_bombc');
+        $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
+        $this->db->join('tb_header','tb_header.nomor_dok = tb_bombc.nobontr','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->join('supplier','supplier.id = tb_header.id_pemasok','left');
+        $this->db->join('ref_negara','ref_negara.kode_negara = supplier.kode_negara','left');
+        $this->db->join('tb_hargamaterial','tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->where('id_header',$id);
+        // $this->db->order_by('id_barang','nobontr ASC');
+        $this->db->group_by('tb_bombc.id');
+        $this->db->order_by('seri_barang','id_barang','nobontr ASC');
+        return $this->db->get();
+    }
+    public function getdetbombyid($id){
+        $this->db->select('tb_bombc.*,barang.nama_barang,barang.kode,barang.nohs,tb_header.nomor_bc,tb_header.jns_bc,satuan.kodesatuan,supplier.kode_negara,tb_header.mtuang');
+        $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tb_hargamaterial.nomor_bc as hamat_nomorbc,tb_hargamaterial.jns_bc as hamat_jnsbc');
+        $this->db->select('tb_hargamaterial.price as hamat_harga,tb_hargamaterial.weight as hamat_weight,tb_hargamaterial.qty as hamat_qty');
+        $this->db->from('tb_bombc');
+        $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
+        $this->db->join('tb_header','tb_header.nomor_dok = tb_bombc.nobontr','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->join('supplier','supplier.id = tb_header.id_pemasok','left');
+        $this->db->join('ref_negara','ref_negara.kode_negara = supplier.kode_negara','left');
+        $this->db->join('tb_hargamaterial','tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->where('tb_bombc.id',$id);
+        return $this->db->get();
+    }
+    public function hitungbom($id,$mode){
+        if($mode==1){
+            $this->db->select("*");
+            $this->db->from('tb_detail');
+            $this->db->where('id_akb',$id);
+            // $this->db->limit(1,0);
+            $this->db->order_by('id_header,seri_barang');
+        }else{
+            $this->db->select("*");
+            $this->db->from('tb_detail');
+            $this->db->where('id_header',$id);
+        }
+        $hasil = $this->db->get();
+        $arrhasil = [];
+        $no=1;
+        foreach ($hasil->result_array() as $hsl) {
+            $arrbom = showbom($hsl['po'],$hsl['item'],$hsl['dis'],$hsl['id_barang'],$hsl['insno'],$hsl['nobontr'],$hsl['kgs'],$no++,$hsl['pcs']);
+            foreach ($arrbom as $hasilshowbom) {
+                // if(getarrayindex($hasilshowbom['id_barang'].trim($hasilshowbom['nobontr']),$arrhasil,'kunci')!=''){
+                //     $index = getarrayindex($hasilshowbom['id_barang'].trim($hasilshowbom['nobontr']),$arrhasil,'kunci');
+                //     $arrhasil[$index]['kgs_asli'] = $arrhasil[$index]['kgs_asli']+$hasilshowbom['kgs_asli'];
+                // }else{
+                //     $hasilshowbom['kunci'] = $hasilshowbom['id_barang'].trim($hasilshowbom['nobontr']);
+                    array_push($arrhasil,$hasilshowbom);
+                // }
+            }
+        }
+        return $arrhasil;
+    }
+    public function simpanbom($data,$id){
+        $det = $this->db->get_where('tb_bombc',['id_header'=>$id])->num_rows();
+        if($det > 0){
+            $this->db->where('id_header',$id);
+            $this->db->delete('tb_bombc');
+        }
+        foreach ($data as $hasilshowbom) {
+            if(((float) $hasilshowbom['kgs_asli']+(float) $hasilshowbom['pcs_asli']) > 0.000009){
+                $hasilshowbom['id_header'] = $id;
+                $datasimpan = [
+                    'id_header' => $id,
+                    'id_barang' => $hasilshowbom['id_barang'],
+                    'seri_barang' => $hasilshowbom['noe'],
+                    'nobontr' => $hasilshowbom['nobontr'],
+                    'kgs' => $hasilshowbom['kgs_asli'],
+                    'pcs' => $hasilshowbom['pcs_asli']
+                ];
+                $cekjenisbc = ceknomorbc($hasilshowbom['nobontr']);
+                if($cekjenisbc=='23'){
+                    $datasimpan['ppn'] = 12;
+                    $datasimpan['pph'] = 2.5;
+                }
+                $hasil = $this->db->insert('tb_bombc',$datasimpan);
+            }
+        }
+        return $hasil;
+    }
+    public function simpandetailbombc($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_bombc',$data);
+    }
+    public function simpanaddkontrak($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_header',$data);
+    }
+    public function hapuskontrak($id){
+        $this->db->where('id',$id);
+        return $this->db->update('tb_header',['id_kontrak' => 0]);
+    }
+    public function getdatakontrak($id){
+        $this->db->where('id',$id);
+        return $this->db->get('tb_kontrak');
+    }
 }

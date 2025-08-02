@@ -1,13 +1,17 @@
 <div class="container-xl"> 
     <div class="mx-2 font-bold">AJU KELUAR BARANG</div>
     <div class="mx-2 mb-2 font-bold">DATA BC - NO <span class="text-blue"><?= $datheader['nomor_dok']; ?></span></div>
-    <div class="card-header font-kecil">
+    <div class="card-header font-kecil">    
         <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" style="background-color: #F6F8FB">
             <li class="nav-item">
              <a href="#tabs-home-8" class="nav-link bg-teal-lt active btn-flat font-bold" data-bs-toggle="tab">Header Dokumen</a>
             </li>
             <li class="nav-item">
                 <a href="#tabs-barang-8" class="nav-link bg-cyan-lt btn-flat font-bold" data-bs-toggle="tab">Detail Barang</a>
+            </li>
+            <?php $navhilang = $datheader['jns_bc']!=261 ?  "hilang" : ""; ?>
+            <li class="nav-item <?= $navhilang; ?>">
+                <a href="#tabs-barangdet-8" class="nav-link bg-purple-lt btn-flat font-bold" data-bs-toggle="tab">Detail Ver. BC </a>
             </li>
             <li class="nav-item">
                 <a href="#tabs-profile-8" class="nav-link bg-red-lt btn-flat font-bold" data-bs-toggle="tab">Lampiran Dokumen</a>
@@ -22,6 +26,7 @@
                     <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
                     <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
                     <input type="hidden" id="namahalaman" value="akb">
+                    <input type="hidden" id="modehalaman" value="<?= $mode; ?>">
                     <?php $date = date("Y-m-d H:i:s",strtotime("+2 hours",strtotime($datatoken['update_at']))); ?>
                     <input type="hidden" id="updateon" value="<?= $date; ?>">
                     <div class="m-2 font-bold d-flex justify-content-between">
@@ -36,6 +41,7 @@
                         <?php $hilangbc30 = $datheader['jns_bc']==30 ? "hilang" : ""; ?>
                         <?php $hilangbc40 = $datheader['jns_bc']==40 ? "hilang" : ""; ?>
                         <?php $hilangbc262 = $datheader['jns_bc']==262 ? "hilang" : ""; ?>
+                        <?php $hilangbc261 = $datheader['jns_bc']==261 ? "hilang" : ""; ?>
                         <?php $selectnonaktif = $datheader['send_ceisa']==1 ? "disabled" : ""; ?>
                         <a href="<?= base_url().'akb/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'akb/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow text-black <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url().'akb/getresponpdf/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                         <!-- <a href="<?= base_url().'akb/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
@@ -50,9 +56,15 @@
                         <hr class="m-0">
                         <div class="d-flex justify-content-between">
                             <div class="p-2 font-kecil">
+                                <?php if($mode==0){ ?>
                                 Nama Customer : <?= $datheader['namacustomer']; ?><br>
                                 Alamat : <?= $datheader['alamat']; ?></br>
                                 NPWP : <?= $datheader['npwp']; ?>
+                                <?php }else{ ?>
+                                Nama Subkontrak : <?= datadepartemen($datheader['dept_tuju'],'nama_subkon'); ?><br>
+                                Alamat : <?= datadepartemen($datheader['dept_tuju'],'alamat_subkon'); ?></br>
+                                NPWP : <?= datadepartemen($datheader['dept_tuju'],'npwp'); ?>
+                                <?php } ?>
                                 <button href="#" id="kirimkeceisa" data-href="<?= base_url().'akb/kirimdatakeceisa'.$datheader['jns_bc'].'/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                             </div>
                         </div>
@@ -210,7 +222,7 @@
                                         </div>
                                     </div>
                                     <!-- Ex BC  -->
-                                    <div class="<?= $hilangbc30; ?><?= $hilangbc40; ?>">
+                                    <div class="<?= $hilangbc30; ?><?= $hilangbc40; ?><?= $hilangbc261; ?>">
                                         <div class="text-center bg-danger-lt mb-1 font-bold">Ex BC</div>
                                         <div class="mb-1 row">
                                             <div class="col">
@@ -232,7 +244,7 @@
                                         </div>
                                     </div>
                                     <!-- BL AWB  -->
-                                    <div class="<?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                    <div class="<?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
                                         <div class="text-center bg-primary-lt mb-1 font-bold">Nomor BL / AWB</div>
                                         <div class="mb-1 row">
                                             <div class="col">
@@ -254,7 +266,7 @@
                                         </div>
                                     </div>
                                     <!-- BL AWB  -->
-                                    <div class="<?= $hilangbc30; ?> <?= $hilangbc262; ?>">
+                                    <div class="<?= $hilangbc30; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
                                         <div class="text-center bg-danger-lt mb-1 font-bold"><span class="text-black">BC 1.1</span></div>
                                         <div class="mb-1 row">
                                             <div class="col">
@@ -295,17 +307,17 @@
                                 <div class="bg-info-lt px-2 py-1 font-bold">Sarana Angkut & Kemasan</div>
                                 <div class="card-body p-1">
                                     <!-- SARANA ANGKUT -->
-                                    <div class="text-center bg-primary-lt mb-1 font-bold <?= $hilangbc40; ?> <?= $hilangbc262; ?>">Pelabuhan & Tempat Penimbunan</div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                    <div class="text-center bg-primary-lt mb-1 font-bold <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">Pelabuhan & Tempat Penimbunan</div>
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">Pelabuhan Muat</label>
                                         <div class="col font-kecil">
                                             <select class="form-select font-kecil font-bold btn-flat pelabuhan" name="pelabuhan_muat" data-placeholder="Pilih Pelabuhan" id="pelabuhan_muat" <?= $selectnonaktif; ?> >
                                                 <!-- <option value="">Pilih Pelabuhan Muat</option> -->
-                                                 <option value="<?= $datheader['pelabuhan_muat']; ?>"><?= $datheader['pelabuhan_muat'].' - '.$datheader['pelmuat']; ?></option>
+                                                 <option value="<?= $datheader['pelabuhan_muat']; ?>"><?= $datheader['p elabuhan_muat'].' - '.$datheader['pelmuat']; ?></option>
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">Pelabuhan Bongkar</label>
                                         <div class="col font-kecil">
                                             <select class="form-select font-kecil btn-flat pelabuhan" name="pelabuhan_bongkar" data-placeholder="Pilih Pelabuhan" id="pelabuhan_bongkar" <?= $selectnonaktif; ?>>
@@ -314,7 +326,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center bg-primary-lt mb-1 font-bold">Sarana / Cara Angkutan</div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">No & Tipe Peti Kemas</label>
                                         <div class="col font-kecil">
                                             <div class="mb-1 text-right">
@@ -356,7 +368,7 @@
                                             <input type="text" class="form-control font-kecil btn-flat" id="no_kendaraan" name="no_kendaraan" value="<?= $datheader['no_kendaraan']; ?>" aria-describedby="emailHelp" placeholder="No Kendaraan" <?= $nonaktif; ?>>
                                         </div>
                                     </div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">Bendera</label>
                                         <div class="col">
                                             <select class="form-select font-kecil font-bold btn-flat" name="bendera_angkutan" id="bendera_angkutan" <?= $selectnonaktif; ?> >
@@ -416,11 +428,12 @@
                     <div class="row">
                         <div class="col-sm-12">
                             <div class="card font-kecil mt-1">
-                                <div class="bg-primary-lt px-2 py-1 font-bold">Nilai Penyerahan, Devisa</div>
+                                <?php $caption_de = $datheader['jns_bc']==261 ? "Kontrak & Nilai Pabean" : "Nilai Penyerahan, Devisa";  ?>
+                                <div class="bg-primary-lt px-2 py-1 font-bold"><?= $caption_de; ?></div>
                                 <div class="card-body p-1">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="mb-1 row">
+                                            <div class="mb-1 row <?= $hilangbc261; ?>">
                                                 <label class="col-3 col-form-label font-kecil mx-2">Kode Cara Bayar</label>
                                                 <div class="col">
                                                     <!-- <input type="text" class="form-control font-kecil" id="netto" name="netto" aria-describedby="emailHelp" placeholder="Netto Kgs"> -->
@@ -457,6 +470,22 @@
                                                 </div>
                                                 <div class="col">
                                                     <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
+                                                </div>
+                                            </div>
+                                            <div class="mb-1 row <?= $hilangbc30; ?> <?= $hilangbc40; ?>">
+                                                <?php 
+                                                    $hilangtomboladdkontrak = $datheader['nomorkontrak']==NULL && $datheader['send_ceisa']==0 ? '' : 'hilang';  
+                                                    $hilangtombolhapuskontrak = $datheader['nomorkontrak']!=NULL && $datheader['send_ceisa']==0  ? '' : 'hilang';  
+                                                ?>
+                                                <label class="col-3 col-form-label font-kecil mx-2">Nomor Kontrak</label>
+                                                <div class="col">
+                                                    <div class="input-group mb-2">
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat " id="nomorkontrak" value="<?= $datheader['nomorkontrak']; ?>" placeholder="Nomor Kontrak Kosong" disabled>
+                                                        <a href="<?= base_url().'akb/addkontrak/'.$datheader['id'].'/'.$datheader['dept_tuju']; ?>" class="btn btn-info font-kecil btn-flat <?= $hilangtomboladdkontrak; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Pilih Kontrak" >Pilih</a>
+                                                        <a data-href="<?= base_url().'akb/hapuskontrak/'.$datheader['id']; ?>" class="btn btn-danger font-kecil btn-flat text-white <?= $hilangtombolhapuskontrak; ?>" style="color: white !important;" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus Kontrak ini" data-title="Hapus Kontrak" >Hapus</a>
+                                                        <a class="btn btn-success font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" href="<?= base_url('kontrak/view/') . $datheader['idkontrak'].'/1'; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" >View</a>
+                                                        <!-- <button class="btn font-kecil btn-flat" type="button">View</button> -->
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
@@ -550,7 +579,7 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-tablee" style="font-size: 13px !important;" >
-                                    <?php $sumdetail=0; $sumpcs=0; $sumkgs=0; foreach ($header as $data) { 
+                                    <?php $sumdetail=0; $sumpcs=0; $sumkgs=0; $nom=0; $jumlahhskosong=0; foreach ($header as $data) {  $nom++;
                                         $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
                                         $sumdetail += $data['harga']; //*$jumlah;
                                         $sumpcs += $data['pcs'];
@@ -560,11 +589,15 @@
                                         if($datheader['jns_bc']==30){
                                             $nambar = $data['engklp'];
                                         }
+                                        $hs = trim($data['po'])=='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+                                        if(trim($hs) == '' || $hs==NULL){
+                                            $jumlahhskosong += 1;
+                                        }
                                          ?>
                                     <tr>
-                                        <td><?= $nambar; ?></td>
+                                        <td><?= $nom.'. '.$nambar; ?></td>
                                         <td class="text-left"><?= formatsku($data['po'],$data['item'],$data['dis'],$data['id_barang']); ?></td>
-                                        <td class="text-left"><?= substr($data['nohs'],0,8) ; ?></td>
+                                        <td class="text-left"><?= $hs; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
                                         <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>
                                         <td class="text-right"><?= rupiah($data['kgs'],2); ?></td>
@@ -582,6 +615,7 @@
                             </tbody>
                         </table>
                         <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail,2); ?>">
+                        <input type="text" id="jumlahhskosong" class="hilang" value="<?= $jumlahhskosong; ?>">
                     </div>
                 </div>
             </div>
@@ -605,6 +639,147 @@
                             </tbody>
                         </table>
                         <input type="text" id="jmllampiran" class="hilang">
+                    </div>
+                </div>
+            </div>
+            <div class="tab-pane fade p-2" id="tabs-barangdet-8">
+                <div class="m-2 font-bold d-flex justify-content-between">Barang Versi BC/CEISA <span><a href="<?= base_url().'akb/hitungbom/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a><span></div>
+                <div class="card card-lg font-kecil">
+                    <div class="card-body p-2">
+                        <table class="table w-100">
+                            <thead style="background-color: blue !important">
+                                <tr>
+                                    <th>No</th>
+                                    <th>Nama Barang</th>
+                                    <th>SKU</th>
+                                    <th>Hs Code</th>
+                                    <th>Negara</th>
+                                    <th>Qty</th>
+                                    <th>Jumlah</th>
+                                    <th>Sat</th>
+                                    <th>No BC</th>
+                                    <th>Jns BC</th>
+                                    <th>Harga IDR</th>
+                                    <th>TOTAL IDR</th>
+                                    <th>AKSI</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
+                                <?php 
+                                    $no=0;
+                                    $serbar=0; 
+                                    $jmlkgs=0;
+                                    $jumlahtot=0;
+                                    $jmbm=0;$jmppn=0;$jmpph=0;$totpajak=0;
+                                    $jumlahnobontrkosong = 0;
+                                    foreach ($detbombc->result_array() as $detbom ) { 
+                                        if((trim($detbom['nobontr']) == '' || $detbom['nobontr']==NULL) && $detbom['kode']!='P6974831'){
+                                            $jumlahnobontrkosong += 1;
+                                        }
+                                        if($detbom['seri_barang']!= $serbar){
+                                           $no=0; 
+                                        }
+                                        $no++; 
+                                        switch ($detbom['mtuang']) {
+                                            case 1:
+                                                $hargaidr = $detbom['totalharga'];
+                                                break;
+                                            case 2:
+                                                $hargaidr = $detbom['totalharga']*$detbom['kurs_usd'];
+                                                break;
+                                            case 3:
+                                                $hargaidr = $detbom['totalharga']*$detbom['kurs_yen'];
+                                                break;
+                                            default:
+                                                $hargaidr = $detbom['totalharga'];
+                                                break;
+                                        }
+                                        $pembagi = $detbom['netto']>0 ? $detbom['netto'] : 1;
+                                        $nomor_bc = $detbom['nomor_bc'] != '' ? $detbom['nomor_bc'] : $detbom['hamat_nomorbc'];
+                                        $jns_bc = $detbom['jns_bc'] != '' ? $detbom['jns_bc'] : $detbom['hamat_jnsbc'];
+                                        $pembagihamat = $detbom['hamat_weight'] > 0 ? $detbom['hamat_weight'] : ($detbom['hamat_qty']>0 ? $detbom['hamat_qty'] : 1);
+                                        $hargaidr = $detbom['nomor_bc'] != '' ? $hargaidr : $detbom['hamat_harga'];
+
+                                        $jmlkgs += $detbom['kgs'];
+                                        
+                                        $harga = $hargaidr/$pembagi;
+                                        $jumlahharga = 0;
+                                        if($detbom['bm'] > 0 || $detbom['ppn'] > 0 || $detbom['pph'] > 0){
+                                            $jumlahharga = $detbom['kgs']*($hargaidr/$pembagi);
+                                            $jumlahtot += $detbom['kgs']*($hargaidr/$pembagi);
+                                        }
+                                        $hitungbm = $detbom['bm'] > 0 ? '' : 'hilang';
+                                        $hitungppn = $detbom['ppn'] > 0 ? '' : 'hilang';
+                                        $hitungpph = $detbom['pph'] > 0 ? '' : 'hilang';
+
+                                        $jmbm += $jumlahharga*($detbom['bm']/100);
+                                        $jmppn += $jumlahharga*($detbom['ppn']/100);
+                                        $jmpph += $jumlahharga*($detbom['pph']/100);
+                                        $jmpajak = ($jumlahharga*($detbom['bm']/100))+($jumlahharga*($detbom['ppn']/100))+$jumlahharga*($detbom['pph']/100);
+                                        $totpajak += $jmpajak;
+                                        $serbar = $detbom['seri_barang'];
+                                ?>
+                                    <tr>
+                                        <td><?= $detbom['seri_barang'].'.'.$no; ?></td>
+                                        <td class="line-12">
+                                            <?= $detbom['nama_barang']; ?><br>
+                                            <span style="font-size:12px;" class="text-pink"><?= $detbom['nobontr']; ?></span>
+                                            <span style="font-size:9px;" class="badge bg-blue text-blue-fg <?= $hitungbm; ?>">BM</span>
+                                            <span style="font-size:9px;" class="badge bg-yellow text-black <?= $hitungppn; ?>">PPN</span>
+                                            <span style="font-size:9px;" class="badge bg-azure text-azure-fg <?= $hitungpph; ?>">PPH</span>
+                                        </td>
+                                        <td><?= $detbom['kode']; ?></td>
+                                        <td><?= $detbom['nohs']; ?></td>
+                                        <td><?= $detbom['kode_negara']; ?></td>
+                                        <td class="text-right"><?= rupiah($detbom['pcs'],0); ?></td>
+                                        <td class="text-right"><?= rupiah($detbom['kgs'],5); ?></td>
+                                        <td><?= $detbom['kodesatuan']; ?></td>
+                                        <td><?= $nomor_bc ?></td>
+                                        <td class="text-center text-blue"><?= $jns_bc; ?></td>
+                                        <td class="text-right"><?= rupiah($harga,2); ?></td>
+                                        <td class="text-right"><?= rupiah($jumlahharga,2); ?></td>
+                                        <td class="text-center">
+                                            <a href="<?= base_url().'akb/editbombc/'.$detbom['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data" >EDIT</a>
+                                        </td>
+                                    </tr>
+                                <?php } ?>
+                                <tr style="font-size: 16px !important" >
+                                    <td colspan="5" class="text-right">TOTAL</td>
+                                    <td class="text-right text-primary"><?= rupiah($jmlkgs,2); ?></td>
+                                    <td colspan="4"></td>
+                                    <td></td>
+                                    <td class="text-right text-primary"><?= rupiah(bulatkan($jumlahtot,1000),2); ?></td>
+                                    <td></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input type="text" id="jmllampiran" class="hilang">
+                        <table class="table w-100 table-bordered">
+                            <thead style="background-color: blue !important">
+                                <tr>
+                                    <th>BM</th>
+                                    <th>BMT</th>
+                                    <th>Cukai</th>
+                                    <th>PPN</th>
+                                    <th>PPNBM</th>
+                                    <th>PPH</th>
+                                    <th>TOTAL</th>
+                                </tr>
+                            </thead>
+                            <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;" >
+                                <tr>
+                                    <td class="text-right"><?= rupiah(bulatkan($jmbm,1000),2); ?></td>
+                                    <td></td>
+                                    <td></td>
+                                    <td class="text-right"><?= rupiah(bulatkan($jmppn,1000),2); ?></td>
+                                    <td></td>
+                                    <td class="text-right"><?= rupiah(bulatkan($jmpph,1000),2); ?></td>
+                                    <td class="text-right"><?= rupiah(bulatkan($jmbm,1000)+bulatkan($jmppn,1000)+bulatkan($jmpph,1000),2); ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <input type="text" id="sumdetailbc" class="hilang" value="<?= rupiah(bulatkan($jumlahtot,1000),2); ?>">
+                        <input type="text" id="jumlahnobontrkosong" class="hilang" value="<?= $jumlahnobontrkosong; ?>">
                     </div>
                 </div>
             </div>
