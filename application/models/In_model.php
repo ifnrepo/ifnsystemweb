@@ -13,18 +13,22 @@ class In_model extends CI_Model{
             // 'ok_valid' => 0,
         ];
         $kondisi = " (kode_dok='T' OR (kode_dok = 'IB' AND (nomor_bc != '' OR tanpa_bc = 1)))";
+        $kondisisubkon = " kode_dok='T' AND (nomor_bc != '' OR tanpa_bc = 1)";
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->where($arrkondisi);
-        // $this->db->where('kode_dok','T');
-        $this->db->where($kondisi);
+        if($kode['katedept']==3){
+            $this->db->where($kondisisubkon);
+        }else{
+            $this->db->where($kondisi);
+        }
         $this->db->order_by('tgl');
         $this->db->order_by('nomor_dok');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
     public function getdatabyid($kode){
-        $this->db->select('*,tb_header.id as xid');
+        $this->db->select('*,tb_header.id as xid,b.nama_subkon as namasubkon,b.alamat_subkon as alamatsubkon');
         $this->db->from('tb_header');
         $this->db->join('dept a','a.dept_id=tb_header.dept_id','left');
         $this->db->join('dept b','b.dept_id=tb_header.dept_tuju','left');
@@ -33,7 +37,7 @@ class In_model extends CI_Model{
         $query = $this->db->get()->row_array();
         return $query;
     }
-    public function getdatadetail($data){
+    public function getdatadetail($data,$mode=0){
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,d.spek");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
@@ -41,7 +45,11 @@ class In_model extends CI_Model{
         $this->db->join('satuan b','b.id = a.id_satuan','left');
         $this->db->join('barang c','c.id = a.id_barang','left');
         $this->db->join('tb_po d','d.po = a.po and d.item = a.item and d.dis = a.dis','left');
-        $this->db->where('a.id_header',$data);
+        if($mode==0){
+            $this->db->where('a.id_header',$data);
+        }else{
+            $this->db->where('a.id_akb',$data);
+        }
         return $this->db->get()->result_array();
     }
     public function resetin($id){
@@ -72,14 +80,18 @@ class In_model extends CI_Model{
             return $query->result();
         }
     }
-    public function simpanin($id){
+    public function simpanin($id,$mode=0){
         $this->db->trans_start();
         $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
         $arraynobontr = ['SP','GM'];
         if($cek==1){
             $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id');
             $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
-            $this->db->where('id_header',$id);
+            if($mode==0){
+                $this->db->where('id_header',$id);
+            }else{
+                $this->db->where('id_akb',$id);
+            }
             $detail = $this->db->get('tb_detail')->result_array();
             foreach($detail as $det){
                 $kondisistok = [

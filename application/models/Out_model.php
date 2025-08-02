@@ -8,6 +8,7 @@ class Out_model extends CI_Model{
             'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
+            'left(nomor_dok,2) != ' => 'TR'
         ];
         if($kode['filterbon']==1){
             $arrkondisi['data_ok'] = 0;

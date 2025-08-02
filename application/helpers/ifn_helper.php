@@ -630,6 +630,15 @@ function formatsku($po,$item,$dis,$brg){
     }
     return $isi;
 }
+function namaspekbarang($brg){
+    $x = "";
+    if($brg>0){
+        $CI = &get_instance();
+        $hasil = $CI->barangmodel->getdatabyid($brg)->row_array();
+        $x = $hasil['nama_barang'];
+    }
+    return $x;
+}
 function cekperiodedaritgl($tgl){
     $unt = strtotime($tgl);
     return date('m',$unt).date('Y',$unt);
@@ -717,5 +726,33 @@ function daftardeptsubkon(){
     // $xkode = trim($kode);
     $CI = &get_instance();
     $getkode = $CI->helpermodel->deptsubkon();
+    return $getkode;
+}
+function showbom($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs){
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->showbom($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs);
+    return $getkode;
+}
+function getarrayindex(string $value,array $array,string $key){
+    $searched_value = array_search($value, array_column($array, $key));
+    return $searched_value;
+}
+function bulatkan($jml,$nilai){
+    $pembulatan = round($jml/$nilai);
+    return $pembulatan*$nilai;
+}
+function ceknomorbc($data){
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->ceknomorbc($data);
+    return $getkode;
+}
+function getjumlahcifbom($id,$no){
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->getjumlahcifbom($id,$no);
+    return $getkode;
+}
+function getdokumenbcbynomordaftar($nodaf,$mode=0){
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->getdokumenbcbynomordaftar($nodaf,$mode);
     return $getkode;
 }

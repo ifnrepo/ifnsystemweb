@@ -1,5 +1,5 @@
 <div class="container-xl font-kecil">
-    <input type="text" class="" name="id_kontrak" id="id_kontrak" value="<?= $idkontrak; ?>">
+    <input type="text" class="hilang" name="id_kontrak" id="id_kontrak" value="<?= $idkontrak; ?>">
     <div class="row">
         <div class="col-12">
             <div class="mb-1 row">

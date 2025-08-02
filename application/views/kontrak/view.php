@@ -76,9 +76,9 @@
                 </div>
                 <div class=" mt-2 col-md-4 col-12 text-primary font-bold font-kecil">
                     <div class="mb-1 row">
-                        <label class="col-3 col-form-label required"><i>Proses</i></label>
+                        <label class="col-3 col-form-label required"><i>Nilai Kontrak</i></label>
                         <div class="col">
-                            <input type="text" class="form-control font-kecil" value="<?= $header['proses']; ?>">
+                            <input type="text" class="form-control font-kecil text-right" value="<?= rupiah($header['jml_ssb'],2); ?>">
                         </div>
                     </div>
                     <!-- <div class="mb-1 row">
@@ -109,7 +109,7 @@
                                 </tr>
                             </thead>
                             <tbody class=" table-tbody" style="font-size: 13px !important;">
-                                <?php $no = 0;
+                                <?php $no = 0; if($mode==0){
                                 foreach ($detail as $key) : $no++; ?>
                                     <tr>
                                         <td style="text-align: center;"><?= $no; ?></td>
@@ -119,7 +119,11 @@
                                         <td style="text-align: right;"><?= $key['pcs']; ?></td>
                                         <td style="text-align: right;"><?= $key['kgs']; ?></td>
                                     </tr>
-                                <?php endforeach; ?>
+                                <?php endforeach; }else{ ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center">--- Data Detail Terlampir ---</td>
+                                    </tr>
+                                <?php } ?>
                             </tbody>
                         </table>
                     </div>

@@ -7,7 +7,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       <div class="col-md-6">
         <h2 class="page-title p-2">
           Konfirmasi Input Barang
-          <?= $this->session->userdata('curdept'); ?> X <?= $this->session->userdata('todept'); ?>
+          (<?= $this->session->userdata('curdept'); ?> - <?= $this->session->userdata('todept'); ?>)
         </h2>
       </div>
       <div class="col-md-6" style="text-align: right;">
@@ -36,9 +36,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                  <span>Tgl Dokumen : <strong class="font-bold"><?= tgl_indo($header['tgl']); ?></strong></span>
                 </div>
                 <div class="col-4">
-                 <span>Nama Supplier : <strong class="font-bold"><?= $header['nama_supplier']; ?></strong></span><br>
-                 <span>Alamat : <strong class="font-bold"><?= $header['alamat']; ?></strong></span><br>
-                 <span>Kontak : <strong class="font-bold"><?= $header['kontak']; ?></strong></span>
+                  <?php if($mode==0){ ?>
+                  <span>Nama Supplier : <strong class="font-bold"><?= $header['nama_supplier']; ?></strong></span><br>
+                  <span>Alamat : <strong class="font-bold"><?= $header['alamat']; ?></strong></span><br>
+                  <span>Kontak : <strong class="font-bold"><?= $header['kontak']; ?></strong></span>
+                 <?php }else{ ?>
+                  <span>Nama Rekanan : <strong class="font-bold"><?= $header['namasubkon']; ?></strong></span><br>
+                  <span>Alamat : <strong class="font-bold"><?= $header['alamatsubkon']; ?></strong></span><br>
+                 <?php } ?>
                 </div>
                 <div class="col-5 <?php if($header['tanpa_bc']==1){ echo "hilang"; } ?>">
                   <span>Nomor SJ/Tgl : <strong class="font-bold"><?= $header['nomor_sj'].'/'.tglmysql($header['tgl_sj']); ?></strong></span><br>
@@ -84,7 +89,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <td class="text-center">
                   <div id="<?= $datdet['id']; ?>">
                     <?php if($datdet['verif_oleh']==null){ ?>
-                      <a href="#" class="btn btn-sm btn-success" id="verifikasirekord" rel="<?= $datdet['id']; ?>" style="padding: 3px 5px !important">Verifikasi</a>
+                      <a class="btn btn-sm btn-success" id="verifikasirekord" rel="<?= $datdet['id']; ?>" style="padding: 3px 5px !important">Verifikasi</a>
                     <?php }else{ ?>
                       <div class='text-primary line-12' style='font-size: 11px !important;'>Verifikasi :<?= substr(datauser($datdet['verif_oleh'],'name'),0,15); ?><br><?= $datdet['verif_tgl']; ?></div>
                     <?php } ?>
@@ -100,10 +105,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
         <div class="form-tombol mt-1">
           <span style="float: left;" class="font-bold text-primary" id="infoverif">Verifikasi : <?= $noverif; ?>/<?= $no-1; ?></span>
           <div class="text-right">
+            <?php $xmode = $mode==0 ? '' : '/1'; ?>
             <input type="text" id="jmlrek" value="<?= $no-1; ?>" class="hilang">
             <input type="text" id="jmlverif" value="<?= $noverif; ?>" class="hilang">
             <button class="btn btn-sm btn-primary" id="xsimpanin" ><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
-            <button class="btn btn-sm btn-primary hilang" id="carisimpanin" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'in/simpanin/'.$header['xid']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
+            <button class="btn btn-sm btn-primary hilang" id="carisimpanin" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'in/simpanin/'.$header['xid'].$xmode; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
             <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-tombol="Ya" data-message="Akan mereset data penerimaan ini" data-href="<?= base_url() . 'in/resetin/'.$header['xid']; ?>"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
           </div>
         </div>

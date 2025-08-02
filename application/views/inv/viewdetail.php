@@ -9,7 +9,7 @@
         </div>
         <div class="col-7 text-primary font-bold">
             <span>SKU/Spesifikasi Barang</span>
-            <?php $spekbarang = $header['nama_barang'] == null ? $header['spek'] : $header['nama_barang']; ?>
+            <?php $spekbarang = trim($header['po']) == '' ? $header['nama_barang'] : spekpo($header['po'],$header['item'],$header['dis']); ?>
             <?php $hilangtombol = $this->session->userdata('viewharga')==1 ? '' : 'hilang'; ?>
             <?php $nobc = trim($header['nomor_bc'])!='' ? 'BC.'.trim($header['jns_bc']).'-'.$header['nomor_bc'].'('.tglmysql($header['tgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>
             <?php $nobcx = trim($header['xbc'])!='' && trim($header['nomor_bc'])=='' ? 'No BC. '.$header['xbc'].'('.tglmysql($header['xtgl_bc']).')<a href="#" id="viewdokhamat" class="btn btn-sm btn-danger ml-2 '.$hilangtombol.'" title="View Dokumen" style="padding: 2px !important;"><i class="fa fa-file-pdf-o"></i></a>' : ''; ?>

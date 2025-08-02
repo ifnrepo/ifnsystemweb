@@ -81,6 +81,7 @@ class inv_model extends CI_Model
             if ($dpt == 'GF') {
                 $nobalefiel = ',nobale';
             }
+            $deptsubkon = datadepartemen($dpt,'katedept_id')==3 ? 'tb_detail.id_akb ': 'tb_detail.id_header' ;
             $period = substr($tglx, 5, 2) . substr($tglx, 0, 4);
             $tambah1 = "SELECT tgl,null as nomor_dok,mode,po,item,dis,id_barang,nama_barang,spek,name_kategori,kode,nobontr,insno,harga,kodesatuan,SUM(pcs) AS pcs,SUM(kgs) AS kgs,SUM(pcsin) AS pcsin,
                         SUM(kgsin) AS kgsin,SUM(pcsout) AS pcsout,SUM(kgsout) AS kgsout,idu,user_verif,tgl_verif,
@@ -117,7 +118,7 @@ class inv_model extends CI_Model
                                         tb_detail.insno," . $noeb3 . ",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,satuan.kodesatuan,0 as id_bom,2 AS nome,tb_po.spek,0 as idu,0 as user_verif,'0000-00-00' as tgl_verif,barang.safety_stock,tb_detail.nobale,tb_header.nomor_kont".$field2.",tb_detail.exnet
                                         FROM tb_detail 
-                                        LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
+                                        LEFT JOIN tb_header ON tb_header.id = ".$deptsubkon."
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
@@ -273,13 +274,14 @@ class inv_model extends CI_Model
             return $hasil;
         }
     }
-    public function getdatadetail($array)
+    public function getdatadetail($array,$mode=0)
     {
         if ($this->session->userdata('tglawal') != null) {
             $tglx = firstday($this->session->userdata('tglawal'));
             $tglawal = tglmysql($this->session->userdata('tglawal'));
             $tglakhir = tglmysql($this->session->userdata('tglakhir'));
             $dpt = $this->session->userdata('currdept');
+            $deptsubkon = datadepartemen($dpt,'katedept_id')==3 ? 'tb_detail.id_akb' : 'tb_detail.id_header';
             $field = ',"" as nomor_bc';
             $join = '';
             $join1 = '';
@@ -342,7 +344,7 @@ class inv_model extends CI_Model
                                         tb_detail.insno,tb_detail.nobontr,tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
                                         0 AS pcsout,0 as pcsadj,0 as kgs,tb_detail.kgs AS kgsin,0 AS kgsout,0 as kgsadj,satuan.kodesatuan,0 as id_bom,2 AS nome,'' as idd,tb_po.spek,tb_detail.nobale,barang.safety_stock".$field."
                                         ,'' as xbc,'0000-00-00' as xtgl_bc FROM tb_detail 
-                                        LEFT JOIN tb_header ON tb_header.id = tb_detail.id_header 
+                                        LEFT JOIN tb_header ON tb_header.id = ".$deptsubkon."
                                         LEFT JOIN barang ON barang.id = tb_detail.id_barang 
                                         LEFT JOIN satuan ON satuan.id = barang.id_satuan 
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori

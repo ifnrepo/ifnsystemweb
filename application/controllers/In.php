@@ -26,7 +26,7 @@ class In extends CI_Controller {
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
-        $data['data'] = $this->inmodel->getdata(['dept_id'=>$this->session->userdata('curdept'),'dept_tuju'=>$this->session->userdata('todept')]);
+        $data['data'] = $this->inmodel->getdata(['dept_id'=>$this->session->userdata('curdept'),'dept_tuju'=>$this->session->userdata('todept'),'katedept' => datadepartemen($this->session->userdata('curdept'),'katedept_id')]);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'in';
 		$this->load->view('layouts/header',$header);
@@ -61,15 +61,21 @@ class In extends CI_Controller {
     }
     public function getdata(){
         $hasil = '';
+        $katedept = datadepartemen($_POST['dept_id'],'katedept_id');
         $kode = [
             'dept_id' => $_POST['dept_id'],
-            'dept_tuju' => $_POST['dept_tuju']
+            'dept_tuju' => $_POST['dept_tuju'],
+            'katedept' => $katedept
         ];
         $this->session->set_userdata('todept',$_POST['dept_tuju']);
         $query = $this->inmodel->getdata($kode);
         $norek=0;$jmlpcs=0;$jmlkgs=0;$noreke=0;
         foreach ($query as $que) {
             $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
+            $insubkn = '';
+            if($katedept==3){
+                $insubkn = '/1';
+            }
             $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('curdept') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
             $hasil .= "<tr>";
             $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
@@ -80,7 +86,7 @@ class In extends CI_Controller {
                 $noreke++;
             }
             if($que['data_ok']==1){
-                $hasil .= "<td class='font-bold'><a href='".base_url().'in/viewdetailin/'.$que['id']."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
+                $hasil .= "<td class='font-bold'><a href='".base_url().'in/viewdetailin/'.$que['id'].$insubkn."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
             }else{
                 $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
             }
@@ -89,7 +95,7 @@ class In extends CI_Controller {
             $hasil .= "<td class='font-kecil line-12'>".$kete."</td>";
             $hasil .= "<td>";
             if($que['ok_valid']==0){
-                $hasil .= "<a href='#' data-href=".base_url().'in/cekkonfirmasi/'.$que['id']." data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Konfirmasi Penerimaan Barang,<br> data tidak dapat dirubah kembali' class='btn btn-sm btn-success ".cekclosebook()."' style='padding: 3px 5px !important;' title='Konfirmasi Data'><i class='fa fa-check mr-1'></i> Konfirmasi</a>";
+                $hasil .= "<a href='#' data-href=".base_url().'in/cekkonfirmasi/'.$que['id'].$insubkn." data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Konfirmasi Penerimaan Barang,<br> data tidak dapat dirubah kembali' class='btn btn-sm btn-success ".cekclosebook()."' style='padding: 3px 5px !important;' title='Konfirmasi Data'><i class='fa fa-check mr-1'></i> Konfirmasi</a>";
             }else if($que['ok_valid']==1){
                 $hasil .= "<a href=".base_url().'in/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
             }
@@ -100,10 +106,11 @@ class In extends CI_Controller {
         $cocok = array('datagroup' => $hasil,'jmlrek'=>$norek,'jmlpcs'=>$jmlpcs,'jmlkgs'=>$jmlkgs,'jmlreke'=>$noreke);
         echo json_encode($cocok);
     }
-    public function cekkonfirmasi($id){
+    public function cekkonfirmasi($id,$mode=0){
         $header['header'] = 'transaksi';
         $data['header'] = $this->inmodel->getdatabyid($id);
-        $data['detail'] = $this->inmodel->getdatadetail($id);
+        $data['detail'] = $this->inmodel->getdatadetail($id,$mode);
+        $data['mode'] = $mode;
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'in';
         $this->load->view('layouts/header',$header);
@@ -127,16 +134,16 @@ class In extends CI_Controller {
             redirect($url);
         }
     }
-    public function simpanin($id){
-        $hasil = $this->inmodel->simpanin($id);
+    public function simpanin($id,$mode=0){
+        $hasil = $this->inmodel->simpanin($id,$mode);
         if($hasil){
             $url = base_url().'in';
             redirect($url);
         }
     }
-    public function viewdetailin($id){
+    public function viewdetailin($id,$mode=0){
         $data['header'] = $this->inmodel->getdatabyid($id);
-        $data['detail'] = $this->inmodel->getdatadetail($id);
+        $data['detail'] = $this->inmodel->getdatadetail($id,$mode);
         $this->load->view('in/viewdetailin',$data);
     }
     // End In Controller
