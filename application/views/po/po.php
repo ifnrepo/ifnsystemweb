@@ -107,8 +107,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </td>
                   <td class="text-right line-12">
                     <?php if ($datdet['data_ok'] == 0) { ?>
-                      <a href="<?= base_url() . 'po/datapo/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
-                      <a href="#" data-href="<?= base_url() . 'po/hapuspo/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus PO <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
+                      <a href="<?= base_url() . 'po/datapo/' . $datdet['id'] ?>" class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
+                      <a href="#" data-href="<?= base_url() . 'po/hapuspo/' . $datdet['id'] ?>" class='btn btn-sm btn-danger <?= cekclosebook(); ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus PO <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0) { ?>
                       <a href="#" data-href="<?= base_url() . 'po/editpo/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit PO <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'><i class='fa fa-refresh mr-1'></i> Edit PO</a>
                       <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Disetujui :'; $hilang = $datdet['ok_valid']==2 ? 'hilang' : ''; ?>

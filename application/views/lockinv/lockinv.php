@@ -33,7 +33,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </thead>
                         <tbody class="table-tbody" style="font-size: 13px !important;">
                             <?php $no = 0;
-                            foreach ($lock as $key) : $no++; ?>
+                            foreach ($lock as $key) : $no++; 
+                            $daribulan = namabulan(substr($key['periode'],0,2)).' '.substr($key['periode'],2,4);
+                            $kebulan = substr($key['periode'],0,2)=='12' ? namabulan('01') : namabulan((int) substr($key['periode'],0,2)+1);
+                            $ketahun = substr($key['periode'],0,2)=='12' ? (int) substr($key['periode'],2,4)+1 : substr($key['periode'],2,4);
+                            ?>
                                 <tr>
                                     <td><?= $no; ?></td>
                                     <td class="font-bold"><?= namabulan(substr($key['periode'],0,2)).' '.substr($key['periode'],2,4); ?></td>
@@ -43,6 +47,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <a class="btn btn-sm btn-danger btn-icon text-white font-kecil" style="padding: 3px 5px !important;" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'lockinv/hapusdata/' . $key['id']; ?>" title="Hapus data">
                                             <i class="fa fa-trash-o mr-1"></i> Hapus Data
                                         </a>
+                                        <a href="#" class="btn btn-sm btn-success btn-icon text-white font-kecil" style="padding: 3px 5px !important;" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan memindahkan Saldo bulan <?= $daribulan; ?> ke Bulan <?= $kebulan.' '.$ketahun; ?>" data-href="<?= base_url() . 'lockinv/saktosaw/' . $key['id']; ?>" title="Hapus data">
+                                            <i class="fa fa-arrow-right mr-1"></i> Sak to Saw
+                                        </a>
+                                        <?php if($key['dibuat_pada'] != $key['diupdate_pada']){ ?>
+                                            <span class="text-purple font-kecil">Update On. <?= tglmysql2($key['diupdate_pada']); ?></span>
+                                        <?php }else{ ?>
+                                            <span class="text-purple font-kecil">Data Belum Submit ke Saldo Awal <?= $kebulan.' '.$ketahun; ?></span>
+                                        <?php } ?>
                                     </td>
                                 </tr>
                             <?php endforeach; ?>
