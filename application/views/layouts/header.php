@@ -15,6 +15,8 @@
   <link href=<?= base_url() . "assets/css/tabler-payments.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/tabler-vendors.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/demo.min.css?1692870487" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/jquery-ui.css" ?> rel="stylesheet" />
+
 
   <!-- datatables -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/datatables.min.css">
@@ -28,6 +30,16 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 
   <link href=<?= base_url() . "assets/css/own-style.css?1748502555" ?> rel="stylesheet" />
+  <style>
+    .ui-autocomplete {
+      z-index: 99999 !important;
+      max-height: 200px;
+      overflow-y: auto;
+      overflow-x: hidden;
+      font-size: 12px;
+      background-color: white;
+    }
+  </style>
   <style>
     /* @import url('https://rsms.me/inter/inter.css'); */
 
@@ -401,6 +413,7 @@
       </div>
     </div>
   </div>
+
   <!-- End Canvas -->
   <!-- <div id="preloader">
     <div class="page page-center">
@@ -650,6 +663,9 @@
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 9); ?>" href="<?= base_url('kontrak/clear'); ?>">
                       Kontrak
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 10); ?>" href="<?= base_url('benang'); ?>">
+                      BENANG (Inventory)
                     </a>
                   </div>
                 </div>
