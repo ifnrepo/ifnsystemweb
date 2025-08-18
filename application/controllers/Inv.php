@@ -88,6 +88,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('nomorbcnya', $_POST['nobcnya']);
         $this->session->set_userdata('kontrakbcnya', $_POST['kontbc']);
         $this->session->set_userdata('ifndln', $_POST['ifndln']);
+        $this->session->set_userdata('exdonya', $_POST['exdo']);
         if (isset($_POST['cari'])) {
             if ($_POST['cari'] == '') {
                 $this->session->unset_userdata('katcari');
@@ -610,6 +611,10 @@ class Inv extends CI_Controller
         $data['dok'] = $this->invmodel->getdatadok($array2)->row_array();
         $data['isi'] = $array;
         $this->load->view('inv/viewdetail', $data);
+    }
+    public function getdatareport(){
+        $hasil = $this->invmodel->getdatareport();
+        echo json_encode($hasil);
     }
     public function ubahperiode()
     {

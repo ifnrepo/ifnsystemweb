@@ -63,6 +63,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-3">
+                  <div class="mb-3 row" id="div-exdo">
+                    <label class="col-3 col-form-label font-kecil font-bold required">EXDO</label>
+                    <div class="co mb-1">
+                      <select name="exdonya" id="exdonya" class="form-control form-select form-sm font-kecil">
+                        <option value="EXPORT" <?php if($this->session->userdata('exdonya')=='EXPORT'){ echo "selected"; } ?>>EXPORT</option>
+                        <option value="DOMESTIC" <?php if($this->session->userdata('exdonya')=='DOMESTIC'){ echo "selected"; } ?>>DOMESTIC</option>
+                      </select>
+                      <!-- <input type="email" class="form-control form-sm font-kecil" aria-describedby="emailHelp" placeholder="Enter email"> -->
+                      <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
+                    </div>
+                    <hr class="m-0">
+                  </div>
                   <h4 class="mb-1 font-kecil">Kategori Barang</h4>
                   <span class="font-kecil">
                     <div class="font-kecil" style="margin-bottom: 2px !important;">
@@ -72,12 +84,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             $pakai = $kate['id_kategori'] != null ? $kate['id_kategori'] : $kate['name_kategori'];
                             $selek = $this->session->userdata('filterkat') == $pakai ? 'selected' : '';
                         ?>
-                            <option value="<?= $pakai; ?>" <?= $selek; ?>><?= $kate['name_kategori']; ?></option>
+                            <option value="<?= $pakai; ?>" <?= $selek; ?>><?= $kate['name_kategori'].$kate['id_kategori']; ?></option>
                         <?php }
                         endif ?>
                       </select>
                     </div>
-                  </span>
                   <?php $deptampil = ['GM', 'SP']; ?>
                   <select class="form-control form-select font-kecil font-bold bg-cyan-lt <?php if (!in_array($this->session->userdata('currdept'), $deptampil)) {
                                                                                             echo "hilang";
