@@ -22,7 +22,8 @@
 </div>
 <!-- jquery latest version -->
 <script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
-<script src="<?= base_url(); ?>assets/js/jquery.min.js"></script>
+<script src="<?= base_url(); ?>assets/js/vendor/jquery-ui.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 <!-- Libs JS -->
 <script src=<?= base_url() . "assets/libs/apexcharts/dist/apexcharts.min.js" ?> defer></script>
 <script src=<?= base_url() . "assets/libs/jsvectormap/dist/js/jsvectormap.min.js" ?> defer></script>
@@ -135,6 +136,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'kontrak') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/kontrak.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'benang') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/benang.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
 	// print_r(json_encode($dataproduksi['data_isi'])); 

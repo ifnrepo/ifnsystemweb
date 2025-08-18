@@ -472,12 +472,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="transaksi4" name="transaksi4" type="checkbox" <?= cekceklis($user['transaksi'], 4); ?>>
                                 <span class="form-check-label">OUT (BON PENGELUARAN BARANG)</span>
                               </label>
-                            </div>
-                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi5" name="transaksi5" type="checkbox" <?= cekceklis($user['transaksi'], 5); ?>>
                                 <span class="form-check-label">ADJ (BON ADJUSTMEN)</span>
                               </label>
+                            </div>
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi6" name="transaksi6" type="checkbox" <?= cekceklis($user['transaksi'], 6); ?>>
                                 <span class="form-check-label">PO (PURCHASE ORDER)</span>
@@ -493,6 +493,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi9" name="transaksi9" type="checkbox" <?= cekceklis($user['transaksi'], 9); ?>>
                                 <span class="form-check-label">Kontrak</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="transaksi10" name="transaksi10" type="checkbox" <?= cekceklis($user['transaksi'], 10); ?>>
+                                <span class="form-check-label">BENANG (INVENTORY)</span>
                               </label>
                               <!-- xx -->
                             </div>

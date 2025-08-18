@@ -1,7 +1,7 @@
 <?php
 define('LOK_UPLOAD_USER', "./assets/image/personil/");
-define('LOK_FOTO_MESIN', base_url()."assets/image/dokmesin/foto/");
-define('LOK_DOK_MESIN', base_url()."assets/image/dokmesin/dok/");
+define('LOK_FOTO_MESIN', base_url() . "assets/image/dokmesin/foto/");
+define('LOK_DOK_MESIN', base_url() . "assets/image/dokmesin/dok/");
 define('IDPERUSAHAAN', 'IFN');
 define('deptbbl', 'GMGSITPG');
 define('LOK_UPLOAD_DOKHAMAT', "./assets/image/dokhamat/");
@@ -114,9 +114,9 @@ function nomorout($tgl, $asal, $tuju)
     $urut = (int) $kode['maxkode'];
     $urut++;
     $hasil = 'ERROR';
-    if ($asal=='DL' && $tuju=='GM'){
-        $hasil = "DLN-IFN/SJ/". $bl . $th . "/" . sprintf("%03s", $urut);
-    }else{
+    if ($asal == 'DL' && $tuju == 'GM') {
+        $hasil = "DLN-IFN/SJ/" . $bl . $th . "/" . sprintf("%03s", $urut);
+    } else {
         $hasil = $asal . "-" . $tuju . "/T/" . $bl . $th . "/" . sprintf("%03s", $urut);
     }
     return $hasil;
@@ -427,7 +427,7 @@ function generatekodebc($jnsbc, $tglbc, $nobc)
 {
     $datenow = "2024-01-01";
     $kode = '000000-010017-00000000-000000';
-    if($tglbc >= $datenow ){
+    if ($tglbc >= $datenow) {
         if (trim($jnsbc) != '') {
             $kode1 = str_repeat('0', 6 - strlen(trim($jnsbc))) . trim($jnsbc);
         } else {
@@ -439,20 +439,20 @@ function generatekodebc($jnsbc, $tglbc, $nobc)
             $kode2 = '00000000';
         }
         if (trim($nobc) != '') {
-            $kode3 = str_repeat('0', 6 - strlen(trim(substr($nobc,0,6)))) . trim(substr($nobc,0,6));
+            $kode3 = str_repeat('0', 6 - strlen(trim(substr($nobc, 0, 6)))) . trim(substr($nobc, 0, 6));
         } else {
             $kode3 = '000000';
         }
         // $kode3 = '';
         $kode = $kode1 . '-010017-' . $kode2 . '-' . $kode3;
-    }else{
+    } else {
         if ($tglbc != null) {
             $kode2 = str_replace('-', '', $tglbc);
         } else {
             $kode2 = '00000000';
         }
         if (trim($nobc) != '') {
-            $kode3 = str_repeat('0', 6 - strlen(trim(substr($nobc,0,6)))) . trim(substr($nobc,0,6));
+            $kode3 = str_repeat('0', 6 - strlen(trim(substr($nobc, 0, 6)))) . trim(substr($nobc, 0, 6));
         } else {
             $kode3 = '000000';
         }
@@ -565,68 +565,75 @@ function cekdetout($header)
     $hasil = $CI->helpermodel->cekdetout($header);
     if ($hasil != 0) {
         $isi = '<span  class="badge badge-outline text-green">OPEN</span>';
-    }else{
+    } else {
         $isi = '<span  class="badge badge-outline text-red">CLOSED</span>';
     }
     return $isi;
 }
-function isikurangnol($data){
+function isikurangnol($data)
+{
     $len = strlen(trim($data));
-    return str_repeat('0',6-$len).trim($data);
+    return str_repeat('0', 6 - $len) . trim($data);
 }
 function max_upload()
 {
-	$max_filesize = (int) (ini_get('upload_max_filesize'));
-	$max_post     = (int) (ini_get('post_max_size'));
-	$memory_limit = (int) (ini_get('memory_limit'));
-	return min($max_filesize, $max_post, $memory_limit);
+    $max_filesize = (int) (ini_get('upload_max_filesize'));
+    $max_post     = (int) (ini_get('post_max_size'));
+    $memory_limit = (int) (ini_get('memory_limit'));
+    return min($max_filesize, $max_post, $memory_limit);
 }
-function nospasi($str){
-    $strc = str_replace(' ','',$str);
+function nospasi($str)
+{
+    $strc = str_replace(' ', '', $str);
     return $strc;
 }
-function toutf($string){
+function toutf($string)
+{
     return html_entity_decode(preg_replace("/U\+([0-9A-F]{4})/", "&#x\\1;", $string), ENT_NOQUOTES, 'UTF-8');
 }
-function hitungwaktu($dateformat){
-    $date1 = $dateformat; 
-    $date2 = date('Y-m-d H:i:s'); 
-    $diff = abs(strtotime($date2) - strtotime($date1)); 
-    $years   = floor($diff / (365*60*60*24)); 
-    $months  = floor(($diff - $years * 365*60*60*24) / (30*60*60*24)); 
-    $days    = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24)/ (60*60*24));
-    $hours   = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24)/ (60*60)); 
-    $minuts  = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60)/ 60); 
-    $seconds = floor(($diff - $years * 365*60*60*24 - $months*30*60*60*24 - $days*60*60*24 - $hours*60*60 - $minuts*60)); 
+function hitungwaktu($dateformat)
+{
+    $date1 = $dateformat;
+    $date2 = date('Y-m-d H:i:s');
+    $diff = abs(strtotime($date2) - strtotime($date1));
+    $years   = floor($diff / (365 * 60 * 60 * 24));
+    $months  = floor(($diff - $years * 365 * 60 * 60 * 24) / (30 * 60 * 60 * 24));
+    $days    = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24) / (60 * 60 * 24));
+    $hours   = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24) / (60 * 60));
+    $minuts  = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24 - $hours * 60 * 60) / 60);
+    $seconds = floor(($diff - $years * 365 * 60 * 60 * 24 - $months * 30 * 60 * 60 * 24 - $days * 60 * 60 * 24 - $hours * 60 * 60 - $minuts * 60));
     // printf("%d years, %d months, %d days, %d hours, %d minutes\n, %d seconds\n", $years, $months, $days, $hours, $minuts, $seconds);
-    $array = ["tahun"=>$years,"bulan"=>$months,"hari"=>$days,"jam"=>$hours,"menit"=>$minuts,"detik"=>$seconds];
+    $array = ["tahun" => $years, "bulan" => $months, "hari" => $days, "jam" => $hours, "menit" => $minuts, "detik" => $seconds];
     return $array;
 }
-function hitunghari($tgl1,$tgl2){
+function hitunghari($tgl1, $tgl2)
+{
     $tanggal_1 = date_create($tgl1);
     $tanggal_2 = date_create($tgl2);
-    $selisih  = date_diff( $tanggal_1, $tanggal_2 );
-    
+    $selisih  = date_diff($tanggal_1, $tanggal_2);
+
     echo $selisih->days;
     // hasil 10722 Hari
 }
-function tambahnol($data){
+function tambahnol($data)
+{
     $nilai = (int) $data;
     $hasil = $nilai;
-    if($nilai <= 9){
-        $hasil = '0'.$nilai;
+    if ($nilai <= 9) {
+        $hasil = '0' . $nilai;
     }
     return $hasil;
 }
-function formatsku($po,$item,$dis,$brg){
+function formatsku($po, $item, $dis, $brg)
+{
     $isi = '';
-    if(trim($po)==''){
+    if (trim($po) == '') {
         $CI = &get_instance();
         $hasil = $CI->barangmodel->getdatabyid($brg)->row_array();
         $isi = $hasil['kode'];
-    }else{
-        $dise = $dis > 0 ? ' (dis) '.$dis : '';
-        $isi = trim($po).'#'.trim($item).$dise;
+    } else {
+        $dise = $dis > 0 ? ' (dis) ' . $dis : '';
+        $isi = trim($po) . '#' . trim($item) . $dise;
     }
     return $isi;
 }
@@ -641,25 +648,29 @@ function namaspekbarang($brg){
 }
 function cekperiodedaritgl($tgl){
     $unt = strtotime($tgl);
-    return date('m',$unt).date('Y',$unt);
+    return date('m', $unt) . date('Y', $unt);
 }
-function spekpo($po,$item,$dis){
+function spekpo($po, $item, $dis)
+{
     $CI = &get_instance();
-    return $CI->helpermodel->spekpo($po,$item,$dis);
+    return $CI->helpermodel->spekpo($po, $item, $dis);
 }
-function getpros($kode){
+function getpros($kode)
+{
     $CI = &get_instance();
     return $CI->helpermodel->getpros($kode);
 }
-function nomorkontrak(){
+function nomorkontrak()
+{
     // $xkode = trim($kode);
     $CI = &get_instance();
     $getkode = $CI->helpermodel->nomorkontrak();
     $xhasil = (int) $getkode['maks'] + 1;
-    $hasil = $xhasil < 10 ? '00'.$xhasil : ($xhasil < 100 ? '0'.$xhasil : $xhasil);
-    return $hasil.'/INM-KB/'.romawi(date('m')).'/'.date('y');
+    $hasil = $xhasil < 10 ? '00' . $xhasil : ($xhasil < 100 ? '0' . $xhasil : $xhasil);
+    return $hasil . '/INM-KB/' . romawi(date('m')) . '/' . date('y');
 }
-function romawi($number) {
+function romawi($number)
+{
     $map = [
         'M' => 1000,
         'CM' => 900,
@@ -684,29 +695,30 @@ function romawi($number) {
     }
     return $result;
 }
-function formatnpwp($kata){
+function formatnpwp($kata)
+{
     $panjang = strlen($kata);
     $hasil = '';
-    if($panjang>=15){
-        for($x=1;$x<=6;$x++){
+    if ($panjang >= 15) {
+        for ($x = 1; $x <= 6; $x++) {
             switch ($x) {
                 case 1:
-                    $hasil = substr($kata,0,2).".";
+                    $hasil = substr($kata, 0, 2) . ".";
                     break;
                 case 2:
-                    $hasil .= substr($kata,2,3).".";
+                    $hasil .= substr($kata, 2, 3) . ".";
                     break;
                 case 3:
-                    $hasil .= substr($kata,5,3).".";
+                    $hasil .= substr($kata, 5, 3) . ".";
                     break;
                 case 4:
-                    $hasil .= substr($kata,8,1)."-";
+                    $hasil .= substr($kata, 8, 1) . "-";
                     break;
                 case 5:
-                    $hasil .= substr($kata,9,3).".";
+                    $hasil .= substr($kata, 9, 3) . ".";
                     break;
                 case 6:
-                    $hasil .= substr($kata,12,3);
+                    $hasil .= substr($kata, 12, 3);
                     break;
                 default:
                     # code...
@@ -716,18 +728,101 @@ function formatnpwp($kata){
     }
     return $hasil;
 }
-function getstokbarangsaatini($data,$dept){
+function getstokbarangsaatini($data, $dept)
+{
     // $xkode = trim($kode);
     $CI = &get_instance();
-    $getkode = $CI->helpermodel->stoksaatini($data,$dept);
+    $getkode = $CI->helpermodel->stoksaatini($data, $dept);
     return $getkode;
 }
-function daftardeptsubkon(){
+function daftardeptsubkon()
+{
     // $xkode = trim($kode);
     $CI = &get_instance();
     $getkode = $CI->helpermodel->deptsubkon();
     return $getkode;
 }
+
+function nomor_dokumen($dept_id, $tb_header, $db, $tgl_input)
+{
+    $bulan = date('m', strtotime($tgl_input));
+    $tahun = date('y', strtotime($tgl_input));
+    $kode_bulan_tahun = $bulan . $tahun;
+
+    $prefix_nomor = 'BN/' . $dept_id . '/' . $kode_bulan_tahun;
+
+
+    $db->from($tb_header);
+    $db->where('dept_id', $dept_id);
+    $db->like('nomor_dok', $prefix_nomor);
+    $jumlah = $db->count_all_results();
+
+    $next_number = str_pad($jumlah + 1, 3, '0', STR_PAD_LEFT);
+
+    return $prefix_nomor . '/' . $next_number;
+}
+
+function format_tanggal_indonesia($tanggal)
+{
+    $hari_indonesia = [
+        'Sunday' => 'Minggu',
+        'Monday' => 'Senin',
+        'Tuesday' => 'Selasa',
+        'Wednesday' => 'Rabu',
+        'Thursday' => 'Kamis',
+        'Friday' => 'Jumat',
+        'Saturday' => 'Sabtu'
+    ];
+
+    $bulan_indonesia = [
+        'January' => 'Januari',
+        'February' => 'Februari',
+        'March' => 'Maret',
+        'April' => 'April',
+        'May' => 'Mei',
+        'June' => 'Juni',
+        'July' => 'Juli',
+        'August' => 'Agustus',
+        'September' => 'September',
+        'October' => 'Oktober',
+        'November' => 'November',
+        'December' => 'Desember'
+    ];
+
+    $date = new DateTime($tanggal);
+    $hari = $hari_indonesia[$date->format('l')];
+    $tanggal = $date->format('d');
+    $bulan = $bulan_indonesia[$date->format('F')];
+    $tahun = $date->format('Y');
+
+    return "$hari, $tanggal $bulan $tahun";
+}
+
+
+
+function format_bulan_tahun($mY)
+{
+    $bulan = [
+        '01' => 'Januari',
+        '02' => 'Februari',
+        '03' => 'Maret',
+        '04' => 'April',
+        '05' => 'Mei',
+        '06' => 'Juni',
+        '07' => 'Juli',
+        '08' => 'Agustus',
+        '09' => 'September',
+        '10' => 'Oktober',
+        '11' => 'November',
+        '12' => 'Desember'
+    ];
+
+    $bulan_angka = substr($mY, 0, 2); // contoh: 08
+    $tahun = substr($mY, 2, 4);       // contoh: 2025
+
+    return $bulan[$bulan_angka] . ' ' . $tahun;
+}
+
 function showbom($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs){
     $CI = &get_instance();
     $getkode = $CI->helpermodel->showbom($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs);
