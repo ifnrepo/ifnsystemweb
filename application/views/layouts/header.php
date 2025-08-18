@@ -286,11 +286,17 @@
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
         <div class="modal-body fetched-data p-1">
-          Fetching Data ..
+          <!-- Fetching Data .. -->
+          <div class="text-center">
+            <div class="progress w-50 mx-auto" style="width: 50% !important">
+              <div class="progress-bar progress-sm progress-bar-indeterminate bg-blue"></div>
+            </div>
+            Fetching Data
+          </div>
         </div>
         <div class="modal-footer">
           <!-- <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button> -->
-          <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Keluar</button>
+          <!-- <button type="button" class="btn btn-sm btn-primary" data-bs-dismiss="modal">Keluar</button> -->
         </div>
       </div>
     </div>

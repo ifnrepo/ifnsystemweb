@@ -22,12 +22,21 @@
                         <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
                         <hr class="m-0">
                         <div class="font-kecil p-1">
+                            <?php if($mode==0){ ?>
                             Supplier : <br>
                             <div style="font-weight: normal !important;">
                                 <?= $header['id_buyer'].' - '.$header['namacustomer']; ?><br>
                                 <?= $header['alamat']; ?><br>
                                 Attn. <?= $header['kontak']; ?>
                             </div>
+                            <?php }else{ ?>
+                            Subkontrak : <br>
+                            <div style="font-weight: normal !important;">
+                                <?= $header['id_buyer'].' - '.datadepartemen($header['dept_tuju'],'nama_subkon'); ?><br>
+                                <?= datadepartemen($header['dept_tuju'],'alamat_subkon'); ?><br>
+                                Attn. <?= datadepartemen($header['dept_tuju'],'pic') ?>
+                            </div>
+                            <?php } ?>
                         </div>
                         <hr class="m-1 <?= $tanpabc; ?>">
                         <div class="font-kecil text-primary p-1 <?= $tanpabc; ?>">

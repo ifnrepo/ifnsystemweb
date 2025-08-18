@@ -45,7 +45,7 @@ class Bbl_model extends CI_Model
 
     public function getnomorbbl($bl, $th, $asal, $tuju)
     {
-        $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,16,3)) AS maxkode FROM tb_header 
+        $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,15,3)) AS maxkode FROM tb_header 
         WHERE kode_dok = 'BBL' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_id = '" . $asal . "' AND dept_tuju = '" . $tuju . "' ")->row_array();
         return $hasil;
     }

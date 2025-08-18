@@ -46,6 +46,7 @@
 <script src="<?= base_url(); ?>assets/vendor/fixheader/js/dataTables.fixedheader.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/datatables/js/dataTables.fixedColumns.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/datatables/js/fixedColumns.bootstrap4.min.js"></script>
+<script src="<?= base_url(); ?>assets/vendor/datatables/js/dataTables.scroller.js"></script>
 
 <script src="<?= base_url(); ?>assets/vendor/bootstrap-datepicker/js/bootstrap-datepicker.min.js"></script>
 <script src="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.js"></script>
@@ -66,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1752224273'; ?>
+<?php $updatejs = '1755503306'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->

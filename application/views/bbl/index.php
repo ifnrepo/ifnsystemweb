@@ -26,7 +26,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <!-- <a href="<?= base_url() . 'bbl/tambahdata'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Transaksi" class="btn btn-primary btn-sm" id="adddatapb"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
                               <?php $disab=''; if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null){ $disab = 'disabled';} ?>
                             <div class="dropdown">
-                                <button class="btn btn-primary btn-sm dropdown-toggle <?= $disab; ?>" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <button class="btn btn-primary btn-sm dropdown-toggle <?= $disab; ?> <?= cekclosebook(); ?>" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                                 <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
                                 </button>
                                 <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">

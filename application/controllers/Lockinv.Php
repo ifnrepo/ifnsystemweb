@@ -48,6 +48,14 @@ class Lockinv extends CI_Controller
             redirect($url);
         }
     }
+    public function saktosaw($periode){
+        $hasil = $this->lockinvmodel->saktosaw($periode);
+        if ($hasil) {
+            $this->helpermodel->isilog($this->db->last_query());
+            $url = base_url('lockinv');
+            redirect($url);
+        }
+    }
     // End Model
     public function simpandata()
     {

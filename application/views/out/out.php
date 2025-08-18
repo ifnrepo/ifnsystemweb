@@ -25,8 +25,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php $disab=''; if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null){ $disab = 'disabled';} ?>
               <a href="<?= base_url() . 'out/adddata/1'; ?>" class="btn btn-info btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <!-- <a href="<?= base_url() . 'out/adddata/0'; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="buttonpilih2"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
-              <div class="dropdown hilang" id="buttonpilih2">
-                  <button class="btn btn-primary btn-sm dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+              <div class="dropdown hilang " id="buttonpilih2">
+                  <button class="btn btn-primary btn-sm dropdown-toggle <?= cekclosebook(); ?>" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
@@ -126,7 +126,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $inoleh = $datdet['dept_tuju']=='CU' ? ' Marketing' : ' '.datadepartemen($datdet['dept_tuju'],'departemen'); 
                 $deptsubkon = daftardeptsubkon(); ?>
                 <tr>
-                  <td><?= tglmysql($datdet['tgl']).$datdet['dept_tuju']; ?></td>
+                  <td><?= tglmysql($datdet['tgl']); ?></td>
                   <?php if ($datdet['data_ok'] == 1) { ?>
                     <td class='font-bold line-12'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important; font-weight: normal"><?= getpros($datdet['ketprc']) ?></span></a></td>
                   <?php } else { ?>
@@ -135,9 +135,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td class="line-12"><?= $jmlrek; ?><br><span class="badge badge-outline text-pink"><?= rupiah($datdet['jumlahpcs'],0); ?> Pcs, <?= rupiah($datdet['netto'],2); ?> Kgs</span></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
                   <td><?= $datdet['keterangan']; ?></td>
-                  <td class="text-end"><span style="color: white;">.</span>
+                  <td class="text-end line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
-                      <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
+                      <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
                       <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini <br> <?= $datdet['nomor_dok']; ?>" data-href="<?= base_url() . 'out/hapusdataout/' . $datdet['id']; ?>" class='btn btn-sm btn-danger <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Hapus Transaksi'><i class='fa fa-trash-o mr-1'></i> Hapus</a>
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_tuju']==1 && $datdet['ok_valid']==1) { ?>
                       <a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
@@ -150,7 +150,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php }else{ ?>
                       <?php if(in_array($datdet['dept_tuju'],daftardeptsubkon())){ ?>
                         <?php if($datdet['data_ok']==1 && $datdet['ok_tuju']==0){ ?>
-                          <span class="text-teal font-kecil line-12">Menunggu Pembuatan Dokumen Pengeluaran</span>
+                          <span class="text-red font-kecil line-12">Menunggu Pembuatan<br>Dokumen Pengeluaran BC 261</span>
                         <?php }else{ ?>
                           <span class="text-teal font-kecil line-12">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>
                         <?php } ?>
