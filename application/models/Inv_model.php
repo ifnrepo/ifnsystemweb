@@ -51,6 +51,7 @@ class inv_model extends CI_Model
             $join = '';
             $join1 = '';
             $join2 = '';
+            $kueriexdo = '';
             if ($this->session->userdata('katcari') != null) {
                 if ($this->session->userdata('kategoricari') == 'Cari Barang') {
                     $xcari = " AND barang.nama_barang LIKE '%" . $this->session->userdata('katcari') . "%'";
@@ -80,6 +81,8 @@ class inv_model extends CI_Model
             }
             if ($dpt == 'GF') {
                 $nobalefiel = ',nobale';
+                $exdo = $this->session->userdata('exdonya');
+                $kueriexdo = " and tb_po.exdo = '".$exdo."' ";
             }
             $deptsubkon = datadepartemen($dpt,'katedept_id')==3 ? 'tb_detail.id_akb ': 'tb_detail.id_header' ;
             $period = substr($tglx, 5, 2) . substr($tglx, 0, 4);
@@ -99,7 +102,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = stokdept.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype " . $join . "
-                                        WHERE kgs_awal+pcs_awal > 0 AND periode = '" . $period . "' AND dept_id = '" . $dpt . "'" . $xinv . $xkat . $xcari . $xbcnya . $ifndln . "
+                                        WHERE kgs_awal+pcs_awal > 0 AND periode = '" . $period . "' AND dept_id = '" . $dpt . "'" . $xinv . $xkat . $xcari . $xbcnya . $ifndln . $kueriexdo. "
                                         UNION ALL 
                                         SELECT IF(tb_header.kode_dok='T','OUT','-') AS mode,tb_header.kode_dok,null,tb_detailgen.id,tb_detailgen.id_barang,tb_detailgen.po,
                                         tb_detailgen.item,tb_detailgen.dis, tb_detailgen.insno," . $noeb2 . ",tb_detailgen.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,
@@ -112,7 +115,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detailgen.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype " . $join1 . "
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " . $xinv . $xkat . $xcari2 . $xbcnya . $ifndln2 .  "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'T' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 " . $xinv . $xkat . $xcari2 . $xbcnya . $ifndln2 . $kueriexdo.  "
                                         UNION ALL   
                                         SELECT 'IB' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno," . $noeb3 . ",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
@@ -124,7 +127,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype " . $join2 . "
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.dept_id != 'GS' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . $xbcnya . $ifndln3 .  "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND (tb_header.kode_dok = 'IB' OR tb_header.kode_dok = 'T') AND tb_header.dept_tuju='" . $dpt . "' AND tb_header.dept_id != 'GS' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . $xbcnya . $ifndln3 . $kueriexdo . "
                                         UNION ALL 
                                         SELECT 'ADJ' AS mode,tb_header.kode_dok,null,tb_detail.id,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis, 
                                         tb_detail.insno," . $noeb3 . ",tb_detail.harga,tb_header.nomor_dok,tb_header.tgl,barang.nama_barang,barang.kode,if(kategori.nama_kategori!='',kategori.nama_kategori,nettype.name_nettype) AS name_kategori,0 as pcs,tb_detail.pcs AS pcsin,
@@ -136,7 +139,7 @@ class inv_model extends CI_Model
                                         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori
                                         LEFT JOIN tb_po ON tb_po.id = tb_detail.id_po
                                         LEFT JOIN nettype ON nettype.id = tb_po.id_nettype " . $join2 . "
-                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . $xbcnya . $ifndln3 . "
+                                        WHERE tb_header.tgl <= '" . $tglawal . "' and month(tb_header.tgl)=" . substr($tglx, 5, 2) . " And year(tb_header.tgl)=" . substr($tglx, 0, 4) . " AND tb_header.kode_dok = 'ADJ' AND tb_header.dept_id='" . $dpt . "' AND tb_header.data_ok = 1 AND tb_header.ok_valid = 1" . $xinv . $xkat . $xcari3 . $xbcnya . $ifndln3 . $kueriexdo . "
                                         ORDER BY nama_barang,tgl,nome" . $tambah2);
             return $hasil;
         }
@@ -1243,5 +1246,65 @@ class inv_model extends CI_Model
             $kgs += $quer['kgs'] + $quer['kgsin'] - $quer['kgsout'];
         }
         return array('rekod' => $no, 'pecees' => $pcs, 'kagees' => $kgs);
+    }
+    public function getdatareport(){
+        $draw = $_POST['draw'];
+        $start = $_POST['start'];
+        $length = $_POST['length'];
+        $searchValue = $_POST['search']['value'];
+        $orderColumn = $_POST['order'][0]['column'];
+        $orderDir = $_POST['order'][0]['dir'];
+        $columns = $_POST['columns'];
+
+        // Build the SQL query
+        $sql = "SELECT * FROM stokdept where periode = '072025' ";
+        $where = [];
+
+        // Apply search filter if provided
+        if (!empty($searchValue)) {
+            $where[] = "id_barang LIKE '%{$searchValue}%' OR id_barang LIKE '%{$searchValue}%'";
+        }
+
+        // Add WHERE clauses if any
+        if (!empty($where)) {
+            $sql .= " WHERE " . implode(" AND ", $where);
+        }
+
+        // Get total records (before filtering)
+        $totalRecordsQuery = $this->db->query("SELECT COUNT(*) as jmlrek FROM stokdept where periode = '072025' ")->row_array();
+        $totalRecords = $totalRecordsQuery['jmlrek'];
+
+        // Get filtered records count
+        $filteredRecordsQuery = $this->db->query(str_replace("SELECT * ", "SELECT COUNT(*) as jmlrek ", $sql))->row_array();
+        $filteredRecords = $filteredRecordsQuery['jmlrek'];
+
+        // Apply ordering
+        $orderColumnName = $columns[$orderColumn]['data'];
+        // $sql .= " ORDER BY {$orderColumnName} {$orderDir}";
+        // $sql .= " ORDER BY 1 {$orderDir}";
+
+        // Apply pagination
+        // $sql .= " LIMIT {$start}, {$length}";
+
+        // Execute the query
+        $result = $this->db->query($sql);
+
+        $data = [];
+        // while ($row = $result->fetch_assoc()) {
+        //     $data[] = array_values($row); // Convert associative array to indexed array for DataTables
+        // }
+        foreach ($result->result_array() as $row) {
+             $data[] = array_values($row);
+        }
+
+        // Prepare the response in JSON format
+        $response = [
+            "draw" => intval($draw),
+            "recordsTotal" => intval($totalRecords),
+            "recordsFiltered" => intval($filteredRecords),
+            "data" => $data
+        ];
+
+        return $response;
     }
 }

@@ -25,12 +25,33 @@ $(function () {
 		loadtablegf();
 	}
 
+	$(".datatableserver").DataTable({
+		serverSide: true,
+		ajax: {
+			url: base_url + "inv/getdatareport", // Your PHP script URL
+			type: "POST", // Or 'GET' depending on your preference
+		},
+		scroller: {
+			loadingIndicator: true, // Show a loading indicator during scrolling
+		},
+		scrollY: 500, // Set a fixed height for the scrollable area
+		deferRender: true, // Improve rendering performance
+		// stateSave: true,
+		paging: true,
+		info: true,
+		searching: false,
+		ordering: false,
+	});
+
 	var jmlrek = $("#jumlahrek").val();
 	var jmlpc = $("#jumlahpc").val();
 	var jmlkg = $("#jumlahkg").val();
 	$("#jumlahrekod").html(rupiah(jmlrek, ".", ",", 0));
 	$("#jumlahpcs").html(rupiah(jmlpc, ".", ",", 2));
 	$("#jumlahkgs").html(rupiah(jmlkg, ".", ",", 2));
+});
+$(document).ready(function () {
+	$("#currdept").change();
 });
 // $(document).ready(function () {
 // 	NProgress.done();
@@ -88,7 +109,7 @@ $("#viewharga").click(function () {
 	});
 });
 $("#katbar").change(function () {
-	$("#updateinv").click();
+	// $("#updateinv").click();
 });
 $("#nomorbcnya").change(function () {
 	$("#updateinv").click();
@@ -101,6 +122,14 @@ $("#tglawal").datepicker({
 	format: "dd-mm-yyyy",
 	todayHighlight: true,
 	maxDate: 0,
+});
+$("#currdept").change(function () {
+	let ini = $(this).val();
+	if (ini == "GF") {
+		$("#div-exdo").removeClass("hilang");
+	} else {
+		$("#div-exdo").addClass("hilang");
+	}
 });
 $("#buttoncari").click(function () {
 	var tglawal = $("#tglawal").val();
@@ -191,6 +220,7 @@ $("#updateinv").click(function () {
 			nobcnya: nomorbcnya,
 			ifndln: ifndl,
 			kontbc: kontrakbcnya,
+			exdo: $("#exdonya").val(),
 		},
 		success: function (data) {
 			// alert(data);

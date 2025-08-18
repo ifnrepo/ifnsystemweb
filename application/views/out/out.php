@@ -126,7 +126,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $inoleh = $datdet['dept_tuju']=='CU' ? ' Marketing' : ' '.datadepartemen($datdet['dept_tuju'],'departemen'); 
                 $deptsubkon = daftardeptsubkon(); ?>
                 <tr>
-                  <td><?= tglmysql($datdet['tgl']).$datdet['dept_tuju']; ?></td>
+                  <td><?= tglmysql($datdet['tgl']); ?></td>
                   <?php if ($datdet['data_ok'] == 1) { ?>
                     <td class='font-bold line-12'><a href='<?= base_url() . 'out/viewdetailout/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'><?= $datdet['nomor_dok'] ?><br><span class="text-purple" style="font-size: 10px !important; font-weight: normal"><?= getpros($datdet['ketprc']) ?></span></a></td>
                   <?php } else { ?>
