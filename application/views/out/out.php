@@ -92,17 +92,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="hr m-1"></div>
-              <div class="row">
-                <h5 class="m-0">Filter</h5>
-                <div class="col-2 mt-0">
-                  <div class="font-kecil">
+              <div class="row mt-0">
+                <div class="col-2">
+                  <h5 class="m-0">Filter</h5>
+                    <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" style="height: 30px; padding-top: 4.5px;" id="filterbon" name="filterbon">
                         <option value="0" <?php if($this->session->userdata('filterbon')==0) { echo "selected"; } ?>>Semua Bon</option>
                         <option value="1" <?php if($this->session->userdata('filterbon')==1) { echo "selected"; } ?>>Bon Belum Validasi</option>
                       </select>
                     </div>
                 </div>
-                <div class="col-10"></div>
+                <div class="col-2" id="div-filter2">
+                  <h5 class="m-0">.</h5>
+                    <div class="font-kecil ">
+                      <select class="form-select form-control form-sm font-kecil font-bold text-primary" style="height: 30px; padding-top: 4.5px;" id="filterbon2" name="filterbon2">
+                        <?php foreach (getkettujuanout($this->session->userdata('deptsekarang')."-".$this->session->userdata('tujusekarang'))->result_array() as $ketuju) { ?>
+                          <option value="0" <?php if($this->session->userdata('filterbon2')==$ketuju['value']) { echo "selected"; } ?>><?= $ketuju['value']; ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                </div>
+                <div class="col-8"></div>
               </div>
             </div>
           </div>

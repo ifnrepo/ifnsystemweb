@@ -46,6 +46,7 @@ class Out extends CI_Controller {
         $this->session->unset_userdata('deptsekarang');
         $this->session->unset_userdata('tujusekarang');
         $this->session->unset_userdata('filterbon');
+        $this->session->unset_userdata('filterbon2');
         $this->session->set_userdata('bl',(int)date('m'));
         $this->session->set_userdata('th',date('Y'));
         $url = base_url().'out';
@@ -62,6 +63,24 @@ class Out extends CI_Controller {
         }
         echo $hasil;
     }
+    public function getkettuju(){
+        $hasil = '';
+        $no = 0;
+        $dari = $_POST['dari'];
+        $ke = $_POST['ke'];
+        $getdata = getkettujuanout($dari.'-'.$ke);
+        if($getdata->num_rows() > 0){
+            foreach ($getdata->result_array() as $que) {
+                $no++;
+                $selek = $this->session->userdata('filterbon2')==$que['value'] ? 'selected' : '';
+                $hasil .= "<option value='".$que['value']."' rel='".$que['kueri']."' ".$selek.">".$que['value']."</option>";
+            }
+        }else{
+            $this->session->unset_userdata('filterbon2');
+        }
+        $cocok = array('datagroup' => $hasil,'jmlrek' => $no);
+        echo json_encode($cocok);
+    }
     public function ubahperiode(){
         // $this->session->unset_userdata('deptsekarang');
         // $this->session->unset_userdata('tujusekarang');
@@ -73,6 +92,11 @@ class Out extends CI_Controller {
         $this->session->set_userdata('deptsekarang',$_POST['dept_id']);
         $this->session->set_userdata('tujusekarang',$_POST['dept_tuju']);
         $this->session->set_userdata('filterbon',$_POST['filterbon']);
+        if(isset($_POST['filterbon2']) && $_POST['filterbon2'] != ''){
+            $this->session->set_userdata('filterbon2',$_POST['filterbon2']);
+        }else{
+            $this->session->unset_userdata('filterbon2');
+        }
         echo 1;
     }
     public function getdatadetailout(){

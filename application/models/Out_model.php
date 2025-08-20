@@ -8,11 +8,17 @@ class Out_model extends CI_Model{
             'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
-            'left(nomor_dok,2) != ' => 'TR'
+            'left(nomor_dok,2) != ' => 'TR',
+            // '' => ''
         ];
         if($kode['filterbon']==1){
             $arrkondisi['data_ok'] = 0;
         }
+        if($this->session->userdata('filterbon2')!== "" && getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2')) != NULL){
+            $kolom = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'));
+            $arrkondisi[$kolom] = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'),1);
+        }
+        
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->select('(SELECT SUM(pcs) AS pcs FROM tb_detail WHERE tb_detail.id_header = tb_header.id GROUP BY id_header ) AS jumlahpcs');
@@ -32,6 +38,10 @@ class Out_model extends CI_Model{
             'year(tgl)' => $this->session->userdata('th'),
         ];
         $arrkondisi['data_ok'] = $kode['filterbon']==1 ? 0 : 1;
+        if($this->session->userdata('filterbon2')!== "" && getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2')) != NULL){
+            $kolom = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'));
+            $arrkondisi[$kolom] = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'),1);
+        }
         $this->db->select('count(distinct nomor_dok) as jmrek,sum(tb_detail.pcs) as pcs, sum(tb_detail.kgs) as kgs');
         $this->db->from('tb_header');
         $this->db->join('tb_detail','tb_header.id = tb_detail.id_header','left');
@@ -49,6 +59,10 @@ class Out_model extends CI_Model{
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
         ];
+        if($this->session->userdata('filterbon2')!== "" && getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2')) != NULL){
+            $kolom = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'));
+            $arrkondisi[$kolom] = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'),1);
+        }
         $this->db->select('count(distinct nomor_dok) as jmlrek');
         $this->db->from('tb_header');
         $this->db->join('tb_detail','tb_header.id = tb_detail.id_header','left');

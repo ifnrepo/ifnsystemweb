@@ -27,6 +27,7 @@ $(document).ready(function () {
 
 	modalBoxSm();
 	modalBoxLg();
+	modalBoxLgWithLoading();
 	modalBoxLg2();
 	modalBoxXl();
 	modalBoxSc();
@@ -347,6 +348,20 @@ function modalBoxSm() {
 
 function modalBoxLg() {
 	$("#modal-large").on("show.bs.modal", function (e) {
+		var link = $(e.relatedTarget);
+		var title = link.data("title");
+		var modal = $(this);
+		modal.find(".modal-title").text(title);
+		$(this).find(".fetched-data").load(link.attr("href"));
+	});
+	return false;
+}
+
+function modalBoxLgWithLoading() {
+	$("#modal-large-loading").on("show.bs.modal", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div><span class="text-gray font-kecil">Fetching Data, Please Wait ..</span></div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);

@@ -220,6 +220,35 @@
       </div>
     </div>
   </div>
+  <div class="modal modal-blur fade" id="modal-large-loading" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+      <div class="modal-content">
+        <div class="modal-header bg-info">
+          <h5 class="modal-title">Large modal</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body fetched-data p-1">
+          <div class="text-center">Fetching Data ..</div>
+          <!-- <div>
+              <div class="container container-slim py-4" id="syncloader">
+                    <div class="text-center">
+                        <div class="mb-3">
+                        </div>
+                        <div class="text-secondary mb-3">Fetching data, Please wait..</div>
+                        <div class="progress progress-sm">
+                        <div class="progress-bar progress-bar-indeterminate"></div>
+                        </div>
+                    </div>
+                </div>
+           </div> -->
+        </div>
+        <!-- <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+          </div> -->
+      </div>
+    </div>
+  </div>
   <div class="modal modal-blur fade" id="modal-largescroll" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-lg modal-dialog-centered modal-dialog-scrollable" role="document">
       <div class="modal-content">

@@ -137,7 +137,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <a href="#" class="btn btn-sm btn-primary" id="xsimpanout"><i class="fa fa-save mr-1"></i> Simpan Transaksi</a>
           <button href="#" class="btn btn-sm btn-primary hilang" id="simpanout" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini" data-href="<?= base_url() . 'out/simpanheaderout/' . $data['id']; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
           <a href="#" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-tombol="Ya" data-message="Akan Reset data ini" data-href="<?= base_url() . 'out/resetdetail/' . $data['id']; ?>"><i class="fa fa-times mr-1"></i> Reset Transaksi</a>
-          <a class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Rekap B.O.M OUT" href="<?= base_url() . 'out/viewrekapbom/' . $data['id']; ?>" id="viewrekap">View Rekap BOM</a>
+          <a class="btn btn-sm btn-info" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Rekap B.O.M OUT" href="<?= base_url() . 'out/viewrekapbom/' . $data['id']; ?>" id="viewrekap">View Rekap BOM</a>
         </div>
       </div>
     </div>

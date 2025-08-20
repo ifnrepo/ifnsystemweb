@@ -46,6 +46,7 @@ $("#dept_kirim").change(function () {
 				$("#buttonpilih2").removeClass("hilang");
 			}
 			$("#dept_tuju").html(data);
+			$("#dept_tuju").change();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -53,12 +54,30 @@ $("#dept_kirim").change(function () {
 		},
 	});
 });
-// $("#dept_tuju").change(function () {
-// 	var ia = $(this).val();
-// 	if (ia != null) {
-// 		getdataout();
-// 	}
-// });
+$("#dept_tuju").change(function () {
+	// alert($(this).val());
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "out/getkettuju",
+		data: {
+			dari: $("#dept_kirim").val(),
+			ke: $(this).val(),
+		},
+		success: function (data) {
+			if (data.jmlrek > 0) {
+				$("#div-filter2").removeClass("hilang");
+				$("#filterbon2").html(data.datagroup);
+			} else {
+				$("#div-filter2").addClass("hilang");
+			}
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+});
 $("#simpandetailbarang").click(function () {
 	if ($("#id_barang").val() == "") {
 		pesan("Isi / Cari nama barang", "error");
@@ -113,6 +132,7 @@ function getdataout() {
 			dept_id: $("#dept_kirim").val(),
 			dept_tuju: $("#dept_tuju").val(),
 			filterbon: $("#filterbon").val(),
+			filterbon2: $("#filterbon2").val(),
 		},
 		success: function (data) {
 			window.location.reload();
