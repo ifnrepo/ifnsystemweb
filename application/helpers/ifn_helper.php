@@ -851,3 +851,14 @@ function getdokumenbcbynomordaftar($nodaf,$mode=0){
     $getkode = $CI->helpermodel->getdokumenbcbynomordaftar($nodaf,$mode);
     return $getkode;
 }
+function getkettujuanout($kode){
+    // $xkode = trim($kode);
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->getkettujuanout($kode);
+    return $getkode;
+}
+function getquerytujuanout($kode,$val,$ke=0){
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->getquerytujuanout($kode,$val,$ke);
+    return $getkode;
+}

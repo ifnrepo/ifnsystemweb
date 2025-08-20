@@ -488,6 +488,24 @@ class Helper_model extends CI_Model
         }
         return $arrrekan;
     }
+    public function getkettujuanout($kode){
+        $data = $this->db->get_where('ref_transaksi_tujuan',['tujuan' => $kode]);
+        return $data;
+    }
+    public function getquerytujuanout($kode,$val,$ke){
+        $data = $this->db->get_where('ref_transaksi_tujuan',['tujuan' => $kode,'value' => $val]);
+        if($data->num_rows() > 0){
+            $xdata = $data->row_array();
+            if($ke==0){
+                $hasil = $xdata['kueri'];
+            }else{
+                $hasil = $xdata['isi'];
+            }
+        }else{
+            $hasil = '';
+        }
+        return $hasil;
+    }
     public function nomorkontrak(){
         $tahun = date('y');
         $this->db->select('MAX(LEFT(nomor,3)) AS maks');
