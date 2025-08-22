@@ -107,6 +107,7 @@ class Akb extends CI_Controller
         $data['lampiran'] = $this->akbmodel->getdatalampiran($id);
         $this->load->view('akb/viewdetailakb', $data);
     }
+
     public function dataib($kode)
     {
         $header['header'] = 'transaksi';
@@ -281,6 +282,35 @@ class Akb extends CI_Controller
         $id  = $_POST['id'];
         $hasil = $this->ibmodel->cekhargabarang($id);
         echo $hasil;
+    }
+    public function getnamasubkon($kode=0){
+        $data['datasubkon'] = daftardeptsubkon();
+        $this->load->view('akb/getnamasubkon',$data);
+    }
+    public function getbongaichu($id,$kode=0){
+        $data['databongaichu'] = $this->akbmodel->getbongaichu($id);
+        $data['idheader'] = $id;
+        $this->load->view('akb/getbongaichu',$data);
+    }
+    public function tambahajusubkon(){
+        $kodesubkon = $_POST['id'];
+        $hasil = $this->akbmodel->tambahajusubkon($kodesubkon);
+        echo $hasil;
+    }
+    public function tambahbongaichu(){
+        $arrgo = [
+            'id' => $_POST['id'],
+            'data' => $_POST['out']
+        ];
+        $kode = $this->akbmodel->tambahbongaichu($arrgo);
+        echo $kode;
+    }
+    public function hapusaju($id){
+        $hasil = $this->akbmodel->hapusaju($id);
+        if($hasil){
+            $url = base_url().'akb';
+            redirect($url);
+        }
     }
     public function viewbc($id){
         $data['header'] = $this->ibmodel->getdatadetailib($id);
@@ -1970,4 +2000,5 @@ class Akb extends CI_Controller
             redirect($url);
         }
     }
+
 }

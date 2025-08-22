@@ -155,7 +155,7 @@
                         <table class="table datatable6 table-hover" id="cobasisip">
                             <thead style="background-color: blue !important">
                                 <tr>
-                                <!-- <th>No</th> -->
+                                <th>No</th>
                                 <th>Specific</th>
                                 <th>SKU</th>
                                 <th>Satuan</th>
@@ -167,7 +167,8 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                                <?php $jmlpcs=0;$jmlkgs=0;$Jmltotal=0; foreach ($detail as $val) {  
+                                <?php $jmlpcs=0;$jmlkgs=0;$Jmltotal=0; $no=0; foreach ($detail as $val) {  
+                                    $no++;
                                     $jumlah = $val['kodesatuan']=='KGS' ? $val['kgs'] : $val['pcs'];
                                     $jmlpcs += $val['pcs']; $jmlkgs += $val['kgs'];
                                     $Jmltotal += $val['harga']; //*$jumlah;
@@ -176,8 +177,10 @@
                                     if($header['jns_bc']==30){
                                         $nambar = $val['engklp'];
                                     }
+                                    $jumlah = $jumlah==0 ? 1 : $jumlah;
                                      ?>
                                     <tr>
+                                        <td><?= $no; ?></td>
                                         <td><?= $nambar; ?></td>
                                         <td><?= formatsku($val['po'],$val['item'],$val['dis'],$val['id_barang']); ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
@@ -189,7 +192,7 @@
                                     </tr>
                                 <?php } ?>
                                 <tr class="bg-success-lt">
-                                    <td colspan="3" class="text-center font-bold text-black">TOTAL</td>
+                                    <td colspan="4" class="text-center font-bold text-black">TOTAL</td>
                                     <td class="text-black font-bold text-right"><?= rupiah($jmlpcs,0); ?></td>
                                     <td class="text-black font-bold text-right"><?= rupiah($jmlkgs,2); ?></td>
                                     <td></td>

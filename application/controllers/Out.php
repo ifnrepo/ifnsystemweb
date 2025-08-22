@@ -117,7 +117,7 @@ class Out extends CI_Controller {
                 $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
             // }
             $hasil .= "<tr>";
-            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['seri_barang'].'. '.$nmbarang.$infoinsno."</a></td>";
+            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large-loading' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['seri_barang'].'. '.$nmbarang.$infoinsno."</a></td>";
             $hasil .= "<td>".$sku."</td>";
             $hasil .= "<td>".$que['kodesatuan']."</td>";
                 $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";

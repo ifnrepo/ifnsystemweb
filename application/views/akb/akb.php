@@ -69,7 +69,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <h4 class="mb-1">
                     <?php if($disab!=''){ ?>
                     <small class="text-pink text-center">Tekan <u><b>GO</b></u> untuk mengaktifkan Tombol Tambah Data dan Load Data</small>
-                    <?php } ?>
+                    <?php }else{ if($this->session->userdata('deptdari')=='FG'){ ?>
+                      <div style="position:absolute;bottom:0px;right:10px;">
+                        <a data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Pilih SUBKON" href="<?= base_url() . 'akb/getnamasubkon' ?>" class="btn btn-sm btn-primary">Tambah Data Pengajuan</a>
+                      </div>
+                    <?php } } ?>
                   </h4>
                 </div>
               </div>
@@ -134,6 +138,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                        ?>
                       <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
                       <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
+                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" href="<?= base_url().'akb/getbongaichu/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-success <?php if($tmb!='/1'){ echo "hilang";} ?>' data-title="Add Bon Gaichu" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>GET BON GAICHU</a>
+                      <a href="#" data-href="<?= base_url() . 'akb/hapusaju/' . $datdet['id'] ?>" class='btn btn-sm btn-danger <?php if($tmb!='/1'){ echo "hilang";} ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus AJU <br><?= $datdet['nomor_dok']; ?>" title='Hapus data Transaksi'><i class="fa fa-trash"></i></a>
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { $inoleh = $datdet['dept_tuju']=='CU' ? 'Marketing' : 'Departemen'; ?>
                       <span class="text-teal">DOKUMEN SELESAI <br>Tunggu Verifikasi <b>Out</b> <?= $inoleh; ?></span>
                     <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>
