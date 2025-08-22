@@ -374,7 +374,7 @@ function modalBoxLgWithLoading() {
 function modalBoxSc() {
 	$("#modal-scroll").on("show.bs.modal", function (e) {
 		var awal =
-			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div><span class="text-gray font-kecil">Fetching Data, Please Wait ..</span></div>';
 		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");

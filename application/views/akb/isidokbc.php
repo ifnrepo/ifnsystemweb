@@ -1,4 +1,5 @@
 <div class="container-xl"> 
+    <?=  var_dump($this->session->flashdata('databom')); ?>
     <div class="mx-2 font-bold">AJU KELUAR BARANG</div>
     <div class="mx-2 mb-2 font-bold">DATA BC - NO <span class="text-blue"><?= $datheader['nomor_dok']; ?></span></div>
     <div class="card-header font-kecil">    
@@ -569,6 +570,9 @@
                             <thead style="background-color: blue !important">
                                 <tr>
                                     <th>Nama Barang</th>
+                                    <?php if($mode==1): ?>
+                                        <th>Bon Gaichu</th>
+                                    <?php endif; ?>
                                     <th class="text-left">SKU</th>
                                     <th class="text-left">HS Code</th>
                                     <th>Satuan</th>
@@ -593,9 +597,13 @@
                                         if(trim($hs) == '' || $hs==NULL){
                                             $jumlahhskosong += 1;
                                         }
+                                        $jumlah = $jumlah==0 ? 1 : $jumlah;
                                          ?>
                                     <tr>
-                                        <td><?= $nom.'. '.$nambar; ?></td>
+                                        <td class="line-12"><?= $nom.'. '.$nambar; ?><br><span class="font-kecil text-teal"><?= $data['insno']; ?></span></td>
+                                        <?php if($mode==1): ?>
+                                            <td class="font-kecil text-teal font-bold"><?= $data['dokgaichu']; ?></td>
+                                        <?php endif; ?>
                                         <td class="text-left"><?= formatsku($data['po'],$data['item'],$data['dis'],$data['id_barang']); ?></td>
                                         <td class="text-left"><?= $hs; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
@@ -606,7 +614,8 @@
                                     </tr>
                                 <?php } ?>
                                 <tr class="bg-primary-lt">
-                                    <td class="text-black text-center font-bold" colspan="4">TOTAL</td>
+                                    <?php $jmcolspan = $mode==1 ? 5 : 4; ?>
+                                    <td class="text-black text-center font-bold" colspan="<?= $jmcolspan; ?>">TOTAL</td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumpcs,0); ?></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumkgs,2); ?></td>
                                     <td></td>

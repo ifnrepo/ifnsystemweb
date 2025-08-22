@@ -5,7 +5,7 @@
                 <table class="table datatable6" id="cobasisip">
                     <thead style="background-color: blue !important">
                         <tr>
-                            <th>Seri</th>
+                            <th>Seri <?= count($hasil); ?></th>
                             <th>Kode / ID</th>
                             <th>Nama Barang</th>
                             <th>Nobontr</th>
@@ -14,7 +14,7 @@
                         </tr>
                     </thead>
                     <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
-                        <?php foreach ($hasil as $databom ) { ?>
+                        <?php if(count($hasil) > 0) { $jumlahpcs=0;$jumlahkgs=0; foreach ($hasil as $databom ) { ?>
                             <tr>
                                 <td><?= $databom['noe']; ?></td>
                                 <td><?= $databom['id_barang']; ?></td>
@@ -22,6 +22,17 @@
                                 <td><?= $databom['nobontr']; ?></td>
                                 <td class="text-right"><?= rupiah($databom['pcs_asli'],0); ?></td>
                                 <td class="text-right"><?= rupiah($databom['kgs_asli'],5); ?></td>
+                            </tr>
+                        <?php $jumlahpcs += $databom['pcs_asli']; $jumlahkgs += $databom['kgs_asli']; } } else { ?>
+                            <tr>
+                                <td class="text-center" colspan="6">Data tidak bisa di BREAKDOWM !</td>
+                            </tr>
+                        <?php } ?>
+                         <?php if(count($hasil) > 0) { ?>
+                            <tr>
+                                <td colspan="4" class="text-center font-bold">TOTAL</td>
+                                <td class="text-right font-bold"><?= rupiah($jumlahpcs,0); ?></td>
+                                <td class="text-right font-bold"><?= rupiah($jumlahkgs,5); ?></td>
                             </tr>
                         <?php } ?>
                     </tbody>

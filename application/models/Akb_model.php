@@ -9,7 +9,7 @@ class Akb_model extends CI_Model
                 'id_perusahaan' => IDPERUSAHAAN,
                 'kode_dok' => 'T',
                 'tb_header.dept_id' => $kode,
-                'dept_tuju' => 'AR',
+                // 'dept_tuju' => 'AR',
                 'month(tgl)' => $this->session->userdata('bl'),
                 'year(tgl)' => $this->session->userdata('th'),
                 'left(nomor_dok,2)' => 'TR'
@@ -54,7 +54,7 @@ class Akb_model extends CI_Model
     }
     public function getdatadetailib($data,$mode=0)
     {
-        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem");
+        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem,j.nomor_dok as dokgaichu");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->from('tb_detail a');
@@ -66,6 +66,7 @@ class Akb_model extends CI_Model
         $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
         $this->db->join('tb_klppo h', 'h.id = g.klppo', 'left');
         $this->db->join('ref_kemas i', 'i.id = a.kd_kemasan', 'left');
+        $this->db->join('tb_header j', 'j.id = a.id_header', 'left');
         if($mode==0){
             $this->db->where('a.id_header', $data);
         }else{
@@ -821,13 +822,7 @@ class Akb_model extends CI_Model
         foreach ($hasil->result_array() as $hsl) {
             $arrbom = showbom($hsl['po'],$hsl['item'],$hsl['dis'],$hsl['id_barang'],$hsl['insno'],$hsl['nobontr'],$hsl['kgs'],$no++,$hsl['pcs']);
             foreach ($arrbom as $hasilshowbom) {
-                // if(getarrayindex($hasilshowbom['id_barang'].trim($hasilshowbom['nobontr']),$arrhasil,'kunci')!=''){
-                //     $index = getarrayindex($hasilshowbom['id_barang'].trim($hasilshowbom['nobontr']),$arrhasil,'kunci');
-                //     $arrhasil[$index]['kgs_asli'] = $arrhasil[$index]['kgs_asli']+$hasilshowbom['kgs_asli'];
-                // }else{
-                //     $hasilshowbom['kunci'] = $hasilshowbom['id_barang'].trim($hasilshowbom['nobontr']);
-                    array_push($arrhasil,$hasilshowbom);
-                // }
+                array_push($arrhasil,$hasilshowbom);
             }
         }
         return $arrhasil;
@@ -874,5 +869,70 @@ class Akb_model extends CI_Model
     public function getdatakontrak($id){
         $this->db->where('id',$id);
         return $this->db->get('tb_kontrak');
+    }
+    public function tambahajusubkon($kode){
+        $arrkondisi = [
+            'id_perusahaan' => IDPERUSAHAAN,
+            'kode_dok' => 'T',
+            'dept_id' => $this->session->userdata('deptdari'),
+            'dept_tuju' => $kode,
+            'nomor_dok' => 'TRXXX-XXXXX',
+            'jns_bc' => '261',
+            'tgl' => date('Y-m-d'),
+            'data_ok' => 1,
+            'tgl_ok' => date('Y-m-d H:i:s'),
+            'user_ok' => $this->session->userdata('id'),
+            'ok_tuju' => 1,
+            'tgl_tuju' => date('Y-m-d H:i:s'),
+            'user_tuju' => $this->session->userdata('id'),
+        ];
+        return $this->db->insert('tb_header',$arrkondisi);
+    }
+    public function getbongaichu($id){
+        $dari = $this->db->get_where('tb_header',['id' => $id])->row_array();
+        $this->db->select('tb_header.nomor_dok,tb_header.id,tb_header.tgl,tb_header.ketprc,ref_proses.ket,sum(tb_detail.kgs) as kgs, sum(tb_detail.pcs) as pcs');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->join('ref_proses','ref_proses.kode = LEFT(tb_header.ketprc,3)','left');
+        $this->db->where('tb_detail.id_akb',NULL);
+        $this->db->where('tb_header.dept_id',$dari['dept_id']);
+        $this->db->where('tb_header.dept_tuju',$dari['dept_tuju']);
+        $this->db->where('tb_header.data_ok',1);
+        $this->db->group_by('tb_detail.id_header');
+        return $this->db->get();
+    }
+    public function tambahbongaichu($kode){
+        $this->db->trans_start();
+        $dataheader = $this->db->get_where('tb_header',['id'=>$kode['id']])->row_array();
+        $jumlah = count($kode['data']);
+        for($x=0;$x<$jumlah;$x++){
+            $arrdat = $kode['data'];
+            $que = $this->db->get_where('tb_header',['id'=>$arrdat[$x]])->row_array();
+            // $que['id_minta'] = $que['id']; 
+            // unset($que['id']);
+            // $que['id_header'] = $dataheader['id'];
+            // $this->db->insert('tb_detail',$que);
+            // $idnya = $this->db->insert_id();
+            // $this->helpermodel->isilog($this->db->last_query());
+            // $que['id_detail'] = $idnya;
+            // $this->db->insert('tb_detailgen',$que);
+            
+            $this->db->where('id_header',$arrdat[$x]);
+            $this->db->update('tb_detail',['id_akb'=>$kode['id']]);
+            $this->helpermodel->isilog($this->db->last_query());
+        }
+        $this->db->trans_complete();
+        return $dataheader['id'];
+    }
+    public function hapusaju($id){
+        $this->db->trans_start();
+        $this->db->where('id_akb',$id);
+        $this->db->update('tb_detail',['id_akb'=>NULL]);
+        $this->helpermodel->isilog($this->db->last_query());
+
+        $this->db->where('id',$id);
+        $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
+        return $this->db->trans_complete();
     }
 }
