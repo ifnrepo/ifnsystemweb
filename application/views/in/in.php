@@ -88,10 +88,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <!-- <div class="hr m-1"></div> -->
             </div>
           </div>
-          
         </div>
-        <div id="table-default" class="table-responsive mt-2">
-          <table class="table datatable4" id="cobasisip">
+        <div id="table-default" class="mt-2">
+          <table class="table nowrap order-column datatable" style="width: 100% !important;" id="cobasisip">
             <thead>
               <tr>
                 <th>Tgl</th>
@@ -103,7 +102,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-
+            <?php $katedept = datadepartemen($this->session->userdata('curdept'),'katedept_id'); 
+              $norek=0;$jmlpcs=0;$jmlkgs=0;$noreke=0;
+              foreach ($data->result_array() as $que) {
+              $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
+              $insubkn = '';
+              if($katedept==3){
+                  $insubkn = '/1';
+              }
+              $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('curdept') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
+              if($que['ok_valid']==1){
+                  $cekpcskgs = $this->inmodel->cekpcskgs($que['id'])->row_array();
+                  $jmlpcs += $cekpcskgs['pcs'];
+                  $jmlkgs += $cekpcskgs['kgs'];
+                  $noreke++;
+              }
+              ?>
+                <tr>
+                  <td><?= tglmysql($que['tgl']) ?></td>
+                  <?php if($que['data_ok']==1){  ?>
+                    <td class="font-bold"><a href="<?= base_url().'in/viewdetailin/'.$que['id'].$insubkn ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail"><?= $que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span>" ?></a></td>
+                  <?php }else{ ?>
+                    <td class="font-bold"><?= $que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span>" ?></td>
+                  <?php } ?>
+                  <td><?= $jmlrek; ?></td>
+                  <td style="line-height: 12px"><?= datauser($que['user_ok'],'name'); ?><br><span style='font-size: 11px;' class='text-secondary'><?= tglmysql2($que['tgl_ok']) ?></span></td>
+                  <td class="font-kecil line-12"><?= $kete; ?></td>
+                  <td>
+                    <?php if($que['ok_valid']==0){ ?>
+                      <a href="#" data-href="<?= base_url().'in/cekkonfirmasi/'.$que['id'].$insubkn ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Konfirmasi Penerimaan Barang,<br> data tidak dapat dirubah kembali" class="btn btn-sm btn-success <?= cekclosebook() ?>" style="padding: 3px 5px !important;" title="Konfirmasi Data"><i class="fa fa-check mr-1"></i> Konfirmasi</a>
+                    <?php }else if($que['ok_valid']==1){ ?>
+                      <a href="<?= base_url().'in/cetakbon/'.$que['id'] ?>" target="_blank" class="btn btn-sm btn-danger" title="Cetak Data"><i class="fa fa-file-pdf-o"></i></a>
+                    <?php } ?>
+                  </td>
+                </tr>
+              <?php
+              $norek++;
+            } ?>
             </tbody>
           </table>
         </div>

@@ -162,6 +162,13 @@ function nomoradj($tgl, $asal)
     $urut++;
     return $asal . "/A/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
+function getnomoraju($kodex){
+    $CI = &get_instance();
+    $kode = $CI->helpermodel->getnomoraju($kodex)->row_array();
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return $kodex.'-'.date('Ymd') . "-" . sprintf("%03s", $urut);
+}
 function tglmysql($tgl)
 {
     if ($tgl == '') {

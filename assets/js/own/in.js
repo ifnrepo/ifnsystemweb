@@ -28,7 +28,7 @@ $("#dept_kirim").change(function () {
 			// alert(data);
 			// window.location.reload();
 			$("#dept_tuju").html(data);
-			$("#dept_tuju").change();
+			// $("#dept_tuju").change();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -36,12 +36,12 @@ $("#dept_kirim").change(function () {
 		},
 	});
 });
-$("#dept_tuju").change(function () {
-	var ia = $(this).val();
-	if (ia != null) {
-		getdatain();
-	}
-});
+// $("#dept_tuju").change(function () {
+// 	var ia = $(this).val();
+// 	if (ia != null) {
+// 		getdatain();
+// 	}
+// });
 $("#bl").change(function () {
 	$.ajax({
 		// dataType: "json",
@@ -106,8 +106,8 @@ $("#xsimpanin").click(function () {
 	}
 });
 $("#butgo").click(function () {
-	// getdatain();
-	window.location.reload();
+	getdatain();
+	// window.location.reload();
 });
 //End JS
 function getdatain() {
@@ -121,11 +121,12 @@ function getdatain() {
 		},
 		success: function (data) {
 			// alert(data.datagroup);
-			$("#body-table").html(data.datagroup).show();
-			$("#jumlahrekod").text(rupiah(data.jmlrek, ".", ",", 0));
-			$("#jumlahpcs").text(rupiah(data.jmlpcs, ".", ",", 0));
-			$("#jumlahkgs").text(rupiah(data.jmlkgs, ".", ",", 2));
-			$("#jumlahrekode").text(rupiah(data.jmlreke, ".", ",", 0));
+			// $("#body-table").html(data.datagroup).show();
+			// $("#jumlahrekod").text(rupiah(data.jmlrek, ".", ",", 0));
+			// $("#jumlahpcs").text(rupiah(data.jmlpcs, ".", ",", 0));
+			// $("#jumlahkgs").text(rupiah(data.jmlkgs, ".", ",", 2));
+			// $("#jumlahrekode").text(rupiah(data.jmlreke, ".", ",", 0));
+			window.location.reload();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);

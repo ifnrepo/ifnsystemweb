@@ -875,4 +875,17 @@ class Helper_model extends CI_Model
             return $this->db->get();
         }
     }
+    public function getnomoraju($kode){
+        $kondisi = [
+            'month(tgl)' => date('m'),
+            'year(tgl)' => date('Y'),
+            'dept_id' => 'FG',
+            'dept_tuju' => $kode,
+            'left(nomor_dok,2)' => 'TR'
+        ];
+        $this->db->select('max(right(trim(nomor_dok),3)) as maxkode');
+        $this->db->from('tb_header');
+        $this->db->where($kondisi);
+        return $this->db->get();
+    }
 }
