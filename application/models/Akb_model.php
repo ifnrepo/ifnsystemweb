@@ -876,7 +876,7 @@ class Akb_model extends CI_Model
             'kode_dok' => 'T',
             'dept_id' => $this->session->userdata('deptdari'),
             'dept_tuju' => $kode,
-            'nomor_dok' => 'TRXXX-XXXXX',
+            'nomor_dok' => 'TR-'.getnomoraju($kode),
             'jns_bc' => '261',
             'tgl' => date('Y-m-d'),
             'data_ok' => 1,

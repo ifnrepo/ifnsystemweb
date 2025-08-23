@@ -25,7 +25,7 @@ class In_model extends CI_Model{
         $this->db->order_by('tgl');
         $this->db->order_by('nomor_dok');
         $hasil = $this->db->get('tb_header');
-        return $hasil->result_array();
+        return $hasil;
     }
     public function getdatabyid($kode){
         $this->db->select('*,tb_header.id as xid,b.nama_subkon as namasubkon,b.alamat_subkon as alamatsubkon');
@@ -83,6 +83,7 @@ class In_model extends CI_Model{
     public function simpanin($id,$mode=0){
         $this->db->trans_start();
         $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
+        $dataheader = $this->db->get_where('tb_header',['id' => $id])->row_array();
         $arraynobontr = ['SP','GM'];
         if($cek==1){
             $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id');
@@ -106,6 +107,7 @@ class In_model extends CI_Model{
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
                     'trim(nobale)' => ($det['dept_id']=='FN' && $det['dept_tuju']=='GF') ? trim($datdet['nobale']) : '',
+                    'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bc']) : '',
                     // 'trim(nobale)' => trim($det['nobale']),
                     // 'harga' => $det['harga'],
                     'stok' => $det['stok'],
@@ -126,7 +128,8 @@ class In_model extends CI_Model{
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
                     'nobale' => $det['dept_tuju']=='GF' ? trim($det['nobale']) : '',
-                    // 'nomor_bc' => $det['nomor_bc'],
+                    'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bc']) : '',
+                    'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bc']) : '',
                     // 'harga' => $det['harga'],
                     // 'exnet' => $det['exnet'],
                     'pcs_masuk' => $det['pcs'],

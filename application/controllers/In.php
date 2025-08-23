@@ -68,43 +68,7 @@ class In extends CI_Controller {
             'katedept' => $katedept
         ];
         $this->session->set_userdata('todept',$_POST['dept_tuju']);
-        $query = $this->inmodel->getdata($kode);
-        $norek=0;$jmlpcs=0;$jmlkgs=0;$noreke=0;
-        foreach ($query as $que) {
-            $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
-            $insubkn = '';
-            if($katedept==3){
-                $insubkn = '/1';
-            }
-            $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('curdept') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
-            $hasil .= "<tr>";
-            $hasil .= "<td>".tglmysql($que['tgl'])."</td>";
-            if($que['ok_valid']==1){
-                $cekpcskgs = $this->inmodel->cekpcskgs($que['id'])->row_array();
-                $jmlpcs += $cekpcskgs['pcs'];
-                $jmlkgs += $cekpcskgs['kgs'];
-                $noreke++;
-            }
-            if($que['data_ok']==1){
-                $hasil .= "<td class='font-bold'><a href='".base_url().'in/viewdetailin/'.$que['id'].$insubkn."' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail'>".$que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span></a></td>";
-            }else{
-                $hasil .= "<td class='font-bold'>".$que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span></td>";
-            }
-            $hasil .= "<td>".$jmlrek."</td>";
-            $hasil .= "<td style='line-height: 12px'>".datauser($que['user_ok'],'name')."<br><span style='font-size: 11px;' class='text-secondary'>".tglmysql2($que['tgl_ok'])."</span></td>";
-            $hasil .= "<td class='font-kecil line-12'>".$kete."</td>";
-            $hasil .= "<td>";
-            if($que['ok_valid']==0){
-                $hasil .= "<a href='#' data-href=".base_url().'in/cekkonfirmasi/'.$que['id'].$insubkn." data-bs-toggle='modal' data-bs-target='#modal-info' data-message='Konfirmasi Penerimaan Barang,<br> data tidak dapat dirubah kembali' class='btn btn-sm btn-success ".cekclosebook()."' style='padding: 3px 5px !important;' title='Konfirmasi Data'><i class='fa fa-check mr-1'></i> Konfirmasi</a>";
-            }else if($que['ok_valid']==1){
-                $hasil .= "<a href=".base_url().'in/cetakbon/'.$que['id']." target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>";
-            }
-            $hasil .= "</td>";
-            $hasil .= "</tr>";
-            $norek++;
-        }
-        $cocok = array('datagroup' => $hasil,'jmlrek'=>$norek,'jmlpcs'=>$jmlpcs,'jmlkgs'=>$jmlkgs,'jmlreke'=>$noreke);
-        echo json_encode($cocok);
+        echo 1;
     }
     public function cekkonfirmasi($id,$mode=0){
         $header['header'] = 'transaksi';
