@@ -637,16 +637,18 @@ function formatsku($po, $item, $dis, $brg)
     }
     return $isi;
 }
-function namaspekbarang($brg){
+function namaspekbarang($brg)
+{
     $x = "";
-    if($brg>0){
+    if ($brg > 0) {
         $CI = &get_instance();
         $hasil = $CI->barangmodel->getdatabyid($brg)->row_array();
         $x = $hasil['nama_barang'];
     }
     return $x;
 }
-function cekperiodedaritgl($tgl){
+function cekperiodedaritgl($tgl)
+{
     $unt = strtotime($tgl);
     return date('m', $unt) . date('Y', $unt);
 }
@@ -743,24 +745,26 @@ function daftardeptsubkon()
     return $getkode;
 }
 
-function nomor_dokumen($dept_id, $tb_header, $db, $tgl_input)
+function nomor_dokumen($dept_id, $dept_tuju, $tb_header, $db, $tgl_input)
 {
     $bulan = date('m', strtotime($tgl_input));
     $tahun = date('y', strtotime($tgl_input));
     $kode_bulan_tahun = $bulan . $tahun;
 
-    $prefix_nomor = 'BN/' . $dept_id . '/' . $kode_bulan_tahun;
+    $prefix_nomor = $dept_id . '-' . $dept_tuju . '/BP/' . $kode_bulan_tahun;
 
 
     $db->from($tb_header);
     $db->where('dept_id', $dept_id);
-    $db->like('nomor_dok', $prefix_nomor);
+    $db->like('nomor_dok', $prefix_nomor, 'after');
     $jumlah = $db->count_all_results();
 
     $next_number = str_pad($jumlah + 1, 3, '0', STR_PAD_LEFT);
 
     return $prefix_nomor . '/' . $next_number;
 }
+
+
 
 function format_tanggal_indonesia($tanggal)
 {
@@ -817,37 +821,43 @@ function format_bulan_tahun($mY)
         '12' => 'Desember'
     ];
 
-    $bulan_angka = substr($mY, 0, 2); // contoh: 08
-    $tahun = substr($mY, 2, 4);       // contoh: 2025
+    $bulan_angka = substr($mY, 0, 2);
+    $tahun = substr($mY, 2, 4);
 
     return $bulan[$bulan_angka] . ' ' . $tahun;
 }
 
-function showbom($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs){
+function showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs)
+{
     $CI = &get_instance();
-    $getkode = $CI->helpermodel->showbom($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs);
+    $getkode = $CI->helpermodel->showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
     return $getkode;
 }
-function getarrayindex(string $value,array $array,string $key){
+function getarrayindex(string $value, array $array, string $key)
+{
     $searched_value = array_search($value, array_column($array, $key));
     return $searched_value;
 }
-function bulatkan($jml,$nilai){
-    $pembulatan = round($jml/$nilai);
-    return $pembulatan*$nilai;
+function bulatkan($jml, $nilai)
+{
+    $pembulatan = round($jml / $nilai);
+    return $pembulatan * $nilai;
 }
-function ceknomorbc($data){
+function ceknomorbc($data)
+{
     $CI = &get_instance();
     $getkode = $CI->helpermodel->ceknomorbc($data);
     return $getkode;
 }
-function getjumlahcifbom($id,$no){
+function getjumlahcifbom($id, $no)
+{
     $CI = &get_instance();
-    $getkode = $CI->helpermodel->getjumlahcifbom($id,$no);
+    $getkode = $CI->helpermodel->getjumlahcifbom($id, $no);
     return $getkode;
 }
-function getdokumenbcbynomordaftar($nodaf,$mode=0){
+function getdokumenbcbynomordaftar($nodaf, $mode = 0)
+{
     $CI = &get_instance();
-    $getkode = $CI->helpermodel->getdokumenbcbynomordaftar($nodaf,$mode);
+    $getkode = $CI->helpermodel->getdokumenbcbynomordaftar($nodaf, $mode);
     return $getkode;
 }
