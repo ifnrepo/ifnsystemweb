@@ -169,6 +169,7 @@ $("#buttoncari").click(function () {
 			nobcnya: nomorbcnya,
 			ifndln: ifndl,
 			kontbc: kontrakbcnya,
+			exdo: $("#exdonya").val(),
 		},
 		success: function (data) {
 			// alert(data);
