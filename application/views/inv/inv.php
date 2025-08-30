@@ -63,9 +63,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-3">
-                  <div class="mb-3 row" id="div-exdo">
+                  <div class="mb-1 row" id="div-exdo">
                     <label class="col-3 col-form-label font-kecil font-bold required">EXDO</label>
-                    <div class="co mb-1">
+                    <div class="col mb-1">
                       <select name="exdonya" id="exdonya" class="form-control form-select form-sm font-kecil">
                         <option value="EXPORT" <?php if($this->session->userdata('exdonya')=='EXPORT'){ echo "selected"; } ?>>EXPORT</option>
                         <option value="DOMESTIC" <?php if($this->session->userdata('exdonya')=='DOMESTIC'){ echo "selected"; } ?>>DOMESTIC</option>
@@ -73,7 +73,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <!-- <input type="email" class="form-control form-sm font-kecil" aria-describedby="emailHelp" placeholder="Enter email"> -->
                       <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
                     </div>
-                    <hr class="m-0">
+                    <hr class="my-0 mx-1">
                   </div>
                   <h4 class="mb-1 font-kecil">Kategori Barang</h4>
                   <span class="font-kecil">

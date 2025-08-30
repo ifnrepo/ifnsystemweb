@@ -88,7 +88,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('nomorbcnya', $_POST['nobcnya']);
         $this->session->set_userdata('kontrakbcnya', $_POST['kontbc']);
         $this->session->set_userdata('ifndln', $_POST['ifndln']);
-        if(isset($_POST['exdonya'])){
+        if(isset($_POST['exdo'])){
             $this->session->set_userdata('exdonya', $_POST['exdo']);
         }
         if (isset($_POST['cari'])) {
