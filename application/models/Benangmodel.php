@@ -8,33 +8,244 @@ class Benangmodel extends CI_Model
         $this->db->where('kode_dok', 'BN');
         return $this->db->get()->result_array();
     }
+    public function cekfield($id, $kolom, $nilai)
+    {
+        $this->db->where('id', $id);
+        $this->db->where($kolom, $nilai);
+        $hasil = $this->db->get('tb_header');
+        return $hasil;
+    }
+    public function validasipb($data)
+    {
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        return $query;
+    }
+
+    public function getdata_filter($data)
+    {
+        $this->db->select('tb_header.*,user.name,(select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
+        $this->db->join('user', 'user.id=tb_header.user_ok', 'left');
+        $this->db->where('kode_dok', 'BP');
+        $this->db->where('dept_id', $data['dept_id']);
+        $this->db->where('dept_tuju', $data['dept_tuju']);
+        if ($data['level'] == 2) {
+            $this->db->where('data_ok', 1);
+            $this->db->where('ok_valid', 0);
+        }
+        $this->db->where('month(tgl)', $this->session->userdata('bl'));
+        $this->db->where('year(tgl)', $this->session->userdata('th'));
+        return $this->db->get('tb_header')->result_array();
+    }
+    public function hapusdetailpb($id)
+    {
+        $this->db->trans_start();
+        $cek = $this->db->get_where('tb_detail', ['id' => $id])->row_array();
+        $this->db->where('id_detail', $id);
+        $hasil = $this->db->delete('tb_detmaterial');
+        $this->db->where('id', $id);
+        $this->db->delete('tb_detailgen');
+        $this->db->where('id', $id);
+        $this->db->delete('tb_detail');
+        $this->helpermodel->isilog($this->db->last_query());
+        $hasil = $this->db->trans_complete();
+        if ($hasil) {
+            $this->db->where('id', $cek['id_header']);
+            $que = $this->db->get('tb_header')->row_array();
+        }
+        return $que;
+    }
+
+    public function tambah_header($data)
+    {
+        $this->db->insert('tb_header', $data);
+        $id = $this->db->insert_id();
+        return $this->db->get_where('tb_header', ['id' => $id])->row_array();
+    }
+
+
+    public function getdataid_header($id)
+    {
+        $this->db->select('tb_header.*,dept.departemen');
+        $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
+        $this->db->where('tb_header.id', $id);
+        return $this->db->get('tb_header')->row_array();
+    }
 
     public function getdatabyid($id)
     {
-        return $this->db->get_where('tb_agama', ['id' => $id])->row_array();
-    }
-    public function updatedata($data)
-    {
-        $this->db->where('id', $data['id']);
-        return $this->db->update('tb_agama', $data);
-    }
-    public function hapus($id)
-    {
-        $this->db->where('id', $id);
-        return $this->db->delete('tb_header');
+        $this->db->select('tb_header.*,dept.departemen');
+        $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
+        $this->db->where('tb_header.id', $id);
+        return $this->db->get('tb_header')->row_array();
     }
 
-    public function simpan()
+    public function getdatadetailpb($id)
     {
-        $data = $_POST;
-        $dept_id = 'FN';
-        $data['id_perusahaan'] = 'IFN';
-        $data['kode_dok'] = 'BN';
-        $data['dept_id'] = 'FN';
-        $tgl_input = date('Y-m-d');
-        $data['nomor_dok'] = nomor_dokumen($dept_id, 'tb_header', $this->db, $tgl_input);
-        return $this->db->insert('tb_header', $data);
+        $this->db->select("tb_detail.*,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id,CONCAT(TRIM(po),'#',TRIM(item),IF(dis > 0,' dis ',''),if(dis > 0,dis,'')) AS sku");
+        $this->db->from('tb_detail');
+        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->where('id_header', $id);
+        return $this->db->get()->result_array();
     }
+
+    public function getSaldo_Terkini($id)
+    {
+        $id_header = is_array($id) ? $id['id'] : $id;
+
+        $tgl = $this->db->get_where('tb_header', ['id' => $id_header])->row_array();
+        $tanggal = $tgl['tgl'];
+        $bulan = date('m', strtotime($tanggal));
+        $tahun = date('Y', strtotime($tanggal));
+        $periode = $bulan . $tahun;
+
+        $this->db->select('
+        tb_detail.id_header, 
+        stokdept.kgs_akhir,
+        stokdept.id_barang, 
+        stokdept.periode, 
+        barang.nama_barang
+        ');
+        $this->db->from('tb_detail');
+        $this->db->join('stokdept', 'stokdept.id_barang = tb_detail.id_barang', 'left');
+        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+        $this->db->join('barang', 'barang.id = stokdept.id_barang', 'left');
+        $this->db->where('stokdept.periode', $periode);
+        $this->db->where('tb_header.id', $id);
+        $cek_saldo_sekarang = $this->db->get()->result_array();
+
+        if (empty($cek_saldo_sekarang)) {
+            $periode_sebelumnya = date('mY', strtotime("-1 month", strtotime($tanggal)));
+            $this->db->select('
+            tb_detail.id_header, 
+            stokdept.kgs_akhir,
+            stokdept.id_barang, 
+            stokdept.periode, 
+            barang.nama_barang
+            ');
+            $this->db->join('stokdept', 'stokdept.id_barang = tb_detail.id_barang', 'left');
+            $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+            $this->db->join('barang', 'barang.id = stokdept.id_barang', 'left');
+            $this->db->where('stokdept.periode', $periode_sebelumnya);
+            $cek_saldo_sekarang = $this->db->get()->row_array();
+        }
+        return $cek_saldo_sekarang;
+    }
+
+
+
+    public function simpanpb($data)
+    {
+        $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
+        $data['jumlah_barang'] = $jmlrec['jml'];
+        $this->db->where('id', $data['id']);
+        $query = $this->db->update('tb_header', $data);
+        $this->helpermodel->isilog($this->db->last_query());
+
+
+        $this->db->delete('tb_detailgen', ['id_header' => $data['id']]);
+
+        //Isi data ke detailge
+        $datadet = $this->db->get_where('tb_detail', ['id_header' => $data['id']]);
+        foreach ($datadet->result_array() as $keydet) {
+            $keydet['id_detail'] = $keydet['id'];
+            unset($keydet['id']);
+            $this->db->insert('tb_detailgen', $keydet);
+        }
+
+        return $query;
+    }
+
+    public function hapusdata($id)
+    {
+        $this->db->trans_start();
+        $this->db->where('id_header', $id);
+        $this->db->delete('catatan_po');
+        $this->db->where('id_header', $id);
+        $this->db->delete('tb_detmaterial');
+        $this->db->where('id_header', $id);
+        $this->db->delete('tb_detailgen');
+        $this->db->where('id_header', $id);
+        $this->db->delete('tb_detail');
+        $this->db->where('id', $id);
+        $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
+        $hasil = $this->db->trans_complete();
+        return $hasil;
+    }
+
+
+
+    public function tambahdataout($kode)
+    {
+        $this->db->where('id', $kode['id']);
+        return $this->db->update('tb_header', ['ok_valid' => 1]);
+    }
+
+    public function getdataid_in($id)
+    {
+        return $this->db->get_where('tb_detail', ['id' => $id])->row_array();
+    }
+
+    public function updatedata_in($data)
+    {
+        $this->db->where('id', $data['id']);
+        return $this->db->update('tb_detail', $data);
+    }
+
+    public function Kgs_keluar($tanggal, $kgs, $id_barang, $dept_id)
+    {
+        $bulan = date('m', strtotime($tanggal));
+        $tahun = date('Y', strtotime($tanggal));
+        $periode = $bulan . $tahun;
+
+        $periode_sebelumnya = date('mY', strtotime("-1 month", strtotime($tanggal)));
+
+
+        $this->db->select('kgs_akhir');
+        $this->db->from('stokdept');
+        $this->db->where('periode', $periode_sebelumnya);
+        $this->db->where('id_barang', $id_barang);
+        $this->db->where('dept_id', $dept_id);
+        $cek_saldo = $this->db->get()->row_array();
+
+        $saldo_awal_kgs = $cek_saldo ? $cek_saldo['kgs_akhir'] : 0;
+
+
+        $this->db->select('id, kgs_masuk, kgs_keluar');
+        $this->db->from('stokdept');
+        $this->db->where('periode', $periode);
+        $this->db->where('id_barang', $id_barang);
+        $saldo = $this->db->get()->row_array();
+
+        if ($saldo) {
+
+            $new_kgs_keluar = $saldo['kgs_keluar'] + $kgs;
+            $new_kgs_akhir = $saldo_awal_kgs + $saldo['kgs_masuk'] - $new_kgs_keluar;
+
+            $this->db->set('kgs_keluar', $new_kgs_keluar);
+            $this->db->set('kgs_awal', $saldo_awal_kgs);
+            $this->db->set('kgs_akhir', $new_kgs_akhir);
+            $this->db->where('id', $saldo['id']);
+            return $this->db->update('stokdept');
+        } else {
+            $new_kgs_akhir = $saldo_awal_kgs - $kgs;
+            $data = [
+                'kgs_awal' => $saldo_awal_kgs,
+                'kgs_masuk' => 0,
+                'kgs_keluar' => $kgs,
+                'kgs_akhir' => $new_kgs_akhir,
+                'periode' => $periode,
+                'id_barang' => $id_barang,
+                'dept_id' => $dept_id
+            ];
+            return  $this->db->insert('stokdept', $data);
+        }
+    }
+
+
+
 
     // public function getUkuranLike($inputan)
     // {
@@ -65,21 +276,7 @@ class Benangmodel extends CI_Model
         return $query->result_array();
     }
 
-    // public function simpan_spek()
-    // {
-    //     $data = $_POST;
-    //     unset($data['filter_benang']);
-    //     unset($data['filter_warna']);
 
-    //     $data['warna_benang'] = strtoupper($data['warna_benang']);
-    //     $data['id_barang'] = $data['barang_id'];
-
-
-    //     unset($data['barang_id']);
-
-
-    //     return $this->db->insert('tb_detail', $data);
-    // }
 
     public function simpan_spek()
     {
@@ -96,6 +293,28 @@ class Benangmodel extends CI_Model
 
         return $this->db->insert('tb_detail', $data);
     }
+
+    public function simpanDetail($id)
+    {
+        $keterangan =  $this->input->post('keterangan');
+        $speck_json = $this->input->post('speck_benang');
+        $specks = json_decode($speck_json, true);
+
+        if (!empty($specks)) {
+            $data_insert = [];
+            foreach ($specks as $s) {
+                $data_insert[] = [
+                    'id_header' => $id,
+                    'id_satuan'   => 22,
+                    'id_barang' => isset($s['barang_id']) ? $s['barang_id'] : null,
+                    'keterangan' => $keterangan,
+                ];
+            }
+            $this->db->insert_batch('tb_detail', $data_insert);
+        }
+    }
+
+
 
     public function getdataByid_all($id)
     {
@@ -259,7 +478,7 @@ class Benangmodel extends CI_Model
     public function hapus_spek($id)
     {
         $this->db->where('id', $id);
-        return $this->db->delete('tb_detail');
+        return $this->db->delete('benang');
     }
     public function hapus_histori_salmas($id)
     {
@@ -609,14 +828,14 @@ class Benangmodel extends CI_Model
     //     return $this->db->get()->result_array();
     // }
 
-    // public function getTahun()
-    // {
-    //     $this->db->select('RIGHT(periode, 4) AS tahun');
-    //     $this->db->from('stokdept');
-    //     $this->db->group_by('tahun');
-    //     $this->db->order_by('tahun', 'DESC');
-    //     return $this->db->get()->result_array();
-    // }
+    public function getRak()
+    {
+        $this->db->select('lokasi AS nama_rak');
+        $this->db->from('benang');
+        $this->db->group_by('nama_rak');
+        $this->db->order_by('nama_rak', 'ASC');
+        return $this->db->get()->result_array();
+    }
 
     public function getBulan()
     {
@@ -666,4 +885,48 @@ class Benangmodel extends CI_Model
 
         return $this->db->get()->result_array();
     }
+
+    public function getBenangLike($inputan)
+    {
+        $this->db->group_start();
+        $this->db->like('ukuran_benang', $inputan);
+        $this->db->or_like('warna_benang', $inputan);
+        $this->db->group_end();
+
+        $this->db->where('barang_id !=', 0);
+
+        $query = $this->db->get('benang');
+        return $query->result_array();
+    }
+
+
+
+
+
+
+    // public function getBenangLike($inputan)
+    // {
+    //     $this->db->group_start();
+    //     $this->db->like('ukuran_benang', $inputan);
+    //     $this->db->or_like('warna_benang', $inputan);
+    //     $this->db->group_end();
+
+    //     $this->db->where('barang_id !=', 0);
+
+    //     $query = $this->db->get('benang')->result();
+
+    //     $result = [];
+    //     foreach ($query as $row) {
+    //         $ukuran = trim($row->ukuran_benang);
+    //         $warna  = trim($row->warna_benang);
+    //         $barang_id = $row->barang_id;
+
+    //         $result[] = [
+    //             "barang_id" => $barang_id,
+    //             "value" => $ukuran . " (" . $warna . ")"
+    //         ];
+    //     }
+
+    //     return $result;
+    // }
 }

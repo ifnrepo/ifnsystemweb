@@ -287,7 +287,7 @@ class Pb extends CI_Controller
             redirect($url);
         }
     }
-    public function viewdetailpb($id,$mode=0)
+    public function viewdetailpb($id, $mode = 0)
     {
         $data['header'] = $this->pb_model->getdatabyid($id);
         $data['detail'] = $this->pb_model->getdatadetailpb($id);

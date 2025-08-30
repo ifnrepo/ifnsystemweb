@@ -16,6 +16,8 @@
   <link href=<?= base_url() . "assets/css/tabler-vendors.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/demo.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/jquery-ui.css" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/tagify/tagify.css" ?> rel="stylesheet" />
+
 
 
   <!-- datatables -->
@@ -700,7 +702,7 @@
                       Kontrak
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 10); ?>" href="<?= base_url('benang'); ?>">
-                      BENANG (Inventory)
+                      BENANG
                     </a>
                   </div>
                 </div>
