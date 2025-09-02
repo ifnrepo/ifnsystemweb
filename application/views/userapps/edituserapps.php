@@ -256,6 +256,38 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Master Data Project Environmental">
+                      <span class="col font-bold">Master Environmental</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <?php $pcaktif = $user['cekenv'] == 1 ? 'checked' : ''; ?>
+                          <input class="form-check-input" name="cekenv" id="cekenv" type="checkbox" <?= $pcaktif; ?>>
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Verifikasi Environmental">
+                      <span class="col font-bold">Hak Verifikasi Environmental</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <?php $pcaktif = $user['hakveri_env'] == 1 ? 'checked' : ''; ?>
+                          <input class="form-check-input" name="hakveri_env" id="hakveri_env" type="checkbox" <?= $pcaktif; ?>>
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="hr mt-2 mb-1"></div>
               <div class="card-body pt-2">
                 <div class="row">
@@ -496,7 +528,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               </label>
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="transaksi10" name="transaksi10" type="checkbox" <?= cekceklis($user['transaksi'], 10); ?>>
-                                <span class="form-check-label">BENANG (INVENTORY)</span>
+                                <span class="form-check-label">BENANG </span>
                               </label>
                               <!-- xx -->
                             </div>

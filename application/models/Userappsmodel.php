@@ -44,6 +44,8 @@ class Userappsmodel extends CI_Model
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['cekpakaibc'] = isset($data['cekpakaibc']) ? 1 : 0;
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
+        $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
+        $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -69,7 +71,7 @@ class Userappsmodel extends CI_Model
             if (isset($data['hakprogram' . $x])) {
                 $hakprogram = substr_replace($hakprogram, '10', ($x * 2) - 2, 2);
                 unset($data['hakprogram' . $x]);
-                if($x==4){
+                if ($x == 4) {
                     $data['hakeventrahasia'] = isset($data['hakeventrahasia']) ? 1 : 0;
                 }
             }
@@ -182,6 +184,8 @@ class Userappsmodel extends CI_Model
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['cekpakaibc'] = isset($data['cekpakaibc']) ? 1 : 0;
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
+        $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
+        $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -208,7 +212,7 @@ class Userappsmodel extends CI_Model
             if (isset($data['hakprogram' . $x])) {
                 $hakprogram = substr_replace($hakprogram, '10', ($x * 2) - 2, 2);
                 unset($data['hakprogram' . $x]);
-                if($x==4){
+                if ($x == 4) {
                     $data['hakeventrahasia'] = isset($data['hakeventrahasia']) ? 1 : 0;
                 }
             }
@@ -361,7 +365,8 @@ class Userappsmodel extends CI_Model
         $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
         return 1;
     }
-    public function cekusername($data){
-        return $this->db->get_where('user',['username'=>$data])->num_rows();
+    public function cekusername($data)
+    {
+        return $this->db->get_where('user', ['username' => $data])->num_rows();
     }
 }

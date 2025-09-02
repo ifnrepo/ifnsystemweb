@@ -100,36 +100,42 @@ class Benangmodel extends CI_Model
         $tahun = date('Y', strtotime($tanggal));
         $periode = $bulan . $tahun;
 
+
         $this->db->select('
-        tb_detail.id_header, 
-        stokdept.kgs_akhir,
-        stokdept.id_barang, 
-        stokdept.periode, 
-        barang.nama_barang
+            tb_detail.id_header, 
+            stokdept.kgs_akhir,
+            stokdept.id_barang, 
+            stokdept.periode, 
+            barang.nama_barang
         ');
         $this->db->from('tb_detail');
         $this->db->join('stokdept', 'stokdept.id_barang = tb_detail.id_barang', 'left');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'barang.id = stokdept.id_barang', 'left');
         $this->db->where('stokdept.periode', $periode);
-        $this->db->where('tb_header.id', $id);
+        $this->db->where('tb_header.id', $id_header);
         $cek_saldo_sekarang = $this->db->get()->result_array();
+
 
         if (empty($cek_saldo_sekarang)) {
             $periode_sebelumnya = date('mY', strtotime("-1 month", strtotime($tanggal)));
+
             $this->db->select('
-            tb_detail.id_header, 
-            stokdept.kgs_akhir,
-            stokdept.id_barang, 
-            stokdept.periode, 
-            barang.nama_barang
+                tb_detail.id_header, 
+                stokdept.kgs_akhir,
+                stokdept.id_barang, 
+                stokdept.periode, 
+                barang.nama_barang
             ');
+            $this->db->from('tb_detail');
             $this->db->join('stokdept', 'stokdept.id_barang = tb_detail.id_barang', 'left');
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
             $this->db->join('barang', 'barang.id = stokdept.id_barang', 'left');
             $this->db->where('stokdept.periode', $periode_sebelumnya);
+            $this->db->where('tb_header.id', $id_header);
             $cek_saldo_sekarang = $this->db->get()->row_array();
         }
+
         return $cek_saldo_sekarang;
     }
 
@@ -334,7 +340,7 @@ class Benangmodel extends CI_Model
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
-        $this->db->group_by('tb_detail.warna_benang', 'ASC');
+        $this->db->group_by('tb_detail.warna_benang');
         $this->db->where('tb_detail.id_header', $id);
         return $this->db->get()->result_array();
     }
