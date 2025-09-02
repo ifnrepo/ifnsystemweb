@@ -216,11 +216,41 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row" title="Kunci dan Edit Data Project RND">
+                    <label class="row" title="Kunci dan Edit Data Project Downtime">
                       <span class="col font-bold">Close/Open Downtime Mesin</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="cekdowntime" id="cekdowntime" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Master Data Project Environmental">
+                      <span class="col font-bold">Master Environmental</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekenv" id="cekenv" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Verifikasi Environmental">
+                      <span class="col font-bold">Hak Verifikasi Environmental</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="hakveri_env" id="hakveri_env" type="checkbox">
                         </label>
                       </span>
                     </label>
