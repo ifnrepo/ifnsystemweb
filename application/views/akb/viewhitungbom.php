@@ -76,14 +76,6 @@
             // $('#textareaID').focus();
             $("#keyw").focus();
         })
-        // alert($("#txtsum").text());
-        // alert($("#txtsumbom").text())
-        // $("#keyw").val($("#nomor_dok").val());
-        // if ($("#keyw").val() != '') {
-        //     $("#getbarang").click();
-        // }
-        // $("#getbarang").click();
-        // $("#deptselect").val($("#xdeptselect").val());
     });
     $("#simpannya").click(function(){
         var harus = $("#txtsum").text();
