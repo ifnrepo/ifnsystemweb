@@ -22,9 +22,10 @@ class Akb extends CI_Controller
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('mtuangmodel');
-        $this->load->model('helper_model','helpermodel');
         $this->load->model('Ib_model','ibmodel');
+        $this->load->model('Inv_model','invmodel');
         $this->load->model('kontrak_model','kontrakmodel');
+        $this->load->model('helper_model','helpermodel');     
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -1688,7 +1689,7 @@ class Akb extends CI_Controller
         $arrayheader['pungutan'] = $arraypungutan;
         $arrayheader['jaminan'] = $arrayjaminan;
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
-        $this->kirim261($arrayheader,$id);
+        $this->kirim261dummy($arrayheader,$id);
     }
     public function kirim30($data,$id){
         $token = $this->akbmodel->gettoken();
@@ -1725,6 +1726,25 @@ class Akb extends CI_Controller
             $url = base_url().'akb/isidokbc/'.$id;
             redirect($url);
         }
+    }
+    public function kirim261dummy($data,$id){
+        $this->db->trans_start(); 
+
+        $this->db->select("tb_detail.*");
+        $this->db->from('tb_detail');
+        $this->db->where('id_ak',$id);
+        $this->db->group_by('id_header');
+        $hasil = $this->db->get();
+
+        foreach ($hasil->row_array() as $val) {
+            $this->db->where('id',$val['id_header']);
+            $this->db->update('ok_tuju',1);
+        }
+
+        $this->db->where('id',$id);
+        $this->db->update('tb_header',['send_ceisa' => 1]);
+
+        $this->db->trans_complete();
     }
     public function kirim261($data,$id){
         $token = $this->akbmodel->gettoken();
@@ -1956,6 +1976,11 @@ class Akb extends CI_Controller
     }
     public function hitungbom($id,$mode=0){
         $hasil['hasil'] = $this->akbmodel->hitungbom($id,$mode);
+        $hasil['idheader'] = $id;
+        $this->load->view('akb/viewhitungbom',$hasil);
+    }
+    public function hitungbomjf($id,$mode=0){
+        $hasil['hasil'] = $this->akbmodel->hitungbomjf($id,$mode);
         $hasil['idheader'] = $id;
         $this->load->view('akb/viewhitungbom',$hasil);
     }

@@ -17,7 +17,7 @@
             <div class="row mt-1">
                 <label class="col-3 col-form-label">Qty</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" aria-label="Text input" placeholder="Nama Barang" value="<?= $data['pcs']; ?>" readonly>
+                    <input type="text" class="form-control font-kecil" id="qty" name="qty" aria-label="Text input" placeholder="Nama Barang" value="<?= $data['pcs']; ?>" >
                 </div>
             </div>
             <div class="row mt-1">
@@ -63,7 +63,8 @@
 		url: base_url + "po/updatehargadetail",
 		data: {
 			id: $("#iddetail").val(),
-            harga: toAngka($("#harga").val())
+            harga: toAngka($("#harga").val()),
+            qty: toAngka($("#qty").val()),
 		},
 		success: function (data) {
 			window.location.reload();
