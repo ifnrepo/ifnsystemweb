@@ -1,13 +1,6 @@
 <?php
 class Benangmodel extends CI_Model
 {
-    public function getdata()
-    {
-        $this->db->select('id, kode_dok, nomor_dok');
-        $this->db->from('tb_header');
-        $this->db->where('kode_dok', 'BN');
-        return $this->db->get()->result_array();
-    }
     public function cekfield($id, $kolom, $nilai)
     {
         $this->db->where('id', $id);
