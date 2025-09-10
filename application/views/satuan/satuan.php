@@ -26,7 +26,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div id="table-default" class="table-responsive">
-          <table class="table datatable">
+          <table class="table datatableasli2">
             <thead>
               <tr>
                 <th>No</th>

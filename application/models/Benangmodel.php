@@ -1,7 +1,6 @@
 <?php
 class Benangmodel extends CI_Model
 {
-
     public function cekfield($id, $kolom, $nilai)
     {
         $this->db->where('id', $id);

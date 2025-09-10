@@ -86,6 +86,7 @@
         // $("#nama_barang").val(x);
         var spn = w==1 ? " - DLN" : "";
         $("#spekbarangnya").text(x+spn);
+        $("#nama_barang").val(x);
         $("#id_barang").val(y);
         $("#id_satuan").val(z);
         $("#dln").val(w);

@@ -2025,5 +2025,83 @@ class Akb extends CI_Controller
             redirect($url);
         }
     }
+    public function toexcel($id,$mode=0)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
+        $sheet->setCellValue('A1', "DATA TIDAK ADA DI BOM MATERIAL "); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B2', "KODE BARANG / SKU"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C2', "INSNO");
+        $sheet->setCellValue('D2', "SPESIFIKASI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('E2', "NOBONTR");
+        $sheet->setCellValue('F2', "KETERANGAN");
+        // $sheet->setCellValue('G2', "IN QTY");
+        // $sheet->setCellValue('H2', "IN KGS");
+        // $sheet->setCellValue('I2', "OUT QTY");
+        // $sheet->setCellValue('J2', "OUT KGS");
+        // $sheet->setCellValue('K2', "ADJ QTY");
+        // $sheet->setCellValue('L2', "ADJ PCS");
+        // $sheet->setCellValue('M2', "SALDO AKHIR QTY");
+        // $sheet->setCellValue('N2', "SALDO AKHIR KGS");
+        // $sheet->setCellValue('O2', "SO QTY");
+        // $sheet->setCellValue('P2', "SO KGS");
+        // $sheet->setCellValue('Q2', "SELISIH QTY");
+        // $sheet->setCellValue('R2', "SELISIH KGS");
+        // $sheet->setCellValue('S2', "KETERANGAN");
+        // Panggil model Get Data   
+        $inv = $this->akbmodel->hitungbomjf($id,$mode);
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 3;
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($inv['ng'] as $data) {
+            $sku = viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $sku);
+            $sheet->setCellValue('C' . $numrow, $data['insno']);
+            $sheet->setCellValue('D' . $numrow, $spekbarang);
+            $sheet->setCellValue('E' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('F' . $numrow, '');
+            // $sheet->setCellValue('G' . $numrow, $data['pcsin']);
+            // $sheet->setCellValue('H' . $numrow, $data['kgsin']);
+            // $sheet->setCellValue('I' . $numrow, $data['pcsout']);
+            // $sheet->setCellValue('J' . $numrow, $data['kgsout']);
+            // $sheet->setCellValue('K' . $numrow, '-');
+            // $sheet->setCellValue('L' . $numrow, '-');
+            // $sheet->setCellValue('M' . $numrow, $data['pcs']+$data['pcsin']-$data['pcsout']);
+            // $sheet->setCellValue('N' . $numrow, $data['kgs']+$data['kgsin']-$data['kgsout']);
+            // $sheet->setCellValue('O' . $numrow, '-');
+            // $sheet->setCellValue('P' . $numrow, '-');
+            // $sheet->setCellValue('Q' . $numrow, '-');
+            // $sheet->setCellValue('R' . $numrow, '-');
+            // $sheet->setCellValue('S' . $numrow, '-');
+            $no++;
+            // Tambah 1 setiap kali looping      
+            $numrow++; // Tambah 1 setiap kali looping    
+        }
+
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle(" DATA");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data INV.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel BOM INVENTORY' . $this->session->userdata('currdept'));
+    }
 }

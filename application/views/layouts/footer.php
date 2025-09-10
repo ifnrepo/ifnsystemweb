@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1756517974'; ?>
+<?php $updatejs = '1757496549'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -139,6 +139,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'benang') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/benang.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'billmaterial') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/billmaterial.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
 	// print_r(json_encode($dataproduksi['data_isi'])); 

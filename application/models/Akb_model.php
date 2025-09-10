@@ -859,6 +859,7 @@ class Akb_model extends CI_Model
                     'seri_barang' => $no-1,   
                     'id_barang' => $hsl['id_barang'],   
                     'insno' => $hsl['insno'],   
+                    'nobontr' => $hsl['nobontr'],   
                 ];
                 array_push($arrnotbom,$data);
             }

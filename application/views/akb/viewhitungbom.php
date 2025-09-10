@@ -3,23 +3,27 @@
         <div class="col-12">
             <div class="alert alert-danger" role="alert">
                 <div class="d-flex">
-                <div>
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>
-                </div>
-                <div>
-                    <h4 class="alert-title">PERHATIAN : Berikut PO/Barang yang tidak ada BOM (<?= count($hasil['ng']) ?> Seri Barang)</h4>
-                    <div class="text-secondary">
-                        <ul style="list-style-type:none;">
-                        <?php 
-                            if(count($hasil['ng']) > 0): foreach($hasil['ng'] as $notbreak){ 
-                            $sku = viewsku($notbreak['po'],$notbreak['item'],$notbreak['dis'],$notbreak['id_barang']);
-                            $nambar = trim($notbreak['po'])=='' ? namaspekbarang($notbreak['id_barang']) : spekpo($notbreak['po'],$notbreak['item'],$notbreak['dis']);
-                        ?>
-                        <li>Seri Barang Ke <b class="text-danger"><?= $notbreak['seri_barang'] ?></b><?=' . '.$sku ?><br><?= '-'.$nambar ?></li>
-                        <?php } endif; ?>
-                        </ul>
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>
+                    </div>
+                    <div>
+                        <h4 class="alert-title">PERHATIAN : Berikut PO/Barang yang tidak ada BOM (<?= count($hasil['ng']) ?> Seri Barang)</h4>
+                        <div class="text-secondary">
+                            <ul style="list-style-type:none;">
+                            <?php 
+                                if(count($hasil['ng']) > 0): foreach($hasil['ng'] as $notbreak){ 
+                                $sku = viewsku($notbreak['po'],$notbreak['item'],$notbreak['dis'],$notbreak['id_barang']);
+                                $nambar = trim($notbreak['po'])=='' ? namaspekbarang($notbreak['id_barang']) : spekpo($notbreak['po'],$notbreak['item'],$notbreak['dis']);
+                            ?>
+                            <li>Seri Barang Ke <b class="text-danger"><?= $notbreak['seri_barang'] ?></b><?=' . '.$sku ?><?= ' '.$nambar ?></li>
+                            <?php } endif; ?>
+                            </ul>
+                        </div>
                     </div>
                 </div>
+                <hr class="small my-0">
+                <div class="text-right mt-1">
+                    <a href="<?= base_url().'akb/toexcel/'.$idheader.'/1' ?>" id="kirimkeexcel" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Copy ke Excel</a>
                 </div>
             </div>
             <div id="table-default" class="table-responsive mb-1">
@@ -62,7 +66,7 @@
                 <div class="text-center">
                     <a href="#" data-href="<?= base_url().'akb/simpanbomjf/'.$idheader.'/1'; ?>" id="simpankedb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini " data-title="Bill Of Material" class="btn btn-sm btn-flat btn-primary hilang">Simpan</a>
                     <a href="#" id="simpannya" class="btn btn-sm btn-flat btn-primary">Simpan</a>
-                    <a href="#" class="btn btn-sm btn-flat btn-danger" data-bs-dismiss="modal">Batal</a>
+                    <a href="#" class="btn btn-sm btn-flat btn-danger" id="tutupmodal" data-bs-dismiss="modal">Batal</a>
                 </div>
             </div>
         </div>
@@ -73,10 +77,12 @@
 <script>
     $(document).ready(function() {
         $('#modal-scroll').on('shown.bs.modal', function() {
-            // $('#textareaID').focus();
             $("#keyw").focus();
         })
     });
+    $("#kirimkeexcel").click(function(){
+        $('#modal-scroll').modal('hide')
+    })
     $("#simpannya").click(function(){
         var harus = $("#txtsum").text();
         var aktual = $("#txtsumbom").text();

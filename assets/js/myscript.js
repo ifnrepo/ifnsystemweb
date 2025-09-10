@@ -164,6 +164,28 @@ $(document).ready(function () {
 		responsive: true,
 		pageLength: 100,
 	});
+	$(".datatableaslitanpasearch").DataTable({
+		language: {
+			paginate: {
+				first: "<<",
+				last: ">>",
+				next: ">",
+				previous: "<",
+			},
+			search: "Cari:",
+			zeroRecords: "Tidak ditemukan data",
+			info: "Baris _START_ sampai _END_ dari _TOTAL_ entri (tidak Semua data)",
+			infoEmpty: "Data kosong",
+			lengthMenu: "Tampilkan _MENU_",
+		},
+		paging: true,
+		searching: false,
+		info: true,
+		ordering: false,
+		scrollY: true,
+		responsive: true,
+		pageLength: 50,
+	});
 	$(".datatable").DataTable({
 		responsive: true,
 		pageLength: 50,
@@ -505,7 +527,7 @@ $(".inputangka").on("change click keyup input paste", function (event) {
 		return value
 			.replace(/(?!\.)\D/g, "")
 			.replace(/(?<=\..*)\./g, "")
-			.replace(/(?<=\.\d\d\d\d).*/g, "")
+			.replace(/(?<=\.\d\d\d\d\d\d\d).*/g, "")
 			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	});
 });
