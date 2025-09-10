@@ -649,6 +649,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 23); ?>" href="<?= base_url('rekanan'); ?>">
                       Data Rekanan
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 24); ?>" href="<?= base_url('billmaterial'); ?>">
+                      Bill Of Material
+                    </a>
                   </div>
                 </div>
               </div>
@@ -702,7 +705,7 @@
                       Kontrak
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 10); ?>" href="<?= base_url('benang'); ?>">
-                      BENANG
+                      Benang
                     </a>
                   </div>
                 </div>

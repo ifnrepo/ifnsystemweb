@@ -3,7 +3,7 @@ class Benangmodel extends CI_Model
 {
     public function getdata()
     {
-        $this->db->select('id, lokasi_rak, kode_dok, nomor_dok');
+        $this->db->select('id, kode_dok, nomor_dok');
         $this->db->from('tb_header');
         $this->db->where('kode_dok', 'BN');
         return $this->db->get()->result_array();

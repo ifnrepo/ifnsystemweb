@@ -20,7 +20,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="card">
       <div class="card-body">
         <div id="table-default" class="table-responsive">
-          <table class="table datatable">
+          <table class="table datatableasli2">
             <thead>
               <tr>
                 <th>Nama</th>
@@ -36,7 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php foreach ($data as $key) : ?>
                 <tr>
                   <td><?= $key['name']; ?></td>
-                  <td><?= $key['username']; ?></td>
+                  <td><?= trim($key['username']); ?></td>
                   <td><?= visibpass(decrypto($key['password'])); ?></td>
                   <td><?= $key['level']; ?></td>
                   <td><?= $key['inputon']; ?></td>
