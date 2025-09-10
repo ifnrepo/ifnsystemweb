@@ -830,6 +830,47 @@ class Helper_model extends CI_Model
         }
         return $xdata;
     }
+    public function showbomjf($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs){
+        $data = [];
+        $datakondisi = [
+            'po' => $po,
+            'item' => $item,
+            'dis' => $dis,
+            'id_barang' => $idbarang,
+            'insno' => $insno,
+            'nobontr' => $nobontr
+        ];
+        $this->db->where($datakondisi);
+        $hasil = $this->db->get('ref_bom');
+        if($hasil->num_rows() > 0){
+            $cekhasil = $hasil->row_array();
+            $this->db->select("id_barang,nobontr,persen");
+            $this->db->from('ref_bom_detail');
+            $this->db->where('id_bom',$cekhasil['id']);
+            $this->db->where('persen >',0);
+            $databom = $this->db->get();
+            foreach($databom->result_array() as $detbom){
+                $dataxspin['po'] = $po;
+                $dataxspin['item'] = $item;
+                $dataxspin['dis'] = $dis;
+                $dataxspin['id_barang'] =  $detbom['id_barang'];
+                $dataxspin['insno'] = $insno;
+                $dataxspin['nobontr'] = $detbom['nobontr'];
+                $dataxspin['persen'] = $detbom['persen'];
+                $dataxspin['kgs_asli'] = $kgs*($detbom['persen']/100);
+                $dataxspin['xinsno'] = $insno;
+                $dataxspin['xinsnox'] = $insno;
+                $dataxspin['cuy'] = formatsku($po,$item,$dis,$idbarang);
+                $dataxspin['noe'] = $noe;
+                $dataxspin['kgs'] = $kgs;
+                $dataxspin['kunci'] = $dataxspin['id_barang'].trim($dataxspin['nobontr']);
+                $dataxspin['pcs_asli'] = 0;
+
+                array_push($data,$dataxspin);
+            }
+        }
+        return $data;
+    }
     public function ceknomorbc($data){
         $datahasil= '';
         $hasil = $this->db->get_where('tb_header',['nomor_dok'=>$data]);
@@ -881,7 +922,7 @@ class Helper_model extends CI_Model
             'year(tgl)' => date('Y'),
             'dept_id' => 'FG',
             'dept_tuju' => $kode,
-            'left(nomor_dok,2)' => 'TR'
+            'left(nomor_dok,3)' => 'IFN'
         ];
         $this->db->select('max(right(trim(nomor_dok),3)) as maxkode');
         $this->db->from('tb_header');

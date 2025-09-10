@@ -95,7 +95,7 @@
             },
             success: function(data){
                 // window.location.reload();
-                alert("Data Sudah Masuk");
+                alert("Data berhasil diupdate, \r\nRefresh halaman untuk melihat hasil");
                 // $("#keluar_bombc").click(); 
                 $('#modal-large').modal('hide');
             },

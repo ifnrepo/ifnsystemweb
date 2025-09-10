@@ -840,6 +840,12 @@ function showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs
     $getkode = $CI->helpermodel->showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
     return $getkode;
 }
+function showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs)
+{
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
+    return $getkode;
+}
 function getarrayindex(string $value, array $array, string $key)
 {
     $searched_value = array_search($value, array_column($array, $key));

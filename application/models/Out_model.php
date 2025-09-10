@@ -8,7 +8,7 @@ class Out_model extends CI_Model{
             'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
-            'left(nomor_dok,2) != ' => 'TR',
+            'left(nomor_dok,3) != ' => 'IFN',
             // '' => ''
         ];
         if($kode['filterbon']==1){
@@ -494,8 +494,6 @@ class Out_model extends CI_Model{
                                 if($loopke > 1){
                                     // insert ke tabel detail apabila stokdept menguragi 2 rekord
                                     unset($datdet['id']);
-                                    // unset($datdet['id_detail']);
-                                    // $this->db->insert('tb_detail',$datdet);
                                     $idinsert = $datdet['id_detail']; //$this->db->insert_id();
                                     $this->db->insert('tb_detailgen',$datdet);
                                     $idinsertx = $this->db->insert_id();
@@ -504,11 +502,6 @@ class Out_model extends CI_Model{
                                     if($this->session->userdata('deptsekarang')=='GM'){
                                         $this->db->set('nobontr',$nobontr);
                                     }
-                                    // $this->db->set('pcs',$kurangpcs);
-                                    // $this->db->set('kgs',$kurangkgs);
-                                    // $this->db->set('harga',$deta['harga']);
-                                    // $this->db->where('id',$idinsert);
-                                    // $this->db->update('tb_detail');
 
                                     $this->db->set('id_stokdept',$stokid);
                                     $this->db->set('nobontr',$nobontr);

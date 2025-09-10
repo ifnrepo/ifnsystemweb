@@ -12,7 +12,7 @@ class Akb_model extends CI_Model
                 // 'dept_tuju' => 'AR',
                 'month(tgl)' => $this->session->userdata('bl'),
                 'year(tgl)' => $this->session->userdata('th'),
-                'left(nomor_dok,2)' => 'TR'
+                'left(nomor_dok,3)' => 'IFN'
             ];
         }else{
             $arrkondisi = [
@@ -71,6 +71,7 @@ class Akb_model extends CI_Model
             $this->db->where('a.id_header', $data);
         }else{
             $this->db->where('a.id_akb', $data);
+            // $this->db->order_by('dokgaichu,po,item,dis,insno,id_barang');
         }
         $this->db->order_by('id_header,seri_barang');
         return $this->db->get()->result_array();
@@ -827,6 +828,44 @@ class Akb_model extends CI_Model
         }
         return $arrhasil;
     }
+    public function hitungbomjf($id,$mode){
+        if($mode==1){
+            $this->db->select("tb_detail.*,tb_header.nomor_dok");
+            $this->db->from('tb_detail');
+            $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+            $this->db->where('id_akb',$id);
+            // $this->db->limit(1,0);
+            $this->db->order_by('id_header,seri_barang');
+        }else{
+            $this->db->select("*");
+            $this->db->from('tb_detail');
+            $this->db->where('id_header',$id);
+        }
+        $hasil = $this->db->get();
+        $arrhasil = [];
+        $arrnotbom = [];
+        $no=1;
+        foreach ($hasil->result_array() as $hsl) {
+            $arrbom = showbomjf($hsl['po'],$hsl['item'],$hsl['dis'],$hsl['id_barang'],$hsl['insno'],$hsl['nobontr'],$hsl['kgs'],$no++,$hsl['pcs']);
+            if(count($arrbom) > 0){
+                foreach ($arrbom as $hasilshowbom) {
+                    array_push($arrhasil,$hasilshowbom);
+                }
+            }else{
+                $data = [
+                    'po' => $hsl['po'],
+                    'item' => $hsl['item'],
+                    'dis' => $hsl['dis'],
+                    'seri_barang' => $no-1,   
+                    'id_barang' => $hsl['id_barang'],   
+                    'insno' => $hsl['insno'],   
+                ];
+                array_push($arrnotbom,$data);
+            }
+        }
+        $arrhasil2 = array('ok'=>$arrhasil,'ng'=>$arrnotbom);
+        return $arrhasil2;
+    }
     public function simpanbom($data,$id){
         $det = $this->db->get_where('tb_bombc',['id_header'=>$id])->num_rows();
         if($det > 0){
@@ -876,7 +915,7 @@ class Akb_model extends CI_Model
             'kode_dok' => 'T',
             'dept_id' => $this->session->userdata('deptdari'),
             'dept_tuju' => $kode,
-            'nomor_dok' => 'TR-'.getnomoraju($kode),
+            'nomor_dok' => 'IFN-'.getnomoraju($kode),
             'jns_bc' => '261',
             'tgl' => date('Y-m-d'),
             'data_ok' => 1,
@@ -908,18 +947,19 @@ class Akb_model extends CI_Model
         for($x=0;$x<$jumlah;$x++){
             $arrdat = $kode['data'];
             $que = $this->db->get_where('tb_header',['id'=>$arrdat[$x]])->row_array();
-            // $que['id_minta'] = $que['id']; 
-            // unset($que['id']);
-            // $que['id_header'] = $dataheader['id'];
-            // $this->db->insert('tb_detail',$que);
-            // $idnya = $this->db->insert_id();
-            // $this->helpermodel->isilog($this->db->last_query());
-            // $que['id_detail'] = $idnya;
-            // $this->db->insert('tb_detailgen',$que);
-            
+
             $this->db->where('id_header',$arrdat[$x]);
             $this->db->update('tb_detail',['id_akb'=>$kode['id']]);
             $this->helpermodel->isilog($this->db->last_query());
+        }
+        if($jumlah > 0){
+            $this->db->select('Count(*) as jumrek');
+            $this->db->from('tb_detail');
+            $this->db->where('id_akb',$dataheader['id']);
+            $hasil = $this->db->get()->row_array();
+
+            $this->db->where('id',$dataheader['id']);
+            $this->db->update('tb_header',['jumlah_barang'=>$hasil['jumrek']]);
         }
         $this->db->trans_complete();
         return $dataheader['id'];

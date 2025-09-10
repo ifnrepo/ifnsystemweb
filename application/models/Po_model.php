@@ -124,7 +124,7 @@ class Po_model extends CI_Model
         $this->db->where('a.ok_valid',1);
         $this->db->where('a.ok_tuju',1);
         $this->db->where('a.ok_pp',1);
-        $this->db->where('a.ok_pc',1);
+        // $this->db->where('a.ok_pc',1);
         $this->db->where('a.kode_dok','BBL');
         $this->db->where('tb_detail.id_po',0);
         if($data!=''){

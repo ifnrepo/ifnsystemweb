@@ -80,9 +80,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <!-- <div class="hr m-1"></div> -->
             </div>
           </div>
-
         </div>
-        <div>
+        <div class="mt-1">
           <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
             <thead>
               <tr>

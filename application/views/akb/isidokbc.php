@@ -1,5 +1,4 @@
 <div class="container-xl"> 
-    <?=  var_dump($this->session->flashdata('databom')); ?>
     <div class="mx-2 font-bold">AJU KELUAR BARANG</div>
     <div class="mx-2 mb-2 font-bold">DATA BC - NO <span class="text-blue"><?= $datheader['nomor_dok']; ?></span></div>
     <div class="card-header font-kecil">    
@@ -66,7 +65,7 @@
                                 Alamat : <?= datadepartemen($datheader['dept_tuju'],'alamat_subkon'); ?></br>
                                 NPWP : <?= datadepartemen($datheader['dept_tuju'],'npwp'); ?>
                                 <?php } ?>
-                                <button href="#" id="kirimkeceisa" data-href="<?= base_url().'akb/kirimdatakeceisa'.$datheader['jns_bc'].'/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
+                                <button href="#" id="kirimkeceisa" data-href="<?= base_url().'akb/kirimdatakeceisa'.$datheader['jns_bc'].'/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                             </div>
                         </div>
                     <hr class="m-0">
@@ -617,7 +616,7 @@
                                     <?php $jmcolspan = $mode==1 ? 5 : 4; ?>
                                     <td class="text-black text-center font-bold" colspan="<?= $jmcolspan; ?>">TOTAL</td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumpcs,0); ?></td>
-                                    <td class="text-black text-right font-bold"><?= rupiah($sumkgs,2); ?></td>
+                                    <td class="text-black text-right font-bold" id="txtsum"><?= rupiah($sumkgs,2); ?></td>
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail,2); ?></td>
                                 </tr>
@@ -652,7 +651,7 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2" id="tabs-barangdet-8">
-                <div class="m-2 font-bold d-flex justify-content-between">Barang Versi BC/CEISA <span><a href="<?= base_url().'akb/hitungbom/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a><span></div>
+                <div class="m-2 font-bold d-flex justify-content-between">Barang Versi BC/CEISA <span><a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a><span></div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
                         <table class="table w-100">
