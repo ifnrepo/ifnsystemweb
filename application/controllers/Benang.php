@@ -33,7 +33,6 @@ class Benang extends CI_Controller
     public function index()
     {
         $header['header'] = 'transaksi';
-        $data['benang'] = $this->Benangmodel->getdata();
         $data['rak'] = $this->Benangmodel->getRak();
         $kode = [
             'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
