@@ -6,8 +6,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="container-xl">
         <div class="row g-0 d-flex align-items-between">
             <div class="col-md-6">
-                <h2 class="page-title p-2">
-                    Benang Out
+                <h2 class="page-title p-2 text-warning">
+                    Trasnsaksi Benang Out
                 </h2>
                 <?= $this->session->flashdata('message'); ?>
             </div>
@@ -20,9 +20,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="container-xl p-0">
     <div class="card-header font-kecil">
         <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
-            <li class="nav-item">
-                <a href="#tabs-home-8" class="nav-link bg-teal-lt active btn-flat" data-bs-toggle="tab">View Dokumen</a>
-            </li>
+
         </ul>
     </div>
     <div class="card-body">
@@ -47,7 +45,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="card-body p-2">
                         <div class="row">
                             <div class="col-md-4">
-                                <table class="table datatable6 table-hover" id="cobasisip">
+                                <table class="table table-vcenter card-table">
                                     <thead style="background-color: blue !important">
                                         <tr>
                                             <th>No</th>
@@ -56,16 +54,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         </tr>
                                     </thead>
                                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                        <?php $no = 0;
-                                        foreach ($saldo_terkini as $key) {
-                                            $no++;
-                                        ?>
+                                        <?php if (!empty($saldo_terkini)) { ?>
+                                            <?php $no = 0;
+                                            foreach ($saldo_terkini as $key) {
+                                                $no++;
+                                            ?>
+                                                <tr>
+                                                    <td><?= $no; ?></td>
+                                                    <td><?= $key['nama_barang']; ?></td>
+                                                    <td><?= rupiah($key['kgs_akhir'], 2); ?></td>
+                                                </tr>
+                                            <?php } ?>
+                                        <?php } else { ?>
                                             <tr>
-                                                <td><?= $no; ?></td>
-                                                <td><?= $key['nama_barang']; ?></td>
-                                                <td><?= rupiah($key['kgs_akhir'], 2); ?></td>
+                                                <td colspan="3" class="text-center">Saldo tidak tersedia</td>
                                             </tr>
                                         <?php } ?>
+
                                     </tbody>
                                 </table>
                             </div>
