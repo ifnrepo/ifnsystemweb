@@ -1,7 +1,7 @@
 <div class="container-xl">
     <div class="row font-kecil">
         <div class="col-12">
-            <div class="alert alert-danger" role="alert">
+            <div class="alert alert-danger <?php if(count($hasil['ng'])==0){ echo 'hilang'; } ?>" role="alert">
                 <div class="d-flex">
                     <div>
                         <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>
@@ -64,9 +64,11 @@
                 </table>
                 <hr class="small m-1">
                 <div class="text-center">
-                    <a href="#" data-href="<?= base_url().'akb/simpanbomjf/'.$idheader.'/1'; ?>" id="simpankedb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini " data-title="Bill Of Material" class="btn btn-sm btn-flat btn-primary hilang">Simpan</a>
-                    <a href="#" id="simpannya" class="btn btn-sm btn-flat btn-primary">Simpan</a>
+                    <a href="#" data-href="<?= base_url().'akb/simpanbomjf/'.$idheader.'/1'; ?>" id="simpankedb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini " data-title="Bill Of Material" class="btn btn-sm btn-flat btn-primary disabled">Simpan</a>
+                    <!-- <a href="#" id="simpannya" class="btn btn-sm btn-flat btn-primary">Simpan</a> -->
                     <a href="#" class="btn btn-sm btn-flat btn-danger" id="tutupmodal" data-bs-dismiss="modal">Batal</a>
+                    <div id="peringatan">XXX</div>
+                    
                 </div>
             </div>
         </div>
@@ -79,19 +81,28 @@
         $('#modal-scroll').on('shown.bs.modal', function() {
             $("#keyw").focus();
         })
+        var harus = $("#txtsum").text();
+        var aktual = $("#txtsumbom").text();
+        if(harus == aktual){
+            $("#simpankedb").removeClass('disabled');
+            $("#peringatan").text('');
+        }else{
+            $("#simpankedb").addClass('disabled');
+            $("#peringatan").text('Data Header ('+harus+') dan Detail Breakdown ('+aktual+') tidak Sama');
+        }
     });
     $("#kirimkeexcel").click(function(){
         $('#modal-scroll').modal('hide')
     })
-    $("#simpannya").click(function(){
-        var harus = $("#txtsum").text();
-        var aktual = $("#txtsumbom").text();
-        if(harus != aktual){
-            alert('Data Header dan Detail Breakdown tidak Sama');
-        }else{
-            $("#simpankedb").click();
-        }
-    })
+    // $("#simpannya").click(function(){
+    //     var harus = $("#txtsum").text();
+    //     var aktual = $("#txtsumbom").text();
+    //     if(harus != aktual){
+    //         alert('Data Header ('+harus+') dan Detail Breakdown ('+aktual+') tidak Sama');
+    //     }else{
+    //         $("#simpankedb").click();
+    //     }
+    // })
     $("#deptselect").change(function(){
         $("#getbarang").click();
     })
