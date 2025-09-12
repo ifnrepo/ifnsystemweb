@@ -42,6 +42,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <?php } ?>
             <option value="kosong" class="text-danger">KOSONG</option>
           </select>
+          <label class="mb-0 font-kecil font-bold text-azure">Jenis Bc</label>
+          <select name="filter_bc" id="filter_bc" class="form-select font-kecil mt-0">
+            <option value="all">Semua Bc</option>
+            <?php foreach ($bc_option->result_array() as $bc) {
+              if (empty($bc['jns_bc'])) continue;
+
+              $selek = $this->session->flashdata('bchargamat') == $bc['jns_bc'] ? 'selected' : '';
+            ?>
+              <option value="<?= $bc['jns_bc']; ?>" <?= $selek; ?>><?= $bc['ket_bc']; ?></option>
+            <?php } ?>
+          </select>
+
         </div>
         <div class="col-md-3" style="border-left: 1px solid !important;">
           <label class="mb-0 font-kecil font-bold text-azure">Articles</label>
@@ -54,25 +66,25 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </select>
           <label class="mb-0 font-kecil font-bold text-azure">Periode</label>
           <div class="row">
-            <div class="col-8">
-               <select name="blperiode" id="blperiode" class="form-select font-kecil mt-0">
+            <div class="col-7">
+              <select name="blperiode" id="blperiode" class="form-select font-kecil mt-0">
                 <option value="">Semua</option>
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
                 <?php endfor; ?>
               </select>
             </div>
-            <div class="col-4">
-              <?php $thperiode = $this->session->userdata('th')!='' ? $this->session->userdata('th') : date('Y'); ?>
+            <div class="col-5">
+              <?php $thperiode = $this->session->userdata('th') != '' ? $this->session->userdata('th') : date('Y'); ?>
               <select name="thperiode" id="thperiode" class="form-select font-kecil mt-0">
                 <option value="">Semua</option>
-                <?php foreach ($tahune->result_array() as $thn ) { ?>
+                <?php foreach ($tahune->result_array() as $thn) { ?>
                   <option value="<?= $thn['thun']; ?>" <?php if ($this->session->userdata('th') == $thn['thun']) echo "selected"; ?>><?= $thn['thun']; ?></option>
                 <?php } ?>
               </select>
             </div>
           </div>
-         
+
         </div>
         <div class="col-md-7 bg-cyan-lt">
           <div style="line-height: 10px !important">

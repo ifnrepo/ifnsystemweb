@@ -32,6 +32,7 @@ class Hargamat extends CI_Controller
         $header['header'] = 'other';
         // $data['data'] = $this->hargamatmodel->getdata();
         $data['kategori'] = $this->hargamatmodel->getdatakategori();
+        $data['bc_option'] = $this->hargamatmodel->getdata_bc();
         $data['artikel'] = $this->hargamatmodel->getdataartikel();
         $data['tahune'] = $this->hargamatmodel->getdatatahun();
         // $data['databbl'] = $this->taskmodel->getdatabbl();
@@ -41,10 +42,11 @@ class Hargamat extends CI_Controller
         $this->load->view('hargamat/hargamat', $data);
         $this->load->view('layouts/footer', $footer);
     }
-    public function clear(){
+    public function clear()
+    {
         $this->session->unset_userdata('bl');
-        $this->session->userdata('th',date('Y'));
-        $url = base_url().'hargamat';
+        $this->session->userdata('th', date('Y'));
+        $url = base_url() . 'hargamat';
         redirect($url);
     }
     public function getbarang()
@@ -68,13 +70,16 @@ class Hargamat extends CI_Controller
         if ($_POST['arti'] != 'all') {
             $this->session->set_flashdata('artihargamat', $_POST['arti']);
         }
+        if ($_POST['bc'] != 'all') {
+            $this->session->set_flashdata('bchargamat', $_POST['bc']);
+        }
         echo 1;
     }
     public function edithamat($id)
     {
         $data['data'] = $this->hargamatmodel->getdatabyid($id)->row_array();
         $data['dokbc'] = $this->hargamatmodel->getdokbc();
-        $this->load->view('hargamat/edithamat',$data);
+        $this->load->view('hargamat/edithamat', $data);
     }
     public function updatehamat()
     {
@@ -91,7 +96,8 @@ class Hargamat extends CI_Controller
 
         $filter_kategori = $this->input->post('filter_kategori');
         $filter_inv = $this->input->post('filter_inv');
-        $list = $this->hargamatmodel->get_datatables($filter_kategori, $filter_inv);
+        $filter_bc = $this->input->post('filter_bc');
+        $list = $this->hargamatmodel->get_datatables($filter_kategori, $filter_inv, $filter_bc);
         $data = array();
         $no = $_POST['start'];
         $total = 0;
@@ -101,8 +107,8 @@ class Hargamat extends CI_Controller
             $tampil = $field->weight == 0 ? $field->qty : $field->weight;
             $barang = $field->id_barang == 0 ? $field->remark . ' (ID not found)' : $field->nama_barang;
             $nobc = '';
-            if(trim($field->nomor_bc) !=  ''){
-                $nobc = 'BC '.trim($field->jns_bc).'-'.$field->nomor_bc;
+            if (trim($field->nomor_bc) !=  '') {
+                $nobc = 'BC ' . trim($field->jns_bc) . '-' . $field->nomor_bc;
             }
             $no++;
             $row = array();
@@ -130,13 +136,13 @@ class Hargamat extends CI_Controller
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->hargamatmodel->count_all(),
-            "recordsFiltered" => $this->hargamatmodel->count_filtered($filter_kategori, $filter_inv),
+            "recordsFiltered" => $this->hargamatmodel->count_filtered($filter_kategori, $filter_inv, $filter_bc),
             "jumlahTotal" => $total,
             "jumlahPcs" => $pcs,
             "jumlahKgs" => $kgs,
             "data" => $data,
         );
-        $this->session->set_userdata('jmlrek', $this->hargamatmodel->hitungrec($filter_kategori, $filter_inv));
+        $this->session->set_userdata('jmlrek', $this->hargamatmodel->hitungrec($filter_kategori, $filter_inv, $filter_bc));
         // $isinya = $this->session->userdata('jmlrek');
         echo "<script type='text/javascript'>
                 isirekod = '<?= base_url() ?>';
@@ -151,13 +157,15 @@ class Hargamat extends CI_Controller
     {
         return 0;
     }
-    public function viewdok($id){
+    public function viewdok($id)
+    {
         $data['data'] = $this->hargamatmodel->getdatabyid($id)->row_array();
-        $this->load->view('hargamat/viewdok',$data);
+        $this->load->view('hargamat/viewdok', $data);
     }
-    public function ubahperiode(){
-        $this->session->set_userdata('bl',$_POST['bl']);
-        $this->session->set_userdata('th',$_POST['th']);
+    public function ubahperiode()
+    {
+        $this->session->set_userdata('bl', $_POST['bl']);
+        $this->session->set_userdata('th', $_POST['th']);
         echo 1;
     }
     //End Controller

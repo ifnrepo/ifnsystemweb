@@ -5,11 +5,12 @@ class Hargamat_model extends CI_Model
     var $column_order = array(null, 'nama_barang', 'nama_supplier', 'remark', 'tgl');
     var $order = array('tgl' => 'asc');
     // var $table = 'barang';
-    public function getdata($filter_kategori, $filter_inv)
+    public function getdata($filter_kategori, $filter_inv,  $filter_bc)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang');
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang,');
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
+        $this->db->join('ref_dok_bc', 'ref_dok_bc.jns_bc = tb_hargamaterial.jns_bc', 'left');
         $this->db->join('supplier', 'supplier.id = tb_hargamaterial.id_supplier', 'left');
         $this->db->join('satuan', 'satuan.id = tb_hargamaterial.id_satuan', 'left');
         if ($filter_kategori && $filter_kategori != 'all') {
@@ -22,6 +23,10 @@ class Hargamat_model extends CI_Model
         if ($filter_inv && $filter_inv != 'all') {
             $this->db->where('barang.id', $filter_inv);
         }
+        if ($filter_bc && $filter_bc != 'all') {
+            $this->db->where('tb_hargamaterial.jns_bc', $filter_bc);
+        }
+
         if ($this->session->userdata('bl') != '') {
             $this->db->where('month(tgl)', $this->session->userdata('bl'));
         }
@@ -70,6 +75,15 @@ class Hargamat_model extends CI_Model
         $this->db->where('kategori.kategori_id is not null');
         $this->db->group_by('kategori.kategori_id');
         $this->db->order_by('kategori.nama_kategori', 'ASC');
+        return $this->db->get();
+    }
+    public function getdata_bc()
+    {
+        $this->db->select('*, ref_dok_bc.ket_bc');
+        $this->db->from('tb_hargamaterial');
+        $this->db->join('ref_dok_bc', 'ref_dok_bc.jns_bc = tb_hargamaterial.jns_bc', 'left');
+        $this->db->group_by('ref_dok_bc.jns_bc');
+        $this->db->order_by('ref_dok_bc.jns_bc', 'ASC');
         return $this->db->get();
     }
     public function getdataartikel()
@@ -188,18 +202,18 @@ class Hargamat_model extends CI_Model
         $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
-    public function get_datatables($filter_kategori, $filter_inv)
+    public function get_datatables($filter_kategori, $filter_inv, $filter_bc)
     {
-        $this->getdata($filter_kategori, $filter_inv);
+        $this->getdata($filter_kategori, $filter_inv, $filter_bc);
         // $this->getdata();
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
-    public function count_filtered($filter_kategori, $filter_inv)
+    public function count_filtered($filter_kategori, $filter_inv, $filter_bc)
     {
-        $this->getdata($filter_kategori, $filter_inv);
+        $this->getdata($filter_kategori, $filter_inv, $filter_bc);
         // $this->getdata();
         $query = $this->db->get();
         return $query->num_rows();
@@ -209,9 +223,9 @@ class Hargamat_model extends CI_Model
         $this->db->from('tb_hargamaterial');
         return $this->db->count_all_results();
     }
-    public function hitungrec($filter_kategori, $filter_inv)
+    public function hitungrec($filter_kategori, $filter_inv, $filter_bc)
     {
-        $this->getdata($filter_kategori, $filter_inv);
+        $this->getdata($filter_kategori, $filter_inv, $filter_bc);
         $query = $this->db->get();
         return $query->num_rows();
     }
