@@ -1,9 +1,9 @@
 <?php
 class Hargamat_model extends CI_Model
 {
-    var $column_search = array('nama_barang', 'nama_supplier', 'remark','nomor_bc','nobontr');
-    var $column_order = array(null, 'nama_barang', 'nama_supplier', 'remark','tgl');
-    var $order = array('tgl'=> 'asc');
+    var $column_search = array('nama_barang', 'nama_supplier', 'remark', 'nomor_bc', 'nobontr');
+    var $column_order = array(null, 'nama_barang', 'nama_supplier', 'remark', 'tgl');
+    var $order = array('tgl' => 'asc');
     // var $table = 'barang';
     public function getdata($filter_kategori, $filter_inv)
     {
@@ -22,11 +22,11 @@ class Hargamat_model extends CI_Model
         if ($filter_inv && $filter_inv != 'all') {
             $this->db->where('barang.id', $filter_inv);
         }
-        if($this->session->userdata('bl')!=''){
-            $this->db->where('month(tgl)',$this->session->userdata('bl'));
+        if ($this->session->userdata('bl') != '') {
+            $this->db->where('month(tgl)', $this->session->userdata('bl'));
         }
-        if($this->session->userdata('th')!=''){
-            $this->db->where('year(tgl)',$this->session->userdata('th'));
+        if ($this->session->userdata('th') != '') {
+            $this->db->where('year(tgl)', $this->session->userdata('th'));
         }
         $i = 0;
         foreach ($this->column_search as $item) {
@@ -82,7 +82,8 @@ class Hargamat_model extends CI_Model
         return $this->db->get();
     }
 
-    public function getdatatahun(){
+    public function getdatatahun()
+    {
         $this->db->select('year(tgl) as thun');
         $this->db->from('tb_hargamaterial');
         $this->db->where('year(tgl) is not null');
@@ -159,12 +160,13 @@ class Hargamat_model extends CI_Model
         $data['price'] = toAngka($data['price']);
         $data['oth_amount'] = toAngka($data['oth_amount']);
         $data['tgl_bc'] = tglmysql($data['tgl_bc']);
+        $data['tgl_aju'] = tglmysql($data['tgl_aju']);
         $fotodulu = FCPATH . 'assets/image/dokhamat/' . $data['dok_lama']; //base_url().$gambar.'.png';
-        if($data['dok_lama'] != $data['namedok']){
+        if ($data['dok_lama'] != $data['namedok']) {
             $data['filedok'] = $this->uploaddok();
             if ($data['filedok'] == 'kosong') {
-				$data['filedok'] = NULL;
-			}
+                $data['filedok'] = NULL;
+            }
             if ($data['filedok'] != NULL) {
                 if (file_exists($fotodulu)) {
                     unlink($fotodulu);
@@ -173,7 +175,7 @@ class Hargamat_model extends CI_Model
                 unset($data['dok_lama']);
                 unset($data['dok']);
             } else {
-                if($data['namedok']!=''){
+                if ($data['namedok'] != '') {
                     $this->session->set_flashdata('ketlain', 'Error Upload Foto Profile ' . $data['noinduk'] . ' ');
                 }
             }
@@ -214,8 +216,9 @@ class Hargamat_model extends CI_Model
         return $query->num_rows();
     }
 
-    public function getdokbc(){
-        $this->db->where('masuk',1);
+    public function getdokbc()
+    {
+        $this->db->where('masuk', 1);
         return $this->db->get('ref_dok_bc');
     }
     public function getdata_export($filter_kategori, $filter_inv)
@@ -240,35 +243,35 @@ class Hargamat_model extends CI_Model
         return $query->result_array();
     }
     public function uploaddok()
-	{
-		$this->load->library('upload');
-		$this->uploadConfig = array(
-			'upload_path' => LOK_UPLOAD_DOKHAMAT,
-			'allowed_types' => 'pdf|PDF',
-			'max_size' => max_upload() * 1024,
-		);
-		// Adakah berkas yang disertakan?
-		$adaBerkas = $_FILES['dok']['name'];
-		if (empty($adaBerkas)) {
-			return 'kosong';
-		}
-		$uploadData = NULL;
-		$this->upload->initialize($this->uploadConfig);
-		if ($this->upload->do_upload('dok')) {
-			$uploadData = $this->upload->data();
-			$namaFileUnik = strtolower($uploadData['file_name']);
-			$fileRenamed = rename(
-				$this->uploadConfig['upload_path'] . $uploadData['file_name'],
-				$this->uploadConfig['upload_path'] . $namaFileUnik
-			);
-			$uploadData['file_name'] = $fileRenamed ? $namaFileUnik : $uploadData['file_name'];
-		} else {
-			$_SESSION['success'] = -1;
-			$ext = pathinfo($adaBerkas, PATHINFO_EXTENSION);
-			$ukuran = $_FILES['dok']['size'] / 1000000;
-			$tidakupload = $this->upload->display_errors(NULL, NULL);
-			$this->session->set_flashdata('msg', $tidakupload . ' ' . $ext . ' ukuran ' . round($ukuran, 2) . ' MB');
-		}
-		return (!empty($uploadData)) ? strtolower(nospasi($uploadData['file_name'])) : NULL;
-	}
+    {
+        $this->load->library('upload');
+        $this->uploadConfig = array(
+            'upload_path' => LOK_UPLOAD_DOKHAMAT,
+            'allowed_types' => 'pdf|PDF',
+            'max_size' => max_upload() * 1024,
+        );
+        // Adakah berkas yang disertakan?
+        $adaBerkas = $_FILES['dok']['name'];
+        if (empty($adaBerkas)) {
+            return 'kosong';
+        }
+        $uploadData = NULL;
+        $this->upload->initialize($this->uploadConfig);
+        if ($this->upload->do_upload('dok')) {
+            $uploadData = $this->upload->data();
+            $namaFileUnik = strtolower($uploadData['file_name']);
+            $fileRenamed = rename(
+                $this->uploadConfig['upload_path'] . $uploadData['file_name'],
+                $this->uploadConfig['upload_path'] . $namaFileUnik
+            );
+            $uploadData['file_name'] = $fileRenamed ? $namaFileUnik : $uploadData['file_name'];
+        } else {
+            $_SESSION['success'] = -1;
+            $ext = pathinfo($adaBerkas, PATHINFO_EXTENSION);
+            $ukuran = $_FILES['dok']['size'] / 1000000;
+            $tidakupload = $this->upload->display_errors(NULL, NULL);
+            $this->session->set_flashdata('msg', $tidakupload . ' ' . $ext . ' ukuran ' . round($ukuran, 2) . ' MB');
+        }
+        return (!empty($uploadData)) ? strtolower(nospasi($uploadData['file_name'])) : NULL;
+    }
 }
