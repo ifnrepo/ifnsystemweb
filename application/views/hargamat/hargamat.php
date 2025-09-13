@@ -106,7 +106,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Article</th>
                 <th>Tgl</th>
                 <th>Nomor IB</th>
-                <th>Nomor IV</th>
+                <th>Invoice</th>
                 <!-- <th class="text-left">Info BC</th> -->
                 <th>Qty</th>
                 <th>Weight</th>

@@ -91,7 +91,7 @@
                     <div class="col-6">
                         <div class="mb-3">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Invoice</label>
-                            <input type="text" class="form-control font-kecil" name="nomor_iv" id="nomor_iv" value="<?= $data['nomor_iv']; ?>">
+                            <input type="text" class="form-control font-kecil" name="nomor_inv" id="nomor_inv" value="<?= $data['nomor_inv']; ?>">
                         </div>
                     </div>
                 </div>

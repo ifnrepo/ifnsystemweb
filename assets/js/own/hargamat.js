@@ -18,7 +18,7 @@ $(document).ready(function () {
 		},
 		columnDefs: [
 			{
-				// className: "dt-nowrap",
+				
 				targets: [0],
 				orderable: false,
 			},
