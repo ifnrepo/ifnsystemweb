@@ -852,20 +852,59 @@ class Akb_model extends CI_Model
                     array_push($arrhasil,$hasilshowbom);
                 }
             }else{
-                $data = [
-                    'po' => $hsl['po'],
-                    'item' => $hsl['item'],
-                    'dis' => $hsl['dis'],
-                    'seri_barang' => $no-1,   
-                    'id_barang' => $hsl['id_barang'],   
-                    'insno' => $hsl['insno'],   
-                    'nobontr' => $hsl['nobontr'],   
-                ];
-                array_push($arrnotbom,$data);
+                $arraynot = ['1338','40396']; // KARUNG 110 X 130 STRIP ORANGE, ADHESIVE TAPE 12.0MMX100MTR GREEN (NASHUA)
+                if(in_array($hsl['id_barang'],$arraynot)){
+                    $dataxspin= [];
+                    // $hasilshowbom = [
+                        $dataxspin['po'] = $hsl['po'];
+                        $dataxspin['item'] = $hsl['item'];
+                        $dataxspin['dis'] = $hsl['dis'];
+                        $dataxspin['id_barang'] = $hsl['id_barang'];   
+                        $dataxspin['insno'] = $hsl['insno'];   
+                        $dataxspin['nobontr'] = $hsl['nobontr'];
+                        $dataxspin['pcs_asli'] = $hsl['pcs'];
+                        $dataxspin['kgs_asli'] = $hsl['kgs'];
+                        $dataxspin['noe'] = $no;
+                    // ];
+                    array_push($arrhasil,$dataxspin);
+                }else{
+                    $data = [
+                        'po' => $hsl['po'],
+                        'item' => $hsl['item'],
+                        'dis' => $hsl['dis'],
+                        'seri_barang' => $no-1,   
+                        'id_barang' => $hsl['id_barang'],   
+                        'insno' => $hsl['insno'],   
+                        'nobontr' => $hsl['nobontr'],   
+                    ];
+                    array_push($arrnotbom,$data);
+                }
             }
         }
         $arrhasil2 = array('ok'=>$arrhasil,'ng'=>$arrnotbom);
         return $arrhasil2;
+    }
+    public function excellampiran261($id){
+        $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx");
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->join('satuan','satuan.id = tb_detail.id_satuan','left');
+        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->join('tb_po g', 'g.po = tb_detail.po AND g.item = tb_detail.item AND g.dis = tb_detail.dis', 'left');
+        $this->db->where('id_akb',$id);
+        // $this->db->limit(1,0);
+        $this->db->order_by('id_header,seri_barang');
+        return $this->db->get();
+    }
+    public function detailexcellampiran261($id,$no){
+        $this->db->select("tb_bombc.*,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc");
+        $this->db->from('tb_bombc');
+        $this->db->join('tb_hargamaterial','tb_hargamaterial ON tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->where('tb_bombc.id_header',$id);
+        $this->db->where('tb_bombc.seri_barang',$no);
+        // $this->db->limit(1,0);
+        // $this->db->order_by('id_header,seri_barang');
+        return $this->db->get();
     }
     public function simpanbom($data,$id){
         $det = $this->db->get_where('tb_bombc',['id_header'=>$id])->num_rows();
@@ -894,6 +933,7 @@ class Akb_model extends CI_Model
         }
         return $hasil;
     }
+    
     public function simpandetailbombc($data){
         $this->db->where('id',$data['id']);
         return $this->db->update('tb_bombc',$data);

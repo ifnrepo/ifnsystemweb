@@ -545,20 +545,20 @@ function cekkolom(mode) {
 		}
 	}
 	// Untuk cek BC 261
-	if ($("#jns_bc").val() == "261") {
-		if ($("#nomorkontrak").val() == "") {
-			pesan("Nomor Kontrak BC harus di isi", "error");
-			return false;
-		}
-		if ($("#jumlahhskosong").val() != "0") {
-			pesan("Masih ada HS Code kosong pada Detail Barang", "error");
-			return false;
-		}
-		if ($("#jumlahnobontrkosong").val() != "0") {
-			pesan("Masih ada Nobontr kosong pada Detail Ver. BC", "error");
-			return false;
-		}
-	}
+	// if ($("#jns_bc").val() == "261") {
+	// 	if ($("#nomorkontrak").val() == "") {
+	// 		pesan("Nomor Kontrak BC harus di isi", "error");
+	// 		return false;
+	// 	}
+	// 	if ($("#jumlahhskosong").val() != "0") {
+	// 		pesan("Masih ada HS Code kosong pada Detail Barang", "error");
+	// 		return false;
+	// 	}
+	// 	if ($("#jumlahnobontrkosong").val() != "0") {
+	// 		pesan("Masih ada Nobontr kosong pada Detail Ver. BC", "error");
+	// 		return false;
+	// 	}
+	// }
 	// $("#keteranganerr").text("Dokumen siap di kirim ke CEISA 40 !");
 	if (mode != 1) {
 		pesan("Dokumen siap di kirim ke CEISA 40 !", "success");

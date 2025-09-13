@@ -697,9 +697,9 @@ async function getIP() {
 	cachedIP = data.ip;
 	return cachedIP;
 }
-setInterval(() => {
-	cekNotif();
-}, 20000);
+// setInterval(() => {
+// 	cekNotif();
+// }, 20000);
 function cekNotif() {
 	$.ajax({
 		url: base_url + "main/ceknotif",

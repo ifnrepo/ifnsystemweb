@@ -1486,9 +1486,6 @@ class Akb extends CI_Controller
         $jumlahfasilitas = 0;
         $pungutanbm = 0;$pungutanppn=0;$pungutanpph=0;
         foreach ($datadet as $detx) {
-            if($detx['kode']=='P6974831'){ // Karung di Skip Upload ke CEISA 40
-                continue;
-            }
             $no++;
             $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
             $cif = getjumlahcifbom($id,$no)->row_array();
@@ -1689,7 +1686,7 @@ class Akb extends CI_Controller
         $arrayheader['pungutan'] = $arraypungutan;
         $arrayheader['jaminan'] = $arrayjaminan;
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
-        $this->kirim261dummy($arrayheader,$id);
+        $this->kirim261($arrayheader,$id);
     }
     public function kirim30($data,$id){
         $token = $this->akbmodel->gettoken();
@@ -1732,14 +1729,14 @@ class Akb extends CI_Controller
 
         $this->db->select("tb_detail.*");
         $this->db->from('tb_detail');
-        $this->db->where('id_ak',$id);
+        $this->db->where('id_akb',$id);
         $this->db->group_by('id_header');
         $hasil = $this->db->get();
 
-        foreach ($hasil->row_array() as $val) {
-            $this->db->where('id',$val['id_header']);
-            $this->db->update('ok_tuju',1);
-        }
+        // foreach ($hasil->row_array() as $val) {
+        //     $this->db->where('id',$val['id_header']);
+        //     $this->db->update('ok_tuju',1);
+        // }
 
         $this->db->where('id',$id);
         $this->db->update('tb_header',['send_ceisa' => 1]);
@@ -1766,21 +1763,21 @@ class Akb extends CI_Controller
         curl_close($curl);
 
         $databalik = json_decode($result,true);
-        // print_r($databalik);
-        if($databalik['status']=='OK'){
-            $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
-            $this->session->set_flashdata('errorsimpan',2);
-            $this->session->set_flashdata('pesanerror',$databalik['message']);
-            // $this->akbmodel->updatesendceisa($id);
-            $url = base_url().'akb/isidokbc/'.$id.'/1';
-            redirect($url);
-        }else{
-            // print_r($databalik);
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
-            $url = base_url().'akb/isidokbc/'.$id.'/1';
-            redirect($url);
-        }
+        print_r($databalik);
+        // if($databalik['status']=='OK'){
+        //     $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
+        //     $this->session->set_flashdata('errorsimpan',2);
+        //     $this->session->set_flashdata('pesanerror',$databalik['message']);
+        //     // $this->akbmodel->updatesendceisa($id);
+        //     $url = base_url().'akb/isidokbc/'.$id.'/1';
+        //     redirect($url);
+        // }else{
+        //     // print_r($databalik);
+        //     $this->session->set_flashdata('errorsimpan',1);
+        //     $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
+        //     $url = base_url().'akb/isidokbc/'.$id.'/1';
+        //     redirect($url);
+        // }
     }
 
     public function getnomoraju(){
@@ -1974,6 +1971,18 @@ class Akb extends CI_Controller
             redirect($url);
         }
     }
+    public function simpanbomjf($id,$mode=0){
+        $hasil = $this->akbmodel->hitungbomjf($id,$mode);
+        $simpan = $this->akbmodel->simpanbom($hasil['ok'],$id);
+        if($simpan){
+            if($mode=0){
+                $url = base_url().'akb/isidokbc/'.$id;
+            }else{
+                $url = base_url().'akb/isidokbc/'.$id.'/1';
+            }
+            redirect($url);
+        }
+    }
     public function hitungbom($id,$mode=0){
         $hasil['hasil'] = $this->akbmodel->hitungbom($id,$mode);
         $hasil['idheader'] = $id;
@@ -2024,6 +2033,77 @@ class Akb extends CI_Controller
             $url = base_url().'akb/isidokbc/'.$id.'/1';
             redirect($url);
         }
+    }
+    public function excellampiran261($id,$mode=0){
+         $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+        $sheet->setCellValue('A1', "BAHAN BAKU & BARANG HASIL SUBKONTRAK"); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"  
+        $sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->setCellValue('B3', "URAIAN BARANG"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->getStyle('B3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->setCellValue('C3', "HS CODE");
+        $sheet->getStyle('C3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->setCellValue('D3', "KODE Brg"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->getStyle('D3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->setCellValue('E3', "JUMLAH");
+        $sheet->getStyle('E3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->setCellValue('F3', "SATUAN");
+        $sheet->getStyle('F3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->setCellValue('G3', "BERAT (Kgm)");
+        $sheet->getStyle('G3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->setCellValue('H3', "KETERANGAN");
+        $sheet->getStyle('H3')->getFont()->setBold(true); // Set bold kolom A1    
+        $inv = $this->akbmodel->excellampiran261($id);
+        $no = 1;
+
+        // // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 4;
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($inv->result_array() as $data) {
+            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $spekbarang);
+            $sheet->setCellValue('C' . $numrow, $hs);
+            $sheet->setCellValue('D' . $numrow, $sku);
+            $sheet->setCellValue('E' . $numrow, $data['pcs']);
+            $sheet->setCellValue('F' . $numrow, $data['kodebc']);
+            $sheet->setCellValue('G' . $numrow, $data['kgs']);
+            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            foreach($inv2->result_array() as $data2){
+                $sheet->setCellValue('H' . $numrow, 'BC.'.$data2['jns_bc'].' '.trim($data2['nomor_bc']).' '.$data2['tgl_bc']);
+                $numrow++; // Tambah 1 setiap kali looping    
+            }
+            $no++;
+            // Tambah 1 setiap kali looping      
+        }
+
+        $newSheet2 = $spreadsheet->createSheet(1); // Index 1 for the second position (0-based)
+        $newSheet2->setTitle('Konversi Pemakaian Bahan Baku');
+
+        $spreadsheet->setActiveSheetIndex(0);
+
+        // // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle("Lampiran Permohonan dan Kontrak");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data INV.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel BOM INVENTORY' . $this->session->userdata('currdept'));
     }
     public function toexcel($id,$mode=0)
     {
@@ -2088,6 +2168,8 @@ class Akb extends CI_Controller
             $numrow++; // Tambah 1 setiap kali looping    
         }
 
+        // $newSheet2 = $spreadsheet->createSheet(1); // Index 1 for the second position (0-based)
+        // $newSheet2->setTitle('Inserted Sheet');
 
         // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
         $sheet->getDefaultRowDimension()->setRowHeight(-1);
