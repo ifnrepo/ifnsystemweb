@@ -107,19 +107,19 @@
                         </div>
                     </div>
                     <div class="row">
-                        <div class="col-4">
+                        <div class="col-2">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Seri</label>
                                 <input type="text" class="form-control font-kecil text-end inputangka" name="seri_barang" id="seri_barang" placeholder="Seri Barang" value="<?= $data['seri_barang']; ?>">
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-7">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Aju</label>
                                 <input type="text" class="form-control font-kecil text-end inputangka" name="nomor_aju" id="nomor_aju" placeholder="Nomor Aju" value="<?= $data['nomor_aju']; ?>">
                             </div>
                         </div>
-                        <div class=" col-4">
+                        <div class=" col-3">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Tanggal Aju</label>
                                 <input type="text" class="form-control font-kecil tgl" value="<?= tglmysql($data['tgl_aju']); ?>" name="tgl_aju" id="tgl_aju" placeholder="Tanggal Aju">

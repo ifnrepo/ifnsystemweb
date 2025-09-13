@@ -10,8 +10,10 @@ $(document).ready(function () {
 			data: function (d) {
 				d.filter_kategori = $("#filter").val();
 				d.filter_inv = $("#filterinv").val();
+				d.filter_bc = $("#filter_bc").val();
 				console.log("Filter kategori:", d.filter_kategori);
-				console.log("Filter kategori:", d.filter_inv);
+				console.log("Filter inv:", d.filter_inv);
+				console.log("Filter bc:", d.filter_bc);
 			},
 		},
 		columnDefs: [
@@ -88,7 +90,7 @@ $(document).ready(function () {
 			},
 		});
 	});
-	$("#filter, #filterinv").on("change", function () {
+	$("#filter, #filterinv,#filter_bc").on("change", function () {
 		table.ajax.reload();
 	});
 	$("#filter, #filterinv").on("change", function () {
