@@ -115,6 +115,7 @@ class Hargamat extends CI_Controller
             $row[] = $barang;
             $row[] = tglmysql($field->tgl);
             $row[] = $field->nobontr;
+            $row[] = $field->nomor_iv;
             // $row[] = $nobc;
             $row[] = rupiah($field->qty, 0);
             $row[] = rupiah($field->weight, 2);

@@ -13,7 +13,7 @@
                     <div class="col-2">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0">ID Barang</label>
-                            <input type="text" class="form-control font-kecil" placeholder="Input placeholder" value="<?= $data['idx'] . '-' . $data['id_barang']; ?>" disabled>
+                            <input type="text" class="form-control font-kecil" placeholder="Input placeholder" value="<?= $data['kode'] . '-' . $data['id_barang']; ?>" disabled>
                         </div>
                     </div>
                 </div>
@@ -88,6 +88,14 @@
                     </div>
                 </div>
                 <div class="row">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Invoice</label>
+                            <input type="text" class="form-control font-kecil" name="nomor_iv" id="nomor_iv" value="<?= $data['nomor_iv']; ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="mb-3">
                         <label class="form-label font-kecil mb-0 font-bold text-primary">Noted</label>
                         <input type="text" class="form-control font-kecil" name="remark" placeholder="Keterangan" value="<?= $data['remark']; ?>">
@@ -110,13 +118,13 @@
                         <div class="col-2">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Seri</label>
-                                <input type="text" class="form-control font-kecil text-end inputangka" name="seri_barang" id="seri_barang" placeholder="Seri Barang" value="<?= $data['seri_barang']; ?>">
+                                <input type="text" class="form-control font-kecil text-end " name="seri_barang" id="seri_barang" placeholder="Seri Barang" value="<?= $data['seri_barang']; ?>">
                             </div>
                         </div>
                         <div class="col-7">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Aju</label>
-                                <input type="text" class="form-control font-kecil text-end inputangka" name="nomor_aju" id="nomor_aju" placeholder="Nomor Aju" value="<?= $data['nomor_aju']; ?>">
+                                <input type="text" class="form-control font-kecil text-end " name="nomor_aju" id="nomor_aju" placeholder="Nomor Aju" value="<?= $data['nomor_aju']; ?>">
                             </div>
                         </div>
                         <div class=" col-3">

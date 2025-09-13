@@ -38,6 +38,11 @@ $(document).ready(function () {
 				targets: [5],
 				orderable: false,
 			},
+			// {
+			// 	className: "text-right",
+			// 	targets: [5],
+			// 	orderable: false,
+			// },
 			{
 				className: "text-right",
 				targets: [6],
