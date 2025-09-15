@@ -2099,7 +2099,7 @@ class Akb extends CI_Controller
 
         // Proses file excel    
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data INV.xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="Permohonan dan Konversi.xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');

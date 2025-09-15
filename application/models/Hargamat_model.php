@@ -57,7 +57,7 @@ class Hargamat_model extends CI_Model
     }
     public function getdatabyid($id)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx');
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode');
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->join('supplier', 'supplier.id = tb_hargamaterial.id_supplier', 'left');
@@ -262,7 +262,7 @@ class Hargamat_model extends CI_Model
         $this->uploadConfig = array(
             'upload_path' => LOK_UPLOAD_DOKHAMAT,
             'allowed_types' => 'pdf|PDF',
-            'max_size' => max_upload() * 1024,
+            'max_size' => max_upload() * 10240,
         );
         // Adakah berkas yang disertakan?
         $adaBerkas = $_FILES['dok']['name'];
