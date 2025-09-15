@@ -897,13 +897,29 @@ class Akb_model extends CI_Model
         return $this->db->get();
     }
     public function detailexcellampiran261($id,$no){
-        $this->db->select("tb_bombc.*,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc");
+        $this->db->select("tb_bombc.*,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.seri_barang,tb_hargamaterial.tgl_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
         $this->db->from('tb_bombc');
         $this->db->join('tb_hargamaterial','tb_hargamaterial ON tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
         $this->db->where('tb_bombc.id_header',$id);
         $this->db->where('tb_bombc.seri_barang',$no);
         // $this->db->limit(1,0);
         // $this->db->order_by('id_header,seri_barang');
+        $this->db->group_by('tb_bombc.id');
+        return $this->db->get();
+    }
+    public function exceljaminan261($id){
+        $this->db->select("tb_bombc.id_barang,tb_bombc.nobontr,SUM(tb_bombc.kgs) AS kgs,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_hargamaterial.jns_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
+        $this->db->select("tb_bombc.bm,tb_bombc.bmt,tb_bombc.cukai,tb_bombc.ppn,tb_bombc.ppnbm,tb_bombc.pph");
+        $this->db->from('tb_bombc');
+        $this->db->join('tb_hargamaterial','tb_hargamaterial ON tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->where('tb_bombc.id_header',$id);
+        $this->db->group_by('tb_bombc.id_barang,tb_bombc.nobontr');
+        // $this->db->limit(1,0);
+        $this->db->order_by('id_barang,nobontr');
         return $this->db->get();
     }
     public function simpanbom($data,$id){
@@ -925,7 +941,7 @@ class Akb_model extends CI_Model
                 ];
                 $cekjenisbc = ceknomorbc($hasilshowbom['nobontr']);
                 if($cekjenisbc=='23'){
-                    $datasimpan['ppn'] = 12;
+                    $datasimpan['ppn'] = 11;
                     $datasimpan['pph'] = 2.5;
                 }
                 $hasil = $this->db->insert('tb_bombc',$datasimpan);

@@ -101,6 +101,17 @@
                         <input type="text" class="form-control font-kecil" name="remark" placeholder="Keterangan" value="<?= $data['remark']; ?>">
                     </div>
                 </div>
+                <div class="row">
+                    <div class="mb-3">
+                        <label class="form-label font-kecil mb-0 font-bold text-primary">Negara</label>
+                        <select class="form-select font-kecil font-bold btn-flat" name="kode_negara" id="kode_negara">
+                            <option value="">Pilih Negara</option>
+                            <?php foreach ($refbendera->result_array() as $bendera) { ?>
+                                <option value="<?= $bendera['kode_negara']; ?>" <?php if($data['kode_negara']==$bendera['kode_negara']){ echo "selected"; } ?>><?= $bendera['kode_negara'].'-'.$bendera['uraian_negara']; ?></option>
+                            <?php } ?>
+                        </select>
+                    </div>
+                </div>
                 <fieldset class="form-fieldset bg-primary-lt">
                     <div class="mb-1 row">
                         <label class="col-2 col-form-label font-bold">Jenis BC</label>
@@ -118,13 +129,14 @@
                         <div class="col-2">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Seri</label>
-                                <input type="text" class="form-control font-kecil text-end " name="seri_barang" id="seri_barang" placeholder="Seri Barang" value="<?= $data['seri_barang']; ?>">
+                                <input type="text" class="form-control font-kecil" name="seri_barang" id="seri_barang" placeholder="Seri Barang" value="<?= $data['seri_barang']; ?>">
+
                             </div>
                         </div>
                         <div class="col-7">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Aju</label>
-                                <input type="text" class="form-control font-kecil text-end " name="nomor_aju" id="nomor_aju" placeholder="Nomor Aju" value="<?= $data['nomor_aju']; ?>">
+                                <input type="text" class="form-control font-kecil" name="nomor_aju" id="nomor_aju" placeholder="Nomor Aju" value="<?= $data['nomor_aju']; ?>">
                             </div>
                         </div>
                         <div class=" col-3">

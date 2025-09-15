@@ -563,7 +563,10 @@
             </div>
             <div class="tab-pane fade p-2 bg-cyan-lt" id="tabs-barang-8">
                 <div class="m-2 font-bold d-flex justify-content-between">Detail Barang 
-                    <span><a href="<?= base_url().'akb/excellampiran261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Excel</a><span>
+                    <span>
+                        <a href="<?= base_url().'akb/excellampiran261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Lampiran dan Konversi</a>
+                        <a href="<?= base_url().'akb/exceljaminan261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-warning text-black"><i class="fa fa-file-excel-o mr-1"></i> Perhitungan Jaminan</a>
+                    <span>
                 </div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">

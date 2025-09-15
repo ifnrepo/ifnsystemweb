@@ -79,6 +79,7 @@ class Hargamat extends CI_Controller
     {
         $data['data'] = $this->hargamatmodel->getdatabyid($id)->row_array();
         $data['dokbc'] = $this->hargamatmodel->getdokbc();
+        $data['refbendera'] = $this->hargamatmodel->refbendera();
         $this->load->view('hargamat/edithamat', $data);
     }
     public function updatehamat()
@@ -392,6 +393,25 @@ class Hargamat extends CI_Controller
         $this->load->view('task/canceltask', $data);
     }
 
+    public function excel2(){
+        $dir = 'assets\docs\templatelapkontrakdankonversi.xlsx';
+        $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($dir);
+
+        $worksheet = $spreadsheet->getActiveSheet();
+
+        $worksheet->getCell('A1')->setValue('John');
+        $worksheet->getCell('A2')->setValue('Smith');
+
+        $writer = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter($spreadsheet, 'Xlsx');
+        // $writer->save('write.xlsx');
+
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data Harga Material.xlsx"');
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel DATA HARGA MATERIAL');
+    }
 
     public function excel()
     {
