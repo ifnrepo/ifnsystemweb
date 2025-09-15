@@ -88,7 +88,15 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="mb-1">
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Invoice</label>
+                            <input type="text" class="form-control font-kecil" name="nomor_inv" id="nomor_inv" value="<?= $data['nomor_inv']; ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3">
                         <label class="form-label font-kecil mb-0 font-bold text-primary">Noted</label>
                         <input type="text" class="form-control font-kecil" name="remark" placeholder="Keterangan" value="<?= $data['remark']; ?>">
                     </div>
@@ -121,7 +129,8 @@
                         <div class="col-2">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Seri</label>
-                                <input type="text" class="form-control font-kecil text-end" name="seri_barang" id="seri_barang" placeholder="Seri Barang" value="<?= $data['seri_barang']; ?>">
+                                <input type="text" class="form-control font-kecil" name="seri_barang" id="seri_barang" placeholder="Seri Barang" value="<?= $data['seri_barang']; ?>">
+
                             </div>
                         </div>
                         <div class="col-7">

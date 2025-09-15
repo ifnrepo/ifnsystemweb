@@ -18,7 +18,7 @@ $(document).ready(function () {
 		},
 		columnDefs: [
 			{
-				// className: "dt-nowrap",
+				
 				targets: [0],
 				orderable: false,
 			},
@@ -38,6 +38,11 @@ $(document).ready(function () {
 				targets: [5],
 				orderable: false,
 			},
+			// {
+			// 	className: "text-right",
+			// 	targets: [5],
+			// 	orderable: false,
+			// },
 			{
 				className: "text-right",
 				targets: [6],
