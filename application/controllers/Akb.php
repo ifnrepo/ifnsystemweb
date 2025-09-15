@@ -1,8 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+require 'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\IOFactory;
 // use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class Akb extends CI_Controller
@@ -2037,107 +2039,271 @@ class Akb extends CI_Controller
     public function excellampiran261($id,$mode=0){
         $spreadsheet = new Spreadsheet();
         // $dir = "assets/docs/templatekontrakdankonversi.xlsx";
-        // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($dir);
+        
+        try {
+            // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($dir);
 
-        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+            $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+            $sheet->setTitle('Lampiran Permohonan');
 
-        // $sheet->setCellValue('A1', "BAHAN BAKU & BARANG HASIL SUBKONTRAK"); // Set kolom A1 dengan tulisan "DATA SISWA"    
-        // $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->setCellValue('A1', "BAHAN BAKU & BARANG HASIL SUBKONTRAK"); // Set kolom A1 dengan tulisan "DATA SISWA"    
+            $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getStyle('J7')->getFont()->setSize(14);   
 
-        // // Buat header tabel nya pada baris ke 3    
-        // $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"  
-        // $sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A1    
-        // $sheet->setCellValue('B3', "URAIAN BARANG"); // Set kolom B3 dengan tulisan "KODE"    
-        // $sheet->getStyle('B3')->getFont()->setBold(true); // Set bold kolom A1    
-        // $sheet->setCellValue('C3', "HS CODE");
-        // $sheet->getStyle('C3')->getFont()->setBold(true); // Set bold kolom A1    
-        // $sheet->setCellValue('D3', "KODE Brg"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        // $sheet->getStyle('D3')->getFont()->setBold(true); // Set bold kolom A1    
-        // $sheet->setCellValue('E3', "JUMLAH");
-        // $sheet->getStyle('E3')->getFont()->setBold(true); // Set bold kolom A1    
-        // $sheet->setCellValue('F3', "SATUAN");
-        // $sheet->getStyle('F3')->getFont()->setBold(true); // Set bold kolom A1    
-        // $sheet->setCellValue('G3', "BERAT (Kgm)");
-        // $sheet->getStyle('G3')->getFont()->setBold(true); // Set bold kolom A1    
-        // $sheet->setCellValue('H3', "KETERANGAN");
-        // $sheet->getStyle('H3')->getFont()->setBold(true); // Set bold kolom A1    
-        $inv = $this->akbmodel->excellampiran261($id);
-        $no = 1;
+            // Buat header tabel nya pada baris ke 3    
+            $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"  
+            $sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getColumnDimension('A')->setWidth(0.71, 'cm');
+            $sheet->setCellValue('B3', "URAIAN BARANG"); // Set kolom B3 dengan tulisan "KODE"    
+            $sheet->getStyle('B3')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getColumnDimension('B')->setWidth(12.45, 'cm');
+            $sheet->setCellValue('C3', "HS CODE");
+            $sheet->getStyle('C3')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getColumnDimension('C')->setWidth(1.77, 'cm');
+            $sheet->setCellValue('D3', "KODE Brg"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+            $sheet->getStyle('D3')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getColumnDimension('D')->setWidth(2.19, 'cm');
+            $sheet->setCellValue('E3', "JUMLAH");
+            $sheet->getStyle('E3')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getColumnDimension('E')->setWidth(1.43, 'cm');
+            $sheet->setCellValue('F3', "SATUAN");
+            $sheet->getStyle('F3')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getColumnDimension('F')->setWidth(1.40, 'cm');
+            $sheet->setCellValue('G3', "BERAT (Kgm)");
+            $sheet->getStyle('G3')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getColumnDimension('G')->setWidth(2.30, 'cm');
+            $sheet->setCellValue('H3', "KETERANGAN");
+            $sheet->getStyle('H3')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getColumnDimension('H')->setWidth(5.09, 'cm');
 
-        // // Untuk penomoran tabel, di awal set dengan 1    
-        $numrow = 4;
+            $sheet->getStyle('A3')->getFont()->setSize(14);  
+            $sheet->getStyle('B3')->getFont()->setSize(14);  
+            $sheet->getStyle('C3')->getFont()->setSize(14);  
+            $sheet->getStyle('D3')->getFont()->setSize(14);  
+            $sheet->getStyle('E3')->getFont()->setSize(14);  
+            $sheet->getStyle('F3')->getFont()->setSize(14);  
+            $sheet->getStyle('G3')->getFont()->setSize(14);  
+            $sheet->getStyle('H3')->getFont()->setSize(14);  
+            $inv = $this->akbmodel->excellampiran261($id);
+            $no = 1;
+
+            // Untuk penomoran tabel, di awal set dengan 1    
+            $numrow = 4;
+            $sheet = $spreadsheet->setActiveSheetIndex(0);
+            // Set baris pertama untuk isi tabel adalah baris ke 3   
+            $jumlahpcs = 0;$jumlahkgs=0; 
+            foreach ($inv->result_array() as $data) {
+                $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+                $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+                $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+                $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
+                $jumlahkgs+=$data['kgs'];
+                if(trim($data['kodebc'])!='KGM'){
+                    $jumlahpcs += $data['pcs'];
+                }
+                // Lakukan looping pada variabel      
+                $sheet->setCellValue('A' . $numrow, $no);
+                $sheet->setCellValue('B' . $numrow, $spekbarang);
+                $sheet->setCellValue('C' . $numrow, $hs);
+                $sheet->setCellValue('D' . $numrow, $sku);
+                $sheet->setCellValue('E' . $numrow, $pcs);
+                $sheet->setCellValue('F' . $numrow, $data['kodebc']);
+                // $sheet->setCellValue('G' . $numrow, $data['kgs']);
+                $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+                foreach($inv2->result_array() as $data2){
+                    $sheet->setCellValue('G' . $numrow, round($data2['kgs'],2));
+                    $sheet->setCellValue('H' . $numrow, 'BC.'.$data2['jns_bc'].' '.trim($data2['nomor_bc']).' '.$data2['tgl_bc']);
+                    $numrow++; // Tambah 1 setiap kali looping    
+                }
+                $no++;
+                // Tambah 1 setiap kali looping      
+            }
+            $sheet->setCellValue('D' . $numrow, 'TOTAL');
+            $sheet->setCellValue('E' . $numrow, $jumlahpcs);
+            $sheet->setCellValue('G' . $numrow, $jumlahpcs);
+
+
+
+            $newSheet2 = $spreadsheet->createSheet(1); // Index 1 for the second position (0-based)
+            $newSheet2->setTitle('Konversi Pemakaian Bahan Baku');
+            $sheet = $spreadsheet->setActiveSheetIndex(1);
+            $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+            $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+            // Buat header tabel nya pada baris ke 3    
+            $sheet->setCellValue('A1', "LEMBAR KONVERSI PEMAKAIAN BAHAN BAKU"); // Set kolom A3 dengan tulisan "NO"  
+            // $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getStyle('A1')->getFont()->setSize(18);    
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('A1:O1');
+            $sheet->setCellValue('A2', "NOMOR KONTRAK"); // Set kolom B3 dengan tulisan "KODE"    
+            $sheet->getStyle('A2')->getFont()->setSize(18);    
+            // $sheet->getStyle('A2')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getStyle('A2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('A2:O2');
+            $sheet->setCellValue('A4', "DATA PENGUSAHA TPB");
+            $sheet->getStyle('A4')->getFont()->setSize(14);   
+            $sheet->setCellValue('A5', "A. NPWP");
+            $sheet->getStyle('A5')->getFont()->setSize(14);   
+            $sheet->setCellValue('A6', "B. NAMA TPB");
+            $sheet->getStyle('A6')->getFont()->setSize(14);   
+            $sheet->setCellValue('A7', "C. NOMOR SURAT IJIN TPB");
+            $sheet->getStyle('A7')->getFont()->setSize(14);   
+            $sheet->setCellValue('C5', ":");
+            $sheet->getStyle('C5')->getFont()->setSize(14);   
+            $sheet->setCellValue('C6', ":");
+            $sheet->getStyle('C6')->getFont()->setSize(14);   
+            $sheet->setCellValue('C7', ":");
+            $sheet->getStyle('C7')->getFont()->setSize(14);   
+            $sheet->setCellValue('D5', "01.001.717.6-057.000");
+            $sheet->getStyle('D5')->getFont()->setSize(14);   
+            $sheet->setCellValue('D6', "PT. INDONEPTUNE NET MANUFACTURING");
+            $sheet->getStyle('D6')->getFont()->setSize(14);   
+            $sheet->setCellValue('D7', "1555/KM.04/2017, 10 JULY 2017");
+            $sheet->getStyle('D7')->getFont()->setSize(14);   
+            $sheet->setCellValue('H4', "DATA PENERIMA SUBKONTRAK");
+            $sheet->getStyle('H4')->getFont()->setSize(14);   
+            $sheet->setCellValue('H5', "A. NPWP");
+            $sheet->getStyle('H5')->getFont()->setSize(14);   
+            $sheet->setCellValue('H6', "B. NAMA PERUSAHAAN");
+            $sheet->getStyle('H6')->getFont()->setSize(14);   
+            $sheet->setCellValue('H7', "C. ALAMAT");
+            $sheet->getStyle('H7')->getFont()->setSize(14);   
+            $sheet->setCellValue('I5', ":");
+            $sheet->getStyle('I5')->getFont()->setSize(14);   
+            $sheet->setCellValue('I6', ":");
+            $sheet->getStyle('I6')->getFont()->setSize(14);   
+            $sheet->setCellValue('I7', ":");
+            $sheet->getStyle('I7')->getFont()->setSize(14);   
+            $sheet->setCellValue('J5', "npwp SUBKON");
+            $sheet->getStyle('J5')->getFont()->setSize(14);   
+            $sheet->setCellValue('J6', "nama SUBKON");
+            $sheet->getStyle('J6')->getFont()->setSize(14);   
+            $sheet->setCellValue('J7', "alamat SUBKON");
+            $sheet->getStyle('J7')->getFont()->setSize(14);   
+
+            $sheet->mergeCells('A10:F10');
+            $sheet->setCellValue('A10', "DATA BAHAN JADI");
+            $sheet->getStyle('A10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('G10:L10');
+            $sheet->setCellValue('G10', "KONVERSI");
+            $sheet->getStyle('G10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('M10:N10');
+            $sheet->setCellValue('M10', "BAHAN TERKANDUNG");
+            $sheet->getStyle('M10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('O10:O11');
+            $sheet->setCellValue('O10', "KETERANGAN \r\nDOKUMEN \r\nDAN NO URUT");
+            $sheet->getStyle('O11')->getAlignment()->setWrapText(true);
+            $sheet->getStyle('010')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('010')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            
+            $sheet->setCellValue('A11', "NOMOR KONVERSI");
+            $sheet->getStyle('A11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('A11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('B11:D11');
+            $sheet->setCellValue('B11', "KODE BARANG \r\nHS \r\nURAIAN BARANG");
+            $sheet->getStyle('B11')->getAlignment()->setWrapText(true);
+            $sheet->getStyle('B11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->getStyle('B11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $sheet->setCellValue('E11', "JML");
+            $sheet->getStyle('E11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('E11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('F11', "SAT");
+            $sheet->getStyle('F11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('F11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('G11', "NO");
+            $sheet->getStyle('G11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('G11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('H11:J11');
+            $sheet->setCellValue('H11', "DETAIL BAHAN BAKU YANG DIGUNAKAN \r\nHS \r\nURAIAN BARANG");
+            $sheet->getStyle('H11')->getAlignment()->setWrapText(true);
+            $sheet->getStyle('H11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->getStyle('H11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+            $sheet->setCellValue('K11', "JML");
+            $sheet->getStyle('K11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('K11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('L11', "SAT");
+            $sheet->getStyle('L11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('L11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('M11', "TERKANDUNG \r\n %");
+            $sheet->getStyle('M11')->getAlignment()->setWrapText(true);
+            $sheet->getStyle('M11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('M11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('N11', "WASTE/SCRAP \r\n %");
+            $sheet->getStyle('N11')->getAlignment()->setWrapText(true);
+            $sheet->getStyle('N11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('N11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+            $sheet->getColumnDimension('A')->setWidth(4.38, 'cm');
+            $sheet->getColumnDimension('B')->setWidth(2.08, 'cm');
+            $sheet->getColumnDimension('C')->setWidth(0.30, 'cm');
+            $sheet->getColumnDimension('D')->setWidth(13.08, 'cm');
+            $sheet->getColumnDimension('E')->setWidth(2.27, 'cm');
+            $sheet->getColumnDimension('F')->setWidth(1.47, 'cm');
+            $sheet->getColumnDimension('G')->setWidth(1.13, 'cm');
+            $sheet->getColumnDimension('H')->setWidth(6.31, 'cm');
+            $sheet->getColumnDimension('I')->setWidth(0.30, 'cm');
+            $sheet->getColumnDimension('J')->setWidth(7.45, 'cm');
+            $sheet->getColumnDimension('K')->setWidth(1.93, 'cm');
+            $sheet->getColumnDimension('L')->setWidth(1.36, 'cm');
+            $sheet->getColumnDimension('M')->setWidth(3.67, 'cm');
+            $sheet->getColumnDimension('N')->setWidth(3.67, 'cm');
+            $sheet->getColumnDimension('O')->setWidth(3.70, 'cm');
+            $sheet->getRowDimension('11')->setRowHeight(1.93, 'cm');
+
+            $inv = $this->akbmodel->excellampiran261($id);
+            $numrow = 12;
+            $no = 1;
+            $nok = 1;
+            foreach ($inv->result_array() as $data) {
+                $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+                $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+                $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+                // Lakukan looping pada variabel      
+                $sheet->setCellValue('A' . $numrow, $no);
+                $sheet->setCellValue('B' . $numrow, $sku);
+                $sheet->setCellValue('E' . $numrow, $data['kgs']);
+                $sheet->setCellValue('F' . $numrow, 'KGM');
+                // $sheet->setCellValue('E' . $numrow, $data['pcs']);
+                // $sheet->setCellValue('F' . $numrow, $data['kodebc']);
+                // $sheet->setCellValue('G' . $numrow, $data['kgs']);
+                $nok = $numrow;
+                $nol = 1;
+                $numrow++;
+                $sheet->setCellValue('B' . $numrow, ' '.$hs);
+                $numrow++;
+                $sheet->setCellValue('B' . $numrow, $spekbarang);
+                $numrow++;
+                // $sheet->setCellValue('H' . $nok, "XXXX");
+                $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+                foreach($inv2->result_array() as $data2){
+                    if(count($data2) > 0){
+                        $sheet->setCellValue('G' . $nok, $nol);
+                        $sheet->setCellValue('H' . $nok, $data2['kode']);
+                        $sheet->setCellValue('K' . $nok, $data2['kgs']);
+                        $sheet->setCellValue('L' . $nok, 'KGM');
+                        $sheet->setCellValue('M' . $nok, round(($data2['kgs']/$data['kgs'])*100,2));
+                        $sheet->setCellValue('N' . $nok, 0);
+                        $sheet->setCellValue('O' . $nok, 'BC.'.$data2['jns_bc'].' '.trim($data2['nomor_bc']).' '.$data2['tgl_bc'].' No.'.$data2['seri_barang']);
+                        $nok++; 
+                        $sheet->setCellValue('H' . $nok, $data2['nohs']);
+                        $nok++; 
+                        $sheet->setCellValue('H' . $nok, $data2['nama_barang']);
+                        $nok++; 
+                        $nol++;
+                    }else{
+                        $no--;
+                    }   
+                }
+                $numrow = $nok;
+                $numrow++;
+                $no++;
+                // Tambah 1 setiap kali looping      
+            }
+        }catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+                die('Error loading file: ' . $e->getMessage());
+        }
+
         $sheet = $spreadsheet->setActiveSheetIndex(0);
-        // Set baris pertama untuk isi tabel adalah baris ke 3    
-        foreach ($inv->result_array() as $data) {
-            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
-            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
-            // Lakukan looping pada variabel      
-            $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, $spekbarang);
-            $sheet->setCellValue('C' . $numrow, $hs);
-            $sheet->setCellValue('D' . $numrow, $sku);
-            $sheet->setCellValue('E' . $numrow, $data['pcs']);
-            $sheet->setCellValue('F' . $numrow, $data['kodebc']);
-            $sheet->setCellValue('G' . $numrow, $data['kgs']);
-            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
-            foreach($inv2->result_array() as $data2){
-                $sheet->setCellValue('H' . $numrow, 'BC.'.$data2['jns_bc'].' '.trim($data2['nomor_bc']).' '.$data2['tgl_bc']);
-                $numrow++; // Tambah 1 setiap kali looping    
-            }
-            $no++;
-            // Tambah 1 setiap kali looping      
-        }
-
-        // $newSheet2 = $spreadsheet->createSheet(1); // Index 1 for the second position (0-based)
-        // $newSheet2->setTitle('Konversi Pemakaian Bahan Baku');
-        $inv = $this->akbmodel->excellampiran261($id);
-        $numrow = 15;
-        $no = 1;
-        $nok = 1;
-        $sheet = $spreadsheet->setActiveSheetIndex(1);
-        foreach ($inv->result_array() as $data) {
-            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
-            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
-            // Lakukan looping pada variabel      
-            $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, $sku);
-            $sheet->setCellValue('E' . $numrow, $data['kgs']);
-            $sheet->setCellValue('F' . $numrow, 'KGM');
-            // $sheet->setCellValue('E' . $numrow, $data['pcs']);
-            // $sheet->setCellValue('F' . $numrow, $data['kodebc']);
-            // $sheet->setCellValue('G' . $numrow, $data['kgs']);
-            $nok = $numrow;
-            $nol = 1;
-            $numrow++;
-            $sheet->setCellValue('B' . $numrow, ' '.$hs);
-            $numrow++;
-            $sheet->setCellValue('B' . $numrow, $spekbarang);
-            $numrow++;
-            // $sheet->setCellValue('H' . $nok, "XXXX");
-            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
-            foreach($inv2->result_array() as $data2){
-                $sheet->setCellValue('G' . $nok, $nol);
-                $sheet->setCellValue('H' . $nok, $data2['kode']);
-                $sheet->setCellValue('K' . $nok, $data2['kgs']);
-                $sheet->setCellValue('L' . $nok, $data2['kodebc']);
-                $sheet->setCellValue('M' . $nok, round(($data2['kgs']/$data['kgs'])*100,2));
-                $sheet->setCellValue('N' . $nok, 0);
-                $sheet->setCellValue('O' . $nok, 'BC.'.$data2['jns_bc'].' '.trim($data2['nomor_bc']).' '.$data2['tgl_bc'].' No.'.$data2['seri_barang']);
-                $nok++; 
-                $sheet->setCellValue('H' . $nok, $data2['nohs']);
-                $nok++; 
-                $sheet->setCellValue('H' . $nok, $data2['nama_barang']);
-                $nok++; 
-                $nol++;
-            }
-            $numrow = $nok;
-            $numrow++;
-            $no++;
-            // Tambah 1 setiap kali looping      
-        }
-
         // // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
         $sheet->getDefaultRowDimension()->setRowHeight(-1);
         // Set orientasi kertas jadi LANDSCAPE    
@@ -2146,12 +2312,218 @@ class Akb extends CI_Controller
         // $sheet->setTitle("Lampiran Permohonan dan Kontrak");
 
         // Proses file excel    
+        ob_end_clean();
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="Permohonan dan Konversi.xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         $this->helpermodel->isilog('Download Excel Lampiran Kontrak dan Konversi' . $this->session->userdata('currdept'));
+    }
+    public function exceljaminan261($id,$mode=0){
+        $spreadsheet = new Spreadsheet();
+        // $dir = "assets/docs/templatekontrakdankonversi.xlsx";
+        
+        try {
+            // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($dir);
+
+            $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+            $sheet->setTitle('Perhitungan Jaminan '.$id);
+
+            $spreadsheet->getDefaultStyle()->getFont()->setName('Times New Roman');
+            $spreadsheet->getDefaultStyle()->getFont()->setSize(12);
+            // Buat header tabel nya pada baris ke 3    
+            $sheet->setCellValue('A1', "LEMBAR PERHITUNGAN JAMINAN DALAM RANGKA PENGELUARAN BARANG DARI TPB KE TLDPP"); // Set kolom A3 dengan tulisan "NO"  
+            // $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+            $sheet->getStyle('A1')->getFont()->setSize(17);    
+            $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('A1:R1');
+            $sheet->setCellValue('A3', "DATA PENGUSAHA TPB");
+            $sheet->getStyle('A3')->getFont()->setSize(14);   
+            $sheet->setCellValue('A3', "A. NPWP");
+            $sheet->getStyle('A4')->getFont()->setSize(14);   
+            $sheet->setCellValue('A4', "B. NAMA TPB");
+            $sheet->getStyle('A5')->getFont()->setSize(14);   
+            $sheet->setCellValue('A5', "C. NOMOR SURAT IJIN TPB");
+            $sheet->getStyle('A6')->getFont()->setSize(14);   
+            $sheet->setCellValue('C4', ":");
+            $sheet->getStyle('C4')->getFont()->setSize(14);   
+            $sheet->setCellValue('C5', ":");
+            $sheet->getStyle('C5')->getFont()->setSize(14);   
+            $sheet->setCellValue('C6', ":");
+            $sheet->getStyle('C6')->getFont()->setSize(14);   
+            $sheet->setCellValue('D4', "01.001.717.6-057.000");
+            $sheet->getStyle('D4')->getFont()->setSize(14);   
+            $sheet->setCellValue('D5', "PT. INDONEPTUNE NET MANUFACTURING");
+            $sheet->getStyle('D5')->getFont()->setSize(14);   
+            $sheet->setCellValue('D6', "1555/KM.04/2017, 10 JULY 2017");
+            $sheet->getStyle('D6')->getFont()->setSize(14);   
+            $sheet->setCellValue('L3', "DATA PENERIMA SUBKONTRAK");
+            $sheet->getStyle('L3')->getFont()->setSize(14);   
+            $sheet->setCellValue('L4', "A. NPWP");
+            $sheet->getStyle('L4')->getFont()->setSize(14);   
+            $sheet->setCellValue('L5', "B. NAMA PERUSAHAAN");
+            $sheet->getStyle('L5')->getFont()->setSize(14);   
+            $sheet->setCellValue('L6', "C. ALAMAT");
+            $sheet->getStyle('L6')->getFont()->setSize(14);   
+            $sheet->setCellValue('N4', ":");
+            $sheet->getStyle('N4')->getFont()->setSize(14);   
+            $sheet->setCellValue('N5', ":");
+            $sheet->getStyle('N5')->getFont()->setSize(14);   
+            $sheet->setCellValue('N6', ":");
+            $sheet->getStyle('N6')->getFont()->setSize(14);   
+            $sheet->setCellValue('O4', "npwp SUBKON");
+            $sheet->getStyle('O4')->getFont()->setSize(14);   
+            $sheet->setCellValue('O5', "nama SUBKON");
+            $sheet->getStyle('O5')->getFont()->setSize(14);   
+            $sheet->setCellValue('O6', "alamat SUBKON");
+            $sheet->getStyle('O6')->getFont()->setSize(14);   
+
+            $sheet->mergeCells('A9:J9');
+            $sheet->setCellValue('A9', "DATA BAHAN BAKU");
+            $sheet->getStyle('A9')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('K9:R9');
+            $sheet->setCellValue('K9', "PERHITUNGAN JAMINAN");
+            $sheet->getStyle('K9')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->mergeCells('A10:A11');
+            $sheet->setCellValue('A10', "NO");
+            $sheet->getStyle('A10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('A10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('B10:D11');
+            $sheet->setCellValue('B10', "KODE BARANG \r\nHS \r\nURAIAN BARANG");
+            $sheet->getStyle('B10')->getAlignment()->setWrapText(true);
+            // $sheet->getStyle('B10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('B10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('E10:E11');
+            $sheet->setCellValue('E10', "JML");
+            $sheet->getStyle('A10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('A10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('F10:F11');
+            $sheet->setCellValue('F10', "SAT");
+            $sheet->getStyle('F10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('F10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('G10:J10');
+            $sheet->setCellValue('G10', "DOKUMEN ASAL");
+            $sheet->getStyle('G10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('G10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('G11', "JENIS \r\nDOK");
+            $sheet->getStyle('G11')->getAlignment()->setWrapText(true);
+            $sheet->getStyle('G11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('G11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('H11', "NO");
+            $sheet->getStyle('H11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('H11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('I11', "TANGGAL");
+            $sheet->getStyle('I11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('I11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->setCellValue('J11', "POS");
+            $sheet->getStyle('J11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('J11')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('K10:K11');
+            $sheet->setCellValue('K10', "BM");
+            $sheet->getStyle('K10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('K10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('L10:L11');
+            $sheet->setCellValue('L10', "BMT");
+            $sheet->getStyle('L10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('L10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('M10:M11');
+            $sheet->setCellValue('M10', "CUKAI");
+            $sheet->getStyle('M10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('M10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('N10:O11');
+            $sheet->setCellValue('N10', "PPN");
+            $sheet->getStyle('N10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('N10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('P10:P11');
+            $sheet->setCellValue('P10', "PPNBM");
+            $sheet->getStyle('P10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('P10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('Q10:Q11');
+            $sheet->setCellValue('Q10', "PPH");
+            $sheet->getStyle('Q10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('Q10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+            $sheet->mergeCells('R10:R11');
+            $sheet->setCellValue('R10', "TOTAL");
+            $sheet->getStyle('R10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('R10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+            $sheet->getColumnDimension('A')->setWidth(1.78, 'cm');
+            $sheet->getColumnDimension('B')->setWidth(4.5, 'cm');
+            $sheet->getColumnDimension('C')->setWidth(0.34, 'cm');
+            $sheet->getColumnDimension('D')->setWidth(8.62, 'cm');
+            $sheet->getColumnDimension('E')->setWidth(1.66, 'cm');
+            $sheet->getColumnDimension('F')->setWidth(1.66, 'cm');
+            $sheet->getColumnDimension('G')->setWidth(1.66, 'cm');
+            $sheet->getColumnDimension('H')->setWidth(2.46, 'cm');
+            $sheet->getColumnDimension('I')->setWidth(2.49, 'cm');
+            $sheet->getColumnDimension('J')->setWidth(1.66, 'cm');
+            $sheet->getColumnDimension('K')->setWidth(3.55, 'cm');
+            $sheet->getColumnDimension('L')->setWidth(3.55, 'cm');
+            $sheet->getColumnDimension('M')->setWidth(3.55, 'cm');
+            $sheet->getColumnDimension('N')->setWidth(0.41, 'cm');
+            $sheet->getColumnDimension('O')->setWidth(3.14, 'cm');
+            $sheet->getColumnDimension('P')->setWidth(3.55, 'cm');
+            $sheet->getColumnDimension('Q')->setWidth(3.55, 'cm');
+            $sheet->getColumnDimension('R')->setWidth(3.55, 'cm');
+            $sheet->getRowDimension('8')->setRowHeight(0.15, 'cm');
+
+            $inv = $this->akbmodel->exceljaminan261($id);
+            $numrow = 13;
+            $no = 1;
+            $nok = 1;
+            foreach ($inv->result_array() as $data) {
+                $sku = $data['kode'];
+                $spekbarang = namaspekbarang($data['id_barang']);
+                $hs =substr($data['nohs'],0,8);
+                // Lakukan looping pada variabel      
+                $sheet->setCellValue('A' . $numrow, $no);
+                $sheet->setCellValue('B' . $numrow, $sku);
+                $sheet->setCellValue('E' . $numrow, round($data['kgs'],2));
+                $sheet->setCellValue('F' . $numrow, 'KGM');
+                $sheet->setCellValue('G' . $numrow, $data['jns_bc']);
+                $sheet->setCellValue('H' . $numrow, $data['nomor_bc']);
+                $sheet->setCellValue('I' . $numrow, $data['tgl_bc']);
+                $sheet->setCellValue('K' . $numrow, $data['bm']);
+                $sheet->setCellValue('L' . $numrow, $data['bmt']);
+                $sheet->setCellValue('M' . $numrow, $data['cukai']);
+                $sheet->setCellValue('N' . $numrow, $data['ppn']);
+                $sheet->mergeCells('N'.$numrow.':O'.$numrow)    ;
+                $sheet->setCellValue('P' . $numrow, $data['ppnbm']);
+                $sheet->setCellValue('Q' . $numrow, $data['pph']);
+                $sheet->setCellValue('R' . $numrow, 0);
+                // $sheet->setCellValue('G' . $numrow, $data['kgs']);
+                $nok = $numrow;
+                $nol = 1;
+                $numrow++;
+                $sheet->setCellValue('B' . $numrow, ' '.$data['nohs']);
+                $numrow++;
+                $sheet->setCellValue('B' . $numrow, $spekbarang);
+                $numrow++;
+                // $sheet->setCellValue('H' . $nok, "XXXX");
+                $no++;
+                // Tambah 1 setiap kali looping      
+            }
+        }catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+                die('Error loading file: ' . $e->getMessage());
+        }
+
+        $sheet = $spreadsheet->setActiveSheetIndex(0);
+        // // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        // $sheet->setTitle("Lampiran Permohonan dan Kontrak");
+
+        // Proses file excel    
+        ob_end_clean();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Perhitungan Jaminan.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel Perhitungan Jaminan' . $this->session->userdata('currdept'));
     }
     public function toexcel($id,$mode=0)
     {

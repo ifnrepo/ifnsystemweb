@@ -7,12 +7,13 @@ class Hargamat_model extends CI_Model
     // var $table = 'barang';
     public function getdata($filter_kategori, $filter_inv,  $filter_bc)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang,');
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang');
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->join('ref_dok_bc', 'ref_dok_bc.jns_bc = tb_hargamaterial.jns_bc', 'left');
         $this->db->join('supplier', 'supplier.id = tb_hargamaterial.id_supplier', 'left');
         $this->db->join('satuan', 'satuan.id = tb_hargamaterial.id_satuan', 'left');
+        // $this->db->join('ref_negara', 'ref_negara.kode_negara = tb_hargamaterial.kode_negara', 'left');
         if ($filter_kategori && $filter_kategori != 'all') {
             if ($filter_kategori != 'kosong') {
                 $this->db->where('barang.id_kategori', $filter_kategori);
@@ -57,12 +58,13 @@ class Hargamat_model extends CI_Model
     }
     public function getdatabyid($id)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode');
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode,ref_negara.uraian_negara');
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->join('supplier', 'supplier.id = tb_hargamaterial.id_supplier', 'left');
         $this->db->join('satuan', 'satuan.id = tb_hargamaterial.id_satuan', 'left');
         $this->db->join('kategori', 'kategori.kategori_id = barang.id_kategori', 'left');
+        $this->db->join('ref_negara', 'ref_negara.kode_negara = tb_hargamaterial.kode_negara', 'left');
         $this->db->where('tb_hargamaterial.id', $id);
         return $this->db->get();
     }
@@ -234,6 +236,9 @@ class Hargamat_model extends CI_Model
     {
         $this->db->where('masuk', 1);
         return $this->db->get('ref_dok_bc');
+    }
+    public function refbendera(){
+        return $this->db->order_by('kode_negara')->get('ref_negara');
     }
     public function getdata_export($filter_kategori, $filter_inv)
     {

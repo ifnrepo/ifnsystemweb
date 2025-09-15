@@ -88,9 +88,20 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class="mb-3">
+                    <div class="mb-1">
                         <label class="form-label font-kecil mb-0 font-bold text-primary">Noted</label>
                         <input type="text" class="form-control font-kecil" name="remark" placeholder="Keterangan" value="<?= $data['remark']; ?>">
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="mb-3">
+                        <label class="form-label font-kecil mb-0 font-bold text-primary">Negara</label>
+                        <select class="form-select font-kecil font-bold btn-flat" name="kode_negara" id="kode_negara">
+                            <option value="">Pilih Negara</option>
+                            <?php foreach ($refbendera->result_array() as $bendera) { ?>
+                                <option value="<?= $bendera['kode_negara']; ?>" <?php if($data['kode_negara']==$bendera['kode_negara']){ echo "selected"; } ?>><?= $bendera['kode_negara'].'-'.$bendera['uraian_negara']; ?></option>
+                            <?php } ?>
+                        </select>
                     </div>
                 </div>
                 <fieldset class="form-fieldset bg-primary-lt">
