@@ -2035,34 +2035,38 @@ class Akb extends CI_Controller
         }
     }
     public function excellampiran261($id,$mode=0){
-         $spreadsheet = new Spreadsheet();
+        $spreadsheet = new Spreadsheet();
+        // $dir = "assets/docs/templatekontrakdankonversi.xlsx";
+        // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($dir);
+
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
-        $sheet->setCellValue('A1', "BAHAN BAKU & BARANG HASIL SUBKONTRAK"); // Set kolom A1 dengan tulisan "DATA SISWA"    
-        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('A1', "BAHAN BAKU & BARANG HASIL SUBKONTRAK"); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        // $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
 
-        // Buat header tabel nya pada baris ke 3    
-        $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"  
-        $sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A1    
-        $sheet->setCellValue('B3', "URAIAN BARANG"); // Set kolom B3 dengan tulisan "KODE"    
-        $sheet->getStyle('B3')->getFont()->setBold(true); // Set bold kolom A1    
-        $sheet->setCellValue('C3', "HS CODE");
-        $sheet->getStyle('C3')->getFont()->setBold(true); // Set bold kolom A1    
-        $sheet->setCellValue('D3', "KODE Brg"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->getStyle('D3')->getFont()->setBold(true); // Set bold kolom A1    
-        $sheet->setCellValue('E3', "JUMLAH");
-        $sheet->getStyle('E3')->getFont()->setBold(true); // Set bold kolom A1    
-        $sheet->setCellValue('F3', "SATUAN");
-        $sheet->getStyle('F3')->getFont()->setBold(true); // Set bold kolom A1    
-        $sheet->setCellValue('G3', "BERAT (Kgm)");
-        $sheet->getStyle('G3')->getFont()->setBold(true); // Set bold kolom A1    
-        $sheet->setCellValue('H3', "KETERANGAN");
-        $sheet->getStyle('H3')->getFont()->setBold(true); // Set bold kolom A1    
+        // // Buat header tabel nya pada baris ke 3    
+        // $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"  
+        // $sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('B3', "URAIAN BARANG"); // Set kolom B3 dengan tulisan "KODE"    
+        // $sheet->getStyle('B3')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('C3', "HS CODE");
+        // $sheet->getStyle('C3')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('D3', "KODE Brg"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        // $sheet->getStyle('D3')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('E3', "JUMLAH");
+        // $sheet->getStyle('E3')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('F3', "SATUAN");
+        // $sheet->getStyle('F3')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('G3', "BERAT (Kgm)");
+        // $sheet->getStyle('G3')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('H3', "KETERANGAN");
+        // $sheet->getStyle('H3')->getFont()->setBold(true); // Set bold kolom A1    
         $inv = $this->akbmodel->excellampiran261($id);
         $no = 1;
 
         // // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 4;
+        $sheet = $spreadsheet->setActiveSheetIndex(0);
         // Set baris pertama untuk isi tabel adalah baris ke 3    
         foreach ($inv->result_array() as $data) {
             $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
@@ -2085,17 +2089,61 @@ class Akb extends CI_Controller
             // Tambah 1 setiap kali looping      
         }
 
-        $newSheet2 = $spreadsheet->createSheet(1); // Index 1 for the second position (0-based)
-        $newSheet2->setTitle('Konversi Pemakaian Bahan Baku');
-
-        $spreadsheet->setActiveSheetIndex(0);
+        // $newSheet2 = $spreadsheet->createSheet(1); // Index 1 for the second position (0-based)
+        // $newSheet2->setTitle('Konversi Pemakaian Bahan Baku');
+        $inv = $this->akbmodel->excellampiran261($id);
+        $numrow = 15;
+        $no = 1;
+        $nok = 1;
+        $sheet = $spreadsheet->setActiveSheetIndex(1);
+        foreach ($inv->result_array() as $data) {
+            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $sku);
+            $sheet->setCellValue('E' . $numrow, $data['kgs']);
+            $sheet->setCellValue('F' . $numrow, 'KGM');
+            // $sheet->setCellValue('E' . $numrow, $data['pcs']);
+            // $sheet->setCellValue('F' . $numrow, $data['kodebc']);
+            // $sheet->setCellValue('G' . $numrow, $data['kgs']);
+            $nok = $numrow;
+            $nol = 1;
+            $numrow++;
+            $sheet->setCellValue('B' . $numrow, ' '.$hs);
+            $numrow++;
+            $sheet->setCellValue('B' . $numrow, $spekbarang);
+            $numrow++;
+            // $sheet->setCellValue('H' . $nok, "XXXX");
+            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            foreach($inv2->result_array() as $data2){
+                $sheet->setCellValue('G' . $nok, $nol);
+                $sheet->setCellValue('H' . $nok, $data2['kode']);
+                $sheet->setCellValue('K' . $nok, $data2['kgs']);
+                $sheet->setCellValue('L' . $nok, $data2['kodebc']);
+                $sheet->setCellValue('M' . $nok, round(($data2['kgs']/$data['kgs'])*100,2));
+                $sheet->setCellValue('N' . $nok, 0);
+                $sheet->setCellValue('O' . $nok, 'BC.'.$data2['jns_bc'].' '.trim($data2['nomor_bc']).' '.$data2['tgl_bc'].' No.'.$data2['seri_barang']);
+                $nok++; 
+                $sheet->setCellValue('H' . $nok, $data2['nohs']);
+                $nok++; 
+                $sheet->setCellValue('H' . $nok, $data2['nama_barang']);
+                $nok++; 
+                $nol++;
+            }
+            $numrow = $nok;
+            $numrow++;
+            $no++;
+            // Tambah 1 setiap kali looping      
+        }
 
         // // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
         $sheet->getDefaultRowDimension()->setRowHeight(-1);
         // Set orientasi kertas jadi LANDSCAPE    
         $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
         // Set judul file excel nya    
-        $sheet->setTitle("Lampiran Permohonan dan Kontrak");
+        // $sheet->setTitle("Lampiran Permohonan dan Kontrak");
 
         // Proses file excel    
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
@@ -2103,7 +2151,7 @@ class Akb extends CI_Controller
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
-        $this->helpermodel->isilog('Download Excel BOM INVENTORY' . $this->session->userdata('currdept'));
+        $this->helpermodel->isilog('Download Excel Lampiran Kontrak dan Konversi' . $this->session->userdata('currdept'));
     }
     public function toexcel($id,$mode=0)
     {
