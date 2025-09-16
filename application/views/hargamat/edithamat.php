@@ -116,7 +116,9 @@
                         <select class="form-select font-kecil font-bold btn-flat" name="kode_negara" id="kode_negara">
                             <option value="">Pilih Negara</option>
                             <?php foreach ($refbendera->result_array() as $bendera) { ?>
-                                <option value="<?= $bendera['kode_negara']; ?>" <?php if($data['kode_negara']==$bendera['kode_negara']){ echo "selected"; } ?>><?= $bendera['kode_negara'].'-'.$bendera['uraian_negara']; ?></option>
+                                <option value="<?= $bendera['kode_negara']; ?>" <?php if ($data['kode_negara'] == $bendera['kode_negara']) {
+                                                                                    echo "selected";
+                                                                                } ?>><?= $bendera['kode_negara'] . '-' . $bendera['uraian_negara']; ?></option>
                             <?php } ?>
                         </select>
                     </div>
@@ -218,6 +220,9 @@
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
+
+
+
     $("#nomor_bc").blur(function() {
         var nobc = $("#nomor_bc").val();
         $(this).val(isikurangnol(nobc));
