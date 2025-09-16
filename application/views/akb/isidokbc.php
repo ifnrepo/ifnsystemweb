@@ -566,6 +566,7 @@
                     <span>
                         <a href="<?= base_url().'akb/excellampiran261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Lampiran dan Konversi</a>
                         <a href="<?= base_url().'akb/exceljaminan261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-warning text-black"><i class="fa fa-file-excel-o mr-1"></i> Perhitungan Jaminan</a>
+                        <a href="<?= base_url().'akb/rekapnobontr/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-info"><i class="fa fa-file-excel-o mr-1"></i> Rekap IB</a>
                     <span>
                 </div>
                 <div class="card card-lg font-kecil">
@@ -621,7 +622,7 @@
                                     <?php $jmcolspan = $mode==1 ? 5 : 4; ?>
                                     <td class="text-black text-center font-bold" colspan="<?= $jmcolspan; ?>">TOTAL</td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumpcs,0); ?></td>
-                                    <td class="text-black text-right font-bold" id="txtsum"><?= rupiah($sumkgs,2); ?></td>
+                                    <td class="text-black text-right font-bold" id="txtsum"><?= rupiah($sumkgs,1); ?></td>
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail,2); ?></td>
                                 </tr>
@@ -758,7 +759,7 @@
                                 <?php } ?>
                                 <tr style="font-size: 16px !important" >
                                     <td colspan="5" class="text-right">TOTAL</td>
-                                    <td class="text-right text-primary"><?= rupiah($jmlkgs,2); ?></td>
+                                    <td class="text-right text-primary"><?= rupiah($jmlkgs,1); ?></td>
                                     <td colspan="4"></td>
                                     <td></td>
                                     <td class="text-right text-primary"><?= rupiah(bulatkan($jumlahtot,1000),2); ?></td>

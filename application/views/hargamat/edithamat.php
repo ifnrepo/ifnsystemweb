@@ -94,6 +94,15 @@
                             <input type="text" class="form-control font-kecil" name="nomor_inv" id="nomor_inv" value="<?= $data['nomor_inv']; ?>">
                         </div>
                     </div>
+                    <div class="col-6">
+                        <div class="mb-3">
+                            <label class="form-label font-kecil mb-0 font-bold text-white">.</label>
+                            <label class="form-check form-check-inline m-2">
+                                <input class="form-check-input" type="checkbox" id="co" name="co" <?php if($data['co']==1){ echo "checked"; } ?> >
+                                <span class="form-check-label text-blue font-bold">Certificate Of Origin</span>
+                            </label>
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="mb-3">
@@ -103,7 +112,7 @@
                 </div>
                 <div class="row">
                     <div class="mb-3">
-                        <label class="form-label font-kecil mb-0 font-bold text-primary">Negara</label>
+                        <label class="form-label font-kecil mb-0 font-bold text-primary">Negara Produsen</label>
                         <select class="form-select font-kecil font-bold btn-flat" name="kode_negara" id="kode_negara">
                             <option value="">Pilih Negara</option>
                             <?php foreach ($refbendera->result_array() as $bendera) { ?>

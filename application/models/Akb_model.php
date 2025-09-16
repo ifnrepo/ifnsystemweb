@@ -480,12 +480,6 @@ class Akb_model extends CI_Model
         return $query;
     }
 
-
-
-
-
-
-
     public function updatedetail($data)
     {
         $this->db->where('id', $data['id']);
@@ -775,16 +769,20 @@ class Akb_model extends CI_Model
 		return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
 	}
     public function getdetbom($id){
+        $subquery = $this->db->select('*,concat(nobontr,id_barang) as nobar')
+                             ->from('tb_hargamaterial')
+                             ->group_by('id_barang,nobontr') 
+                             ->get_compiled_select();
         $this->db->select('tb_bombc.*,barang.nama_barang,barang.kode,barang.nohs,tb_header.nomor_bc,tb_header.jns_bc,satuan.kodesatuan,supplier.kode_negara,tb_header.mtuang');
-        $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tb_hargamaterial.nomor_bc as hamat_nomorbc,tb_hargamaterial.jns_bc as hamat_jnsbc');
-        $this->db->select('tb_hargamaterial.price as hamat_harga,tb_hargamaterial.weight as hamat_weight,tb_hargamaterial.qty as hamat_qty,tb_hargamaterial.kurs  as hamat_kurs');
+        $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tbhargamat.nomor_bc as hamat_nomorbc,tbhargamat.jns_bc as hamat_jnsbc');
+        $this->db->select('tbhargamat.price as hamat_harga,tbhargamat.weight as hamat_weight,tbhargamat.qty as hamat_qty,tbhargamat.kurs  as hamat_kurs');
         $this->db->from('tb_bombc');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
         $this->db->join('tb_header','tb_header.nomor_dok = tb_bombc.nobontr','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
         $this->db->join('supplier','supplier.id = tb_header.id_pemasok','left');
         $this->db->join('ref_negara','ref_negara.kode_negara = supplier.kode_negara','left');
-        $this->db->join('tb_hargamaterial','tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->join("($subquery) as tbhargamat",'tbhargamat.nobar = concat(tb_bombc.nobontr,tb_bombc.id_barang)','left');
         $this->db->where('id_header',$id);
         // $this->db->order_by('id_barang','nobontr ASC');
         $this->db->group_by('tb_bombc.id');
@@ -792,16 +790,20 @@ class Akb_model extends CI_Model
         return $this->db->get();
     }
     public function getdetbombyid($id){
+        $subquery = $this->db->select('*,concat(nobontr,id_barang) as nobar')
+                             ->from('tb_hargamaterial')
+                             ->group_by('id_barang,nobontr') 
+                             ->get_compiled_select();
         $this->db->select('tb_bombc.*,barang.nama_barang,barang.kode,barang.nohs,tb_header.nomor_bc,tb_header.jns_bc,satuan.kodesatuan,supplier.kode_negara,tb_header.mtuang');
-        $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tb_hargamaterial.nomor_bc as hamat_nomorbc,tb_hargamaterial.jns_bc as hamat_jnsbc');
-        $this->db->select('tb_hargamaterial.price as hamat_harga,tb_hargamaterial.weight as hamat_weight,tb_hargamaterial.qty as hamat_qty');
+        $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tbhargamat.nomor_bc as hamat_nomorbc,tbhargamat.jns_bc as hamat_jnsbc');
+        $this->db->select('tbhargamat.price as hamat_harga,tbhargamat.weight as hamat_weight,tbhargamat.qty as hamat_qty');
         $this->db->from('tb_bombc');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
         $this->db->join('tb_header','tb_header.nomor_dok = tb_bombc.nobontr','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
         $this->db->join('supplier','supplier.id = tb_header.id_pemasok','left');
         $this->db->join('ref_negara','ref_negara.kode_negara = supplier.kode_negara','left');
-        $this->db->join('tb_hargamaterial','tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->join("($subquery) as tbhargamat",'tbhargamat.nobar = concat(tb_bombc.nobontr,tb_bombc.id_barang)','left');
         $this->db->where('tb_bombc.id',$id);
         return $this->db->get();
     }
@@ -897,9 +899,13 @@ class Akb_model extends CI_Model
         return $this->db->get();
     }
     public function detailexcellampiran261($id,$no){
-        $this->db->select("tb_bombc.*,tb_hargamaterial.jns_bc,tb_hargamaterial.nomor_bc,tb_hargamaterial.seri_barang,tb_hargamaterial.tgl_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
+        $subquery = $this->db->select('*,concat(nobontr,id_barang) as nobar')
+                             ->from('tb_hargamaterial')
+                             ->group_by('id_barang,nobontr') 
+                             ->get_compiled_select();
+        $this->db->select("tb_bombc.*,tbhargamat.jns_bc,tbhargamat.nomor_bc,tbhargamat.seri_barang,tbhargamat.tgl_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
         $this->db->from('tb_bombc');
-        $this->db->join('tb_hargamaterial','tb_hargamaterial ON tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->join("($subquery) as tbhargamat",'tbhargamat.nobar = concat(tb_bombc.nobontr,tb_bombc.id_barang)','left');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
         $this->db->where('tb_bombc.id_header',$id);
@@ -910,16 +916,20 @@ class Akb_model extends CI_Model
         return $this->db->get();
     }
     public function exceljaminan261($id){
-        $this->db->select("tb_bombc.id_barang,tb_bombc.nobontr,SUM(tb_bombc.kgs) AS kgs,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_hargamaterial.jns_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
-        $this->db->select("tb_bombc.bm,tb_bombc.bmt,tb_bombc.cukai,tb_bombc.ppn,tb_bombc.ppnbm,tb_bombc.pph");
+        $subquery = $this->db->select('*,concat(nobontr,id_barang) as nobar')
+                             ->from('tb_hargamaterial')
+                             ->group_by('id_barang,nobontr') 
+                             ->get_compiled_select();
+        $this->db->distinct();
+        $this->db->select("tb_bombc.id,tb_bombc.id_barang,tb_bombc.nobontr,SUM(tb_bombc.kgs) AS kgs,tbhargamat.nomor_bc,tbhargamat.tgl_bc,tbhargamat.jns_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
+        $this->db->select("tb_bombc.bm,tb_bombc.bmt,tb_bombc.cukai,tb_bombc.ppn,tb_bombc.ppnbm,tb_bombc.pph,tbhargamat.cif,tbhargamat.mt_uang");
         $this->db->from('tb_bombc');
-        $this->db->join('tb_hargamaterial','tb_hargamaterial ON tb_hargamaterial.nobontr = tb_bombc.nobontr AND tb_hargamaterial.id_barang = tb_bombc.id_barang','left');
+        $this->db->join("($subquery) as tbhargamat",'tbhargamat.nobar = concat(tb_bombc.nobontr,tb_bombc.id_barang)','left');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
         $this->db->where('tb_bombc.id_header',$id);
         $this->db->group_by('tb_bombc.id_barang,tb_bombc.nobontr');
-        // $this->db->limit(1,0);
-        $this->db->order_by('id_barang,nobontr');
+        $this->db->order_by('nama_barang,id_barang,nobontr');
         return $this->db->get();
     }
     public function simpanbom($data,$id){
