@@ -95,7 +95,7 @@
                 </div>
                 <div class="row">
                     <div class="mb-3">
-                        <label class="form-label font-kecil mb-0 font-bold text-primary">Negara</label>
+                        <label class="form-label font-kecil mb-0 font-bold text-primary">Negara Produsen</label>
                         <select class="form-select font-kecil font-bold btn-flat" name="kode_negara" id="kode_negara">
                             <option value="">Pilih Negara</option>
                             <?php foreach ($refbendera->result_array() as $bendera) { ?>
