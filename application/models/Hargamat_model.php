@@ -174,6 +174,7 @@ class Hargamat_model extends CI_Model
         $data['qty'] = toAngka($data['qty']);
         $data['weight'] = toAngka($data['weight']);
         $data['price'] = toAngka($data['price']);
+        $data['cif'] = toAngka($data['cif']);
         $data['oth_amount'] = toAngka($data['oth_amount']);
         $data['tgl_bc'] = tglmysql($data['tgl_bc']);
         $data['tgl_aju'] = tglmysql($data['tgl_aju']);
@@ -237,7 +238,8 @@ class Hargamat_model extends CI_Model
         $this->db->where('masuk', 1);
         return $this->db->get('ref_dok_bc');
     }
-    public function refbendera(){
+    public function refbendera()
+    {
         return $this->db->order_by('kode_negara')->get('ref_negara');
     }
     public function getdata_export($filter_kategori, $filter_inv)
