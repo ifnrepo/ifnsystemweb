@@ -177,6 +177,7 @@ class Hargamat_model extends CI_Model
         $data['oth_amount'] = toAngka($data['oth_amount']);
         $data['tgl_bc'] = tglmysql($data['tgl_bc']);
         $data['tgl_aju'] = tglmysql($data['tgl_aju']);
+        $data['co'] = isset($data['co']) ? 1 : 0;
         $fotodulu = FCPATH . 'assets/image/dokhamat/' . $data['dok_lama']; //base_url().$gambar.'.png';
         if ($data['dok_lama'] != $data['namedok']) {
             $data['filedok'] = $this->uploaddok();
