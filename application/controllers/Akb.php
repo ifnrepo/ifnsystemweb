@@ -2068,6 +2068,441 @@ class Akb extends CI_Controller
             redirect($url);
         }
     }
+    public function uploadijin($id,$mode=0){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+        $sheet->setTitle("BARANG DIKIRIM");
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A1', "SERI BARANG DIKIRIM"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "DOKUMEN ASAL"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "KODE KANTOR DOKUMEN ASAL"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "NOMOR AJU DOKUMEN ASAL");
+        $sheet->setCellValue('E1', "NOMOR DAFTAR");
+        $sheet->setCellValue('F1', "TANGGAL DAFTAR");
+        $sheet->setCellValue('G1', "SERI BARANG DOKUMEN ASAL");
+        $sheet->setCellValue('H1', "HS");
+        $sheet->setCellValue('I1', "MEREK");
+        $sheet->setCellValue('J1', "TIPE");
+        $sheet->setCellValue('K1', "SPESIFIKASI LAIN");
+        $sheet->setCellValue('L1', "URAIAN");
+        $sheet->setCellValue('M1', "KODE BARANG");
+        $sheet->setCellValue('N1', "ASAL BARANG");
+        $sheet->setCellValue('O1', "NEGARA ASAL");
+        $sheet->setCellValue('P1', "JUMLAH SATUAN");
+        $sheet->setCellValue('Q1', "JENIS SATUAN");
+        $sheet->setCellValue('R1', "NETTO");
+        $sheet->setCellValue('S1', "NDPBM");
+        $sheet->setCellValue('T1', "VALUTA");
+        $sheet->setCellValue('U1', "CIF ");
+        $sheet->setCellValue('V1', "CIF RUPIAH");
+        $sheet->setCellValue('W1', "HARGA PENYERAHAN");
+        $sheet->setCellValue('X1', "ISI PER KEMASAN");
+        $sheet->setCellValue('Y1', "JUMLAH DILEKATKAN");
+        $sheet->setCellValue('Z1', "JUMLAH PITA CUKAI");
+        $sheet->setCellValue('AA1', "HJE CUKAI");
+        $sheet->setCellValue('AB1', "TARIF CUKAI");
+        $sheet->setCellValue('AC1', "TOTAL NILAI TARIF BARANG");
+        $sheet->setCellValue('AD1', "KETERANGAN");
+        $sheet->setCellValue('AE1', "JUMLAH_KEMASAN");
+        $isiheader = $this->akbmodel->getdatabyid($id);
+        $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
+        $inv = $this->akbmodel->excellampiran261($id);
+        $no=0;
+        $numrow = 2;
+        foreach($inv->result_array() as $datbarangkirim){
+            $no++;
+            $hs = trim($datbarangkirim['po'])!='' ? substr($datbarangkirim['hsx'],0,8) : substr($datbarangkirim['nohs'],0,8) ;
+            $sku = trim($datbarangkirim['po'])=='' ? $datbarangkirim['kode'] : viewsku($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis'],$datbarangkirim['id_barang']);
+            $spekbarang = trim($datbarangkirim['po'])=='' ? namaspekbarang($datbarangkirim['id_barang']) : spekpo($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis']);
+
+            $sheet->setCellValue('A'.$numrow, $no);
+            $sheet->setCellValue('C'.$numrow, '050500');
+            $sheet->setCellValue('H'.$numrow, $hs);
+            $sheet->setCellValue('I'.$numrow, '-');
+            $sheet->setCellValue('J'.$numrow, '-');
+            $sheet->setCellValue('K'.$numrow, '-');
+            $sheet->setCellValue('L'.$numrow, $spekbarang);
+            $sheet->setCellValue('M'.$numrow, '-');
+            $sheet->setCellValue('P'.$numrow, $datbarangkirim['pcs']);
+            $sheet->setCellValue('Q'.$numrow, $datbarangkirim['kodebc']);
+            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            $nodet = 0;
+            foreach($inv2->result_array() as $det){
+                $asalbar = $det['jns_bc']==23 ? 1 : 2 ;
+                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang[strtolower($det['mt_uang'])];
+                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                if(count($det) > 0){
+                    $nodet++;
+                    $sheet->setCellValue('B'.$numrow, $det['jns_bc']);
+                    $sheet->setCellValue('D'.$numrow, $det['nomor_aju']);
+                    $sheet->setCellValue('E'.$numrow, $det['nomor_bc']);
+                    $sheet->setCellValue('F'.$numrow, $det['tgl_bc']);
+                    $sheet->setCellValue('G'.$numrow, $det['serbar']);
+                    $sheet->setCellValue('N'.$numrow, $asalbar);
+                    $sheet->setCellValue('O'.$numrow, $det['kode_negara']);
+                    $sheet->setCellValue('R'.$numrow, $det['kgs']);
+                    $sheet->setCellValue('S'.$numrow, $ndpbm);
+                    $sheet->setCellValue('T'.$numrow, $det['mt_uang']);
+                    $sheet->setCellValue('U'.$numrow, $det['cif']/$pembagi);
+                    $sheet->setCellValue('V'.$numrow, ($det['cif']/$pembagi)*$ndpbm);
+                    if($nodet > 1){
+                        $sheet->setCellValue('A'.$numrow, $no);
+                        $sheet->setCellValue('C'.$numrow, '050500');
+                        $sheet->setCellValue('H'.$numrow, $hs);
+                        $sheet->setCellValue('I'.$numrow, '-');
+                        $sheet->setCellValue('J'.$numrow, '-');
+                        $sheet->setCellValue('K'.$numrow, '-');
+                        $sheet->setCellValue('L'.$numrow, $spekbarang);
+                        $sheet->setCellValue('M'.$numrow, '-');
+                        $sheet->setCellValue('P'.$numrow, $datbarangkirim['pcs']);
+                        $sheet->setCellValue('Q'.$numrow, $datbarangkirim['kodebc']);
+                    }
+                    $numrow++;
+                }else{
+                    $numrow++;
+                }
+            }
+            // $numrow++;
+        }
+        
+
+        $newSheet2 = $spreadsheet->createSheet(1);
+        $newSheet2->setTitle('BARANG DIKIRIM TARIF');
+        $sheet = $spreadsheet->setActiveSheetIndex(1);
+
+        $sheet->setCellValue('A1', "SERI BARANG DIKIRIM"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "KODE PUNGUTAN"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "KODE TARIF"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "TARIF");
+        $sheet->setCellValue('E1', "KODE FASILITAS");
+        $sheet->setCellValue('F1', "TARIF FASILITAS");
+        $sheet->setCellValue('G1', "NILAI BAYAR");
+        $sheet->setCellValue('H1', "NILAI FASILITAS");
+        $sheet->setCellValue('I1', "NILAI SUDAH DILUNASI");
+        $sheet->setCellValue('J1', "KODE KEMASAN");
+        $sheet->setCellValue('K1', "JUMLAH KEMASAN  ");
+        $sheet->setCellValue('L1', "KODE KOMODITI CUKAI");
+        $sheet->setCellValue('M1', "KODE SUB KOMODITI CUKAI");
+        $sheet->setCellValue('N1', "FLAG TIS");
+        $sheet->setCellValue('O1', "FLAG PELEKATAN");
+        
+        $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
+        $inv = $this->akbmodel->excellampiran261($id);
+        $no=0;
+        $numrow = 2;
+        foreach($inv->result_array() as $datbarangkirim){
+            $no++;
+            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            $pajak = ['PPH','BM','PPN'];
+            $kdfas = [6,3,6];
+            foreach($inv2->result_array() as $det){
+                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
+                $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
+                $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
+                for($x=0;$x<3;$x++){
+                    $sheet->setCellValue('A'.$numrow,$no);
+                    $sheet->setCellValue('B'.$numrow,$pajak[$x]);
+                    $sheet->setCellValue('C'.$numrow,1);
+                    $sheet->setCellValue('D'.$numrow,$det[strtolower($pajak[$x])]);
+                    $sheet->setCellValue('E'.$numrow,$kdfas[$x]);
+                    $sheet->setCellValue('F'.$numrow,100);
+                    $sheet->setCellValue('H'.$numrow,round($dpp*($det[strtolower($pajak[$x])]/100)));
+                    $numrow++;
+                }
+            }
+        }
+
+
+        $newSheet3 = $spreadsheet->createSheet(2);
+        $newSheet3->setTitle('BAHAN BAKU DIKIRIM');
+        $sheet = $spreadsheet->setActiveSheetIndex(2);
+
+        $sheet->setCellValue('A1', "SERI BAHAN BAKU DIKIRIM"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "SERI BARANG DIKIRIM"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "DOKUMEN ASAL"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "KODE KANTOR DOKUMEN ASAL");
+        $sheet->setCellValue('E1', "NOMOR AJU DOKUMEN ASAL");
+        $sheet->setCellValue('F1', "NOMOR DAFTAR");
+        $sheet->setCellValue('G1', "TANGGAL DAFTAR");
+        $sheet->setCellValue('H1', "SERI BARANG DOKUMEN ASAL");
+        $sheet->setCellValue('I1', "HS");
+        $sheet->setCellValue('J1', "MEREK");
+        $sheet->setCellValue('K1', "TIPE");
+        $sheet->setCellValue('L1', "SPESIFIKASI LAIN");
+        $sheet->setCellValue('M1', "URAIAN");
+        $sheet->setCellValue('N1', "KODE BARANG");
+        $sheet->setCellValue('O1', "ASAL BARANG");
+        $sheet->setCellValue('P1', "NEGARA ASAL");
+        $sheet->setCellValue('Q1', "JUMLAH SATUAN");
+        $sheet->setCellValue('R1', "JENIS SATUAN");
+        $sheet->setCellValue('S1', "NETTO");
+        $sheet->setCellValue('T1', "NDPBM");
+        $sheet->setCellValue('U1', "VALUTA ");
+        $sheet->setCellValue('V1', "CIF");
+        $sheet->setCellValue('W1', "CIF RUPIAH");
+        $sheet->setCellValue('X1', "HARGA PENYERAHAN");
+        $sheet->setCellValue('Y1', "ISI PER KEMASAN");
+        $sheet->setCellValue('Z1', "JUMLAH DILEKATKAN");
+        $sheet->setCellValue('AA1', "JUMLAH PITA CUKAI");
+        $sheet->setCellValue('AB1', "HJE CUKAI");
+        $sheet->setCellValue('AC1', "TARIF CUKAI");
+        $sheet->setCellValue('AD1', "TOTAL NILAI TARIF BARANG");
+        $sheet->setCellValue('AE1', "KETERANGAN");
+        $sheet->setCellValue('AF1', "JUMLAH_KEMASAN");
+        $sheet->setCellValue('AG1', "FLAG BARANG LOKAL");
+
+        $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
+        $inv = $this->akbmodel->excellampiran261($id);
+        $no=0;
+        $numrow = 2;
+        foreach($inv->result_array() as $datbarangkirim){
+            $no++;
+            $hs = trim($datbarangkirim['po'])!='' ? substr($datbarangkirim['hsx'],0,8) : substr($datbarangkirim['nohs'],0,8) ;
+            $sku = trim($datbarangkirim['po'])=='' ? $datbarangkirim['kode'] : viewsku($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis'],$datbarangkirim['id_barang']);
+            $spekbarang = trim($datbarangkirim['po'])=='' ? namaspekbarang($datbarangkirim['id_barang']) : spekpo($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis']);
+
+            $sheet->setCellValue('A'.$numrow, $no);
+            $sheet->setCellValue('B'.$numrow, $no);
+            $sheet->setCellValue('D'.$numrow, '050500');
+            $sheet->setCellValue('I'.$numrow, $hs);
+            $sheet->setCellValue('J'.$numrow, '-');
+            $sheet->setCellValue('K'.$numrow, '-');
+            $sheet->setCellValue('L'.$numrow, '-');
+            $sheet->setCellValue('M'.$numrow, $spekbarang);
+            $sheet->setCellValue('N'.$numrow, '-');
+            $sheet->setCellValue('Q'.$numrow, $datbarangkirim['pcs']);
+            $sheet->setCellValue('R'.$numrow, $datbarangkirim['kodebc']);
+            $sheet->setCellValue('AF'.$numrow, 1);
+            $sheet->setCellValue('AG'.$numrow, 'AN');
+            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            $nodet = 0;
+            foreach($inv2->result_array() as $det){
+                $asalbar = $det['jns_bc']==23 ? 1 : 2 ;
+                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang[strtolower($det['mt_uang'])];
+                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                if(count($det) > 0){
+                    $nodet++;
+                    $sheet->setCellValue('C'.$numrow, $det['jns_bc']);
+                    $sheet->setCellValue('E'.$numrow, $det['nomor_aju']);
+                    $sheet->setCellValue('F'.$numrow, $det['nomor_bc']);
+                    $sheet->setCellValue('G'.$numrow, $det['tgl_bc']);
+                    $sheet->setCellValue('H'.$numrow, $det['serbar']);
+                    $sheet->setCellValue('O'.$numrow, $asalbar);
+                    $sheet->setCellValue('P'.$numrow, $det['kode_negara']);
+                    $sheet->setCellValue('S'.$numrow, $det['kgs']);
+                    $sheet->setCellValue('T'.$numrow, $ndpbm);
+                    $sheet->setCellValue('U'.$numrow, $det['mt_uang']);
+                    $sheet->setCellValue('V'.$numrow, $det['cif']/$pembagi);
+                    $sheet->setCellValue('W'.$numrow, ($det['cif']/$pembagi)*$ndpbm);
+                    $sheet->setCellValue('AF'.$numrow, 1);
+                    $sheet->setCellValue('AG'.$numrow, 'AN');
+                    if($nodet > 1){
+                        $sheet->setCellValue('A'.$numrow, $no);
+                        $sheet->setCellValue('B'.$numrow, $no);
+                        $sheet->setCellValue('D'.$numrow, '050500');
+                        $sheet->setCellValue('I'.$numrow, $hs);
+                        $sheet->setCellValue('J'.$numrow, '-');
+                        $sheet->setCellValue('K'.$numrow, '-');
+                        $sheet->setCellValue('L'.$numrow, '-');
+                        $sheet->setCellValue('M'.$numrow, $spekbarang);
+                        $sheet->setCellValue('N'.$numrow, '-');
+                        $sheet->setCellValue('Q'.$numrow, $datbarangkirim['pcs']);
+                        $sheet->setCellValue('R'.$numrow, $datbarangkirim['kodebc']);
+                        $sheet->setCellValue('AF'.$numrow, 1);
+                        $sheet->setCellValue('AG'.$numrow, 'AN');
+                    }
+                    $numrow++;
+                }else{
+                    $numrow++;
+                }
+            }
+            // $numrow++;
+        }
+
+        $newSheet4 = $spreadsheet->createSheet(3);
+        $newSheet4->setTitle('BAHAN BAKU DIKIRIM TARIF');
+        $sheet = $spreadsheet->setActiveSheetIndex(3);
+
+        $sheet->setCellValue('A1', "SERI BAHAN BAKU DIKIRIM"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "SERI BARANG DIKIRIM"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "KODE PUNGUTAN"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "KODE TARIF");
+        $sheet->setCellValue('E1', "TARIF");
+        $sheet->setCellValue('F1', "KODE FASILITAS");
+        $sheet->setCellValue('G1', "TARIF FASILITAS");
+        $sheet->setCellValue('H1', "NILAI BAYAR");
+        $sheet->setCellValue('I1', "NILAI FASILITAS");
+        $sheet->setCellValue('J1', "NILAI SUDAH DILUNASI");
+        $sheet->setCellValue('K1', "KODE KEMASAN");
+        $sheet->setCellValue('L1', "JUMLAH KEMASAN");
+        $sheet->setCellValue('M1', "KODE KOMODITI CUKAI");
+        $sheet->setCellValue('N1', "KODE SUB KOMODITI CUKAI");
+        $sheet->setCellValue('O1', "FLAG TIS");
+        $sheet->setCellValue('P1', "FLAG PELEKATAN");
+
+        $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
+        $inv = $this->akbmodel->excellampiran261($id);
+        $no=0;
+        $numrow = 2;
+        foreach($inv->result_array() as $datbarangkirim){
+            $no++;
+            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            $pajak = ['PPH','BM','PPN'];
+            $kdfas = [6,3,6];
+            foreach($inv2->result_array() as $det){
+                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
+                $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
+                $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
+                for($x=0;$x<3;$x++){
+                    $sheet->setCellValue('A'.$numrow,$no);
+                    $sheet->setCellValue('B'.$numrow,$no);
+                    $sheet->setCellValue('C'.$numrow,$pajak[$x]);
+                    $sheet->setCellValue('D'.$numrow,1);
+                    $sheet->setCellValue('E'.$numrow,$det[strtolower($pajak[$x])]);
+                    $sheet->setCellValue('F'.$numrow,$kdfas[$x]);
+                    $sheet->setCellValue('G'.$numrow,100);
+                    $sheet->setCellValue('I'.$numrow,round($dpp*($det[strtolower($pajak[$x])]/100)));
+                    $numrow++;
+                }
+            }
+        }
+
+        $newSheet5 = $spreadsheet->createSheet(4);
+        $newSheet5->setTitle('BARANG MASUK');
+        $sheet = $spreadsheet->setActiveSheetIndex(4);
+
+        $sheet->setCellValue('A1', "SERI BARANG MASUK"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "HS"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "MEREK"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "TIPE");
+        $sheet->setCellValue('E1', "SPESIFIKASI LAIN");
+        $sheet->setCellValue('F1', "URAIAN");
+        $sheet->setCellValue('G1', "KODE BARANG");
+        $sheet->setCellValue('H1', "JUMLAH SATUAN");
+        $sheet->setCellValue('I1', "JENIS SATUAN");
+        $sheet->setCellValue('J1', "NETTO");
+        $sheet->setCellValue('K1', "VOLUME");
+        $sheet->setCellValue('L1', "KETERANGAN");
+
+        $inv = $this->akbmodel->excellampiran261($id);
+        $no = 1;
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 2;
+        // Set baris pertama untuk isi tabel adalah baris ke 3   
+        $jumlahpcs = 0;$jumlahkgs=0; 
+        foreach ($inv->result_array() as $data) {
+            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+            $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
+            $jumlahkgs+=$data['kgs'];
+            if(trim($data['kodebc'])!='KGM'){
+                $jumlahpcs += $data['pcs'];
+            }
+            $numawal = $numrow;
+            $numakhir = $numrow-1;
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $hs);
+            $sheet->setCellValue('F' . $numrow, $spekbarang);
+            $sheet->setCellValue('H' . $numrow, $pcs);
+            $sheet->setCellValue('I' . $numrow, $data['kodebc']);
+            $sheet->setCellValue('J' . $numrow, $data['kgs']);
+
+            $numrow++;
+            $no++;  
+        }
+
+        $newSheet6 = $spreadsheet->createSheet(5);
+        $newSheet6->setTitle('BARANG SISA');
+        $sheet = $spreadsheet->setActiveSheetIndex(5);
+
+        $sheet->setCellValue('A1', "SERI BARANG SISA"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "HS"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "MEREK"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "TIPE");
+        $sheet->setCellValue('E1', "SPESIFIKASI LAIN");
+        $sheet->setCellValue('F1', "URAIAN");
+        $sheet->setCellValue('G1', "KODE BARANG");
+        $sheet->setCellValue('H1', "JUMLAH SATUAN");
+        $sheet->setCellValue('I1', "JENIS SATUAN");
+        $sheet->setCellValue('J1', "NETTO");
+        $sheet->setCellValue('K1', "VOLUME");
+        $sheet->setCellValue('L1', "KETERANGAN");
+
+        $newSheet7 = $spreadsheet->createSheet(6);
+        $newSheet7->setTitle('BARANG TAMBAHAN');
+        $sheet = $spreadsheet->setActiveSheetIndex(6);
+
+        $sheet->setCellValue('A1', "SERI BARANG TAMBAHAN"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "HS"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "MEREK"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "TIPE");
+        $sheet->setCellValue('E1', "SPESIFIKASI LAIN");
+        $sheet->setCellValue('F1', "URAIAN");
+        $sheet->setCellValue('G1', "KODE BARANG");
+        $sheet->setCellValue('H1', "JUMLAH SATUAN");
+        $sheet->setCellValue('I1', "JENIS SATUAN");
+        $sheet->setCellValue('J1', "NETTO");
+        $sheet->setCellValue('K1', "VOLUME");
+        $sheet->setCellValue('L1', "HARGA PENYERAHAN");
+        $sheet->setCellValue('M1', "KETERANGAN");
+
+        $newSheet8 = $spreadsheet->createSheet(7);
+        $newSheet8->setTitle('KONVERSI');
+        $sheet = $spreadsheet->setActiveSheetIndex(7);
+
+        $sheet->setCellValue('A1', "SERI BARANG MASUK"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "JUMLAH BARANG MASUK"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "SERI BAHAN BAKU DIKIRIM"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "JUMLAH BAHAN BAKU DIKIRIM");
+        $sheet->setCellValue('E1', "CONSMP");
+
+
+        $sheet = $spreadsheet->setActiveSheetIndex(0);
+        
+        // $inv = $this->akbmodel->exceljaminan261($id);
+        // $no = 1;
+
+        // // Untuk penomoran tabel, di awal set dengan 1    
+        // $numrow = 3;
+        // // Set baris pertama untuk isi tabel adalah baris ke 3    
+        // foreach ($inv->result_array() as $data) {
+        //     $sku = $data['kode'];
+        //     $spekbarang = namaspekbarang($data['id_barang']);
+        //     // Lakukan looping pada variabel      
+        //     $sheet->setCellValue('A' . $numrow, $no);
+        //     $sheet->setCellValue('B' . $numrow, $sku);
+        //     $sheet->setCellValue('C' . $numrow, $spekbarang);
+        //     $sheet->setCellValue('D' . $numrow, $data['nobontr']);
+        //     $sheet->setCellValue('E' . $numrow, $data['jns_bc']);
+        //     $sheet->setCellValue('F' . $numrow, $data['nomor_bc']);
+        //     $sheet->setCellValue('G' . $numrow, $data['tgl_bc']);
+        //     $sheet->setCellValue('H' . $numrow, $data['mt_uang']);
+        //     $sheet->setCellValue('I' . $numrow, $data['cif']);
+        //     $no++;
+        //     // Tambah 1 setiap kali looping      
+        //     $numrow++; // Tambah 1 setiap kali looping    
+        // }
+
+        // // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        // $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // // Set orientasi kertas jadi LANDSCAPE    
+        // $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // // Set judul file excel nya    
+        // $sheet->setTitle("DATA");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Dokumen Perijinan AJU "'.$id.'".xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel Rekap NOMOR IB' . $this->session->userdata('currdept'));
+    }
     public function rekapnobontr($id,$mode=0){
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
@@ -2236,11 +2671,12 @@ class Akb extends CI_Controller
                         $sheet->getStyle('G'.$numrow)->applyFromArray($styleArray);
                         $sheet->getStyle('H'.$numrow)->applyFromArray($styleArray);
                         $numakhir++;
-                        $numrow++; // Tambah 1 setiap kali looping    
+                        $numrow++; 
+                    }else{
+                        $numrow++; 
                     }
                 }
-                $no++;
-                // Tambah 1 setiap kali looping      
+                $no++;  
                 $sheet->getStyle('A'.$numawal.':A'.$numakhir)->applyFromArray($styleArray);
                 $sheet->getStyle('B'.$numawal.':B'.$numakhir)->applyFromArray($styleArray);
                 $sheet->getStyle('C'.$numawal.':C'.$numakhir)->applyFromArray($styleArray);
@@ -2443,7 +2879,7 @@ class Akb extends CI_Controller
                         $sheet->setCellValue('O' . $nok, trim($data2['nomor_bc']).' '.$data2['tgl_bc']);
                         $nok++; 
                         $sheet->setCellValue('H' . $nok, $data2['nama_barang']);
-                        $sheet->setCellValue('O' . $nok, ' No.'.$data2['seri_barang']);
+                        $sheet->setCellValue('O' . $nok, ' No.'.$data2['serbar']);
                         $sheet->getStyle('G'.$numawal.':G'.$nok)->applyFromArray($styleArray);
                         $sheet->getStyle('H'.$numawal.':J'.$nok)->applyFromArray($styleArray);
                         $sheet->getStyle('K'.$numawal.':K'.$nok)->applyFromArray($styleArray);
@@ -2467,6 +2903,106 @@ class Akb extends CI_Controller
         }catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
                 die('Error loading file: ' . $e->getMessage());
         }
+
+        $newSheet3 = $spreadsheet->createSheet(2);
+        $newSheet3->setTitle('Lampiran BARANG JADI');
+        $sheet = $spreadsheet->setActiveSheetIndex(2);
+        
+        $sheet->setCellValue('A1', "BARANG HASIL SUBKONTRAK"); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('A1')->getFont()->setSize(14);   
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"  
+        $sheet->getStyle('A3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('A3')->applyFromArray($styleArray);
+        $sheet->getColumnDimension('A')->setWidth(0.71, 'cm');
+        $sheet->setCellValue('B3', "URAIAN BARANG"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->getStyle('B3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('B3')->applyFromArray($styleArray);
+        $sheet->getColumnDimension('B')->setWidth(12.45, 'cm');
+        $sheet->setCellValue('C3', "HS CODE");
+        $sheet->getStyle('C3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('C3')->applyFromArray($styleArray);
+        $sheet->getColumnDimension('C')->setWidth(1.77, 'cm');
+        $sheet->setCellValue('D3', "KODE Brg"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->getStyle('D3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('D3')->applyFromArray($styleArray);
+        $sheet->getColumnDimension('D')->setWidth(2.19, 'cm');
+        $sheet->setCellValue('E3', "JUMLAH");
+        $sheet->getStyle('E3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('E3')->applyFromArray($styleArray);
+        $sheet->getColumnDimension('E')->setWidth(1.43, 'cm');
+        $sheet->setCellValue('F3', "SATUAN");
+        $sheet->getStyle('F3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('F3')->applyFromArray($styleArray);
+        $sheet->getColumnDimension('F')->setWidth(1.40, 'cm');
+        $sheet->setCellValue('G3', "BERAT (Kgm)");
+        $sheet->getStyle('G3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('G3')->applyFromArray($styleArray);
+        $sheet->getColumnDimension('G')->setWidth(2.30, 'cm');
+        $sheet->setCellValue('H3', "KETERANGAN");
+        $sheet->getStyle('H3')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->getStyle('H3')->applyFromArray($styleArray);
+        $sheet->getColumnDimension('H')->setWidth(5.09, 'cm');
+
+        $sheet->getStyle('A3')->getFont()->setSize(13);  
+        $sheet->getStyle('B3')->getFont()->setSize(13);  
+        $sheet->getStyle('C3')->getFont()->setSize(13);  
+        $sheet->getStyle('D3')->getFont()->setSize(13);  
+        $sheet->getStyle('E3')->getFont()->setSize(13);  
+        $sheet->getStyle('F3')->getFont()->setSize(13);  
+        $sheet->getStyle('G3')->getFont()->setSize(13);  
+        $sheet->getStyle('H3')->getFont()->setSize(13);  
+        $inv = $this->akbmodel->excellampiran261($id);
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 4;
+        // Set baris pertama untuk isi tabel adalah baris ke 3   
+        $jumlahpcs = 0;$jumlahkgs=0; 
+        foreach ($inv->result_array() as $data) {
+            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+            $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
+            $jumlahkgs+=$data['kgs'];
+            if(trim($data['kodebc'])!='KGM'){
+                $jumlahpcs += $data['pcs'];
+            }
+            $numawal = $numrow;
+            $numakhir = $numrow-1;
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $spekbarang);
+            $sheet->setCellValue('C' . $numrow, $hs);
+            $sheet->setCellValue('D' . $numrow, $sku);
+            $sheet->setCellValue('E' . $numrow, $pcs);
+            $sheet->setCellValue('F' . $numrow, $data['kodebc']);
+            $sheet->setCellValue('G' . $numrow, $data['kgs']);
+
+            $sheet->getStyle('A'.$numrow.':A'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('B'.$numrow.':B'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('C'.$numrow.':C'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('D'.$numrow.':D'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('E'.$numrow.':E'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('F'.$numrow.':F'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('G'.$numrow.':G'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('H'.$numrow.':H'.$numrow)->applyFromArray($styleArray);
+            $numrow++;
+            $no++;  
+        }
+        $sheet->setCellValue('D' . $numrow, 'TOTAL');
+        $sheet->getStyle('D'. $numrow)->getFont()->setBold(true);
+        $sheet->getStyle('A'.$numrow.':D'.$numrow)->applyFromArray($styleArray);
+        $sheet->setCellValue('E' . $numrow, $jumlahpcs);
+        $sheet->getStyle('E'. $numrow)->getFont()->setBold(true);
+        $sheet->getStyle('E'.$numrow)->applyFromArray($styleArray);
+        $sheet->setCellValue('G' . $numrow, round($jumlahkgs,1));
+        $sheet->getStyle('G'.$numrow)->applyFromArray($styleArray);
+        $sheet->getStyle('G'. $numrow)->getFont()->setBold(true);
+        $sheet->getStyle('F'.$numrow)->applyFromArray($styleArray);
+        $sheet->getStyle('H'.$numrow)->applyFromArray($styleArray);
 
         $sheet = $spreadsheet->setActiveSheetIndex(0);
         // // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
@@ -2659,7 +3195,8 @@ class Akb extends CI_Controller
             $sheet->getColumnDimension('Q')->setWidth(3.55, 'cm');
             $sheet->getColumnDimension('R')->setWidth(3.55, 'cm');
             $sheet->getRowDimension('8')->setRowHeight(0.15, 'cm');
-            $kurssekarang = getkurssekarang()->row_array();
+            $isiheader = $this->akbmodel->getdatabyid($id);
+            $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
             $inv = $this->akbmodel->exceljaminan261($id);
             $numrow = 13;
             $no = 1;
