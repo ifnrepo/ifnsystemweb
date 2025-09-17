@@ -918,7 +918,8 @@ class Akb_model extends CI_Model
                              ->from('tb_hargamaterial')
                              ->group_by('id_barang,nobontr') 
                              ->get_compiled_select();
-        $this->db->select("tb_bombc.*,tbhargamat.jns_bc,tbhargamat.nomor_bc,tbhargamat.seri_barang,tbhargamat.tgl_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
+        $this->db->select("tb_bombc.*,tbhargamat.jns_bc,tbhargamat.nomor_bc,tbhargamat.seri_barang as serbar,tbhargamat.tgl_bc,barang.nohs");
+        $this->db->select("barang.kode,barang.nama_barang,satuan.kodebc,tbhargamat.nomor_aju,tbhargamat.tgl_aju,tbhargamat.kode_negara,tbhargamat.mt_uang,tbhargamat.cif,tbhargamat.weight");
         $this->db->from('tb_bombc');
         $this->db->join("($subquery) as tbhargamat",'tbhargamat.nobar = concat(trim(tb_bombc.nobontr),tb_bombc.id_barang)','left');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
@@ -936,7 +937,7 @@ class Akb_model extends CI_Model
                              ->group_by('id_barang,nobontr') 
                              ->get_compiled_select();
         $this->db->select("tb_bombc.id,tb_bombc.id_barang,tb_bombc.nobontr,SUM(tb_bombc.kgs) AS kgs,tbhargamat.nomor_bc,tbhargamat.tgl_bc,tbhargamat.jns_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
-        $this->db->select("tb_bombc.bm,tb_bombc.bmt,tb_bombc.cukai,tb_bombc.ppn,tb_bombc.ppnbm,tb_bombc.pph,tbhargamat.cif,tbhargamat.mt_uang,tbhargamat.price as hamat_harga,tbhargamat.weight as hamat_weight");
+        $this->db->select("tb_bombc.bm,tb_bombc.bmt,tb_bombc.cukai,tb_bombc.ppn,tb_bombc.ppnbm,tb_bombc.pph,tbhargamat.cif,tbhargamat.mt_uang,tbhargamat.price as hamat_harga,tbhargamat.weight as hamat_weight,tbhargamat.seri_barang");
         $this->db->from('tb_bombc');
         $this->db->join("($subquery) as tbhargamat",'tbhargamat.nobar = concat(trim(tb_bombc.nobontr),tb_bombc.id_barang)','left');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
