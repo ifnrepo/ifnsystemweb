@@ -43,7 +43,14 @@
                     <div class="col-2">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Currency</label>
-                            <input type="text" class="form-control font-kecil" name="mt_uang" placeholder="Input placeholder" value="<?= $data['mt_uang']; ?>" disabled>
+                            <select class="form-select font-kecil font-bold btn-flat" name="mt_uang" id="mt_uang">
+                                <option value="">Pilih Mata Uang</option>
+                                <?php foreach ($refmtuang->result_array() as $mtuang) { ?>
+                                    <option value="<?= $mtuang['mt_uang']; ?>" <?php if ($data['mt_uang'] == $mtuang['mt_uang']) {
+                                                                                        echo "selected";
+                                                                                    } ?>><?= $mtuang['mt_uang'] ?></option>
+                                <?php } ?>
+                            </select>
                         </div>
                     </div>
                     <div class="col-5">

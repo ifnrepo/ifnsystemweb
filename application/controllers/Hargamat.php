@@ -80,6 +80,7 @@ class Hargamat extends CI_Controller
         $data['data'] = $this->hargamatmodel->getdatabyid($id)->row_array();
         $data['dokbc'] = $this->hargamatmodel->getdokbc();
         $data['refbendera'] = $this->hargamatmodel->refbendera();
+        $data['refmtuang'] = $this->hargamatmodel->refmtuang();
         $this->load->view('hargamat/edithamat', $data);
     }
     public function updatehamat()

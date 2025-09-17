@@ -686,52 +686,43 @@
                                     $jumlahtot=0;
                                     $jmbm=0;$jmppn=0;$jmpph=0;$totpajak=0;
                                     $jumlahnobontrkosong = 0;
+                                    $kurssekarang = getkurssekarang($datheader['tgl_aju'])->row_array();
                                     foreach ($detbombc->result_array() as $detbom ) { 
-                                        if((trim($detbom['nobontr']) == '' || $detbom['nobontr']==NULL) && $detbom['kode']!='P6974831'){
-                                            $jumlahnobontrkosong += 1;
-                                        }
                                         if($detbom['seri_barang']!= $serbar){
                                            $no=0; 
                                         }
                                         $no++; 
-                                        switch ($detbom['mtuang']) {
-                                            case 1:
-                                                $hargaidr = $detbom['totalharga'];
+                                        $pembagi = $detbom['hamat_weight']==0 ? 1 : $detbom['hamat_weight'];
+                                        switch ($detbom['mt_uang']) {
+                                            case 'IDR':
+                                                $hargaperkilo = round($detbom['hamat_harga']/$pembagi,2);
                                                 break;
-                                            case 2:
-                                                $hargaidr = $detbom['totalharga']*$detbom['kurs_usd'];
+                                            case 'USD':
+                                                $hargaperkilo = ($detbom['cif']/$pembagi)*$kurssekarang['usd'];
                                                 break;
-                                            case 3:
-                                                $hargaidr = $detbom['totalharga']*$detbom['kurs_yen'];
                                                 break;
+                                            case 'JPY':
+                                                $hargaperkilo = ($detbom['cif']/$pembagi)*$kurssekarang['jpy'];
+                                                break;
+                                            
                                             default:
-                                                $hargaidr = $detbom['totalharga'];
+                                                # code...
                                                 break;
                                         }
-                                        $pembagi = $detbom['netto']>0 ? $detbom['netto'] : 1;
-                                        $nomor_bc = $detbom['nomor_bc'] != '' ? $detbom['nomor_bc'] : $detbom['hamat_nomorbc'];
-                                        $jns_bc = $detbom['jns_bc'] != '' ? $detbom['jns_bc'] : $detbom['hamat_jnsbc'];
-                                        $pembagihamat = $detbom['hamat_weight'] > 0 ? $detbom['hamat_weight'] : ($detbom['hamat_qty']>0 ? $detbom['hamat_qty'] : 1);
-                                        $hargaidr = $detbom['nomor_bc'] != '' ? $hargaidr : $detbom['hamat_harga'];
-
                                         $jmlkgs += $detbom['kgs'];
-                                        
-                                        $harga = $hargaidr/$pembagi;
-                                        $jumlahharga = 0;
-                                        if($detbom['bm'] > 0 || $detbom['ppn'] > 0 || $detbom['pph'] > 0){
-                                            $jumlahharga = $detbom['kgs']*($hargaidr/$pembagi);
-                                            $jumlahtot += $detbom['kgs']*($hargaidr/$pembagi);
-                                        }
+                                        $serbar = $detbom['seri_barang'];
+                                        $jns_bc = $detbom['hamat_jnsbc'];
+                                        $nomor_bc = $detbom['hamat_nomorbc'];
+                                        $jumlahhargaperkilo = $hargaperkilo*$detbom['kgs'];
+                                        $jumlahtot += $jumlahhargaperkilo;
                                         $hitungbm = $detbom['bm'] > 0 ? '' : 'hilang';
                                         $hitungppn = $detbom['ppn'] > 0 ? '' : 'hilang';
                                         $hitungpph = $detbom['pph'] > 0 ? '' : 'hilang';
-
-                                        $jmbm += $jumlahharga*($detbom['bm']/100);
-                                        $jmppn += $jumlahharga*($detbom['ppn']/100);
-                                        $jmpph += $jumlahharga*($detbom['pph']/100);
-                                        $jmpajak = ($jumlahharga*($detbom['bm']/100))+($jumlahharga*($detbom['ppn']/100))+$jumlahharga*($detbom['pph']/100);
-                                        $totpajak += $jmpajak;
-                                        $serbar = $detbom['seri_barang'];
+                                        if($jns_bc == 23){
+                                            $jmbm += $jumlahhargaperkilo*($detbom['bm']/100);
+                                            $jmppn += $jumlahhargaperkilo*($detbom['ppn']/100);
+                                            $jmpph += $jumlahhargaperkilo*($detbom['pph']/100);
+                                        }
                                 ?>
                                     <tr>
                                         <td><?= $detbom['seri_barang'].'.'.$no; ?></td>
@@ -750,8 +741,8 @@
                                         <td><?= $detbom['kodesatuan']; ?></td>
                                         <td><?= $nomor_bc ?></td>
                                         <td class="text-center text-blue"><?= $jns_bc; ?></td>
-                                        <td class="text-right"><?= rupiah($harga,2); ?></td>
-                                        <td class="text-right"><?= rupiah($jumlahharga,2); ?></td>
+                                        <td class="text-right"><?= rupiah($hargaperkilo,2) ?></td>
+                                        <td class="text-right"><?= rupiah($jumlahhargaperkilo,2) ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url().'akb/editbombc/'.$detbom['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data" >EDIT</a>
                                         </td>

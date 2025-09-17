@@ -929,4 +929,10 @@ class Helper_model extends CI_Model
         $this->db->where($kondisi);
         return $this->db->get();
     }
+    public function getkurssekarang($date){
+        if($date=='' || $date==NULL){
+            $date = date('Y-m-d');
+        }
+        return $this->db->get_where('tb_kurs',['tgl' => $date]);
+    }
 }
