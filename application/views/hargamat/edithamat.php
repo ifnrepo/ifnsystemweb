@@ -47,8 +47,8 @@
                                 <option value="">Pilih Mata Uang</option>
                                 <?php foreach ($refmtuang->result_array() as $mtuang) { ?>
                                     <option value="<?= $mtuang['mt_uang']; ?>" <?php if ($data['mt_uang'] == $mtuang['mt_uang']) {
-                                                                                        echo "selected";
-                                                                                    } ?>><?= $mtuang['mt_uang'] ?></option>
+                                                                                    echo "selected";
+                                                                                } ?>><?= $mtuang['mt_uang'] ?></option>
                                 <?php } ?>
                             </select>
                         </div>
@@ -105,7 +105,9 @@
                         <div class="mb-3">
                             <label class="form-label font-kecil mb-0 font-bold text-white">.</label>
                             <label class="form-check form-check-inline m-2">
-                                <input class="form-check-input" type="checkbox" id="co" name="co" <?php if($data['co']==1){ echo "checked"; } ?> >
+                                <input class="form-check-input" type="checkbox" id="co" name="co" <?php if ($data['co'] == 1) {
+                                                                                                        echo "checked";
+                                                                                                    } ?>>
                                 <span class="form-check-label text-blue font-bold">Certificate Of Origin</span>
                             </label>
                         </div>
@@ -128,6 +130,27 @@
                                                                                 } ?>><?= $bendera['kode_negara'] . '-' . $bendera['uraian_negara']; ?></option>
                             <?php } ?>
                         </select>
+                    </div>
+                </div>
+                <div class="row">
+
+                    <div class="col-4">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Bm</label>
+                            <input type="text" class="form-control font-kecil text-end inputangka" name="bm" placeholder="Input BM" value="<?= rupiah($data['bm'], 2); ?>">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Ppn</label>
+                            <input type="text" class="form-control font-kecil text-end inputangka" name="ppn" placeholder="Input Ppn" value="<?= rupiah($data['ppn'], 2); ?>">
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Pph</label>
+                            <input type="text" class="form-control font-kecil text-end inputangka" name="pph" placeholder="Input Pph" value="<?= rupiah($data['pph'], 2); ?>">
+                        </div>
                     </div>
                 </div>
                 <fieldset class="form-fieldset bg-primary-lt">
@@ -154,7 +177,7 @@
                         <div class="col-7">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Aju</label>
-                                <input type="text" class="form-control font-kecil" name="nomor_aju" id="nomor_aju" placeholder="Nomor Aju" value="<?= $data['nomor_aju']; ?>">
+                                <input type="text" class="form-control font-kecil" name="nomor_aju" id="nomor_aju" placeholder="Nomor Aju" value="<?= trim($data['nomor_aju']); ?>">
                             </div>
                         </div>
                         <div class=" col-3">

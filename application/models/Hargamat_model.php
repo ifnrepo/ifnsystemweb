@@ -175,6 +175,9 @@ class Hargamat_model extends CI_Model
         $data['weight'] = toAngka($data['weight']);
         $data['price'] = toAngka($data['price']);
         $data['cif'] = toAngka($data['cif']);
+        $data['bm'] = toAngka($data['bm']);
+        $data['ppn'] = toAngka($data['ppn']);
+        $data['pph'] = toAngka($data['pph']);
         $data['oth_amount'] = toAngka($data['oth_amount']);
         $data['tgl_bc'] = tglmysql($data['tgl_bc']);
         $data['tgl_aju'] = tglmysql($data['tgl_aju']);
