@@ -243,6 +243,10 @@ class Hargamat_model extends CI_Model
     {
         return $this->db->order_by('kode_negara')->get('ref_negara');
     }
+    public function refmtuang()
+    {
+        return $this->db->get('ref_mt_uang');
+    }
     public function getdata_export($filter_kategori, $filter_inv)
     {
         $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang');

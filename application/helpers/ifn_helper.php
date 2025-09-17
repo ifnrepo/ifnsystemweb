@@ -885,3 +885,8 @@ function getquerytujuanout($kode,$val,$ke=0){
     $getkode = $CI->helpermodel->getquerytujuanout($kode,$val,$ke);
     return $getkode;
 }
+function getkurssekarang($date = ''){
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->getkurssekarang($date);
+    return $getkode;
+}

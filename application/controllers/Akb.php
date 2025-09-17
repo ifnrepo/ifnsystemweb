@@ -337,10 +337,11 @@ class Akb extends CI_Controller
         $data['refmtuang'] = $this->akbmodel->refmtuang();
         $data['refincoterm'] = $this->akbmodel->refincoterm();
         $data['refbendera'] = $this->akbmodel->refbendera();
-        // $data['refpelabuhan'] = $this->ibmodel->refpelabuhan();
+        $data['refpelabuhan'] = $this->ibmodel->refpelabuhan();
         $data['datatoken'] = $this->akbmodel->gettokenbc()->row_array();
         if($mode==1){
             $data['detbombc'] = $this->akbmodel->getdetbom($id);
+            // $data['detbombc'] = [];
         }else{
             $data['detbombc'] = $this->akbmodel->getdetbom($id);
         }
@@ -644,6 +645,7 @@ class Akb extends CI_Controller
             $this->akbmodel->isitokenbc($data);
             $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
             $this->helpermodel->isilog('Refresh Token CEISA 40');
+            $this->getkurs();
             if($id=99){
                 $url = base_url().'akb';
             }else{
@@ -661,6 +663,36 @@ class Akb extends CI_Controller
                 $url = base_url().'ib/isidokbc/'.$id;
             }
             redirect($url);
+        }
+    }
+    public function getkurs(){
+        $token = $this->akbmodel->gettoken();
+        $kode = ['usd','jpy','eur'];
+        for($x=0;$x<count($kode);$x++){
+            $kodex = $kode[$x];
+            $curl = curl_init();
+            // $token = $consID;
+            $headers = array(
+                "Content-Type: application/json",
+                "Authorization: Bearer ".$token,
+            );
+
+            curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/kurs/'.$kodex);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            $result = curl_exec($curl);
+            curl_close($curl);
+
+            $databalik = json_decode($result,true);
+            // print_r($databalik['data'][0]['nilaiKurs']);
+            if($databalik['status']=='true'){
+                $this->akbmodel->isikursbc($databalik['data'][0]['nilaiKurs'],$kodex);
+                $this->helpermodel->isilog('Isi KURS BC CEISA 40');
+            }
         }
     }
     public function getresponhost($id){
@@ -2063,6 +2095,7 @@ class Akb extends CI_Controller
         $sheet->getColumnDimension('G')->setWidth(2.06, 'cm');
         $sheet->getColumnDimension('H')->setWidth(2.38, 'cm');
         $sheet->getColumnDimension('I')->setWidth(2, 'cm');
+        
         $inv = $this->akbmodel->exceljaminan261($id);
         $no = 1;
 
@@ -2626,7 +2659,7 @@ class Akb extends CI_Controller
             $sheet->getColumnDimension('Q')->setWidth(3.55, 'cm');
             $sheet->getColumnDimension('R')->setWidth(3.55, 'cm');
             $sheet->getRowDimension('8')->setRowHeight(0.15, 'cm');
-
+            $kurssekarang = getkurssekarang()->row_array();
             $inv = $this->akbmodel->exceljaminan261($id);
             $numrow = 13;
             $no = 1;
@@ -2635,6 +2668,32 @@ class Akb extends CI_Controller
                 $sku = $data['kode'];
                 $spekbarang = namaspekbarang($data['id_barang']);
                 $hs =substr($data['nohs'],0,8);
+                switch ($data['mt_uang']) {
+                    case 'IDR':
+                        $hargaperkilo = round($data['hamat_harga']/$data['hamat_weight'],2);
+                        break;
+                    case 'USD':
+                        $hargaperkilo = ($data['cif']/$data['hamat_weight'])*$kurssekarang['usd'];
+                        break;
+                        break;
+                    case 'JPY':
+                        $hargaperkilo = ($data['cif']/$data['hamat_weight'])*$kurssekarang['jpy'];
+                        break;
+                    
+                    default:
+                        # code...
+                        break;
+                }
+                if($data['jns_bc'] == 23){
+                    $jmbm = ($hargaperkilo*($data['bm']/100))*$data['kgs'];
+                    $jmppn = ($hargaperkilo*($data['ppn']/100))*$data['kgs'];
+                    $jmpph = ($hargaperkilo*($data['pph']/100))*$data['kgs'];
+                }else{
+                    $jmbm = 0;
+                    $jmppn = 0;
+                    $jmpph = 0;
+                }
+                $totaljamin = $jmbm+$jmppn+$jmpph;
                 // Lakukan looping pada variabel      
                 $sheet->setCellValue('A' . $numrow, $no);
                 $sheet->getStyle('A'.$numrow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -2644,14 +2703,14 @@ class Akb extends CI_Controller
                 $sheet->setCellValue('G' . $numrow, $data['jns_bc']);
                 $sheet->setCellValue('H' . $numrow, $data['nomor_bc']);
                 $sheet->setCellValue('I' . $numrow, $data['tgl_bc']);
-                $sheet->setCellValue('K' . $numrow, $data['bm']);
+                $sheet->setCellValue('K' . $numrow, $jmbm);
                 $sheet->setCellValue('L' . $numrow, $data['bmt']);
                 $sheet->setCellValue('M' . $numrow, $data['cukai']);
-                $sheet->setCellValue('N' . $numrow, $data['ppn']);
+                $sheet->setCellValue('N' . $numrow, $jmppn);
                 $sheet->mergeCells('N'.$numrow.':O'.$numrow)    ;
                 $sheet->setCellValue('P' . $numrow, $data['ppnbm']);
-                $sheet->setCellValue('Q' . $numrow, $data['pph']);
-                $sheet->setCellValue('R' . $numrow, 0);
+                $sheet->setCellValue('Q' . $numrow, $jmpph);
+                $sheet->setCellValue('R' . $numrow, $totaljamin);
                 // $sheet->setCellValue('G' . $numrow, $data['kgs']);
                 $nok = $numrow;
                 $nol = 1;
