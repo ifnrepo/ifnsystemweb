@@ -869,7 +869,8 @@ class Akb_model extends CI_Model
                     array_push($arrhasil,$hasilshowbom);
                 }
             }else{
-                $arraynot = ['1338','40396']; // KARUNG 110 X 130 STRIP ORANGE, ADHESIVE TAPE 12.0MMX100MTR GREEN (NASHUA)
+                // $arraynot = ['1338','40396']; // KARUNG 110 X 130 STRIP ORANGE, ADHESIVE TAPE 12.0MMX100MTR GREEN (NASHUA)
+                $arraynot= ['XE@#$#'];
                 if(in_array($hsl['id_barang'],$arraynot)){
                     $dataxspin= [];
                     // $hasilshowbom = [

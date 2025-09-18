@@ -2124,14 +2124,23 @@ class Akb extends CI_Controller
             $sheet->setCellValue('K'.$numrow, '-');
             $sheet->setCellValue('L'.$numrow, $spekbarang);
             $sheet->setCellValue('M'.$numrow, $sku);
-            $sheet->setCellValue('P'.$numrow, $datbarangkirim['pcs']);
-            $sheet->setCellValue('Q'.$numrow, $datbarangkirim['kodebc']);
+            $sheet->setCellValue('Q'.$numrow, 'KGM');
             $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
             $nodet = 0;
             foreach($inv2->result_array() as $det){
                 $asalbar = $det['jns_bc']==23 ? 1 : 2 ;
-                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang[strtolower($det['mt_uang'])];
+                $kursusd = $kurssekarang['usd'];
+                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
                 $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                switch ($det['mt_uang']) {
+                    case 'JPY':
+                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy/$kursusd;
+                        break;
+                    default:
+                        $cif = $det['cif'];
+                        break;
+                }
                 if(count($det) > 0){
                     $nodet++;
                     $sheet->setCellValue('B'.$numrow, $det['jns_bc']);
@@ -2141,11 +2150,13 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('G'.$numrow, $det['serbar']);
                     $sheet->setCellValue('N'.$numrow, $asalbar);
                     $sheet->setCellValue('O'.$numrow, $det['kode_negara']);
-                    $sheet->setCellValue('R'.$numrow, $det['kgs']);
-                    $sheet->setCellValue('S'.$numrow, $ndpbm);
-                    $sheet->setCellValue('T'.$numrow, $det['mt_uang']);
-                    $sheet->setCellValue('U'.$numrow, ($det['cif']/$pembagi)*$det['kgs']);
-                    $sheet->setCellValue('V'.$numrow, (($det['cif']/$pembagi)*$det['kgs'])*$ndpbm);
+                    $sheet->setCellValue('P'.$numrow, round($det['kgs'],2));
+                    $sheet->setCellValue('R'.$numrow, round($det['kgs'],2));
+                    $sheet->setCellValue('S'.$numrow, $kursusd);
+                    $sheet->setCellValue('T'.$numrow, 'USD');
+                    $sheet->setCellValue('U'.$numrow, ($cif/$pembagi)*$det['kgs']);
+                    $sheet->setCellValue('V'.$numrow, (($cif/$pembagi)*$det['kgs'])*$ndpbm);
+                    $sheet->setCellValue('AE'.$numrow, 1);
                     if($nodet > 1){
                         $sheet->setCellValue('A'.$numrow, $no);
                         $sheet->setCellValue('C'.$numrow, '050500');
@@ -2155,8 +2166,8 @@ class Akb extends CI_Controller
                         $sheet->setCellValue('K'.$numrow, '-');
                         $sheet->setCellValue('L'.$numrow, $spekbarang);
                         $sheet->setCellValue('M'.$numrow, $sku);
-                        $sheet->setCellValue('P'.$numrow, $datbarangkirim['pcs']);
-                        $sheet->setCellValue('Q'.$numrow, $datbarangkirim['kodebc']);
+                        $sheet->setCellValue('P'.$numrow, $det['kgs']);
+                        $sheet->setCellValue('Q'.$numrow, 'KGM');
                     }
                     $numrow++;
                 }else{
@@ -2270,17 +2281,26 @@ class Akb extends CI_Controller
             $sheet->setCellValue('J'.$numrow, '-');
             $sheet->setCellValue('K'.$numrow, '-');
             $sheet->setCellValue('L'.$numrow, '-');
-            $sheet->setCellValue('Q'.$numrow, $datbarangkirim['pcs']);
-            $sheet->setCellValue('R'.$numrow, $datbarangkirim['kodebc']);
+            $sheet->setCellValue('R'.$numrow, 'KGM');
             // $sheet->setCellValue('AF'.$numrow, 1);
             // $sheet->setCellValue('AG'.$numrow, 'N');
             $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
             $nodet = 0;
             foreach($inv2->result_array() as $det){
                 $asalbar = $det['jns_bc']==23 ? 1 : 2 ;
-                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang[strtolower($det['mt_uang'])];
+                $kursusd = $kurssekarang['usd'];
+                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
                 $pembagi = $det['weight']==0 ? 1 : $det['weight'];
                 $spekbarang = namaspekbarang($det['id_barang']);
+                switch ($det['mt_uang']) {
+                    case 'JPY':
+                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy/$kursusd;
+                        break;
+                    default:
+                        $cif = $det['cif'];
+                        break;
+                }
                 if(count($det) > 0){
                     $nodet++;
                     $sheet->setCellValue('C'.$numrow, $det['jns_bc']);
@@ -2293,11 +2313,13 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('N'.$numrow, $det['kode']);
                     $sheet->setCellValue('O'.$numrow, $asalbar);
                     $sheet->setCellValue('P'.$numrow, $det['kode_negara']);
-                    $sheet->setCellValue('S'.$numrow, $det['kgs']);
-                    $sheet->setCellValue('T'.$numrow, $ndpbm);
-                    $sheet->setCellValue('U'.$numrow, $det['mt_uang']);
-                    $sheet->setCellValue('V'.$numrow, $det['cif']/$pembagi);
-                    $sheet->setCellValue('W'.$numrow, ($det['cif']/$pembagi)*$ndpbm);
+                    $sheet->setCellValue('Q'.$numrow, round($det['kgs'],2));
+                    $sheet->setCellValue('R'.$numrow, 'KGM');
+                    $sheet->setCellValue('S'.$numrow, round($det['kgs'],2));
+                    $sheet->setCellValue('T'.$numrow, $kursusd);
+                    $sheet->setCellValue('U'.$numrow, 'USD');
+                    $sheet->setCellValue('V'.$numrow, $cif/$pembagi);
+                    $sheet->setCellValue('W'.$numrow, ($cif/$pembagi)*$ndpbm);
                     $sheet->setCellValue('AF'.$numrow, 1);
                     $sheet->setCellValue('AG'.$numrow, 'N');
                     if($nodet > 1){
@@ -3247,16 +3269,17 @@ class Akb extends CI_Controller
                 $sku = $data['kode'];
                 $spekbarang = namaspekbarang($data['id_barang']);
                 $hs =substr($data['nohs'],0,8);
+                $pembagi = $data['hamat_weight']==0 ? 1 : $data['hamat_weight'];
                 switch ($data['mt_uang']) {
                     case 'IDR':
-                        $hargaperkilo = round($data['hamat_harga']/$data['hamat_weight'],2);
+                        $hargaperkilo = round($data['hamat_harga']/$pembagi,2);
                         break;
                     case 'USD':
-                        $hargaperkilo = ($data['cif']/$data['hamat_weight'])*$kurssekarang['usd'];
+                        $hargaperkilo = ($data['cif']/$pembagi)*$kurssekarang['usd'];
                         break;
                         break;
                     case 'JPY':
-                        $hargaperkilo = ($data['cif']/$data['hamat_weight'])*$kurssekarang['jpy'];
+                        $hargaperkilo = ($data['cif']/$pembagi)*$kurssekarang['jpy'];
                         break;
                     
                     default:
