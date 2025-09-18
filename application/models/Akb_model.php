@@ -790,7 +790,7 @@ class Akb_model extends CI_Model
                              ->get_compiled_select();
         $this->db->select('tb_bombc.*,barang.nama_barang,barang.kode,barang.nohs,tb_header.nomor_bc,tb_header.jns_bc,satuan.kodesatuan,supplier.kode_negara,tb_header.mtuang');
         $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tbhargamat.nomor_bc as hamat_nomorbc,tbhargamat.jns_bc as hamat_jnsbc');
-        $this->db->select('tbhargamat.price as hamat_harga,tbhargamat.weight as hamat_weight,tbhargamat.qty as hamat_qty,tbhargamat.kurs  as hamat_kurs,tbhargamat.cif,tbhargamat.mt_uang');
+        $this->db->select('tbhargamat.price as hamat_harga,tbhargamat.weight as hamat_weight,tbhargamat.qty as hamat_qty,tbhargamat.kurs  as hamat_kurs,tbhargamat.cif,tbhargamat.mt_uang,tbhargamat.kode_negara as negarahamat,barang.nohs as hsbarang');
         $this->db->from('tb_bombc');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
         $this->db->join('tb_header','tb_header.nomor_dok = tb_bombc.nobontr','left');

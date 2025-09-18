@@ -566,7 +566,7 @@
                     <span>
                         <a href="<?= base_url().'akb/excellampiran261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Lampiran dan Konversi</a>
                         <a href="<?= base_url().'akb/exceljaminan261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-warning text-black"><i class="fa fa-file-excel-o mr-1"></i> Perhitungan Jaminan</a>
-                        <a href="<?= base_url().'akb/uploadijin/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-teal"><i class="fa fa-file-excel-o mr-1"></i> Upload Perijinan</a>
+                        <a href="<?= base_url().'akb/uploadijin/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-teal"><i class="fa fa-file-excel-o mr-1"></i> Perijinan</a>
                         <a href="<?= base_url().'akb/rekapnobontr/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-info"><i class="fa fa-file-excel-o mr-1"></i> Rekap IB</a>
                     <span>
                 </div>
@@ -736,7 +736,7 @@
                                         </td>
                                         <td><?= $detbom['kode']; ?></td>
                                         <td><?= $detbom['nohs']; ?></td>
-                                        <td><?= $detbom['kode_negara']; ?></td>
+                                        <td class="text-teal"><?= $detbom['negarahamat']; ?></td>
                                         <td class="text-right"><?= rupiah($detbom['pcs'],0); ?></td>
                                         <td class="text-right"><?= rupiah($detbom['kgs'],5); ?></td>
                                         <td><?= $detbom['kodesatuan']; ?></td>

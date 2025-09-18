@@ -2123,7 +2123,7 @@ class Akb extends CI_Controller
             $sheet->setCellValue('J'.$numrow, '-');
             $sheet->setCellValue('K'.$numrow, '-');
             $sheet->setCellValue('L'.$numrow, $spekbarang);
-            $sheet->setCellValue('M'.$numrow, '-');
+            $sheet->setCellValue('M'.$numrow, $sku);
             $sheet->setCellValue('P'.$numrow, $datbarangkirim['pcs']);
             $sheet->setCellValue('Q'.$numrow, $datbarangkirim['kodebc']);
             $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
@@ -2144,8 +2144,8 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('R'.$numrow, $det['kgs']);
                     $sheet->setCellValue('S'.$numrow, $ndpbm);
                     $sheet->setCellValue('T'.$numrow, $det['mt_uang']);
-                    $sheet->setCellValue('U'.$numrow, $det['cif']/$pembagi);
-                    $sheet->setCellValue('V'.$numrow, ($det['cif']/$pembagi)*$ndpbm);
+                    $sheet->setCellValue('U'.$numrow, ($det['cif']/$pembagi)*$det['kgs']);
+                    $sheet->setCellValue('V'.$numrow, (($det['cif']/$pembagi)*$det['kgs'])*$ndpbm);
                     if($nodet > 1){
                         $sheet->setCellValue('A'.$numrow, $no);
                         $sheet->setCellValue('C'.$numrow, '050500');
@@ -2154,7 +2154,7 @@ class Akb extends CI_Controller
                         $sheet->setCellValue('J'.$numrow, '-');
                         $sheet->setCellValue('K'.$numrow, '-');
                         $sheet->setCellValue('L'.$numrow, $spekbarang);
-                        $sheet->setCellValue('M'.$numrow, '-');
+                        $sheet->setCellValue('M'.$numrow, $sku);
                         $sheet->setCellValue('P'.$numrow, $datbarangkirim['pcs']);
                         $sheet->setCellValue('Q'.$numrow, $datbarangkirim['kodebc']);
                     }
@@ -2194,8 +2194,8 @@ class Akb extends CI_Controller
         foreach($inv->result_array() as $datbarangkirim){
             $no++;
             $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
-            $pajak = ['PPH','BM','PPN'];
-            $kdfas = [6,3,6];
+            $pajak = ['BM','PPN','PPH'];
+            $kdfas = [3,6,6];
             foreach($inv2->result_array() as $det){
                 $pembagi = $det['weight']==0 ? 1 : $det['weight'];
                 // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
@@ -2256,32 +2256,31 @@ class Akb extends CI_Controller
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
         $inv = $this->akbmodel->excellampiran261($id);
         $no=0;
+        $nop=0;
         $numrow = 2;
         foreach($inv->result_array() as $datbarangkirim){
             $no++;
+            $nop++;
             $hs = trim($datbarangkirim['po'])!='' ? substr($datbarangkirim['hsx'],0,8) : substr($datbarangkirim['nohs'],0,8) ;
             $sku = trim($datbarangkirim['po'])=='' ? $datbarangkirim['kode'] : viewsku($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis'],$datbarangkirim['id_barang']);
-            $spekbarang = trim($datbarangkirim['po'])=='' ? namaspekbarang($datbarangkirim['id_barang']) : spekpo($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis']);
 
-            $sheet->setCellValue('A'.$numrow, $no);
+            $sheet->setCellValue('A'.$numrow, $nop);
             $sheet->setCellValue('B'.$numrow, $no);
             $sheet->setCellValue('D'.$numrow, '050500');
-            $sheet->setCellValue('I'.$numrow, $hs);
             $sheet->setCellValue('J'.$numrow, '-');
             $sheet->setCellValue('K'.$numrow, '-');
             $sheet->setCellValue('L'.$numrow, '-');
-            $sheet->setCellValue('M'.$numrow, $spekbarang);
-            $sheet->setCellValue('N'.$numrow, '-');
             $sheet->setCellValue('Q'.$numrow, $datbarangkirim['pcs']);
             $sheet->setCellValue('R'.$numrow, $datbarangkirim['kodebc']);
-            $sheet->setCellValue('AF'.$numrow, 1);
-            $sheet->setCellValue('AG'.$numrow, 'AN');
+            // $sheet->setCellValue('AF'.$numrow, 1);
+            // $sheet->setCellValue('AG'.$numrow, 'N');
             $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
             $nodet = 0;
             foreach($inv2->result_array() as $det){
                 $asalbar = $det['jns_bc']==23 ? 1 : 2 ;
                 $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang[strtolower($det['mt_uang'])];
                 $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                $spekbarang = namaspekbarang($det['id_barang']);
                 if(count($det) > 0){
                     $nodet++;
                     $sheet->setCellValue('C'.$numrow, $det['jns_bc']);
@@ -2289,6 +2288,9 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('F'.$numrow, $det['nomor_bc']);
                     $sheet->setCellValue('G'.$numrow, $det['tgl_bc']);
                     $sheet->setCellValue('H'.$numrow, $det['serbar']);
+                    $sheet->setCellValue('I'.$numrow, $det['nohs']);
+                    $sheet->setCellValue('M'.$numrow, $spekbarang);
+                    $sheet->setCellValue('N'.$numrow, $det['kode']);
                     $sheet->setCellValue('O'.$numrow, $asalbar);
                     $sheet->setCellValue('P'.$numrow, $det['kode_negara']);
                     $sheet->setCellValue('S'.$numrow, $det['kgs']);
@@ -2297,21 +2299,12 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('V'.$numrow, $det['cif']/$pembagi);
                     $sheet->setCellValue('W'.$numrow, ($det['cif']/$pembagi)*$ndpbm);
                     $sheet->setCellValue('AF'.$numrow, 1);
-                    $sheet->setCellValue('AG'.$numrow, 'AN');
+                    $sheet->setCellValue('AG'.$numrow, 'N');
                     if($nodet > 1){
-                        $sheet->setCellValue('A'.$numrow, $no);
+                        $nop++;
+                        $sheet->setCellValue('A'.$numrow, $nop);
                         $sheet->setCellValue('B'.$numrow, $no);
-                        $sheet->setCellValue('D'.$numrow, '050500');
-                        $sheet->setCellValue('I'.$numrow, $hs);
-                        $sheet->setCellValue('J'.$numrow, '-');
-                        $sheet->setCellValue('K'.$numrow, '-');
-                        $sheet->setCellValue('L'.$numrow, '-');
-                        $sheet->setCellValue('M'.$numrow, $spekbarang);
-                        $sheet->setCellValue('N'.$numrow, '-');
-                        $sheet->setCellValue('Q'.$numrow, $datbarangkirim['pcs']);
-                        $sheet->setCellValue('R'.$numrow, $datbarangkirim['kodebc']);
-                        $sheet->setCellValue('AF'.$numrow, 1);
-                        $sheet->setCellValue('AG'.$numrow, 'AN');
+                        $sheet->setCellValue('D'.$numrow, '050500'); 
                     }
                     $numrow++;
                 }else{
@@ -2345,19 +2338,26 @@ class Akb extends CI_Controller
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
         $inv = $this->akbmodel->excellampiran261($id);
         $no=0;
+        $nop=0;
         $numrow = 2;
         foreach($inv->result_array() as $datbarangkirim){
             $no++;
+            $nop++;
             $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
-            $pajak = ['PPH','BM','PPN'];
-            $kdfas = [6,3,6];
+            $pajak = ['BM','PPN','PPH'];
+            $kdfas = [3,6,6];
+            $nodet=0;
             foreach($inv2->result_array() as $det){
+                $nodet++;
                 $pembagi = $det['weight']==0 ? 1 : $det['weight'];
                 // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
                 $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
                 $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
+                if($nodet > 1){
+                    $nop++;
+                }
                 for($x=0;$x<3;$x++){
-                    $sheet->setCellValue('A'.$numrow,$no);
+                    $sheet->setCellValue('A'.$numrow,$nop);
                     $sheet->setCellValue('B'.$numrow,$no);
                     $sheet->setCellValue('C'.$numrow,$pajak[$x]);
                     $sheet->setCellValue('D'.$numrow,1);
@@ -2460,6 +2460,48 @@ class Akb extends CI_Controller
         $sheet->setCellValue('C1', "SERI BAHAN BAKU DIKIRIM"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
         $sheet->setCellValue('D1', "JUMLAH BAHAN BAKU DIKIRIM");
         $sheet->setCellValue('E1', "CONSMP");
+
+        $inv = $this->akbmodel->excellampiran261($id);
+        $no = 1;
+        $nop=0;
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 2;
+        // Set baris pertama untuk isi tabel adalah baris ke 3   
+        $jumlahpcs = 0;$jumlahkgs=0; 
+        foreach ($inv->result_array() as $data) {
+            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+            $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
+            $jumlahkgs+=$data['kgs'];
+            if(trim($data['kodebc'])!='KGM'){
+                $jumlahpcs += $data['pcs'];
+            }
+            $numawal = $numrow;
+            $numakhir = $numrow-1;
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $data['kgs']);
+            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            $nodet = 0;
+            foreach($inv2->result_array() as $det){
+                $nodet++;
+                if($nodet > 1){
+                    $sheet->setCellValue('A' . $numrow, $no);
+                    $sheet->setCellValue('B' . $numrow, $data['kgs']);
+                }
+                if(count($det) > 0){
+                    $nop++;
+                    $sheet->setCellValue('C' . $numrow, $nop);
+                    $sheet->setCellValue('D' . $numrow, $det['kgs']);
+                    $sheet->setCellValue('E' . $numrow, $det['kgs']/$data['kgs']);
+                    $numrow++;
+                }else{
+                    $numrow++;
+                }
+            }
+            $no++;  
+        }
 
 
         $sheet = $spreadsheet->setActiveSheetIndex(0);
