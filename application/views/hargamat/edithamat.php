@@ -61,7 +61,7 @@
                     </div>
                     <div class="col-5">
                         <div class="mb-1">
-                            <label class="form-label font-kecil mb-0 font-bold text-primary">CIF</label>
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">CIF Barang</label>
                             <input type="text" class="form-control font-kecil text-end inputangka" name="cif" placeholder="Input CIF" value="<?= rupiah($data['cif'], 2); ?>">
                         </div>
                     </div>
