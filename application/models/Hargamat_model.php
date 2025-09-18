@@ -170,6 +170,13 @@ class Hargamat_model extends CI_Model
     public function updatehamat()
     {
         $data = $_POST;
+        $nobontr = $data['nobontr'];
+        $nomor_aju = $data['nomor_aju'];
+
+        // var_dump($nobontr);
+        // var_dump($nomor_aju);
+        // die();
+
         $data['kurs'] = toAngka($data['kurs']);
         $data['qty'] = toAngka($data['qty']);
         $data['weight'] = toAngka($data['weight']);
@@ -204,10 +211,22 @@ class Hargamat_model extends CI_Model
         unset($data['namedok']);
         unset($data['dok_lama']);
         unset($data['dok']);
+
+
+        $this->db->trans_start();
+
+
         $this->db->where('id', $data['id']);
-        $query = $this->db->update('tb_hargamaterial', $data);
+        $this->db->update('tb_hargamaterial', $data);
+
+
+        $this->db->where('nobontr', $nobontr);
+        $this->db->update('tb_hargamaterial', ['nomor_aju' => $nomor_aju]);
+
         $this->helpermodel->isilog($this->db->last_query());
-        return $query;
+        $this->db->trans_complete();
+
+        return $this->db->trans_status();
     }
     public function get_datatables($filter_kategori, $filter_inv, $filter_bc)
     {
