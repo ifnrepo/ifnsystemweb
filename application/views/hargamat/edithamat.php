@@ -27,7 +27,7 @@
                     <div class="col-8">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor IB</label>
-                            <input type="text" class="form-control font-kecil" placeholder="Input placeholder" value="<?= $data['nobontr']; ?>" disabled>
+                            <input type="text" class="form-control font-kecil" placeholder="Input placeholder" name="nobontr" value="<?= $data['nobontr']; ?>" readonly>
                         </div>
                     </div>
                 </div>
@@ -113,6 +113,14 @@
                         </div>
                     </div>
                 </div>
+
+                <div class="row" id="nomor_co_wrapper" style="display: <?= ($data['co'] == 1) ? 'block' : 'none' ?>;">
+                    <label class="form-label font-kecil mb-0 font-bold text-primary">
+                        Nomor Certificate Of Origin
+                    </label>
+                    <input type="text" class="form-control font-kecil" name="nomor_co" id="nomor_co" placeholder="Certificate Of Origin" value="<?= trim($data['nomor_co']); ?>">
+                </div>
+
                 <div class="row">
                     <div class="mb-3">
                         <label class="form-label font-kecil mb-0 font-bold text-primary">Noted</label>
@@ -221,6 +229,7 @@
     <a href="#" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</a>
     <button type="button" class="btn btn-sm btn-primary" id="simpanbarang">Simpan</button>
 </div>
+<script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
 <script>
     $(document).ready(function() {
         $(".tgl").datepicker({
@@ -257,13 +266,37 @@
         var nobc = $("#nomor_bc").val();
         $(this).val(isikurangnol(nobc));
     });
-    $("#simpanbarang").click(function() {
+
+    $("#simpanbarang").click(function(e) {
+        e.preventDefault();
+
+        let coChecked = $("#co").is(":checked");
+        let nomorCo = $("#nomor_co").val().trim();
+
+        if (coChecked && nomorCo === "") {
+            alert("Nomor Certificate Of Origin wajib diisi!");
+            $("#nomor_co").focus();
+            return;
+        }
+
+
         document.formhamat.submit();
     });
+
+
 
     function isikurangnol(val) {
         var nol = "0";
         var jnsbc = nol.repeat(6 - val.length) + val;
         return jnsbc;
     }
+
+    document.getElementById('co').addEventListener('change', function() {
+        let wrapper = document.getElementById('nomor_co_wrapper');
+        if (this.checked) {
+            wrapper.style.display = 'block';
+        } else {
+            wrapper.style.display = 'none';
+        }
+    });
 </script>
