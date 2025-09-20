@@ -129,3 +129,36 @@ defined('BASEPATH') or exit('No direct script access allowed');
   </div>
 </div>
 </div>
+
+<div class="modal modal-blur fade" id="modal-large-hamat" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h5 class="modal-title">Edit Hamat</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body fetched-data p-1">
+        <div id="loadform-edit"></div>
+      </div>
+    </div>
+  </div>
+</div>
+<script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
+<script>
+  $(function() {
+    $(document).on('click', '.edit', function() {
+      var data = $(this).data("id");
+      console.log("Id Hamat:", data);
+
+      if (data) {
+        var Modalhamat = new bootstrap.Modal(document.getElementById('modal-large-hamat'));
+        Modalhamat.show();
+
+        $("#loadform-edit").load("<?= base_url(); ?>hargamat/edithamat/" + encodeURIComponent(data));
+      } else {
+        alert("Data tidak valid!");
+      }
+    });
+
+  });
+</script>
