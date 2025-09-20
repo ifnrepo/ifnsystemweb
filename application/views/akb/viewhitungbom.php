@@ -57,7 +57,7 @@
                             <tr>
                                 <td colspan="4" class="text-center font-bold">TOTAL</td>
                                 <td class="text-right font-bold"><?= rupiah($jumlahpcs,0); ?></td>
-                                <td class="text-right font-bold" id="txtsumbom"><?= rupiah($jumlahkgs,1); ?></td>
+                                <td class="text-right font-bold" id="txtsumbom"><?= rupiah($jumlahkgs,2); ?></td>
                             </tr>
                         <?php } ?>
                     </tbody>

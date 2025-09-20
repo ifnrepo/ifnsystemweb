@@ -856,10 +856,10 @@ function bulatkan($jml, $nilai)
     $pembulatan = round($jml / $nilai);
     return $pembulatan * $nilai;
 }
-function ceknomorbc($data)
+function ceknomorbc($data,$idbarang)
 {
     $CI = &get_instance();
-    $getkode = $CI->helpermodel->ceknomorbc($data);
+    $getkode = $CI->helpermodel->ceknomorbc($data,$idbarang);
     return $getkode;
 }
 function getjumlahcifbom($id, $no)

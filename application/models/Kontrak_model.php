@@ -28,8 +28,32 @@ class Kontrak_model extends CI_Model
         }
         if(isset($kode['datkecuali'])){
             $datkont = $this->db->query("Select id_kontrak from tb_header where id_kontrak is not null")->result_array();
-            // $this->db->where_not_in('id', $datkont);
         }
+        $this->db->order_by('tgl_akhir');
+        return $this->db->get();
+    }
+    public function getdatakontrak261($kode)
+    {
+        $this->db->select('*');
+        $this->db->from('tb_kontrak');
+        $this->db->join('dept','dept.dept_id = tb_kontrak.dept_id');
+        if($kode['dept_id']!=""){
+            $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
+        }
+        $this->db->where('jns_bc', $kode['jnsbc']);
+        if($kode['status']==1){
+            $this->db->where("tgl_akhir >= '" . date('Y-m-d')."'");
+        }else if($kode['status']==2){
+            $this->db->where("tgl_akhir < '" . date('Y-m-d')."'");
+        }
+        if($kode['thkontrak']!=''){
+            $this->db->where("year(tgl_awal)",$kode['thkontrak']);
+        }
+        if(isset($kode['datkecuali'])){
+            $datkont = $this->db->query("Select id_kontrak from tb_header where id_kontrak is not null")->result_array();
+        }
+        $this->db->where('nomor_bpj != "" ');
+        $this->db->where('tgl_bpj is not null ');
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }

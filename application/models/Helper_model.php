@@ -833,12 +833,12 @@ class Helper_model extends CI_Model
     public function showbomjf($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs){
         $data = [];
         $datakondisi = [
-            'po' => $po,
-            'item' => $item,
+            'trim(po)' => trim($po),
+            'trim(item)' => trim($item),
             'dis' => $dis,
             'id_barang' => $idbarang,
-            'insno' => $insno,
-            'nobontr' => $nobontr
+            'trim(insno)' => trim($insno),
+            'trim(nobontr)' => trim($nobontr)
         ];
         $this->db->where($datakondisi);
         $hasil = $this->db->get('ref_bom');
@@ -871,25 +871,29 @@ class Helper_model extends CI_Model
         }
         return $data;
     }
-    public function ceknomorbc($data){
-        $datahasil= '';
-        $hasil = $this->db->get_where('tb_header',['nomor_dok'=>$data]);
-        if($hasil->num_rows() > 0){
-            $xhasil = $hasil->row_array();
-            $datahasil = $xhasil['jns_bc'];
-        }else{
-            $hasil2 = $this->db->get_where('tb_hargamaterial',['nobontr' => $data]);
-            if($hasil2->num_rows() > 0){
-                $xhasil2 = $hasil2->row_array();
-                $datahasil = $xhasil2['jns_bc'];
-            }
+    public function ceknomorbc($data,$idbarang){
+        $datahasil= [];
+
+        $hasil2 = $this->db->get_where('tb_hargamaterial',['nobontr' => $data,'id_barang' => $idbarang]);
+        if($hasil2->num_rows() > 0){
+            $xhasil2 = $hasil2->row_array();
+            // $xdatahasil = $xhasil2['jns_bc'];
+            // $hasilcek = [
+            //     'jns_bc' => $xhasil2['jns_bc'],
+            //     'co' => $xhasil2['co'],
+            //     'bm' => $xhasil2['bm'],
+            //     'ppn' => $xhasil2['ppn'],
+            //     'pph' => $xhasil2['pph'],
+            // ];
+            // array_push($datahasil,$hasilcek);
         }
-        return $datahasil;
+        // }
+        return $xhasil2;
     }
     public function getjumlahcifbom($id,$no){
         $this->db->select('tb_bombc.*,barang.nama_barang,barang.kode,barang.nohs,tb_header.nomor_bc,tb_header.jns_bc,satuan.kodesatuan,supplier.kode_negara,tb_header.mtuang');
         $this->db->select('tb_header.netto,tb_header.bruto,tb_header.kurs_yen,tb_header.kurs_usd,tb_header.totalharga,tb_hargamaterial.nomor_bc as hamat_nomorbc,tb_hargamaterial.jns_bc as hamat_jnsbc');
-        $this->db->select('tb_hargamaterial.price as hamat_harga,tb_hargamaterial.weight as hamat_weight,tb_hargamaterial.qty as hamat_qty,satuan.kodebc,tb_hargamaterial.mt_uang as hamat_mtuang');
+        $this->db->select('tb_hargamaterial.price as hamat_harga,tb_hargamaterial.weight as hamat_weight,tb_hargamaterial.qty as hamat_qty,satuan.kodebc,tb_hargamaterial.mt_uang as hamat_mtuang,tb_hargamaterial.seri_barang,tb_hargamaterial.nomor_aju,tb_hargamaterial.nomor_bc,tb_hargamaterial.jns_bc as jnsbchamat');
         $this->db->select('SUM(case when tb_header.jns_bc = "23" then if(mtuang=1,(tb_header.totalharga)/tb_header.kurs_usd,tb_header.totalharga)/tb_header.netto ELSE 0 END) OVER() sum_totalharga,SUM(case when tb_hargamaterial.jns_bc = "23" AND tb_header.totalharga IS NULL then tb_hargamaterial.price ELSE 0 END) OVER() sum_totalharga2');
         $this->db->from('tb_bombc');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
