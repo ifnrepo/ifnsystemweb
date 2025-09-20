@@ -121,4 +121,7 @@ $(document).ready(function () {
 		console.log("Export Excel URL:", exportUrlExcel);
 		console.log("Export PDF URL:", exportUrlPdf);
 	});
+	$(document).on('click','#modaledit',function(){
+
+	})
 });

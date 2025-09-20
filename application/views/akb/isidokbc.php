@@ -623,7 +623,7 @@
                                     <?php $jmcolspan = $mode==1 ? 5 : 4; ?>
                                     <td class="text-black text-center font-bold" colspan="<?= $jmcolspan; ?>">TOTAL</td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumpcs,0); ?></td>
-                                    <td class="text-black text-right font-bold" id="txtsum"><?= rupiah($sumkgs,1); ?></td>
+                                    <td class="text-black text-right font-bold" id="txtsum"><?= rupiah($sumkgs,2); ?></td>
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail,2); ?></td>
                                 </tr>
@@ -688,41 +688,38 @@
                                     $jmbm=0;$jmppn=0;$jmpph=0;$totpajak=0;
                                     $jumlahnobontrkosong = 0;
                                     $kurssekarang = getkurssekarang($datheader['tgl_aju'])->row_array();
+                                    $kursusd = $kurssekarang['usd'];
                                     foreach ($detbombc->result_array() as $detbom ) { 
                                         if($detbom['seri_barang']!= $serbar){
                                            $no=0; 
                                         }
                                         $no++; 
+                                        $kursusd = $kurssekarang['usd'];
+                                        $ndpbm = $detbom['mt_uang']=='' || $detbom['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
                                         $pembagi = $detbom['hamat_weight']==0 ? 1 : $detbom['hamat_weight'];
                                         switch ($detbom['mt_uang']) {
-                                            case 'IDR':
-                                                $hargaperkilo = round($detbom['hamat_harga']/$pembagi,2);
-                                                break;
-                                            case 'USD':
-                                                $hargaperkilo = ($detbom['cif']/$pembagi)*$kurssekarang['usd'];
-                                                break;
-                                                break;
                                             case 'JPY':
-                                                $hargaperkilo = ($detbom['cif']/$pembagi)*$kurssekarang['jpy'];
+                                                $jpy = $detbom['cif']*$kurssekarang[strtolower($detbom['mt_uang'])];
+                                                $cif = $jpy/$kursusd;
                                                 break;
-                                            
                                             default:
-                                                # code...
+                                                $cif = $detbom['cif'];
                                                 break;
                                         }
                                         $jmlkgs += $detbom['kgs'];
                                         $serbar = $detbom['seri_barang'];
                                         $jns_bc = $detbom['hamat_jnsbc'];
                                         $nomor_bc = $detbom['hamat_nomorbc'];
-                                        $jumlahhargaperkilo = $hargaperkilo*$detbom['kgs'];
+                                        $jumlahhargaperkilo = round((($cif/$pembagi)*$detbom['kgs']),2)*$ndpbm;
                                         $jumlahtot += $jumlahhargaperkilo;
                                         $hitungbm = $detbom['bm'] > 0 ? '' : 'hilang';
                                         $hitungppn = $detbom['ppn'] > 0 ? '' : 'hilang';
                                         $hitungpph = $detbom['pph'] > 0 ? '' : 'hilang';
+                                        $adabm = $detbom['bm'] > 0 ? $jumlahhargaperkilo*($detbom['bm']/100) : 0;
                                         if($jns_bc == 23){
                                             $jmbm += $jumlahhargaperkilo*($detbom['bm']/100);
-                                            $jmppn += $jumlahhargaperkilo*($detbom['ppn']/100);
-                                            $jmpph += $jumlahhargaperkilo*($detbom['pph']/100);
+                                            $jmppn += ($adabm+$jumlahhargaperkilo)*($detbom['ppn']/100);
+                                            $jmpph += ($adabm+$jumlahhargaperkilo)*($detbom['pph']/100);
                                         }
                                 ?>
                                     <tr>
@@ -742,8 +739,8 @@
                                         <td><?= $detbom['kodesatuan']; ?></td>
                                         <td><?= $nomor_bc ?></td>
                                         <td class="text-center text-blue"><?= $jns_bc; ?></td>
-                                        <td class="text-right"><?= rupiah($hargaperkilo,2) ?></td>
-                                        <td class="text-right"><?= rupiah($jumlahhargaperkilo,2) ?></td>
+                                        <td class="text-right"><?= rupiah(($cif/$pembagi)*$ndpbm,2) ?></td>
+                                        <td class="text-right"><?= rupiah(round((($cif/$pembagi)*$detbom['kgs']),2)*$ndpbm,2) ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url().'akb/editbombc/'.$detbom['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data" >EDIT</a>
                                         </td>
@@ -751,7 +748,7 @@
                                 <?php } ?>
                                 <tr style="font-size: 16px !important" >
                                     <td colspan="5" class="text-right">TOTAL</td>
-                                    <td class="text-right text-primary"><?= rupiah($jmlkgs,1); ?></td>
+                                    <td class="text-right text-primary"><?= rupiah($jmlkgs,2); ?></td>
                                     <td colspan="4"></td>
                                     <td></td>
                                     <td class="text-right text-primary"><?= rupiah(bulatkan($jumlahtot,1000),2); ?></td>
@@ -774,13 +771,13 @@
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;" >
                                 <tr>
-                                    <td class="text-right"><?= rupiah(bulatkan($jmbm,1000),2); ?></td>
+                                    <td class="text-right"><?= rupiah($jmbm,2); ?></td>
                                     <td></td>
                                     <td></td>
-                                    <td class="text-right"><?= rupiah(bulatkan($jmppn,1000),2); ?></td>
+                                    <td class="text-right"><?= rupiah($jmppn,2); ?></td>
                                     <td></td>
-                                    <td class="text-right"><?= rupiah(bulatkan($jmpph,1000),2); ?></td>
-                                    <td class="text-right"><?= rupiah(bulatkan($jmbm,1000)+bulatkan($jmppn,1000)+bulatkan($jmpph,1000),2); ?></td>
+                                    <td class="text-right"><?= rupiah($jmpph,2); ?></td>
+                                    <td class="text-right"><?= rupiah($jmbm+$jmppn+$jmpph,2); ?></td>
                                 </tr>
                             </tbody>
                         </table>

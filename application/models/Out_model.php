@@ -548,7 +548,7 @@ class Out_model extends CI_Model{
                     }
                 }else{
                     // Untuk pengeluaran selain dari departemen GS
-                    if ($datdet['id_barang'] == 40396) continue; // Spek KARUNG di skip
+                    // if ($datdet['id_barang'] == 40396) continue; // Spek KARUNG di skip
                     $kondisistok = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
@@ -578,8 +578,8 @@ class Out_model extends CI_Model{
                     }else{
                         $detil = $adaisi->row_array();
                         if($detil['pcs_akhir'] >= $datdet['pcs'] && $detil['kgs_akhir'] >= $datdet['kgs']){
-                            $this->db->set('pcs_keluar','pcs_keluar +'.$datdet['pcs'],false);
-                            $this->db->set('kgs_keluar','kgs_keluar +'.$datdet['kgs'],false);
+                            $this->db->set('pcs_keluar','pcs_keluar +'.toAngka($datdet['pcs']),false);
+                            $this->db->set('kgs_keluar','kgs_keluar +'.toAngka($datdet['kgs']),false);
                             $this->db->where('id',$detil['id']);
                             $this->db->update('stokdept');
 

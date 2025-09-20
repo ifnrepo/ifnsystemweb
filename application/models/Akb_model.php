@@ -69,11 +69,12 @@ class Akb_model extends CI_Model
         $this->db->join('tb_header j', 'j.id = a.id_header', 'left');
         if($mode==0){
             $this->db->where('a.id_header', $data);
+            $this->db->order_by('id_header,seri_barang');
         }else{
             $this->db->where('a.id_akb', $data);
-            // $this->db->order_by('dokgaichu,po,item,dis,insno,id_barang');
+            $this->db->order_by('urut_akb,seri_barang');
         }
-        $this->db->order_by('id_header,seri_barang');
+        
         return $this->db->get()->result_array();
     }
     public function getdatakontainer($id){
@@ -852,7 +853,7 @@ class Akb_model extends CI_Model
             $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
             $this->db->where('id_akb',$id);
             // $this->db->limit(1,0);
-            $this->db->order_by('id_header,seri_barang');
+            $this->db->order_by('urut_akb,seri_barang');
         }else{
             $this->db->select("*");
             $this->db->from('tb_detail');
@@ -869,7 +870,8 @@ class Akb_model extends CI_Model
                     array_push($arrhasil,$hasilshowbom);
                 }
             }else{
-                $arraynot = ['1338','40396']; // KARUNG 110 X 130 STRIP ORANGE, ADHESIVE TAPE 12.0MMX100MTR GREEN (NASHUA)
+                // $arraynot = ['1338','40396']; // KARUNG 110 X 130 STRIP ORANGE, ADHESIVE TAPE 12.0MMX100MTR GREEN (NASHUA)
+                $arraynot= ['XE@#$#'];
                 if(in_array($hsl['id_barang'],$arraynot)){
                     $dataxspin= [];
                     // $hasilshowbom = [
@@ -910,7 +912,7 @@ class Akb_model extends CI_Model
         $this->db->join('tb_po g', 'g.po = tb_detail.po AND g.item = tb_detail.item AND g.dis = tb_detail.dis', 'left');
         $this->db->where('id_akb',$id);
         // $this->db->limit(1,0);
-        $this->db->order_by('id_header,seri_barang');
+        $this->db->order_by('urut_akb,seri_barang');
         return $this->db->get();
     }
     public function detailexcellampiran261($id,$no){
@@ -964,8 +966,11 @@ class Akb_model extends CI_Model
                     'kgs' => $hasilshowbom['kgs_asli'],
                     'pcs' => $hasilshowbom['pcs_asli']
                 ];
-                $cekjenisbc = ceknomorbc($hasilshowbom['nobontr']);
-                if($cekjenisbc=='23'){
+                $cekjenisbc = ceknomorbc($hasilshowbom['nobontr'],$hasilshowbom['id_barang']);
+                if($cekjenisbc['jns_bc']=='23'){
+                    // if($cekjenisbc['co']==0){
+                        $datasimpan['bm'] = $cekjenisbc['bm'];
+                    // }
                     $datasimpan['ppn'] = 11;
                     $datasimpan['pph'] = 2.5;
                 }
