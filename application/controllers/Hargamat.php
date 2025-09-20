@@ -127,12 +127,32 @@ class Hargamat extends CI_Controller
             // $row[] = $field->mt_uang;
             // $row[] = rupiah($field->oth_amount, 2);
             // $row[] = rupiah($field->kurs, 2);
-            $buton = "<a href=" . base_url() . 'hargamat/edithamat/' . $field->idx . " class='btn btn-sm btn-info' style='padding: 2px 5px !important;' data-bs-target='#modal-large-loading' data-bs-toggle='modal' data-title='Edit HAMAT' title='EDIT " . trim($field->nama_barang) . "'><i class='fa fa-pencil mr-1'></i> Edit</a>";
-            // $buton = "<a href='#' class='btn btn-sm btn-info' style='padding: 2px 5px !important;' id='modaledit' rel=".$field->idx." title='EDIT " . trim($field->nama_barang) . "'><i class='fa fa-pencil mr-1'></i> Edit</a>";
-            $buton .= "<a href=" . base_url() . 'hargamat/viewdok/' . $field->idx . " class='btn btn-sm btn-danger ml-1' style='padding: 5px !important;' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View DOKUMEN'><i class='fa fa-file-pdf-o'></i></a>";
-            $row[] = $buton;
+            // $buton = "<a href=" . base_url() . 'hargamat/edithamat/' . $field->idx . " class='btn btn-sm btn-info' style='padding: 2px 5px !important;' data-bs-target='#modal-large' data-bs-toggle='modal' data-title='Edit HAMAT' title='EDIT " . trim($field->nama_barang) . "'><i class='fa fa-pencil mr-1'></i> Edit</a>";
+            // $buton .= "<a href=" . base_url() . 'hargamat/viewdok/' . $field->idx . " class='btn btn-sm btn-danger ml-1' style='padding: 5px !important;' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View DOKUMEN'><i class='fa fa-file-pdf-o'></i></a>";
+            // $row[] = $buton;
+            // $data[] = $row;
+            $buton = '
+                <a href="#"
+                class="btn btn-sm btn-info edit"
+                style="padding: 2px 5px !important;"
+                title="Edit Data"
+                data-id="' . $field->idx . '">
+                <i class="fa fa-pencil mr-1"></i>  Edit</i>
+                </a>
 
+                <a href="' . base_url('hargamat/viewdok/' . $field->idx) . '"
+                class="btn btn-sm btn-danger ml-1"
+                style="padding: 5px !important;"
+                data-bs-toggle="offcanvas"
+                data-bs-target="#canvasdet"
+                data-title="View DOKUMEN">
+                <i class="fa fa-file-pdf-o"></i>
+                </a>
+            ';
+
+            $row[] = $buton;
             $data[] = $row;
+
             $total += $tampil * $field->price;
             $pcs += $field->qty;
             $kgs += $field->weight;
@@ -395,7 +415,8 @@ class Hargamat extends CI_Controller
         $this->load->view('task/canceltask', $data);
     }
 
-    public function excel2(){
+    public function excel2()
+    {
         $dir = 'assets\docs\templatelapkontrakdankonversi.xlsx';
         $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($dir);
 
