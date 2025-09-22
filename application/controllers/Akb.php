@@ -1613,7 +1613,8 @@ class Akb extends CI_Controller
                         break;
                 }
                 $cifnya = round(($cif/$pembagi)*$databahanbaku['kgs'],2);
-                $cifrupiah = round((($cif/$pembagi)*$databahanbaku['kgs']),2)*$ndpbm;
+                // $cifrupiah = round((($cif/$pembagi)*$databahanbaku['kgs']),2)*$ndpbm;
+                $cifrupiah =(($cif/$pembagi)*$ndpbm)*round($databahanbaku['kgs'],2);
                 $barangbahanbaku = [
 					"seriBarang" => $no,
                     "seriBahanBaku" => $nob,
@@ -2451,7 +2452,7 @@ class Akb extends CI_Controller
             $sheet->setCellValue('F' . $numrow, $spekbarang);
             $sheet->setCellValue('H' . $numrow, $pcs);
             $sheet->setCellValue('I' . $numrow, $data['kodebc']);
-            $sheet->setCellValue('J' . $numrow, $data['kgs']);
+            $sheet->setCellValue('J' . $numrow, round($data['kgs'],2));
 
             $numrow++;
             $no++;  
@@ -3067,7 +3068,7 @@ class Akb extends CI_Controller
             $sheet->setCellValue('D' . $numrow, $sku);
             $sheet->setCellValue('E' . $numrow, $pcs);
             $sheet->setCellValue('F' . $numrow, $data['kodebc']);
-            $sheet->setCellValue('G' . $numrow, $data['kgs']);
+            $sheet->setCellValue('G' . $numrow, round($data['kgs'],2));
 
             $sheet->getStyle('A'.$numrow.':A'.$numrow)->applyFromArray($styleArray);
             $sheet->getStyle('B'.$numrow.':B'.$numrow)->applyFromArray($styleArray);
@@ -3393,7 +3394,7 @@ class Akb extends CI_Controller
                 $sheet->setCellValue('A' . $numrow, $no);
                 $sheet->getStyle('A'.$numrow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $sheet->setCellValue('B' . $numrow, $sku);
-                $sheet->setCellValue('E' . $numrow, round($data['kgs'],2));
+                $sheet->setCellValue('E' . $numrow, $data['kgs']);
                 $sheet->setCellValue('F' . $numrow, 'KGM');
                 $sheet->setCellValue('G' . $numrow, $data['jns_bc']);
                 $sheet->setCellValue('H' . $numrow, $data['nomor_bc']);
@@ -3473,6 +3474,66 @@ class Akb extends CI_Controller
         $spreadsheet->disconnectWorksheet();
         unset($spreadsheet);
     }
+    public function buatbonexcel($id,$mode=0)
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+        $sheet->setCellValue('A1', "DATA TIDAK ADA DI BOM MATERIAL "); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B2', "KODE BARANG / SKU"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C2', "INSNO");
+        $sheet->setCellValue('D2', "SPESIFIKASI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('E2', "NOBONTR");
+        $sheet->setCellValue('G2', "BON GAICHU");
+        $sheet->setCellValue('H2', "PCS");
+        $sheet->setCellValue('I2', "KGS");
+
+        $inv = $this->akbmodel->getdatadetailib($id,1);
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 3;
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($inv as $data) {
+            $sku = viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $sku);
+            $sheet->setCellValue('C' . $numrow, $data['insno']);
+            $sheet->setCellValue('D' . $numrow, $spekbarang);
+            $sheet->setCellValue('E' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('F' . $numrow, '');
+            $sheet->setCellValue('G' . $numrow, $data['dokgaichu']);
+            $sheet->setCellValue('H' . $numrow, $data['pcs']);
+            $sheet->setCellValue('I' . $numrow, $data['kgs']);
+            $no++;
+            // Tambah 1 setiap kali looping      
+            $numrow++; // Tambah 1 setiap kali looping    
+        }
+
+        // $newSheet2 = $spreadsheet->createSheet(1); // Index 1 for the second position (0-based)
+        // $newSheet2->setTitle('Inserted Sheet');
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle(" DATA");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data Detail "'.$id.'".xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel BOM INVENTORY' . $this->session->userdata('currdept'));
+    }
     public function toexcel($id,$mode=0)
     {
         $spreadsheet = new Spreadsheet();
@@ -3505,6 +3566,62 @@ class Akb extends CI_Controller
             $sheet->setCellValue('D' . $numrow, $spekbarang);
             $sheet->setCellValue('E' . $numrow, $data['nobontr']);
             $sheet->setCellValue('F' . $numrow, '');
+            $no++;
+            // Tambah 1 setiap kali looping      
+            $numrow++; // Tambah 1 setiap kali looping    
+        }
+
+        // $newSheet2 = $spreadsheet->createSheet(1); // Index 1 for the second position (0-based)
+        // $newSheet2->setTitle('Inserted Sheet');
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle(" DATA");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="Data INV.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel BOM INVENTORY' . $this->session->userdata('currdept'));
+    }
+    public function simpanbomkeexcel($id,$mode=0){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+        $sheet->setCellValue('A1', "DATA BOM MATERIAL "); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B2', "SERI"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('C2', "KODE BARANG / SKU"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('D2', "SPESIFIKASI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('E2', "NOBONTR");
+        $sheet->setCellValue('F2', "PCS");
+        $sheet->setCellValue('G2', "KGS");
+
+        $inv = $this->akbmodel->hitungbomjf($id,$mode);
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 3;
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($inv['ok'] as $data) {
+            $sku = viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $data['noe']);
+            $sheet->setCellValue('C' . $numrow, $sku);
+            $sheet->setCellValue('D' . $numrow, $spekbarang);
+            $sheet->setCellValue('E' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('F' . $numrow, $data['pcs_asli']);
+            $sheet->setCellValue('G' . $numrow, $data['kgs_asli']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

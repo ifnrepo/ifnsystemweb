@@ -91,6 +91,12 @@ $(document).ready(function () {
 		$("#kolomfreight").addClass("hilang");
 		$("#kolomasuransi").addClass("hilang");
 	}
+	var isikonversi = $("#totalkonversi").text();
+	if(isikonversi=='-'){
+		$("#lampirandankonversi").addClass('disabled');
+		$("#perhitunganjaminan").addClass('disabled');
+		$("#lembarperijinan").addClass('disabled');
+	}
 });
 $("#getnomoraju").click(function () {
 	$.ajax({

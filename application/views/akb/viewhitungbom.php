@@ -48,7 +48,7 @@
                                 <td class="text-right"><?= rupiah($databom['pcs_asli'],0); ?></td>
                                 <td class="text-right"><?= rupiah($databom['kgs_asli'],5); ?></td>
                             </tr>
-                        <?php $jumlahpcs += $databom['pcs_asli']; $jumlahkgs += $databom['kgs_asli']; } } else { ?>
+                        <?php $jumlahpcs += $databom['pcs_asli']; $jumlahkgs += round($databom['kgs_asli'],2); } } else { ?>
                             <tr>
                                 <td class="text-center" colspan="6">Data tidak bisa di BREAKDOWM !</td>
                             </tr>
@@ -64,8 +64,8 @@
                 </table>
                 <hr class="small m-1">
                 <div class="text-center">
-                    <a href="#" data-href="<?= base_url().'akb/simpanbomjf/'.$idheader.'/1'; ?>" id="simpankedb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini " data-title="Bill Of Material" class="btn btn-sm btn-flat btn-primary disabled">Simpan</a>
-                    <!-- <a href="#" id="simpannya" class="btn btn-sm btn-flat btn-primary">Simpan</a> -->
+                    <a href="#" data-href="<?= base_url().'akb/simpanbomjf/'.$idheader.'/1'; ?>" id="simpankedb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini " data-title="Bill Of Material" class="btn btn-sm btn-flat btn-primary">Simpan</a>
+                    <a href="<?= base_url().'akb/simpanbomkeexcel/'.$idheader.'/1'; ?>" id="simpanexcel" class="btn btn-sm btn-flat btn-success">Simpan ke Excel</a>
                     <a href="#" class="btn btn-sm btn-flat btn-danger" id="tutupmodal" data-bs-dismiss="modal">Batal</a>
                     <div id="peringatan">XXX</div>
                     
@@ -87,7 +87,7 @@
             $("#simpankedb").removeClass('disabled');
             $("#peringatan").text('');
         }else{
-            $("#simpankedb").addClass('disabled');
+            // $("#simpankedb").addClass('disabled');
             $("#peringatan").text('Data Header ('+harus+') dan Detail Breakdown ('+aktual+') tidak Sama');
         }
     });

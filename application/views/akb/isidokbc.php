@@ -564,10 +564,11 @@
             <div class="tab-pane fade p-2 bg-cyan-lt" id="tabs-barang-8">
                 <div class="m-2 font-bold d-flex justify-content-between">Detail Barang 
                     <span>
-                        <a href="<?= base_url().'akb/excellampiran261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Lampiran dan Konversi</a>
-                        <a href="<?= base_url().'akb/exceljaminan261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-warning text-black"><i class="fa fa-file-excel-o mr-1"></i> Perhitungan Jaminan</a>
-                        <a href="<?= base_url().'akb/uploadijin/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-teal"><i class="fa fa-file-excel-o mr-1"></i> Perijinan</a>
+                        <a id="lampirandankonversi" href="<?= base_url().'akb/excellampiran261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Lampiran dan Konversi</a>
+                        <a id="perhitunganjaminan" href="<?= base_url().'akb/exceljaminan261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-warning text-black"><i class="fa fa-file-excel-o mr-1"></i> Perhitungan Jaminan</a>
+                        <a id="lembarperijinan" href="<?= base_url().'akb/uploadijin/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-teal"><i class="fa fa-file-excel-o mr-1"></i> Perijinan</a>
                         <a href="<?= base_url().'akb/rekapnobontr/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-info"><i class="fa fa-file-excel-o mr-1"></i> Rekap IB</a>
+                        <a href="<?= base_url().'akb/buatbonexcel/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-info"><i class="fa fa-file-excel-o mr-1"></i> Cetak Detail</a>
                     <span>
                 </div>
                 <div class="card card-lg font-kecil">
@@ -593,7 +594,7 @@
                                         $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
                                         $sumdetail += $data['harga']; //*$jumlah;
                                         $sumpcs += $data['pcs'];
-                                        $sumkgs += $data['kgs'];
+                                        $sumkgs += round($data['kgs'],2);
                                         // $nambar = $data['po']!='' ? $data['spek'] : $data['nama_barang'];
                                         $nambar = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
                                         if($datheader['jns_bc']==30){
@@ -696,7 +697,7 @@
                                         $no++; 
                                         $kursusd = $kurssekarang['usd'];
                                         $ndpbm = $detbom['mt_uang']=='' || $detbom['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                                        $pembagi = $detbom['hamat_weight']==0 ? 1 : $detbom['hamat_weight'];
+                                        $pembagi = $detbom['hamat_weight']==0 ? 1 : round($detbom['hamat_weight'],2);
                                         switch ($detbom['mt_uang']) {
                                             case 'JPY':
                                                 $jpy = $detbom['cif']*$kurssekarang[strtolower($detbom['mt_uang'])];
@@ -706,11 +707,12 @@
                                                 $cif = $detbom['cif'];
                                                 break;
                                         }
-                                        $jmlkgs += $detbom['kgs'];
+                                        $jmlkgs += round($detbom['kgs'],2);
                                         $serbar = $detbom['seri_barang'];
                                         $jns_bc = $detbom['hamat_jnsbc'];
                                         $nomor_bc = $detbom['hamat_nomorbc'];
-                                        $jumlahhargaperkilo = round((($cif/$pembagi)*$detbom['kgs']),2)*$ndpbm;
+                                        // $jumlahhargaperkilo = round((($cif/$pembagi)*round($detbom['kgs'],2)),2)*$ndpbm;
+                                        $jumlahhargaperkilo = (($cif/$pembagi)*$ndpbm)*round($detbom['kgs'],2);
                                         $jumlahtot += $jumlahhargaperkilo;
                                         $hitungbm = $detbom['bm'] > 0 ? '' : 'hilang';
                                         $hitungppn = $detbom['ppn'] > 0 ? '' : 'hilang';
@@ -740,7 +742,7 @@
                                         <td><?= $nomor_bc ?></td>
                                         <td class="text-center text-blue"><?= $jns_bc; ?></td>
                                         <td class="text-right"><?= rupiah(($cif/$pembagi)*$ndpbm,2) ?></td>
-                                        <td class="text-right"><?= rupiah(round((($cif/$pembagi)*$detbom['kgs']),2)*$ndpbm,2) ?></td>
+                                        <td class="text-right"><?= rupiah((($cif/$pembagi)*$ndpbm)*round($detbom['kgs'],2),2) ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url().'akb/editbombc/'.$detbom['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data" >EDIT</a>
                                         </td>
@@ -748,7 +750,7 @@
                                 <?php } ?>
                                 <tr style="font-size: 16px !important" >
                                     <td colspan="5" class="text-right">TOTAL</td>
-                                    <td class="text-right text-primary"><?= rupiah($jmlkgs,2); ?></td>
+                                    <td class="text-right text-primary" id="totalkonversi"><?= rupiah($jmlkgs,2); ?></td>
                                     <td colspan="4"></td>
                                     <td></td>
                                     <td class="text-right text-primary"><?= rupiah(bulatkan($jumlahtot,1000),2); ?></td>
