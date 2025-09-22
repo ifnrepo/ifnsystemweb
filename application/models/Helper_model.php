@@ -873,7 +873,7 @@ class Helper_model extends CI_Model
     }
     public function ceknomorbc($data,$idbarang){
         $datahasil= [];
-
+        $xhasil2= [];
         $hasil2 = $this->db->get_where('tb_hargamaterial',['nobontr' => $data,'id_barang' => $idbarang]);
         if($hasil2->num_rows() > 0){
             $xhasil2 = $hasil2->row_array();
