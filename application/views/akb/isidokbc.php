@@ -562,7 +562,11 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2 bg-cyan-lt" id="tabs-barang-8">
-                <div class="m-2 font-bold d-flex justify-content-between">Detail Barang 
+                <div class="m-2 font-bold d-flex justify-content-between">Detail Barang <br>
+                    <span class="font-kecil text-black">
+                        Jumlah Pcs : <span id="jumlahpcsdetailbarang"></span><br>
+                        Jumlah Kgs : <span id="jumlahkgsdetailbarang"></span>
+                    </span>
                     <span>
                         <a id="lampirandankonversi" href="<?= base_url().'akb/excellampiran261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Lampiran dan Konversi</a>
                         <a id="perhitunganjaminan" href="<?= base_url().'akb/exceljaminan261/'.$datheader['id'].'/1'; ?>" class="btn btn-sm btn-warning text-black"><i class="fa fa-file-excel-o mr-1"></i> Perhitungan Jaminan</a>
@@ -623,7 +627,7 @@
                                 <tr class="bg-primary-lt">
                                     <?php $jmcolspan = $mode==1 ? 5 : 4; ?>
                                     <td class="text-black text-center font-bold" colspan="<?= $jmcolspan; ?>">TOTAL</td>
-                                    <td class="text-black text-right font-bold"><?= rupiah($sumpcs,0); ?></td>
+                                    <td class="text-black text-right font-bold" id="pcssum"><?= rupiah($sumpcs,0); ?></td>
                                     <td class="text-black text-right font-bold" id="txtsum"><?= rupiah($sumkgs,2); ?></td>
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail,2); ?></td>
@@ -659,7 +663,15 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2" id="tabs-barangdet-8">
-                <div class="m-2 font-bold d-flex justify-content-between">Barang Versi BC/CEISA <span><a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a><span></div>
+                <div class="m-2 font-bold d-flex justify-content-between">Barang Versi BC/CEISA <br>
+                    <span class="font-kecil text-black">
+                        Jumlah Kgs : <span id="jumlahkgsdetailbarang2"></span>
+                    </span>
+                    <span>
+                        <a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
+                        <a href="#" data-href="<?= base_url().'akb/tambahkelampiran/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-success"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
+                    <span>
+                </div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
                         <table class="table w-100">

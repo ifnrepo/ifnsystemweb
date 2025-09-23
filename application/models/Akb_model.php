@@ -35,6 +35,40 @@ class Akb_model extends CI_Model
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
+    public function getjumlahdata($kode)
+    {
+        if($kode=='FG'){
+            $deptsubkon = daftardeptsubkon();
+            $arrkondisi = [
+                'id_perusahaan' => IDPERUSAHAAN,
+                'kode_dok' => 'T',
+                'tb_header.dept_id' => $kode,
+                // 'dept_tuju' => 'AR',
+                'month(tgl)' => $this->session->userdata('bl'),
+                'year(tgl)' => $this->session->userdata('th'),
+                'left(nomor_dok,3)' => 'IFN'
+            ];
+        }else{
+            $arrkondisi = [
+                'id_perusahaan' => IDPERUSAHAAN,
+                'kode_dok' => 'T',
+                'tb_header.dept_id' => $kode,
+                'dept_tuju' => 'CU',
+                'month(tgl)' => $this->session->userdata('bl'),
+                'year(tgl)' => $this->session->userdata('th'),
+                'tanpa_bc' => 0,
+                'ok_tuju' => 1
+            ];
+        }
+        $this->db->select('tb_header.*,customer.nama_customer as namacustomer,tb_kontrak.nomor as nomorkontrak,sum(jumlah_barang) over() as jumlahitemnya');
+        $this->db->join('customer', 'customer.id = tb_header.id_buyer', 'left');
+        $this->db->join('tb_kontrak', 'tb_kontrak.id = tb_header.id_kontrak', 'left');
+        $this->db->where($arrkondisi);
+        $this->db->order_by('tgl','desc');
+        $this->db->order_by('nomor_dok','desc');
+        $hasil = $this->db->get('tb_header');
+        return $hasil;
+    }
     public function getdatabyid($kode,$mode=0)
     {
         $this->db->select('tb_header.*,customer.nama_customer as namacustomer,customer.alamat,customer.kontak,customer.npwp,customer.kode_negara as negaracustomer,customer.pembeli as dirsell,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat,ref_negara.kode_negara,tb_kontrak.nomor as nomorkontrak');
