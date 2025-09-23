@@ -97,6 +97,9 @@ $(document).ready(function () {
 		$("#perhitunganjaminan").addClass('disabled');
 		$("#lembarperijinan").addClass('disabled');
 	}
+	$("#jumlahpcsdetailbarang").text($("#pcssum").text())
+	$("#jumlahkgsdetailbarang").text($("#txtsum").text())
+	$("#jumlahkgsdetailbarang2").text($("#totalkonversi").text())
 });
 $("#getnomoraju").click(function () {
 	$.ajax({

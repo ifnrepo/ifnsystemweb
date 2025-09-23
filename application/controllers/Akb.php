@@ -41,6 +41,7 @@ class Akb extends CI_Controller
         $data['depbbl'] = $this->deptmodel->getdata_dept_bbl(1);
         $kode = $this->session->userdata('deptdari');
         $data['data'] = $this->akbmodel->getdata($kode);
+        $data['jumlahrek'] = $this->akbmodel->getjumlahdata($kode);
         $data['datatoken'] = $this->akbmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'akb';
@@ -2394,7 +2395,8 @@ class Akb extends CI_Controller
                 $pembagi = $det['weight']==0 ? 1 : $det['weight'];
                 // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
                 $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
-                $dpp = $det['kgs']*(round(($det['cif']/$pembagi),2)*$kurssekarang[strtolower($fld)]);
+                // $dpp = $det['kgs']*(round(($det['cif']/$pembagi),2)*$kurssekarang[strtolower($fld)]);
+                $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
                 if($nodet > 1){
                     $nop++;
                 }
@@ -2523,7 +2525,7 @@ class Akb extends CI_Controller
             $numakhir = $numrow-1;
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, $data['kgs']);
+            $sheet->setCellValue('B' . $numrow, round($data['kgs'],2));
             $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
             $nodet = 0;
             foreach($inv2->result_array() as $det){
@@ -2531,13 +2533,13 @@ class Akb extends CI_Controller
                 $kiloan = $data['kgs']==0 ? 1 : $data['kgs'];
                 if($nodet > 1){
                     $sheet->setCellValue('A' . $numrow, $no);
-                    $sheet->setCellValue('B' . $numrow, $data['kgs']);
+                    $sheet->setCellValue('B' . $numrow, round($data['kgs'],2));
                 }
                 if(count($det) > 0){
                     $nop++;
                     $sheet->setCellValue('C' . $numrow, $nop);
-                    $sheet->setCellValue('D' . $numrow, $det['kgs']);
-                    $sheet->setCellValue('E' . $numrow, $det['kgs']/$kiloan);
+                    $sheet->setCellValue('D' . $numrow, round($det['kgs'],2));
+                    $sheet->setCellValue('E' . $numrow, round($det['kgs']/$kiloan,2));
                     $numrow++;
                 }else{
                     $numrow++;
@@ -2550,35 +2552,6 @@ class Akb extends CI_Controller
         $sheet = $spreadsheet->setActiveSheetIndex(0);
         
         // $inv = $this->akbmodel->exceljaminan261($id);
-        // $no = 1;
-
-        // // Untuk penomoran tabel, di awal set dengan 1    
-        // $numrow = 3;
-        // // Set baris pertama untuk isi tabel adalah baris ke 3    
-        // foreach ($inv->result_array() as $data) {
-        //     $sku = $data['kode'];
-        //     $spekbarang = namaspekbarang($data['id_barang']);
-        //     // Lakukan looping pada variabel      
-        //     $sheet->setCellValue('A' . $numrow, $no);
-        //     $sheet->setCellValue('B' . $numrow, $sku);
-        //     $sheet->setCellValue('C' . $numrow, $spekbarang);
-        //     $sheet->setCellValue('D' . $numrow, $data['nobontr']);
-        //     $sheet->setCellValue('E' . $numrow, $data['jns_bc']);
-        //     $sheet->setCellValue('F' . $numrow, $data['nomor_bc']);
-        //     $sheet->setCellValue('G' . $numrow, $data['tgl_bc']);
-        //     $sheet->setCellValue('H' . $numrow, $data['mt_uang']);
-        //     $sheet->setCellValue('I' . $numrow, $data['cif']);
-        //     $no++;
-        //     // Tambah 1 setiap kali looping      
-        //     $numrow++; // Tambah 1 setiap kali looping    
-        // }
-
-        // // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
-        // $sheet->getDefaultRowDimension()->setRowHeight(-1);
-        // // Set orientasi kertas jadi LANDSCAPE    
-        // $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-        // // Set judul file excel nya    
-        // $sheet->setTitle("DATA");
 
         // Proses file excel    
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
