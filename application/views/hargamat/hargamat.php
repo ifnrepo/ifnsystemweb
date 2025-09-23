@@ -18,6 +18,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="page-body">
   <div class="container-xl">
     <div class="card">
+      <?= $this->session->flashdata('message'); ?>
       <div class="card card-active mb-2">
         <div class="card-body p-1 text-right">
           <?= $this->session->flashdata('ketlain'); ?>
@@ -93,7 +94,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <label class="font-kecil font-bold">Rp : <span id="reko4" style="font-size: 14px !important"></span></label><br>
           </div>
           <label class="font-kecil font-bold">Jumlah Record : <span id="reko1" style="font-size: 14px !important"></span></label><br>
-          <a href="<?= base_url() . 'hargamat/getbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get data IB" class="btn btn-success btn-sm" style="position: absolute; bottom:5px; right:5px;"><i class="fa fa-plus"></i><span class="ml-1">Get Barang</span></a>
+          <!-- <a href="<?= base_url() . 'hargamat/getbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get data IB" class="btn btn-success btn-sm" style="position: absolute; bottom:5px; right:5px;"><i class="fa fa-plus"></i><span class="ml-1">Get Barang</span></a> -->
+          <!-- <a id="tambahdata" class="btn btn-primary text-white" style="position: absolute; bottom:5px; right:5px;" data-title="Get data IB" role="button">
+            <i class="fa fa-plus"></i><span class="ml-1">Get Barang</span>
+          </a> -->
+          <a href="#" id="tambahdata" style="position: absolute; bottom:5px; right:5px;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-large-tambah">
+            <i class="fa fa-plus"></i><span class="ml-1"> Get Barang </a>
+
+
         </div>
       </div>
       <!-- </div> -->
@@ -131,6 +139,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </div>
 </div>
 
+<div class="offcanvas offcanvas-start" tabindex="-1" id="modal-tambahdata" aria-labelledby=" offcanvasExampleLabel" style="width: 55%;">
+  <div class="offcanvas-header bg-info" style="height: 20px;">
+    <h5 class="offcanvas-title" id="offcanvasExampleLabel">Tambah Data Hamat</h5>
+    <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+  </div>
+  <div class="offcanvas-body">
+    <div id="loadform-tambah"></div>
+  </div>
+</div>
+<div class="modal modal-blur fade" id="modal-large-tambah" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
+    <div class="modal-content">
+      <div class="modal-header bg-info">
+        <h5 class="modal-title">Tambah Data Hamat</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body p-1">
+        <div id="loadform-tambah-data"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 <div class="modal modal-blur fade" id="modal-large-hamat" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -145,8 +177,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
   </div>
 </div>
 <script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
+<script src="<?= base_url(); ?>/assets/js/jquery/jquery-ui.min.js"></script>
 <script>
   $(function() {
+
+    $("#tambahdata").click(function() {
+      $("#modal-large-tambah").modal("show");
+      $("#loadform-tambah-data").load("<?= base_url('hargamat/tambahdata'); ?>");
+    });
+
+    // $(document).on("click", "#tambahdata", function() {
+    //   var ModalTambah = new bootstrap.Modal(document.getElementById("modal-large-tambah"));
+    //   ModalTambah.show();
+
+    //   $("#loadform-tambah-data").load("<?= base_url(); ?>hargamat/tambahdata");
+    // });
+
+    // $(document).on("click", "#tambahdata", function() {
+    //   var OffcanvasTambah = new bootstrap.Offcanvas(document.getElementById("modal-tambahdata"));
+    //   OffcanvasTambah.show();
+
+    //   $("#loadform-tambah").load("<?= base_url(); ?>hargamat/tambahdata");
+    // });
+
+
     $(document).on('click', '.edit', function() {
       var data = $(this).data("id");
       console.log("Id Hamat:", data);

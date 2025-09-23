@@ -19,7 +19,6 @@
   <link href=<?= base_url() . "assets/tagify/tagify.css" ?> rel="stylesheet" />
 
 
-
   <!-- datatables -->
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/datatables.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/datatables/css/responsive.bootstrap.min.css">

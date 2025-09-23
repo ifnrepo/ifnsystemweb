@@ -54,13 +54,73 @@ class Hargamat extends CI_Controller
         $data['data'] = $this->hargamatmodel->getbarang();
         $this->load->view('hargamat/getbarang', $data);
     }
-    public function simpanbarang()
+
+    // public function barang()
+    // {
+    //     $inputan = $this->input->get('term');
+    //     $result = $this->hargamatmodel->getLikeBarang($inputan);
+    //     echo json_encode($result);
+    // }
+    public function master_barang()
     {
-        $arrgo = [
-            'data' => $_POST['out']
-        ];
-        $kode = $this->hargamatmodel->simpanbarang($arrgo);
-        echo $kode;
+        $inputan = $this->input->get('term');
+        $result = $this->hargamatmodel->getLikeMAsBar($inputan);
+        echo json_encode($result);
+    }
+    public function master_satuan()
+    {
+        $inputan = $this->input->get('term');
+        $result = $this->hargamatmodel->getLikeMAsSat($inputan);
+        echo json_encode($result);
+    }
+    public function master_supplier()
+    {
+        $inputan = $this->input->get('term');
+        $result = $this->hargamatmodel->getLikeMAsSup($inputan);
+        echo json_encode($result);
+    }
+    public function tambahdata()
+    {
+        $data['dokbc'] = $this->hargamatmodel->getdokbc();
+        $data['refbendera'] = $this->hargamatmodel->refbendera();
+        $data['refmtuang'] = $this->hargamatmodel->refmtuang();
+        $this->load->view('hargamat/add', $data);
+    }
+    // public function simpandata()
+    // {
+    //     $query = $this->hargamatmodel->SimpanData();
+    //     if ($query) {
+    //         $url = base_url() . 'hargamat';
+    //         redirect($url);
+    //     }
+    // }
+    public function simpandata()
+    {
+        $data = $_POST;
+
+        $id_barang = $data['id_barang'];
+        $nobontr =  $data['nobontr'];
+
+        $cekdata = $this->db->get_where('tb_hargamaterial', [
+            'id_barang' => $id_barang,
+            'nobontr' => $nobontr
+        ])->row_array();
+
+        if ($cekdata) {
+            $this->session->set_flashdata('message', '
+            <div class="alert alert-warning alert-dismissible fade show" role="alert">
+              Data Barang Sudah Tersedia Sebelumnya !
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>');
+            $url = base_url() . 'hargamat';
+            redirect($url);
+        } else {
+            $query = $this->hargamatmodel->SimpanData();
+            if ($query) {
+                $url = base_url() . 'hargamat';
+                redirect($url);
+            }
+        }
     }
     public function addkondisi()
     {

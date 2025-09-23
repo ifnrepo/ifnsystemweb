@@ -121,6 +121,79 @@ class Hargamat_model extends CI_Model
         // $this->db->where_not_in('tb_detail.id',array_column($strkondisi, 'id_detail'));
         return $this->db->get();
     }
+
+    // public function getLikeBarang($inputan)
+    // {
+
+    //     $this->db->select("*,tb_detail.id as idx, barang.nama_barang");
+    //     $this->db->from('tb_detail');
+    //     $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+    //     $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
+    //     $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+    //     $this->db->join('kategori', 'kategori.kategori_id = barang.id_kategori', 'left');
+    //     $this->db->where(['tb_header.kode_dok' => 'IB', 'tb_header.data_ok' => 1, 'tb_header.ok_valid' => 1, 'id_hamat' => 0]);
+
+    //     // $this->db->group_start();
+    //     $this->db->like('barang.nama_barang', $inputan);
+    //     $this->db->group_by('tb_detail.id_barang');
+    //     // $this->db->group_end();
+
+    //     return $this->db->get()->result_array();
+    // }
+
+    public function getLikeBarang($inputan)
+    {
+
+        $this->db->select("tb_detail.* ,barang.id as id_barang, barang.nama_barang, tb_header.nomor_dok, tb_header.tgl,
+        tb_header.jns_bc, tb_header.tgl_bc, tb_header.nomor_bc, ref_mt_uang.mt_uang ,
+        supplier.id as ids,
+        supplier.nama_supplier as nama_supplier,
+        kategori.nama_kategori as nama_kategori");
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+        $this->db->join('ref_mt_uang', 'ref_mt_uang.id = tb_header.mtuang', 'left');
+        $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->join('kategori', 'kategori.kategori_id = barang.id_kategori', 'left');
+        $this->db->where([
+            'tb_header.kode_dok' => 'IB',
+            'tb_header.data_ok'  => 1,
+            'tb_header.ok_valid' => 1,
+            'id_hamat'           => 0
+        ]);
+        $this->db->like('barang.nama_barang', $inputan);
+        $this->db->group_by('tb_detail.id_barang');
+
+        return $this->db->get()->result_array();
+    }
+
+    public function getLikeMAsBar($inputan)
+    {
+        $this->db->group_start();
+        $this->db->like('nama_barang', $inputan);
+        $this->db->or_like('nama_alias', $inputan);
+        $this->db->group_end();
+        $query = $this->db->get('barang');
+        return $query->result_array();
+    }
+    public function getLikeMAsSat($inputan)
+    {
+
+        $this->db->like('kodesatuan', $inputan);
+
+        $query = $this->db->get('satuan');
+        return $query->result_array();
+    }
+    public function getLikeMAsSup($inputan)
+    {
+
+        $this->db->like('nama_supplier', $inputan);
+
+        $query = $this->db->get('supplier');
+        return $query->result_array();
+    }
+
+
     public function simpanbarang($kode)
     {
         $jumlah = count($kode['data']);
@@ -164,11 +237,123 @@ class Hargamat_model extends CI_Model
         }
         return true;
     }
+    // public function SimpanData()
+    // {
+    //     $data = $_POST;
+
+
+    //     $data['kurs'] = toAngka($data['kurs']);
+    //     $data['qty'] = toAngka($data['qty']);
+    //     $data['weight'] = toAngka($data['weight']);
+    //     $data['price'] = toAngka($data['price']);
+    //     $data['cif'] = toAngka($data['cif']);
+    //     $data['bm'] = toAngka($data['bm']);
+    //     $data['ppn'] = toAngka($data['ppn']);
+    //     $data['pph'] = toAngka($data['pph']);
+    //     $data['oth_amount'] = toAngka($data['oth_amount']);
+    //     // $data['tgl_bc'] = tglmysql($data['tgl_bc']);
+    //     $data['tgl_aju'] = tglmysql($data['tgl_aju']);
+    //     $data['co'] = isset($data['co']) ? 1 : 0;
+    //     $fotodulu = FCPATH . 'assets/image/dokhamat/' . $data['dok_lama']; //base_url().$gambar.'.png';
+    //     if ($data['dok_lama'] != $data['namedok']) {
+    //         $data['filedok'] = $this->uploaddok();
+    //         if ($data['filedok'] == 'kosong') {
+    //             $data['filedok'] = NULL;
+    //         }
+    //         if ($data['filedok'] != NULL) {
+    //             if (file_exists($fotodulu)) {
+    //                 unlink($fotodulu);
+    //             }
+    //             unset($data['namedok']);
+    //             unset($data['dok_lama']);
+    //             unset($data['dok']);
+    //         } else {
+    //             if ($data['namedok'] != '') {
+    //                 $this->session->set_flashdata('ketlain', 'Error Upload Foto Profile ' . $data['noinduk'] . ' ');
+    //             }
+    //         }
+    //     }
+    //     unset($data['namedok']);
+    //     unset($data['dok_lama']);
+    //     unset($data['dok']);
+    //     unset($data['nama_barang']);
+    //     unset($data['nama_kategori']);
+    //     unset($data['nama_supplier']);
+
+
+
+    //     $query = $this->db->insert('tb_hargamaterial', $data);
+    //     $this->helpermodel->isilog($this->db->last_query());
+    //     return $query;
+    // }
+    public function SimpanData()
+    {
+        $data = $_POST;
+
+
+        $data['kurs'] = toAngka($data['kurs']);
+        $data['qty'] = toAngka($data['qty']);
+        $data['weight'] = toAngka($data['weight']);
+        $data['price'] = toAngka($data['price']);
+        $data['cif'] = toAngka($data['cif']);
+        $data['bm'] = toAngka($data['bm']);
+        $data['ppn'] = toAngka($data['ppn']);
+        $data['pph'] = toAngka($data['pph']);
+        $data['oth_amount'] = toAngka($data['oth_amount']);
+        $data['tgl'] = tglmysql($data['tgl']);
+        $data['tgl_bc'] = tglmysql($data['tgl_bc']);
+        $data['tgl_aju'] = tglmysql($data['tgl_aju']);
+        $data['co'] = isset($data['co']) ? 1 : 0;
+        $fotodulu = FCPATH . 'assets/image/dokhamat/' . $data['dok_lama']; //base_url().$gambar.'.png';
+        if ($data['dok_lama'] != $data['namedok']) {
+            $data['filedok'] = $this->uploaddok();
+            if ($data['filedok'] == 'kosong') {
+                $data['filedok'] = NULL;
+            }
+            if ($data['filedok'] != NULL) {
+                if (file_exists($fotodulu)) {
+                    unlink($fotodulu);
+                }
+                unset($data['namedok']);
+                unset($data['dok_lama']);
+                unset($data['dok']);
+            } else {
+                if ($data['namedok'] != '') {
+                    $this->session->set_flashdata('ketlain', 'Error Upload Foto Profile ' . $data['noinduk'] . ' ');
+                }
+            }
+        }
+        unset($data['namedok']);
+        unset($data['dok_lama']);
+        unset($data['dok']);
+        unset($data['nama_barang']);
+        unset($data['nama_satuan']);
+        unset($data['nama_supplier']);
+
+        // echo '<pre>';
+        // print_r($data);
+        // echo '</pre>';
+        // exit;
+
+
+        $query = $this->db->insert('tb_hargamaterial', $data);
+        $this->helpermodel->isilog($this->db->last_query());
+        return $query;
+    }
     public function updatehamat()
     {
         $data = $_POST;
         $nobontr = $data['nobontr'];
+        $mt_uang = $data['mt_uang'];
+        $kode_negara = $data['kode_negara'];
+        $jns_bc = $data['jns_bc'];
+        $nomor_bc = $data['nomor_bc'];
+        $tgl_bc = $data['tgl_bc'];
         $nomor_aju = $data['nomor_aju'];
+        $tgl_aju = $data['tgl_aju'];
+        $filedok = $data['filedok'];
+
+
 
         // var_dump($nobontr);
         // var_dump($nomor_aju);
@@ -218,7 +403,16 @@ class Hargamat_model extends CI_Model
 
 
         $this->db->where('nobontr', $nobontr);
-        $this->db->update('tb_hargamaterial', ['nomor_aju' => $nomor_aju]);
+        $this->db->update('tb_hargamaterial', [
+            'mt_uang' => $mt_uang,
+            'kode_negara' => $kode_negara,
+            'jns_bc' => $jns_bc,
+            'nomor_bc' => $nomor_bc,
+            'tgl_bc' => $tgl_bc,
+            'nomor_aju' => $nomor_aju,
+            'tgl_aju' => $tgl_aju,
+            'filedok'     => $data['filedok']
+        ]);
 
         $this->helpermodel->isilog($this->db->last_query());
         $this->db->trans_complete();
