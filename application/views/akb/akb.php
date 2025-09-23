@@ -65,7 +65,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-5">
                   <span class="mb-1 font-kecil text-primary font-bold">Jumlah Record : <?= $jumlahrek->num_rows(); ?></span><br>
                   <?php $jmlrek = $jumlahrek->row_array(); ?>
-                  <span class="mb-1 font-kecil text-primary font-bold">Jumlah Detail : <?= rupiah($jmlrek['jumlahitemnya'],0).' Item' ?></span>
+                  <span class="mb-1 font-kecil text-primary font-bold">Jumlah Detail : <?= rupiah(0,0).' Item' ?></span>
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1">
