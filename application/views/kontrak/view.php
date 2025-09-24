@@ -54,7 +54,7 @@
                         </div>
                     </div>
                     <div class="mb-1 row">
-                        <label class="col-3 col-form-label required"><i>No SSB</i></label>
+                        <label class="col-3 col-form-label required"><i>No Jaminan</i></label>
                         <div class="col">
                             <input type="text" class="form-control font-kecil" value="<?= $header['nomor_ssb']; ?>">
                         </div>

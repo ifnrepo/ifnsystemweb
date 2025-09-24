@@ -1552,7 +1552,8 @@ class Akb extends CI_Controller
                         break;
                 }
                 $cifnya += round(($cif/$pembagi)*$det['kgs'],2);
-                $cifrupiah += round((($cif/$pembagi)*$det['kgs']),2)*$ndpbm;
+                $cifrupiah += (($cif/$pembagi)*$ndpbm)*round($det['kgs'],2);
+                // $cifrupiah += round((($cif/$pembagi)*$det['kgs']),2)*$ndpbm;
             }
             $uraian = trim($detx['po'])!='' ? spekpo($detx['po'],$detx['item'],$detx['dis']) : namaspekbarang($detx['id_barang']);
             $hs = trim($detx['po'])=='' ? substr($detx['nohs'],0,8) : substr($detx['hsx'],0,8); 
@@ -1602,9 +1603,9 @@ class Akb extends CI_Controller
                 $nob++;
                 $asalbar = $databahanbaku['jns_bc']==23 ? "0" : "1" ;
                 $kursusd = $kurssekarang['usd'];
-                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
-                switch ($det['mt_uang']) {
+                $ndpbm = $databahanbaku['mt_uang']=='' || $databahanbaku['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
+                $pembagi = $databahanbaku['weight']==0 ? 1 : $databahanbaku['weight'];
+                switch ($databahanbaku['mt_uang']) {
                     case 'JPY':
                         $jpy = $databahanbaku['cif']*$kurssekarang[strtolower($det['mt_uang'])];
                         $cif = $jpy/$kursusd;
@@ -1615,12 +1616,13 @@ class Akb extends CI_Controller
                 }
                 $cifnya = round(($cif/$pembagi)*$databahanbaku['kgs'],2);
                 // $cifrupiah = round((($cif/$pembagi)*$databahanbaku['kgs']),2)*$ndpbm;
-                $cifrupiah =(($cif/$pembagi)*$ndpbm)*round($databahanbaku['kgs'],2);
+                // $cifrupiah =(($cif/$pembagi)*$ndpbm)*round($databahanbaku['kgs'],2);
+                $cifrupiah = $cifnya*$ndpbm;
                 $barangbahanbaku = [
 					"seriBarang" => $no,
                     "seriBahanBaku" => $nob,
                     "kodeAsalBahanBaku" => $asalbar,
-                    "posTarif" => $databahanbaku['nohs'],
+                    "posTarif" => substr($databahanbaku['nohs'],0,8),
                     "kodeBarang" => $databahanbaku['kode'],
                     "uraianBarang" => $databahanbaku['nama_barang'],
                     "merkBarang" => "-",
@@ -1628,7 +1630,7 @@ class Akb extends CI_Controller
                     "ukuranBarang" => "-",
                     "spesifikasiLainBarang" => "-",
                     "kodeSatuanBarang" => $databahanbaku['kodebc'],
-                    "jumlahSatuan" => (float) $databahanbaku['kgs'],
+                    "jumlahSatuan" => (float) round($databahanbaku['kgs'],2),
                     "kodeDokAsal" => $databahanbaku['jns_bc'],
                     "kodeKantor" => "050500",
                     "kodeDokumen" => $databahanbaku['jns_bc'], // EX
@@ -1648,29 +1650,36 @@ class Akb extends CI_Controller
                     "seriIjin" => 0
                 ];
                 $arraybahanbakutarif = [];
+                $tarifbm = 0;
                 for($ke=1;$ke<=3;$ke++){
-                    $kodepungut = $ke==1 ? 'BM' : ($ke==2 ? 'PPN' : 'PPH');
+                    $kodepungut = $databahanbaku['jns_bc']=='40' ? 'PPNLOKAL' : ($ke==1 ? 'BM' : ($ke==2 ? 'PPN' : 'PPH'));
                     $tarif = 0;
                     switch ($kodepungut) {
                         case 'PPNLOKAL':
-                            $tarif = 0;
+                            $tarif = 11;
+                            $ke = 4;
+                            $jmltarif = 0;
                             break;
                         case 'BM':
                             if($databahanbaku['bm'] > 0){
                                 $tarif = $databahanbaku['bm'];
                                 $pungutanbm += $cifrupiah*($tarif/100);
+                                $tarifbm = $pungutanbm;
+                                $jmltarif = $cifrupiah*($tarif/100);
                             }
                             break;
                         case 'PPN':
                             if($databahanbaku['ppn'] > 0){
                                 $tarif = $databahanbaku['ppn'];
-                                $pungutanppn += $cifrupiah*($tarif/100);
+                                $pungutanppn += ($tarifbm+$cifrupiah)*($tarif/100);
+                                $jmltarif = ($tarifbm+$cifrupiah)*($tarif/100);
                             }
                             break;
                         case 'PPH':
                             if($databahanbaku['pph'] > 0){
                                 $tarif = $databahanbaku['pph'];
-                                $pungutanpph += $cifrupiah*($tarif/100);
+                                $pungutanpph += ($tarifbm+$cifrupiah)*($tarif/100);
+                                $jmltarif = ($tarifbm+$cifrupiah)*($tarif/100);
                             }
                             break;
                         default:
@@ -1687,10 +1696,10 @@ class Akb extends CI_Controller
                         "tarif" => (float) $tarif,
                         "tarifFasilitas" => 100,
                         "nilaiBayar" => 0,
-                        "nilaiFasilitas" => $cifrupiah*($tarif/100),
+                        "nilaiFasilitas" => round($jmltarif,2),
                         "kodeSatuanBarang" => $databahanbaku['kodebc'],
                         "nilaiSudahDilunasi" => 0,
-                        "jumlahSatuan" => (float) $databahanbaku['kgs'],
+                        "jumlahSatuan" => (float) round($databahanbaku['kgs'],2),
                         "jumlahKemasan" => 0
                     ];
                     array_push($arraybahanbakutarif,$bahanbakutarif);
@@ -1718,8 +1727,8 @@ class Akb extends CI_Controller
         $jaminan = [
             "idJaminan" => "",
             "kodeJenisJaminan" => "3",
-            "nomorJaminan" => $datakontrak['nomor'],
-            "tanggalJaminan" => $datakontrak['tgl_awal'],
+            "nomorJaminan" => $datakontrak['nomor_ssb'],
+            "tanggalJaminan" => $datakontrak['tgl_ssb'],
             "nilaiJaminan" => (float) $datakontrak['jml_ssb'],
             "penjamin" => $datakontrak['penjamin']==NULL ? "" : $datakontrak['penjamin'],
             "tanggalJatuhTempo" => $datakontrak['tgl_akhir'],
@@ -1867,6 +1876,22 @@ class Akb extends CI_Controller
             }
         }
         echo $hasil;
+    }
+    public function tambahkelampiran($id,$mode){
+        $inv =  $this->akbmodel->exceljaminan261($id);
+        foreach($inv->result_array() as $lampiran){
+            // if($lampiran['jns_bc']=='23'):
+                $data = [
+                    'kode_dokumen' => $lampiran['jns_bc'],
+                    'nomor_dokumen' => $lampiran['nomor_bc'],
+                    'tgl_dokumen' => $lampiran['tgl_bc'],
+                    'id_header' => $id
+                ];
+                $this->db->insert('lampiran',$data);
+            // endif;
+        }
+        $url = base_url().'akb/isidokbc/'.$id.'/1';
+        redirect($url);
     }
     //End IB Controller
   
@@ -2056,7 +2081,7 @@ class Akb extends CI_Controller
             'id' => $_POST['id'],
             'nobontr' => trim(strtoupper($_POST['nobontr'])),
             'bm' => $_POST['bm']=='true' ? 5 : 0,
-            'ppn' => $_POST['ppn']=='true' ? 12 : 0,
+            'ppn' => $_POST['ppn']=='true' ? 11 : 0,
             'pph' => $_POST['pph']=='true' ? 2.5 : 0,
         ];
         $hasil = $this->akbmodel->simpandetailbombc($data);
@@ -2088,6 +2113,16 @@ class Akb extends CI_Controller
             $url = base_url().'akb/isidokbc/'.$id.'/1';
             redirect($url);
         }
+    }
+    public function masukkelampiran(){
+        $data = [
+            'id_header' => $_POST['id'],
+            'kode_dokumen' => $_POST['field'],
+            'tgl_dokumen' => tglmysql($_POST['tgl']),
+            'nomor_dokumen' => $_POST['nilai']
+        ];
+        $hasil = $this->akbmodel->masukkelampiran($data);
+        echo $hasil;
     }
     public function uploadijin($id,$mode=0){
         $spreadsheet = new Spreadsheet();
@@ -2167,7 +2202,7 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('B'.$numrow, $det['jns_bc']);
                     $sheet->setCellValue('D'.$numrow, $det['nomor_aju']);
                     $sheet->setCellValue('E'.$numrow, $det['nomor_bc']);
-                    $sheet->setCellValue('F'.$numrow, $det['tgl_bc']);
+                    $sheet->setCellValue('F'.$numrow, date('d-m-Y',strtotime($det['tgl_bc'])));
                     $sheet->setCellValue('G'.$numrow, $det['serbar']);
                     $sheet->setCellValue('N'.$numrow, $asalbar);
                     $sheet->setCellValue('O'.$numrow, $det['kode_negara']);
@@ -2231,16 +2266,34 @@ class Akb extends CI_Controller
             foreach($inv2->result_array() as $det){
                 $pembagi = $det['weight']==0 ? 1 : $det['weight'];
                 // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
+                // $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
+                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
                 $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
-                $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
+                // $dpp = $det['kgs']*(round(($det['cif']/$pembagi),2)*$kurssekarang[strtolower($fld)]);
+                switch ($det['mt_uang']) {
+                    case 'JPY':
+                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy/$kursusd;
+                        break;
+                    default:
+                        $cif = $det['cif'];
+                        break;
+                }
+                // $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
+                $dpp = (round(($cif/$pembagi)*$det['kgs'],2))*$ndpbm;
+                // $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
                 for($x=0;$x<3;$x++){
+                    $tambahdpp = 0;
+                    if($pajak[$x]!='BM' && $det[strtolower($pajak[$x])] > 0){
+                        $tambahdpp = $dpp*($det['bm']/100);
+                    }
                     $sheet->setCellValue('A'.$numrow,$no);
                     $sheet->setCellValue('B'.$numrow,$pajak[$x]);
                     $sheet->setCellValue('C'.$numrow,1);
                     $sheet->setCellValue('D'.$numrow,$det[strtolower($pajak[$x])]);
                     $sheet->setCellValue('E'.$numrow,$kdfas[$x]);
                     $sheet->setCellValue('F'.$numrow,100);
-                    $sheet->setCellValue('H'.$numrow,round($dpp*($det[strtolower($pajak[$x])]/100)));
+                    $sheet->setCellValue('H'.$numrow,round(($tambahdpp+$dpp)*($det[strtolower($pajak[$x])]/100)));
                     $numrow++;
                 }
             }
@@ -2327,7 +2380,7 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('C'.$numrow, $det['jns_bc']);
                     $sheet->setCellValue('E'.$numrow, $det['nomor_aju']);
                     $sheet->setCellValue('F'.$numrow, $det['nomor_bc']);
-                    $sheet->setCellValue('G'.$numrow, $det['tgl_bc']);
+                    $sheet->setCellValue('G'.$numrow, date('d-m-Y',strtotime($det['tgl_bc'])));
                     $sheet->setCellValue('H'.$numrow, $det['serbar']);
                     $sheet->setCellValue('I'.$numrow, $det['nohs']);
                     $sheet->setCellValue('M'.$numrow, $spekbarang);
@@ -2339,8 +2392,8 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('S'.$numrow, round($det['kgs'],2));
                     $sheet->setCellValue('T'.$numrow, $kursusd);
                     $sheet->setCellValue('U'.$numrow, 'USD');
-                    $sheet->setCellValue('V'.$numrow, $cif/$pembagi);
-                    $sheet->setCellValue('W'.$numrow, ($cif/$pembagi)*$ndpbm);
+                    $sheet->setCellValue('V'.$numrow, round(($cif/$pembagi)*$det['kgs'],2));
+                    $sheet->setCellValue('W'.$numrow, (round(($cif/$pembagi)*$det['kgs'],2))*$ndpbm);
                     $sheet->setCellValue('AF'.$numrow, 1);
                     $sheet->setCellValue('AG'.$numrow, 'N');
                     if($nodet > 1){
@@ -2394,13 +2447,28 @@ class Akb extends CI_Controller
                 $nodet++;
                 $pembagi = $det['weight']==0 ? 1 : $det['weight'];
                 // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
+                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
                 $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
                 // $dpp = $det['kgs']*(round(($det['cif']/$pembagi),2)*$kurssekarang[strtolower($fld)]);
-                $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
+                switch ($det['mt_uang']) {
+                    case 'JPY':
+                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy/$kursusd;
+                        break;
+                    default:
+                        $cif = $det['cif'];
+                        break;
+                }
+                // $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
+                $dpp = (round(($cif/$pembagi)*$det['kgs'],2))*$ndpbm;
                 if($nodet > 1){
                     $nop++;
                 }
                 for($x=0;$x<3;$x++){
+                    $tambahdpp = 0;
+                    if($pajak[$x]!='BM' && $det[strtolower($pajak[$x])] > 0){
+                        $tambahdpp = $dpp*($det['bm']/100);
+                    }
                     $sheet->setCellValue('A'.$numrow,$nop);
                     $sheet->setCellValue('B'.$numrow,$no);
                     $sheet->setCellValue('C'.$numrow,$pajak[$x]);
@@ -2408,7 +2476,7 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('E'.$numrow,$det[strtolower($pajak[$x])]);
                     $sheet->setCellValue('F'.$numrow,$kdfas[$x]);
                     $sheet->setCellValue('G'.$numrow,100);
-                    $sheet->setCellValue('I'.$numrow,round($dpp*($det[strtolower($pajak[$x])]/100)));
+                    $sheet->setCellValue('I'.$numrow,round(($tambahdpp+$dpp)*($det[strtolower($pajak[$x])]/100)));
                     $numrow++;
                 }
             }

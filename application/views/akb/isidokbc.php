@@ -484,7 +484,11 @@
                                                         <a href="<?= base_url().'akb/addkontrak/'.$datheader['id'].'/'.$datheader['dept_tuju']; ?>" class="btn btn-info font-kecil btn-flat <?= $hilangtomboladdkontrak; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Pilih Kontrak" >Pilih</a>
                                                         <a data-href="<?= base_url().'akb/hapuskontrak/'.$datheader['id']; ?>" class="btn btn-danger font-kecil btn-flat text-white <?= $hilangtombolhapuskontrak; ?>" style="color: white !important;" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus Kontrak ini" data-title="Hapus Kontrak" >Hapus</a>
                                                         <a class="btn btn-success font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" href="<?= base_url('kontrak/view/') . $datheader['idkontrak'].'/1'; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" >View</a>
+                                                        <a class="btn btn-primary font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" id="addkontraktolampiran" href="#" data-title="Add To Lampiran" ><i class="fa fa-upload"></i></a>
                                                         <!-- <button class="btn font-kecil btn-flat" type="button">View</button> -->
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tglkontrak" value="<?= $datheader['tglkontrak']; ?>" placeholder="Nomor Kontrak Kosong" >
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tgl_kep" value="<?= $datheader['tgl_kep']; ?>" placeholder="Nomor Kontrak Kosong" >
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="nomor_kep" value="<?= $datheader['nomor_kep']; ?>" placeholder="Nomor Kontrak Kosong" >
                                                     </div>
                                                 </div>
                                             </div>
@@ -668,8 +672,8 @@
                         Jumlah Kgs : <span id="jumlahkgsdetailbarang2"></span>
                     </span>
                     <span>
-                        <a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
-                        <a href="#" data-href="<?= base_url().'akb/tambahkelampiran/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-success"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
+                        <a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].'/1'; ?>" id="tombolhitung" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
+                        <a href="#" data-href="<?= base_url().'akb/tambahkelampiran/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" class="btn btn-sm btn-success"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
                     <span>
                 </div>
                 <div class="card card-lg font-kecil">
@@ -707,7 +711,7 @@
                                            $no=0; 
                                         }
                                         $no++; 
-                                        $kursusd = $kurssekarang['usd'];
+                                        $kursusd = $kurssekarang['usd']==null ? 1 : $kurssekarang['usd'];
                                         $ndpbm = $detbom['mt_uang']=='' || $detbom['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
                                         $pembagi = $detbom['hamat_weight']==0 ? 1 : round($detbom['hamat_weight'],2);
                                         switch ($detbom['mt_uang']) {
@@ -725,15 +729,18 @@
                                         $nomor_bc = $detbom['hamat_nomorbc'];
                                         // $jumlahhargaperkilo = round((($cif/$pembagi)*round($detbom['kgs'],2)),2)*$ndpbm;
                                         $jumlahhargaperkilo = (($cif/$pembagi)*$ndpbm)*round($detbom['kgs'],2);
-                                        $jumlahtot += $jumlahhargaperkilo;
+                                        $jmmm = (($cif/$pembagi)*$ndpbm)*$detbom['kgs'];
+                                        $hargaperkilo = round(($cif/$pembagi)*$detbom['kgs'],2)*$ndpbm;
+                                        $jumlahtot += $hargaperkilo; //$jumlahhargaperkilo;
                                         $hitungbm = $detbom['bm'] > 0 ? '' : 'hilang';
                                         $hitungppn = $detbom['ppn'] > 0 ? '' : 'hilang';
                                         $hitungpph = $detbom['pph'] > 0 ? '' : 'hilang';
-                                        $adabm = $detbom['bm'] > 0 ? $jumlahhargaperkilo*($detbom['bm']/100) : 0;
+                                        // $adabm = $detbom['bm'] > 0 ? $jumlahhargaperkilo*($detbom['bm']/100) : 0;
+                                        $adabm = $detbom['bm'] > 0 ? $jmmm*($detbom['bm']/100) : 0;
                                         if($jns_bc == 23){
                                             $jmbm += $jumlahhargaperkilo*($detbom['bm']/100);
-                                            $jmppn += ($adabm+$jumlahhargaperkilo)*($detbom['ppn']/100);
-                                            $jmpph += ($adabm+$jumlahhargaperkilo)*($detbom['pph']/100);
+                                            $jmppn += round($jmmm*($detbom['ppn']/100),0);
+                                            $jmpph += round($jmmm*($detbom['pph']/100),0);
                                         }
                                 ?>
                                     <tr>
@@ -753,8 +760,8 @@
                                         <td><?= $detbom['kodesatuan']; ?></td>
                                         <td><?= $nomor_bc ?></td>
                                         <td class="text-center text-blue"><?= $jns_bc; ?></td>
-                                        <td class="text-right"><?= rupiah(($cif/$pembagi)*$ndpbm,2) ?></td>
-                                        <td class="text-right"><?= rupiah((($cif/$pembagi)*$ndpbm)*round($detbom['kgs'],2),2) ?></td>
+                                        <td class="text-right"><?= rupiah($hargaperkilo/$detbom['kgs'],2) ?></td>
+                                        <td class="text-right"><?= rupiah($hargaperkilo,2) ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url().'akb/editbombc/'.$detbom['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data" >EDIT</a>
                                         </td>
@@ -765,7 +772,7 @@
                                     <td class="text-right text-primary" id="totalkonversi"><?= rupiah($jmlkgs,2); ?></td>
                                     <td colspan="4"></td>
                                     <td></td>
-                                    <td class="text-right text-primary"><?= rupiah(bulatkan($jumlahtot,1000),2); ?></td>
+                                    <td class="text-right text-primary"><?= rupiah($jumlahtot,2); ?></td>
                                     <td></td>
                                 </tr>
                             </tbody>
@@ -795,7 +802,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input type="text" id="sumdetailbc" class="hilang" value="<?= rupiah(bulatkan($jumlahtot,1000),2); ?>">
+                        <input type="text" id="sumdetailbc" class="hilang" value="<?= rupiah($jumlahtot,2); ?>">
                         <input type="text" id="jumlahnobontrkosong" class="hilang" value="<?= $jumlahnobontrkosong; ?>">
                     </div>
                 </div>
