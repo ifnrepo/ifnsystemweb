@@ -100,6 +100,12 @@ $(document).ready(function () {
 	$("#jumlahpcsdetailbarang").text($("#pcssum").text())
 	$("#jumlahkgsdetailbarang").text($("#txtsum").text())
 	$("#jumlahkgsdetailbarang2").text($("#totalkonversi").text())
+
+	if($("#tgl_aju").val() == ''){
+		$("#tombolhitung").addClass('disabled');
+	}else{
+		$("#tombolhitung").removeClass('disabled');
+	}
 });
 $("#getnomoraju").click(function () {
 	$.ajax({
@@ -573,6 +579,38 @@ function cekkolom(mode) {
 		pesan("Dokumen siap di kirim ke CEISA 40 !", "success");
 	}
 	return 1;
+}
+$(document).on('dblclick','#nomor_sj',function(){
+	masukkelampiran($("#id_header").val(),'630',$(this).val(),$("#tgl_sj").val());
+})
+$(document).on('click','#addkontraktolampiran',function(){
+	masukkelampiran($("#id_header").val(),'315',$("#nomorkontrak").val(),$("#tglkontrak").val());
+	masukkelampiran($("#id_header").val(),'203',$("#nomor_kep").val(),$("#tgl_kep").val());
+})
+function masukkelampiran(idx,fieldx,nilaix,tglx){
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "akb/masukkelampiran/",
+		data: {
+			id: idx,
+			field: fieldx,
+			nilai: nilaix,
+			tgl: tglx,
+		},
+		success: function (data) {
+			alert('Lampiran '+fieldx+' sudah masuk, Refresh halaman');
+			$("#keteranganerr").text("Data Saved ..!");
+			// pesan("Data Saved ..!", "success");
+			setTimeout(() => {
+				$("#keteranganerr").text("");
+			}, 3000);
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
 }
 function savedata(kolom, data) {
 	$("#keteranganerr").text("Loading ..!");

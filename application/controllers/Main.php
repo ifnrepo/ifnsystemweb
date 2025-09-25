@@ -17,12 +17,16 @@ class Main extends CI_Controller {
 	public function index()
 	{
         $dataproduksi = $this->helpermodel->dataproduksi();
+        $kurshariini = $this->helpermodel->getkurssekarang(date('Y-m-d'))->row_array();
+        $datakurs = $this->helpermodel->getkurs30hari();
 		$this->load->view('layouts/header');
         $data['dataproduksi'] = $dataproduksi;
+        $data['kurshariini'] = $kurshariini;
 		$this->load->view('main',$data);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'main';
         $footer['dataproduksi'] = $dataproduksi;
+        $footer['datakurs'] = $datakurs;
 		$this->load->view('layouts/footer',$footer);
 	}
     public function ceknotif(){

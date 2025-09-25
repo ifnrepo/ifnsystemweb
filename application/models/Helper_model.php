@@ -452,7 +452,7 @@ class Helper_model extends CI_Model
             $hasilnya = $hasil->row_array();
             $nilai = $hasilnya['spek'];
         }
-        return $nilai;
+        return htmlspecialchars($nilai);
     }
     public function getpros($kode){
         if(trim($kode)==''){
@@ -938,5 +938,14 @@ class Helper_model extends CI_Model
             $date = date('Y-m-d');
         }
         return $this->db->get_where('tb_kurs',['tgl' => $date]);
+    }
+    public function getkurs30hari($date=''){
+        if($date=='' || $date==NULL){
+            $date = date('Y-m-d');
+        }
+        $new_date_timestamp = strtotime('-1 month', strtotime($date));
+        $xdate = date('Y-m-d', $new_date_timestamp);
+        // echo $xdate; // Output: 2025-08-23
+        return $this->db->get_where('tb_kurs',['tgl >=' => $xdate]);
     }
 }
