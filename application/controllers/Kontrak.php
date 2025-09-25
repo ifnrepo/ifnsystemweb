@@ -25,8 +25,8 @@ class Kontrak extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['deprekanan'] = $this->helpermodel->getkontrakrekanan();
-        if($this->session->userdata('statuskontrak')==""){
-            $this->session->set_userdata('statuskontrak',1);
+        if ($this->session->userdata('statuskontrak') == "") {
+            $this->session->set_userdata('statuskontrak', 1);
         }
         $kode = [
             'dept_id' => $this->session->userdata('deptkontrak') == null ? '' : $this->session->userdata('deptkontrak'),
@@ -58,27 +58,27 @@ class Kontrak extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['mode'] = 'INPUT';
-        if($this->session->userdata('sesikontrak')==''){
+        if ($this->session->userdata('sesikontrak') == '') {
             $data['data'] = $this->kontrakmodel->adddata()->row_array();
-        }else{
+        } else {
             $data['data'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
         }
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'kontrak';
         $this->load->view('layouts/header', $header);
-        $this->load->view('kontrak/addkontrak',$data);
+        $this->load->view('kontrak/addkontrak', $data);
         $this->load->view('layouts/footer', $footer);
     }
     public function editdata($sesi)
     {
         $header['header'] = 'transaksi';
         $data['mode'] = 'EDIT';
-        $this->session->set_userdata('sesikontrak',$sesi);
+        $this->session->set_userdata('sesikontrak', $sesi);
         $data['data'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'kontrak';
         $this->load->view('layouts/header', $header);
-        $this->load->view('kontrak/addkontrak',$data);
+        $this->load->view('kontrak/addkontrak', $data);
         $this->load->view('layouts/footer', $footer);
     }
     public function getdata()
@@ -91,35 +91,38 @@ class Kontrak extends CI_Controller
         redirect($url);
     }
 
-    public function hapuskontrak($id){
+    public function hapuskontrak($id)
+    {
         $hapus = $this->kontrakmodel->hapuskontrak($id);
-        if($hapus){
+        if ($hapus) {
             $url = base_url('kontrak');
             redirect($url);
         }
     }
-    public function simpankontrak(){
+    public function simpankontrak()
+    {
         $data = $_POST;
         $simpan = $this->kontrakmodel->simpankontrak($data);
-        if($simpan){
+        if ($simpan) {
             $url = base_url('kontrak');
             redirect($url);
         }
     }
-    public function loaddetailkontrak(){
+    public function loaddetailkontrak()
+    {
         $id = $_POST['id'];
         $mode = $_POST['mode'];
-        $part_of_url = $mode=='INPUT' ? 'adddata' : 'editdata';
+        $part_of_url = $mode == 'INPUT' ? 'adddata' : 'editdata';
         $data = $this->kontrakmodel->loaddetailkontrak($id);
         $html = '';
         foreach ($data->result_array() as $det) {
             $html .= '<tr>';
-            $html .= '<td>'.$det['kategori'].'</td>';
-            $html .= '<td>'.$det['uraian'].'</td>';
-            $html .= '<td>'.$det['hscode'].'</td>';
-            $html .= '<td class="text-right">'.rupiah($det['pcs'],0).'</td>';
-            $html .= '<td class="text-right">'.rupiah($det['kgs'],2).'</td>';
-            $html .= '<td class="text-center"><a href="#" class="btn btn-sm btn-danger btn-flat p-0" style="padding: 2px 3px !important;" data-href="'.base_url() . 'kontrak/hapusdetailkontrak/' . $det['id'].'/'.$part_of_url.'" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Detail Kontrak">Hapus</a></td>';
+            $html .= '<td>' . $det['kategori'] . '</td>';
+            $html .= '<td>' . $det['uraian'] . '</td>';
+            $html .= '<td>' . $det['hscode'] . '</td>';
+            $html .= '<td class="text-right">' . rupiah($det['pcs'], 0) . '</td>';
+            $html .= '<td class="text-right">' . rupiah($det['kgs'], 2) . '</td>';
+            $html .= '<td class="text-center"><a href="#" class="btn btn-sm btn-danger btn-flat p-0" style="padding: 2px 3px !important;" data-href="' . base_url() . 'kontrak/hapusdetailkontrak/' . $det['id'] . '/' . $part_of_url . '" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Detail Kontrak">Hapus</a></td>';
             $html .= '</tr>';
         }
         $cocok = array('datagroup' => $html);
@@ -128,21 +131,20 @@ class Kontrak extends CI_Controller
     public function adddetail($idkontrak)
     {
         $data['idkontrak'] = $idkontrak;
-        $this->load->view('kontrak/adddetail',$data);
+        $this->load->view('kontrak/adddetail', $data);
     }
-    public function view($id,$mode=0)
+    public function view($sesi, $mode = 0)
     {
-        $kode = [
-            'dept_id' => $this->session->userdata('deptkontrak') ?? '',
-            'jnsbc' => $this->session->userdata('jnsbckontrak') ?? '',
-        ];
-        $data['detail'] = $this->db->get_where('tb_kontrak_detail', ['id_kontrak' => $id])->result_array();
+        $this->session->set_userdata('sesikontrak', $sesi);
+        $data['header'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 
-        $data['header'] = $this->kontrakmodel->getDetail_nomor($id, $kode);
+        $data['detail'] = $this->db->get_where('tb_kontrak_detail', ['id_kontrak' => $sesi])->result_array();
         $data['mode'] = $mode;
         $this->load->view('kontrak/view', $data);
     }
-    public function simpandetailkontrak(){
+    public function simpandetailkontrak()
+    {
         $data = [
             'id_kontrak' => $_POST['id_kontrak'],
             'kode_kategori' => $_POST['kode_kategori'],
@@ -155,14 +157,16 @@ class Kontrak extends CI_Controller
         $simpan = $this->kontrakmodel->simpandetailkontrak($data);
         echo $simpan;
     }
-    public function hapusdetailkontrak($id,$id2){
+    public function hapusdetailkontrak($id, $id2)
+    {
         $hapus = $this->kontrakmodel->hapusdetailkontrak($id);
-        if($hapus){
-            $url = base_url('kontrak/'.$id2);
+        if ($hapus) {
+            $url = base_url('kontrak/' . $id2);
             redirect($url);
         }
     }
-    public function simpankedatabase(){
+    public function simpankedatabase()
+    {
         $data = [
             'tabel' => $_POST['tbl'],
             'kolom' => $_POST['kolom'],
