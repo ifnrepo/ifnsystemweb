@@ -72,7 +72,7 @@ class Akb_model extends CI_Model
     public function getdatabyid($kode,$mode=0)
     {
         $this->db->select('tb_header.*,customer.nama_customer as namacustomer,customer.alamat,customer.kontak,customer.npwp,customer.kode_negara as negaracustomer,customer.pembeli as dirsell,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat,ref_negara.kode_negara,tb_kontrak.nomor as nomorkontrak');
-        $this->db->select('tb_kontrak.id as idkontrak');
+        $this->db->select('tb_kontrak.id as idkontrak,tb_kontrak.tgl_awal as tglkontrak,tb_kontrak.tgl_kep,tb_kontrak.nomor_kep');
         $this->db->select('depte.nama_subkon as namasubkon,depte.alamat_subkon as alamatsubkon,depte.npwp as npwpsubkon,depte.noijin,depte.tglijin');
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_muat) as pelmuat");
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_bongkar) as pelbongkar");
@@ -106,7 +106,7 @@ class Akb_model extends CI_Model
             $this->db->order_by('id_header,seri_barang');
         }else{
             $this->db->where('a.id_akb', $data);
-            $this->db->order_by('urut_akb,seri_barang');
+            $this->db->order_by('a.urut_akb,seri_barang');
         }
         
         return $this->db->get()->result_array();
@@ -522,6 +522,10 @@ class Akb_model extends CI_Model
         $query = $this->db->get_where('token_bc',['id'=>1])->row_array();
         return $query['token'];
     }
+    public function cekkursnow(){
+        $query = $this->db->get_where('tb_kurs',['tgl'=>date('Y-m-d')]);
+        return $query;
+    }
     //End IB Models
     public function updatepo($data)
     {
@@ -836,7 +840,7 @@ class Akb_model extends CI_Model
         $this->db->where('id_header',$id);
         // $this->db->order_by('id_barang','nobontr ASC');
         $this->db->group_by('tb_bombc.id');
-        $this->db->order_by('seri_barang','id_barang','nobontr ASC');
+        $this->db->order_by('tb_bombc.seri_barang','id_barang','nobontr ASC');
         return $this->db->get();
     }
     public function getdetbombyid($id){
@@ -887,7 +891,7 @@ class Akb_model extends CI_Model
             $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
             $this->db->where('id_akb',$id);
             // $this->db->limit(1,0);
-            $this->db->order_by('urut_akb,seri_barang');
+            $this->db->order_by('tb_detail.urut_akb,seri_barang');
         }else{
             $this->db->select("*");
             $this->db->from('tb_detail');
@@ -1095,5 +1099,8 @@ class Akb_model extends CI_Model
         $this->db->delete('tb_header');
         $this->helpermodel->isilog($this->db->last_query());
         return $this->db->trans_complete();
+    }
+    public function masukkelampiran($data){
+        return $this->db->insert('lampiran',$data);
     }
 }

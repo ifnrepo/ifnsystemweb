@@ -11,6 +11,7 @@ class Auth extends CI_Controller
         $this->load->model('userappsmodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('helper_model', 'helpermodel');
+        $this->load->model('akb_model', 'akbmodel');
         // if(get_cookie('bantuMasukMomois')=='YES'){
         //     $this->_loginwithcookie(get_cookie('usernameMasukMomois'),get_cookie('passwordMasukMomois'));
         // }
@@ -192,8 +193,16 @@ class Auth extends CI_Controller
                 }
                 $this->helpermodel->isilog('LOGIN Aplikasi momois DG USERNAME PASSWORD');
 
-                $url = base_url('Main');
-                redirect($url);
+                $cekkursnow = $this->akbmodel->cekkursnow();
+                if($cekkursnow->num_rows() == 0){
+                    $cektoken = $this->cektoken();
+                }else{
+                    $cektoken = true;
+                }
+                if($cektoken){
+                    $url = base_url('Main');
+                    redirect($url);
+                }
             } else {
                 $this->session->set_flashdata('message', $htmlsalahpassword);
                 $url = base_url('Auth');
@@ -204,6 +213,81 @@ class Auth extends CI_Controller
             $url = base_url('Auth');
             redirect($url);
         }
+    }
+
+    public function cektoken(){
+        $this->session->unset_userdata('datatokenbeacukai');
+        $curl = curl_init();
+        $headers = array(
+            "Content-Type: application/json",
+        );
+        $data = [
+            'username' => 'siaga1', //'indoneptune',
+            'password' => 'Ifn123456' //'Bandung#14',
+        ];
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/nle-oauth/v1/user/login');
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+
+        $databalik = json_decode($result,true);
+        // print_r($databalik);
+        if($databalik['status']=='success'){
+            $data = [
+                'token' => $databalik['item']['access_token'],
+                'refresh_token' => $databalik['item']['refresh_token']
+            ];
+            $this->akbmodel->isitokenbc($data);
+            $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
+            $this->helpermodel->isilog('Refresh Token CEISA 40');
+            $kurs = $this->getkurs();
+            if($kurs){
+                return true;
+            }
+        }else{
+            // $url = base_url().'ib/kosong';
+            // redirect($url);
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+        }
+    }
+
+    public function getkurs(){
+        $token = $this->akbmodel->gettoken();
+        $kode = ['usd','jpy','eur'];
+        for($x=0;$x<count($kode);$x++){
+            $kodex = $kode[$x];
+            $curl = curl_init();
+            // $token = $consID;
+            $headers = array(
+                "Content-Type: application/json",
+                "Authorization: Bearer ".$token,
+            );
+
+            curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+            curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+            curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+            // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+            curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/kurs/'.$kodex);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+            curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+            $result = curl_exec($curl);
+            curl_close($curl);
+
+            $databalik = json_decode($result,true);
+            // print_r($databalik['data'][0]['nilaiKurs']);
+            if($databalik['status']=='true'){
+                $this->akbmodel->isikursbc($databalik['data'][0]['nilaiKurs'],$kodex);
+                $this->helpermodel->isilog('Isi KURS BC CEISA 40 - '.strtoupper($kodex));
+            }
+        }
+        return true;
     }
 
     public function logout()

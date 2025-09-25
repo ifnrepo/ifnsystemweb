@@ -6,7 +6,7 @@ class Billmaterialmodel extends CI_Model
         $this->db->select('ref_bom.*,barang.nama_barang,barang.kode');
         $this->db->from('ref_bom');
         $this->db->join('barang','barang.id = ref_bom.id_barang','left');
-        $this->db->limit(100,0);
+        $this->db->limit(1000,0);
         if($this->session->userdata('katcari')!=''){
             $this->db->like('po',$this->session->userdata('katcari'));
             $this->db->or_like('kode',$this->session->userdata('katcari'));
