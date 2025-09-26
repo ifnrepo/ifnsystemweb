@@ -2,6 +2,7 @@
 defined('BASEPATH') or exit('No direct script access allowed');
 
 require 'vendor/autoload.php';
+
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
@@ -24,10 +25,10 @@ class Akb extends CI_Controller
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('mtuangmodel');
-        $this->load->model('Ib_model','ibmodel');
-        $this->load->model('Inv_model','invmodel');
-        $this->load->model('kontrak_model','kontrakmodel');
-        $this->load->model('helper_model','helpermodel');     
+        $this->load->model('Ib_model', 'ibmodel');
+        $this->load->model('Inv_model', 'invmodel');
+        $this->load->model('kontrak_model', 'kontrakmodel');
+        $this->load->model('helper_model', 'helpermodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -70,14 +71,14 @@ class Akb extends CI_Controller
     }
     public function tambahdataib()
     {
-        if($this->session->userdata('depttuju')!=null){
+        if ($this->session->userdata('depttuju') != null) {
             $kode = $this->ibmodel->tambahdataib();
             if ($kode) {
                 $url = base_url() . 'ib/dataib/' . $kode;
                 redirect($url);
             }
-        }else{
-            $this->session->set_flashdata('errorsimpan',1);
+        } else {
+            $this->session->set_flashdata('errorsimpan', 1);
             $url = base_url() . 'ib';
             redirect($url);
         }
@@ -103,11 +104,11 @@ class Akb extends CI_Controller
         }
     }
 
-    public function viewdetail($id,$mode=0)
+    public function viewdetail($id, $mode = 0)
     {
         $data['mode'] = $mode;
-        $data['header'] = $this->akbmodel->getdatabyid($id,$mode);
-        $data['detail'] = $this->akbmodel->getdatadetailib($id,$mode);
+        $data['header'] = $this->akbmodel->getdatabyid($id, $mode);
+        $data['detail'] = $this->akbmodel->getdatadetailib($id, $mode);
         $data['lampiran'] = $this->akbmodel->getdatalampiran($id);
         $this->load->view('akb/viewdetailakb', $data);
     }
@@ -124,7 +125,8 @@ class Akb extends CI_Controller
         $this->load->view('ib/dataib', $data);
         $this->load->view('layouts/footer', $footer);
     }
-    public function updatebykolom($kolom){
+    public function updatebykolom($kolom)
+    {
         $data = [
             'id' => $_POST['id'],
             $kolom => $_POST['isinya']
@@ -132,15 +134,17 @@ class Akb extends CI_Controller
         $hasil = $this->ibmodel->updatebykolom($data);
         echo $hasil;
     }
-    public function updatekolom($kolom){
+    public function updatekolom($kolom)
+    {
         $data = [
             'id_header' => $_POST['id'],
             $kolom => $_POST['isinya']
         ];
-        $hasil = $this->ibmodel->updatekolom($_POST['tbl'],$data,'id');
+        $hasil = $this->ibmodel->updatekolom($_POST['tbl'], $data, 'id');
         echo $hasil;
     }
-    public function updateib(){
+    public function updateib()
+    {
         $data = [
             'tgl' => tglmysql($_POST['tgl']),
             // 'keterangan' => $_POST['ket'],
@@ -149,18 +153,18 @@ class Akb extends CI_Controller
         $simpan = $this->ibmodel->updateib($data);
         echo $simpan;
     }
-    public function getbarangib($sup='')
+    public function getbarangib($sup = '')
     {
-        if($sup==''){
+        if ($sup == '') {
             $data['datadetail'] = $this->ibmodel->getbarangibl();
-            $this->load->view('ib/getbarangibl',$data);
-        }else{
+            $this->load->view('ib/getbarangibl', $data);
+        } else {
             $data['header'] = $this->suppliermodel->getdatabyid($sup);
             $data['datadetail'] = $this->ibmodel->getbarangib($sup);
-            $this->load->view('ib/getbarangib',$data);
+            $this->load->view('ib/getbarangib', $data);
         }
     }
-        public function editsupplier()
+    public function editsupplier()
     {
         $this->load->view('ib/editsupplier');
     }
@@ -168,7 +172,8 @@ class Akb extends CI_Controller
     {
         $this->load->view('ib/edit_tgl');
     }
-    public function adddetailib(){
+    public function adddetailib()
+    {
         $id = $_POST['id'];
         $brg = $_POST['brg'];
         $data = [
@@ -188,8 +193,8 @@ class Akb extends CI_Controller
         $no = 0;
         foreach ($query as $que) {
             $no++;
-            $tampil = $que['pcs']==0 ? $que['kgs'] : $que['pcs'];
-            $tampil2 = $que['pcsmintaa']==0 ? $que['kgsmintaa'] : $que['pcsmintaa'];
+            $tampil = $que['pcs'] == 0 ? $que['kgs'] : $que['pcs'];
+            $tampil2 = $que['pcsmintaa'] == 0 ? $que['kgsmintaa'] : $que['pcsmintaa'];
             $hasil .= "<tr>";
             $hasil .= "<td>" . $no . "</td>";
             $hasil .= "<td>" . $que['nama_barang'] . "</td>";
@@ -197,30 +202,32 @@ class Akb extends CI_Controller
             $hasil .= "<td>" . $que['namasatuan'] . "</td>";
             $hasil .= "<td>" . rupiah($tampil2, 0) . "</td>";
             $hasil .= "<td>" . rupiah($tampil, 0) . "</td>";
-            if($header['jn_ib']==1){
-            $hasil .= "<td>" . rupiah($que['harga'],2) . "</td>";
+            if ($header['jn_ib'] == 1) {
+                $hasil .= "<td>" . rupiah($que['harga'], 2) . "</td>";
             }
             $hasil .= "<td>";
             $hasil .= "<a href=" . base_url() . 'ib/editdetailib/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
-            $hasil .= "<a href='#' data-href=" . base_url() . 'ib/hapusdetailib/' . $que['id'] .'/'.$que['id_header']. " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
+            $hasil .= "<a href='#' data-href=" . base_url() . 'ib/hapusdetailib/' . $que['id'] . '/' . $que['id_header'] . " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
-            $totalharga += $que['harga']*$tampil;
+            $totalharga += $que['harga'] * $tampil;
         }
-        $cocok = array('datagroup' => $hasil,'totalharga' => $totalharga,'jmlrek'=>$no);
+        $cocok = array('datagroup' => $hasil, 'totalharga' => $totalharga, 'jmlrek' => $no);
         echo json_encode($cocok);
     }
-    public function hapusdetailib($id,$detid){
+    public function hapusdetailib($id, $detid)
+    {
         $hasil = $this->ibmodel->hapusdetailib($id);
-        if($hasil){
-            $url = base_url().'ib/dataib/'.$detid;
+        if ($hasil) {
+            $url = base_url() . 'ib/dataib/' . $detid;
             redirect($url);
         }
     }
-    public function editdetailib($id){
+    public function editdetailib($id)
+    {
         $data['data'] = $this->ibmodel->getdetailibbyid($id);
         $data['header'] = $this->ibmodel->getdatabyid($id);
-        $this->load->view('ib/editdetailib',$data);
+        $this->load->view('ib/editdetailib', $data);
     }
     public function updatepcskgs()
     {
@@ -236,7 +243,7 @@ class Akb extends CI_Controller
     public function simpanib($id)
     {
         $cekdetail = $this->ibmodel->cekdetail($id);
-        if($cekdetail['xharga']==0 && $cekdetail['xkgs']==0){
+        if ($cekdetail['xharga'] == 0 && $cekdetail['xkgs'] == 0) {
             $data = [
                 'user_ok' => $this->session->userdata('id'),
                 'data_ok' => 1,
@@ -252,15 +259,16 @@ class Akb extends CI_Controller
                 $url = base_url() . 'ib';
                 redirect($url);
             }
-        }else{
-            $this->session->set_flashdata('errorsimpan',4);
-            $url = base_url() . 'ib/dataib/'.$id;
+        } else {
+            $this->session->set_flashdata('errorsimpan', 4);
+            $url = base_url() . 'ib/dataib/' . $id;
             redirect($url);
         }
     }
-    public function editib($id){
-        $cek = $this->ibmodel->cekfield($id,'ok_tuju',0)->num_rows();
-        if($cek==1){
+    public function editib($id)
+    {
+        $cek = $this->ibmodel->cekfield($id, 'ok_tuju', 0)->num_rows();
+        if ($cek == 1) {
             $data = [
                 'data_ok' => 0,
                 'user_ok' => null,
@@ -268,40 +276,45 @@ class Akb extends CI_Controller
                 'id' => $id
             ];
             $hasil = $this->ibmodel->editib($data);
-            if($hasil){
-                $url = base_url().'ib';
+            if ($hasil) {
+                $url = base_url() . 'ib';
                 redirect($url);
-            }else{
-                $this->session->set_flashdata('errorsimpan',3);
-                $url = base_url().'ib';
+            } else {
+                $this->session->set_flashdata('errorsimpan', 3);
+                $url = base_url() . 'ib';
                 redirect($url);
             }
-        }else{
-            $this->session->set_flashdata('errorsimpan',2);
-            $url = base_url().'ib';
+        } else {
+            $this->session->set_flashdata('errorsimpan', 2);
+            $url = base_url() . 'ib';
             redirect($url);
         }
     }
-    public function cekhargabarang(){
+    public function cekhargabarang()
+    {
         $id  = $_POST['id'];
         $hasil = $this->ibmodel->cekhargabarang($id);
         echo $hasil;
     }
-    public function getnamasubkon($kode=0){
+    public function getnamasubkon($kode = 0)
+    {
         $data['datasubkon'] = daftardeptsubkon();
-        $this->load->view('akb/getnamasubkon',$data);
+        $this->load->view('akb/getnamasubkon', $data);
     }
-    public function getbongaichu($id,$kode=0){
+    public function getbongaichu($id, $kode = 0)
+    {
         $data['databongaichu'] = $this->akbmodel->getbongaichu($id);
         $data['idheader'] = $id;
-        $this->load->view('akb/getbongaichu',$data);
+        $this->load->view('akb/getbongaichu', $data);
     }
-    public function tambahajusubkon(){
+    public function tambahajusubkon()
+    {
         $kodesubkon = $_POST['id'];
         $hasil = $this->akbmodel->tambahajusubkon($kodesubkon);
         echo $hasil;
     }
-    public function tambahbongaichu(){
+    public function tambahbongaichu()
+    {
         $arrgo = [
             'id' => $_POST['id'],
             'data' => $_POST['out']
@@ -309,28 +322,32 @@ class Akb extends CI_Controller
         $kode = $this->akbmodel->tambahbongaichu($arrgo);
         echo $kode;
     }
-    public function hapusaju($id){
+    public function hapusaju($id)
+    {
         $hasil = $this->akbmodel->hapusaju($id);
-        if($hasil){
-            $url = base_url().'akb';
+        if ($hasil) {
+            $url = base_url() . 'akb';
             redirect($url);
         }
     }
-    public function viewbc($id){
+    public function viewbc($id)
+    {
         $data['header'] = $this->ibmodel->getdatadetailib($id);
         $data['datheader'] = $id;
-        $this->load->view('ib/viewbc',$data);
+        $this->load->view('ib/viewbc', $data);
     }
-    public function simpandatabc(){
+    public function simpandatabc()
+    {
         $data = $_POST['mode'];
         $head = $_POST['head'];
-        $hasil = $this->ibmodel->simpandatabc($data,$head);
+        $hasil = $this->ibmodel->simpandatabc($data, $head);
         echo $hasil;
     }
-    public function isidokbc($id,$mode=0){
+    public function isidokbc($id, $mode = 0)
+    {
         $header['header'] = 'transaksi';
         $data['mode'] = $mode;
-        $data['header'] = $this->akbmodel->getdatadetailib($id,$mode);
+        $data['header'] = $this->akbmodel->getdatadetailib($id, $mode);
         $data['datheader'] = $this->akbmodel->getdatabyid($id);
         $data['bckeluar'] = $this->akbmodel->getbckeluar();
         $data['jnsangkutan'] = $this->akbmodel->getjnsangkutan();
@@ -340,155 +357,157 @@ class Akb extends CI_Controller
         $data['refbendera'] = $this->akbmodel->refbendera();
         $data['refpelabuhan'] = $this->ibmodel->refpelabuhan();
         $data['datatoken'] = $this->akbmodel->gettokenbc()->row_array();
-        if($mode==1){
+        if ($mode == 1) {
             $data['detbombc'] = $this->akbmodel->getdetbom($id);
             // $data['detbombc'] = [];
-        }else{
+        } else {
             $data['detbombc'] = $this->akbmodel->getdetbom($id);
         }
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ibx';
         $this->load->view('layouts/header', $header);
-        $this->load->view('akb/isidokbc',$data);
+        $this->load->view('akb/isidokbc', $data);
         $this->load->view('layouts/footer', $footer);
     }
-    public function simpandatanobc(){
+    public function simpandatanobc()
+    {
         $hasil = $this->ibmodel->simpandatanobc();
         echo $hasil;
     }
-    public function ceisa40excel($id){
-        $spreadsheet = new Spreadsheet();    
+    public function ceisa40excel($id)
+    {
+        $spreadsheet = new Spreadsheet();
         $array = [
             'HEADER',
             'ENTITAS',
             'DOKUMEN',
-            'PENGANGKUT','KEMASAN','KONTAINER','BARANG','BARANGTARIF','BARANGDOKUMEN','BARANGENTITAS','BARANGSPEKKHUSUS','BARANGVD',
-            'BAHANBAKU','BAHANBAKUTARIF','BAHANBAKUDOKUMEN','PUNGUTAN','JAMINAN','BANKDEVISA','VERSI'
+            'PENGANGKUT', 'KEMASAN', 'KONTAINER', 'BARANG', 'BARANGTARIF', 'BARANGDOKUMEN', 'BARANGENTITAS', 'BARANGSPEKKHUSUS', 'BARANGVD',
+            'BAHANBAKU', 'BAHANBAKUTARIF', 'BAHANBAKUDOKUMEN', 'PUNGUTAN', 'JAMINAN', 'BANKDEVISA', 'VERSI'
         ];
-        
-        $no=0;
-        for($i=0;$i<count($array);$i++){
-            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, $array[$i]); 
+
+        $no = 0;
+        for ($i = 0; $i < count($array); $i++) {
+            $myWorkSheet = new \PhpOffice\PhpSpreadsheet\Worksheet\Worksheet($spreadsheet, $array[$i]);
             $spreadsheet->addSheet($myWorkSheet);
             $no++;
         }
-        for($z=0;$z<count($array);$z++){
+        for ($z = 0; $z < count($array); $z++) {
             $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
             $sheet = $spreadsheet->getSheetByName($array[$z]);
             // 65
             $arrayheader = [
-                'NOMOR AJU','KODE DOKUMEN','KODE KANTOR','KODE KANTOR BONGKAR','KODE KANTOR PERIKSA','KODE KANTOR TUJUAN',
-                'KODE KANTOR EKSPOR','KODE JENIS IMPOR','KODE JENIS EKSPOR','KODE JENIS TPB','KODE JENIS PLB','KODE JENIS PROSEDUR',
-                'KODE TUJUAN PEMASUKAN','KODE TUJUAN PENGIRIMAN','KODE TUJUAN TPB','KODE CARA DAGANG','KODE CARA BAYAR','KODE CARA BAYAR LAINNYA',
-                'KODE GUDANG ASAL','KODE GUDANG TUJUAN','KODE JENIS KIRIM','KODE JENIS PENGIRIMAN','KODE KATEGORI EKSPOR','KODE KATEGORI MASUK FTZ',
-                'KODE KATEGORI KELUAR FTZ','KODE KATEGORI BARANG FTZ','KODE LOKASI','KODE LOKASI BAYAR','LOKASI ASAL','LOKASI TUJUAN','KODE DAERAH ASAL',
-                'KODE GUDANG ASAL','KODE GUDANG TUJUAN','KODE NEGARA TUJUAN','KODE TUTUP PU','NOMOR BC11','TANGGAL BC11','NOMOR POS','NOMOR SUB POS',
-                'KODE PELABUHAN BONGKAR','KODE PELABUHAN MUAT','KODE PELABUHAN MUAT AKHIR','KODE PELABUHAN TRANSIT','KODE PELABUHAN TUJUAN','KODE PELABUHAN EKSPOR',
-                'KODE TPS','TANGGAL BERANGKAT','TANGGAL EKSPOR','TANGGAL MASUK','TANGGAL MUAT','TANGGAL TIBA','TANGGAL PERIKSA','TEMPAT STUFFING',
-                'TANGGAL STUFFING','KODE TANDA PENGAMAN','JUMLAH TANDA PENGAMAN','FLAG CURAH','FLAG SDA','FLAG VD','FLAG AP BK','FLAG MIGAS','KODE ASURANSI',
-                'ASURANSI','NILAI BARANG','NILAI INCOTERM','NILAI MAKLON','ASURANSI','FREIGHT','FOB','BIAYA TAMBAHAN','BIAYA PENGURANG','VD','CIF','HARGA_PENYERAHAN',
-                'NDPBM','TOTAL DANA SAWIT','DASAR PENGENAAN PAJAK','NILAI JASA','UANG MUKA','BRUTO','NETTO','VOLUME','KOTA PERNYATAAN','TANGGAL PERNYATAAN',
-                'NAMA PERNYATAAN','JABATAN PERNYATAAN','KODE VALUTA','KODE INCOTERM','KODE JASA KENA PAJAK','NOMOR BUKTI BAYAR','TANGGAL BUKTI BAYAR','KODE JENIS NILAI',
-                'KODE KANTOR MUAT','NOMOR DAFTAR','TANGGAL DAFTAR','KODE ASAL BARANG FTZ','KODE TUJUAN PENGELUARAN','PPN PAJAK','PPNBM PAJAK',
-                'TARIF PPN PAJAK','TARIF PPNBM PAJAK','BARANG TIDAK BERWUJUD','KODE JENIS PENGELUARAN'
+                'NOMOR AJU', 'KODE DOKUMEN', 'KODE KANTOR', 'KODE KANTOR BONGKAR', 'KODE KANTOR PERIKSA', 'KODE KANTOR TUJUAN',
+                'KODE KANTOR EKSPOR', 'KODE JENIS IMPOR', 'KODE JENIS EKSPOR', 'KODE JENIS TPB', 'KODE JENIS PLB', 'KODE JENIS PROSEDUR',
+                'KODE TUJUAN PEMASUKAN', 'KODE TUJUAN PENGIRIMAN', 'KODE TUJUAN TPB', 'KODE CARA DAGANG', 'KODE CARA BAYAR', 'KODE CARA BAYAR LAINNYA',
+                'KODE GUDANG ASAL', 'KODE GUDANG TUJUAN', 'KODE JENIS KIRIM', 'KODE JENIS PENGIRIMAN', 'KODE KATEGORI EKSPOR', 'KODE KATEGORI MASUK FTZ',
+                'KODE KATEGORI KELUAR FTZ', 'KODE KATEGORI BARANG FTZ', 'KODE LOKASI', 'KODE LOKASI BAYAR', 'LOKASI ASAL', 'LOKASI TUJUAN', 'KODE DAERAH ASAL',
+                'KODE GUDANG ASAL', 'KODE GUDANG TUJUAN', 'KODE NEGARA TUJUAN', 'KODE TUTUP PU', 'NOMOR BC11', 'TANGGAL BC11', 'NOMOR POS', 'NOMOR SUB POS',
+                'KODE PELABUHAN BONGKAR', 'KODE PELABUHAN MUAT', 'KODE PELABUHAN MUAT AKHIR', 'KODE PELABUHAN TRANSIT', 'KODE PELABUHAN TUJUAN', 'KODE PELABUHAN EKSPOR',
+                'KODE TPS', 'TANGGAL BERANGKAT', 'TANGGAL EKSPOR', 'TANGGAL MASUK', 'TANGGAL MUAT', 'TANGGAL TIBA', 'TANGGAL PERIKSA', 'TEMPAT STUFFING',
+                'TANGGAL STUFFING', 'KODE TANDA PENGAMAN', 'JUMLAH TANDA PENGAMAN', 'FLAG CURAH', 'FLAG SDA', 'FLAG VD', 'FLAG AP BK', 'FLAG MIGAS', 'KODE ASURANSI',
+                'ASURANSI', 'NILAI BARANG', 'NILAI INCOTERM', 'NILAI MAKLON', 'ASURANSI', 'FREIGHT', 'FOB', 'BIAYA TAMBAHAN', 'BIAYA PENGURANG', 'VD', 'CIF', 'HARGA_PENYERAHAN',
+                'NDPBM', 'TOTAL DANA SAWIT', 'DASAR PENGENAAN PAJAK', 'NILAI JASA', 'UANG MUKA', 'BRUTO', 'NETTO', 'VOLUME', 'KOTA PERNYATAAN', 'TANGGAL PERNYATAAN',
+                'NAMA PERNYATAAN', 'JABATAN PERNYATAAN', 'KODE VALUTA', 'KODE INCOTERM', 'KODE JASA KENA PAJAK', 'NOMOR BUKTI BAYAR', 'TANGGAL BUKTI BAYAR', 'KODE JENIS NILAI',
+                'KODE KANTOR MUAT', 'NOMOR DAFTAR', 'TANGGAL DAFTAR', 'KODE ASAL BARANG FTZ', 'KODE TUJUAN PENGELUARAN', 'PPN PAJAK', 'PPNBM PAJAK',
+                'TARIF PPN PAJAK', 'TARIF PPNBM PAJAK', 'BARANG TIDAK BERWUJUD', 'KODE JENIS PENGELUARAN'
             ];
             $arrayentitas = [
-                'NOMOR AJU','SERI','KODE ENTITAS','KODE JENIS IDENTITAS','NOMOR IDENTITAS','NAMA ENTITAS','ALAMAT ENTITAS','NIB ENTITAS','KODE JENIS API',
-                'KODE STATUS','NOMOR UIN ENTITAS','TANGGAL UIN ENTITAS','KODE NEGARA','NIPER ENTITAS'
+                'NOMOR AJU', 'SERI', 'KODE ENTITAS', 'KODE JENIS IDENTITAS', 'NOMOR IDENTITAS', 'NAMA ENTITAS', 'ALAMAT ENTITAS', 'NIB ENTITAS', 'KODE JENIS API',
+                'KODE STATUS', 'NOMOR UIN ENTITAS', 'TANGGAL UIN ENTITAS', 'KODE NEGARA', 'NIPER ENTITAS'
             ];
             $arraydokumen = [
-                'NOMOR AJU','SERI','KODE DOKUMEN','NOMOR DOKUMEN','TANGGAL DOKUMEN','KODE FASILITAS','KODE UIN'
+                'NOMOR AJU', 'SERI', 'KODE DOKUMEN', 'NOMOR DOKUMEN', 'TANGGAL DOKUMEN', 'KODE FASILITAS', 'KODE UIN'
             ];
             $arraypengangkut = [
-                'NOMOR AJU','SERI','KODE CARA ANGKUT','NAMA PENGANGKUT','NOMOR PENGANGKUT','KODE NEGARA','CALL SIGN','FLAG ANGKUT PLB'
+                'NOMOR AJU', 'SERI', 'KODE CARA ANGKUT', 'NAMA PENGANGKUT', 'NOMOR PENGANGKUT', 'KODE NEGARA', 'CALL SIGN', 'FLAG ANGKUT PLB'
             ];
             $arraykemasan = [
-                'NOMOR AJU','SERI','KODE KEMASAN','JUMLAH KEMASAN','MERK'
+                'NOMOR AJU', 'SERI', 'KODE KEMASAN', 'JUMLAH KEMASAN', 'MERK'
             ];
             $arraykontainer = [
-                'NOMOR AJU','SERI','NOMOR KONTAINER','KODE UKURAN KONTAINER','KODE JENIS KONTAINER','KODE TIPE KONTAINER'
+                'NOMOR AJU', 'SERI', 'NOMOR KONTAINER', 'KODE UKURAN KONTAINER', 'KODE JENIS KONTAINER', 'KODE TIPE KONTAINER'
             ];
             $arraybarang = [
-                'NOMOR AJU','SERI BARANG','HS','KODE BARANG','URAIAN','MEREK','TIPE','UKURAN','SPESIFIKASI LAIN','KODE SATUAN','JUMLAH SATUAN',
-                'KODE KEMASAN','JUMLAH KEMASAN','KODE DOKUMEN ASAL','KODE KANTOR ASAL','NOMOR DAFTAR ASAL','TANGGAL DAFTAR ASAL','NOMOR AJU ASAL',
-                'SERI BARANG ASAL','NETTO','BRUTO','VOLUME','SALDO AWAL','SALDO AKHIR','JUMLAH REALISASI','CIF','CIF RUPIAH','NDPBM','FOB','ASURANSI',
-                'FREIGHT','NILAI TAMBAH','DISKON','HARGA PENYERAHAN','HARGA PEROLEHAN','HARGA SATUAN','HARGA EKSPOR','HARGA PATOKAN','NILAI BARANG','NILAI JASA',
-                'NILAI DANA SAWIT','NILAi DEVISA','PERSENTASE IMPOR','KODE ASAL BARANG','KODE DAERAH ASAL','KODE GUNA BARANG','KODE JENIS NILAI',
-                'JATUH TEMPO ROYALTI','KODE KATEGORI BARANG','KODE KONDISI BARANG','KODE NEGARA ASAL','KODE PERHITUNGAN','PERNYATAAN LARTAS',
-                'FLAG 4 TAHUN','SERI IZIN','TAHUN PEMBUATAN','KAPASITAS SILINDER','KODE BKC','KODE KOMODITI BKC','KODE SUB KOMODITI BKC','FLAG TIS',
-                'ISI PER KEMASAN','JUMLAH DILEKATKAN','JUMLAH PITA CUKAI','HJE CUKAI','TARIF CUKAI'
+                'NOMOR AJU', 'SERI BARANG', 'HS', 'KODE BARANG', 'URAIAN', 'MEREK', 'TIPE', 'UKURAN', 'SPESIFIKASI LAIN', 'KODE SATUAN', 'JUMLAH SATUAN',
+                'KODE KEMASAN', 'JUMLAH KEMASAN', 'KODE DOKUMEN ASAL', 'KODE KANTOR ASAL', 'NOMOR DAFTAR ASAL', 'TANGGAL DAFTAR ASAL', 'NOMOR AJU ASAL',
+                'SERI BARANG ASAL', 'NETTO', 'BRUTO', 'VOLUME', 'SALDO AWAL', 'SALDO AKHIR', 'JUMLAH REALISASI', 'CIF', 'CIF RUPIAH', 'NDPBM', 'FOB', 'ASURANSI',
+                'FREIGHT', 'NILAI TAMBAH', 'DISKON', 'HARGA PENYERAHAN', 'HARGA PEROLEHAN', 'HARGA SATUAN', 'HARGA EKSPOR', 'HARGA PATOKAN', 'NILAI BARANG', 'NILAI JASA',
+                'NILAI DANA SAWIT', 'NILAi DEVISA', 'PERSENTASE IMPOR', 'KODE ASAL BARANG', 'KODE DAERAH ASAL', 'KODE GUNA BARANG', 'KODE JENIS NILAI',
+                'JATUH TEMPO ROYALTI', 'KODE KATEGORI BARANG', 'KODE KONDISI BARANG', 'KODE NEGARA ASAL', 'KODE PERHITUNGAN', 'PERNYATAAN LARTAS',
+                'FLAG 4 TAHUN', 'SERI IZIN', 'TAHUN PEMBUATAN', 'KAPASITAS SILINDER', 'KODE BKC', 'KODE KOMODITI BKC', 'KODE SUB KOMODITI BKC', 'FLAG TIS',
+                'ISI PER KEMASAN', 'JUMLAH DILEKATKAN', 'JUMLAH PITA CUKAI', 'HJE CUKAI', 'TARIF CUKAI'
             ];
             $arraybarangtarif = [
-                'NOMOR AJU','SERI BARANG','KODE PUNGUTAN','KODE TARIF','TARIF','KODE FASILITAS','TARIF FASILITAS','NILAI BAYAR','NILAI FASILITAS',
-                'NILAI SUDAH DILUNASI','KODE SATUAN','JUMLAH SATUAN','FLAG BMT SEMENTARA','KODE KOMODITI CUKAI','KODE SUB KOMODITI CUKAI','FLAG TIS',
-                'FLAG PELEKATAN','KODE KEMASAN','JUMLAH KEMASAN'
+                'NOMOR AJU', 'SERI BARANG', 'KODE PUNGUTAN', 'KODE TARIF', 'TARIF', 'KODE FASILITAS', 'TARIF FASILITAS', 'NILAI BAYAR', 'NILAI FASILITAS',
+                'NILAI SUDAH DILUNASI', 'KODE SATUAN', 'JUMLAH SATUAN', 'FLAG BMT SEMENTARA', 'KODE KOMODITI CUKAI', 'KODE SUB KOMODITI CUKAI', 'FLAG TIS',
+                'FLAG PELEKATAN', 'KODE KEMASAN', 'JUMLAH KEMASAN'
             ];
             $arraybarangdokumen = [
-                'NOMOR AJU','SERI BARANG','SERI DOKUMEN','SERI IZIN'  
+                'NOMOR AJU', 'SERI BARANG', 'SERI DOKUMEN', 'SERI IZIN'
             ];
             $arraybarangentitas = [
-                'NOMOR AJU','SERI BARANG','SERI DOKUMEN'
+                'NOMOR AJU', 'SERI BARANG', 'SERI DOKUMEN'
             ];
             $arraybarangspekkhusus = [
-                'NOMOR AJU','SERI BARANG','KODE','URAIAN'
+                'NOMOR AJU', 'SERI BARANG', 'KODE', 'URAIAN'
             ];
             $arraybarangvd = [
-                'NOMOR AJU','SERI BARANG','KODE VD','NILAI BARANG','BIAYA TAMBAHAN','BIAYA PENGURANG','JATUH TEMPO'
+                'NOMOR AJU', 'SERI BARANG', 'KODE VD', 'NILAI BARANG', 'BIAYA TAMBAHAN', 'BIAYA PENGURANG', 'JATUH TEMPO'
             ];
             $arraybahanbaku = [
-                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE ASAL BAHAN BAKU','HS','KODE BARANG','URAIAN','MEREK','TIPE','UKURAN','SPESIFIKASI LAIN',
-                'KODE SATUAN','JUMLAH SATUAN','KODE KEMASAN','JUMLAH KEMASAN','KODE DOKUMEN ASAL','KODE KANTOR ASAL','NOMOR DAFTAR ASAL','TANGGAL DAFTAR ASAl',
-                'NOMOR AJU ASAL','SERI BARANG ASAL','NETTO','BRUTO','VOLUME','CIF','CIF RUPIAH','NDPBM','HARGA PENYERAHAN','HARGA PEROLEHAN','NILAI JASA','SERI IZIN',
-                'VALUTA','KODE BKC','KODE KOMODITI BKC','KODE SUB KOMODITI BKC','FLAG TIS','ISI PER KEMASAN','JUMLAH DILEKATKAN','JUMLAH PITA CUKAI','HJE CUKAI','TARIF CUKAI'
+                'NOMOR AJU', 'SERI BARANG', 'SERI BAHAN BAKU', 'KODE ASAL BAHAN BAKU', 'HS', 'KODE BARANG', 'URAIAN', 'MEREK', 'TIPE', 'UKURAN', 'SPESIFIKASI LAIN',
+                'KODE SATUAN', 'JUMLAH SATUAN', 'KODE KEMASAN', 'JUMLAH KEMASAN', 'KODE DOKUMEN ASAL', 'KODE KANTOR ASAL', 'NOMOR DAFTAR ASAL', 'TANGGAL DAFTAR ASAl',
+                'NOMOR AJU ASAL', 'SERI BARANG ASAL', 'NETTO', 'BRUTO', 'VOLUME', 'CIF', 'CIF RUPIAH', 'NDPBM', 'HARGA PENYERAHAN', 'HARGA PEROLEHAN', 'NILAI JASA', 'SERI IZIN',
+                'VALUTA', 'KODE BKC', 'KODE KOMODITI BKC', 'KODE SUB KOMODITI BKC', 'FLAG TIS', 'ISI PER KEMASAN', 'JUMLAH DILEKATKAN', 'JUMLAH PITA CUKAI', 'HJE CUKAI', 'TARIF CUKAI'
             ];
             $arraybahanbakutarif = [
-                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE ASAL BAHAN BAKU','KODE PUNGUTAN','KODE TARIF','TARIF','KODE FASILITAS','TARIF FASILITAS',
-                'NILAI BAYAR','NILAI FASILITAS','NILAI SUDAH DILUNASI','KODE SATUAN','JUMLAH SATUAN','FLAG BMT SEMENTARA','KODE KOMODITI CUKAI','KODE SUB KOMODITI CUKAI',
-                'FLAG TIS','FLAG PELEKATAN','KODE KEMASAN','KODE SUB KOMODITI CUKAI','FLAG TIS','FLAG PELEKATAN','KODE KEMASAN','JUMLAH KEMASAN'
+                'NOMOR AJU', 'SERI BARANG', 'SERI BAHAN BAKU', 'KODE ASAL BAHAN BAKU', 'KODE PUNGUTAN', 'KODE TARIF', 'TARIF', 'KODE FASILITAS', 'TARIF FASILITAS',
+                'NILAI BAYAR', 'NILAI FASILITAS', 'NILAI SUDAH DILUNASI', 'KODE SATUAN', 'JUMLAH SATUAN', 'FLAG BMT SEMENTARA', 'KODE KOMODITI CUKAI', 'KODE SUB KOMODITI CUKAI',
+                'FLAG TIS', 'FLAG PELEKATAN', 'KODE KEMASAN', 'KODE SUB KOMODITI CUKAI', 'FLAG TIS', 'FLAG PELEKATAN', 'KODE KEMASAN', 'JUMLAH KEMASAN'
             ];
             $arraybahanbakudokumen = [
-                'NOMOR AJU','SERI BARANG','SERI BAHAN BAKU','KODE_ASAL_BAHAN_BAKU','SERI DOKUMEN','SERI IZIN'
+                'NOMOR AJU', 'SERI BARANG', 'SERI BAHAN BAKU', 'KODE_ASAL_BAHAN_BAKU', 'SERI DOKUMEN', 'SERI IZIN'
             ];
             $arraypungutan = [
-                'NOMOR AJU','KODE FASILITAS TARIF','KODE JENIS PUNGUTAN','NILAI PUNGUTAN','NPWP BILLING'
+                'NOMOR AJU', 'KODE FASILITAS TARIF', 'KODE JENIS PUNGUTAN', 'NILAI PUNGUTAN', 'NPWP BILLING'
             ];
             $arrayjaminan = [
-                'NOMOR AJU','KODE KANTOR','KODE JAMINAN','NOMOR JAMINAN','TANGGAL JAMINAN','NILAI JAMINAN','PENJAMIN','TANGGAL JATUH TEMPO','NOMOR BPJ','TANGGAL BPJ'
+                'NOMOR AJU', 'KODE KANTOR', 'KODE JAMINAN', 'NOMOR JAMINAN', 'TANGGAL JAMINAN', 'NILAI JAMINAN', 'PENJAMIN', 'TANGGAL JATUH TEMPO', 'NOMOR BPJ', 'TANGGAL BPJ'
             ];
             $arraybankdevisa = [
-                'NOMOR AJU','SERI','KODE','NAMA'
+                'NOMOR AJU', 'SERI', 'KODE', 'NAMA'
             ];
             $arrayversi = [
                 'VERSI'
             ];
-            $kode = 'array'.strtolower($array[$z]);
+            $kode = 'array' . strtolower($array[$z]);
             // print_r($$kode);
-            for($i=0;$i<count($$kode);$i++){
-                if((65+$i) > 142){
-                    $chr = chr(67).chr(65+($i-78));
-                }else if((65+$i) > 116){
-                    $chr = chr(66).chr(65+($i-52));
-                }else if((65+$i) > 90){
-                    $chr = chr(65).chr(65+($i-26));
-                }else{
-                    $chr = chr(65+$i);
+            for ($i = 0; $i < count($$kode); $i++) {
+                if ((65 + $i) > 142) {
+                    $chr = chr(67) . chr(65 + ($i - 78));
+                } else if ((65 + $i) > 116) {
+                    $chr = chr(66) . chr(65 + ($i - 52));
+                } else if ((65 + $i) > 90) {
+                    $chr = chr(65) . chr(65 + ($i - 26));
+                } else {
+                    $chr = chr(65 + $i);
                 }
-                $sheet->setCellValue($chr.'1', $$kode[$i]);
+                $sheet->setCellValue($chr . '1', $$kode[$i]);
             }
-        }  
+        }
         $sheetIndex = $spreadsheet->getIndex(
             $spreadsheet->getSheetByName('Worksheet')
         );
         $spreadsheet->removeSheetByIndex($sheetIndex);
         //Proses pengisian excel dari database
         $data = $this->ibmodel->getdatabyid($id);
-        $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
+        $noaju = isikurangnol($data['jns_bc']) . '010017' . str_replace('-', '', $data['tgl_aju']) . $data['nomor_aju'];
         $sheet = $spreadsheet->getSheetByName('HEADER');
-        $sheet->setCellValue('A2', $noaju); 
-        $sheet->setCellValue('B2', '40'); 
-        $sheet->setCellValue('C2', '050500'); 
-        $sheet->setCellValue('J2', '1'); 
-        $sheet->setCellValue('N2', '1'); 
+        $sheet->setCellValue('A2', $noaju);
+        $sheet->setCellValue('B2', '40');
+        $sheet->setCellValue('C2', '050500');
+        $sheet->setCellValue('J2', '1');
+        $sheet->setCellValue('N2', '1');
         $sheet->setCellValue('BV2', $data['totalharga']);  // Nilai PAB
         $sheet->setCellValue('CB2', $data['bruto']);  // Bruto
         $sheet->setCellValue('CC2', $data['netto']);  // Netto
@@ -499,35 +518,35 @@ class Akb extends CI_Controller
         $sheet->setCellValue('CH2', 'MANAGER KEU. & AKT');
 
         $sheet = $spreadsheet->getSheetByName('ENTITAS');
-        $sheet->setCellValue('A2', $noaju); 
-        $sheet->setCellValue('B2', '3'); 
-        $sheet->setCellValue('C2', '3'); 
-        $sheet->setCellValue('D2', '5'); 
-        $sheet->setCellValue('E2', '010017176057000'); 
+        $sheet->setCellValue('A2', $noaju);
+        $sheet->setCellValue('B2', '3');
+        $sheet->setCellValue('C2', '3');
+        $sheet->setCellValue('D2', '5');
+        $sheet->setCellValue('E2', '010017176057000');
         $sheet->setCellValue('F2', 'INDONEPTUNE NET MANUFACTURING');
-        $sheet->setCellValue('G2', 'JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT'); 
+        $sheet->setCellValue('G2', 'JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT');
         $sheet->setCellValue('H2', "9120011042693");
         $sheet->setCellValue('K2', '1555/KM.4/2017');
         $sheet->setCellValue('L2', '2017-07-10');
 
-        $sheet->setCellValue('A3', $noaju); 
-        $sheet->setCellValue('B3', '7'); 
-        $sheet->setCellValue('C3', '7'); 
-        $sheet->setCellValue('D3', '5'); 
-        $sheet->setCellValue('E3', '010017176057000'); 
+        $sheet->setCellValue('A3', $noaju);
+        $sheet->setCellValue('B3', '7');
+        $sheet->setCellValue('C3', '7');
+        $sheet->setCellValue('D3', '5');
+        $sheet->setCellValue('E3', '010017176057000');
         $sheet->setCellValue('F3', 'INDONEPTUNE NET MANUFACTURING');
-        $sheet->setCellValue('G3', 'JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT'); 
+        $sheet->setCellValue('G3', 'JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01, DESA CANGKUANG 004/001 CANGKUANG, RANCAEKEK, BANDUNG, JAWA BARAT');
         $sheet->setCellValue('J2', "LAINNYA");
         $sheet->setCellValue('K3', '1555/KM.4/2017');
         $sheet->setCellValue('L3', '2017-07-10');
 
-        $sheet->setCellValue('A4', $noaju); 
-        $sheet->setCellValue('B4', '9'); 
-        $sheet->setCellValue('C4', '9'); 
-        $sheet->setCellValue('D4', '5'); 
-        $sheet->setCellValue('E4', $data['npwp']); 
+        $sheet->setCellValue('A4', $noaju);
+        $sheet->setCellValue('B4', '9');
+        $sheet->setCellValue('C4', '9');
+        $sheet->setCellValue('D4', '5');
+        $sheet->setCellValue('E4', $data['npwp']);
         $sheet->setCellValue('F4', $data['namasupplier']);
-        $sheet->setCellValue('G4', $data['alamat']); 
+        $sheet->setCellValue('G4', $data['alamat']);
         $sheet->setCellValue('I4', "02");
         $sheet->setCellValue('J4', 'LAINNYA');
 
@@ -535,7 +554,7 @@ class Akb extends CI_Controller
         $dokmen = $this->ibmodel->getdatadokumen($id);
         $no = 1;
         foreach ($dokmen->result_array() as $doku) {
-            $sheet->setCellValue('A2', $noaju); 
+            $sheet->setCellValue('A2', $noaju);
             $sheet->setCellValue('B2', $no++);
             $sheet->setCellValue('C2', $doku['kode_dokumen']);
             $sheet->setCellValue('D2', $doku['nomor_dokumen']);
@@ -543,34 +562,34 @@ class Akb extends CI_Controller
         }
 
         $sheet = $spreadsheet->getSheetByName('PENGANGKUT');
-        $sheet->setCellValue('A2', $noaju); 
-        $sheet->setCellValue('C2', $data['jns_angkutan']); 
-        $sheet->setCellValue('D2', $data['angkutan']); 
-        $sheet->setCellValue('E2', $data['no_kendaraan']); 
+        $sheet->setCellValue('A2', $noaju);
+        $sheet->setCellValue('C2', $data['jns_angkutan']);
+        $sheet->setCellValue('D2', $data['angkutan']);
+        $sheet->setCellValue('E2', $data['no_kendaraan']);
 
         $sheet = $spreadsheet->getSheetByName('KEMASAN');
-        $sheet->setCellValue('A2', $noaju); 
-        $sheet->setCellValue('B2', '1'); 
-        $sheet->setCellValue('C2', $data['kd_kemasan']); 
+        $sheet->setCellValue('A2', $noaju);
+        $sheet->setCellValue('B2', '1');
+        $sheet->setCellValue('C2', $data['kd_kemasan']);
         $sheet->setCellValue('D2', $data['jml_kemasan']);
-        
+
         $sheet = $spreadsheet->getSheetByName('BARANG');
         $datadet = $this->ibmodel->getdatadetailib($id);
         $no = 1;
         foreach ($datadet as $detx) {
             $no++;
-            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
-            $sheet->setCellValue('A'.$no, $noaju); 
-            $sheet->setCellValue('B'.$no, $detx['seri_barang']); 
-            $sheet->setCellValue('C'.$no, $detx['nohs']); 
-            $sheet->setCellValue('D'.$no, $detx['brg_id']); 
-            $sheet->setCellValue('E'.$no, $detx['nama_barang']); 
-            $sheet->setCellValue('J'.$no, $detx['satbc']); 
-            $sheet->setCellValue('K'.$no, $jumlah); 
-            $sheet->setCellValue('L'.$no, $data['kd_kemasan']); 
-            $sheet->setCellValue('M'.$no, '0'); 
-            $sheet->setCellValue('T'.$no, $detx['kgs']); 
-            $sheet->setCellValue('AH'.$no, $detx['harga']); 
+            $jumlah = $detx['kodesatuan'] == 'KGS' ? $detx['kgs'] : $detx['pcs'];
+            $sheet->setCellValue('A' . $no, $noaju);
+            $sheet->setCellValue('B' . $no, $detx['seri_barang']);
+            $sheet->setCellValue('C' . $no, $detx['nohs']);
+            $sheet->setCellValue('D' . $no, $detx['brg_id']);
+            $sheet->setCellValue('E' . $no, $detx['nama_barang']);
+            $sheet->setCellValue('J' . $no, $detx['satbc']);
+            $sheet->setCellValue('K' . $no, $jumlah);
+            $sheet->setCellValue('L' . $no, $data['kd_kemasan']);
+            $sheet->setCellValue('M' . $no, '0');
+            $sheet->setCellValue('T' . $no, $detx['kgs']);
+            $sheet->setCellValue('AH' . $no, $detx['harga']);
         }
 
         $sheet = $spreadsheet->getSheetByName('BARANGTARIF');
@@ -578,38 +597,39 @@ class Akb extends CI_Controller
         $sumppn = 0;
         foreach ($datadet as $detx) {
             $no++;
-            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
-            $sheet->setCellValue('A'.$no, $noaju); 
-            $sheet->setCellValue('B'.$no, $detx['seri_barang']); 
-            $sheet->setCellValue('C'.$no, 'PPN'); 
-            $sheet->setCellValue('D'.$no, '1'); 
-            $sheet->setCellValue('E'.$no, 11); 
-            $sheet->setCellValue('F'.$no, '3'); 
-            $sheet->setCellValue('G'.$no, 100); 
-            $sheet->setCellValue('I'.$no, round($detx['harga']*0.11,0)); 
-            $sheet->setCellValue('J'.$no, '0'); 
-            $sheet->setCellValue('K'.$no, substr($detx['kodesatuan'],0,2)); 
-            $sheet->setCellValue('L'.$no, $jumlah); 
-            $sumppn += round($detx['harga']*0.11,0);
+            $jumlah = $detx['kodesatuan'] == 'KGS' ? $detx['kgs'] : $detx['pcs'];
+            $sheet->setCellValue('A' . $no, $noaju);
+            $sheet->setCellValue('B' . $no, $detx['seri_barang']);
+            $sheet->setCellValue('C' . $no, 'PPN');
+            $sheet->setCellValue('D' . $no, '1');
+            $sheet->setCellValue('E' . $no, 11);
+            $sheet->setCellValue('F' . $no, '3');
+            $sheet->setCellValue('G' . $no, 100);
+            $sheet->setCellValue('I' . $no, round($detx['harga'] * 0.11, 0));
+            $sheet->setCellValue('J' . $no, '0');
+            $sheet->setCellValue('K' . $no, substr($detx['kodesatuan'], 0, 2));
+            $sheet->setCellValue('L' . $no, $jumlah);
+            $sumppn += round($detx['harga'] * 0.11, 0);
         }
 
         $sheet = $spreadsheet->getSheetByName('PUNGUTAN');
-        $sheet->setCellValue('A2', $noaju); 
-        $sheet->setCellValue('B2', '3'); 
-        $sheet->setCellValue('C2', 'PPN'); 
-        $sheet->setCellValue('D2', $sumppn); 
+        $sheet->setCellValue('A2', $noaju);
+        $sheet->setCellValue('B2', '3');
+        $sheet->setCellValue('C2', 'PPN');
+        $sheet->setCellValue('D2', $sumppn);
 
         $sheet = $spreadsheet->getSheetByName('VERSI');
-        $sheet->setCellValue('A2', '1.1'); 
+        $sheet->setCellValue('A2', '1.1');
 
         // Proses file excel    
-        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="Data Ceisa 40.xlsx"'); // Set nama file excel nya    
-        header('Cache-Control: max-age=0');    
-        $writer = new Xlsx($spreadsheet);    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
     }
-    public function hosttohost($id){
+    public function hosttohost($id)
+    {
         $this->session->unset_userdata('datatokenbeacukai');
         $curl = curl_init();
         // $token = $consID;
@@ -622,7 +642,10 @@ class Akb extends CI_Controller
             'password' => 'Ifn123456' //'Bandung#14',
         ];
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers
+        curl_setopt(
+            $curl,
+            CURLOPT_HTTPHEADER,
+            $headers
             // array(
             //     "Authorization: $token",
             // )
@@ -636,93 +659,95 @@ class Akb extends CI_Controller
         $result = curl_exec($curl);
         curl_close($curl);
 
-        $databalik = json_decode($result,true);
+        $databalik = json_decode($result, true);
         // print_r($databalik);
-        if($databalik['status']=='success'){
+        if ($databalik['status'] == 'success') {
             $data = [
                 'token' => $databalik['item']['access_token'],
                 'refresh_token' => $databalik['item']['refresh_token']
             ];
             $this->akbmodel->isitokenbc($data);
-            $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
+            $this->session->set_userdata('datatokenbeacukai', $databalik['item']['access_token']);
             $this->helpermodel->isilog('Refresh Token CEISA 40');
             $this->getkurs();
-            if($id=99){
-                $url = base_url().'akb';
-            }else{
-                $url = base_url().'akb/isidokbc/'.$id;
+            if ($id = 99) {
+                $url = base_url() . 'akb';
+            } else {
+                $url = base_url() . 'akb/isidokbc/' . $id;
             }
             redirect($url);
-        }else{
+        } else {
             // $url = base_url().'ib/kosong';
             // redirect($url);
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
-            if($id=''){
-                $url = base_url().'ib';
-            }else{
-                $url = base_url().'ib/isidokbc/'.$id;
+            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
+            if ($id = '') {
+                $url = base_url() . 'ib';
+            } else {
+                $url = base_url() . 'ib/isidokbc/' . $id;
             }
             redirect($url);
         }
     }
-    public function getkurs(){
+    public function getkurs()
+    {
         $token = $this->akbmodel->gettoken();
-        $kode = ['usd','jpy','eur'];
-        for($x=0;$x<count($kode);$x++){
+        $kode = ['usd', 'jpy', 'eur'];
+        for ($x = 0; $x < count($kode); $x++) {
             $kodex = $kode[$x];
             $curl = curl_init();
             // $token = $consID;
             $headers = array(
                 "Content-Type: application/json",
-                "Authorization: Bearer ".$token,
+                "Authorization: Bearer " . $token,
             );
 
-            curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-            curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/kurs/'.$kodex);
+            curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/kurs/' . $kodex);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
             $result = curl_exec($curl);
             curl_close($curl);
 
-            $databalik = json_decode($result,true);
+            $databalik = json_decode($result, true);
             // print_r($databalik['data'][0]['nilaiKurs']);
-            if($databalik['status']=='true'){
-                $this->akbmodel->isikursbc($databalik['data'][0]['nilaiKurs'],$kodex);
+            if ($databalik['status'] == 'true') {
+                $this->akbmodel->isikursbc($databalik['data'][0]['nilaiKurs'], $kodex);
                 $this->helpermodel->isilog('Isi KURS BC CEISA 40');
             }
         }
     }
-    public function getresponhost($id){
+    public function getresponhost($id)
+    {
         $dataaju = $this->akbmodel->getdatanomoraju($id);
         $token = $this->akbmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
             "Content-Type: application/json",
-            "Authorization: Bearer ".$token,
+            "Authorization: Bearer " . $token,
         );
         $data = [
             $dataaju
         ];
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/status/'.$dataaju);
+        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/status/' . $dataaju);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         $result = curl_exec($curl);
         curl_close($curl);
 
-        $databalik = json_decode($result,true);
+        $databalik = json_decode($result, true);
         // print_r($databalik);
-        if($databalik['status']=='Success'){
-            if($databalik['dataStatus'][0]['nomorDaftar']!=''){
+        if ($databalik['status'] == 'Success') {
+            if ($databalik['dataStatus'][0]['nomorDaftar'] != '') {
                 $data = [
                     'id' => $id,
                     'nomor_bc' => $databalik['dataStatus'][0]['nomorDaftar'],
@@ -731,107 +756,111 @@ class Akb extends CI_Controller
                     'tgl_sppb' => $databalik['dataRespon'][0]['tanggalRespon']
                 ];
                 $hasil = $this->akbmodel->simpanresponbc($data);
-                if($hasil){
-                    $this->helpermodel->isilog("Berhasil GET RESPON AJU ".$dataaju." (".$databalik['dataStatus'][0]['nomorDaftar'].")");
-                    $this->session->set_flashdata('errorsimpan',2);
-                    $this->session->set_flashdata('pesanerror','Respon sudah berhasil di Tarik');
+                if ($hasil) {
+                    $this->helpermodel->isilog("Berhasil GET RESPON AJU " . $dataaju . " (" . $databalik['dataStatus'][0]['nomorDaftar'] . ")");
+                    $this->session->set_flashdata('errorsimpan', 2);
+                    $this->session->set_flashdata('pesanerror', 'Respon sudah berhasil di Tarik');
                 }
-            }else{
-                $this->session->set_flashdata('errorsimpan',1);
-                $this->session->set_flashdata('pesanerror','Nomor Pendaftaran Masih kosong, '.$databalik['dataStatus'][0]['keterangan']);
+            } else {
+                $this->session->set_flashdata('errorsimpan', 1);
+                $this->session->set_flashdata('pesanerror', 'Nomor Pendaftaran Masih kosong, ' . $databalik['dataStatus'][0]['keterangan']);
             }
-            $url = base_url().'akb/isidokbc/'.$id;
+            $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
-        }else{
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+        } else {
+            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
             // $url = base_url().'ib/isidokbc/'.$id;
-            $url = base_url().'akb/isidokbc/'.$id;
+            $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
         }
     }
-    public function getresponpdf($id,$mode=0){
+    public function getresponpdf($id, $mode = 0)
+    {
         $dataaju = $this->akbmodel->getdatanomoraju($id);
         $token = $this->akbmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
             "Content-Type: application/json",
-            "Authorization: Bearer ".$token,
+            "Authorization: Bearer " . $token,
         );
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/status/'.$dataaju);
+        curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/status/' . $dataaju);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         $result = curl_exec($curl);
         curl_close($curl);
 
-        $databalik = json_decode($result,true);
+        $databalik = json_decode($result, true);
         // print_r($databalik);
-        if($databalik['status']=='Success'){
-            if($databalik['dataStatus'][0]['nomorDaftar']!='' && $databalik['dataRespon'][0]['pdf']!=null){
-                $this->tampilkanpdf($databalik['dataRespon'][0]['pdf'],$id,$mode);
-            }else{
-                $this->session->set_flashdata('errorsimpan',1);
-                $this->session->set_flashdata('pesanerror','PDF Belum ada');
+        if ($databalik['status'] == 'Success') {
+            if ($databalik['dataStatus'][0]['nomorDaftar'] != '' && $databalik['dataRespon'][0]['pdf'] != null) {
+                $this->tampilkanpdf($databalik['dataRespon'][0]['pdf'], $id, $mode);
+            } else {
+                $this->session->set_flashdata('errorsimpan', 1);
+                $this->session->set_flashdata('pesanerror', 'PDF Belum ada');
             }
-            $url = $mode = 0 ? base_url().'akb/isidokbc/'.$id : base_url().'akb';
+            $url = $mode = 0 ? base_url() . 'akb/isidokbc/' . $id : base_url() . 'akb';
             redirect($url);
-        }else{
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+        } else {
+            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
             // $url = base_url().'ib/isidokbc/'.$id;
-            $url = $mode = 0 ? base_url().'akb/isidokbc/'.$id : base_url().'akb';
+            $url = $mode = 0 ? base_url() . 'akb/isidokbc/' . $id : base_url() . 'akb';
             redirect($url);
         }
     }
-    public function tampilkanpdf($data,$id,$mode){
+    public function tampilkanpdf($data, $id, $mode)
+    {
         $token = $this->ibmodel->gettoken();
         $dataaju = $this->ibmodel->getdatanomoraju($id);
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
             "Content-Type: application/json",
-            "Authorization: Bearer ".$token,
+            "Authorization: Bearer " . $token,
         );
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-        curl_setopt($curl, CURLOPT_URL, "https://apis-gw.beacukai.go.id/openapi/download-respon?path=".$data);
+        curl_setopt($curl, CURLOPT_URL, "https://apis-gw.beacukai.go.id/openapi/download-respon?path=" . $data);
         curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
         curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
         $result = curl_exec($curl);
         curl_close($curl);
-        
+
         // print_r($data);  
-        $pisah = explode('/',$data);
+        $pisah = explode('/', $data);
         $filename = $data;
         $databalik = $result;
         $lokfile = $dataaju;
-        header('Cache-Control: public'); 
+        header('Cache-Control: public');
         header('Content-type: application/pdf');
-        header('Content-Disposition: attachment; filename="'.$lokfile.'"');
-        header('Content-Length: '.strlen($databalik));
+        header('Content-Disposition: attachment; filename="' . $lokfile . '"');
+        header('Content-Length: ' . strlen($databalik));
         echo $databalik;
-        if($mode=0){
-            $url = base_url().'ib/isidokbc/'.$id;
-        }else{
-            $url = base_url().'ib';
+        if ($mode = 0) {
+            $url = base_url() . 'ib/isidokbc/' . $id;
+        } else {
+            $url = base_url() . 'ib';
         }
         redirect($url);
     }
-    public function addlampiran($id){
+    public function addlampiran($id)
+    {
         $data['datheader'] = $this->ibmodel->getdatabyid($id);
         $data['lampiran'] = $this->ibmodel->getjenisdokumen();
-        $this->load->view('ib/addlampiran',$data);
+        $this->load->view('ib/addlampiran', $data);
     }
-    public function tambahlampiran(){
+    public function tambahlampiran()
+    {
         $data = [
             'id_header' => $_POST['id'],
             'kode_dokumen' => $_POST['kode'],
@@ -840,22 +869,22 @@ class Akb extends CI_Controller
             'keterangan' => $_POST['ket']
         ];
         $hasil = $this->ibmodel->tambahlampiran($data);
-        if($hasil){
+        if ($hasil) {
             $this->helpermodel->isilog($this->db->last_query());
             $html = '';
             $query = $this->ibmodel->getdatalampiran($_POST['id']);
             $no = 1;
             foreach ($query->result_array() as $que) {
                 $html .= '<tr>';
-                $html .= '<td>'.$no++.'</td>';
-                $html .= '<td>'.$que['kode_dokumen'].'</td>';
-                $html .= '<td>'.$que['nama_dokumen'].'</td>';
-                $html .= '<td>'.$que['nomor_dokumen'].'</td>';
-                $html .= '<td>'.$que['tgl_dokumen'].'</td>';
-                $html .= '<td>'.$que['keterangan'].'</td>';
+                $html .= '<td>' . $no++ . '</td>';
+                $html .= '<td>' . $que['kode_dokumen'] . '</td>';
+                $html .= '<td>' . $que['nama_dokumen'] . '</td>';
+                $html .= '<td>' . $que['nomor_dokumen'] . '</td>';
+                $html .= '<td>' . $que['tgl_dokumen'] . '</td>';
+                $html .= '<td>' . $que['keterangan'] . '</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
-                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data AJU + Nomor BC">Edit</a>';
+                $html .= '<a href="' . base_url() . 'ib/hapuslampiran/' . $que['id'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="' . base_url() . 'ib/editlampiran/' . $que['id'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data AJU + Nomor BC">Edit</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -863,23 +892,24 @@ class Akb extends CI_Controller
             echo json_encode($cocok);
         }
     }
-    public function getdatalampiran($id){
+    public function getdatalampiran($id)
+    {
         $html = '';
         $sendceisa = $_POST['cek'];
         $query = $this->ibmodel->getdatalampiran($id);
         $no = 1;
         foreach ($query->result_array() as $que) {
             $html .= '<tr>';
-            $html .= '<td>'.$no++.'</td>';
-            $html .= '<td>'.$que['kode_dokumen'].'</td>';
-            $html .= '<td>'.$que['nama_dokumen'].'</td>';
-            $html .= '<td>'.$que['nomor_dokumen'].'</td>';
-            $html .= '<td>'.$que['tgl_dokumen'].'</td>';
-            $html .= '<td>'.$que['keterangan'].'</td>';
+            $html .= '<td>' . $no++ . '</td>';
+            $html .= '<td>' . $que['kode_dokumen'] . '</td>';
+            $html .= '<td>' . $que['nama_dokumen'] . '</td>';
+            $html .= '<td>' . $que['nomor_dokumen'] . '</td>';
+            $html .= '<td>' . $que['tgl_dokumen'] . '</td>';
+            $html .= '<td>' . $que['keterangan'] . '</td>';
             $html .= '<td>';
-            if($sendceisa == 0){
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Hapus Lampiran">Hapus</a>';
-                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
+            if ($sendceisa == 0) {
+                $html .= '<a href="' . base_url() . 'ib/hapuslampiran/' . $que['idx'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Hapus Lampiran">Hapus</a>';
+                $html .= '<a href="' . base_url() . 'ib/editlampiran/' . $que['id'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
             }
             $html .= '</td>';
             $html .= '</tr>';
@@ -887,12 +917,14 @@ class Akb extends CI_Controller
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function editlampiran($id,$ide){
+    public function editlampiran($id, $ide)
+    {
         $data['datlampiran'] = $this->ibmodel->getdatalampiranbyid($id)->row_array();
         $data['lampiran'] = $this->ibmodel->getjenisdokumen();
-        $this->load->view('ib/editlampiran',$data);
+        $this->load->view('ib/editlampiran', $data);
     }
-    public function updatelampiran(){
+    public function updatelampiran()
+    {
         $data = [
             'id' => $_POST['id'],
             'kode_dokumen' => $_POST['kode'],
@@ -901,22 +933,22 @@ class Akb extends CI_Controller
             'keterangan' => $_POST['ket']
         ];
         $hasil = $this->ibmodel->updatelampiran($data);
-        if($hasil){
+        if ($hasil) {
             $this->helpermodel->isilog($this->db->last_query());
             $html = '';
             $query = $this->ibmodel->getdatalampiran($_POST['head']);
             $no = 1;
             foreach ($query->result_array() as $que) {
                 $html .= '<tr>';
-                $html .= '<td>'.$no++.'</td>';
-                $html .= '<td>'.$que['kode_dokumen'].'</td>';
-                $html .= '<td>'.$que['nama_dokumen'].'</td>';
-                $html .= '<td>'.$que['nomor_dokumen'].'</td>';
-                $html .= '<td>'.$que['tgl_dokumen'].'</td>';
-                $html .= '<td>'.$que['keterangan'].'</td>';
+                $html .= '<td>' . $no++ . '</td>';
+                $html .= '<td>' . $que['kode_dokumen'] . '</td>';
+                $html .= '<td>' . $que['nama_dokumen'] . '</td>';
+                $html .= '<td>' . $que['nomor_dokumen'] . '</td>';
+                $html .= '<td>' . $que['tgl_dokumen'] . '</td>';
+                $html .= '<td>' . $que['keterangan'] . '</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
-                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data AJU + Nomor BC">Edit</a>';
+                $html .= '<a href="' . base_url() . 'ib/hapuslampiran/' . $que['id'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC">Hapus</a>';
+                $html .= '<a href="' . base_url() . 'ib/editlampiran/' . $que['id'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data AJU + Nomor BC">Edit</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -924,33 +956,35 @@ class Akb extends CI_Controller
             echo json_encode($cocok);
         }
     }
-    public function hapuslampiran($id,$ide){
+    public function hapuslampiran($id, $ide)
+    {
         $data = [
             'id' => $id,
             'header' => $ide
         ];
-        $this->load->view('ib/hapuslampiran',$data);
+        $this->load->view('ib/hapuslampiran', $data);
     }
-    public function hapuslamp(){
+    public function hapuslamp()
+    {
         $data = $_POST['id'];
         $header = $_POST['head'];
         $hasil = $this->ibmodel->hapuslampiran($data);
-        if($hasil){
+        if ($hasil) {
             $this->helpermodel->isilog($this->db->last_query());
             $html = '';
             $query = $this->ibmodel->getdatalampiran($header);
             $no = 1;
             foreach ($query->result_array() as $que) {
                 $html .= '<tr>';
-                $html .= '<td>'.$no++.'</td>';
-                $html .= '<td>'.$que['kode_dokumen'].'</td>';
-                $html .= '<td>'.$que['nama_dokumen'].'</td>';
-                $html .= '<td>'.$que['nomor_dokumen'].'</td>';
-                $html .= '<td>'.$que['tgl_dokumen'].'</td>';
-                $html .= '<td>'.$que['keterangan'].'</td>';
+                $html .= '<td>' . $no++ . '</td>';
+                $html .= '<td>' . $que['kode_dokumen'] . '</td>';
+                $html .= '<td>' . $que['nama_dokumen'] . '</td>';
+                $html .= '<td>' . $que['nomor_dokumen'] . '</td>';
+                $html .= '<td>' . $que['tgl_dokumen'] . '</td>';
+                $html .= '<td>' . $que['keterangan'] . '</td>';
                 $html .= '<td>';
-                $html .= '<a href="'.base_url().'ib/hapuslampiran/'.$que['idx'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Lampiran" class="btn btn-sm btn-primary">Hapus</a>';
-                $html .= '<a href="'.base_url().'ib/editlampiran/'.$que['id'].'/'.$que['id_header'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
+                $html .= '<a href="' . base_url() . 'ib/hapuslampiran/' . $que['idx'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus Lampiran" class="btn btn-sm btn-primary">Hapus</a>';
+                $html .= '<a href="' . base_url() . 'ib/editlampiran/' . $que['id'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
                 $html .= '</td>';
                 $html .= '</tr>';
             }
@@ -958,11 +992,12 @@ class Akb extends CI_Controller
             echo json_encode($cocok);
         }
     }
-    function kirimdatakeceisa30($id){
+    function kirimdatakeceisa30($id)
+    {
         $data = $this->akbmodel->getdatabyid($id);
         $datakon = $this->akbmodel->getdatakontainer($id);
-        $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
-        $kurs = $data['mtuang']==2 ? $data['kurs_usd'] : $data['kurs_yen'];
+        $noaju = isikurangnol($data['jns_bc']) . '010017' . str_replace('-', '', $data['tgl_aju']) . $data['nomor_aju'];
+        $kurs = $data['mtuang'] == 2 ? $data['kurs_usd'] : $data['kurs_yen'];
         $arrayheader = [
             "asalData" => "S",
             "kodeDokumen" => $data['jns_bc'],
@@ -1006,51 +1041,51 @@ class Akb extends CI_Controller
             // "bankDevisa" => []
         ];
         $arrayentitas = [];
-        for($ke=1;$ke<=4;$ke++){
+        for ($ke = 1; $ke <= 4; $ke++) {
             $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
-            $serient = $ke==1 ? "2" : (($ke==2) ? "8" : (($ke==3) ? "6" : "13"));
-            $kodeentitas = $ke==1 ? "2" : (($ke==2) ? "7" : (($ke==3) ? "8" : "6"));
-            $kodejnent = $ke==1 ? "6" : (($ke==4) ? "" : (($ke==2) ? "6" : ""));
+            $serient = $ke == 1 ? "2" : (($ke == 2) ? "8" : (($ke == 3) ? "6" : "13"));
+            $kodeentitas = $ke == 1 ? "2" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
+            $kodejnent = $ke == 1 ? "6" : (($ke == 4) ? "" : (($ke == 2) ? "6" : ""));
             $status = "";
-            if($ke > 2){
-                if ($ke == 3){
+            if ($ke > 2) {
+                if ($ke == 3) {
                     $nomoridentitas = "";
                     $namaidentitas = $data['namacustomer'];
                     $alamat = strtoupper($data['alamat']);
                     $negara = $data['negaracustomer'];
-                }else{
-                    if($data['dirsell']==1){
+                } else {
+                    if ($data['dirsell'] == 1) {
                         $nomoridentitas = "";
                         $namaidentitas = $data['namacustomer'];
                         $alamat = strtoupper($data['alamat']);
                         $negara = $data['negaracustomer'];
-                    }else{
+                    } else {
                         $nomoridentitas = "";
                         $namaidentitas = "MOMOI FISHING NET MFG CO.,LTD";
                         $alamat = "10TH FL.KOBE ASAHI BLDG 59 NANIWA MACHI CHUO KU KOBE 6500035";
                         $negara = "JP";
                     }
                 }
-            }else{
-                $nomoridentitas = $ke==1 ? "0010017176057000000000" : "0010017176057000000000";
-                $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : "INDONEPTUNE NET MANUFACTURING";
-                $alamat = $ke==1 ? $alamatifn : $alamatifn ;
+            } else {
+                $nomoridentitas = $ke == 1 ? "0010017176057000000000" : "0010017176057000000000";
+                $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : "INDONEPTUNE NET MANUFACTURING";
+                $alamat = $ke == 1 ? $alamatifn : $alamatifn;
                 $negara = '';
                 $status = "5";
             }
-            $nibidentitas = $ke==1 ? "9120011042693" : (($ke==2) ? "9120011042693" : "");
+            $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "9120011042693" : "");
             $arrayke = [
                 "seriEntitas" => (int) $serient,
                 "kodeEntitas" => $kodeentitas,
                 "kodeJenisIdentitas" => $kodejnent,
-                "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$nomoridentitas))),
+                "nomorIdentitas" => trim(str_replace('-', '', str_replace('.', '', $nomoridentitas))),
                 "alamatEntitas" => $alamat,
                 "namaEntitas" => trim($namaidentitas),
                 "nibEntitas" => $nibidentitas,
                 "kodeNegara" => $negara,
                 "kodeStatus" => $status
             ];
-            array_push($arrayentitas,$arrayke);
+            array_push($arrayentitas, $arrayke);
         }
         $arraydokumen = [];
         $dokmen = $this->akbmodel->getdatadokumen($id);
@@ -1062,7 +1097,7 @@ class Akb extends CI_Controller
                 "seriDokumen" => $no++,
                 "tanggalDokumen" => $doku['tgl_dokumen']
             ];
-            array_push($arraydokumen,$arrayke);
+            array_push($arraydokumen, $arrayke);
         }
         $carangkut = $data['jns_angkutan'];
         switch ($carangkut) {
@@ -1084,11 +1119,12 @@ class Akb extends CI_Controller
             "kodeCaraAngkut" => $carangkut,
             "kodeBendera" => $data['kode_negara']
         ];
-        array_push($arrangkut,$arrayangkutan);
+        array_push($arrangkut, $arrayangkutan);
         $datakont = $this->akbmodel->getdatakontainer($id);
         $arraykonta = [];
         $ke = 0;
-        foreach ($datakont->result_array() as $kont) { $ke++;
+        foreach ($datakont->result_array() as $kont) {
+            $ke++;
             $arrkont = [
                 'kodeTipeKontainer' => "1",
                 'kodeUkuranKontainer' => $kont['ukuran_kontainer'],
@@ -1096,7 +1132,7 @@ class Akb extends CI_Controller
                 'kodeJenisKontainer' => $kont['jenis_kontainer'],
                 'seriKontainer' => $ke
             ];
-            array_push($arraykonta,$arrkont);
+            array_push($arraykonta, $arrkont);
         }
         // array_push($arraykonta,$arraykontainer);
         $arrkemas = [];
@@ -1106,27 +1142,27 @@ class Akb extends CI_Controller
             "merkKemasan" => "-",
             "seriKemasan" => 1
         ];
-        array_push($arrkemas,$arraykemasan);
+        array_push($arrkemas, $arraykemasan);
         $arraybarang = [];
         $datadet = $this->akbmodel->getdatadetailib($id);
         $no = 0;
         $jumlahfasilitas = 0;
         foreach ($datadet as $detx) {
             $no++;
-            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
+            $jumlah = $detx['kodesatuan'] == 'KGS' ? $detx['kgs'] : $detx['pcs'];
             $arrayke = [
                 "seriBarang" => $no,
                 "asuransi" => 0,
                 "cif" => 0,
                 "cifRupiah" => 0,
-                "fob" => (float) round($detx['harga'],2),
+                "fob" => (float) round($detx['harga'], 2),
                 "hargaEkspor" => 0,
                 "hargaPatokan" => 0,
                 "hargaPerolehan" => 0,
-                "hargaSatuan" => (float) round($detx['harga_satuan'],2),
+                "hargaSatuan" => (float) round($detx['harga_satuan'], 2),
                 "jumlahKemasan" => (float) $detx['jml_kemasan'],
                 "jumlahSatuan" => (float) $jumlah,
-                "kodeBarang" => trim($detx['po']).'#'.trim($detx['item']),
+                "kodeBarang" => trim($detx['po']) . '#' . trim($detx['item']),
                 "kodeDaerahAsal" => "3204",
                 "kodeJenisKemasan" => $detx['kdkem'],
                 "kodeNegaraAsal" => "ID",
@@ -1134,7 +1170,7 @@ class Akb extends CI_Controller
                 "merk" => "MOMOI",
                 "ndpbm" => (float) $kurs,
                 "netto" => (float) $detx['kgs'],
-                "posTarif" =>  substr($detx['nohs'],0,8),
+                "posTarif" =>  substr($detx['nohs'], 0, 8),
                 "spesifikasiLain" => "1",
                 "tipe" => "-",
                 "ukuran" => "-",
@@ -1161,30 +1197,30 @@ class Akb extends CI_Controller
             $arrpemilik = [
                 'seriEntitas' => 8
             ];
-            $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
-            array_push($arraypemilik,$arrpemilik);
+            $jumlahfasilitas += ($detx['harga'] * $jumlah) * 0.11;
+            array_push($arraypemilik, $arrpemilik);
             $arrayke['barangTarif'] = $arraytarif;
             $arrayke['barangPemilik'] = $arraypemilik;
-            array_push($arraybarang,$arrayke);
+            array_push($arraybarang, $arrayke);
         }
         $arraypungutan = [];
         $pungutanarray = [
             "kodeFasilitasTarif" => "3",
             "kodeJenisPungutan" => "PPN",
-            "nilaiPungutan" => round($jumlahfasilitas,0)
+            "nilaiPungutan" => round($jumlahfasilitas, 0)
         ];
-        array_push($arraypungutan,$pungutanarray);
+        array_push($arraypungutan, $pungutanarray);
         $arrayBank = [];
         $bankarray = [
             "kodeBank" => "213",
             "seriBank" => 1
         ];
-        array_push($arrayBank,$bankarray);
+        array_push($arrayBank, $bankarray);
         $datakon = $this->akbmodel->getdatakontainer($id);
-        if($datakon->num_rows() > 0){
+        if ($datakon->num_rows() > 0) {
             $konn = $datakon->row_array();
             $carastuffing = $konn['jenis_kontainer'];
-        }else{
+        } else {
             $carastuffing = "7";
         }
         $arrsiapbar = [];
@@ -1199,7 +1235,7 @@ class Akb extends CI_Controller
             "waktuSiapPeriksa" => (new \DateTime('Asia/Jakarta'))->format(DATE_ATOM),
             "kodeCaraStuffing" => $carastuffing
         ];
-        array_push($arrsiapbar,$arraysiapbarang);
+        array_push($arrsiapbar, $arraysiapbarang);
 
         $arrayheader['entitas'] = $arrayentitas;
         $arrayheader['dokumen'] = $arraydokumen;
@@ -1211,11 +1247,12 @@ class Akb extends CI_Controller
         $arrayheader['kesiapanBarang'] = $arrsiapbar;
         // $arrayheader['pungutan'] = $arraypungutan;
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
-        $this->kirim30($arrayheader,$id);
+        $this->kirim30($arrayheader, $id);
     }
-    function kirimdatakeceisa23($id){
+    function kirimdatakeceisa23($id)
+    {
         $data = $this->ibmodel->getdatabyid($id);
-        $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
+        $noaju = isikurangnol($data['jns_bc']) . '010017' . str_replace('-', '', $data['tgl_aju']) . $data['nomor_aju'];
         $arrayheader = [
             "asalData" => "S",
             "asuransi" => 0,
@@ -1256,20 +1293,20 @@ class Akb extends CI_Controller
             "biayaPengurang" => 0,
             "kodeKenaPajak" => "1"
         ];
-        $ke=1;
+        $ke = 1;
         $arrayentitas = [];
-        for($ke=1;$ke<=3;$ke++){
+        for ($ke = 1; $ke <= 3; $ke++) {
             $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
-            $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "5" : "7");
-            if($ke == 3){
-                $nomoridentitas = $data['jns_pkp']==1 ? $data['nik'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['nik'])))))) : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1));
-            }else{
-                $nomoridentitas = $ke==1 ? "0010017176057000000000" : (($ke==2) ? "0010017176057000000000" : '0'.$data['npwp'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwp']))))+1)));
+            $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "5" : "7");
+            if ($ke == 3) {
+                $nomoridentitas = $data['jns_pkp'] == 1 ? $data['nik'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['nik'])))))) : '0' . $data['npwp'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwp'])))) + 1));
+            } else {
+                $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . $data['npwp'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwp'])))) + 1)));
             }
-            $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
-            $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
-            $nibidentitas = $ke==1 ? "9120011042693" : "";
-            $kodejeniden = $ke==3 ? "4" : "5";
+            $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
+            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : $data['alamat']);
+            $nibidentitas = $ke == 1 ? "9120011042693" : "";
+            $kodejeniden = $ke == 3 ? "4" : "5";
             $arrayke = [
                 "seriEntitas" => $ke,
                 "alamatEntitas" => $alamat,
@@ -1277,18 +1314,18 @@ class Akb extends CI_Controller
                 "kodeJenisIdentitas" => $kodejeniden,
                 "namaEntitas" => trim($namaidentitas),
                 "nibEntitas" => $nibidentitas,
-                "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$nomoridentitas))),
+                "nomorIdentitas" => trim(str_replace('-', '', str_replace('.', '', $nomoridentitas))),
                 "kodeNegara" => "ID",
                 "kodeStatus" => "5"
             ];
-            if($ke==2){
+            if ($ke == 2) {
                 $arrayke["kodeJenisApi"] = "2";
             }
-            if($ke == 1){
+            if ($ke == 1) {
                 $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
                 $arrayke["tanggalIjinEntitas"] = "2017-07-10";
             }
-            array_push($arrayentitas,$arrayke);
+            array_push($arrayentitas, $arrayke);
         }
         $arraydokumen = [];
         $dokmen = $this->ibmodel->getdatadokumen($id);
@@ -1300,7 +1337,7 @@ class Akb extends CI_Controller
                 "seriDokumen" => $no++,
                 "tanggalDokumen" => $doku['tgl_dokumen']
             ];
-            array_push($arraydokumen,$arrayke);
+            array_push($arraydokumen, $arrayke);
         }
         $arrangkut = [];
         $arrayangkutan = [
@@ -1310,7 +1347,7 @@ class Akb extends CI_Controller
             "kodeBendera" => $data['kode_negara'],
             "kodeCaraAngkut" => $data['jns_angkutan']
         ];
-        array_push($arrangkut,$arrayangkutan);
+        array_push($arrangkut, $arrayangkutan);
         $arrkemas = [];
         $arraykemasan = [
             "jumlahKemasan" => (int) $data['jml_kemasan'],
@@ -1318,25 +1355,25 @@ class Akb extends CI_Controller
             "merkKemasan" => "-",
             "seriKemasan" => 1
         ];
-        array_push($arrkemas,$arraykemasan);
+        array_push($arrkemas, $arraykemasan);
         $arraybarang = [];
         $datadet = $this->ibmodel->getdatadetailib($id);
         $no = 0;
         $jumlahfasilitas = 0;
         foreach ($datadet as $detx) {
             $no++;
-            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
+            $jumlah = $detx['kodesatuan'] == 'KGS' ? $detx['kgs'] : $detx['pcs'];
             $arrayke = [
                 "seriBarang" => $no,
                 "asuransi" => 0,
-                "cif" => (float) $detx['harga']*$jumlah,
+                "cif" => (float) $detx['harga'] * $jumlah,
                 "diskon" => 0,
                 "fob" => 0,
                 "freight" => 0,
                 "hargaEkspor" => 0,
                 "hargaSatuan" => (float) $detx['harga'],
                 "bruto" => 0,
-                "hargaPenyerahan" => (float) $detx['harga']*$jumlah,
+                "hargaPenyerahan" => (float) $detx['harga'] * $jumlah,
                 "jumlahSatuan" => (int) $jumlah,
                 "kodeBarang" => $detx['brg_id'],
                 "kodeDokumen" => "40",
@@ -1356,8 +1393,8 @@ class Akb extends CI_Controller
                 "ukuran" => "",
                 "uraian" => "",
                 "ndpbm" => (float) $data['kurs_usd'],
-                "cifRupiah" => (float) $data['kurs_usd']*$jumlah,
-                "hargaPerolehan" => (float) $detx['harga']*$jumlah,
+                "cifRupiah" => (float) $data['kurs_usd'] * $jumlah,
+                "hargaPerolehan" => (float) $detx['harga'] * $jumlah,
                 "kodeAsalBahanBaku" => "0",
                 "volume" => 0,
                 "jumlahKemasan" => (int) $data['jml_kemasan'],
@@ -1370,27 +1407,27 @@ class Akb extends CI_Controller
                 "kodeFasilitasTarif" => "3",
                 "kodeSatuanBarang" => $detx['kodesatuan'],
                 "nilaiBayar" => 0,
-                "nilaiFasilitas" => round(($detx['harga']*$jumlah)*0.11,0),
+                "nilaiFasilitas" => round(($detx['harga'] * $jumlah) * 0.11, 0),
                 "nilaiSudahDilunasi" => 0,
                 "tarif" => 11,
                 "tarifFasilitas" => 100,
                 "kodeJenisPungutan" => "BM",
                 "kodeJenisTarif" => "1"
             ];
-            $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
+            $jumlahfasilitas += ($detx['harga'] * $jumlah) * 0.11;
             $arraybarangdokumen = [];
-            array_push($arraytarif,$barangtarif);
+            array_push($arraytarif, $barangtarif);
             $arrayke['barangTarif'] = $arraytarif;
             $arrayke['barangDokumen'] = $arraybarangdokumen;
-            array_push($arraybarang,$arrayke);
+            array_push($arraybarang, $arrayke);
         }
         $arraypungutan = [];
         $pungutanarray = [
             "kodeFasilitasTarif" => "3",
             "kodeJenisPungutan" => "PPN",
-            "nilaiPungutan" => round($jumlahfasilitas,0)
+            "nilaiPungutan" => round($jumlahfasilitas, 0)
         ];
-        array_push($arraypungutan,$pungutanarray);
+        array_push($arraypungutan, $pungutanarray);
 
         $arrayheader['entitas'] = $arrayentitas;
         $arrayheader['dokumen'] = $arraydokumen;
@@ -1399,19 +1436,20 @@ class Akb extends CI_Controller
         $arrayheader['barang'] = $arraybarang;
         $arrayheader['pungutan'] = $arraypungutan;
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
-        $this->kirim40($arrayheader,$id);
+        $this->kirim40($arrayheader, $id);
     }
-    function kirimdatakeceisa261($id){
+    function kirimdatakeceisa261($id)
+    {
         $data = $this->akbmodel->getdatabyid($id);
         $datakon = $this->akbmodel->getdatakontainer($id);
-        $noaju = isikurangnol($data['jns_bc']).'010017'.str_replace('-','',$data['tgl_aju']).$data['nomor_aju'];
+        $noaju = isikurangnol($data['jns_bc']) . '010017' . str_replace('-', '', $data['tgl_aju']) . $data['nomor_aju'];
         $kurs = $data['kurs_usd']; //$data['mtuang']==2 ? $data['kurs_usd'] : ($data['mtuang']==3 ? $data['kurs_yen'] : $data['kurs_idr']);
         $arrayheader = [
             "asalData" => "S",
             "kodeDokumen" => $data['jns_bc'],
             "asuransi" => (float) $data['asuransi'],
             "bruto" => (float) $data['netto'],
-            "cif" => (float) round($data['nilai_pab']/$kurs,2),
+            "cif" => (float) round($data['nilai_pab'] / $kurs, 2),
             "biayaTambahan" => 0,
             "biayaPengurang" => 0,
             "disclaimer" => "1",
@@ -1440,22 +1478,22 @@ class Akb extends CI_Controller
             "vd" => 0
         ];
         $arrayentitas = [];
-        for($ke=1;$ke<=3;$ke++){
+        for ($ke = 1; $ke <= 3; $ke++) {
             $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
-            $serient = $ke==1 ? "3" : (($ke==2) ? "7" : (($ke==3) ? "8" : "13"));
-            $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "7" : (($ke==3) ? "8" : "6"));
+            $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
+            $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6"; //$ke==1 ? "6" : (($ke==4) ? "" : (($ke==2) ? "6" : ""));
-            $status = $ke==2 ? "10" : "";
-            $nibidentitas = $ke==1 ? "9120011042693" : (($ke==2) ? "" : "");
-            $nomoridentitas = $ke==1 ? "0010017176057000000000" : (($ke==2) ? "0010017176057000000000" : '0'.$data['npwpsubkon'].str_repeat('0',22-(strlen(trim(str_replace('-','',str_replace('.','',$data['npwpsubkon']))))+1)));
-            $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamatsubkon']);
-            $namaidentitas = $ke==1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasubkon']);
-            $kodejenisapi = $ke==2 ? "02" : "";
+            $status = $ke == 2 ? "10" : "";
+            $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
+            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . $data['npwpsubkon'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwpsubkon'])))) + 1)));
+            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : $data['alamatsubkon']);
+            $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasubkon']);
+            $kodejenisapi = $ke == 2 ? "02" : "";
             $arrayke = [
                 "seriEntitas" => (int) $serient,
                 "kodeEntitas" => $kodeentitas,
                 "kodeJenisIdentitas" => $kodejnent,
-                "nomorIdentitas" => trim(str_replace('-','',str_replace('.','',$nomoridentitas))),
+                "nomorIdentitas" => trim(str_replace('-', '', str_replace('.', '', $nomoridentitas))),
                 "alamatEntitas" => $alamat,
                 "namaEntitas" => trim($namaidentitas),
                 "nibEntitas" => $nibidentitas,
@@ -1463,15 +1501,15 @@ class Akb extends CI_Controller
                 "kodeStatus" => $status,
                 "kodeJenisApi" => "02"
             ];
-            if($ke==3){
+            if ($ke == 3) {
                 $arrayke["nomorIjinEntitas"] = $data['noijin'];
                 $arrayke["tanggalIjinEntitas"] =  $data['tglijin'];
             }
-            if($ke == 1){
+            if ($ke == 1) {
                 $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
                 $arrayke["tanggalIjinEntitas"] = "2017-07-10";
             }
-            array_push($arrayentitas,$arrayke);
+            array_push($arrayentitas, $arrayke);
         }
         $arraydokumen = [];
         $dokmen = $this->akbmodel->getdatadokumen($id);
@@ -1483,7 +1521,7 @@ class Akb extends CI_Controller
                 "seriDokumen" => $no++,
                 "tanggalDokumen" => $doku['tgl_dokumen']
             ];
-            array_push($arraydokumen,$arrayke);
+            array_push($arraydokumen, $arrayke);
         }
         $carangkut = $data['jns_angkutan'];
         switch ($carangkut) {
@@ -1506,7 +1544,7 @@ class Akb extends CI_Controller
             "kodeCaraAngkut" => $carangkut,
             // "kodeBendera" => $data['kode_negara']
         ];
-        array_push($arrangkut,$arrayangkutan);
+        array_push($arrangkut, $arrayangkutan);
         $arrkemas = [];
         $arraykemasan = [
             "jumlahKemasan" => (int) $data['jml_kemasan'],
@@ -1514,75 +1552,77 @@ class Akb extends CI_Controller
             "merkKemasan" => "-",
             "seriKemasan" => 1
         ];
-        array_push($arrkemas,$arraykemasan);
+        array_push($arrkemas, $arraykemasan);
         $arraybarang = [];
         $datadet = $this->akbmodel->excellampiran261($id);
         $no = 0;
         $jumlahfasilitas = 0;
-        $pungutanbm = 0;$pungutanppn=0;$pungutanpph=0;
+        $pungutanbm = 0;
+        $pungutanppn = 0;
+        $pungutanpph = 0;
         foreach ($datadet->result_array() as $detx) {
             $no++;
-            $jumlah = $detx['kodebc']=='KGM' ? $detx['kgs'] : $detx['pcs'];
-            if($jumlah == 0 && $detx['kodebc']!='KGM'){
+            $jumlah = $detx['kodebc'] == 'KGM' ? $detx['kgs'] : $detx['pcs'];
+            if ($jumlah == 0 && $detx['kodebc'] != 'KGM') {
                 $jumlah = $detx['kgs'];
-            }else{
-                if($jumlah==0){
+            } else {
+                if ($jumlah == 0) {
                     $jumlah = $detx['kgs'];
                 }
             }
             // $jumlah=0;
-            $cif = getjumlahcifbom($id,$no)->row_array();
-            $bahanbaku = $this->akbmodel->detailexcellampiran261($id,$no);
+            $cif = getjumlahcifbom($id, $no)->row_array();
+            $bahanbaku = $this->akbmodel->detailexcellampiran261($id, $no);
             $cifnya = 0;
             $cifrupiah = 0;
             $isiheader = $this->akbmodel->getdatabyid($id);
             $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
-            foreach($bahanbaku->result_array() as $det){
-                $asalbar = $det['jns_bc']==23 ? 1 : 2 ;
+            foreach ($bahanbaku->result_array() as $det) {
+                $asalbar = $det['jns_bc'] == 23 ? 1 : 2;
                 $kursusd = $kurssekarang['usd'];
-                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                $ndpbm = $det['mt_uang'] == '' || $det['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+                $pembagi = $det['weight'] == 0 ? 1 : $det['weight'];
                 switch ($det['mt_uang']) {
                     case 'JPY':
-                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
-                        $cif = $jpy/$kursusd;
+                        $jpy = $det['cif'] * $kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy / $kursusd;
                         break;
                     default:
                         $cif = $det['cif'];
                         break;
                 }
-                $cifnya += round(($cif/$pembagi)*$det['kgs'],2);
-                $cifrupiah += (($cif/$pembagi)*$ndpbm)*round($det['kgs'],2);
+                $cifnya += round(($cif / $pembagi) * $det['kgs'], 2);
+                $cifrupiah += (($cif / $pembagi) * $ndpbm) * round($det['kgs'], 2);
                 // $cifrupiah += round((($cif/$pembagi)*$det['kgs']),2)*$ndpbm;
             }
-            $uraian = trim($detx['po'])!='' ? spekpo($detx['po'],$detx['item'],$detx['dis']) : namaspekbarang($detx['id_barang']);
-            $hs = trim($detx['po'])=='' ? substr($detx['nohs'],0,8) : substr($detx['hsx'],0,8); 
-            $kodebc = str_contains($detx['nomor_dok'],'NET/') ? 'KGM' : $detx['kodebc'];
-            if(str_contains($detx['nomor_dok'],'NET/')){
+            $uraian = trim($detx['po']) != '' ? spekpo($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
+            $hs = trim($detx['po']) == '' ? substr($detx['nohs'], 0, 8) : substr($detx['hsx'], 0, 8);
+            $kodebc = str_contains($detx['nomor_dok'], 'NET/') ? 'KGM' : $detx['kodebc'];
+            if (str_contains($detx['nomor_dok'], 'NET/')) {
                 $kodebc = 'KGM';
-            }else{
-                if(str_contains($detx['nomor_dok'],'RSC/')){
+            } else {
+                if (str_contains($detx['nomor_dok'], 'RSC/')) {
                     $kodebc = 'KGM';
                 }
             }
             $arraykebarang = [
                 "seriBarang" => $no,
-                "cif" => (float) round($cifnya,2),
-                "cifRupiah" => round($cifrupiah,2),
+                "cif" => (float) round($cifnya, 2),
+                "cifRupiah" => round($cifrupiah, 2),
                 "hargaEkspor" => 0,
                 "hargaPenyerahan" => 0,
                 "hargaPerolehan" => 0,
                 "isiPerKemasan" => 0,
                 "jumlahSatuan" => (float) $jumlah,
                 "jumlahKemasan" => (float) $detx['jml_kemasan'],
-                "kodeBarang" => formatsku($detx['po'],$detx['item'],$detx['dis'],$detx['id_barang']),
+                "kodeBarang" => formatsku($detx['po'], $detx['item'], $detx['dis'], $detx['id_barang']),
                 "kodeAsalBarang" => "4",
                 "kodeJenisKemasan" => $data['kd_kemasan'],
                 "kodeNegaraAsal" => "ID",
                 "kodeSatuanBarang" => $kodebc,
                 "merk" => "-",
                 "ndpbm" => (float) $kurs,
-                "netto" => (float) round($detx['kgs'],2),
+                "netto" => (float) round($detx['kgs'], 2),
                 "spesifikasiLain" => "-",
                 "tipe" => "-",
                 "ukuran" => "-",
@@ -1598,31 +1638,31 @@ class Akb extends CI_Controller
                 "uangMuka" => 0
             ];
             $arr_bahanbaku = [];
-            $nob=0;
+            $nob = 0;
             foreach ($bahanbaku->result_array() as $databahanbaku) {
                 $nob++;
-                $asalbar = $databahanbaku['jns_bc']==23 ? "0" : "1" ;
+                $asalbar = $databahanbaku['jns_bc'] == 23 ? "0" : "1";
                 $kursusd = $kurssekarang['usd'];
-                $ndpbm = $databahanbaku['mt_uang']=='' || $databahanbaku['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                $pembagi = $databahanbaku['weight']==0 ? 1 : $databahanbaku['weight'];
+                $ndpbm = $databahanbaku['mt_uang'] == '' || $databahanbaku['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+                $pembagi = $databahanbaku['weight'] == 0 ? 1 : $databahanbaku['weight'];
                 switch ($databahanbaku['mt_uang']) {
                     case 'JPY':
-                        $jpy = $databahanbaku['cif']*$kurssekarang[strtolower($det['mt_uang'])];
-                        $cif = $jpy/$kursusd;
+                        $jpy = $databahanbaku['cif'] * $kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy / $kursusd;
                         break;
                     default:
                         $cif = $databahanbaku['cif'];
                         break;
                 }
-                $cifnya = round(($cif/$pembagi)*$databahanbaku['kgs'],2);
+                $cifnya = round(($cif / $pembagi) * $databahanbaku['kgs'], 2);
                 // $cifrupiah = round((($cif/$pembagi)*$databahanbaku['kgs']),2)*$ndpbm;
                 // $cifrupiah =(($cif/$pembagi)*$ndpbm)*round($databahanbaku['kgs'],2);
-                $cifrupiah = $cifnya*$ndpbm;
+                $cifrupiah = $cifnya * $ndpbm;
                 $barangbahanbaku = [
-					"seriBarang" => $no,
+                    "seriBarang" => $no,
                     "seriBahanBaku" => $nob,
                     "kodeAsalBahanBaku" => $asalbar,
-                    "posTarif" => substr($databahanbaku['nohs'],0,8),
+                    "posTarif" => substr($databahanbaku['nohs'], 0, 8),
                     "kodeBarang" => $databahanbaku['kode'],
                     "uraianBarang" => $databahanbaku['nama_barang'],
                     "merkBarang" => "-",
@@ -1630,7 +1670,7 @@ class Akb extends CI_Controller
                     "ukuranBarang" => "-",
                     "spesifikasiLainBarang" => "-",
                     "kodeSatuanBarang" => $databahanbaku['kodebc'],
-                    "jumlahSatuan" => (float) round($databahanbaku['kgs'],2),
+                    "jumlahSatuan" => (float) round($databahanbaku['kgs'], 2),
                     "kodeDokAsal" => $databahanbaku['jns_bc'],
                     "kodeKantor" => "050500",
                     "kodeDokumen" => $databahanbaku['jns_bc'], // EX
@@ -1640,8 +1680,8 @@ class Akb extends CI_Controller
                     "nomorDokumen" => trim($databahanbaku['nomor_aju']), //No AJU ASAL
                     "seriBarangDokAsal" => (int) $databahanbaku['seri_barang'], //SERI BARANG
                     "netto" => (float) $databahanbaku['kgs'],
-                    "cif" => round($cifnya,2),
-                    "cifRupiah" => round($cifrupiah,2),
+                    "cif" => round($cifnya, 2),
+                    "cifRupiah" => round($cifrupiah, 2),
                     "hargaPenyerahan" => 0,
                     "hargaPerolehan" => 0,
                     "isiPerKemasan" => "",
@@ -1651,8 +1691,8 @@ class Akb extends CI_Controller
                 ];
                 $arraybahanbakutarif = [];
                 $tarifbm = 0;
-                for($ke=1;$ke<=3;$ke++){
-                    $kodepungut = $databahanbaku['jns_bc']=='40' ? 'PPNLOKAL' : ($ke==1 ? 'BM' : ($ke==2 ? 'PPN' : 'PPH'));
+                for ($ke = 1; $ke <= 3; $ke++) {
+                    $kodepungut = $databahanbaku['jns_bc'] == '40' ? 'PPNLOKAL' : ($ke == 1 ? 'BM' : ($ke == 2 ? 'PPN' : 'PPH'));
                     $tarif = 0;
                     switch ($kodepungut) {
                         case 'PPNLOKAL':
@@ -1661,25 +1701,25 @@ class Akb extends CI_Controller
                             $jmltarif = 0;
                             break;
                         case 'BM':
-                            if($databahanbaku['bm'] > 0){
+                            if ($databahanbaku['bm'] > 0) {
                                 $tarif = $databahanbaku['bm'];
-                                $pungutanbm += $cifrupiah*($tarif/100);
+                                $pungutanbm += $cifrupiah * ($tarif / 100);
                                 $tarifbm = $pungutanbm;
-                                $jmltarif = $cifrupiah*($tarif/100);
+                                $jmltarif = $cifrupiah * ($tarif / 100);
                             }
                             break;
                         case 'PPN':
-                            if($databahanbaku['ppn'] > 0){
+                            if ($databahanbaku['ppn'] > 0) {
                                 $tarif = $databahanbaku['ppn'];
-                                $pungutanppn += ($tarifbm+$cifrupiah)*($tarif/100);
-                                $jmltarif = ($tarifbm+$cifrupiah)*($tarif/100);
+                                $pungutanppn += ($tarifbm + $cifrupiah) * ($tarif / 100);
+                                $jmltarif = ($tarifbm + $cifrupiah) * ($tarif / 100);
                             }
                             break;
                         case 'PPH':
-                            if($databahanbaku['pph'] > 0){
+                            if ($databahanbaku['pph'] > 0) {
                                 $tarif = $databahanbaku['pph'];
-                                $pungutanpph += ($tarifbm+$cifrupiah)*($tarif/100);
-                                $jmltarif = ($tarifbm+$cifrupiah)*($tarif/100);
+                                $pungutanpph += ($tarifbm + $cifrupiah) * ($tarif / 100);
+                                $jmltarif = ($tarifbm + $cifrupiah) * ($tarif / 100);
                             }
                             break;
                         default:
@@ -1696,31 +1736,31 @@ class Akb extends CI_Controller
                         "tarif" => (float) $tarif,
                         "tarifFasilitas" => 100,
                         "nilaiBayar" => 0,
-                        "nilaiFasilitas" => round($jmltarif,2),
+                        "nilaiFasilitas" => round($jmltarif, 2),
                         "kodeSatuanBarang" => $databahanbaku['kodebc'],
                         "nilaiSudahDilunasi" => 0,
-                        "jumlahSatuan" => (float) round($databahanbaku['kgs'],2),
+                        "jumlahSatuan" => (float) round($databahanbaku['kgs'], 2),
                         "jumlahKemasan" => 0
                     ];
-                    array_push($arraybahanbakutarif,$bahanbakutarif);
+                    array_push($arraybahanbakutarif, $bahanbakutarif);
                 }
                 $barangbahanbaku['bahanBakuTarif'] = $arraybahanbakutarif;
-                array_push($arr_bahanbaku,$barangbahanbaku);
+                array_push($arr_bahanbaku, $barangbahanbaku);
             }
             $arraykebarang['bahanBaku'] = $arr_bahanbaku;
-            array_push($arraybarang,$arraykebarang);
+            array_push($arraybarang, $arraykebarang);
         }
         $arraypungutan = [];
-        for($ke=1;$ke<=3;$ke++){
-            $jenispungut = $ke==1 ? 'BM' : ($ke==2 ? 'PPN' : 'PPH');
-            $jmlpungut = $ke==1 ? $pungutanbm : ($ke==2 ? $pungutanppn : $pungutanpph);
+        for ($ke = 1; $ke <= 3; $ke++) {
+            $jenispungut = $ke == 1 ? 'BM' : ($ke == 2 ? 'PPN' : 'PPH');
+            $jmlpungut = $ke == 1 ? $pungutanbm : ($ke == 2 ? $pungutanppn : $pungutanpph);
             $pungutan = [
                 "idPungutan" => "",
                 "kodeFasilitasTarif" => "8",
                 "kodeJenisPungutan" => $jenispungut,
-                "nilaiPungutan" => round((float) $jmlpungut,2),
+                "nilaiPungutan" => round((float) $jmlpungut, 2),
             ];
-            array_push($arraypungutan,$pungutan);
+            array_push($arraypungutan, $pungutan);
         }
         $datakontrak = $this->akbmodel->getdatakontrak($data['id_kontrak'])->row_array();
         $arrayjaminan = [];
@@ -1730,13 +1770,13 @@ class Akb extends CI_Controller
             "nomorJaminan" => $datakontrak['nomor_ssb'],
             "tanggalJaminan" => $datakontrak['tgl_ssb'],
             "nilaiJaminan" => (float) $datakontrak['jml_ssb'],
-            "penjamin" => $datakontrak['penjamin']==NULL ? "" : $datakontrak['penjamin'],
+            "penjamin" => $datakontrak['penjamin'] == NULL ? "" : $datakontrak['penjamin'],
             "tanggalJatuhTempo" => $datakontrak['tgl_akhir'],
             "nomorBpj" => $datakontrak['nomor_bpj'],
             "tanggalBpj" => $datakontrak['tgl_bpj']
         ];
-        array_push($arrayjaminan,$jaminan);
-        $jumlahfasilitas += ($detx['harga']*$jumlah)*0.11;
+        array_push($arrayjaminan, $jaminan);
+        $jumlahfasilitas += ($detx['harga'] * $jumlah) * 0.11;
         // $arrayke['bahanbaku'] = $arr_bahanbaku;
         // array_push($arraybarang,$arrayke);
         // }
@@ -1749,18 +1789,19 @@ class Akb extends CI_Controller
         $arrayheader['pungutan'] = $arraypungutan;
         $arrayheader['jaminan'] = $arrayjaminan;
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
-        $this->kirim261($arrayheader,$id);
+        $this->kirim261($arrayheader, $id);
     }
-    public function kirim30($data,$id){
+    public function kirim30($data, $id)
+    {
         $token = $this->akbmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
             "Content-Type: application/json",
-            "Authorization: Bearer ".$token,
+            "Authorization: Bearer " . $token,
         );
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
@@ -1770,29 +1811,30 @@ class Akb extends CI_Controller
         $result = curl_exec($curl);
         curl_close($curl);
 
-        $databalik = json_decode($result,true);
+        $databalik = json_decode($result, true);
         // print_r($databalik);
-        if($databalik['status']=='OK'){
-            $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL".$data['nomorAju']);
-            $this->session->set_flashdata('errorsimpan',2);
-            $this->session->set_flashdata('pesanerror',$databalik['message']);
+        if ($databalik['status'] == 'OK') {
+            $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL" . $data['nomorAju']);
+            $this->session->set_flashdata('errorsimpan', 2);
+            $this->session->set_flashdata('pesanerror', $databalik['message']);
             $this->akbmodel->updatesendceisa($id);
-            $url = base_url().'akb/isidokbc/'.$id;
+            $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
-        }else{
+        } else {
             // print_r($databalik);
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
-            $url = base_url().'akb/isidokbc/'.$id;
+            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('pesanerror', $databalik['message'][0] . '[EXCEPTION]' . $databalik['exception']);
+            $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
         }
     }
-    public function kirim261dummy($data,$id){
-        $this->db->trans_start(); 
+    public function kirim261dummy($data, $id)
+    {
+        $this->db->trans_start();
 
         $this->db->select("tb_detail.*");
         $this->db->from('tb_detail');
-        $this->db->where('id_akb',$id);
+        $this->db->where('id_akb', $id);
         $this->db->group_by('id_header');
         $hasil = $this->db->get();
 
@@ -1801,21 +1843,22 @@ class Akb extends CI_Controller
         //     $this->db->update('ok_tuju',1);
         // }
 
-        $this->db->where('id',$id);
-        $this->db->update('tb_header',['send_ceisa' => 1]);
+        $this->db->where('id', $id);
+        $this->db->update('tb_header', ['send_ceisa' => 1]);
 
         $this->db->trans_complete();
     }
-    public function kirim261($data,$id){
+    public function kirim261($data, $id)
+    {
         $token = $this->akbmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
         $headers = array(
             "Content-Type: application/json",
-            "Authorization: Bearer ".$token,
+            "Authorization: Bearer " . $token,
         );
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
@@ -1825,76 +1868,79 @@ class Akb extends CI_Controller
         $result = curl_exec($curl);
         curl_close($curl);
 
-        $databalik = json_decode($result,true);
+        $databalik = json_decode($result, true);
         // print_r($databalik);
-        if($databalik['status']=='OK'){
-            $this->helpermodel->isilog("Kirim dokumen CEISA 40 - 261 BERHASIL".$data['nomorAju']);
-            $this->session->set_flashdata('errorsimpan',2);
-            $this->session->set_flashdata('pesanerror',$databalik['message']);
+        if ($databalik['status'] == 'OK') {
+            $this->helpermodel->isilog("Kirim dokumen CEISA 40 - 261 BERHASIL" . $data['nomorAju']);
+            $this->session->set_flashdata('errorsimpan', 2);
+            $this->session->set_flashdata('pesanerror', $databalik['message']);
             $this->akbmodel->updatesendceisa($id);
-            $url = base_url().'akb/isidokbc/'.$id.'/1';
+            $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             redirect($url);
-        }else{
+        } else {
             // print_r($databalik);
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.$databalik['exception']);
-            $url = base_url().'akb/isidokbc/'.$id.'/1';
+            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('pesanerror', $databalik['message'][0] . '[EXCEPTION]' . $databalik['exception']);
+            $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             redirect($url);
         }
     }
 
-    public function getnomoraju(){
+    public function getnomoraju()
+    {
         $jns = $_POST['jns'];
         $hasil = $this->ibmodel->getnomoraju($jns);
         echo json_encode($hasil);
     }
-    public function getdoklampiran(){
+    public function getdoklampiran()
+    {
         $id = $_POST['id'];
         $bc = $_POST['bc'];
         $query = $this->ibmodel->getdatadokumen($id);
         $arrdok = [];
-        foreach($query->result_array() as $que){
-            array_push($arrdok,$que['kode_dokumen']);
+        foreach ($query->result_array() as $que) {
+            array_push($arrdok, $que['kode_dokumen']);
         }
         $hasil = 1;
-        if($bc == 40){
-            if(count($arrdok) > 0){
+        if ($bc == 40) {
+            if (count($arrdok) > 0) {
                 $hasil = 1;
-            }else{
+            } else {
                 $hasil = 'Lengkapi Lampiran Dokumen';
             }
         }
-        if($bc == 23){
-            if(count($arrdok) > 0){
-                if(in_array('380',$arrdok) && (in_array('740',$arrdok) || in_array('705',$arrdok))){
+        if ($bc == 23) {
+            if (count($arrdok) > 0) {
+                if (in_array('380', $arrdok) && (in_array('740', $arrdok) || in_array('705', $arrdok))) {
                     $hasil = 1;
-                }else{
+                } else {
                     $hasil = 'Dokumen Invoice, BL/AWB Belum di input';
                 }
-            }else{
+            } else {
                 $hasil = 'Lengkapi Lampiran Dokumen';
             }
         }
         echo $hasil;
     }
-    public function tambahkelampiran($id,$mode){
+    public function tambahkelampiran($id, $mode)
+    {
         $inv =  $this->akbmodel->exceljaminan261($id);
-        foreach($inv->result_array() as $lampiran){
+        foreach ($inv->result_array() as $lampiran) {
             // if($lampiran['jns_bc']=='23'):
-                $data = [
-                    'kode_dokumen' => $lampiran['jns_bc'],
-                    'nomor_dokumen' => $lampiran['nomor_bc'],
-                    'tgl_dokumen' => $lampiran['tgl_bc'],
-                    'id_header' => $id
-                ];
-                $this->db->insert('lampiran',$data);
+            $data = [
+                'kode_dokumen' => $lampiran['jns_bc'],
+                'nomor_dokumen' => $lampiran['nomor_bc'],
+                'tgl_dokumen' => $lampiran['tgl_bc'],
+                'id_header' => $id
+            ];
+            $this->db->insert('lampiran', $data);
             // endif;
         }
-        $url = base_url().'akb/isidokbc/'.$id.'/1';
+        $url = base_url() . 'akb/isidokbc/' . $id . '/1';
         redirect($url);
     }
     //End IB Controller
-  
+
     function cetakqr2($isi, $id)
     {
         $tempdir = "temp/";
@@ -2006,88 +2052,99 @@ class Akb extends CI_Controller
         $pdf->Cell(19, 5, 'Dokumen ini sudah ditanda tangani secara digital', 0);
         $pdf->Output('I', 'FM-GD-05.pdf');
     }
-    public function uploaddok($id){
+    public function uploaddok($id)
+    {
         $data['data'] = $this->akbmodel->getdatabyid($id);
-        $data['actiondok'] = base_url().'ib/simpandokumen';
-        $this->load->view('ib/uploaddok',$data);
+        $data['actiondok'] = base_url() . 'ib/simpandokumen';
+        $this->load->view('ib/uploaddok', $data);
     }
-    public function simpandokumen(){
+    public function simpandokumen()
+    {
         $this->ibmodel->updatedok();
     }
-    public function caripelabuhan(){
+    public function caripelabuhan()
+    {
         $datacari = $_GET['search'];
         $hasil = $this->ibmodel->getpelabuhanbykode($datacari);
 
-        if($hasil){
+        if ($hasil) {
             $dataar = [];
             foreach ($hasil->result_array() as $key) {
                 $data['id'] = $key['kode_pelabuhan'];
-                $data['text'] = $key['kode_pelabuhan'].' - '.$key['uraian_pelabuhan'];
-                array_push($dataar,$data);
+                $data['text'] = $key['kode_pelabuhan'] . ' - ' . $key['uraian_pelabuhan'];
+                array_push($dataar, $data);
             }
         }
         echo json_encode($dataar);
     }
-    public function xhitungbom($id,$mode=0){
-        $hasil = $this->akbmodel->hitungbom($id,$mode);
-        $this->session->set_flashdata('databom',$hasil);
-        if($mode=0){
-            $url = base_url().'akb/isidokbc/'.$id;
-        }else{
-            $url = base_url().'akb/isidokbc/'.$id.'/1';
+    public function xhitungbom($id, $mode = 0)
+    {
+        $hasil = $this->akbmodel->hitungbom($id, $mode);
+        $this->session->set_flashdata('databom', $hasil);
+        if ($mode = 0) {
+            $url = base_url() . 'akb/isidokbc/' . $id;
+        } else {
+            $url = base_url() . 'akb/isidokbc/' . $id . '/1';
         }
         redirect($url);
     }
-    public function simpanbom($id,$mode=0){
-        $hasil = $this->akbmodel->hitungbom($id,$mode);
-        $simpan = $this->akbmodel->simpanbom($hasil,$id);
-        if($simpan){
-            if($mode=0){
-                $url = base_url().'akb/isidokbc/'.$id;
-            }else{
-                $url = base_url().'akb/isidokbc/'.$id.'/1';
+    public function simpanbom($id, $mode = 0)
+    {
+        $hasil = $this->akbmodel->hitungbom($id, $mode);
+        $simpan = $this->akbmodel->simpanbom($hasil, $id);
+        if ($simpan) {
+            if ($mode = 0) {
+                $url = base_url() . 'akb/isidokbc/' . $id;
+            } else {
+                $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             }
             redirect($url);
         }
     }
-    public function simpanbomjf($id,$mode=0){
-        $hasil = $this->akbmodel->hitungbomjf($id,$mode);
-        $simpan = $this->akbmodel->simpanbom($hasil['ok'],$id);
-        if($simpan){
-            if($mode=0){
-                $url = base_url().'akb/isidokbc/'.$id;
-            }else{
-                $url = base_url().'akb/isidokbc/'.$id.'/1';
+    public function simpanbomjf($id, $mode = 0)
+    {
+        $hasil = $this->akbmodel->hitungbomjf($id, $mode);
+        $simpan = $this->akbmodel->simpanbom($hasil['ok'], $id);
+        if ($simpan) {
+            if ($mode = 0) {
+                $url = base_url() . 'akb/isidokbc/' . $id;
+            } else {
+                $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             }
             redirect($url);
         }
     }
-    public function hitungbom($id,$mode=0){
-        $hasil['hasil'] = $this->akbmodel->hitungbom($id,$mode);
+    public function hitungbom($id, $mode = 0)
+    {
+        $hasil['hasil'] = $this->akbmodel->hitungbom($id, $mode);
         $hasil['idheader'] = $id;
-        $this->load->view('akb/viewhitungbom',$hasil);
+        $this->load->view('akb/viewhitungbom', $hasil);
     }
-    public function hitungbomjf($id,$mode=0){
-        $hasil['hasil'] = $this->akbmodel->hitungbomjf($id,$mode);
+    public function hitungbomjf($id, $mode = 0)
+    {
+        $hasil['hasil'] = $this->akbmodel->hitungbomjf($id, $mode);
         $hasil['idheader'] = $id;
-        $this->load->view('akb/viewhitungbom',$hasil);
+        $this->load->view('akb/viewhitungbom', $hasil);
     }
-    public function editbombc($id){
+    public function editbombc($id)
+    {
         $hasil['detail'] = $this->akbmodel->getdetbombyid($id)->row_array();
-        $this->load->view('akb/editbombc',$hasil);
+        $this->load->view('akb/editbombc', $hasil);
     }
-    public function simpandetailbombc(){
+    public function simpandetailbombc()
+    {
         $data = [
             'id' => $_POST['id'],
             'nobontr' => trim(strtoupper($_POST['nobontr'])),
-            'bm' => $_POST['bm']=='true' ? 5 : 0,
-            'ppn' => $_POST['ppn']=='true' ? 11 : 0,
-            'pph' => $_POST['pph']=='true' ? 2.5 : 0,
+            'bm' => $_POST['bm'] == 'true' ? 5 : 0,
+            'ppn' => $_POST['ppn'] == 'true' ? 11 : 0,
+            'pph' => $_POST['pph'] == 'true' ? 2.5 : 0,
         ];
         $hasil = $this->akbmodel->simpandetailbombc($data);
         echo $hasil;
     }
-    public function addkontrak($id,$dept){
+    public function addkontrak($id, $dept)
+    {
         $data['idheader'] = $id;
         $kondisi = [
             'dept_id' => $dept,
@@ -2097,26 +2154,29 @@ class Akb extends CI_Controller
             'datkecuali' => 1,
             'nomorbpj != ' => '',
             'nomor_ssb != ' => '',
-            'penjamin != ' => '' 
+            'penjamin != ' => ''
         ];
         $data['kontrak'] = $this->kontrakmodel->getdatakontrak261($kondisi);
-        $this->load->view('akb/addkontrak',$data);
+        $this->load->view('akb/addkontrak', $data);
     }
-    public function simpanaddkontrak(){
+    public function simpanaddkontrak()
+    {
         $data = [
             'id' => $_POST['id'],
             'id_kontrak' => $_POST['kontrak']
         ];
         return $this->akbmodel->simpanaddkontrak($data);
     }
-    public function hapuskontrak($id){
+    public function hapuskontrak($id)
+    {
         $hasil = $this->akbmodel->hapuskontrak($id);
-        if($hasil){
-            $url = base_url().'akb/isidokbc/'.$id.'/1';
+        if ($hasil) {
+            $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             redirect($url);
         }
     }
-    public function masukkelampiran(){
+    public function masukkelampiran()
+    {
         $data = [
             'id_header' => $_POST['id'],
             'kode_dokumen' => $_POST['field'],
@@ -2126,7 +2186,8 @@ class Akb extends CI_Controller
         $hasil = $this->akbmodel->masukkelampiran($data);
         echo $hasil;
     }
-    public function uploadijin($id,$mode=0){
+    public function uploadijin($id, $mode = 0)
+    {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
         $sheet->setTitle("BARANG DIKIRIM");
@@ -2166,75 +2227,75 @@ class Akb extends CI_Controller
         $isiheader = $this->akbmodel->getdatabyid($id);
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
         $inv = $this->akbmodel->excellampiran261($id);
-        $no=0;
+        $no = 0;
         $numrow = 2;
-        foreach($inv->result_array() as $datbarangkirim){
+        foreach ($inv->result_array() as $datbarangkirim) {
             $no++;
-            $hs = trim($datbarangkirim['po'])!='' ? substr($datbarangkirim['hsx'],0,8) : substr($datbarangkirim['nohs'],0,8) ;
-            $sku = trim($datbarangkirim['po'])=='' ? $datbarangkirim['kode'] : viewsku($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis'],$datbarangkirim['id_barang']);
-            $spekbarang = trim($datbarangkirim['po'])=='' ? namaspekbarang($datbarangkirim['id_barang']) : spekpo($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis']);
+            $hs = trim($datbarangkirim['po']) != '' ? substr($datbarangkirim['hsx'], 0, 8) : substr($datbarangkirim['nohs'], 0, 8);
+            $sku = trim($datbarangkirim['po']) == '' ? $datbarangkirim['kode'] : viewsku($datbarangkirim['po'], $datbarangkirim['item'], $datbarangkirim['dis'], $datbarangkirim['id_barang']);
+            $spekbarang = trim($datbarangkirim['po']) == '' ? namaspekbarang($datbarangkirim['id_barang']) : spekpo($datbarangkirim['po'], $datbarangkirim['item'], $datbarangkirim['dis']);
 
-            $sheet->setCellValue('A'.$numrow, $no);
-            $sheet->setCellValue('C'.$numrow, '050500');
-            $sheet->setCellValue('H'.$numrow, $hs);
-            $sheet->setCellValue('I'.$numrow, '-');
-            $sheet->setCellValue('J'.$numrow, '-');
-            $sheet->setCellValue('K'.$numrow, '-');
-            $sheet->setCellValue('L'.$numrow, $spekbarang);
-            $sheet->setCellValue('M'.$numrow, $sku);
-            $sheet->setCellValue('Q'.$numrow, 'KGM');
-            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('C' . $numrow, '050500');
+            $sheet->setCellValue('H' . $numrow, $hs);
+            $sheet->setCellValue('I' . $numrow, '-');
+            $sheet->setCellValue('J' . $numrow, '-');
+            $sheet->setCellValue('K' . $numrow, '-');
+            $sheet->setCellValue('L' . $numrow, $spekbarang);
+            $sheet->setCellValue('M' . $numrow, $sku);
+            $sheet->setCellValue('Q' . $numrow, 'KGM');
+            $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
             $nodet = 0;
-            foreach($inv2->result_array() as $det){
-                $asalbar = $det['jns_bc']==23 ? 1 : 2 ;
+            foreach ($inv2->result_array() as $det) {
+                $asalbar = $det['jns_bc'] == 23 ? 1 : 2;
                 $kursusd = $kurssekarang['usd'];
-                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                $ndpbm = $det['mt_uang'] == '' || $det['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+                $pembagi = $det['weight'] == 0 ? 1 : $det['weight'];
                 switch ($det['mt_uang']) {
                     case 'JPY':
-                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
-                        $cif = $jpy/$kursusd;
+                        $jpy = $det['cif'] * $kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy / $kursusd;
                         break;
                     default:
                         $cif = $det['cif'];
                         break;
                 }
-                if(count($det) > 0){
+                if (count($det) > 0) {
                     $nodet++;
-                    $sheet->setCellValue('B'.$numrow, $det['jns_bc']);
-                    $sheet->setCellValue('D'.$numrow, $det['nomor_aju']);
-                    $sheet->setCellValue('E'.$numrow, $det['nomor_bc']);
-                    $sheet->setCellValue('F'.$numrow, date('d-m-Y',strtotime($det['tgl_bc'])));
-                    $sheet->setCellValue('G'.$numrow, $det['serbar']);
-                    $sheet->setCellValue('N'.$numrow, $asalbar);
-                    $sheet->setCellValue('O'.$numrow, $det['kode_negara']);
-                    $sheet->setCellValue('P'.$numrow, round($det['kgs'],2));
-                    $sheet->setCellValue('R'.$numrow, round($det['kgs'],2));
-                    $sheet->setCellValue('S'.$numrow, $kursusd);
-                    $sheet->setCellValue('T'.$numrow, 'USD');
-                    $sheet->setCellValue('U'.$numrow, round(($cif/$pembagi)*$det['kgs'],2));
-                    $sheet->setCellValue('V'.$numrow, round((($cif/$pembagi)*$det['kgs']),2)*$ndpbm);
-                    $sheet->setCellValue('AE'.$numrow, 1);
-                    if($nodet > 1){
-                        $sheet->setCellValue('A'.$numrow, $no);
-                        $sheet->setCellValue('C'.$numrow, '050500');
-                        $sheet->setCellValue('H'.$numrow, $hs);
-                        $sheet->setCellValue('I'.$numrow, '-');
-                        $sheet->setCellValue('J'.$numrow, '-');
-                        $sheet->setCellValue('K'.$numrow, '-');
-                        $sheet->setCellValue('L'.$numrow, $spekbarang);
-                        $sheet->setCellValue('M'.$numrow, $sku);
-                        $sheet->setCellValue('P'.$numrow, $det['kgs']);
-                        $sheet->setCellValue('Q'.$numrow, 'KGM');
+                    $sheet->setCellValue('B' . $numrow, $det['jns_bc']);
+                    $sheet->setCellValue('D' . $numrow, $det['nomor_aju']);
+                    $sheet->setCellValue('E' . $numrow, $det['nomor_bc']);
+                    $sheet->setCellValue('F' . $numrow, date('d-m-Y', strtotime($det['tgl_bc'])));
+                    $sheet->setCellValue('G' . $numrow, $det['serbar']);
+                    $sheet->setCellValue('N' . $numrow, $asalbar);
+                    $sheet->setCellValue('O' . $numrow, $det['kode_negara']);
+                    $sheet->setCellValue('P' . $numrow, round($det['kgs'], 2));
+                    $sheet->setCellValue('R' . $numrow, round($det['kgs'], 2));
+                    $sheet->setCellValue('S' . $numrow, $kursusd);
+                    $sheet->setCellValue('T' . $numrow, 'USD');
+                    $sheet->setCellValue('U' . $numrow, round(($cif / $pembagi) * $det['kgs'], 2));
+                    $sheet->setCellValue('V' . $numrow, round((($cif / $pembagi) * $det['kgs']), 2) * $ndpbm);
+                    $sheet->setCellValue('AE' . $numrow, 1);
+                    if ($nodet > 1) {
+                        $sheet->setCellValue('A' . $numrow, $no);
+                        $sheet->setCellValue('C' . $numrow, '050500');
+                        $sheet->setCellValue('H' . $numrow, $hs);
+                        $sheet->setCellValue('I' . $numrow, '-');
+                        $sheet->setCellValue('J' . $numrow, '-');
+                        $sheet->setCellValue('K' . $numrow, '-');
+                        $sheet->setCellValue('L' . $numrow, $spekbarang);
+                        $sheet->setCellValue('M' . $numrow, $sku);
+                        $sheet->setCellValue('P' . $numrow, $det['kgs']);
+                        $sheet->setCellValue('Q' . $numrow, 'KGM');
                     }
                     $numrow++;
-                }else{
+                } else {
                     $numrow++;
                 }
             }
             // $numrow++;
         }
-        
+
 
         $newSheet2 = $spreadsheet->createSheet(1);
         $newSheet2->setTitle('BARANG DIKIRIM TARIF');
@@ -2255,47 +2316,47 @@ class Akb extends CI_Controller
         $sheet->setCellValue('M1', "KODE SUB KOMODITI CUKAI");
         $sheet->setCellValue('N1', "FLAG TIS");
         $sheet->setCellValue('O1', "FLAG PELEKATAN");
-        
+
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
         $inv = $this->akbmodel->excellampiran261($id);
-        $no=0;
+        $no = 0;
         $numrow = 2;
-        foreach($inv->result_array() as $datbarangkirim){
+        foreach ($inv->result_array() as $datbarangkirim) {
             $no++;
-            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
-            $pajak = ['BM','PPN','PPH'];
-            $kdfas = [3,6,6];
-            foreach($inv2->result_array() as $det){
-                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+            $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
+            $pajak = ['BM', 'PPN', 'PPH'];
+            $kdfas = [3, 6, 6];
+            foreach ($inv2->result_array() as $det) {
+                $pembagi = $det['weight'] == 0 ? 1 : $det['weight'];
                 // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
                 // $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
-                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
+                $ndpbm = $det['mt_uang'] == '' || $det['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+                $fld = $det['mt_uang'] == '' ? 'IDR' : $det['mt_uang'];
                 // $dpp = $det['kgs']*(round(($det['cif']/$pembagi),2)*$kurssekarang[strtolower($fld)]);
                 switch ($det['mt_uang']) {
                     case 'JPY':
-                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
-                        $cif = $jpy/$kursusd;
+                        $jpy = $det['cif'] * $kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy / $kursusd;
                         break;
                     default:
                         $cif = $det['cif'];
                         break;
                 }
                 // $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
-                $dpp = (round(($cif/$pembagi)*$det['kgs'],2))*$ndpbm;
+                $dpp = (round(($cif / $pembagi) * $det['kgs'], 2)) * $ndpbm;
                 // $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
-                for($x=0;$x<3;$x++){
+                for ($x = 0; $x < 3; $x++) {
                     $tambahdpp = 0;
-                    if($pajak[$x]!='BM' && $det[strtolower($pajak[$x])] > 0){
-                        $tambahdpp = $dpp*($det['bm']/100);
+                    if ($pajak[$x] != 'BM' && $det[strtolower($pajak[$x])] > 0) {
+                        $tambahdpp = $dpp * ($det['bm'] / 100);
                     }
-                    $sheet->setCellValue('A'.$numrow,$no);
-                    $sheet->setCellValue('B'.$numrow,$pajak[$x]);
-                    $sheet->setCellValue('C'.$numrow,1);
-                    $sheet->setCellValue('D'.$numrow,$det[strtolower($pajak[$x])]);
-                    $sheet->setCellValue('E'.$numrow,$kdfas[$x]);
-                    $sheet->setCellValue('F'.$numrow,100);
-                    $sheet->setCellValue('H'.$numrow,round(($tambahdpp+$dpp)*($det[strtolower($pajak[$x])]/100)));
+                    $sheet->setCellValue('A' . $numrow, $no);
+                    $sheet->setCellValue('B' . $numrow, $pajak[$x]);
+                    $sheet->setCellValue('C' . $numrow, 1);
+                    $sheet->setCellValue('D' . $numrow, $det[strtolower($pajak[$x])]);
+                    $sheet->setCellValue('E' . $numrow, $kdfas[$x]);
+                    $sheet->setCellValue('F' . $numrow, 100);
+                    $sheet->setCellValue('H' . $numrow, round(($tambahdpp + $dpp) * ($det[strtolower($pajak[$x])] / 100)));
                     $numrow++;
                 }
             }
@@ -2342,70 +2403,70 @@ class Akb extends CI_Controller
 
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
         $inv = $this->akbmodel->excellampiran261($id);
-        $no=0;
-        $nop=0;
+        $no = 0;
+        $nop = 0;
         $numrow = 2;
-        foreach($inv->result_array() as $datbarangkirim){
+        foreach ($inv->result_array() as $datbarangkirim) {
             $no++;
             $nop++;
-            $hs = trim($datbarangkirim['po'])!='' ? substr($datbarangkirim['hsx'],0,8) : substr($datbarangkirim['nohs'],0,8) ;
-            $sku = trim($datbarangkirim['po'])=='' ? $datbarangkirim['kode'] : viewsku($datbarangkirim['po'],$datbarangkirim['item'],$datbarangkirim['dis'],$datbarangkirim['id_barang']);
+            $hs = trim($datbarangkirim['po']) != '' ? substr($datbarangkirim['hsx'], 0, 8) : substr($datbarangkirim['nohs'], 0, 8);
+            $sku = trim($datbarangkirim['po']) == '' ? $datbarangkirim['kode'] : viewsku($datbarangkirim['po'], $datbarangkirim['item'], $datbarangkirim['dis'], $datbarangkirim['id_barang']);
 
-            $sheet->setCellValue('A'.$numrow, $nop);
-            $sheet->setCellValue('B'.$numrow, $no);
-            $sheet->setCellValue('D'.$numrow, '050500');
-            $sheet->setCellValue('J'.$numrow, '-');
-            $sheet->setCellValue('K'.$numrow, '-');
-            $sheet->setCellValue('L'.$numrow, '-');
-            $sheet->setCellValue('R'.$numrow, 'KGM');
+            $sheet->setCellValue('A' . $numrow, $nop);
+            $sheet->setCellValue('B' . $numrow, $no);
+            $sheet->setCellValue('D' . $numrow, '050500');
+            $sheet->setCellValue('J' . $numrow, '-');
+            $sheet->setCellValue('K' . $numrow, '-');
+            $sheet->setCellValue('L' . $numrow, '-');
+            $sheet->setCellValue('R' . $numrow, 'KGM');
             // $sheet->setCellValue('AF'.$numrow, 1);
             // $sheet->setCellValue('AG'.$numrow, 'N');
-            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
             $nodet = 0;
-            foreach($inv2->result_array() as $det){
-                $asalbar = $det['jns_bc']==23 ? 1 : 2 ;
+            foreach ($inv2->result_array() as $det) {
+                $asalbar = $det['jns_bc'] == 23 ? 1 : 2;
                 $kursusd = $kurssekarang['usd'];
-                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                $ndpbm = $det['mt_uang'] == '' || $det['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+                $pembagi = $det['weight'] == 0 ? 1 : $det['weight'];
                 $spekbarang = namaspekbarang($det['id_barang']);
                 switch ($det['mt_uang']) {
                     case 'JPY':
-                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
-                        $cif = $jpy/$kursusd;
+                        $jpy = $det['cif'] * $kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy / $kursusd;
                         break;
                     default:
                         $cif = $det['cif'];
                         break;
                 }
-                if(count($det) > 0){
+                if (count($det) > 0) {
                     $nodet++;
-                    $sheet->setCellValue('C'.$numrow, $det['jns_bc']);
-                    $sheet->setCellValue('E'.$numrow, $det['nomor_aju']);
-                    $sheet->setCellValue('F'.$numrow, $det['nomor_bc']);
-                    $sheet->setCellValue('G'.$numrow, date('d-m-Y',strtotime($det['tgl_bc'])));
-                    $sheet->setCellValue('H'.$numrow, $det['serbar']);
-                    $sheet->setCellValue('I'.$numrow, $det['nohs']);
-                    $sheet->setCellValue('M'.$numrow, $spekbarang);
-                    $sheet->setCellValue('N'.$numrow, $det['kode']);
-                    $sheet->setCellValue('O'.$numrow, $asalbar);
-                    $sheet->setCellValue('P'.$numrow, $det['kode_negara']);
-                    $sheet->setCellValue('Q'.$numrow, round($det['kgs'],2));
-                    $sheet->setCellValue('R'.$numrow, 'KGM');
-                    $sheet->setCellValue('S'.$numrow, round($det['kgs'],2));
-                    $sheet->setCellValue('T'.$numrow, $kursusd);
-                    $sheet->setCellValue('U'.$numrow, 'USD');
-                    $sheet->setCellValue('V'.$numrow, round(($cif/$pembagi)*$det['kgs'],2));
-                    $sheet->setCellValue('W'.$numrow, (round(($cif/$pembagi)*$det['kgs'],2))*$ndpbm);
-                    $sheet->setCellValue('AF'.$numrow, 1);
-                    $sheet->setCellValue('AG'.$numrow, 'N');
-                    if($nodet > 1){
+                    $sheet->setCellValue('C' . $numrow, $det['jns_bc']);
+                    $sheet->setCellValue('E' . $numrow, $det['nomor_aju']);
+                    $sheet->setCellValue('F' . $numrow, $det['nomor_bc']);
+                    $sheet->setCellValue('G' . $numrow, date('d-m-Y', strtotime($det['tgl_bc'])));
+                    $sheet->setCellValue('H' . $numrow, $det['serbar']);
+                    $sheet->setCellValue('I' . $numrow, $det['nohs']);
+                    $sheet->setCellValue('M' . $numrow, $spekbarang);
+                    $sheet->setCellValue('N' . $numrow, $det['kode']);
+                    $sheet->setCellValue('O' . $numrow, $asalbar);
+                    $sheet->setCellValue('P' . $numrow, $det['kode_negara']);
+                    $sheet->setCellValue('Q' . $numrow, round($det['kgs'], 2));
+                    $sheet->setCellValue('R' . $numrow, 'KGM');
+                    $sheet->setCellValue('S' . $numrow, round($det['kgs'], 2));
+                    $sheet->setCellValue('T' . $numrow, $kursusd);
+                    $sheet->setCellValue('U' . $numrow, 'USD');
+                    $sheet->setCellValue('V' . $numrow, round(($cif / $pembagi) * $det['kgs'], 2));
+                    $sheet->setCellValue('W' . $numrow, (round(($cif / $pembagi) * $det['kgs'], 2)) * $ndpbm);
+                    $sheet->setCellValue('AF' . $numrow, 1);
+                    $sheet->setCellValue('AG' . $numrow, 'N');
+                    if ($nodet > 1) {
                         $nop++;
-                        $sheet->setCellValue('A'.$numrow, $nop);
-                        $sheet->setCellValue('B'.$numrow, $no);
-                        $sheet->setCellValue('D'.$numrow, '050500'); 
+                        $sheet->setCellValue('A' . $numrow, $nop);
+                        $sheet->setCellValue('B' . $numrow, $no);
+                        $sheet->setCellValue('D' . $numrow, '050500');
                     }
                     $numrow++;
-                }else{
+                } else {
                     $numrow++;
                 }
             }
@@ -2435,50 +2496,50 @@ class Akb extends CI_Controller
 
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
         $inv = $this->akbmodel->excellampiran261($id);
-        $no=0;
-        $nop=0;
+        $no = 0;
+        $nop = 0;
         $numrow = 2;
-        foreach($inv->result_array() as $datbarangkirim){
+        foreach ($inv->result_array() as $datbarangkirim) {
             $no++;
             $nop++;
-            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
-            $pajak = ['BM','PPN','PPH'];
-            $kdfas = [3,6,6];
-            $nodet=0;
-            foreach($inv2->result_array() as $det){
+            $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
+            $pajak = ['BM', 'PPN', 'PPH'];
+            $kdfas = [3, 6, 6];
+            $nodet = 0;
+            foreach ($inv2->result_array() as $det) {
                 $nodet++;
-                $pembagi = $det['weight']==0 ? 1 : $det['weight'];
+                $pembagi = $det['weight'] == 0 ? 1 : $det['weight'];
                 // $dpp = ($det['cif']/$pembagi)*$kurssekarang[strtolower($det['mt_uang'])];
-                $ndpbm = $det['mt_uang']=='' || $det['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                $fld = $det['mt_uang']=='' ? 'IDR' : $det['mt_uang'];
+                $ndpbm = $det['mt_uang'] == '' || $det['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+                $fld = $det['mt_uang'] == '' ? 'IDR' : $det['mt_uang'];
                 // $dpp = $det['kgs']*(round(($det['cif']/$pembagi),2)*$kurssekarang[strtolower($fld)]);
                 switch ($det['mt_uang']) {
                     case 'JPY':
-                        $jpy = $det['cif']*$kurssekarang[strtolower($det['mt_uang'])];
-                        $cif = $jpy/$kursusd;
+                        $jpy = $det['cif'] * $kurssekarang[strtolower($det['mt_uang'])];
+                        $cif = $jpy / $kursusd;
                         break;
                     default:
                         $cif = $det['cif'];
                         break;
                 }
                 // $dpp = $det['kgs']*(($det['cif']/$pembagi)*$kurssekarang[strtolower($fld)]);
-                $dpp = (round(($cif/$pembagi)*$det['kgs'],2))*$ndpbm;
-                if($nodet > 1){
+                $dpp = (round(($cif / $pembagi) * $det['kgs'], 2)) * $ndpbm;
+                if ($nodet > 1) {
                     $nop++;
                 }
-                for($x=0;$x<3;$x++){
+                for ($x = 0; $x < 3; $x++) {
                     $tambahdpp = 0;
-                    if($pajak[$x]!='BM' && $det[strtolower($pajak[$x])] > 0){
-                        $tambahdpp = $dpp*($det['bm']/100);
+                    if ($pajak[$x] != 'BM' && $det[strtolower($pajak[$x])] > 0) {
+                        $tambahdpp = $dpp * ($det['bm'] / 100);
                     }
-                    $sheet->setCellValue('A'.$numrow,$nop);
-                    $sheet->setCellValue('B'.$numrow,$no);
-                    $sheet->setCellValue('C'.$numrow,$pajak[$x]);
-                    $sheet->setCellValue('D'.$numrow,1);
-                    $sheet->setCellValue('E'.$numrow,$det[strtolower($pajak[$x])]);
-                    $sheet->setCellValue('F'.$numrow,$kdfas[$x]);
-                    $sheet->setCellValue('G'.$numrow,100);
-                    $sheet->setCellValue('I'.$numrow,round(($tambahdpp+$dpp)*($det[strtolower($pajak[$x])]/100)));
+                    $sheet->setCellValue('A' . $numrow, $nop);
+                    $sheet->setCellValue('B' . $numrow, $no);
+                    $sheet->setCellValue('C' . $numrow, $pajak[$x]);
+                    $sheet->setCellValue('D' . $numrow, 1);
+                    $sheet->setCellValue('E' . $numrow, $det[strtolower($pajak[$x])]);
+                    $sheet->setCellValue('F' . $numrow, $kdfas[$x]);
+                    $sheet->setCellValue('G' . $numrow, 100);
+                    $sheet->setCellValue('I' . $numrow, round(($tambahdpp + $dpp) * ($det[strtolower($pajak[$x])] / 100)));
                     $numrow++;
                 }
             }
@@ -2506,28 +2567,29 @@ class Akb extends CI_Controller
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 2;
         // Set baris pertama untuk isi tabel adalah baris ke 3   
-        $jumlahpcs = 0;$jumlahkgs=0; 
+        $jumlahpcs = 0;
+        $jumlahkgs = 0;
         foreach ($inv->result_array() as $data) {
-            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
-            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
-            $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
-            $jumlahkgs+=$data['kgs'];
-            if(trim($data['kodebc'])!='KGM'){
+            $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis'], $data['id_barang']);
+            $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
+            $hs = trim($data['po']) != '' ? substr($data['hsx'], 0, 8) : substr($data['nohs'], 0, 8);
+            $pcs = trim($data['kodebc']) == 'KGM' ? $data['kgs'] : $data['pcs'];
+            $jumlahkgs += $data['kgs'];
+            if (trim($data['kodebc']) != 'KGM') {
                 $jumlahpcs += $data['pcs'];
             }
             $numawal = $numrow;
-            $numakhir = $numrow-1;
+            $numakhir = $numrow - 1;
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $hs);
             $sheet->setCellValue('F' . $numrow, $spekbarang);
             $sheet->setCellValue('H' . $numrow, $pcs);
             $sheet->setCellValue('I' . $numrow, $data['kodebc']);
-            $sheet->setCellValue('J' . $numrow, round($data['kgs'],2));
+            $sheet->setCellValue('J' . $numrow, round($data['kgs'], 2));
 
             $numrow++;
-            $no++;  
+            $no++;
         }
 
         $newSheet6 = $spreadsheet->createSheet(5);
@@ -2577,55 +2639,56 @@ class Akb extends CI_Controller
 
         $inv = $this->akbmodel->excellampiran261($id);
         $no = 1;
-        $nop=0;
+        $nop = 0;
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 2;
         // Set baris pertama untuk isi tabel adalah baris ke 3   
-        $jumlahpcs = 0;$jumlahkgs=0; 
+        $jumlahpcs = 0;
+        $jumlahkgs = 0;
         foreach ($inv->result_array() as $data) {
-            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
-            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
-            $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
-            $jumlahkgs+=$data['kgs'];
-            if(trim($data['kodebc'])!='KGM'){
+            $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis'], $data['id_barang']);
+            $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
+            $hs = trim($data['po']) != '' ? substr($data['hsx'], 0, 8) : substr($data['nohs'], 0, 8);
+            $pcs = trim($data['kodebc']) == 'KGM' ? $data['kgs'] : $data['pcs'];
+            $jumlahkgs += $data['kgs'];
+            if (trim($data['kodebc']) != 'KGM') {
                 $jumlahpcs += $data['pcs'];
             }
             $numawal = $numrow;
-            $numakhir = $numrow-1;
+            $numakhir = $numrow - 1;
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, round($data['kgs'],2));
-            $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+            $sheet->setCellValue('B' . $numrow, round($data['kgs'], 2));
+            $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
             $nodet = 0;
-            foreach($inv2->result_array() as $det){
+            foreach ($inv2->result_array() as $det) {
                 $nodet++;
-                $kiloan = $data['kgs']==0 ? 1 : $data['kgs'];
-                if($nodet > 1){
+                $kiloan = $data['kgs'] == 0 ? 1 : $data['kgs'];
+                if ($nodet > 1) {
                     $sheet->setCellValue('A' . $numrow, $no);
-                    $sheet->setCellValue('B' . $numrow, round($data['kgs'],2));
+                    $sheet->setCellValue('B' . $numrow, round($data['kgs'], 2));
                 }
-                if(count($det) > 0){
+                if (count($det) > 0) {
                     $nop++;
                     $sheet->setCellValue('C' . $numrow, $nop);
-                    $sheet->setCellValue('D' . $numrow, round($det['kgs'],2));
-                    $sheet->setCellValue('E' . $numrow, round($det['kgs']/$kiloan,2));
+                    $sheet->setCellValue('D' . $numrow, round($det['kgs'], 2));
+                    $sheet->setCellValue('E' . $numrow, round($det['kgs'] / $kiloan, 2));
                     $numrow++;
-                }else{
+                } else {
                     $numrow++;
                 }
             }
-            $no++;  
+            $no++;
         }
 
 
         $sheet = $spreadsheet->setActiveSheetIndex(0);
-        
+
         // $inv = $this->akbmodel->exceljaminan261($id);
 
         // Proses file excel    
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Dokumen Perijinan AJU "'.$id.'".xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="Dokumen Perijinan AJU "' . $id . '".xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
@@ -2634,7 +2697,8 @@ class Akb extends CI_Controller
         $spreadsheet->disconnectWorksheet();
         unset($spreadsheet);
     }
-    public function rekapnobontr($id,$mode=0){
+    public function rekapnobontr($id, $mode = 0)
+    {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
@@ -2661,7 +2725,7 @@ class Akb extends CI_Controller
         $sheet->getColumnDimension('G')->setWidth(2.06, 'cm');
         $sheet->getColumnDimension('H')->setWidth(2.38, 'cm');
         $sheet->getColumnDimension('I')->setWidth(2, 'cm');
-        
+
         $inv = $this->akbmodel->exceljaminan261($id);
         $no = 1;
 
@@ -2701,10 +2765,11 @@ class Akb extends CI_Controller
         $writer->save('php://output');
         $this->helpermodel->isilog('Download Excel Rekap NOMOR IB' . $this->session->userdata('currdept'));
     }
-    public function excellampiran261($id,$mode=0){
+    public function excellampiran261($id, $mode = 0)
+    {
         $spreadsheet = new Spreadsheet();
         // $dir = "assets/docs/templatekontrakdankonversi.xlsx";
-        
+
         try {
             // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($dir);
             $styleArray = [
@@ -2723,7 +2788,7 @@ class Akb extends CI_Controller
             $sheet->setTitle('Lampiran Bahan Baku');
             $sheet->setCellValue('A1', "BAHAN BAKU SUBKON"); // Set kolom A1 dengan tulisan "DATA SISWA"    
             $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
-            $sheet->getStyle('A1')->getFont()->setSize(14);   
+            $sheet->getStyle('A1')->getFont()->setSize(14);
 
             // Buat header tabel nya pada baris ke 3    
             $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"  
@@ -2759,33 +2824,40 @@ class Akb extends CI_Controller
             $sheet->getStyle('H3')->applyFromArray($styleArray);
             $sheet->getColumnDimension('H')->setWidth(5.09, 'cm');
 
-            $sheet->getStyle('A3')->getFont()->setSize(13);  
-            $sheet->getStyle('B3')->getFont()->setSize(13);  
-            $sheet->getStyle('C3')->getFont()->setSize(13);  
-            $sheet->getStyle('D3')->getFont()->setSize(13);  
-            $sheet->getStyle('E3')->getFont()->setSize(13);  
-            $sheet->getStyle('F3')->getFont()->setSize(13);  
-            $sheet->getStyle('G3')->getFont()->setSize(13);  
-            $sheet->getStyle('H3')->getFont()->setSize(13);  
+            $sheet->getStyle('A3')->getFont()->setSize(13);
+            $sheet->getStyle('B3')->getFont()->setSize(13);
+            $sheet->getStyle('C3')->getFont()->setSize(13);
+            $sheet->getStyle('D3')->getFont()->setSize(13);
+            $sheet->getStyle('E3')->getFont()->setSize(13);
+            $sheet->getStyle('F3')->getFont()->setSize(13);
+            $sheet->getStyle('G3')->getFont()->setSize(13);
+            $sheet->getStyle('H3')->getFont()->setSize(13);
             $inv = $this->akbmodel->excellampiran261($id);
+            $header = $this->akbmodel->getdatabyid($id);
+            // echo "<pre>";
+            // print_r($header);
+            // echo "</pre>";
+            // die();
+
             $no = 1;
 
             // Untuk penomoran tabel, di awal set dengan 1    
             $numrow = 4;
             $sheet = $spreadsheet->setActiveSheetIndex(0);
             // Set baris pertama untuk isi tabel adalah baris ke 3   
-            $jumlahpcs = 0;$jumlahkgs=0; 
+            $jumlahpcs = 0;
+            $jumlahkgs = 0;
             foreach ($inv->result_array() as $data) {
-                $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-                $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
-                $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
-                $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
-                $jumlahkgs+=$data['kgs'];
-                if(trim($data['kodebc'])!='KGM'){
+                $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis'], $data['id_barang']);
+                $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
+                $hs = trim($data['po']) != '' ? substr($data['hsx'], 0, 8) : substr($data['nohs'], 0, 8);
+                $pcs = trim($data['kodebc']) == 'KGM' ? $data['kgs'] : $data['pcs'];
+                $jumlahkgs += $data['kgs'];
+                if (trim($data['kodebc']) != 'KGM') {
                     $jumlahpcs += $data['pcs'];
                 }
                 $numawal = $numrow;
-                $numakhir = $numrow-1;
+                $numakhir = $numrow - 1;
                 // Lakukan looping pada variabel      
                 $sheet->setCellValue('A' . $numrow, $no);
                 $sheet->setCellValue('B' . $numrow, $spekbarang);
@@ -2794,38 +2866,38 @@ class Akb extends CI_Controller
                 $sheet->setCellValue('E' . $numrow, $pcs);
                 $sheet->setCellValue('F' . $numrow, $data['kodebc']);
                 // $sheet->setCellValue('G' . $numrow, $data['kgs']);
-                $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
-                foreach($inv2->result_array() as $data2){
-                    if(round($data2['kgs'],2) > 0){
-                        $sheet->setCellValue('G' . $numrow, round($data2['kgs'],2));
-                        $sheet->setCellValue('H' . $numrow, 'BC.'.$data2['jns_bc'].' '.trim($data2['nomor_bc']).' '.$data2['tgl_bc']);
-                        $sheet->getStyle('G'.$numrow)->applyFromArray($styleArray);
-                        $sheet->getStyle('H'.$numrow)->applyFromArray($styleArray);
+                $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
+                foreach ($inv2->result_array() as $data2) {
+                    if (round($data2['kgs'], 2) > 0) {
+                        $sheet->setCellValue('G' . $numrow, round($data2['kgs'], 2));
+                        $sheet->setCellValue('H' . $numrow, 'BC.' . $data2['jns_bc'] . ' ' . trim($data2['nomor_bc']) . ' ' . $data2['tgl_bc']);
+                        $sheet->getStyle('G' . $numrow)->applyFromArray($styleArray);
+                        $sheet->getStyle('H' . $numrow)->applyFromArray($styleArray);
                         $numakhir++;
-                        $numrow++; 
-                    }else{
-                        $numrow++; 
+                        $numrow++;
+                    } else {
+                        $numrow++;
                     }
                 }
-                $no++;  
-                $sheet->getStyle('A'.$numawal.':A'.$numakhir)->applyFromArray($styleArray);
-                $sheet->getStyle('B'.$numawal.':B'.$numakhir)->applyFromArray($styleArray);
-                $sheet->getStyle('C'.$numawal.':C'.$numakhir)->applyFromArray($styleArray);
-                $sheet->getStyle('D'.$numawal.':D'.$numakhir)->applyFromArray($styleArray);
-                $sheet->getStyle('E'.$numawal.':E'.$numakhir)->applyFromArray($styleArray);
-                $sheet->getStyle('F'.$numawal.':F'.$numakhir)->applyFromArray($styleArray);
+                $no++;
+                $sheet->getStyle('A' . $numawal . ':A' . $numakhir)->applyFromArray($styleArray);
+                $sheet->getStyle('B' . $numawal . ':B' . $numakhir)->applyFromArray($styleArray);
+                $sheet->getStyle('C' . $numawal . ':C' . $numakhir)->applyFromArray($styleArray);
+                $sheet->getStyle('D' . $numawal . ':D' . $numakhir)->applyFromArray($styleArray);
+                $sheet->getStyle('E' . $numawal . ':E' . $numakhir)->applyFromArray($styleArray);
+                $sheet->getStyle('F' . $numawal . ':F' . $numakhir)->applyFromArray($styleArray);
             }
             $sheet->setCellValue('D' . $numrow, 'TOTAL');
-            $sheet->getStyle('D'. $numrow)->getFont()->setBold(true);
-            $sheet->getStyle('A'.$numrow.':D'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('D' . $numrow)->getFont()->setBold(true);
+            $sheet->getStyle('A' . $numrow . ':D' . $numrow)->applyFromArray($styleArray);
             $sheet->setCellValue('E' . $numrow, $jumlahpcs);
-            $sheet->getStyle('E'. $numrow)->getFont()->setBold(true);
-            $sheet->getStyle('E'.$numrow)->applyFromArray($styleArray);
-            $sheet->setCellValue('G' . $numrow, round($jumlahkgs,1));
-            $sheet->getStyle('G'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('G'. $numrow)->getFont()->setBold(true);
-            $sheet->getStyle('F'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('H'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('E' . $numrow)->getFont()->setBold(true);
+            $sheet->getStyle('E' . $numrow)->applyFromArray($styleArray);
+            $sheet->setCellValue('G' . $numrow, round($jumlahkgs, 1));
+            $sheet->getStyle('G' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('G' . $numrow)->getFont()->setBold(true);
+            $sheet->getStyle('F' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('H' . $numrow)->applyFromArray($styleArray);
 
 
 
@@ -2837,54 +2909,54 @@ class Akb extends CI_Controller
             // Buat header tabel nya pada baris ke 3    
             $sheet->setCellValue('A1', "LEMBAR KONVERSI PEMAKAIAN BAHAN BAKU"); // Set kolom A3 dengan tulisan "NO"  
             // $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
-            $sheet->getStyle('A1')->getFont()->setSize(18);    
+            $sheet->getStyle('A1')->getFont()->setSize(18);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $sheet->mergeCells('A1:O1');
             $sheet->setCellValue('A2', "NOMOR KONTRAK"); // Set kolom B3 dengan tulisan "KODE"    
-            $sheet->getStyle('A2')->getFont()->setSize(18);    
+            $sheet->getStyle('A2')->getFont()->setSize(18);
             // $sheet->getStyle('A2')->getFont()->setBold(true); // Set bold kolom A1    
             $sheet->getStyle('A2')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $sheet->mergeCells('A2:O2');
             $sheet->setCellValue('A4', "DATA PENGUSAHA TPB");
-            $sheet->getStyle('A4')->getFont()->setSize(14);   
+            $sheet->getStyle('A4')->getFont()->setSize(14);
             $sheet->setCellValue('A5', "A. NPWP");
-            $sheet->getStyle('A5')->getFont()->setSize(14);   
+            $sheet->getStyle('A5')->getFont()->setSize(14);
             $sheet->setCellValue('A6', "B. NAMA TPB");
-            $sheet->getStyle('A6')->getFont()->setSize(14);   
+            $sheet->getStyle('A6')->getFont()->setSize(14);
             $sheet->setCellValue('A7', "C. NOMOR SURAT IJIN TPB");
-            $sheet->getStyle('A7')->getFont()->setSize(14);   
+            $sheet->getStyle('A7')->getFont()->setSize(14);
             $sheet->setCellValue('C5', ":");
-            $sheet->getStyle('C5')->getFont()->setSize(14);   
+            $sheet->getStyle('C5')->getFont()->setSize(14);
             $sheet->setCellValue('C6', ":");
-            $sheet->getStyle('C6')->getFont()->setSize(14);   
+            $sheet->getStyle('C6')->getFont()->setSize(14);
             $sheet->setCellValue('C7', ":");
-            $sheet->getStyle('C7')->getFont()->setSize(14);   
+            $sheet->getStyle('C7')->getFont()->setSize(14);
             $sheet->setCellValue('D5', "01.001.717.6-057.000");
-            $sheet->getStyle('D5')->getFont()->setSize(14);   
+            $sheet->getStyle('D5')->getFont()->setSize(14);
             $sheet->setCellValue('D6', "PT. INDONEPTUNE NET MANUFACTURING");
-            $sheet->getStyle('D6')->getFont()->setSize(14);   
+            $sheet->getStyle('D6')->getFont()->setSize(14);
             $sheet->setCellValue('D7', "1555/KM.04/2017, 10 JULY 2017");
-            $sheet->getStyle('D7')->getFont()->setSize(14);   
+            $sheet->getStyle('D7')->getFont()->setSize(14);
             $sheet->setCellValue('H4', "DATA PENERIMA SUBKONTRAK");
-            $sheet->getStyle('H4')->getFont()->setSize(14);   
+            $sheet->getStyle('H4')->getFont()->setSize(14);
             $sheet->setCellValue('H5', "A. NPWP");
-            $sheet->getStyle('H5')->getFont()->setSize(14);   
+            $sheet->getStyle('H5')->getFont()->setSize(14);
             $sheet->setCellValue('H6', "B. NAMA PERUSAHAAN");
-            $sheet->getStyle('H6')->getFont()->setSize(14);   
+            $sheet->getStyle('H6')->getFont()->setSize(14);
             $sheet->setCellValue('H7', "C. ALAMAT");
-            $sheet->getStyle('H7')->getFont()->setSize(14);   
+            $sheet->getStyle('H7')->getFont()->setSize(14);
             $sheet->setCellValue('I5', ":");
-            $sheet->getStyle('I5')->getFont()->setSize(14);   
+            $sheet->getStyle('I5')->getFont()->setSize(14);
             $sheet->setCellValue('I6', ":");
-            $sheet->getStyle('I6')->getFont()->setSize(14);   
+            $sheet->getStyle('I6')->getFont()->setSize(14);
             $sheet->setCellValue('I7', ":");
-            $sheet->getStyle('I7')->getFont()->setSize(14);   
-            $sheet->setCellValue('J5', "");
-            $sheet->getStyle('J5')->getFont()->setSize(14);   
-            $sheet->setCellValue('J6', "");
-            $sheet->getStyle('J6')->getFont()->setSize(14);   
-            $sheet->setCellValue('J7', "");
-            $sheet->getStyle('J7')->getFont()->setSize(14);   
+            $sheet->getStyle('I7')->getFont()->setSize(14);
+            $sheet->setCellValue('J5', $header['npwpsubkon']);
+            $sheet->getStyle('J5')->getFont()->setSize(14);
+            $sheet->setCellValue('J6', $header['namasubkon']);
+            $sheet->getStyle('J6')->getFont()->setSize(14);
+            $sheet->setCellValue('J7', $header['alamatsubkon']);
+            $sheet->getStyle('J7')->getFont()->setSize(14);
 
             $sheet->mergeCells('A10:F10');
             $sheet->getStyle('A10:F10')->applyFromArray($styleArray);
@@ -2904,7 +2976,7 @@ class Akb extends CI_Controller
             $sheet->getStyle('O10')->getAlignment()->setWrapText(true);
             $sheet->getStyle('O10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle('O10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
-            
+
             $sheet->setCellValue('A11', "NOMOR KONVERSI");
             $sheet->getStyle('A11')->applyFromArray($styleArray);
             $sheet->getStyle('A11')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
@@ -2974,13 +3046,13 @@ class Akb extends CI_Controller
             $no = 1;
             $nok = 1;
             foreach ($inv->result_array() as $data) {
-                $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-                $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
-                $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
+                $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis'], $data['id_barang']);
+                $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
+                $hs = trim($data['po']) != '' ? substr($data['hsx'], 0, 8) : substr($data['nohs'], 0, 8);
                 // Lakukan looping pada variabel      
                 $sheet->setCellValue('A' . $numrow, $no);
                 $sheet->setCellValue('B' . $numrow, $sku);
-                $sheet->setCellValue('E' . $numrow, round($data['kgs'],2));
+                $sheet->setCellValue('E' . $numrow, round($data['kgs'], 2));
                 $sheet->setCellValue('F' . $numrow, 'KGM');
                 // $sheet->setCellValue('E' . $numrow, $data['pcs']);
                 // $sheet->setCellValue('F' . $numrow, $data['kodebc']);
@@ -2988,61 +3060,61 @@ class Akb extends CI_Controller
                 $nok = $numrow;
                 $nol = 1;
                 $numrow++;
-                $sheet->setCellValue('B' . $numrow, ' '.$hs);
+                $sheet->setCellValue('B' . $numrow, ' ' . $hs);
                 $numrow++;
                 $sheet->setCellValue('B' . $numrow, $spekbarang);
                 $numrow++;
                 $numawal = $nok;
-                $numakhir = $numrow-1;
+                $numakhir = $numrow - 1;
                 // $sheet->setCellValue('H' . $nok, "XXXX");
-                $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
-                foreach($inv2->result_array() as $data2){
-                    $kiloan = $data['kgs']==0 ? 1 : $data['kgs'];
-                    if(count($data2) > 0 && round($data2['kgs'],2) > 0){
+                $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
+                foreach ($inv2->result_array() as $data2) {
+                    $kiloan = $data['kgs'] == 0 ? 1 : $data['kgs'];
+                    if (count($data2) > 0 && round($data2['kgs'], 2) > 0) {
                         $sheet->setCellValue('G' . $nok, $nol);
                         $sheet->setCellValue('H' . $nok, $data2['kode']);
-                        $sheet->setCellValue('K' . $nok, round($data2['kgs'],2));
+                        $sheet->setCellValue('K' . $nok, round($data2['kgs'], 2));
                         $sheet->setCellValue('L' . $nok, 'KGM');
-                        $sheet->setCellValue('M' . $nok, round(($data2['kgs']/$kiloan)*100,2));
+                        $sheet->setCellValue('M' . $nok, round(($data2['kgs'] / $kiloan) * 100, 2));
                         $sheet->setCellValue('N' . $nok, 0);
-                        $sheet->setCellValue('O' . $nok, 'BC.'.$data2['jns_bc']);
-                        $nok++; 
+                        $sheet->setCellValue('O' . $nok, 'BC.' . $data2['jns_bc']);
+                        $nok++;
                         $sheet->setCellValue('H' . $nok, $data2['nohs']);
-                        $sheet->setCellValue('O' . $nok, trim($data2['nomor_bc']).' '.$data2['tgl_bc']);
-                        $nok++; 
+                        $sheet->setCellValue('O' . $nok, trim($data2['nomor_bc']) . ' ' . $data2['tgl_bc']);
+                        $nok++;
                         $sheet->setCellValue('H' . $nok, $data2['nama_barang']);
-                        $sheet->setCellValue('O' . $nok, ' No.'.$data2['serbar']);
-                        $sheet->getStyle('G'.$numawal.':G'.$nok)->applyFromArray($styleArray);
-                        $sheet->getStyle('H'.$numawal.':J'.$nok)->applyFromArray($styleArray);
-                        $sheet->getStyle('K'.$numawal.':K'.$nok)->applyFromArray($styleArray);
-                        $sheet->getStyle('L'.$numawal.':L'.$nok)->applyFromArray($styleArray);
-                        $sheet->getStyle('M'.$numawal.':M'.$nok)->applyFromArray($styleArray);
-                        $sheet->getStyle('N'.$numawal.':N'.$nok)->applyFromArray($styleArray);
-                        $sheet->getStyle('O'.$numawal.':O'.$nok)->applyFromArray($styleArray);
-                        $nok++; 
+                        $sheet->setCellValue('O' . $nok, ' No.' . $data2['serbar']);
+                        $sheet->getStyle('G' . $numawal . ':G' . $nok)->applyFromArray($styleArray);
+                        $sheet->getStyle('H' . $numawal . ':J' . $nok)->applyFromArray($styleArray);
+                        $sheet->getStyle('K' . $numawal . ':K' . $nok)->applyFromArray($styleArray);
+                        $sheet->getStyle('L' . $numawal . ':L' . $nok)->applyFromArray($styleArray);
+                        $sheet->getStyle('M' . $numawal . ':M' . $nok)->applyFromArray($styleArray);
+                        $sheet->getStyle('N' . $numawal . ':N' . $nok)->applyFromArray($styleArray);
+                        $sheet->getStyle('O' . $numawal . ':O' . $nok)->applyFromArray($styleArray);
+                        $nok++;
                         $nol++;
-                    }   
+                    }
                 }
                 $numrow = $nok;
-                $sheet->getStyle('E'.$numawal.':E'.$nok-1)->applyFromArray($styleArray);
-                $sheet->getStyle('F'.$numawal.':F'.$nok-1)->applyFromArray($styleArray);
-                $sheet->getStyle('B'.$numawal.':D'.$nok-1)->applyFromArray($styleArray);
-                $sheet->getStyle('A'.$numawal.':A'.$nok-1)->applyFromArray($styleArray);
+                $sheet->getStyle('E' . $numawal . ':E' . $nok - 1)->applyFromArray($styleArray);
+                $sheet->getStyle('F' . $numawal . ':F' . $nok - 1)->applyFromArray($styleArray);
+                $sheet->getStyle('B' . $numawal . ':D' . $nok - 1)->applyFromArray($styleArray);
+                $sheet->getStyle('A' . $numawal . ':A' . $nok - 1)->applyFromArray($styleArray);
                 // $numrow++;
                 $no++;
                 // Tambah 1 setiap kali looping      
             }
-        }catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
-                die('Error loading file: ' . $e->getMessage());
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            die('Error loading file: ' . $e->getMessage());
         }
 
         $newSheet3 = $spreadsheet->createSheet(2);
         $newSheet3->setTitle('Lampiran BARANG JADI');
         $sheet = $spreadsheet->setActiveSheetIndex(2);
-        
+
         $sheet->setCellValue('A1', "BARANG HASIL SUBKONTRAK"); // Set kolom A1 dengan tulisan "DATA SISWA"    
         $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
-        $sheet->getStyle('A1')->getFont()->setSize(14);   
+        $sheet->getStyle('A1')->getFont()->setSize(14);
 
         // Buat header tabel nya pada baris ke 3    
         $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"  
@@ -3078,32 +3150,33 @@ class Akb extends CI_Controller
         $sheet->getStyle('H3')->applyFromArray($styleArray);
         $sheet->getColumnDimension('H')->setWidth(5.09, 'cm');
 
-        $sheet->getStyle('A3')->getFont()->setSize(13);  
-        $sheet->getStyle('B3')->getFont()->setSize(13);  
-        $sheet->getStyle('C3')->getFont()->setSize(13);  
-        $sheet->getStyle('D3')->getFont()->setSize(13);  
-        $sheet->getStyle('E3')->getFont()->setSize(13);  
-        $sheet->getStyle('F3')->getFont()->setSize(13);  
-        $sheet->getStyle('G3')->getFont()->setSize(13);  
-        $sheet->getStyle('H3')->getFont()->setSize(13);  
+        $sheet->getStyle('A3')->getFont()->setSize(13);
+        $sheet->getStyle('B3')->getFont()->setSize(13);
+        $sheet->getStyle('C3')->getFont()->setSize(13);
+        $sheet->getStyle('D3')->getFont()->setSize(13);
+        $sheet->getStyle('E3')->getFont()->setSize(13);
+        $sheet->getStyle('F3')->getFont()->setSize(13);
+        $sheet->getStyle('G3')->getFont()->setSize(13);
+        $sheet->getStyle('H3')->getFont()->setSize(13);
         $inv = $this->akbmodel->excellampiran261($id);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 4;
         // Set baris pertama untuk isi tabel adalah baris ke 3   
-        $jumlahpcs = 0;$jumlahkgs=0; 
+        $jumlahpcs = 0;
+        $jumlahkgs = 0;
         foreach ($inv->result_array() as $data) {
-            $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
-            $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
-            $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
-            $jumlahkgs+=$data['kgs'];
-            if(trim($data['kodebc'])!='KGM'){
+            $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis'], $data['id_barang']);
+            $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
+            $hs = trim($data['po']) != '' ? substr($data['hsx'], 0, 8) : substr($data['nohs'], 0, 8);
+            $pcs = trim($data['kodebc']) == 'KGM' ? $data['kgs'] : $data['pcs'];
+            $jumlahkgs += $data['kgs'];
+            if (trim($data['kodebc']) != 'KGM') {
                 $jumlahpcs += $data['pcs'];
             }
             $numawal = $numrow;
-            $numakhir = $numrow-1;
+            $numakhir = $numrow - 1;
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $spekbarang);
@@ -3111,30 +3184,30 @@ class Akb extends CI_Controller
             $sheet->setCellValue('D' . $numrow, $sku);
             $sheet->setCellValue('E' . $numrow, $pcs);
             $sheet->setCellValue('F' . $numrow, $data['kodebc']);
-            $sheet->setCellValue('G' . $numrow, round($data['kgs'],2));
+            $sheet->setCellValue('G' . $numrow, round($data['kgs'], 2));
 
-            $sheet->getStyle('A'.$numrow.':A'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('B'.$numrow.':B'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('C'.$numrow.':C'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('D'.$numrow.':D'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('E'.$numrow.':E'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('F'.$numrow.':F'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('G'.$numrow.':G'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('H'.$numrow.':H'.$numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('A' . $numrow . ':A' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('B' . $numrow . ':B' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('C' . $numrow . ':C' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('D' . $numrow . ':D' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('E' . $numrow . ':E' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('F' . $numrow . ':F' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('G' . $numrow . ':G' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('H' . $numrow . ':H' . $numrow)->applyFromArray($styleArray);
             $numrow++;
-            $no++;  
+            $no++;
         }
         $sheet->setCellValue('D' . $numrow, 'TOTAL');
-        $sheet->getStyle('D'. $numrow)->getFont()->setBold(true);
-        $sheet->getStyle('A'.$numrow.':D'.$numrow)->applyFromArray($styleArray);
+        $sheet->getStyle('D' . $numrow)->getFont()->setBold(true);
+        $sheet->getStyle('A' . $numrow . ':D' . $numrow)->applyFromArray($styleArray);
         $sheet->setCellValue('E' . $numrow, $jumlahpcs);
-        $sheet->getStyle('E'. $numrow)->getFont()->setBold(true);
-        $sheet->getStyle('E'.$numrow)->applyFromArray($styleArray);
-        $sheet->setCellValue('G' . $numrow, round($jumlahkgs,1));
-        $sheet->getStyle('G'.$numrow)->applyFromArray($styleArray);
-        $sheet->getStyle('G'. $numrow)->getFont()->setBold(true);
-        $sheet->getStyle('F'.$numrow)->applyFromArray($styleArray);
-        $sheet->getStyle('H'.$numrow)->applyFromArray($styleArray);
+        $sheet->getStyle('E' . $numrow)->getFont()->setBold(true);
+        $sheet->getStyle('E' . $numrow)->applyFromArray($styleArray);
+        $sheet->setCellValue('G' . $numrow, round($jumlahkgs, 1));
+        $sheet->getStyle('G' . $numrow)->applyFromArray($styleArray);
+        $sheet->getStyle('G' . $numrow)->getFont()->setBold(true);
+        $sheet->getStyle('F' . $numrow)->applyFromArray($styleArray);
+        $sheet->getStyle('H' . $numrow)->applyFromArray($styleArray);
 
         $sheet = $spreadsheet->setActiveSheetIndex(0);
         // // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
@@ -3147,7 +3220,7 @@ class Akb extends CI_Controller
         // Proses file excel    
         ob_end_clean();
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Permohonan dan Konversi "'.$id.'".xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="Permohonan dan Konversi "' . $id . '".xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
@@ -3156,15 +3229,17 @@ class Akb extends CI_Controller
         $spreadsheet->disconnectWorksheet();
         unset($spreadsheet);
     }
-    public function exceljaminan261($id,$mode=0){
+    public function exceljaminan261($id, $mode = 0)
+    {
         $spreadsheet = new Spreadsheet();
         // $dir = "assets/docs/templatekontrakdankonversi.xlsx";
-        
+        $header = $this->akbmodel->getdatabyid($id);
+
         try {
             // $spreadsheet = \PhpOffice\PhpSpreadsheet\IOFactory::load($dir);
 
             $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
-            $sheet->setTitle('Perhitungan Jaminan '.$id);
+            $sheet->setTitle('Perhitungan Jaminan ' . $id);
 
             $styleArray = [
                 'borders' => [
@@ -3181,49 +3256,49 @@ class Akb extends CI_Controller
             // Buat header tabel nya pada baris ke 3    
             $sheet->setCellValue('A1', "LEMBAR PERHITUNGAN JAMINAN DALAM RANGKA PENGELUARAN BARANG DARI TPB KE TLDPP"); // Set kolom A3 dengan tulisan "NO"  
             // $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
-            $sheet->getStyle('A1')->getFont()->setSize(17);    
+            $sheet->getStyle('A1')->getFont()->setSize(17);
             $sheet->getStyle('A1')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $sheet->mergeCells('A1:R1');
             $sheet->setCellValue('A3', "DATA PENGUSAHA TPB");
-            $sheet->getStyle('A3')->getFont()->setSize(14);   
+            $sheet->getStyle('A3')->getFont()->setSize(14);
             $sheet->setCellValue('A4', "A. NPWP");
-            $sheet->getStyle('A4')->getFont()->setSize(14);   
+            $sheet->getStyle('A4')->getFont()->setSize(14);
             $sheet->setCellValue('A5', "B. NAMA TPB");
-            $sheet->getStyle('A5')->getFont()->setSize(14);   
+            $sheet->getStyle('A5')->getFont()->setSize(14);
             $sheet->setCellValue('A6', "C. NOMOR SURAT IJIN TPB");
-            $sheet->getStyle('A6')->getFont()->setSize(14);   
+            $sheet->getStyle('A6')->getFont()->setSize(14);
             $sheet->setCellValue('C4', ":");
-            $sheet->getStyle('C4')->getFont()->setSize(14);   
+            $sheet->getStyle('C4')->getFont()->setSize(14);
             $sheet->setCellValue('C5', ":");
-            $sheet->getStyle('C5')->getFont()->setSize(14);   
+            $sheet->getStyle('C5')->getFont()->setSize(14);
             $sheet->setCellValue('C6', ":");
-            $sheet->getStyle('C6')->getFont()->setSize(14);   
+            $sheet->getStyle('C6')->getFont()->setSize(14);
             $sheet->setCellValue('D4', "01.001.717.6-057.000");
-            $sheet->getStyle('D4')->getFont()->setSize(14);   
+            $sheet->getStyle('D4')->getFont()->setSize(14);
             $sheet->setCellValue('D5', "PT. INDONEPTUNE NET MANUFACTURING");
-            $sheet->getStyle('D5')->getFont()->setSize(14);   
+            $sheet->getStyle('D5')->getFont()->setSize(14);
             $sheet->setCellValue('D6', "1555/KM.04/2017, 10 JULY 2017");
-            $sheet->getStyle('D6')->getFont()->setSize(14);   
+            $sheet->getStyle('D6')->getFont()->setSize(14);
             $sheet->setCellValue('L3', "DATA PENERIMA SUBKONTRAK");
-            $sheet->getStyle('L3')->getFont()->setSize(14);   
+            $sheet->getStyle('L3')->getFont()->setSize(14);
             $sheet->setCellValue('L4', "A. NPWP");
-            $sheet->getStyle('L4')->getFont()->setSize(14);   
+            $sheet->getStyle('L4')->getFont()->setSize(14);
             $sheet->setCellValue('L5', "B. NAMA PERUSAHAAN");
-            $sheet->getStyle('L5')->getFont()->setSize(14);   
+            $sheet->getStyle('L5')->getFont()->setSize(14);
             $sheet->setCellValue('L6', "C. ALAMAT");
-            $sheet->getStyle('L6')->getFont()->setSize(14);   
+            $sheet->getStyle('L6')->getFont()->setSize(14);
             $sheet->setCellValue('N4', ":");
-            $sheet->getStyle('N4')->getFont()->setSize(14);   
+            $sheet->getStyle('N4')->getFont()->setSize(14);
             $sheet->setCellValue('N5', ":");
-            $sheet->getStyle('N5')->getFont()->setSize(14);   
+            $sheet->getStyle('N5')->getFont()->setSize(14);
             $sheet->setCellValue('N6', ":");
-            $sheet->getStyle('N6')->getFont()->setSize(14);   
-            $sheet->setCellValue('O4', "");
-            $sheet->getStyle('O4')->getFont()->setSize(14);   
-            $sheet->setCellValue('O5', "");
-            $sheet->getStyle('O5')->getFont()->setSize(14);   
-            $sheet->setCellValue('O6', "");
-            $sheet->getStyle('O6')->getFont()->setSize(14);   
+            $sheet->getStyle('N6')->getFont()->setSize(14);
+            $sheet->setCellValue('O4', $header['npwpsubkon']);
+            $sheet->getStyle('O4')->getFont()->setSize(14);
+            $sheet->setCellValue('O5', $header['namasubkon']);
+            $sheet->getStyle('O5')->getFont()->setSize(14);
+            $sheet->setCellValue('O6', $header['alamatsubkon']);
+            $sheet->getStyle('O6')->getFont()->setSize(14);
 
             $sheet->mergeCells('A9:J9');
             $sheet->setCellValue('A9', "DATA BAHAN BAKU");
@@ -3310,7 +3385,7 @@ class Akb extends CI_Controller
             $sheet->getStyle('R10')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle('R10')->getAlignment()->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
             $sheet->getStyle('R10:R11')->applyFromArray($styleArray);
-            
+
             $sheet->setCellValue('A12', "1");
             $sheet->getStyle('A12')->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
             $sheet->getStyle('A12')->applyFromArray($styleArray);
@@ -3384,24 +3459,26 @@ class Akb extends CI_Controller
             $numrow = 13;
             $no = 1;
             $nok = 1;
-            $sumbm=0;$sumppn=0;$sumpph=0;
+            $sumbm = 0;
+            $sumppn = 0;
+            $sumpph = 0;
             foreach ($inv->result_array() as $data) {
                 $sku = $data['kode'];
                 $spekbarang = namaspekbarang($data['id_barang']);
-                $hs =substr($data['nohs'],0,8);
-                $pembagi = $data['hamat_weight']==0 ? 1 : $data['hamat_weight'];
+                $hs = substr($data['nohs'], 0, 8);
+                $pembagi = $data['hamat_weight'] == 0 ? 1 : $data['hamat_weight'];
                 switch ($data['mt_uang']) {
                     case 'IDR':
-                        $hargaperkilo = round($data['hamat_harga']/$pembagi,2);
+                        $hargaperkilo = round($data['hamat_harga'] / $pembagi, 2);
                         break;
                     case 'USD':
-                        $hargaperkilo = ($data['cif']/$pembagi)*$kurssekarang['usd'];
+                        $hargaperkilo = ($data['cif'] / $pembagi) * $kurssekarang['usd'];
                         break;
                         break;
                     case 'JPY':
-                        $hargaperkilo = ($data['cif']/$pembagi)*$kurssekarang['jpy'];
+                        $hargaperkilo = ($data['cif'] / $pembagi) * $kurssekarang['jpy'];
                         break;
-                    
+
                     default:
                         # code...
                         break;
@@ -3418,83 +3495,83 @@ class Akb extends CI_Controller
                 //         $cif = $detbom['cif'];
                 //         break;
                 // }
-                if($data['jns_bc'] == 23){
-                    $adabm = $data['bm'] > 0 ? $hargaperkilo*($data['bm']/100) : 0;
-                    $jmbm = ($hargaperkilo*($data['bm']/100))*$data['kgs'];
-                    $jmppn = (($adabm+$hargaperkilo)*($data['ppn']/100))*$data['kgs'];
-                    $jmpph = (($adabm+$hargaperkilo)*($data['pph']/100))*$data['kgs'];
-                }else{
+                if ($data['jns_bc'] == 23) {
+                    $adabm = $data['bm'] > 0 ? $hargaperkilo * ($data['bm'] / 100) : 0;
+                    $jmbm = ($hargaperkilo * ($data['bm'] / 100)) * $data['kgs'];
+                    $jmppn = (($adabm + $hargaperkilo) * ($data['ppn'] / 100)) * $data['kgs'];
+                    $jmpph = (($adabm + $hargaperkilo) * ($data['pph'] / 100)) * $data['kgs'];
+                } else {
                     $jmbm = 0;
                     $jmppn = 0;
                     $jmpph = 0;
                 }
-                $totaljamin = $jmbm+$jmppn+$jmpph;
+                $totaljamin = $jmbm + $jmppn + $jmpph;
                 $sumbm += $jmbm;
                 $sumppn += $jmppn;
                 $sumpph += $jmpph;
                 // Lakukan looping pada variabel      
                 $numasal = $numrow;
                 $sheet->setCellValue('A' . $numrow, $no);
-                $sheet->getStyle('A'.$numrow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+                $sheet->getStyle('A' . $numrow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $sheet->setCellValue('B' . $numrow, $sku);
                 $sheet->setCellValue('E' . $numrow, $data['kgs']);
                 $sheet->setCellValue('F' . $numrow, 'KGM');
                 $sheet->setCellValue('G' . $numrow, $data['jns_bc']);
                 $sheet->setCellValue('H' . $numrow, $data['nomor_bc']);
                 $sheet->setCellValue('I' . $numrow, $data['tgl_bc']);
-                $sheet->setCellValue('K' . $numrow, round($jmbm,2));
+                $sheet->setCellValue('K' . $numrow, round($jmbm, 2));
                 $sheet->setCellValue('L' . $numrow, $data['bmt']);
                 $sheet->setCellValue('M' . $numrow, $data['cukai']);
-                $sheet->setCellValue('N' . $numrow, round($jmppn,2));
-                $sheet->mergeCells('N'.$numrow.':O'.$numrow)    ;
+                $sheet->setCellValue('N' . $numrow, round($jmppn, 2));
+                $sheet->mergeCells('N' . $numrow . ':O' . $numrow);
                 $sheet->setCellValue('P' . $numrow, $data['ppnbm']);
-                $sheet->setCellValue('Q' . $numrow, round($jmpph,2));
-                $sheet->setCellValue('R' . $numrow, round($totaljamin,2));
+                $sheet->setCellValue('Q' . $numrow, round($jmpph, 2));
+                $sheet->setCellValue('R' . $numrow, round($totaljamin, 2));
                 // $sheet->setCellValue('G' . $numrow, $data['kgs']);
                 $nok = $numrow;
                 $nol = 1;
                 $numrow++;
-                $sheet->setCellValue('B' . $numrow, ' '.$data['nohs']);
+                $sheet->setCellValue('B' . $numrow, ' ' . $data['nohs']);
                 $numrow++;
                 $sheet->setCellValue('B' . $numrow, $spekbarang);
-                $sheet->getStyle('A'.$numasal.':A'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('B'.$numasal.':D'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('E'.$numasal.':E'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('F'.$numasal.':F'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('G'.$numasal.':G'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('H'.$numasal.':H'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('I'.$numasal.':I'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('J'.$numasal.':J'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('K'.$numasal.':K'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('L'.$numasal.':L'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('M'.$numasal.':M'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('N'.$numasal.':O'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('P'.$numasal.':P'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('Q'.$numasal.':Q'.$numrow)->applyFromArray($styleArray);
-                $sheet->getStyle('R'.$numasal.':R'.$numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('A' . $numasal . ':A' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('B' . $numasal . ':D' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('E' . $numasal . ':E' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('F' . $numasal . ':F' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('G' . $numasal . ':G' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('H' . $numasal . ':H' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('I' . $numasal . ':I' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('J' . $numasal . ':J' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('K' . $numasal . ':K' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('L' . $numasal . ':L' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('M' . $numasal . ':M' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('N' . $numasal . ':O' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('P' . $numasal . ':P' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('Q' . $numasal . ':Q' . $numrow)->applyFromArray($styleArray);
+                $sheet->getStyle('R' . $numasal . ':R' . $numrow)->applyFromArray($styleArray);
                 $numrow++;
                 // $sheet->setCellValue('H' . $nok, "XXXX");
                 $no++;
                 // Tambah 1 setiap kali looping      
             }
-            $sheet->mergeCells('A'.$numrow.':J'.$numrow);
-            $sheet->setCellValue('A'.$numrow, "TOTAL");
-            $sheet->getStyle('A'.$numrow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
-            $sheet->getStyle('A'.$numrow.':J'.$numrow)->applyFromArray($styleArray);
-            $sheet->setCellValue('K'.$numrow, round($sumbm,2));
-            $sheet->getStyle('K'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('L'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('M'.$numrow)->applyFromArray($styleArray);
-            $sheet->getStyle('P'.$numrow)->applyFromArray($styleArray);
-            $sheet->mergeCells('N'.$numrow.':O'.$numrow);
-            $sheet->setCellValue('N'.$numrow, round($sumppn,2));
-            $sheet->getStyle('N'.$numrow.':O'.$numrow)->applyFromArray($styleArray);
-            $sheet->setCellValue('Q'.$numrow, round($sumpph,2));
-            $sheet->getStyle('Q'.$numrow)->applyFromArray($styleArray);
-            $sheet->setCellValue('R'.$numrow, round($sumbm+$sumppn+$sumpph,2));
-            $sheet->getStyle('R'.$numrow)->applyFromArray($styleArray);
-        }catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
-                die('Error loading file: ' . $e->getMessage());
+            $sheet->mergeCells('A' . $numrow . ':J' . $numrow);
+            $sheet->setCellValue('A' . $numrow, "TOTAL");
+            $sheet->getStyle('A' . $numrow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
+            $sheet->getStyle('A' . $numrow . ':J' . $numrow)->applyFromArray($styleArray);
+            $sheet->setCellValue('K' . $numrow, round($sumbm, 2));
+            $sheet->getStyle('K' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('L' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('M' . $numrow)->applyFromArray($styleArray);
+            $sheet->getStyle('P' . $numrow)->applyFromArray($styleArray);
+            $sheet->mergeCells('N' . $numrow . ':O' . $numrow);
+            $sheet->setCellValue('N' . $numrow, round($sumppn, 2));
+            $sheet->getStyle('N' . $numrow . ':O' . $numrow)->applyFromArray($styleArray);
+            $sheet->setCellValue('Q' . $numrow, round($sumpph, 2));
+            $sheet->getStyle('Q' . $numrow)->applyFromArray($styleArray);
+            $sheet->setCellValue('R' . $numrow, round($sumbm + $sumppn + $sumpph, 2));
+            $sheet->getStyle('R' . $numrow)->applyFromArray($styleArray);
+        } catch (\PhpOffice\PhpSpreadsheet\Reader\Exception $e) {
+            die('Error loading file: ' . $e->getMessage());
         }
 
         $sheet = $spreadsheet->setActiveSheetIndex(0);
@@ -3508,7 +3585,7 @@ class Akb extends CI_Controller
         // Proses file excel    
         ob_end_clean();
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Perhitungan Jaminan "'.$id.'".xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="Perhitungan Jaminan "' . $id . '".xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
@@ -3517,7 +3594,7 @@ class Akb extends CI_Controller
         $spreadsheet->disconnectWorksheet();
         unset($spreadsheet);
     }
-    public function buatbonexcel($id,$mode=0)
+    public function buatbonexcel($id, $mode = 0)
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
@@ -3535,15 +3612,15 @@ class Akb extends CI_Controller
         $sheet->setCellValue('H2', "PCS");
         $sheet->setCellValue('I2', "KGS");
 
-        $inv = $this->akbmodel->getdatadetailib($id,1);
+        $inv = $this->akbmodel->getdatadetailib($id, 1);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 3;
         // Set baris pertama untuk isi tabel adalah baris ke 3    
         foreach ($inv as $data) {
-            $sku = viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            $sku = viewsku($data['po'], $data['item'], $data['dis'], $data['id_barang']);
+            $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $sku);
@@ -3571,13 +3648,13 @@ class Akb extends CI_Controller
 
         // Proses file excel    
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data Detail "'.$id.'".xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="Data Detail "' . $id . '".xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         $this->helpermodel->isilog('Download Excel BOM INVENTORY' . $this->session->userdata('currdept'));
     }
-    public function toexcel($id,$mode=0)
+    public function toexcel($id, $mode = 0)
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
@@ -3593,15 +3670,15 @@ class Akb extends CI_Controller
         $sheet->setCellValue('E2', "NOBONTR");
         $sheet->setCellValue('F2', "KETERANGAN");
 
-        $inv = $this->akbmodel->hitungbomjf($id,$mode);
+        $inv = $this->akbmodel->hitungbomjf($id, $mode);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 3;
         // Set baris pertama untuk isi tabel adalah baris ke 3    
         foreach ($inv['ng'] as $data) {
-            $sku = viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            $sku = viewsku($data['po'], $data['item'], $data['dis'], $data['id_barang']);
+            $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $sku);
@@ -3632,7 +3709,8 @@ class Akb extends CI_Controller
         $writer->save('php://output');
         $this->helpermodel->isilog('Download Excel BOM INVENTORY' . $this->session->userdata('currdept'));
     }
-    public function simpanbomkeexcel($id,$mode=0){
+    public function simpanbomkeexcel($id, $mode = 0)
+    {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
@@ -3648,15 +3726,15 @@ class Akb extends CI_Controller
         $sheet->setCellValue('F2', "PCS");
         $sheet->setCellValue('G2', "KGS");
 
-        $inv = $this->akbmodel->hitungbomjf($id,$mode);
+        $inv = $this->akbmodel->hitungbomjf($id, $mode);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 3;
         // Set baris pertama untuk isi tabel adalah baris ke 3    
         foreach ($inv['ok'] as $data) {
-            $sku = viewsku($data['po'],$data['item'],$data['dis'],$data['id_barang']);
-            $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
+            $sku = viewsku($data['po'], $data['item'], $data['dis'], $data['id_barang']);
+            $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $data['noe']);
