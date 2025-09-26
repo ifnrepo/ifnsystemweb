@@ -849,7 +849,15 @@ class Helper_model extends CI_Model
             $this->db->where('id_bom',$cekhasil['id']);
             $this->db->where('persen >',0);
             $databom = $this->db->get();
+            $jmlrekdet = $databom->num_rows();
+            $nor=0;$jmlkgsdet=0;
             foreach($databom->result_array() as $detbom){
+                $nor++;
+                $jmlkgsdet += $kgs*($detbom['persen']/100);
+                $tambahnya=0;
+                if($nor == $jmlrekdet){
+                    $tambahnya = $kgs-$jmlkgsdet;
+                }
                 $dataxspin['po'] = $po;
                 $dataxspin['item'] = $item;
                 $dataxspin['dis'] = $dis;
@@ -857,7 +865,7 @@ class Helper_model extends CI_Model
                 $dataxspin['insno'] = $insno;
                 $dataxspin['nobontr'] = $detbom['nobontr'];
                 $dataxspin['persen'] = $detbom['persen'];
-                $dataxspin['kgs_asli'] = $kgs*($detbom['persen']/100);
+                $dataxspin['kgs_asli'] = ($kgs*($detbom['persen']/100))+$tambahnya;
                 $dataxspin['xinsno'] = $insno;
                 $dataxspin['xinsnox'] = $insno;
                 $dataxspin['cuy'] = formatsku($po,$item,$dis,$idbarang);

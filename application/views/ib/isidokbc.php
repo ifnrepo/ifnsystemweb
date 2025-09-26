@@ -567,20 +567,26 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-tablee" style="font-size: 13px !important;" >
-                                    <?php $sumdetail=0; $sumpcs=0; $sumkgs=0; foreach ($header as $data) { 
+                                    <?php $no=0; $sumdetail=0; $sumpcs=0; $sumkgs=0; foreach ($header as $data) { 
+                                        $no++;
                                         $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
                                         $sumdetail += $data['harga']*$jumlah;
-                                        $sumpcs += $data['pcs'];
-                                        $sumkgs += $data['kgs'];
+                                        $sumpcs += $mode==0 ? $data['pcs'] : $data['pcsx'];
+                                        $sumkgs += $mode==0 ? $data['kgs'] : $data['kgsx'];
                                         $spekbarang = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
                                          ?>
                                     <tr>
-                                        <td><?= $spekbarang; ?></td>
+                                        <td class="line-12"><?= $no.'. '.$spekbarang; ?><br><span class="text-teal font-10"><?= $data['insno'].$data['nobontr'] ?></span></td>
                                         <td class="text-left"><?= $data['kategori_id']; ?></td>
                                         <td class="text-left"><?= $data['nohs']; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
-                                        <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>
-                                        <td class="text-right"><?= rupiah($data['kgs'],2); ?></td>
+                                        <?php if($mode==0){ ?>
+                                            <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>
+                                            <td class="text-right"><?= rupiah($data['kgs'],2); ?></td>
+                                        <?php }else{ ?>
+                                            <td class="text-right"><?= rupiah($data['pcsx'],0); ?></td>
+                                            <td class="text-right"><?= rupiah($data['kgsx'],2); ?></td>
+                                        <?php } ?>
                                         <td class="text-right"><?= rupiah($data['harga'],2); ?></td>
                                         <td class="text-right"><?= rupiah($data['harga']*$jumlah,2); ?></td>
                                     </tr>
