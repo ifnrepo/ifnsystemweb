@@ -119,7 +119,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php if($datdet['tanpa_bc']==0){ ?>
                     <td style="font-size: 17px" class="text-info"><?= $datdet['jns_bc']; ?></td>
                       <?php if($datdet['send_ceisa']==1){ ?>
-                        <td class="line-12"><a href="<?= base_url().'akb/isidokbc/'.$datdet['id']; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                        <td class="line-12"><a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
                         <?php }else{ ?>
                           <td class="line-12"><?= $isibc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
                       <?php } ?>

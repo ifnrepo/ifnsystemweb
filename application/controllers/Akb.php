@@ -2780,7 +2780,7 @@ class Akb extends CI_Controller
                 $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
                 $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
                 $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
-                $jumlahkgs+=$data['kgs'];
+                $jumlahkgs+=round($data['kgs'],2);
                 if(trim($data['kodebc'])!='KGM'){
                     $jumlahpcs += $data['pcs'];
                 }
@@ -2788,16 +2788,24 @@ class Akb extends CI_Controller
                 $numakhir = $numrow-1;
                 // Lakukan looping pada variabel      
                 $sheet->setCellValue('A' . $numrow, $no);
-                $sheet->setCellValue('B' . $numrow, $spekbarang);
+                $sheet->setCellValue('B' . $numrow, htmlspecialchars_decode($spekbarang));
                 $sheet->setCellValue('C' . $numrow, $hs);
                 $sheet->setCellValue('D' . $numrow, $sku);
                 $sheet->setCellValue('E' . $numrow, $pcs);
                 $sheet->setCellValue('F' . $numrow, $data['kodebc']);
                 // $sheet->setCellValue('G' . $numrow, $data['kgs']);
                 $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+                $jmlrekinv2= $inv2->num_rows();
+                $nor = 0;$jmlkgsdet=0;
                 foreach($inv2->result_array() as $data2){
+                    $nor++;
+                    $jmlkgsdet += round($data2['kgs'],2);
+                    $tambahnya = 0;
                     if(round($data2['kgs'],2) > 0){
-                        $sheet->setCellValue('G' . $numrow, round($data2['kgs'],2));
+                        if($nor==$jmlrekinv2){
+                            $tambahnya = round($data['kgs'],2)-$jmlkgsdet;
+                        }
+                        $sheet->setCellValue('G' . $numrow, round($data2['kgs']+$tambahnya,2));
                         $sheet->setCellValue('H' . $numrow, 'BC.'.$data2['jns_bc'].' '.trim($data2['nomor_bc']).' '.$data2['tgl_bc']);
                         $sheet->getStyle('G'.$numrow)->applyFromArray($styleArray);
                         $sheet->getStyle('H'.$numrow)->applyFromArray($styleArray);
@@ -2821,7 +2829,7 @@ class Akb extends CI_Controller
             $sheet->setCellValue('E' . $numrow, $jumlahpcs);
             $sheet->getStyle('E'. $numrow)->getFont()->setBold(true);
             $sheet->getStyle('E'.$numrow)->applyFromArray($styleArray);
-            $sheet->setCellValue('G' . $numrow, round($jumlahkgs,1));
+            $sheet->setCellValue('G' . $numrow, round($jumlahkgs,2));
             $sheet->getStyle('G'.$numrow)->applyFromArray($styleArray);
             $sheet->getStyle('G'. $numrow)->getFont()->setBold(true);
             $sheet->getStyle('F'.$numrow)->applyFromArray($styleArray);
@@ -2996,12 +3004,20 @@ class Akb extends CI_Controller
                 $numakhir = $numrow-1;
                 // $sheet->setCellValue('H' . $nok, "XXXX");
                 $inv2 = $this->akbmodel->detailexcellampiran261($id,$no);
+                $jmlrekinv2= $inv2->num_rows();
+                $nor = 0;$jmlkgsdet=0;
                 foreach($inv2->result_array() as $data2){
                     $kiloan = $data['kgs']==0 ? 1 : $data['kgs'];
+                    $nor++;
+                    $jmlkgsdet += round($data2['kgs'],2);
+                    $tambahnya = 0;
                     if(count($data2) > 0 && round($data2['kgs'],2) > 0){
+                        if($nor==$jmlrekinv2){
+                            $tambahnya = round($data['kgs'],2)-$jmlkgsdet;
+                        }
                         $sheet->setCellValue('G' . $nok, $nol);
                         $sheet->setCellValue('H' . $nok, $data2['kode']);
-                        $sheet->setCellValue('K' . $nok, round($data2['kgs'],2));
+                        $sheet->setCellValue('K' . $nok, round($data2['kgs']+$tambahnya,2));
                         $sheet->setCellValue('L' . $nok, 'KGM');
                         $sheet->setCellValue('M' . $nok, round(($data2['kgs']/$kiloan)*100,2));
                         $sheet->setCellValue('N' . $nok, 0);
@@ -3098,7 +3114,7 @@ class Akb extends CI_Controller
             $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']);
             $hs = trim($data['po'])!='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
             $pcs = trim($data['kodebc'])=='KGM' ? $data['kgs'] : $data['pcs'];
-            $jumlahkgs+=$data['kgs'];
+            $jumlahkgs+=round($data['kgs'],2);
             if(trim($data['kodebc'])!='KGM'){
                 $jumlahpcs += $data['pcs'];
             }
@@ -3106,7 +3122,7 @@ class Akb extends CI_Controller
             $numakhir = $numrow-1;
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, $spekbarang);
+            $sheet->setCellValue('B' . $numrow, htmlspecialchars_decode($spekbarang));
             $sheet->setCellValue('C' . $numrow, $hs);
             $sheet->setCellValue('D' . $numrow, $sku);
             $sheet->setCellValue('E' . $numrow, $pcs);
@@ -3130,7 +3146,7 @@ class Akb extends CI_Controller
         $sheet->setCellValue('E' . $numrow, $jumlahpcs);
         $sheet->getStyle('E'. $numrow)->getFont()->setBold(true);
         $sheet->getStyle('E'.$numrow)->applyFromArray($styleArray);
-        $sheet->setCellValue('G' . $numrow, round($jumlahkgs,1));
+        $sheet->setCellValue('G' . $numrow, round($jumlahkgs,2));
         $sheet->getStyle('G'.$numrow)->applyFromArray($styleArray);
         $sheet->getStyle('G'. $numrow)->getFont()->setBold(true);
         $sheet->getStyle('F'.$numrow)->applyFromArray($styleArray);
@@ -3389,40 +3405,43 @@ class Akb extends CI_Controller
                 $sku = $data['kode'];
                 $spekbarang = namaspekbarang($data['id_barang']);
                 $hs =substr($data['nohs'],0,8);
-                $pembagi = $data['hamat_weight']==0 ? 1 : $data['hamat_weight'];
-                switch ($data['mt_uang']) {
-                    case 'IDR':
-                        $hargaperkilo = round($data['hamat_harga']/$pembagi,2);
-                        break;
-                    case 'USD':
-                        $hargaperkilo = ($data['cif']/$pembagi)*$kurssekarang['usd'];
-                        break;
-                        break;
-                    case 'JPY':
-                        $hargaperkilo = ($data['cif']/$pembagi)*$kurssekarang['jpy'];
-                        break;
-                    
-                    default:
-                        # code...
-                        break;
-                }
-                // $kursusd = $kurssekarang['usd'];
-                // $ndpbm = $detbom['mt_uang']=='' || $detbom['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                // $pembagi = $detbom['hamat_weight']==0 ? 1 : $detbom['hamat_weight'];
-                // switch ($detbom['mt_uang']) {
-                //     case 'JPY':
-                //         $jpy = $detbom['cif']*$kurssekarang[strtolower($detbom['mt_uang'])];
-                //         $cif = $jpy/$kursusd;
+                // $pembagi = $data['hamat_weight']==0 ? 1 : $data['hamat_weight'];
+                // switch ($data['mt_uang']) {
+                //     case 'IDR':
+                //         $hargaperkilo = round($data['hamat_harga']/$pembagi,2);
                 //         break;
+                //     case 'USD':
+                //         $hargaperkilo = ($data['cif']/$pembagi)*$kurssekarang['usd'];
+                //         break;
+                //         break;
+                //     case 'JPY':
+                //         $hargaperkilo = ($data['cif']/$pembagi)*$kurssekarang['jpy'];
+                //         break;
+                    
                 //     default:
-                //         $cif = $detbom['cif'];
+                //         # code...
                 //         break;
                 // }
+                $hargaperkilo = 0;
+                $kursusd = $kurssekarang['usd'];
+                $ndpbm = $data['mt_uang']=='' || $data['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
+                $pembagi = $data['hamat_weight']==0 ? 1 : $data['hamat_weight'];
+                switch ($data['mt_uang']) {
+                case 'JPY':
+                    $jpy = $data['cif']*$kurssekarang[strtolower($data['mt_uang'])];
+                    $cif = $jpy/$kursusd;
+                    break;
+                    default:
+                    $cif = $data['cif'];
+                    break;
+                }
+                $jmmm = (($cif/$pembagi)*$ndpbm)*$data['kgs'];
+                $hargaperkilo = round(($cif/$pembagi)*$data['kgs'],2)*$ndpbm;
+                $adabm = $data['bm'] > 0 ? $jmmm*($data['bm']/100) : 0;
                 if($data['jns_bc'] == 23){
-                    $adabm = $data['bm'] > 0 ? $hargaperkilo*($data['bm']/100) : 0;
-                    $jmbm = ($hargaperkilo*($data['bm']/100))*$data['kgs'];
-                    $jmppn = (($adabm+$hargaperkilo)*($data['ppn']/100))*$data['kgs'];
-                    $jmpph = (($adabm+$hargaperkilo)*($data['pph']/100))*$data['kgs'];
+                    $jmbm = round($hargaperkilo*($data['bm']/100),0);
+                    $jmppn = round(($adabm+$hargaperkilo)*($data['ppn']/100),0);
+                    $jmpph = round(($adabm+$hargaperkilo)*($data['pph']/100),0);
                 }else{
                     $jmbm = 0;
                     $jmppn = 0;
@@ -3437,7 +3456,7 @@ class Akb extends CI_Controller
                 $sheet->setCellValue('A' . $numrow, $no);
                 $sheet->getStyle('A'.$numrow)->getAlignment()->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER);
                 $sheet->setCellValue('B' . $numrow, $sku);
-                $sheet->setCellValue('E' . $numrow, $data['kgs']);
+                $sheet->setCellValue('E' . $numrow, round($data['kgs'],2));
                 $sheet->setCellValue('F' . $numrow, 'KGM');
                 $sheet->setCellValue('G' . $numrow, $data['jns_bc']);
                 $sheet->setCellValue('H' . $numrow, $data['nomor_bc']);

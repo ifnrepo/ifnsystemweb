@@ -126,7 +126,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </div>
               <div class="text-right">
                 <?php if(isset($kurshariini['usd'])){ ?>
-                  <div class="h3 mb-3">JPY <?= rupiah($kurshariini['jpy'],2) ?></div>
+                  <div class="h3 mb-3">IDR <?= rupiah($kurshariini['jpy'],2) ?></div>
                 <?php }else{ ?>
                   <div class="h3 mb-3 me-2">NOT FOUND</div>
                 <?php } ?>

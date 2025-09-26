@@ -1173,7 +1173,7 @@ class Ib extends CI_Controller
         ];
         array_push($arrkemas,$arraykemasan);
         $arraybarang = [];
-        $datadet = $this->ibmodel->getdatadetailib($id);
+        $datadet = $this->ibmodel->getdatadetailib($id,0);
         $no = 0;
         $jumlahfasilitas = 0;
         foreach ($datadet as $detx) {

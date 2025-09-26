@@ -42,11 +42,14 @@ class Ib_model extends CI_Model
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
-    public function getdatadetailib($data,$mode)
+    public function getdatadetailib($data,$mode=0)
     {
         $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
+        if($mode==1){
+            $this->db->select("sum(a.kgs) as kgsx,sum(a.pcs) as pcsx");
+        }
         $this->db->from('tb_detail a');
         $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
         $this->db->join('barang c', 'c.id = a.id_barang', 'left');
@@ -58,6 +61,8 @@ class Ib_model extends CI_Model
             $this->db->where('a.id_header', $data);
         }else{
             $this->db->where('a.id_akb', $data);
+            $this->db->group_by('a.po,a.item,a.dis,a.id_barang,a.insno,a.nobontr');
+            $this->db->order_by('a.po,a.item,a.dis,c.kode,a.insno');
         }
         return $this->db->get()->result_array();
     }
