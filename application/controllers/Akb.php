@@ -1831,7 +1831,7 @@ class Akb extends CI_Controller
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 - 261 BERHASIL".$data['nomorAju']);
             $this->session->set_flashdata('errorsimpan',2);
             $this->session->set_flashdata('pesanerror',$databalik['message']);
-            // $this->akbmodel->updatesendceisa($id);
+            $this->akbmodel->updatesendceisa($id);
             $url = base_url().'akb/isidokbc/'.$id.'/1';
             redirect($url);
         }else{
@@ -2095,7 +2095,9 @@ class Akb extends CI_Controller
             'jnsbc' => 261,
             'thkontrak' => '',
             'datkecuali' => 1,
-            'nomorbpj != ' => ''
+            'nomorbpj != ' => '',
+            'nomor_ssb != ' => '',
+            'penjamin != ' => '' 
         ];
         $data['kontrak'] = $this->kontrakmodel->getdatakontrak261($kondisi);
         $this->load->view('akb/addkontrak',$data);

@@ -50,9 +50,15 @@
                         <hr class="m-0">
                         <div class="d-flex justify-content-between">
                             <div class="p-2 font-kecil">
-                                Nama Pengirim : <?= $datheader['namasupplier']; ?><br>
-                                Alamat Pengirim : <?= $datheader['alamat']; ?></br>
-                                NPWP : <?= $datheader['npwp']; ?>
+                                <?php if($mode==0){ ?>
+                                    Nama Pengirim : <?= $datheader['namasupplier']; ?><br>
+                                    Alamat Pengirim : <?= $datheader['alamat']; ?></br>
+                                    NPWP : <?= $datheader['npwp']; ?>
+                                <?php }else{ ?>
+                                    Nama Subkontrak : <?= datadepartemen($datheader['dept_id'],'nama_subkon'); ?><br>
+                                    Alamat : <?= datadepartemen($datheader['dept_id'],'alamat_subkon'); ?></br>
+                                    NPWP : <?= datadepartemen($datheader['dept_id'],'npwp'); ?>
+                                <?php } ?>
                                 <button href="#" id="kirimkeceisa" data-href="<?= base_url().'ib/kirimdatakeceisa'.$datheader['jns_bc'].'/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                             </div>
                         </div>
@@ -566,9 +572,10 @@
                                         $sumdetail += $data['harga']*$jumlah;
                                         $sumpcs += $data['pcs'];
                                         $sumkgs += $data['kgs'];
+                                        $spekbarang = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
                                          ?>
                                     <tr>
-                                        <td><?= $data['nama_barang']; ?></td>
+                                        <td><?= $spekbarang; ?></td>
                                         <td class="text-left"><?= $data['kategori_id']; ?></td>
                                         <td class="text-left"><?= $data['nohs']; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>

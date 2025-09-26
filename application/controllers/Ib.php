@@ -291,10 +291,10 @@ class Ib extends CI_Controller
         $hasil = $this->ibmodel->simpandatabc($data,$head);
         echo $hasil;
     }
-    public function isidokbc($id){
+    public function isidokbc($id,$mode=0){
         $header['header'] = 'transaksi';
-        $data['header'] = $this->ibmodel->getdatadetailib($id);
-        $data['datheader'] = $this->ibmodel->getdatabyid($id);
+        $data['header'] = $this->ibmodel->getdatadetailib($id,$mode);
+        $data['datheader'] = $this->ibmodel->getdatabyid($id); 
         $data['bcmasuk'] = $this->ibmodel->getbcmasuk();
         $data['jnsangkutan'] = $this->ibmodel->getjnsangkutan();
         $data['refkemas'] = $this->ibmodel->refkemas();
@@ -303,6 +303,7 @@ class Ib extends CI_Controller
         // $data['refpelabuhan'] = $this->ibmodel->refpelabuhan();
         $data['datatoken'] = $this->ibmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $data['mode'] = $mode;
         $footer['fungsi'] = 'ibx';
         $this->load->view('layouts/header', $header);
         $this->load->view('ib/isidokbc',$data);
