@@ -10,8 +10,8 @@ class Akb_model extends CI_Model
                 'kode_dok' => 'T',
                 'tb_header.dept_id' => $kode,
                 // 'dept_tuju' => 'AR',
-                'month(tgl)' => $this->session->userdata('bl'),
-                'year(tgl)' => $this->session->userdata('th'),
+                'month(tb_header.tgl)' => $this->session->userdata('bl'),
+                'year(tb_header.tgl)' => $this->session->userdata('th'),
                 'left(nomor_dok,3)' => 'IFN'
             ];
         }else{
@@ -20,8 +20,8 @@ class Akb_model extends CI_Model
                 'kode_dok' => 'T',
                 'tb_header.dept_id' => $kode,
                 'dept_tuju' => 'CU',
-                'month(tgl)' => $this->session->userdata('bl'),
-                'year(tgl)' => $this->session->userdata('th'),
+                'month(tb_header.tgl)' => $this->session->userdata('bl'),
+                'year(tb_header.tgl)' => $this->session->userdata('th'),
                 'tanpa_bc' => 0,
                 'ok_tuju' => 1
             ];
@@ -30,7 +30,7 @@ class Akb_model extends CI_Model
         $this->db->join('customer', 'customer.id = tb_header.id_buyer', 'left');
         $this->db->join('tb_kontrak', 'tb_kontrak.id = tb_header.id_kontrak', 'left');
         $this->db->where($arrkondisi);
-        $this->db->order_by('tgl','desc');
+        $this->db->order_by('tb_header.tgl','desc');
         $this->db->order_by('nomor_dok','desc');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
@@ -44,8 +44,8 @@ class Akb_model extends CI_Model
                 'kode_dok' => 'T',
                 'tb_header.dept_id' => $kode,
                 // 'dept_tuju' => 'AR',
-                'month(tgl)' => $this->session->userdata('bl'),
-                'year(tgl)' => $this->session->userdata('th'),
+                'month(tb_header.tgl)' => $this->session->userdata('bl'),
+                'year(tb_header.tgl)' => $this->session->userdata('th'),
                 'left(nomor_dok,3)' => 'IFN'
             ];
         }else{
@@ -54,8 +54,8 @@ class Akb_model extends CI_Model
                 'kode_dok' => 'T',
                 'tb_header.dept_id' => $kode,
                 'dept_tuju' => 'CU',
-                'month(tgl)' => $this->session->userdata('bl'),
-                'year(tgl)' => $this->session->userdata('th'),
+                'month(tb_header.tgl)' => $this->session->userdata('bl'),
+                'year(tb_header.tgl)' => $this->session->userdata('th'),
                 'tanpa_bc' => 0,
                 'ok_tuju' => 1
             ];

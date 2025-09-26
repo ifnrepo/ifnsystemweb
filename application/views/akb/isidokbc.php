@@ -738,9 +738,9 @@
                                         // $adabm = $detbom['bm'] > 0 ? $jumlahhargaperkilo*($detbom['bm']/100) : 0;
                                         $adabm = $detbom['bm'] > 0 ? $jmmm*($detbom['bm']/100) : 0;
                                         if($jns_bc == 23){
-                                            $jmbm += $jumlahhargaperkilo*($detbom['bm']/100);
-                                            $jmppn += round($jmmm*($detbom['ppn']/100),0);
-                                            $jmpph += round($jmmm*($detbom['pph']/100),0);
+                                            $jmbm += round($hargaperkilo*($detbom['bm']/100),0);
+                                            $jmppn += round(($adabm+$hargaperkilo)*($detbom['ppn']/100),0);
+                                            $jmpph += round(($adabm+$hargaperkilo)*($detbom['pph']/100),0);
                                         }
                                 ?>
                                     <tr>
@@ -751,6 +751,9 @@
                                             <span style="font-size:9px;" class="badge bg-blue text-blue-fg <?= $hitungbm; ?>">BM</span>
                                             <span style="font-size:9px;" class="badge bg-yellow text-black <?= $hitungppn; ?>">PPN</span>
                                             <span style="font-size:9px;" class="badge bg-azure text-azure-fg <?= $hitungpph; ?>">PPH</span>
+                                            <span><?= round($hargaperkilo*($detbom['bm']/100),0) ?></span>#
+                                            <span><?= round(($adabm+$hargaperkilo)*($detbom['ppn']/100),0) ?></span>#
+                                            <span><?= round(($adabm+$hargaperkilo)*($detbom['pph']/100),0) ?></span>
                                         </td>
                                         <td><?= $detbom['kode']; ?></td>
                                         <td><?= $detbom['nohs']; ?></td>

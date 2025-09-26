@@ -82,14 +82,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="d-flex align-items-center">
               <div class="subheader"><?= ENVIRONMENT; ?></div>
               <div class="ms-auto lh-1">
-                <div class="dropdown">
+                <!-- <div class="dropdown">
                   <a class="dropdown-toggle text-secondary" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 7 days</a>
                   <div class="dropdown-menu dropdown-menu-end">
                     <a class="dropdown-item active" href="#">Last 7 days</a>
                     <a class="dropdown-item" href="#">Last 30 days</a>
                     <a class="dropdown-item" href="#">Last 3 months</a>
                   </div>
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="d-flex align-items-baseline">
@@ -107,34 +107,33 @@ defined('BASEPATH') OR exit('No direct script access allowed');
       </div>
       <div class="col-sm-6 col-lg-3">
         <div class="card">
-          <div class="card-body">
-            <div class="d-flex align-items-center">
-              <div class="subheader text-teal line-12">Kurs USD <br><?= tgl_indo(date('Y-m-d'),1) ?></div>
-              <div class="ms-auto lh-1">
-                <!-- <div class="dropdown">
-                  <a class="dropdown-toggle text-secondary" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 7 days</a>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item active" href="#">Last 7 days</a>
-                    <a class="dropdown-item" href="#">Last 30 days</a>
-                    <a class="dropdown-item" href="#">Last 3 months</a>
-                  </div>
-                </div> -->
+          <div class="card-body pb-1">
+            <div class="d-flex justify-content-between align-items-center">
+              <div>
+                <div class="subheader text-teal line-12">Kurs USD - KMK</div>
+              </div>
+              <div class="text-right">
+                <div class="subheader text-teal line-12">Kurs JPY - KMK</div>
               </div>
             </div>
-            <div class="d-flex align-items-baseline">
-              <?php if(isset($kurshariini['usd'])){ ?>
-                <div class="h1 mb-3 me-2">IDR <?= rupiah($kurshariini['usd'],2) ?></div>
-              <?php }else{ ?>
-                <div class="h1 mb-3 me-2">NOT FOUND</div>
-              <?php } ?>
-              <div class="me-auto">
-                <!-- <span class="text-green d-inline-flex align-items-center lh-1">
-                  4% 
-                  <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
-                </span> -->
+            <div class="d-flex justify-content-between align-items-baseline">
+              <div>
+                <?php if(isset($kurshariini['usd'])){ ?>
+                  <div class="h3 mb-3 me-2">IDR <?= rupiah($kurshariini['usd'],2) ?></div>
+                <?php }else{ ?>
+                  <div class="h3 mb-3 me-2">NOT FOUND</div>
+                <?php } ?>
+              </div>
+              <div class="text-right">
+                <?php if(isset($kurshariini['usd'])){ ?>
+                  <div class="h3 mb-3">JPY <?= rupiah($kurshariini['jpy'],2) ?></div>
+                <?php }else{ ?>
+                  <div class="h3 mb-3 me-2">NOT FOUND</div>
+                <?php } ?>
               </div>
             </div>
             <div id="chart-active-users" class="chart-sm"></div>
+            <div class="m-0 subheader"><i><?= tgl_indo(date('Y-m-d'),1) ?></i></div>
           </div>
         </div>
       </div>

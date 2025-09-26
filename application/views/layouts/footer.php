@@ -149,18 +149,25 @@
 			// echo json_encode($datakurs->result_array());
 			$arraydate = [];
 			$arrayusd = [];
+			$arrayjpy = [];
 			$date = date('Y-m-d');
 			for($x=30;$x>=1;$x--){
 				$dateawal =  strtotime('-'.$x.' day', strtotime($date));
 				$xdate = date('Y-m-d', $dateawal);
 				$kurssekarang = $this->helpermodel->getkurssekarang($xdate)->row_array();
 				if(isset($kurssekarang['usd']) && $kurssekarang['usd']!=null){
-					$usd = round($kurssekarang['usd'],2);
+					$usd = round($kurssekarang['usd'],0);
 				}else{
 					$usd = 0;
 				}
+				if(isset($kurssekarang['jpy']) && $kurssekarang['jpy']!=null){
+					$jpy = round($kurssekarang['jpy'],2);
+				}else{
+					$jpy = 0;
+				}
 				array_push($arraydate,$xdate);
 				array_push($arrayusd,$usd);
+				array_push($arrayjpy,$jpy);
 			}
 			// print_r(json_encode($arrayusd));
 ?>
@@ -253,7 +260,7 @@
 	<script>
 		// @formatter:off
 		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('chart-new-clients'), {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-active-users'), {
 				chart: {
 					type: "line",
 					fontFamily: 'inherit',
@@ -275,11 +282,13 @@
 					curve: "smooth",
 				},
 				series: [{
-					name: "May",
-					data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67]
+					name: "USD",
+					// data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67]
+					data: <?= json_encode($arrayusd) ?>
 				}, {
-					name: "April",
-					data: [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37]
+					name: "JPY",
+					// data: [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37]
+					data: <?= json_encode($arrayjpy) ?>
 				}],
 				tooltip: {
 					theme: 'dark'
@@ -301,10 +310,11 @@
 						padding: 4
 					},
 				},
-				labels: [
-					'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
-				],
-				colors: [tabler.getColor("primary"), tabler.getColor("gray-600")],
+				// labels: [
+				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+				// ],
+				labels: <?= json_encode($arraydate) ?>,
+				colors: [tabler.getColor("blue"), tabler.getColor("gray-600")],
 				legend: {
 					show: false,
 				},
@@ -315,7 +325,7 @@
 	<script>
 		// @formatter:off
 		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('chart-active-users'), {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-new-clients'), {
 				chart: {
 					type: "bar",
 					fontFamily: 'inherit',
@@ -339,9 +349,8 @@
 					opacity: 1,
 				},
 				series: [{
-					name: "USD",
-					// data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 19, 46, 39, 62, 51, 35, 41, 67]
-					data: <?= json_encode($arrayusd) ?>
+					name: "Person",
+					data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 19, 46, 39, 62, 51, 35, 41, 67]
 				}],
 				tooltip: {
 					theme: 'dark'
@@ -366,11 +375,10 @@
 						padding: 4
 					},
 				},
-				// labels: [
-				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
-				// ],
-				labels: <?= json_encode($arraydate) ?>,
-				colors: [tabler.getColor("blue")],
+				labels: [
+					'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+				],
+				colors: [tabler.getColor("pink")],
 				legend: {
 					show: false,
 				},

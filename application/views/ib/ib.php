@@ -85,7 +85,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <tr>
                 <th>Tgl</th>
                 <th>Nomor</th>
-                <th>Supplier</th>
+                <?php if($this->session->userdata('depttuju')=='FG'){ ?>
+                  <th>Subkon</th>
+                <?php }else{ ?>
+                  <th>Supplier</th>
+                <?php } ?>
                 <th>Jumlah Item</th>
                 <th>Dibuat Oleh</th>
                 <th>BC</th>
@@ -96,9 +100,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php foreach ($data as $datdet) {
                 $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item';
-                $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set'; 
                 $nomorbc = $datdet['tanpa_bc']== 1 ? 'Tanpa BC' : 'XX';
                 $isibc = $nomorbc=='XX' ? 'AJU. '.$datdet['nomor_aju'].'<br>BC. '.$datdet['nomor_bc'] : $nomorbc;
+                $tmb = '';
+                if($this->session->userdata('depttuju')=='FG'){
+                  $namasup = datadepartemen($datdet['dept_id'],'nama_subkon');
+                  $tmb = '/1';
+                }else{
+                  $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set';
+                }
                 ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
@@ -128,7 +138,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       $textsudahkirim = $datdet['send_ceisa']==0 ? 'Isi Dok BC' : 'Tunggu Respon';
                        ?>
                       <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
-                      <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
+                      <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { ?>
                       <span class="text-teal">DOKUMEN SELESAI<br>Tunggu Verifikasi <b>IN</b> Departemen</span>
                     <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>

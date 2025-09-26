@@ -3,13 +3,24 @@ class Ib_model extends CI_Model
 {
     public function getdata($kode)
     {
-        $arrkondisi = [
-            'id_perusahaan' => IDPERUSAHAAN,
-            'kode_dok' => 'IB',
-            'dept_tuju' => $kode,
-            'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th')
-        ];
+        if($kode=='FG'){
+            $arrkondisi = [
+                'id_perusahaan' => IDPERUSAHAAN,
+                'kode_dok' => 'T',
+                'dept_tuju' => $kode,
+                'month(tgl)' => $this->session->userdata('bl'),
+                'year(tgl)' => $this->session->userdata('th'),
+                'left(nomor_dok,3)' => 'IFN'
+            ];
+        }else{
+            $arrkondisi = [
+                'id_perusahaan' => IDPERUSAHAAN,
+                'kode_dok' => 'IB',
+                'dept_tuju' => $kode,
+                'month(tgl)' => $this->session->userdata('bl'),
+                'year(tgl)' => $this->session->userdata('th')
+            ];
+        }
         $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier');
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->where($arrkondisi);
@@ -31,7 +42,7 @@ class Ib_model extends CI_Model
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
-    public function getdatadetailib($data)
+    public function getdatadetailib($data,$mode)
     {
         $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
@@ -43,7 +54,11 @@ class Ib_model extends CI_Model
         $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
         $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left');
         $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
-        $this->db->where('a.id_header', $data);
+        if($mode==0){
+            $this->db->where('a.id_header', $data);
+        }else{
+            $this->db->where('a.id_akb', $data);
+        }
         return $this->db->get()->result_array();
     }
     public function getdepttuju($kode)
