@@ -348,10 +348,10 @@ class Hargamat_model extends CI_Model
         $kode_negara = $data['kode_negara'];
         $jns_bc = $data['jns_bc'];
         $nomor_bc = $data['nomor_bc'];
-        $tgl_bc = $data['tgl_bc'];
+        // $tgl_bc = $data['tgl_bc'];
         $nomor_aju = $data['nomor_aju'];
-        $tgl_aju = $data['tgl_aju'];
-        $filedok = $data['filedok'];
+        // $tgl_aju = $data['tgl_aju'];
+        // $filedok = $data['filedok'];
 
 
 
@@ -401,18 +401,25 @@ class Hargamat_model extends CI_Model
         $this->db->where('id', $data['id']);
         $this->db->update('tb_hargamaterial', $data);
 
+        $updateFields = [
+            'mt_uang'     => $mt_uang,
+            'kode_negara' => $kode_negara,
+            'jns_bc'      => $jns_bc,
+            'nomor_bc'    => $nomor_bc,
+            'tgl_bc'      => $data['tgl_bc'],
+            'nomor_aju'   => $nomor_aju,
+            'tgl_aju'     => $data['tgl_aju'],
+        ];
+
+        if (!empty($data['filedok'])) {
+            $updateFields['filedok'] = $data['filedok'];
+        }
+        // elseif (isset($data['remove_dok']) && $data['remove_dok'] == 1) {
+        //     $updateFields['filedok'] = NULL;
+        // }
 
         $this->db->where('nobontr', $nobontr);
-        $this->db->update('tb_hargamaterial', [
-            'mt_uang' => $mt_uang,
-            'kode_negara' => $kode_negara,
-            'jns_bc' => $jns_bc,
-            'nomor_bc' => $nomor_bc,
-            'tgl_bc' => $tgl_bc,
-            'nomor_aju' => $nomor_aju,
-            'tgl_aju' => $tgl_aju,
-            'filedok'     => $data['filedok']
-        ]);
+        $this->db->update('tb_hargamaterial', $updateFields);
 
         $this->helpermodel->isilog($this->db->last_query());
         $this->db->trans_complete();
