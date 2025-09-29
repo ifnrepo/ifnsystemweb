@@ -136,11 +136,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && $datdet['tanpa_bc']==0 && $datdet['nomor_bc']=='') { 
                       $sudahkirim = $datdet['send_ceisa']==0 ? 'btn-danger' : 'btn-info';
                       $textsudahkirim = $datdet['send_ceisa']==0 ? 'Isi Dok BC' : 'Tunggu Respon';
+                      $butsudahkirim = $datdet['send_ceisa']==0 ? '' : 'hilang';
                        ?>
                       <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
                       <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
-                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" href="<?= base_url().'akb/getbongaichu/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-success <?php if($tmb!='/1'){ echo "hilang";} ?>' data-title="Add Bon Gaichu" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>GET BON GAICHU</a>
-                      <a href="#" data-href="<?= base_url() . 'akb/hapusaju/' . $datdet['id'] ?>" class='btn btn-sm btn-danger <?php if($tmb!='/1'){ echo "hilang";} ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus AJU <br><?= $datdet['nomor_dok']; ?>" title='Hapus data Transaksi'><i class="fa fa-trash"></i></a>
+                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" href="<?= base_url().'akb/getbongaichu/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-success <?= $butsudahkirim; ?> <?php if($tmb!='/1'){ echo "hilang";} ?>' data-title="Add Bon Gaichu" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>GET BON GAICHU</a>
+                      <a href="#" data-href="<?= base_url() . 'akb/hapusaju/' . $datdet['id'] ?>" class='btn btn-sm btn-danger <?= $butsudahkirim ?> <?php if($tmb!='/1'){ echo "hilang";} ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus AJU <br><?= $datdet['nomor_dok']; ?>" title='Hapus data Transaksi'><i class="fa fa-trash"></i></a>
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { $inoleh = $datdet['dept_tuju']=='CU' ? 'Marketing' : 'Departemen'; ?>
                       <span class="text-teal">DOKUMEN SELESAI <br>Tunggu Verifikasi <b>Out</b> <?= $inoleh; ?></span>
                     <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>

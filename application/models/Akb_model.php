@@ -86,27 +86,51 @@ class Akb_model extends CI_Model
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
-    public function getdatadetailib($data,$mode=0)
+    public function getdatadetailib($data,$mode=0,$qu=0)
     {
-        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem,j.nomor_dok as dokgaichu");
-        $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
-        $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
-        $this->db->from('tb_detail a');
-        $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
-        $this->db->join('barang c', 'c.id = a.id_barang', 'left');
-        $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
-        $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
-        $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left');
-        $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
-        $this->db->join('tb_klppo h', 'h.id = g.klppo', 'left');
-        $this->db->join('ref_kemas i', 'i.id = a.kd_kemasan', 'left');
-        $this->db->join('tb_header j', 'j.id = a.id_header', 'left');
-        if($mode==0){
-            $this->db->where('a.id_header', $data);
-            $this->db->order_by('id_header,seri_barang');
+        if($qu==0){
+            $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem,j.nomor_dok as dokgaichu");
+            $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
+            $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
+            $this->db->from('tb_detail a');
+            $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
+            $this->db->join('barang c', 'c.id = a.id_barang', 'left');
+            $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
+            $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
+            $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left');
+            $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
+            $this->db->join('tb_klppo h', 'h.id = g.klppo', 'left');
+            $this->db->join('ref_kemas i', 'i.id = a.kd_kemasan', 'left');
+            $this->db->join('tb_header j', 'j.id = a.id_header', 'left');
+            if($mode==0){
+                $this->db->where('a.id_header', $data);
+                $this->db->order_by('id_header,seri_barang');
+            }else{
+                $this->db->where('a.id_akb', $data);
+                $this->db->order_by('a.urut_akb,seri_barang');
+            }
         }else{
-            $this->db->where('a.id_akb', $data);
-            $this->db->order_by('a.urut_akb,seri_barang');
+            $this->db->select("a.*,sum(round(a.pcs,2)) as pcs,sum(round(a.kgs,2)) as kgs,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem,j.nomor_dok as dokgaichu");
+            $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
+            $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
+            $this->db->from('tb_detail a');
+            $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
+            $this->db->join('barang c', 'c.id = a.id_barang', 'left');
+            $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
+            $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
+            $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left');
+            $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
+            $this->db->join('tb_klppo h', 'h.id = g.klppo', 'left');
+            $this->db->join('ref_kemas i', 'i.id = a.kd_kemasan', 'left');
+            $this->db->join('tb_header j', 'j.id = a.id_header', 'left');
+            if($mode==0){
+                $this->db->where('a.id_header', $data);
+                $this->db->order_by('id_header,seri_barang');
+            }else{
+                $this->db->where('a.id_akb', $data);
+                $this->db->group_by('j.ketprc,a.po,a.item,a.dis,a.insno,c.kode');
+                $this->db->order_by('a.po,a.item,a.dis,a.insno,c.kode');
+            }
         }
         
         return $this->db->get()->result_array();
@@ -886,12 +910,15 @@ class Akb_model extends CI_Model
     }
     public function hitungbomjf($id,$mode){
         if($mode==1){
-            $this->db->select("tb_detail.*,tb_header.nomor_dok");
+            $this->db->select("tb_detail.*,sum(round(tb_detail.pcs,2)) as pcs,sum(round(tb_detail.kgs,2)) as kgs,tb_header.nomor_dok,tb_header.ketprc,barang.kode");
             $this->db->from('tb_detail');
             $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
             $this->db->where('id_akb',$id);
             // $this->db->limit(1,0);
-            $this->db->order_by('tb_detail.urut_akb,seri_barang');
+            $this->db->group_by('tb_header.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
+            $this->db->order_by('po,item,dis,insno,barang.kode');
+            // $this->db->order_by('tb_detail.urut_akb,seri_barang');
         }else{
             $this->db->select("*");
             $this->db->from('tb_detail');
@@ -902,7 +929,31 @@ class Akb_model extends CI_Model
         $arrnotbom = [];
         $no=1;
         foreach ($hasil->result_array() as $hsl) {
-            $arrbom = showbomjf($hsl['po'],$hsl['item'],$hsl['dis'],$hsl['id_barang'],$hsl['insno'],$hsl['nobontr'],$hsl['kgs'],$no++,$hsl['pcs']);
+            $kondisi = [
+                'id_akb' => $id,
+                'tb_header.ketprc' => $hsl['ketprc'],
+                'tb_detail.po' => $hsl['po'],
+                'tb_detail.item' => $hsl['item'],
+                'tb_detail.dis' => $hsl['dis'],
+                'tb_detail.insno' => $hsl['insno'],
+                'barang.kode' => $hsl['kode']
+            ];
+            $this->db->select("tb_detail.id");
+            $this->db->from('tb_detail');
+            $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+            $this->db->where($kondisi);
+            $dataex = $this->db->get();
+            $xhasil = [];
+            foreach($dataex->result_array() as $x){
+                array_push($xhasil,$x['id']);
+            }
+            
+            $this->db->set('seri_urut_akb',$no);
+            $this->db->where_in('id',$xhasil);
+            $this->db->update('tb_detail');
+
+            $arrbom = showbomjf($hsl['po'],$hsl['item'],$hsl['dis'],$hsl['id_barang'],$hsl['insno'],$hsl['nobontr'],round($hsl['kgs'],2),$no++,$hsl['pcs']);
             if(count($arrbom) > 0){
                 foreach ($arrbom as $hasilshowbom) {
                     array_push($arrhasil,$hasilshowbom);
@@ -976,7 +1027,7 @@ class Akb_model extends CI_Model
                              ->from('tb_hargamaterial')
                              ->group_by('id_barang,nobontr') 
                              ->get_compiled_select();
-        $this->db->select("tb_bombc.id,tb_bombc.id_barang,tb_bombc.nobontr,SUM(round(tb_bombc.kgs,3)) AS kgs,tbhargamat.nomor_bc,tbhargamat.tgl_bc,tbhargamat.jns_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
+        $this->db->select("tb_bombc.id,tb_bombc.id_barang,tb_bombc.nobontr,SUM(round(tb_bombc.kgs,2)) AS kgs,tbhargamat.nomor_bc,tbhargamat.tgl_bc,tbhargamat.jns_bc,barang.nohs,barang.kode,barang.nama_barang,satuan.kodebc");
         $this->db->select("tb_bombc.bm,tb_bombc.bmt,tb_bombc.cukai,tb_bombc.ppn,tb_bombc.ppnbm,tb_bombc.pph,tbhargamat.cif,tbhargamat.mt_uang,tbhargamat.price as hamat_harga,tbhargamat.weight as hamat_weight,tbhargamat.seri_barang");
         $this->db->from('tb_bombc');
         $this->db->join("($subquery) as tbhargamat",'tbhargamat.nobar = concat(trim(tb_bombc.nobontr),tb_bombc.id_barang)','left');
@@ -1001,7 +1052,7 @@ class Akb_model extends CI_Model
                     'id_barang' => $hasilshowbom['id_barang'],
                     'seri_barang' => $hasilshowbom['noe'],
                     'nobontr' => $hasilshowbom['nobontr'],
-                    'kgs' => $hasilshowbom['kgs_asli'],
+                    'kgs' => round($hasilshowbom['kgs_asli'],2),
                     'pcs' => $hasilshowbom['pcs_asli']
                 ];
                 $cekjenisbc = ceknomorbc($hasilshowbom['nobontr'],$hasilshowbom['id_barang']);
@@ -1102,5 +1153,9 @@ class Akb_model extends CI_Model
     }
     public function masukkelampiran($data){
         return $this->db->insert('lampiran',$data);
+    }
+    public function isiurutakb($id,$no){
+        $this->db->where('id',$id);
+        return $this->db->update('tb_detail',['seri_urut_akb'=>$no]);
     }
 }

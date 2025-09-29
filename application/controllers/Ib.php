@@ -1613,6 +1613,14 @@ class Ib extends CI_Controller
         }
         echo $hasil;
     }
+    public function hapusaju($id)
+    {
+        $hasil = $this->ibmodel->hapusaju($id);
+        if ($hasil) {
+            $url = base_url() . 'ib';
+            redirect($url);
+        }
+    }
     //End IB Controller
   
     function cetakqr2($isi, $id)
@@ -1752,5 +1760,10 @@ class Ib extends CI_Controller
         $id = $_POST['id'];
         $cek = $this->ibmodel->isilampiran23($id);
         echo $cek;
+    }
+    public function getbcasal($id,$mode=0){
+        $data['idheader'] = $id;
+        $data['data'] = $this->ibmodel->getdatabcasal($id);
+        $this->load->view('ib/addbcasal',$data);
     }
 }

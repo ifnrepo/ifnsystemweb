@@ -220,7 +220,10 @@ class Out_model extends CI_Model{
         return $dataheader['id'];
     }
     public function getdatadetail($data){
+        $periode = getcurrentperiode();
+        $dept = $this->session->userdata('deptsekarang');
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.nomor_bc as bcnomor,f.tgl_bc as bctgl,f.jns_bc");
+        $this->db->select("(Select count(*) as stokrek from stokdept where TRIM(po) = TRIM(a.po) AND TRIM(item) = TRIM(a.item) AND dis = a.dis AND id_barang = a.id_barang AND TRIM(insno) = TRIM(a.insno) AND TRIM(nobontr) = TRIM(a.nobontr) AND dln = a.dln and periode = '".$periode."' AND dept_id = '".$dept."') as jmlrekstok ");
         $this->db->from('tb_detailgen a');
         $this->db->join('satuan b','b.id = a.id_satuan','left');
         $this->db->join('barang c','c.id = a.id_barang','left');

@@ -956,4 +956,13 @@ class Helper_model extends CI_Model
         // echo $xdate; // Output: 2025-08-23
         return $this->db->get_where('tb_kurs',['tgl >=' => $xdate]);
     }
+    public function getdetailbcasal($exbc,$data){
+        $this->db->select('*');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
+        $this->db->where('tb_header.nomor_bc',$exbc);
+        $this->db->where($data);
+        $this->db->limit(1);
+        return $this->db->get();
+    }
 }
