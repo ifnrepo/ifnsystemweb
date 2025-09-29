@@ -890,3 +890,15 @@ function getkurssekarang($date = ''){
     $getkode = $CI->helpermodel->getkurssekarang($date);
     return $getkode;
 }
+function getcurrentperiode(){
+    $bulan = date('m');
+    // if($bulan <= 9){
+    //     $bulan = '0'.$bulan;
+    // }
+    return $bulan.date('Y');
+}
+function getbcasal($exbc,$data){
+    $CI = &get_instance();
+    $get = $CI->helpermodel->getdetailbcasal($exbc,$data);
+    return $get;
+}

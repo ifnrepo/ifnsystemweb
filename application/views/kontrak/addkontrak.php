@@ -64,6 +64,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="mb-1 row">
+                <label class="col-3 col-form-label">Tgl Kontrak</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil btn-flat tglmode loss-inputtgl" name="tgl" id="tgl" value="<?= tglmysql($data['tgl']); ?>" title="Tgl Kontrak" placeholder="Tanggal Kontrak">
+                </div>
+              </div>
+              <div class="mb-1 row">
                 <label class="col-3 col-form-label">Proses</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil btn-flat loss-input" name="proses" id="proses" title="Nama Proses" value="<?= $data['proses']; ?>" placeholder="Nama Proses">
@@ -91,12 +97,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label">Kgs Kontrak</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil btn-flat inputangka text-right loss-inputangka" name="kgs" id="kgs" title="Kgs" value="<?= rupiah($data['kgs'], 2); ?>" placeholder="Kgs Kontrak">
-                </div>
-              </div>
-              <div class="mb-1 row">
-                <label class="col-3 col-form-label">Tgl Kontrak</label>
-                <div class="col">
-                  <input type="text" class="form-control font-kecil btn-flat tglmode loss-inputtgl" name="tgl" id="tgl" value="<?= tglmysql($data['tgl']); ?>" title="Tgl Kontrak" placeholder="Tanggal Kontrak">
                 </div>
               </div>
               <div class="mb-1 row">

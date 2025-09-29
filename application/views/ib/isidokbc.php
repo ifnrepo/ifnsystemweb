@@ -550,20 +550,32 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2 bg-cyan-lt" id="tabs-barang-8">
-                <div class="m-2 font-bold d-flex justify-content-between">Detail Barang</div>
+                <div class="m-2 font-bold d-flex justify-content-between">
+                    <div>Detail Barang</div>
+                    <div>
+                        <a href="<?= base_url().'ib/getbcasal/'.$datheader['id'].'/1'; ?>" id="tombolgetbcasal" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="BC Asal Default" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> BC Asal Default</a>
+                    </div>
+                </div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
                         <table class="table w-100">
                             <thead style="background-color: blue !important">
                                 <tr>
                                     <th>Nama Barang</th>
-                                    <th class="text-left">Kategori</th>
+                                    <?php if($mode==0){ ?>
+                                        <th class="text-left">Kategori</th>
+                                    <?php }else{ ?>
+                                        <th class="text-left">SKU</th>
+                                    <?php } ?>
                                     <th class="text-left">HS Code</th>
                                     <th>Satuan</th>
                                     <th>Pcs</th>
                                     <th>Kgs</th>
                                     <th>Hrg/Satuan</th>
                                     <th>Total</th>
+                                    <?php if($mode==1): ?>
+                                        <th>Aksi</th>
+                                    <?php endif; ?>
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-tablee" style="font-size: 13px !important;" >
@@ -574,10 +586,17 @@
                                         $sumpcs += $mode==0 ? $data['pcs'] : $data['pcsx'];
                                         $sumkgs += $mode==0 ? $data['kgs'] : $data['kgsx'];
                                         $spekbarang = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
+                                        $sku = $mode==0 ? $data['kategori_id'] : (trim($data['po']=='') ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis']));
                                          ?>
                                     <tr>
-                                        <td class="line-12"><?= $no.'. '.$spekbarang; ?><br><span class="text-teal font-10"><?= $data['insno'].$data['nobontr'] ?></span></td>
-                                        <td class="text-left"><?= $data['kategori_id']; ?></td>
+                                        <td class="line-12">
+                                            <?php if($mode==0 || $data['id_seri_exbc'] == 0){ ?>
+                                                <?= $no.'. '.$spekbarang; ?><br><span class="text-teal font-11"><?= $data['insno'].$data['nobontr'] ?></span>
+                                            <?php }else{ ?>
+                                                <a href="#"><?= $no.'. '.$spekbarang; ?></a><br><span class="text-teal font-11"><?= $data['insno'].$data['nobontr'] ?></span>
+                                            <?php } ?>
+                                        </td>
+                                        <td class="text-left"><?= $sku ?></td>
                                         <td class="text-left"><?= $data['nohs']; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
                                         <?php if($mode==0){ ?>
@@ -589,6 +608,11 @@
                                         <?php } ?>
                                         <td class="text-right"><?= rupiah($data['harga'],2); ?></td>
                                         <td class="text-right"><?= rupiah($data['harga']*$jumlah,2); ?></td>
+                                        <?php if($mode==1): ?>
+                                        <td class="text-center">
+                                            <a href="<?= base_url().'ib/editbcasal/'.$data['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data" >EDIT</a>
+                                        </td>
+                                        <?php endif; ?>
                                     </tr>
                                 <?php } ?>
                                 <tr class="bg-primary-lt">
@@ -597,6 +621,7 @@
                                     <td class="text-black text-right font-bold"><?= rupiah($sumkgs,2); ?></td>
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail,2); ?></td>
+                                    <td></td>
                                 </tr>
                             </tbody>
                         </table>

@@ -832,4 +832,35 @@ class Ib_model extends CI_Model
         }
         return $hasil;
     }
+    public function hapusaju($id){
+        $this->db->trans_start();
+        $this->db->where('id_akb',$id);
+        $this->db->update('tb_detail',['id_akb'=>NULL]);
+        $this->helpermodel->isilog($this->db->last_query());
+
+        $this->db->where('id',$id);
+        $this->db->delete('tb_header');
+        $this->helpermodel->isilog($this->db->last_query());
+        return $this->db->trans_complete();
+    }
+    public function getdatabcasal($data)
+    {
+        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,h.nomor_bc");
+        $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
+        $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
+        $this->db->select("sum(a.kgs) as kgsx,sum(a.pcs) as pcsx");
+        $this->db->from('tb_detail a');
+        $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
+        $this->db->join('barang c', 'c.id = a.id_barang', 'left');
+        $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
+        $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
+        $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left'); 
+        $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
+        $this->db->join('tb_header h', 'h.id=a.id_akb', 'left');
+        $this->db->where('a.id_akb', $data);
+        $this->db->group_by('a.po,a.item,a.dis,a.id_barang,a.insno,a.nobontr');
+        $this->db->order_by('a.po,a.item,a.dis,c.kode,a.insno');
+        $hasil1 = $this->db->get();
+        return $hasil1;
+    }
 }

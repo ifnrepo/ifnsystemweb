@@ -586,7 +586,7 @@
                                 <tr>
                                     <th>Nama Barang</th>
                                     <?php if($mode==1): ?>
-                                        <th>Bon Gaichu</th>
+                                        <th>Proses</th>
                                     <?php endif; ?>
                                     <th class="text-left">SKU</th>
                                     <th class="text-left">HS Code</th>
@@ -674,6 +674,7 @@
                     <span>
                         <a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].'/1'; ?>" id="tombolhitung" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
                         <a href="#" data-href="<?= base_url().'akb/tambahkelampiran/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" class="btn btn-sm btn-success"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
+                        <a href="#" data-href="<?= base_url().'akb/isiurutakb/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengisi Urut AKB" data-title="Bill Of Material" class="btn btn-sm btn-success">...</a>
                     <span>
                 </div>
                 <div class="card card-lg font-kecil">
@@ -751,9 +752,6 @@
                                             <span style="font-size:9px;" class="badge bg-blue text-blue-fg <?= $hitungbm; ?>">BM</span>
                                             <span style="font-size:9px;" class="badge bg-yellow text-black <?= $hitungppn; ?>">PPN</span>
                                             <span style="font-size:9px;" class="badge bg-azure text-azure-fg <?= $hitungpph; ?>">PPH</span>
-                                            <span><?= round($hargaperkilo*($detbom['bm']/100),0) ?></span>#
-                                            <span><?= round(($adabm+$hargaperkilo)*($detbom['ppn']/100),0) ?></span>#
-                                            <span><?= round(($adabm+$hargaperkilo)*($detbom['pph']/100),0) ?></span>
                                         </td>
                                         <td><?= $detbom['kode']; ?></td>
                                         <td><?= $detbom['nohs']; ?></td>

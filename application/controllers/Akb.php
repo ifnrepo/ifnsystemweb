@@ -347,8 +347,8 @@ class Akb extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['mode'] = $mode;
-        $data['header'] = $this->akbmodel->getdatadetailib($id, $mode);
         $data['datheader'] = $this->akbmodel->getdatabyid($id);
+        $data['header'] = $this->akbmodel->getdatadetailib($id, $mode,$data['datheader']['urutakb']);
         $data['bckeluar'] = $this->akbmodel->getbckeluar();
         $data['jnsangkutan'] = $this->akbmodel->getjnsangkutan();
         $data['refkemas'] = $this->akbmodel->refkemas();
@@ -2103,7 +2103,8 @@ class Akb extends CI_Controller
     }
     public function simpanbomjf($id, $mode = 0)
     {
-        $hasil = $this->akbmodel->hitungbomjf($id, $mode);
+        $data['datheader'] = $this->akbmodel->getdatabyid($id);
+        $hasil = $this->akbmodel->hitungbomjf($id, $mode,$data['datheader']['urutakb']);
         $simpan = $this->akbmodel->simpanbom($hasil['ok'], $id);
         if ($simpan) {
             if ($mode = 0) {
@@ -2186,6 +2187,16 @@ class Akb extends CI_Controller
         $hasil = $this->akbmodel->masukkelampiran($data);
         echo $hasil;
     }
+    public function isiurutakb($id,$mode=0){
+        $hasil = $this->akbmodel->getdatadetailib($id,$mode);
+        $no=0;
+        foreach($hasil as $hasil){
+            $no++;
+            $this->akbmodel->isiurutakb($hasil['id'],$no);
+        }
+        $url = base_url() . 'akb/isidokbc/' . $id . '/1';
+        redirect($url);
+    }
     public function uploadijin($id, $mode = 0)
     {
         $spreadsheet = new Spreadsheet();
@@ -2241,7 +2252,7 @@ class Akb extends CI_Controller
             $sheet->setCellValue('I' . $numrow, '-');
             $sheet->setCellValue('J' . $numrow, '-');
             $sheet->setCellValue('K' . $numrow, '-');
-            $sheet->setCellValue('L' . $numrow, $spekbarang);
+            $sheet->setCellValue('L' . $numrow, htmlspecialchars_decode($spekbarang));
             $sheet->setCellValue('M' . $numrow, $sku);
             $sheet->setCellValue('Q' . $numrow, 'KGM');
             $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
@@ -2283,7 +2294,7 @@ class Akb extends CI_Controller
                         $sheet->setCellValue('I' . $numrow, '-');
                         $sheet->setCellValue('J' . $numrow, '-');
                         $sheet->setCellValue('K' . $numrow, '-');
-                        $sheet->setCellValue('L' . $numrow, $spekbarang);
+                        $sheet->setCellValue('L' . $numrow, htmlspecialchars_decode($spekbarang));
                         $sheet->setCellValue('M' . $numrow, $sku);
                         $sheet->setCellValue('P' . $numrow, $det['kgs']);
                         $sheet->setCellValue('Q' . $numrow, 'KGM');
@@ -2583,7 +2594,7 @@ class Akb extends CI_Controller
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $hs);
-            $sheet->setCellValue('F' . $numrow, $spekbarang);
+            $sheet->setCellValue('F' . $numrow, htmlspecialchars_decode($spekbarang));
             $sheet->setCellValue('H' . $numrow, $pcs);
             $sheet->setCellValue('I' . $numrow, $data['kodebc']);
             $sheet->setCellValue('J' . $numrow, round($data['kgs'], 2));
@@ -2738,7 +2749,7 @@ class Akb extends CI_Controller
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $sku);
-            $sheet->setCellValue('C' . $numrow, $spekbarang);
+            $sheet->setCellValue('C' . $numrow, htmlspecialchars_decode($spekbarang));
             $sheet->setCellValue('D' . $numrow, $data['nobontr']);
             $sheet->setCellValue('E' . $numrow, $data['jns_bc']);
             $sheet->setCellValue('F' . $numrow, $data['nomor_bc']);
@@ -3070,7 +3081,7 @@ class Akb extends CI_Controller
                 $numrow++;
                 $sheet->setCellValue('B' . $numrow, ' ' . $hs);
                 $numrow++;
-                $sheet->setCellValue('B' . $numrow, $spekbarang);
+                $sheet->setCellValue('B' . $numrow, htmlspecialchars_decode($spekbarang));
                 $numrow++;
                 $numawal = $nok;
                 $numakhir = $numrow - 1;
