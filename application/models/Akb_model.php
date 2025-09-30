@@ -110,7 +110,7 @@ class Akb_model extends CI_Model
                 $this->db->order_by('a.urut_akb,seri_barang');
             }
         }else{
-            $this->db->select("a.*,sum(round(a.pcs,2)) as pcs,sum(round(a.kgs,2)) as kgs,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem,j.nomor_dok as dokgaichu");
+            $this->db->select("a.*,round(sum(a.pcs),2) as pcs,round(sum(a.kgs),2) as kgs,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem,j.nomor_dok as dokgaichu");
             $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
             $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
             $this->db->from('tb_detail a');
@@ -910,7 +910,7 @@ class Akb_model extends CI_Model
     }
     public function hitungbomjf($id,$mode){
         if($mode==1){
-            $this->db->select("tb_detail.*,sum(round(tb_detail.pcs,2)) as pcs,sum(round(tb_detail.kgs,2)) as kgs,tb_header.nomor_dok,tb_header.ketprc,barang.kode");
+            $this->db->select("tb_detail.*,round(sum(tb_detail.pcs),2) as pcs,round(sum(tb_detail.kgs),2) as kgs,tb_header.nomor_dok,tb_header.ketprc,barang.kode");
             $this->db->from('tb_detail');
             $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
             $this->db->join('barang','barang.id = tb_detail.id_barang','left');
@@ -992,16 +992,30 @@ class Akb_model extends CI_Model
         $arrhasil2 = array('ok'=>$arrhasil,'ng'=>$arrnotbom);
         return $arrhasil2;
     }
-    public function excellampiran261($id){
-        $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx");
-        $this->db->from('tb_detail');
-        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
-        $this->db->join('satuan','satuan.id = tb_detail.id_satuan','left');
-        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-        $this->db->join('tb_po g', 'g.po = tb_detail.po AND g.item = tb_detail.item AND g.dis = tb_detail.dis', 'left');
-        $this->db->where('id_akb',$id);
-        // $this->db->limit(1,0);
-        $this->db->order_by('urut_akb,seri_barang');
+    public function excellampiran261($id,$qu=0){
+        if($qu==0){
+            $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx");
+            $this->db->from('tb_detail');
+            $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+            $this->db->join('satuan','satuan.id = tb_detail.id_satuan','left');
+            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+            $this->db->join('tb_po g', 'g.po = tb_detail.po AND g.item = tb_detail.item AND g.dis = tb_detail.dis', 'left');
+            $this->db->where('id_akb',$id);
+            // $this->db->limit(1,0);
+            $this->db->order_by('urut_akb,seri_barang');
+        }else{
+            $this->db->select("tb_detail.*,round(sum(pcs),2) as pcs,round(sum(kgs),2) as kgs,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx");
+            $this->db->from('tb_detail');
+            $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
+            $this->db->join('satuan','satuan.id = tb_detail.id_satuan','left');
+            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+            $this->db->join('tb_po g', 'g.po = tb_detail.po AND g.item = tb_detail.item AND g.dis = tb_detail.dis', 'left');
+            $this->db->where('id_akb',$id);
+            // $this->db->limit(1,0);
+            $this->db->group_by('tb_header.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
+            $this->db->order_by('tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
+            // $this->db->order_by('urut_akb,seri_barang');
+        }
         return $this->db->get();
     }
     public function detailexcellampiran261($id,$no){
