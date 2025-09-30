@@ -1500,7 +1500,7 @@ class Ib extends CI_Controller
             // $url = base_url().'ib/kosong';
             print_r($databalik);
             $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.var_dump($databalik['Exception']));
+            $this->session->set_flashdata('pesanerror',$databalik['message'][0].'[EXCEPTION]'.var_dump($databalik['Exception']));
             // $this->session->set_flashdata('pesanerror',print_r($databalik));
             $url = base_url().'ib/isidokbc/'.$id;
             redirect($url);
@@ -1765,5 +1765,18 @@ class Ib extends CI_Controller
         $data['idheader'] = $id;
         $data['data'] = $this->ibmodel->getdatabcasal($id);
         $this->load->view('ib/addbcasal',$data);
+    }
+    public function simpanbcasal($id,$mode=0){
+        $data['idheader'] = $id;
+        $cek = $this->ibmodel->simpanbcasal($id);
+        if($cek){
+            $url = base_url().'ib/isidokbc/'.$id.'/1';
+            redirect($url);
+        }
+    }
+    public function viewbcasal($id){
+        $data['idheader'] = $id;
+        $data['detail'] = $this->ibmodel->getdatadetailbyid($id)->row_array();
+        $this->load->view('ib/viewbcasal',$data);
     }
 }

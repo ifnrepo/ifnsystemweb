@@ -16,28 +16,25 @@
                     $no=0; foreach($data->result_array() as $data){ $no++; 
                         $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis']);
                         $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis'],$data['id_barang']);
+                         $kondisi = [
+                            'id_barang' => $data['id_barang'],
+                            'trim(po)' => trim($data['po']),
+                            'trim(item)' => trim($data['item']),
+                            'dis' => $data['dis'],
+                            'trim(insno)' => trim($data['insno']),
+                            'trim(nobontr)' => trim($data['nobontr'])
+                        ];
+                        $datdetail = getbcasal($data['exnomor_bc'],$kondisi)->row_array(); 
+                        $nomaju = isset($datdetail['nomor_aju']) ? $datdetail['nomor_aju'] : 'TIDAK DITEMUKAN';
+                        $serbar = isset($datdetail['seri_urut_akb']) ? $datdetail['seri_urut_akb'] : 0;
+                        $warnateks = $serbar==0 ? 'text-pink' : 'text-teal';
                 ?>
                     <tr>
                         <td><?= $no ?></td>
                         <td><?= $sku ?></td>
-                        <td><?= $spekbarang ?></td>
+                        <td class="line-12"><?= $spekbarang ?><br><span class="<?= $warnateks ?>">Aju <?= $nomaju ?>, Seri Barang <?= $serbar ?></span></td>
                         <td><?= $data['pcsx'] ?></td>
                         <td><?= $data['kgsx'] ?></td>
-                    </tr>
-                    <?php
-                        $kondisi = [
-                            'id_barang' => $data['id_barang'],
-                            'po' => $data['po'],
-                            'item' => $data['item'],
-                            'dis' => $data['dis'],
-                            'insno' => $data['insno'],
-                            'nobontr' => $data['nobontr']
-                        ];
-                        $datdetail = getbcasal($data['nomor_bc'],$kondisi)->row_array(); 
-                    ?>
-                    <tr style="padding: 0px !important; margin: 0px !important;" class="text-teal">
-                        <td></td>
-                        <td colspan="4">Aju <?= $datdetail['nomor_aju'] ?>, Seri Barang <?= $datdetail['seri_barang'] ?></td>
                     </tr>
                 <?php } ?>
             </tbody>

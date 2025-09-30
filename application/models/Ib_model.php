@@ -42,9 +42,17 @@ class Ib_model extends CI_Model
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
+    public function getdatadetailbyid($id){
+        $this->db->select('tb_detail.*,barang.kode');
+        $this->db->from('tb_detail');
+        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->join('tb_po','trim(tb_po.po)=trim(tb_detail.po) and trim(tb_po.item) = trim(tb_detail.item) and tb_po.dis = tb_detail.dis','left');
+        $this->db->where('tb_detail.id',$id);
+        return $this->db->get();
+    }
     public function getdatadetailib($data,$mode=0)
     {
-        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id");
+        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,'56081100' as hsx");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         if($mode==1){
@@ -845,7 +853,7 @@ class Ib_model extends CI_Model
     }
     public function getdatabcasal($data)
     {
-        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,h.nomor_bc");
+        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,c.kode,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,h.exnomor_bc,'56081100' as hsx,");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         $this->db->select("sum(a.kgs) as kgsx,sum(a.pcs) as pcsx");
@@ -862,5 +870,34 @@ class Ib_model extends CI_Model
         $this->db->order_by('a.po,a.item,a.dis,c.kode,a.insno');
         $hasil1 = $this->db->get();
         return $hasil1;
+    }
+    public function simpanbcasal($id){
+        $this->db->trans_start();
+        $data = $this->getdatabcasal($id);
+        foreach($data->result_array() as $data){
+            $kondisi = [
+                'id_barang' => $data['id_barang'],
+                'trim(po)' => trim($data['po']),
+                'trim(item)' => trim($data['item']),
+                'dis' => $data['dis'],
+                'trim(insno)' => trim($data['insno']),
+                'trim(nobontr)' => trim($data['nobontr'])
+            ];
+            $kondisi2 = [
+                'id_akb' => $id,
+                'trim(po)' => trim($data['po']),
+                'trim(item)' => trim($data['item']),
+                'dis' => $data['dis'],
+                'id_barang' => $data['id_barang'],
+                'trim(insno)' => trim($data['insno']),
+                'trim(nobontr)' => trim($data['nobontr'])
+            ];
+            $datdetail = getbcasal($data['exnomor_bc'],$kondisi)->row_array();
+
+            $this->db->where($kondisi2);
+            $this->db->update('tb_detail',['id_seri_exbc'=>$datdetail['id']]);
+        }
+        $this->helpermodel->isilog('SIMPAN BC Asal seri barang nomor dok : '.$data['id']);
+        return $this->db->trans_complete();
     }
 }

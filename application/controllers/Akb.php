@@ -2188,7 +2188,8 @@ class Akb extends CI_Controller
         echo $hasil;
     }
     public function isiurutakb($id,$mode=0){
-        $hasil = $this->akbmodel->getdatadetailib($id,$mode);
+        $data['datheader'] = $this->akbmodel->getdatabyid($id);
+        $hasil = $this->akbmodel->getdatadetailib($id,$mode,$data['datheader']['urutakb']);
         $no=0;
         foreach($hasil as $hasil){
             $no++;
@@ -2237,7 +2238,7 @@ class Akb extends CI_Controller
         $sheet->setCellValue('AE1', "JUMLAH_KEMASAN");
         $isiheader = $this->akbmodel->getdatabyid($id);
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
-        $inv = $this->akbmodel->excellampiran261($id);
+        $inv = $this->akbmodel->excellampiran261($id,$isiheader['urutakb']);
         $no = 0;
         $numrow = 2;
         foreach ($inv->result_array() as $datbarangkirim) {
@@ -2329,7 +2330,7 @@ class Akb extends CI_Controller
         $sheet->setCellValue('O1', "FLAG PELEKATAN");
 
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
-        $inv = $this->akbmodel->excellampiran261($id);
+        $inv = $this->akbmodel->excellampiran261($id,$isiheader['urutakb']);
         $no = 0;
         $numrow = 2;
         foreach ($inv->result_array() as $datbarangkirim) {
@@ -2413,7 +2414,7 @@ class Akb extends CI_Controller
         $sheet->setCellValue('AG1', "FLAG BARANG LOKAL");
 
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
-        $inv = $this->akbmodel->excellampiran261($id);
+        $inv = $this->akbmodel->excellampiran261($id,$isiheader['urutakb']);
         $no = 0;
         $nop = 0;
         $numrow = 2;
@@ -2506,7 +2507,7 @@ class Akb extends CI_Controller
         $sheet->setCellValue('P1', "FLAG PELEKATAN");
 
         $kurssekarang = getkurssekarang($isiheader['tgl_aju'])->row_array();
-        $inv = $this->akbmodel->excellampiran261($id);
+        $inv = $this->akbmodel->excellampiran261($id,$isiheader['urutakb']);
         $no = 0;
         $nop = 0;
         $numrow = 2;
@@ -2573,7 +2574,7 @@ class Akb extends CI_Controller
         $sheet->setCellValue('K1', "VOLUME");
         $sheet->setCellValue('L1', "KETERANGAN");
 
-        $inv = $this->akbmodel->excellampiran261($id);
+        $inv = $this->akbmodel->excellampiran261($id,$isiheader['urutakb']);
         $no = 1;
         // Untuk penomoran tabel, di awal set dengan 1    
         $numrow = 2;
@@ -2648,7 +2649,7 @@ class Akb extends CI_Controller
         $sheet->setCellValue('D1', "JUMLAH BAHAN BAKU DIKIRIM");
         $sheet->setCellValue('E1', "CONSMP");
 
-        $inv = $this->akbmodel->excellampiran261($id);
+        $inv = $this->akbmodel->excellampiran261($id,$isiheader['urutakb']);
         $no = 1;
         $nop = 0;
         // Untuk penomoran tabel, di awal set dengan 1    
@@ -2736,8 +2737,8 @@ class Akb extends CI_Controller
         $sheet->getColumnDimension('G')->setWidth(2.06, 'cm');
         $sheet->getColumnDimension('H')->setWidth(2.38, 'cm');
         $sheet->getColumnDimension('I')->setWidth(2, 'cm');
-
-        $inv = $this->akbmodel->exceljaminan261($id);
+        $isiheader = $this->akbmodel->getdatabyid($id);
+        $inv = $this->akbmodel->exceljaminan261($id,$isiheader['urutakb']);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
@@ -2843,8 +2844,9 @@ class Akb extends CI_Controller
             $sheet->getStyle('F3')->getFont()->setSize(13);
             $sheet->getStyle('G3')->getFont()->setSize(13);
             $sheet->getStyle('H3')->getFont()->setSize(13);
-            $inv = $this->akbmodel->excellampiran261($id);
             $header = $this->akbmodel->getdatabyid($id);
+            // $cekhead = $header->row_array();
+            $inv = $this->akbmodel->excellampiran261($id,$header['urutakb']);
             // echo "<pre>";
             // print_r($header);
             // echo "</pre>";
@@ -3060,7 +3062,7 @@ class Akb extends CI_Controller
             $sheet->getColumnDimension('O')->setWidth(3.70, 'cm');
             $sheet->getRowDimension('11')->setRowHeight(1.93, 'cm');
 
-            $inv = $this->akbmodel->excellampiran261($id);
+            $inv = $this->akbmodel->excellampiran261($id,$header['urutakb']);
             $numrow = 12;
             $no = 1;
             $nok = 1;
@@ -3185,7 +3187,7 @@ class Akb extends CI_Controller
         $sheet->getStyle('F3')->getFont()->setSize(13);
         $sheet->getStyle('G3')->getFont()->setSize(13);
         $sheet->getStyle('H3')->getFont()->setSize(13);
-        $inv = $this->akbmodel->excellampiran261($id);
+        $inv = $this->akbmodel->excellampiran261($id,$header['urutakb']);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
@@ -3642,8 +3644,8 @@ class Akb extends CI_Controller
         $sheet->setCellValue('G2', "BON GAICHU");
         $sheet->setCellValue('H2', "PCS");
         $sheet->setCellValue('I2', "KGS");
-
-        $inv = $this->akbmodel->getdatadetailib($id, 1);
+        $isiheader = $this->akbmodel->getdatabyid($id);
+        $inv = $this->akbmodel->getdatadetailib($id, 1,$isiheader['urutakb']);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    

@@ -957,7 +957,7 @@ class Helper_model extends CI_Model
         return $this->db->get_where('tb_kurs',['tgl >=' => $xdate]);
     }
     public function getdetailbcasal($exbc,$data){
-        $this->db->select('*');
+        $this->db->select('tb_detail.*,tb_header.nomor_aju');
         $this->db->from('tb_detail');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
         $this->db->where('tb_header.nomor_bc',$exbc);

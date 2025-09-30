@@ -102,7 +102,7 @@
                             </div>
                         </div>
                     </div>
-                    <div class="row <?= $hilangbc40; ?>">
+                    <div class="row <?= $hilangbc40; ?><?= $hilangbc262; ?>">
                         <div class="col-sm-12">
                             <div class="card font-kecil mt-1">
                                 <div class="bg-warning-lt px-2 py-1 font-bold"><span class="text-black">Entitas Dokumen</span><span style="float: right;"><a href="<?= base_url().'ib/addentitas/'.$datheader['id']; ?>" class="btn btn-success py-0 px-1 btn-flat" title="Add Entitas" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Entitas"><i class="fa fa-plus"></i></a></span></div>
@@ -553,7 +553,7 @@
                 <div class="m-2 font-bold d-flex justify-content-between">
                     <div>Detail Barang</div>
                     <div>
-                        <a href="<?= base_url().'ib/getbcasal/'.$datheader['id'].'/1'; ?>" id="tombolgetbcasal" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="BC Asal Default" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> BC Asal Default</a>
+                        <a href="<?= base_url().'ib/getbcasal/'.$datheader['id'].'/1'; ?>" id="tombolgetbcasal" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="BC Asal Default" class="btn btn-sm btn-primary <?= $hilangbc23.' '.$hilangbc40 ?>"><i class="fa fa-calculator mr-1"></i> BC Asal Default</a>
                     </div>
                 </div>
                 <div class="card card-lg font-kecil">
@@ -586,18 +586,19 @@
                                         $sumpcs += $mode==0 ? $data['pcs'] : $data['pcsx'];
                                         $sumkgs += $mode==0 ? $data['kgs'] : $data['kgsx'];
                                         $spekbarang = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
-                                        $sku = $mode==0 ? $data['kategori_id'] : (trim($data['po']=='') ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis']));
+                                        $sku = $mode==0 ? $data['kategori_id'] : (trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis']));
+                                        $nohs = $mode==0 ? $data['nohs'] : (trim($data['po'])=='' ? $data['nohs'] : $data['hsx']);
                                          ?>
                                     <tr>
                                         <td class="line-12">
                                             <?php if($mode==0 || $data['id_seri_exbc'] == 0){ ?>
                                                 <?= $no.'. '.$spekbarang; ?><br><span class="text-teal font-11"><?= $data['insno'].$data['nobontr'] ?></span>
                                             <?php }else{ ?>
-                                                <a href="#"><?= $no.'. '.$spekbarang; ?></a><br><span class="text-teal font-11"><?= $data['insno'].$data['nobontr'] ?></span>
+                                                <a href="<?= base_url().'ib/viewbcasal/'.$data['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View BC ASAL"><?= $no.'. '.$spekbarang; ?></a><br><span class="text-teal font-11"><?= $data['insno'].$data['nobontr'] ?></span>
                                             <?php } ?>
                                         </td>
                                         <td class="text-left"><?= $sku ?></td>
-                                        <td class="text-left"><?= $data['nohs']; ?></td>
+                                        <td class="text-left"><?= $nohs; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
                                         <?php if($mode==0){ ?>
                                             <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>
