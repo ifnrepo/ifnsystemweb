@@ -225,11 +225,16 @@
                                     </tr>
                                 </thead>
                                 <tbody class=" table-tbody" style="font-size: 13px !important;">
-                                    <?php $no = 0;
+                                    <?php
+                                    $no = 0;
+                                    $total_kgs = 0;
                                     if (!empty($detail)) {
-                                        foreach ($detail as $key) : $no++; ?>
+                                        foreach ($detail as $key) :
+                                            $total_kgs += $key['kgs']; // jumlahkan tiap baris
+                                            $no++; ?>
+
                                             <tr>
-                                                <td class="text-primary"><?= trim($key['seri_barang']) !== '' ? $key['seri_barang'] : '-'; ?></td>
+                                                <td class="text-primary"><?= trim($key['seri_urut_akb']) !== '' ? $key['seri_urut_akb'] : '-'; ?></td>
                                                 <td class="text-primary" style="text-align: center;"><?= trim($key['po']) !== '' ? trim($key['po']) : '-'; ?></td>
                                                 <td class="text-primary" style="text-align: center;"><?= trim($key['item']) !== '' ? trim($key['item']) : '-'; ?></td>
                                                 <td class="text-primary"><?= trim($key['nama_barang']) !== '' ? trim($key['nama_barang']) : '-'; ?></td>
@@ -237,12 +242,20 @@
                                                 <td class="text-primary"><?= trim($key['kgs']) !== '' ? $key['kgs'] : '-'; ?></td>
                                                 <td class="text-primary"><?= trim($key['pcs']) !== '' ? $key['pcs'] : '-'; ?></td>
                                             </tr>
-                                        <?php endforeach;
-                                    } else { ?>
+                                        <?php endforeach; ?>
                                         <tr>
-                                            <td colspan="6" class="text-center text-danger">--- Data Belum Terlampir ---</td>
+                                            <td colspan="4" class="text-center fw-bold text-danger">Total Kgs</td>
+                                            <td></td>
+
+                                            <td class="fw-bold text-danger"><?= $total_kgs ?></td>
+                                        </tr>
+
+                                    <?php } else { ?>
+                                        <tr>
+                                            <td colspan="7" class="text-center text-danger">--- Data Belum Terlampir ---</td>
                                         </tr>
                                     <?php } ?>
+
                                 </tbody>
                             </table>
                         </div>
