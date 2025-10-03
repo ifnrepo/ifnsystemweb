@@ -9,29 +9,65 @@ class Kontrak_model extends CI_Model
         return $hasil;
     }
 
+    // public function getdatakontrak($kode)
+    // {
+    //     $this->db->select('*');
+    //     $this->db->from('tb_kontrak');
+    //     $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
+    //     if ($kode['dept_id'] != "") {
+    //         $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
+    //     }
+    //     $this->db->where('jns_bc', $kode['jnsbc']);
+    //     if ($kode['status'] == 1) {
+    //         $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
+    //     } else if ($kode['status'] == 2) {
+    //         $this->db->where("tgl_akhir < '" . date('Y-m-d') . "'");
+    //     }
+    //     if ($kode['thkontrak'] != '') {
+    //         $this->db->where("year(tgl_awal)", $kode['thkontrak']);
+    //     }
+    //     if (isset($kode['datkecuali'])) {
+    //         $datkont = $this->db->query("Select id_kontrak from tb_header where id_kontrak is not null")->result_array();
+    //     }
+    //     $this->db->order_by('tgl_akhir');
+    //     return $this->db->get();
+    // }
+
     public function getdatakontrak($kode)
     {
-        $this->db->select('*');
+        $this->db->select("tb_kontrak.*,dept.departemen,SUM(tb_detail.kgs) AS total_kgs");
         $this->db->from('tb_kontrak');
-        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
-        if ($kode['dept_id'] != "") {
+        $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id');
+        $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
+        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
+
+        if (!empty($kode['dept_id'])) {
             $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
         }
-        $this->db->where('jns_bc', $kode['jnsbc']);
+
+        $this->db->where('tb_kontrak.jns_bc', $kode['jnsbc']);
+
         if ($kode['status'] == 1) {
             $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
         } else if ($kode['status'] == 2) {
             $this->db->where("tgl_akhir < '" . date('Y-m-d') . "'");
         }
-        if ($kode['thkontrak'] != '') {
-            $this->db->where("year(tgl_awal)", $kode['thkontrak']);
+
+        if (!empty($kode['thkontrak'])) {
+            $this->db->where("YEAR(tgl_awal)", $kode['thkontrak']);
         }
+
         if (isset($kode['datkecuali'])) {
-            $datkont = $this->db->query("Select id_kontrak from tb_header where id_kontrak is not null")->result_array();
+            $datkont = $this->db->query("SELECT id_kontrak FROM tb_header WHERE id_kontrak IS NOT NULL")->result_array();
         }
+
+        $this->db->group_by('tb_kontrak.id');
         $this->db->order_by('tgl_akhir');
+
         return $this->db->get();
     }
+
+
     public function getdatakontrak261($kode)
     {
         $this->db->select('*');
@@ -117,7 +153,16 @@ class Kontrak_model extends CI_Model
         return $this->db->get();
     }
 
-
+    public function getDetail_kontrak($sesi)
+    {
+        $this->db->select("tb_detail.*, barang.nama_barang, satuan.kodesatuan");
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+        $this->db->where('tb_header.id_kontrak', $sesi);
+        return $this->db->get()->result_array();
+    }
 
     public function getdatabyid($id)
     {
