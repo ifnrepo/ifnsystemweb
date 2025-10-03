@@ -8,7 +8,7 @@ class Out_model extends CI_Model{
             'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
-            'left(nomor_dok,3) != ' => 'IFN',
+            'left(nomor_dok,6) != ' => 'IFN-TR',
             // '' => ''
         ];
         if($kode['filterbon']==1){

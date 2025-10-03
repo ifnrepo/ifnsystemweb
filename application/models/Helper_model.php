@@ -885,17 +885,7 @@ class Helper_model extends CI_Model
         $hasil2 = $this->db->get_where('tb_hargamaterial',['nobontr' => $data,'id_barang' => $idbarang]);
         if($hasil2->num_rows() > 0){
             $xhasil2 = $hasil2->row_array();
-            // $xdatahasil = $xhasil2['jns_bc'];
-            // $hasilcek = [
-            //     'jns_bc' => $xhasil2['jns_bc'],
-            //     'co' => $xhasil2['co'],
-            //     'bm' => $xhasil2['bm'],
-            //     'ppn' => $xhasil2['ppn'],
-            //     'pph' => $xhasil2['pph'],
-            // ];
-            // array_push($datahasil,$hasilcek);
         }
-        // }
         return $xhasil2;
     }
     public function getjumlahcifbom($id,$no){

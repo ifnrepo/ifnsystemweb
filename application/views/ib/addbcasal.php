@@ -31,7 +31,7 @@
                 ?>
                     <tr>
                         <td><?= $no ?></td>
-                        <td><?= $sku ?></td>
+                        <td class="line-12"><?= $sku ?><br><span class="text-teal"><?= $datdetail['insno'] ?></span></td>
                         <td class="line-12"><?= $spekbarang ?><br><span class="<?= $warnateks ?>">Aju <?= $nomaju ?>, Seri Barang <?= $serbar ?></span></td>
                         <td><?= $data['pcsx'] ?></td>
                         <td><?= $data['kgsx'] ?></td>

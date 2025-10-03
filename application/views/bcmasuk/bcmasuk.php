@@ -94,7 +94,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th class="text-left">No Dokumen / Tgl</th>
                 <th class="text-left">Pengirim</th>
                 <th class="text-left">Info</th>
-                <th class="text-left">Nomor/Tgl Respon</th>
+                <th class="text-left">Nomor/Tgl SPPB</th>
                 <th class="text-left">Nilai IDR</th>
                 <th class="text-left">Nilai USD</th>
                 <th class="text-left">Ket</th>

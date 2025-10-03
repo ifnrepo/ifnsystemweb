@@ -582,7 +582,7 @@
                                     <?php $no=0; $sumdetail=0; $sumpcs=0; $sumkgs=0; foreach ($header as $data) { 
                                         $no++;
                                         $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
-                                        $sumdetail += $data['harga']*$jumlah;
+                                        $sumdetail += $mode==0 ? $data['harga']*$jumlah : $data['xcif']*$data['xndpbm'];
                                         $sumpcs += $mode==0 ? $data['pcs'] : $data['pcsx'];
                                         $sumkgs += $mode==0 ? $data['kgs'] : $data['kgsx'];
                                         $spekbarang = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
@@ -594,24 +594,27 @@
                                             <?php if($mode==0 || $data['id_seri_exbc'] == 0){ ?>
                                                 <?= $no.'. '.$spekbarang; ?><br><span class="text-teal font-11"><?= $data['insno'].$data['nobontr'] ?></span>
                                             <?php }else{ ?>
-                                                <a href="<?= base_url().'ib/viewbcasal/'.$data['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View BC ASAL"><?= $no.'. '.$spekbarang; ?></a><br><span class="text-teal font-11"><?= $data['insno'].$data['nobontr'] ?></span>
+                                                <a href="<?= base_url().'ib/viewbcasal/'.$data['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="View BC ASAL"><?= $no.'. '.$spekbarang; ?></a><br><span class="text-teal font-11"><?= $data['insno'].$data['nobontr'] ?></span>
                                             <?php } ?>
                                         </td>
                                         <td class="text-left"><?= $sku ?></td>
                                         <td class="text-left"><?= $nohs; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
                                         <?php if($mode==0){ ?>
-                                            <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>
-                                            <td class="text-right"><?= rupiah($data['kgs'],2); ?></td>
-                                        <?php }else{ ?>
-                                            <td class="text-right"><?= rupiah($data['pcsx'],0); ?></td>
-                                            <td class="text-right"><?= rupiah($data['kgsx'],2); ?></td>
+                                                <td class="text-right"><?= rupiah($data['pcs'],0); ?></td>
+                                                <td class="text-right"><?= rupiah($data['kgs'],2); ?></td>
+                                                <td class="text-right"><?= rupiah($data['harga'],2); ?></td>
+                                                <td class="text-right"><?= rupiah($data['harga']*$jumlah,2); ?></td>
+                                            <?php }else{ ?>
+                                                <?php $datkgs = $data['kgsx']==0 ? 1 : $data['kgsx']; ?>
+                                                <td class="text-right"><?= rupiah($data['pcsx'],0); ?></td>
+                                                <td class="text-right"><?= rupiah($data['kgsx'],2); ?></td>
+                                                <td class="text-right"><?= rupiah(($data['xcif']/$datkgs)*$data['xndpbm'],2); ?></td>
+                                                <td class="text-right"><?= rupiah($data['xcif']*$data['xndpbm'],2); ?></td>
                                         <?php } ?>
-                                        <td class="text-right"><?= rupiah($data['harga'],2); ?></td>
-                                        <td class="text-right"><?= rupiah($data['harga']*$jumlah,2); ?></td>
                                         <?php if($mode==1): ?>
                                         <td class="text-center">
-                                            <a href="<?= base_url().'ib/editbcasal/'.$data['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data" >EDIT</a>
+                                            <a href="<?= base_url().'ib/editbcasal/'.$datheader['id'].'/'.$data['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261" >EDIT</a>
                                         </td>
                                         <?php endif; ?>
                                     </tr>
