@@ -486,8 +486,8 @@
                                                         <a class="btn btn-success font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" href="<?= base_url('kontrak/view/') . $datheader['idkontrak'].'/1'; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" >View</a>
                                                         <a class="btn btn-primary font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" id="addkontraktolampiran" href="#" data-title="Add To Lampiran" ><i class="fa fa-upload"></i></a>
                                                         <!-- <button class="btn font-kecil btn-flat" type="button">View</button> -->
-                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tglkontrak" value="<?= $datheader['tglkontrak']; ?>" placeholder="Nomor Kontrak Kosong" >
-                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tgl_kep" value="<?= $datheader['tgl_kep']; ?>" placeholder="Nomor Kontrak Kosong" >
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tglkontrak" value="<?= tglmysql($datheader['tglkontrak']); ?>" placeholder="Nomor Kontrak Kosong" >
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tgl_kep" value="<?= tglmysql($datheader['tgl_kep']); ?>" placeholder="Nomor Kontrak Kosong" >
                                                         <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="nomor_kep" value="<?= $datheader['nomor_kep']; ?>" placeholder="Nomor Kontrak Kosong" >
                                                     </div>
                                                 </div>
@@ -674,7 +674,17 @@
                     <span>
                         <a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].'/1'; ?>" id="tombolhitung" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
                         <a href="#" data-href="<?= base_url().'akb/tambahkelampiran/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" class="btn btn-sm btn-success"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
-                        <a href="#" data-href="<?= base_url().'akb/isiurutakb/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengisi Urut AKB" data-title="Bill Of Material" class="btn btn-sm btn-success">...</a>
+                        <span class="dropdown">
+                            <button class="btn btn-sm btn-info" style="height: 32px;" data-bs-boundary="viewport" data-bs-toggle="dropdown"><i class="fa fa-chevron-down"></i></button>
+                            <div class="dropdown-menu dropdown-menu-end">
+                            <a class="dropdown-item font-kecil" href="#" data-href="<?= base_url().'akb/isiurutakb/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengisi Urut AKB" data-title="Bill Of Material">
+                                Isi/Urut Seri Barang
+                            </a>
+                            <a class="dropdown-item font-kecil" href="#" data-href="<?= base_url().'akb/isidatacifbombc/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan merefresh data CIF Material" data-title="Refresh CIF">
+                                Refresh CIF BOM
+                            </a>
+                            </div>
+                        </span>
                     <span>
                 </div>
                 <div class="card card-lg font-kecil">
@@ -761,7 +771,8 @@
                                         <td><?= $detbom['kodesatuan']; ?></td>
                                         <td><?= $nomor_bc ?></td>
                                         <td class="text-center text-blue"><?= $jns_bc; ?></td>
-                                        <td class="text-right"><?= rupiah($hargaperkilo/$detbom['kgs'],2) ?></td>
+                                        <?php $xdetbom = $detbom['kgs']==0 ? 1 : $detbom['kgs']; ?>
+                                        <td class="text-right"><?= rupiah($hargaperkilo/$xdetbom,2) ?></td>
                                         <td class="text-right"><?= rupiah($hargaperkilo,2) ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url().'akb/editbombc/'.$detbom['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data" >EDIT</a>

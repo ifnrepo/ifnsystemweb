@@ -2,11 +2,13 @@
     <div class="row font-kecil">
         <div class="col-12 mb-1">
             <input type="text" name="id" id="id" class="hilang" value="<?= $detail['id']; ?>">
+            <input type="text" name="id_header" id="id_header" class="hilang" value="<?= $detail['id_header']; ?>">
             <div class="row">
                 <div class="col-9">
                     <div class="row mb-1">
                         <label class="col-3 col-form-label font-kecil">Nama Barang</label>
                         <div class="col">
+                            <input type="hidden" name="id_barang" id="id_barang" value ="<?= $detail['id_barang'] ?>">
                             <input type="text" class="form-control font-kecil" id="nama_barang" name="nama_barang" value="<?= $detail['nama_barang']; ?>" aria-describedby="emailHelp" placeholder="Barang" disabled>
                         </div>
                     </div>
@@ -85,7 +87,9 @@
             url: base_url+'akb/simpandetailbombc',
             data: {
                 id: $("#id").val(),
+                idheader: $("#id_header").val(),
                 nobontr: $("#nobontr").val(),
+                idbarang: $("#id_barang").val(),
                 bm: cekbm,
                 bmt: cekbmt,
                 cukai: cekcukai,

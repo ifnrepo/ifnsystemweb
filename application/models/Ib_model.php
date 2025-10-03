@@ -50,13 +50,22 @@ class Ib_model extends CI_Model
         $this->db->where('tb_detail.id',$id);
         return $this->db->get();
     }
+    public function getdatadetailbyidbcasal($kondisi){
+        $this->db->select('tb_detail.*,barang.kode');
+        $this->db->select('sum(kgs) as kgs');
+        $this->db->from('tb_detail');
+        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->where($kondisi);
+        $this->db->group_by('po,item,dis,id_barang,insno,nobontr');
+        return $this->db->get();
+    }
     public function getdatadetailib($data,$mode=0)
     {
         $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,'56081100' as hsx");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         if($mode==1){
-            $this->db->select("sum(a.kgs) as kgsx,sum(a.pcs) as pcsx");
+            $this->db->select("sum(a.kgs) as kgsx,sum(a.pcs) as pcsx,a.exbc_cif as xcif,a.exbc_ndpbm as xndpbm");
         }
         $this->db->from('tb_detail a');
         $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
@@ -73,6 +82,9 @@ class Ib_model extends CI_Model
             $this->db->order_by('a.po,a.item,a.dis,c.kode,a.insno');
         }
         return $this->db->get()->result_array();
+    }
+    public function getdatabynomorbc($kode){
+        return $this->db->get_where('tb_header',['trim(nomor_bc)' => $kode])->row_array();
     }
     public function getdepttuju($kode)
     {
@@ -871,6 +883,35 @@ class Ib_model extends CI_Model
         $hasil1 = $this->db->get();
         return $hasil1;
     }
+     public function getdatabcasaluntukedit($data,$qu=0,$kondisi=[])
+    {
+        $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,c.kode,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,h.exnomor_bc,'56081100' as hsx,");
+        $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
+        $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
+        $this->db->select('tb_bombc.cif');
+        if($qu=0){
+            $this->db->select("sum(a.kgs) as kgsx,sum(a.pcs) as pcsx");
+        }
+        $this->db->from('tb_detail a');
+        $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
+        $this->db->join('barang c', 'c.id = a.id_barang', 'left');
+        $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
+        $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
+        $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left'); 
+        $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
+        $this->db->join('tb_header h', 'h.id=a.id_akb', 'left');
+        $this->db->join('tb_bombc', 'tb_bombc.id_header=a.id_akb and tb_bombc.seri_barang = a.seri_urut_akb', 'left');
+        $this->db->where('a.id_akb', $data);
+        $this->db->where($kondisi);
+        if($qu=0){
+            $this->db->group_by('a.po,a.item,a.dis,a.id_barang,a.insno,a.nobontr');
+            $this->db->order_by('a.po,a.item,a.dis,c.kode,a.insno');
+        }else{
+            $this->db->order_by('a.seri_urut_akb,a.urut_akb');
+        }
+        $hasil1 = $this->db->get();
+        return $hasil1;
+    }
     public function simpanbcasal($id){
         $this->db->trans_start();
         $data = $this->getdatabcasal($id);
@@ -895,9 +936,97 @@ class Ib_model extends CI_Model
             $datdetail = getbcasal($data['exnomor_bc'],$kondisi)->row_array();
 
             $this->db->where($kondisi2);
-            $this->db->update('tb_detail',['id_seri_exbc'=>$datdetail['id']]);
+            $this->db->update('tb_detail',['id_seri_exbc'=>$datdetail['id'],'arr_seri_exbc' => trim($datdetail['id']).',']);
+
+            $cekcifbcasal = $this->getdatadetailbcasal($data['id']); // Menggunakan Function getdatadetailbcasal
+            $jumlahcif = 0; $jumlahkgs = 0;$ndpbm=0;
+            foreach($cekcifbcasal['bom'] as $cekcif){
+                $jumlahcif += $cekcif->cif; //$cekcif->bm_rupiah+$cekcif->pph_rupiah+$cekcif->ppn_rupiah;
+                $jumlahkgs += $cekcif->kgs;
+                $ndpbm = $cekcif->ndpbm;
+            }
+            $xjmlkgs = $jumlahkgs==0 ? 1 : $jumlahkgs;
+            $datakgsx = $data['kgsx']==0 ? 1 : $data['kgsx'];
+            $ndpbm = $ndpbm==0 ? 1 : $ndpbm;
+            $pembagicif = $jumlahkgs/$datakgsx;
+            $xcif = $jumlahcif/round($pembagicif,2);
+            $this->db->where($kondisi2);
+            $this->db->update('tb_detail',['exbc_cif'=>$xcif,'exbc_ndpbm' => $ndpbm]);
+
+            $this->db->where('id',$id);
+            $this->db->update('tb_header',['kurs_usd' => $ndpbm]);
         }
-        $this->helpermodel->isilog('SIMPAN BC Asal seri barang nomor dok : '.$data['id']);
+        $this->helpermodel->isilog('SIMPAN BC Asal (DEFAULT) seri barang nomor dok : '.$data['id']);
         return $this->db->trans_complete();
+    }
+    public function getbombcasal($id){
+        $this->db->select('tb_detail.*,tb_bombc.seri_barang,tb_bombc.id_barang,barang.kode,barang.nama_barang,tb_bombc.cif,tb_bombc.ndpbm,tb_bombc.bm,tb_bombc.ppn,tb_bombc.pph');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_bombc','tb_bombc.id_header = tb_detail.id_akb','left');
+        $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
+        $this->db->where('tb_detail.id',$id);
+        $this->db->where('tb_bombc.seri_barang = tb_detail.seri_urut_akb');
+        return $this->db->get();
+    }
+    public function getdatadetailbcasal($id){
+        $arrhasil = [];
+        $this->db->select('tb_detail.*,barang.nama_barang,barang.kode');
+        $this->db->from('tb_detail');
+        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->where('tb_detail.id',$id);
+        $hasil = $this->db->get()->row_array();
+        if(isset($hasil['arr_seri_exbc'])){
+            $kondisi = [
+                'id_akb' => $hasil['id_akb'],
+                'trim(po)' => trim($hasil['po']),
+                'trim(item)' => trim($hasil['item']),
+                'dis' => $hasil['dis'],
+                'id_barang' => $hasil['id_barang'],
+                'trim(insno)' => trim($hasil['insno']),
+                'trim(nobontr)' => trim($hasil['nobontr']),
+            ];
+            $this->db->select('po,item,dis,id_barang,insno,nobontr,seri_urut_akb,kgs,SUM(round(kgs,2)) OVER() AS sumkgs,barang.kode');
+            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+            $this->db->from('tb_detail');
+            $this->db->where($kondisi);
+
+            $xhasil = $this->db->get();
+            $arrhasil['detail'] = $xhasil->result();
+
+            $arrseriexbc = explode(',',$hasil['arr_seri_exbc']);
+            $p = 0;
+            foreach($arrseriexbc as $arrseri):
+                 // $hasil2 = $this->db->get_where('tb_detail',['id'=>$hasil['id_seri_exbc']])->row_array();            
+                if(!empty($arrseri)):    
+                $hasil2 = $this->db->get_where('tb_detail',['id'=>$arrseriexbc[$p]])->row_array();
+
+                $kondisi2 = [
+                    'id_akb' => $hasil2['id_akb'],
+                    'trim(po)' => trim($hasil2['po']),
+                    'trim(item)' => trim($hasil2['item']),
+                    'dis' => $hasil2['dis'],
+                    'tb_detail.id_barang' => $hasil2['id_barang'],
+                    'trim(insno)' => trim($hasil2['insno']),
+                    'trim(tb_detail.nobontr)' => trim($hasil2['nobontr']),
+                ];
+                $this->db->select('tb_detail.seri_urut_akb,tb_bombc.kgs,SUM(round(tb_bombc.kgs,2)) OVER() AS sumkgs,tb_bombc.seri_barang ,tb_bombc.id_barang,tb_bombc.cif,SUM(tb_bombc.cif) OVER() AS sumcif,tb_bombc.ndpbm,tb_bombc.nobontr');
+                $this->db->select('barang.kode,barang.nama_barang,tb_bombc.bm,tb_bombc.ppn,tb_bombc.pph,tb_bombc.bm_rupiah,tb_bombc.ppn_rupiah,tb_bombc.pph_rupiah');
+                $this->db->from('tb_detail');
+                $this->db->join('tb_bombc','tb_bombc.id_header = tb_detail.id_akb AND tb_bombc.seri_barang = tb_detail.seri_urut_akb','left');
+                $this->db->join('barang','barang.id = tb_bombc.id_barang');
+                $this->db->where($kondisi2);
+                $this->db->where('tb_detail.id',$arrseriexbc[$p]);
+
+                $xhasil2 = $this->db->get();
+                $arrhasil['bom'] = $xhasil2->result();
+                $p++;
+                endif;
+            endforeach;
+        }
+        return $arrhasil;
+    }
+    public function updatebcasal($id,$kondisi,$nilai,$cife){
+        $this->db->where($kondisi);
+        return $this->db->update('tb_detail',['arr_seri_exbc' => implode(",",$nilai),'exbc_cif'=>$cife]);
     }
 }

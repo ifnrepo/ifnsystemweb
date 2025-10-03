@@ -1554,7 +1554,7 @@ class Akb extends CI_Controller
         ];
         array_push($arrkemas, $arraykemasan);
         $arraybarang = [];
-        $datadet = $this->akbmodel->excellampiran261($id);
+        $datadet = $this->akbmodel->excellampiran261($id,$data['urutakb']);
         $no = 0;
         $jumlahfasilitas = 0;
         $pungutanbm = 0;
@@ -2123,7 +2123,8 @@ class Akb extends CI_Controller
     }
     public function hitungbomjf($id, $mode = 0)
     {
-        $hasil['hasil'] = $this->akbmodel->hitungbomjf($id, $mode);
+        $datheader = $this->akbmodel->getdatabyid($id);
+        $hasil['hasil'] = $this->akbmodel->hitungbomjf($id, $mode,$datheader['urutakb']);
         $hasil['idheader'] = $id;
         $this->load->view('akb/viewhitungbom', $hasil);
     }
@@ -2137,6 +2138,8 @@ class Akb extends CI_Controller
         $data = [
             'id' => $_POST['id'],
             'nobontr' => trim(strtoupper($_POST['nobontr'])),
+            'id_barang' => $_POST['idbarang'],
+            'id_header' => $_POST['idheader'],
             'bm' => $_POST['bm'] == 'true' ? 5 : 0,
             'ppn' => $_POST['ppn'] == 'true' ? 11 : 0,
             'pph' => $_POST['pph'] == 'true' ? 2.5 : 0,
@@ -2194,10 +2197,27 @@ class Akb extends CI_Controller
         $no = 0;
         foreach ($hasil as $hasil) {
             $no++;
-            $this->akbmodel->isiurutakb($hasil['id'], $no);
+            $kondisi = [
+                'id_akb' => $id,
+                'trim(po)' => trim($hasil['po']),
+                'trim(item)' => trim($hasil['item']),
+                'dis' => $hasil['dis'],
+                'id_barang' => $hasil['id_barang'],
+                'trim(insno)' => trim($hasil['insno']),
+                'trim(nobontr)' => trim($hasil['nobontr'])
+            ];
+            $this->akbmodel->isiurutakb($hasil['id'],$no,$data['datheader']['urutakb'],$kondisi);
+
         }
         $url = base_url() . 'akb/isidokbc/' . $id . '/1';
         redirect($url);
+    }
+    public function isidatacifbombc($id){
+        $hasil = $this->akbmodel->isidatacifbombc($id);
+        if($hasil){
+            $url = base_url().'akb/isidokbc/'.$id.'/1';
+            redirect($url);
+        }
     }
     public function uploadijin($id, $mode = 0)
     {
