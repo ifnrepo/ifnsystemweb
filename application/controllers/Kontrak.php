@@ -139,8 +139,6 @@ class Kontrak extends CI_Controller
         $this->session->set_userdata('sesikontrak', $sesi);
         $data['header'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
-
-        // $data['detail'] = $this->db->get_where('tb_kontrak_detail', ['id_kontrak' => $sesi])->result_array();
         $data['detail'] = $this->kontrakmodel->getDetail_kontrak($sesi);
 
         // var_dump($cek);
