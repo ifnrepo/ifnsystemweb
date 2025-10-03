@@ -202,37 +202,45 @@
                     <hr class='m-1'>
                     <div class="font-kecil font-bold bg-primary-lt p-1">DETAIL BARANG</div>
                     <div class="card card-lg">
-                        <div id="table-default" class="table-responsive  ">
+                        <div id="table-default" class="table-responsive">
                             <table class="table datatable">
                                 <thead>
                                     <tr>
-                                        <th class="text-danger text-center">No</th>
-                                        <!-- <th class="text-danger text-center">Kode</th> -->
-                                        <!-- <th class="text-danger text-center">Kode Kategori</th> -->
+                                        <!-- <th class="text-dark text-center">No</th> -->
+                                        <!-- <th class="text-danger text-center">Kode</th>
+                                        <th class="text-danger text-center">Kode Kategori</th>
                                         <th class="text-danger text-center">Kategori</th>
                                         <th class="text-danger text-center">Uraian</th>
                                         <th class="text-danger text-center">HsCode</th>
                                         <th class="text-danger text-center">Pcs</th>
-                                        <th class="text-danger text-center">Kgs</th>
+                                        <th class="text-danger text-center">Kgs</th> -->
+                                        <th class="text-primary">Seri Barang</th>
+                                        <th class="text-primary">PO</th>
+                                        <th class="text-primary">Item</th>
+                                        <th class="text-primary">Nama Barang</th>
+                                        <th class="text-primary">Satuan</th>
+                                        <th class="text-primary">Kgs</th>
+                                        <th class="text-primary">Pcs</th>
 
                                     </tr>
                                 </thead>
                                 <tbody class=" table-tbody" style="font-size: 13px !important;">
                                     <?php $no = 0;
-                                    if ($mode == 0) {
+                                    if (!empty($detail)) {
                                         foreach ($detail as $key) : $no++; ?>
                                             <tr>
-                                                <td style="text-align: center;"><?= $no; ?></td>
-                                                <td style="text-align: center;"><?= $key['kategori']; ?></td>
-                                                <td style="text-align: center;"><?= $key['uraian']; ?></td>
-                                                <td style="text-align: center;"><?= $key['hscode']; ?></td>
-                                                <td style="text-align: right;"><?= $key['pcs']; ?></td>
-                                                <td style="text-align: right;"><?= $key['kgs']; ?></td>
+                                                <td class="text-primary"><?= trim($key['seri_barang']) !== '' ? $key['seri_barang'] : '-'; ?></td>
+                                                <td class="text-primary" style="text-align: center;"><?= trim($key['po']) !== '' ? trim($key['po']) : '-'; ?></td>
+                                                <td class="text-primary" style="text-align: center;"><?= trim($key['item']) !== '' ? trim($key['item']) : '-'; ?></td>
+                                                <td class="text-primary"><?= trim($key['nama_barang']) !== '' ? trim($key['nama_barang']) : '-'; ?></td>
+                                                <td class="text-primary"><?= trim($key['kodesatuan']) !== '' ? $key['kodesatuan'] : '-'; ?> </td>
+                                                <td class="text-primary"><?= trim($key['kgs']) !== '' ? $key['kgs'] : '-'; ?></td>
+                                                <td class="text-primary"><?= trim($key['pcs']) !== '' ? $key['pcs'] : '-'; ?></td>
                                             </tr>
                                         <?php endforeach;
                                     } else { ?>
                                         <tr>
-                                            <td colspan="6" class="text-center">--- Data Detail Terlampir ---</td>
+                                            <td colspan="6" class="text-center text-danger">--- Data Belum Terlampir ---</td>
                                         </tr>
                                     <?php } ?>
                                 </tbody>
