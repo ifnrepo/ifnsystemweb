@@ -131,12 +131,13 @@ class Kontrak_model extends CI_Model
 
     public function getDetail_kontrak($sesi)
     {
-        $this->db->select("tb_detail.*, barang.nama_barang, satuan.kodesatuan");
+        $this->db->select("tb_detail.*, barang.nama_barang, satuan.kodesatuan,barang.kode");
         $this->db->from('tb_detail');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->where('tb_header.id_kontrak', $sesi);
+        $this->db->order_by('tb_detail.seri_urut_akb');
         return $this->db->get()->result_array();
     }
 

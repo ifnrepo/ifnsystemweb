@@ -146,7 +146,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php
-              foreach ($data->result_array() as $datdet) :
+              foreach ($data->result_array() as $datdet) : 
+              $bold = ($datdet['kgs'] < $datdet['total_kgs']) ? 'font-bold' : '';
+              $warnahuruf = ($datdet['kgs'] < $datdet['total_kgs']) ? 'text-pink' : 'text-primary';
+              $saldo = $datdet['total_kgs'] - 0;
               ?>
                 <tr>
                   <td class="line-12"><?= $datdet['nomor']; ?><br><span class="text-pink" style="font-size: 11px"><?= $datdet['departemen']; ?></span></td>
@@ -155,9 +158,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= tglmysql($datdet['tgl_akhir']); ?></td>
                   <td class="text-right"><?= rupiah($datdet['pcs'], 2); ?></td>
                   <td class="text-right"><?= rupiah($datdet['kgs'], 2); ?></td>
-                  <td class="text-right"><?= $datdet['total_kgs']; ?></td>
+                  <td class="text-right <?= $warnahuruf ?> <?= $bold ?>"><?= rupiah($datdet['total_kgs'],2); ?></td>
                   <td class="text-right"></td>
-                  <td class="text-right"></td>
+                  <td class="text-right"><?= rupiah($saldo,2) ?></td>
                   <td>
                     <a href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" style="padding: 3px 5px !important;" class="btn btn-sm btn-success btn-icon p-0">View</a>
                     <a href="<?= base_url() . 'kontrak/editdata/' . $datdet['id']; ?>" class="onprogress btn btn-sm btn-primary btn-icon p-0" style="padding: 3px 5px !important;">Edit</a>

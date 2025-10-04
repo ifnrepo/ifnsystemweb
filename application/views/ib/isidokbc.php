@@ -579,7 +579,7 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-tablee" style="font-size: 13px !important;" >
-                                    <?php $no=0; $sumdetail=0; $sumpcs=0; $sumkgs=0; foreach ($header as $data) { 
+                                    <?php $no=0; $sumdetail=0; $sumpcs=0; $sumkgs=0; $sumcif=0; foreach ($header as $data) { 
                                         $no++;
                                         $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
                                         $sumdetail += $mode==0 ? $data['harga']*$jumlah : $data['xcif']*$data['xndpbm'];
@@ -588,6 +588,7 @@
                                         $spekbarang = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
                                         $sku = $mode==0 ? $data['kategori_id'] : (trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis']));
                                         $nohs = $mode==0 ? $data['nohs'] : (trim($data['po'])=='' ? $data['nohs'] : $data['hsx']);
+                                        $sumcif += $mode==0 ? 0 : $data['xcif'];
                                          ?>
                                     <tr>
                                         <td class="line-12">
@@ -609,7 +610,7 @@
                                                 <?php $datkgs = $data['kgsx']==0 ? 1 : $data['kgsx']; ?>
                                                 <td class="text-right"><?= rupiah($data['pcsx'],0); ?></td>
                                                 <td class="text-right"><?= rupiah($data['kgsx'],2); ?></td>
-                                                <td class="text-right"><?= rupiah(($data['xcif']/$datkgs)*$data['xndpbm'],2); ?></td>
+                                                <td class="text-right line-12"><?= rupiah(($data['xcif']/$datkgs)*$data['xndpbm'],2); ?><br><span class="font-11 text-pink"><?= $data['xcif'] ?></span></td>
                                                 <td class="text-right"><?= rupiah($data['xcif']*$data['xndpbm'],2); ?></td>
                                         <?php } ?>
                                         <?php if($mode==1): ?>
@@ -624,7 +625,11 @@
                                     <td class="text-black text-right font-bold"><?= rupiah($sumpcs,0); ?></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumkgs,2); ?></td>
                                     <td></td>
-                                    <td class="text-black text-right font-bold"><?= rupiah($sumdetail,2); ?></td>
+                                    <td class="text-black text-right font-bold line-12"><?= rupiah($sumdetail,2); ?>
+                                    <?php if($mode==1): ?>
+                                    <br><span class="text-pink font-12"><?= rupiah($sumcif,2) ?></span>
+                                    <?php endif; ?>
+                                    </td>
                                     <td></td>
                                 </tr>
                             </tbody>
