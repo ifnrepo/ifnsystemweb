@@ -118,7 +118,7 @@
                     </div>
                 </div>
                 <div class="row">
-                    <div class=" mt-2 col-md-4 font-bold font-kecil text-dark">
+                    <div class=" mt-2 col-md-3 font-bold font-kecil text-dark">
                         <div class="mb-1 row">
                             <label class="col-3 col-form-label required">SSB</label>
                             <div class="col">
@@ -165,7 +165,7 @@
                         </div>
 
                     </div>
-                    <div class=" mt-2 col-md-4 col-12 text-dark font-bold font-kecil">
+                    <div class=" mt-2 col-md-5 col-12 text-dark font-bold font-kecil">
                         <div class="mb-1 row">
                             <label class="col-3 col-form-label required">Nilai</label>
                             <div class="col">
@@ -229,25 +229,25 @@
                                     $total_kgs = 0;
                                     if (!empty($detail)) {
                                         foreach ($detail as $key) :
-                                            $total_kgs += $key['kgs']; // jumlahkan tiap baris
-                                            $no++; 
-                                            $sku = trim($key['po']) == '' ? $key['kode'] : viewsku($key['po'],$key['item'],$key['dis']);
-                                            $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'],$key['item'],$key['dis']);
-                                            ?>
+                                            $total_kgs += $key['kgs'];
+                                            $no++;
+                                            $sku = trim($key['po']) == '' ? $key['kode'] : viewsku($key['po'], $key['item'], $key['dis']);
+                                            $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
+                                    ?>
                                             <tr>
                                                 <td class="text-primary"><?= trim($key['seri_urut_akb']) !== '' ? $key['seri_urut_akb'] : '-'; ?></td>
                                                 <td class="text-primary"><?= $sku ?></td>
                                                 <td class="text-primary"><?= $spekbarang ?></td>
                                                 <td class="text-primary"><?= trim($key['kodesatuan']) !== '' ? $key['kodesatuan'] : '-'; ?> </td>
-                                                <td class="text-primary text-right"><?= trim($key['pcs']) !== '' ? rupiah($key['pcs'],0) : '-'; ?></td>
-                                                <td class="text-primary text-right"><?= trim($key['kgs']) !== '' ? rupiah($key['kgs'],2) : '-'; ?></td>
+                                                <td class="text-primary text-right"><?= trim($key['pcs']) !== '' ? rupiah($key['pcs'], 0) : '-'; ?></td>
+                                                <td class="text-primary text-right"><?= trim($key['kgs']) !== '' ? rupiah($key['kgs'], 2) : '-'; ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                         <tr>
                                             <td colspan="4" class="text-center fw-bold text-danger">Total Kgs</td>
                                             <td></td>
 
-                                            <td class="font-bold text-danger text-right"><?= rupiah($total_kgs,2) ?></td>
+                                            <td class="font-bold text-danger text-right"><?= rupiah($total_kgs, 2) ?></td>
                                         </tr>
 
                                     <?php } else { ?>
