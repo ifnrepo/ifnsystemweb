@@ -553,6 +553,12 @@
                 <div class="m-2 font-bold d-flex justify-content-between">
                     <div>Detail Barang</div>
                     <div>
+                        <span class="font-kecil text-black">
+                            Jumlah Pcs : <span id="jumlahpcsdetailbarang"></span><br>
+                            Jumlah Kgs : <span id="jumlahkgsdetailbarang"></span>
+                        </span>
+                    </div>
+                    <div>
                         <a href="<?= base_url().'ib/getbcasal/'.$datheader['id'].'/1'; ?>" id="tombolgetbcasal" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="BC Asal Default" class="btn btn-sm btn-primary <?= $hilangbc23.' '.$hilangbc40 ?>"><i class="fa fa-calculator mr-1"></i> BC Asal Default</a>
                     </div>
                 </div>
