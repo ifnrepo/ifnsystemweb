@@ -2018,14 +2018,16 @@ class Ib extends CI_Controller
             'trim(a.po)' => trim($detail['po']),
             'trim(a.item)' => trim($detail['item']),
             'a.dis' => $detail['dis'],
-            'a.id_barang' => $detail['id_barang']
+            'a.id_barang' => $detail['id_barang'],
+            'trim(a.insno)' => trim($detail['insno']),
         ];
         $arrkond2 = [
             'id_akb' => $id,
             'trim(po)' => trim($detail['po']),
             'trim(item)' => trim($detail['item']),
             'dis' => $detail['dis'],
-            'id_barang' => $detail['id_barang']
+            'id_barang' => $detail['id_barang'],
+            'trim(insno)' => trim($detail['insno']),
         ];
         $arrayid = explode(',',$detail['arr_seri_exbc']);
         $detail2 = $this->ibmodel->getdatadetailbyidbcasal($arrkond2)->row_array();
@@ -2038,12 +2040,18 @@ class Ib extends CI_Controller
     }
     public function simpaneditbcasal(){
         $id = $_POST['id'];
-        $detail = $_POST['iddetail'];
+        $xdetail = $_POST['iddetail'];
         $bcasal = $_POST['bcasal'];
         $cife = $_POST['cifbaru'];
+        $jmlkembali = $_POST['jmlkembali'];
 
-        $detail = $this->ibmodel->getdatadetailbyid($detail)->row_array();
-        $exseribc = explode(',',$detail['arr_seri_exbc']);
+        $detail = $this->ibmodel->getdatadetailbyid($xdetail)->row_array();
+        $exseribc = $bcasal[0];
+
+        //cari ndpbm bcasalnya 
+        $header = $this->ibmodel->getdatabyid($id);
+        $headerasal = $this->ibmodel->getdatabynomorbc($header['exnomor_bc']);
+        $kursasal = getkurssekarang($headerasal['tgl_aju'])->row_array();
 
         $arrkond = [
             'id_akb' => $id,
@@ -2054,7 +2062,7 @@ class Ib extends CI_Controller
             'id_barang' => $detail['id_barang']
         ];
 
-        $cek = $this->ibmodel->updatebcasal($exseribc[0],$arrkond,$bcasal,$cife);
+        $cek = $this->ibmodel->updatebcasal($exseribc,$arrkond,$bcasal,$cife,$kursasal['usd']);
         if($cek){
             echo 1;
         }

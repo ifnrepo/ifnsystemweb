@@ -46,9 +46,19 @@
     <div class="mb-1 row">
         <div class="col">
             <div class="row">
+                <label class="col-3 col-form-label font-kecil">Pcs</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil btn-flat text-right" id="pcs" name="pcs" value="<?= rupiah($header['pcsx'],2) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" readonly >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-1 row">
+        <div class="col">
+            <div class="row">
                 <label class="col-3 col-form-label font-kecil">Kgs</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil btn-flat text-right" id="kgs" name="kgs" value="<?= rupiah($header['kgs'],2) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" >
+                    <input type="text" class="form-control font-kecil btn-flat text-right" id="kgs" name="kgs" value="<?= rupiah($header['kgsx'],2) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" readonly >
                 </div>
             </div>
         </div>
@@ -65,6 +75,7 @@
                     <th>Qty</th>
                     <th>Berat (Kg)</th>
                     <th>Pilih</th>
+                    <th>Jml</th>
                 </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
@@ -81,13 +92,16 @@
                         <td><?= $sku ?></td>
                         <td class="<?= $inidipakai ?>"><?= $spekbarang ?></td>
                         <td><?= round($detail['cif'],2) ?></td>
-                        <td id="pcsx<?= $no ?>"><?= $detail['pcs'] ?></td>
-                        <td><?= $detail['kgs'] ?></td>
+                        <td id="pcsx<?= $no ?>"><?= rupiah($detail['pcs'],0) ?></td>
+                        <td><?= rupiah($detail['kgs'],2) ?></td>
                         <td class="text-center">
                             <label class="form-check mb-0">
-                                <input class="form-check-input pilihcek" rel2="<?= round($detail['cif'],2) ?>" rel3="<?= $detail['kgs'] ?>" name="cekpilihbcasal" id="cekbok<?= $no; ?>" rel="<?= $detail['id']; ?>" type="checkbox" title="<?= $detail['id']; ?>">
+                                <input class="form-check-input pilihcek" rel2="<?= round($detail['cif'],2) ?>" rel3="<?= $detail['kgs'] ?>" rel4="<?= $detail['pcs'] ?>" name="cekpilihbcasal" id="cekbok<?= $no; ?>" rel="<?= $detail['id']; ?>" type="checkbox" title="<?= $detail['id']; ?>">
                                 <span class="form-check-label">Pilih</span>
                             </label>
+                        </td>
+                        <td class="text-center">
+                            <input type="text" class="form-control font-kecil btn-flat text-center iniinput" style="max-width: 45px !important; height: 20px;"   rel="<?= $detail['id']; ?>" id="input<?= $no; ?>" value="" aria-describedby="emailHelp" placeholder="Pcs Dipilih">
                         </td>
                     </tr>
                 <?php } ?>
@@ -98,15 +112,25 @@
     <div class="mb-1 row">
         <div class="col">
             <div class="row">
+                <label class="col-3 col-form-label font-kecil">Pcs Dipilih</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil btn-flat text-right" id="inipcs" value="" aria-describedby="emailHelp" placeholder="Pcs Dipilih">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-1 row">
+        <div class="col">
+            <div class="row">
                 <label class="col-3 col-form-label font-kecil">Nilai CIF</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil btn-flat text-right" id="nilaicif" value="" aria-describedby="emailHelp" placeholder="Nilai CIF" >
+                    <input type="text" class="form-control font-kecil btn-flat text-right" id="nilaicif" value="" aria-describedby="emailHelp" placeholder="Nilai CIF">
                 </div>
             </div>
         </div>
     </div>
     <hr class="small m-1">
-    <div class="text-center">
+    <div class="text-center mb-3">
         <a href="#" id="simpankedb" class="btn btn-sm btn-flat btn-primary">Simpan</a>
         <a href="#" id="hitungcif" class="btn btn-sm btn-flat btn-primary hilang">Hitung</a>
         <a href="#" class="btn btn-sm btn-flat btn-danger" id="tutupmodal" data-bs-dismiss="modal">Batal</a>
@@ -122,43 +146,52 @@
         // });
         // $("#peringatan").text('');
     })
+    $(document).on('change','.iniinput',function(){
+        $("#hitungcif").click();
+    })
     $(document).on('click','.pilihcek',function(){
+        var kode = $(this).attr('id');
+        var jmlpcs = $(this).attr('rel4');
+        kode = kode.replace('cekbok','input');
+        $("#"+kode).val(Math.round(jmlpcs,0));
         $("#hitungcif").click();
     })
     $("#hitungcif").click(function(){
         var cif = 0;
         var kgs = 0;
+        var pcs = 0;
         var kgsheader = parseFloat($("#kgs").val());
+        var pcsheader = parseFloat($("#pcs").val());
         for (let i = 1; i < 1000; i++) {
             if($("#cekbok"+i).is(":checked")){
                 cif += parseFloat($("#cekbok"+i).attr('rel2'));
                 kgs += parseFloat($("#cekbok"+i).attr('rel3'));
+                // pcs += parseFloat($("#cekbok"+i).attr('rel4'));
+                pcs += parseFloat($("#input"+i).val());
             }
         }
         pembagi = Math.round(kgs/kgsheader,2);
+        if(pcs < pcsheader){
+            pcspembagi = 1;
+        }else{
+            pcspembagi = pcsheader/pcs;
+        }
         hasil = isNaN(cif) ? 0 : cif;
-        $("#nilaicif").val(hasil);
+        $("#nilaicif").val(hasil*pcspembagi);
+        $("#inipcs").val(pcs);
     })
-    $("#kode_entitas").change(function(){
-        $("#divnegara").addClass('hilang');
-        $("#dividentitas").addClass('hilang');
-        var xx = $(this).val();
-        if(xx == 7){
-            $("#dividentitas").removeClass('hilang');
-        }
-        if(xx == 5){
-            $("#divnegara").removeClass('hilang');
-        }
-    })
+
     $("#simpankedb").click(function(){
         if($("#peringatan").text()=='0'){
             pesan('Pilih Salah satu BC ASAL','error');
             return false;
         }
         var text = [];
+        var text2 = [];
         for (let i = 1; i < 1000; i++) {
             if($("#cekbok"+i).is(":checked")){
                 text.push($("#cekbok"+i).attr('rel'));
+                text2.push($("#input"+i).val());
             }
         }
         if(text.length > 0){
@@ -170,7 +203,8 @@
                     id: $("#id_header").val(),
                     iddetail: $("#id_detail").val(),
                     bcasal: text,
-                    cifbaru: $("#nilaicif").val()
+                    cifbaru: $("#nilaicif").val(),
+                    jmlkembali: text2
                 },
                 success: function (data) {
                     $('#modal-large-loading').modal('hide');

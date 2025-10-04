@@ -52,7 +52,7 @@ class Ib_model extends CI_Model
     }
     public function getdatadetailbyidbcasal($kondisi){
         $this->db->select('tb_detail.*,barang.kode');
-        $this->db->select('sum(kgs) as kgs');
+        $this->db->select('sum(kgs) as kgsx,sum(pcs) as pcsx');
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
         $this->db->where($kondisi);
@@ -855,7 +855,7 @@ class Ib_model extends CI_Model
     public function hapusaju($id){
         $this->db->trans_start();
         $this->db->where('id_akb',$id);
-        $this->db->update('tb_detail',['id_akb'=>NULL]);
+        $this->db->update('tb_detail',['id_akb'=>NULL,'id_seri_exbc'=>NULL,'arr_seri_exbc'=>NULL,'exbc_cif'=>NULL,'exbc_ndpbm'=>NULL]);
         $this->helpermodel->isilog($this->db->last_query());
 
         $this->db->where('id',$id);
@@ -1025,8 +1025,8 @@ class Ib_model extends CI_Model
         }
         return $arrhasil;
     }
-    public function updatebcasal($id,$kondisi,$nilai,$cife){
+    public function updatebcasal($id,$kondisi,$nilai,$cife,$ndpbm){
         $this->db->where($kondisi);
-        return $this->db->update('tb_detail',['arr_seri_exbc' => implode(",",$nilai),'exbc_cif'=>$cife]);
+        return $this->db->update('tb_detail',['arr_seri_exbc' => implode(",",$nilai),'exbc_cif'=>$cife,'id_seri_exbc'=>$id,'exbc_ndpbm'=>$ndpbm]);
     }
 }
