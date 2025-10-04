@@ -214,13 +214,12 @@
                                         <th class="text-danger text-center">HsCode</th>
                                         <th class="text-danger text-center">Pcs</th>
                                         <th class="text-danger text-center">Kgs</th> -->
-                                        <th class="text-primary">Seri Barang</th>
-                                        <th class="text-primary">PO</th>
-                                        <th class="text-primary">Item</th>
+                                        <th class="text-primary">Seri</th>
+                                        <th class="text-primary">SKU</th>
                                         <th class="text-primary">Nama Barang</th>
                                         <th class="text-primary">Satuan</th>
-                                        <th class="text-primary">Kgs</th>
                                         <th class="text-primary">Pcs</th>
+                                        <th class="text-primary">Kgs</th>
 
                                     </tr>
                                 </thead>
@@ -231,23 +230,24 @@
                                     if (!empty($detail)) {
                                         foreach ($detail as $key) :
                                             $total_kgs += $key['kgs']; // jumlahkan tiap baris
-                                            $no++; ?>
-
+                                            $no++; 
+                                            $sku = trim($key['po']) == '' ? $key['kode'] : viewsku($key['po'],$key['item'],$key['dis']);
+                                            $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'],$key['item'],$key['dis']);
+                                            ?>
                                             <tr>
                                                 <td class="text-primary"><?= trim($key['seri_urut_akb']) !== '' ? $key['seri_urut_akb'] : '-'; ?></td>
-                                                <td class="text-primary" style="text-align: center;"><?= trim($key['po']) !== '' ? trim($key['po']) : '-'; ?></td>
-                                                <td class="text-primary" style="text-align: center;"><?= trim($key['item']) !== '' ? trim($key['item']) : '-'; ?></td>
-                                                <td class="text-primary"><?= trim($key['nama_barang']) !== '' ? trim($key['nama_barang']) : '-'; ?></td>
+                                                <td class="text-primary"><?= $sku ?></td>
+                                                <td class="text-primary"><?= $spekbarang ?></td>
                                                 <td class="text-primary"><?= trim($key['kodesatuan']) !== '' ? $key['kodesatuan'] : '-'; ?> </td>
-                                                <td class="text-primary"><?= trim($key['kgs']) !== '' ? $key['kgs'] : '-'; ?></td>
-                                                <td class="text-primary"><?= trim($key['pcs']) !== '' ? $key['pcs'] : '-'; ?></td>
+                                                <td class="text-primary text-right"><?= trim($key['pcs']) !== '' ? rupiah($key['pcs'],0) : '-'; ?></td>
+                                                <td class="text-primary text-right"><?= trim($key['kgs']) !== '' ? rupiah($key['kgs'],2) : '-'; ?></td>
                                             </tr>
                                         <?php endforeach; ?>
                                         <tr>
                                             <td colspan="4" class="text-center fw-bold text-danger">Total Kgs</td>
                                             <td></td>
 
-                                            <td class="fw-bold text-danger"><?= $total_kgs ?></td>
+                                            <td class="font-bold text-danger text-right"><?= rupiah($total_kgs,2) ?></td>
                                         </tr>
 
                                     <?php } else { ?>

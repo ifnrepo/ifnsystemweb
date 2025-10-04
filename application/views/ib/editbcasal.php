@@ -93,13 +93,24 @@
                 <?php } ?>
             </tbody>
         </table>
-        <hr class="small m-1">
-        <div class="text-center">
-            <a href="#" id="simpankedb" class="btn btn-sm btn-flat btn-primary">Simpan</a>
-            <a href="#" id="hitungcif" class="btn btn-sm btn-flat btn-primary hilang">Hitung</a>
-            <a href="#" class="btn btn-sm btn-flat btn-danger" id="tutupmodal" data-bs-dismiss="modal">Batal</a>
-            <div id="peringatan">0</div>
+    </div>
+    <hr class="small m-1">
+    <div class="mb-1 row">
+        <div class="col">
+            <div class="row">
+                <label class="col-3 col-form-label font-kecil">Nilai CIF</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil btn-flat text-right" id="nilaicif" value="" aria-describedby="emailHelp" placeholder="Nilai CIF" >
+                </div>
+            </div>
         </div>
+    </div>
+    <hr class="small m-1">
+    <div class="text-center">
+        <a href="#" id="simpankedb" class="btn btn-sm btn-flat btn-primary">Simpan</a>
+        <a href="#" id="hitungcif" class="btn btn-sm btn-flat btn-primary hilang">Hitung</a>
+        <a href="#" class="btn btn-sm btn-flat btn-danger" id="tutupmodal" data-bs-dismiss="modal">Batal</a>
+        <!-- <div id="peringatan">0</div> -->
     </div>
 </div>
 <script>
@@ -125,8 +136,8 @@
             }
         }
         pembagi = Math.round(kgs/kgsheader,2);
-        hasil = isNaN(cif/pembagi) ? 0 : cif/pembagi;
-        $("#peringatan").text(hasil);
+        hasil = isNaN(cif) ? 0 : cif;
+        $("#nilaicif").val(hasil);
     })
     $("#kode_entitas").change(function(){
         $("#divnegara").addClass('hilang');
@@ -159,7 +170,7 @@
                     id: $("#id_header").val(),
                     iddetail: $("#id_detail").val(),
                     bcasal: text,
-                    cifbaru: $("#peringatan").text()
+                    cifbaru: $("#nilaicif").val()
                 },
                 success: function (data) {
                     $('#modal-large-loading').modal('hide');
