@@ -616,12 +616,13 @@
                                                 <?php $datkgs = $data['kgsx']==0 ? 1 : $data['kgsx']; ?>
                                                 <td class="text-right"><?= rupiah($data['pcsx'],0); ?></td>
                                                 <td class="text-right"><?= rupiah($data['kgsx'],2); ?></td>
-                                                <td class="text-right line-12"><?= rupiah(($data['xcif']/$datkgs)*$data['xndpbm'],2); ?><br><span class="font-11 text-pink"><?= $data['xcif'] ?></span></td>
+                                                <td class="text-right line-12"><?= rupiah(($data['xcif']/$datkgs)*$data['xndpbm'],2); ?><br><span class="font-11 text-pink"><?= rupiah($data['xcif'],2) ?></span></td>
                                                 <td class="text-right"><?= rupiah($data['xcif']*$data['xndpbm'],2); ?></td>
                                         <?php } ?>
                                         <?php if($mode==1): ?>
                                         <td class="text-center">
                                             <a href="<?= base_url().'ib/editbcasal/'.$datheader['id'].'/'.$data['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261" >EDIT</a>
+                                            <a href="#" data-href="<?= base_url().'ib/resetbcasal/'.$datheader['id'].'/'.$data['id']; ?>" class="btn btn-sm btn-danger font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Me-reset BC ASAL 261" >RESET</a>
                                         </td>
                                         <?php endif; ?>
                                     </tr>
