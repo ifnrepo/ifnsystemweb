@@ -559,7 +559,7 @@
                         </span>
                     </div>
                     <div>
-                        <a href="<?= base_url().'ib/getbcasal/'.$datheader['id'].'/1'; ?>" id="tombolgetbcasal" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="BC Asal Default" class="btn btn-sm btn-primary <?= $hilangbc23.' '.$hilangbc40 ?>"><i class="fa fa-calculator mr-1"></i> BC Asal Default</a>
+                        <a href="<?= base_url().'ib/getbcasal/'.$datheader['id'].'/1'; ?>" id="tombolgetbcasal" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="BC Asal Default" class="btn btn-sm btn-primary hilang <?= $hilangbc23.' '.$hilangbc40 ?>"><i class="fa fa-calculator mr-1"></i> BC Asal Default</a>
                     </div>
                 </div>
                 <div class="card card-lg font-kecil">
