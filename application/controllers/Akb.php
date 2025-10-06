@@ -108,7 +108,7 @@ class Akb extends CI_Controller
     {
         $data['mode'] = $mode;
         $data['header'] = $this->akbmodel->getdatabyid($id, $mode);
-        $data['detail'] = $this->akbmodel->getdatadetailib($id, $mode);
+        $data['detail'] = $this->akbmodel->getdatadetailib($id, $mode,$data['header']['urutakb']);
         $data['lampiran'] = $this->akbmodel->getdatalampiran($id);
         $this->load->view('akb/viewdetailakb', $data);
     }

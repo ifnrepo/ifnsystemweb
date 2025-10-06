@@ -1,5 +1,4 @@
 <div class="container-xl"> 
-    <?= print_r($databcasal); ?>
     <input type="hidden" name="id_header" id="id_header" value="<?= $idheader; ?>">
     <div class="mb-1 row">
         <div class="col">
@@ -46,6 +45,16 @@
     <div class="mb-1 row">
         <div class="col">
             <div class="row">
+                <label class="col-3 col-form-label font-kecil">Qty</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil btn-flat text-right" id="pcs" name="pcs" value="<?= rupiah($detail['sumpcs'],0) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" >
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="mb-1 row">
+        <div class="col">
+            <div class="row">
                 <label class="col-3 col-form-label font-kecil">Kgs</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil btn-flat text-right" id="kgs" name="kgs" value="<?= rupiah($detail['sumkgs'],2) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" >
@@ -61,17 +70,28 @@
                 <th>Seri</th>
                 <th>SKU</th>
                 <th>Nama Barang / Uraian</th>
+                <th>Qty</th>
                 <th>Kgs</th>
-                <th>CIF (IDR)</th>
-                <th class="text-center">BM</th>
-                <th class="text-center">PPN</th>
-                <th class="text-center">PPH</th>
+                <th class="text-center">CIF</th>
+                <th class="text-center">Keterangan</th>
             </tr>
         </thead>
         <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
-            <?php foreach($databcasal as $databcasal): ?>
+            <?php $jmlcif=0; foreach($databcasal as $datab): ?>
+            <?php 
+                $spekbarang = trim($datab['po'])=='' ? namaspekbarang($datab['id_barang']) : spekpo($datab['po'],$datab['item'],$datab['dis']);
+                $sku = trim($datab['po'])=='' ? $datab['kode'] : viewsku($datab['po'],$datab['item'],$datab['dis']);
+                $pcspembagi = ($datab['pcs']/$datab['in_exbc'])==0 ? 1 : $datab['pcs']/$datab['in_exbc'];
+                $jmlcif += $datab['cif']/$pcspembagi;
+            ?>
                 <tr>
-                    <td><?= $databcasal->id ?></td>
+                    <td><?= $datab['seri_urut_akb'] ?></td>
+                    <td><?= $sku ?></td>
+                    <td><?= $spekbarang ?></td>
+                    <td><?= rupiah($datab['in_exbc'],0) ?></td>
+                    <td><?= rupiah($datab['kgs'],2) ?></td>
+                    <td><?= rupiah($datab['cif']/$pcspembagi,2) ?></td>
+                    <td class="text-center text-green">BC No.<?= $datab['nomor_bc'] ?></td>
                 </tr>
             <?php endforeach; ?>
         </tbody>
@@ -82,7 +102,7 @@
             <div class="row">
                 <label class="col-3 col-form-label font-kecil">IDR</label>
                 <div class="col">
-                    <input type="text" class="form-control font-14 btn-flat text-right font-bold" id="kgs" name="kgs" value="" aria-describedby="emailHelp" placeholder="Nama Barang" >
+                    <input type="text" class="form-control font-14 btn-flat text-right font-bold" id="kgs" name="kgs" value="<?= rupiah($jmlcif*$datab['ndpbm'],2) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" >
                 </div>
             </div>
         </div>
@@ -92,7 +112,7 @@
             <div class="row">
                 <label class="col-3 col-form-label font-kecil">USD</label>
                 <div class="col">
-                    <input type="text" class="form-control font-14 btn-flat text-right font-bold" id="kgs" name="kgs" value="" aria-describedby="emailHelp" placeholder="Nama Barang" >
+                    <input type="text" class="form-control font-14 btn-flat text-right font-bold" id="kgs" name="kgs" value="<?= rupiah($jmlcif,2) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" >
                 </div>
             </div>
         </div>

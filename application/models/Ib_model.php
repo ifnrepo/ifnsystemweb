@@ -921,7 +921,7 @@ class Ib_model extends CI_Model
         $this->db->join('tb_bombc', 'tb_bombc.id_header=a.id_akb and tb_bombc.seri_barang = a.seri_urut_akb', 'left');
         $this->db->where('a.id_akb', $data);
         $this->db->where($kondisi);
-        $this->db->where('(a.pcs-a.in_exbc) > 0');
+        $this->db->where('(a.kgs-a.in_exbc) > 0');
         if($qu=0){
             $this->db->group_by('a.po,a.item,a.dis,a.id_barang,a.insno,a.nobontr');
             $this->db->order_by('a.po,a.item,a.dis,c.kode,a.insno');
@@ -1004,9 +1004,9 @@ class Ib_model extends CI_Model
                 'trim(insno)' => trim($hasil['insno']),
                 'trim(nobontr)' => trim($hasil['nobontr']),
             ];
-            $this->db->select('po,item,dis,id_barang,insno,nobontr,seri_urut_akb,kgs,SUM(round(kgs,2)) OVER() AS sumkgs,barang.kode');
-            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+            $this->db->select('po,item,dis,id_barang,insno,nobontr,seri_urut_akb,kgs,SUM(round(kgs,2)) OVER() AS sumkgs,SUM(round(pcs,2)) OVER() AS sumpcs,barang.kode');
             $this->db->from('tb_detail');
+            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
             $this->db->where($kondisi);
 
             $xhasil = $this->db->get();
@@ -1019,37 +1019,44 @@ class Ib_model extends CI_Model
                  // $hasil2 = $this->db->get_where('tb_detail',['id'=>$hasil['id_seri_exbc']])->row_array();            
                 if(!empty($arrseri)):    
                     $hasil2 = $this->db->get_where('tb_detail',['id'=>$arrseriexbc[$p]])->row_array();
-                    $arkon = [
-                        'id' => $hasil2['id']
+
+                    $kondisi2 = [
+                        'id_akb' => $hasil2['id_akb'],
+                        'trim(po)' => trim($hasil2['po']),
+                        'trim(item)' => trim($hasil2['item']),
+                        'dis' => $hasil2['dis'],
+                        'tb_detail.id_barang' => $hasil2['id_barang'],
+                        'trim(insno)' => trim($hasil2['insno']),
+                        'trim(tb_detail.nobontr)' => trim($hasil2['nobontr']),
                     ];
+                    $this->db->select('tb_detail.*');
+                    $this->db->select('tb_bombc.kgs,SUM(round(tb_bombc.kgs,2)) OVER() AS sumkgs,tb_bombc.seri_barang ,tb_bombc.id_barang,tb_bombc.cif,SUM(tb_bombc.cif) OVER() AS sumcif,tb_bombc.ndpbm,tb_bombc.nobontr');
+                    $this->db->select('barang.kode,barang.nama_barang,tb_bombc.bm,tb_bombc.ppn,tb_bombc.pph,tb_bombc.bm_rupiah,tb_bombc.ppn_rupiah,tb_bombc.pph_rupiah');
+                    $this->db->select('tb_header.nomor_bc');
+                    $this->db->from('tb_detail');
+                    $this->db->join('tb_bombc','tb_bombc.id_header = tb_detail.id_akb AND tb_bombc.seri_barang = tb_detail.seri_urut_akb','left');
+                    $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
+                    $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
+                    $this->db->where($kondisi2);
+                    $this->db->where('tb_detail.id',$arrseriexbc[$p]);
 
-                    // $kondisi2 = [
-                    //     'id_akb' => $hasil2['id_akb'],
-                    //     'trim(po)' => trim($hasil2['po']),
-                    //     'trim(item)' => trim($hasil2['item']),
-                    //     'dis' => $hasil2['dis'],
-                    //     'tb_detail.id_barang' => $hasil2['id_barang'],
-                    //     'trim(insno)' => trim($hasil2['insno']),
-                    //     'trim(tb_detail.nobontr)' => trim($hasil2['nobontr']),
-                    // ];
-                    // $this->db->select('tb_detail.*');
-                    // $this->db->select('tb_bombc.kgs,SUM(round(tb_bombc.kgs,2)) OVER() AS sumkgs,tb_bombc.seri_barang ,tb_bombc.id_barang,tb_bombc.cif,SUM(tb_bombc.cif) OVER() AS sumcif,tb_bombc.ndpbm,tb_bombc.nobontr');
-                    // $this->db->select('barang.kode,barang.nama_barang,tb_bombc.bm,tb_bombc.ppn,tb_bombc.pph,tb_bombc.bm_rupiah,tb_bombc.ppn_rupiah,tb_bombc.pph_rupiah');
-                    // $this->db->from('tb_detail');
-                    // $this->db->join('tb_bombc','tb_bombc.id_header = tb_detail.id_akb AND tb_bombc.seri_barang = tb_detail.seri_urut_akb','left');
-                    // $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
-                    // $this->db->where($kondisi2);
-                    // $this->db->where('tb_detail.id',$arrseriexbc[$p]);
+                    $xhasil2 = $this->db->get()->row_array();
 
-                    // $xhasil2 = $this->db->get();
-                    array_push($arrhasix,$arkon);
-                    // $arrhasil['bom'] = $xhasil2->result();
+                    array_push($arrhasix,$xhasil2);
                     $p++;
                 endif;
             endforeach;
         }
         $arrhasil['bom'] = $arrhasix;
         return $arrhasil;
+    }
+    public function getdatabahanbakuasal($id){
+        $this->db->select('tb_detail.*,tb_header.nomor_bc,tb_header.nomor_aju,tb_header.tgl_aju,tb_header.tgl_bc,barang.nama_barang');
+        $this->db->from('tb_detail');
+        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
+        $this->db->where('tb_detail.id',$id);
+        return $this->db->get()->row_array();
     }
     public function updatebcasal($id,$kondisi,$nilai,$cife,$ndpbm,$jmll){
         $this->db->trans_start();
@@ -1086,7 +1093,11 @@ class Ib_model extends CI_Model
                 $this->db->update('tb_detail',['in_exbc' => 'in_exbc - '.$arrayindetasal[$ke]]);
             }
         }
+        $this->db->where($kondisi);
         $this->db->update('tb_detail',['arr_seri_exbc'=>NULL,'exbc_cif'=>NULL,'id_seri_exbc'=>NULL,'exbc_ndpbm'=>NULL,'in_pcs_exbc'=>NULL]);
         return $this->db->trans_complete();
+    }
+    public function getdatakontrakbyid($id){
+        return $this->db->get_where('tb_kontrak',['id'=>$id])->row_array();
     }
 }
