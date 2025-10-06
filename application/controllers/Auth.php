@@ -194,7 +194,7 @@ class Auth extends CI_Controller
                 $this->helpermodel->isilog('LOGIN Aplikasi momois DG USERNAME PASSWORD');
 
                 $cekkursnow = $this->akbmodel->cekkursnow();
-                if($cekkursnow->num_rows() == 0){
+                if($cekkursnow->num_rows() == 0 && strtoupper(ENVIRONMENT) == 'PRODUCTION'){
                     $cektoken = $this->cektoken();
                 }else{
                     $cektoken = true;

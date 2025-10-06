@@ -1489,7 +1489,7 @@ class Ib extends CI_Controller
             "kodeValuta" => $data['mt_uang'],
             "kotaTtd" => "BANDUNG",
             "namaTtd" => strtoupper($data['tg_jawab']),
-            "ndpbm" => (float) $kurs['kurs_usd'],
+            "ndpbm" => (float) $kurs['usd'],
             "netto" => (float) $data['netto'],
             "nik" => "",
             "nilaiBarang" => (float) $data['nilai_pab'],
@@ -1507,8 +1507,8 @@ class Ib extends CI_Controller
             }else{
                 $nomoridentitas = "0010017176057000000000";
             }
-            $namaidentitas = $ke==1 ? "PT. INDONEPTUNE NET MANUFACTURING" : (($ke==3) ? "PT. INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
-            $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : $data['alamat']);
+            $namaidentitas = $ke==1 ? "PT. INDONEPTUNE NET MANUFACTURING" : (($ke==3) ? "PT. INDONEPTUNE NET MANUFACTURING" : datadepartemen($data['dept_id'],'nama_subkon'));
+            $alamat = $ke==1 ? $alamatifn : (($ke==3) ? $alamatifn : datadepartemen($data['dept_id'],'alamat_subkon'));
             $nibidentitas = $ke==1 ? "9120011042693" : "";
             $kodejeniden = "6";
             $arrayke = [
@@ -1585,22 +1585,22 @@ class Ib extends CI_Controller
             $arrayke = [
                 "seriBarang" => $no,
                 "asuransi" => 0,
-                "cif" => (float) $detx['harga']*$jumlah,
+                "cif" => (float) $detx['xcif'],
                 "diskon" => 0,
                 "fob" => 0,
                 "freight" => 0,
                 "hargaEkspor" => 0,
-                "hargaSatuan" => (float) $detx['harga'],
+                "hargaSatuan" => (float) ($detx['xndpbm']*$detx['xcif'])/$detx['xkgs'],
                 "bruto" => 0,
-                "hargaPenyerahan" => (float) $detx['harga']*$jumlah,
-                "jumlahSatuan" => (int) $jumlah,
-                "kodeBarang" => $detx['brg_id'],
+                "hargaPenyerahan" => (float) ($detx['xndpbm']*$detx['xcif'])*$detx['xkgs'],
+                "jumlahSatuan" => (int) $detx['xkgs'],
+                "kodeBarang" => trim($detx['po'])=='' ? $detx['kode'] : viewsku($detx['po'],$detx['item'],$detx['dis']),
                 "kodeDokumen" => "40",
                 "kodeJenisKemasan" => $data['kd_kemasan'],
                 "isiPerKemasan" => 0,
                 "kodeSatuanBarang" => $detx['satbc'],
                 "kodeKategoriBarang" => "11",
-                "kodeNegaraAsal" => "TH", //$data['kodenegara'],
+                "kodeNegaraAsal" => "", //$data['kodenegara'],
                 "kodePerhitungan" => "1",
                 "merk" => "-",
                 "netto" => (float) $detx['kgs'],
@@ -1649,6 +1649,8 @@ class Ib extends CI_Controller
                 //     "bahanBaku"
 
             ];
+            $arraybahanbaku = [];
+
             $arraytarif = [];
             for($ik=1;$ik<=3;$ik++){
                 $kodeJenisPungutan = $ik==1 ? "BM" : ($ik==2 ? "PPH" : "PPN");
@@ -2062,9 +2064,16 @@ class Ib extends CI_Controller
             'id_barang' => $detail['id_barang']
         ];
 
-        $cek = $this->ibmodel->updatebcasal($exseribc,$arrkond,$bcasal,$cife,$kursasal['usd']);
+        $cek = $this->ibmodel->updatebcasal($exseribc,$arrkond,$bcasal,$cife,$kursasal['usd'],$jmlkembali);
         if($cek){
             echo 1;
+        }
+    }
+    public function resetbcasal($header,$id){
+        $cek = $this->ibmodel->resetbcasal($header,$id);
+        if($cek){
+            $url = base_url().'ib/isidokbc/'.$header.'/1';
+            redirect($url);
         }
     }
 }

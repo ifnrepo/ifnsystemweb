@@ -1,4 +1,5 @@
 <div class="container-xl"> 
+    <?= print_r($databcasal); ?>
     <input type="hidden" name="id_header" id="id_header" value="<?= $idheader; ?>">
     <div class="mb-1 row">
         <div class="col">
@@ -68,39 +69,11 @@
             </tr>
         </thead>
         <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
-            <?php
-                $jumlahcif = 0; $jumlahkgs = 0;
-                foreach($databcasal as $databcasal){ 
-                $adabm = $databcasal->bm > 0 ? '<i class="fa fa-check text-green"></i>' : '';
-                $adappn = $databcasal->ppn > 0 ? '<i class="fa fa-check text-green"></i>' : '';
-                $adapph = $databcasal->pph > 0 ? '<i class="fa fa-check text-green"></i>' : '';
-                // $jumlahcif += $databcasal->bm_rupiah+$databcasal->pph_rupiah+$databcasal->ppn_rupiah;
-                $jumlahkgs += $databcasal->kgs;
-                $ndpbm = $databcasal->ndpbm;
-                // $xcif = (($jumlahcif/$jumlahkgs)*$detail['sumkgs'])/$ndpbm;
-                $xcif = $jumlahcif;
-                $xcoba = $xcif/$ndpbm;
-                $rupiahcif = $xcif*$ndpbm;
-                $jumlahcif += $databcasal->cif*$databcasal->ndpbm;
-            ?>
+            <?php foreach($databcasal as $databcasal): ?>
                 <tr>
-                    <td><?= $databcasal->seri_urut_akb ?></td>
-                    <td><?= $databcasal->kode ?></td>
-                    <td class="line-12"><?= $databcasal->nama_barang ?><br><span class="font-12 text-teal"><?= $databcasal->nobontr ?></span></td>
-                    <td><?= round($databcasal->kgs,2) ?></td>
-                    <td><?= round($databcasal->cif,2)*$ndpbm ?></td>
-                    <td class="text-center"><?= $adabm ?></td>
-                    <td class="text-center"><?= $adappn ?></td>
-                    <td class="text-center"><?= $adapph ?></td>
+                    <td><?= $databcasal->id ?></td>
                 </tr>
-            <?php } ?>
-            <tr>
-                <td colspan="8" class="font-bold text-center">
-                    <span class="mr-5">TOTAL KGS <span style="font-weight: normal"><?= $jumlahkgs ?></span></span>
-                    <span class="mr-5">TOTAL CIF <span style="font-weight: normal"><?= $databcasal->sumcif ?></span></span>
-                    <span class="mr-3">TOTAL CIF (IDR) <span style="font-weight: normal"><?= rupiah($jumlahcif,2) ?></span></span>
-                </td>
-            </tr>
+            <?php endforeach; ?>
         </tbody>
     </table>
     <div class="text-center font-kecil bg-primary-lt mb-1 font-bold">Nilai CIF (<?= $detail['sumkgs'] ?> Kgs)</div>
@@ -109,9 +82,7 @@
             <div class="row">
                 <label class="col-3 col-form-label font-kecil">IDR</label>
                 <div class="col">
-                    <?php $sumkgs = $detail['sumkgs']==0 ? 1 : $detail['sumkgs']; ?>
-                    <?php $jumlahidr = $jumlahkgs/$sumkgs; ?>
-                    <input type="text" class="form-control font-14 btn-flat text-right font-bold" id="kgs" name="kgs" value="<?= rupiah($jumlahcif/round($jumlahidr,2),2) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" >
+                    <input type="text" class="form-control font-14 btn-flat text-right font-bold" id="kgs" name="kgs" value="" aria-describedby="emailHelp" placeholder="Nama Barang" >
                 </div>
             </div>
         </div>
@@ -121,7 +92,7 @@
             <div class="row">
                 <label class="col-3 col-form-label font-kecil">USD</label>
                 <div class="col">
-                    <input type="text" class="form-control font-14 btn-flat text-right font-bold" id="kgs" name="kgs" value="<?= rupiah(($jumlahcif/round($jumlahidr,2))/$ndpbm,2) ?>" aria-describedby="emailHelp" placeholder="Nama Barang" >
+                    <input type="text" class="form-control font-14 btn-flat text-right font-bold" id="kgs" name="kgs" value="" aria-describedby="emailHelp" placeholder="Nama Barang" >
                 </div>
             </div>
         </div>

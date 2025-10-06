@@ -81,6 +81,8 @@
             <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
                 <?php 
                     $no=0;
+                    $disab = $detail->num_rows() > 0 ? '' : 'disabled';
+                    if($detail->num_rows() > 0){
                     foreach($detail->result_array() as $detail){ 
                     $no++;
                     $sku = trim($detail['po'])=='' ? $detail['kode'] : viewsku($detail['po'],$detail['item'],$detail['dis']);
@@ -92,11 +94,11 @@
                         <td><?= $sku ?></td>
                         <td class="<?= $inidipakai ?>"><?= $spekbarang ?></td>
                         <td><?= round($detail['cif'],2) ?></td>
-                        <td id="pcsx<?= $no ?>"><?= rupiah($detail['pcs'],0) ?></td>
+                        <td id="pcsx<?= $no ?>"><?= rupiah($detail['pcs']-$detail['in_exbc'],0) ?></td>
                         <td><?= rupiah($detail['kgs'],2) ?></td>
                         <td class="text-center">
                             <label class="form-check mb-0">
-                                <input class="form-check-input pilihcek" rel2="<?= round($detail['cif'],2) ?>" rel3="<?= $detail['kgs'] ?>" rel4="<?= $detail['pcs'] ?>" name="cekpilihbcasal" id="cekbok<?= $no; ?>" rel="<?= $detail['id']; ?>" type="checkbox" title="<?= $detail['id']; ?>">
+                                <input class="form-check-input pilihcek" rel2="<?= round($detail['cif'],2) ?>" rel3="<?= $detail['kgs'] ?>" rel4="<?= $detail['pcs']-$detail['in_exbc'] ?>" name="cekpilihbcasal" id="cekbok<?= $no; ?>" rel="<?= $detail['id']; ?>" type="checkbox" title="<?= $detail['id']; ?>">
                                 <span class="form-check-label">Pilih</span>
                             </label>
                         </td>
@@ -104,7 +106,11 @@
                             <input type="text" class="form-control font-kecil btn-flat text-center iniinput" style="max-width: 45px !important; height: 20px;"   rel="<?= $detail['id']; ?>" id="input<?= $no; ?>" value="" aria-describedby="emailHelp" placeholder="Pcs Dipilih">
                         </td>
                     </tr>
-                <?php } ?>
+                <?php }}else{ ?>
+                    <tr>
+                        <td colspan="8" class="text-center">Data tidak ada / sudah habis dikembalikan</td>
+                    </tr>
+                <?php }; ?>
             </tbody>
         </table>
     </div>
@@ -131,7 +137,7 @@
     </div>
     <hr class="small m-1">
     <div class="text-center mb-3">
-        <a href="#" id="simpankedb" class="btn btn-sm btn-flat btn-primary">Simpan</a>
+        <a href="#" id="simpankedb" class="btn btn-sm btn-flat btn-primary <?= $disab; ?>">Simpan</a>
         <a href="#" id="hitungcif" class="btn btn-sm btn-flat btn-primary hilang">Hitung</a>
         <a href="#" class="btn btn-sm btn-flat btn-danger" id="tutupmodal" data-bs-dismiss="modal">Batal</a>
         <!-- <div id="peringatan">0</div> -->
@@ -184,6 +190,12 @@
     $("#simpankedb").click(function(){
         if($("#peringatan").text()=='0'){
             pesan('Pilih Salah satu BC ASAL','error');
+            return false;
+        }
+        var pcsterima = parseFloat($("#pcs").val());
+        var pcs = parseFloat($("#inipcs").val());
+        if(pcs < pcsterima){
+            pesan('Penerimaan lebih besar dari BC ASAL','info');
             return false;
         }
         var text = [];
