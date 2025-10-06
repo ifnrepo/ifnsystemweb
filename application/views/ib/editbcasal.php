@@ -88,12 +88,13 @@
                     $sku = trim($detail['po'])=='' ? $detail['kode'] : viewsku($detail['po'],$detail['item'],$detail['dis']);
                     $spekbarang = trim($detail['po'])=='' ? namaspekbarang($detail['id_barang']) : spekpo($detail['po'],$detail['item'],$detail['dis']);
                     $inidipakai = in_array($detail['id'],$arrayid) ? 'text-teal' : '';
+                    $inidanger = $detail['cif']==0 ? 'text-danger' : '';
                 ?>
                     <tr>
                         <td><?= $detail['seri_urut_akb'] ?></td>
                         <td><?= $sku ?></td>
                         <td class="<?= $inidipakai ?>"><?= $spekbarang ?></td>
-                        <td><?= round($detail['cif'],2) ?></td>
+                        <td class="<?= $inidanger ?>"><?= round($detail['cif'],2) ?></td>
                         <td id="pcsx<?= $no ?>"><?= rupiah($detail['pcs']-$detail['in_exbc'],0) ?></td>
                         <td><?= rupiah($detail['kgs'],2) ?></td>
                         <td class="text-center">
@@ -120,6 +121,7 @@
             <div class="row">
                 <label class="col-3 col-form-label font-kecil">Pcs Dipilih</label>
                 <div class="col">
+                    <input type="text" name="pcsasli" id="pcsasli" class="hilang">
                     <input type="text" class="form-control font-kecil btn-flat text-right" id="inipcs" value="" aria-describedby="emailHelp" placeholder="Pcs Dipilih">
                 </div>
             </div>
@@ -166,13 +168,14 @@
         var cif = 0;
         var kgs = 0;
         var pcs = 0;
+        var pcsx = 0;
         var kgsheader = parseFloat($("#kgs").val());
         var pcsheader = parseFloat($("#pcs").val());
         for (let i = 1; i < 1000; i++) {
             if($("#cekbok"+i).is(":checked")){
                 cif += parseFloat($("#cekbok"+i).attr('rel2'));
                 kgs += parseFloat($("#cekbok"+i).attr('rel3'));
-                // pcs += parseFloat($("#cekbok"+i).attr('rel4'));
+                pcsx += parseFloat($("#cekbok"+i).attr('rel4'));
                 pcs += parseFloat($("#input"+i).val());
             }
         }
@@ -180,11 +183,12 @@
         if(pcs < pcsheader){
             pcspembagi = 1;
         }else{
-            pcspembagi = pcsheader/pcs;
+            pcspembagi = pcs/pcsx;
         }
         hasil = isNaN(cif) ? 0 : cif;
         $("#nilaicif").val(hasil*pcspembagi);
         $("#inipcs").val(pcs);
+        $("#pcsasli").val(pcsx);
     })
 
     $("#simpankedb").click(function(){
@@ -194,8 +198,8 @@
         }
         var pcsterima = parseFloat($("#pcs").val());
         var pcs = parseFloat($("#inipcs").val());
-        if(pcs < pcsterima){
-            pesan('Penerimaan lebih besar dari BC ASAL','info');
+        if(pcs != pcsterima){
+            pesan('Jumlah Penerimaan harus sama dengan BC ASAL','info');
             return false;
         }
         var text = [];
