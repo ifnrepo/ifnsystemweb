@@ -117,11 +117,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
                   <?php if($datdet['tanpa_bc']==0){ ?>
-                    <td style="font-size: 17px" class="text-info"><?= $datdet['jns_bc']; ?></td>
+                    <td style="font-size: 17px" class="text-info line-12"><?= $datdet['jns_bc']; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
                       <?php if($datdet['send_ceisa']==1){ ?>
-                        <td class="line-12"><a href="<?= base_url().'ib/isidokbc/'.$datdet['id']; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                        <td class="line-12"><a href="<?= base_url().'ib/isidokbc/'.$datdet['id']; ?>"><?= $isibc; ?></a></td>
                         <?php }else{ ?>
-                          <td class="line-12"><?= $isibc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                          <td class="line-12"><?= $isibc; ?></span></td>
                       <?php } ?>
                     <?php }else{ ?>
                       <td style="font-size: 17px" class="text-info">-</td>

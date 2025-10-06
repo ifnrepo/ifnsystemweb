@@ -489,9 +489,6 @@ function cancelTask() {
 }
 function verifTask() {
 	$("#veriftask").on("show.bs.modal", function (e) {
-		var awal =
-			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
-		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);
@@ -503,6 +500,9 @@ function verifTask() {
 
 function canvasoff() {
 	$("#canvasdet").on("show.bs.offcanvas", function (e) {
+		var awal =
+			'<div class="text-center my-3"><div class="progress progress-sm mx-auto w-50"><div class="progress-bar progress-bar-indeterminate bg-blue"></div></div>Fetching Data</div>';
+		$(this).find(".fetched-data").html(awal);
 		var link = $(e.relatedTarget);
 		var title = link.data("title");
 		var modal = $(this);

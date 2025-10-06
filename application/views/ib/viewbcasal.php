@@ -79,9 +79,9 @@
         <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
             <?php $jmlcif=0; foreach($databcasal as $datab): ?>
             <?php 
-                $spekbarang = trim($datab['po'])=='' ? namapekbarang($datab['id_barang']) : spekpo($datab['po'],$datab['item'],$datab['dis']);
+                $spekbarang = trim($datab['po'])=='' ? namaspekbarang($datab['id_barang']) : spekpo($datab['po'],$datab['item'],$datab['dis']);
                 $sku = trim($datab['po'])=='' ? $datab['kode'] : viewsku($datab['po'],$datab['item'],$datab['dis']);
-                $pcspembagi = $datab['pcs']/$datab['in_exbc'];
+                $pcspembagi = ($datab['pcs']/$datab['in_exbc'])==0 ? 1 : $datab['pcs']/$datab['in_exbc'];
                 $jmlcif += $datab['cif']/$pcspembagi;
             ?>
                 <tr>

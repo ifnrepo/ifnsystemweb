@@ -921,7 +921,7 @@ class Ib_model extends CI_Model
         $this->db->join('tb_bombc', 'tb_bombc.id_header=a.id_akb and tb_bombc.seri_barang = a.seri_urut_akb', 'left');
         $this->db->where('a.id_akb', $data);
         $this->db->where($kondisi);
-        $this->db->where('(a.pcs-a.in_exbc) > 0');
+        $this->db->where('(a.kgs-a.in_exbc) > 0');
         if($qu=0){
             $this->db->group_by('a.po,a.item,a.dis,a.id_barang,a.insno,a.nobontr');
             $this->db->order_by('a.po,a.item,a.dis,c.kode,a.insno');
