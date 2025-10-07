@@ -616,7 +616,7 @@
                                                 <?php $datkgs = $data['kgsx']==0 ? 1 : $data['kgsx']; ?>
                                                 <td class="text-right"><?= rupiah($data['pcsx'],0); ?></td>
                                                 <td class="text-right"><?= rupiah($data['kgsx'],2); ?></td>
-                                                <td class="text-right line-12"><?= rupiah(($data['xcif']/$datkgs)*$data['xndpbm'],2); ?><br><span class="font-11 text-pink"><?= rupiah($data['xcif'],2) ?></span></td>
+                                                <td id="jumlahcif<?= $data['id'] ?>" class="text-right line-12"><?= rupiah(($data['xcif']/$datkgs)*$data['xndpbm'],2); ?><br><span class="font-11 text-pink"><?= rupiah($data['xcif'],2) ?></span></td>
                                                 <td class="text-right"><?= rupiah($data['xcif']*$data['xndpbm'],2); ?></td>
                                         <?php } ?>
                                         <?php if($mode==1): ?>
@@ -646,7 +646,12 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2 bg-red-lt" id="tabs-profile-8">
-                <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen <span><a href="<?= base_url().'ib/addlampiran/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary"><i class="fa fa-plus mr-1"></i> Tambah Data</a><span></div>
+                <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen 
+                    <span>
+                        <a href="#" data-href="<?= base_url().'ib/autolampiran/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengisi lampiran secara otomatis" data-title="Lampiran" class="btn btn-sm btn-yellow text-black"><i class="fa fa-plus mr-1 <?= $hilangbc23.' '.$hilangbc40 ?>"></i> Auto</a>
+                        <a href="<?= base_url().'ib/addlampiran/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary"><i class="fa fa-plus mr-1"></i> Tambah Data</a>
+                    <span>
+                </div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
                         <table class="table datatable8 w-100">
