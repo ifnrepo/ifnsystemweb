@@ -83,12 +83,12 @@ class Bcmasuk extends CI_Controller
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
+
         $sheet->mergeCells('B2:H2')->setCellValue('B2', 'KAWASAN BERIKAT PT. INDONEPTUNE NET MANUFACTURING');
         $sheet->mergeCells('B3:H3')->setCellValue('B3', 'LAPORAN PEMASUKAN BARANG PER DOKUMEN PABEAN');
         $sheet->mergeCells('B4:H4')->setCellValue('B4', "PERIODE: " . $this->session->userdata('tglawal') . " S/D " . $this->session->userdata('tglakhir'));
         $sheet->getStyle('B2:B4')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('B2:B4')->getAlignment()->setHorizontal('left');
-
 
         $sheet->mergeCells('B6:B7')->setCellValue('B6', 'No Urut');
         $sheet->mergeCells('C6:C7')->setCellValue('C6', 'Jenis Dokumen');
@@ -102,8 +102,6 @@ class Bcmasuk extends CI_Controller
         $sheet->mergeCells('M6:M7')->setCellValue('M6', 'Kgs');
         $sheet->mergeCells('N6:N7')->setCellValue('N6', 'Nilai Barang (IDR)');
         $sheet->mergeCells('O6:O7')->setCellValue('O6', 'Nilai Barang (USD)');
-
-
         $sheet->setCellValue('D7', 'Nomor');
         $sheet->setCellValue('E7', 'Tanggal');
         $sheet->setCellValue('F7', 'Nomor');
@@ -114,7 +112,7 @@ class Bcmasuk extends CI_Controller
         $sheet->getColumnDimension('C')->setWidth(10);
         $sheet->getColumnDimension('D')->setWidth(12);
         $sheet->getColumnDimension('E')->setWidth(12);
-        $sheet->getColumnDimension('F')->setWidth(15);
+        $sheet->getColumnDimension('F')->setWidth(20);
         $sheet->getColumnDimension('G')->setWidth(12);
         $sheet->getColumnDimension('H')->setWidth(35);
         $sheet->getColumnDimension('I')->setWidth(15);
@@ -135,6 +133,7 @@ class Bcmasuk extends CI_Controller
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000']
                 ],
             ],
             'fill' => [
@@ -143,9 +142,12 @@ class Bcmasuk extends CI_Controller
             ],
         ]);
 
+
         $bcmasuk = $this->bcmasukmodel->getdata_export();
         $no = 1;
         $numrow = 8;
+        $ceknomor_bc = '';
+
         foreach ($bcmasuk->result_array() as $data) {
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
@@ -157,7 +159,15 @@ class Bcmasuk extends CI_Controller
                 $nilaiusd = $nilaiidr / $data['kurs_usd'];
             }
 
-            $sheet->setCellValue('B' . $numrow,  $no);
+
+            if ($data['nomor_bc'] == $ceknomor_bc) {
+                $sheet->setCellValue('B' . $numrow, '');
+            } else {
+                $sheet->setCellValue('B' . $numrow, $no);
+                $no++;
+            }
+
+
             $sheet->setCellValue('C' . $numrow, "BC " . $data['jns_bc']);
             $sheet->setCellValue('D' . $numrow, $data['nomor_bc']);
             $sheet->setCellValue('E' . $numrow, $data['tgl_bc']);
@@ -169,27 +179,32 @@ class Bcmasuk extends CI_Controller
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
             $sheet->setCellValue('M' . $numrow, $data['kgs']);
-            $sheet->setCellValue('N' . $numrow, $nilaiidr);
-            $sheet->setCellValue('O' . $numrow, $nilaiusd);
+            $sheet->setCellValue('N' . $numrow, round($nilaiidr, 2));
+            $sheet->setCellValue('O' . $numrow, round($nilaiusd, 2));
 
+            $ceknomor_bc = $data['nomor_bc'];
             $numrow++;
-            $no++;
         }
+
         $sheet->getStyle('B8:O' . ($numrow - 1))->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
                 ],
             ],
-            'alignment' => [
-                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
-                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
-            ],
         ]);
+        $sheet->getStyle('B8:K' . ($numrow - 1))
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT)
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+        $sheet->getStyle('L8:O' . ($numrow - 1))
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT)
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="laporan_pemasukan.xlsx"');
+        header('Content-Disposition: attachment;filename="LAPORAN BC KELUAR.xlsx"');
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
     }
@@ -197,56 +212,19 @@ class Bcmasuk extends CI_Controller
 
     public function cetakpdf()
     {
-        $pdf = new PDF('L', 'mm', 'A4');
+        $pdf = new PDF_Bcmasuk('L', 'mm', 'A4');
+        $pdf->AliasNbPages();
         $pdf->AddFont('Lato', '', 'Lato-Regular.php');
         $pdf->AddFont('Latob', '', 'Lato-Bold.php');
         $pdf->AddPage();
 
-
-        $pdf->SetFont('Latob', '', 10);
-        $pdf->Cell(0, 6, 'KAWASAN BERIKAT PT. INDONEPTUNE NET MANUFACTURING', 0, 1, 'L');
-        $pdf->Cell(0, 6, 'LAPORAN PEMASUKAN BARANG PER DOKUMEN PABEAN', 0, 1, 'L');
-        $pdf->Cell(0, 6, 'PERIODE: ' . $this->session->userdata('tglawal') . ' S/D ' . $this->session->userdata('tglakhir'), 0, 1, 'L');
-        $pdf->Ln(3);
-
-
-        $pdf->SetFont('Latob', '', 8);
-        $pdf->SetFillColor(220, 220, 220);
-        $pdf->SetDrawColor(0, 0, 0);
-
-        $y = $pdf->GetY();
-
-        $pdf->Cell(7, 12, 'No', 1, 0, 'C', true);
-        $pdf->Cell(8, 12, 'Jenis', 1, 0, 'C', true);
-
-        $x_doc = $pdf->GetX();
-        $pdf->Cell(25, 6, 'Dokumen Pabean', 1, 0, 'C', true);
-        $pdf->SetXY($x_doc, $y + 6);
-        $pdf->Cell(10, 6, 'Nomor', 1, 0, 'C', true);
-        $pdf->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
-        $pdf->SetXY($x_doc + 25, $y);
-
-        $x_bukti = $pdf->GetX();
-        $pdf->Cell(42, 6, 'Bukti Penerimaan Barang', 1, 0, 'C', true);
-        $pdf->SetXY($x_bukti, $y + 6);
-        $pdf->Cell(27, 6, 'Nomor', 1, 0, 'C', true);
-        $pdf->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
-        $pdf->SetXY($x_bukti + 42, $y);
-
-        $pdf->Cell(45, 12, 'Pemasok/Pengirim', 1, 0, 'C', true);
-        $pdf->Cell(15, 12, 'Kode', 1, 0, 'C', true);
-        $pdf->Cell(90, 12, 'Nama Barang', 1, 0, 'C', true);
-        $pdf->Cell(8, 12, 'Sat', 1, 0, 'C', true);
-        $pdf->Cell(10, 12, 'Jum', 1, 0, 'C', true);
-        $pdf->Cell(10, 12, 'Kgs', 1, 0, 'C', true);
-        $pdf->Cell(20, 12, 'Nilai (IDR)', 1, 1, 'C', true);
-
-
         $pdf->SetFont('Lato', '', 7);
         $bcmasuk = $this->bcmasukmodel->getdata_export();
         $no = 1;
+        $ceknomor_bc = '';
 
         foreach ($bcmasuk->result_array() as $data) {
+
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
             if ($data['xmtuang'] == 'USD') {
@@ -257,26 +235,56 @@ class Bcmasuk extends CI_Controller
                 $nilaiusd = $nilaiidr / $data['kurs_usd'];
             }
 
-            $pdf->Cell(7, 6, $no++, 1, 0, 'C');
-            $pdf->Cell(8, 6, 'BC ' . $data['jns_bc'], 1, 0, 'C');
-            $pdf->Cell(10, 6, $data['nomor_bc'], 1, 0, 'C');
-            $pdf->Cell(15, 6, $data['tgl_bc'], 1, 0, 'C');
-            $pdf->Cell(27, 6, $data['nomor_dok'], 1, 0, 'C');
-            $pdf->Cell(15, 6, $data['tgl'], 1, 0, 'C');
-            $pdf->Cell(45, 6, $data['nama_supplier'], 1, 0);
-            $pdf->Cell(15, 6, $data['kode'], 1, 0, 'C');
-            $pdf->Cell(90, 6, $data['nama_barang'], 1, 0);
-            $pdf->Cell(8, 6, $data['kodesatuan'], 1, 0, 'C');
-            $pdf->Cell(10, 6, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(10, 6, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(20, 6, number_format($nilaiidr, 2, ',', '.'), 1, 1, 'R');
+
+            $tinggi = 6;
+
+
+            $x_awal = $pdf->GetX();
+            $y_awal = $pdf->GetY();
+
+            $lebarNamaBarang = 70;
+            $nbNama = $pdf->NbLines($lebarNamaBarang, $data['nama_barang']);
+            $tinggiMaks = $nbNama * $tinggi;
+
+            if ($data['nomor_bc'] == $ceknomor_bc) {
+                $pdf->Cell(6, $tinggiMaks, '', 1, 0, 'C');
+            } else {
+                $pdf->Cell(6, $tinggiMaks, $no, 1, 0, 'C');
+                $no++;
+            }
+
+            $pdf->Cell(8, $tinggiMaks, 'BC ' . $data['jns_bc'], 1, 0, 'L');
+            $pdf->Cell(12, $tinggiMaks, $data['nomor_bc'], 1, 0, 'L');
+            $pdf->Cell(15, $tinggiMaks, $data['tgl_bc'], 1, 0, 'L');
+            $pdf->Cell(27, $tinggiMaks, $data['nomor_dok'], 1, 0, 'L');
+            $pdf->Cell(15, $tinggiMaks, $data['tgl'], 1, 0, 'L');
+            $pdf->Cell(45, $tinggiMaks, $data['nama_supplier'], 1, 0, 'L');
+            $pdf->Cell(15, $tinggiMaks, $data['kode'], 1, 0, 'L');
+
+
+            $x_nama = $pdf->GetX();
+            $y_nama = $pdf->GetY();
+            $pdf->MultiCell($lebarNamaBarang, $tinggi, $data['nama_barang'], 1, 'L');
+
+
+            $pdf->SetXY($x_nama + $lebarNamaBarang, $y_nama);
+
+            $pdf->Cell(8, $tinggiMaks, $data['kodesatuan'], 1, 0, 'L');
+            $pdf->Cell(12, $tinggiMaks, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(12, $tinggiMaks, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(20, $tinggiMaks, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(15, $tinggiMaks, number_format($nilaiusd, 2, ',', '.'), 1, 1, 'R');
+
+            $ceknomor_bc = $data['nomor_bc'];
         }
 
-        $pdf->Ln(3);
-        $pdf->SetFont('Latob', '', 7);
-        $pdf->Cell(0, 5, 'Dicetak pada: ' . date('d-m-Y H:i:s'), 0, 1, 'R');
 
-        $pdf->Output('I', 'Laporan_Pemasukan_Barang.pdf');
-        $this->helpermodel->isilog('Download PDF Laporan Pemasukan Barang');
+        // Info waktu cetak (opsional)
+        // $pdf->Ln(3);
+        // $pdf->SetFont('Latob', '', 7);
+        // $pdf->Cell(0, 5, 'Dicetak pada: ' . date('d-m-Y H:i:s'), 0, 1, 'R');
+
+        $pdf->Output('I', 'Laporan Bc Masuk.pdf');
+        $this->helpermodel->isilog('Download PDF Laporan Bc Masuk');
     }
 }

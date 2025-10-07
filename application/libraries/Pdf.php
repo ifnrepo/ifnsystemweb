@@ -112,3 +112,196 @@ class Pdf extends FPDF
         return $count;
     }
 }
+
+class PDF_Bcmasuk extends FPDF
+{
+    function Header()
+    {
+        $this->SetFont('Latob', '', 10);
+        $this->Cell(0, 4, 'KAWASAN BERIKAT PT. INDONEPTUNE NET MANUFACTURING', 0, 1, 'L');
+        $this->Cell(0, 4, 'LAPORAN PEMASUKAN BARANG PER DOKUMEN PABEAN', 0, 1, 'L');
+        $this->Cell(0, 4, 'PERIODE: ' . $_SESSION['tglawal'] . ' S/D ' . $_SESSION['tglakhir'], 0, 1, 'L');
+        $this->Ln(2);
+
+        $this->SetFont('Latob', '', 8);
+        $this->SetFillColor(220, 220, 220);
+        $this->SetDrawColor(0, 0, 0);
+
+        $y = $this->GetY();
+
+        $this->Cell(6, 12, 'No', 1, 0, 'C', true);
+        $this->Cell(8, 12, 'Jenis', 1, 0, 'C', true);
+        $x_doc = $this->GetX();
+        $this->Cell(27, 6, 'Dokumen Pabean', 1, 0, 'C', true);
+        $this->SetXY($x_doc, $y + 6);
+        $this->Cell(12, 6, 'Nomor', 1, 0, 'C', true);
+        $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
+        $this->SetXY($x_doc + 27, $y);
+
+        $x_bukti = $this->GetX();
+        $this->Cell(42, 6, 'Bukti Penerimaan Barang', 1, 0, 'C', true);
+        $this->SetXY($x_bukti, $y + 6);
+        $this->Cell(27, 6, 'Nomor', 1, 0, 'C', true);
+        $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
+        $this->SetXY($x_bukti + 42, $y);
+
+        $this->Cell(45, 12, 'Pemasok/Pengirim', 1, 0, 'C', true);
+        $this->Cell(15, 12, 'Kode', 1, 0, 'C', true);
+        $this->Cell(70, 12, 'Nama Barang', 1, 0, 'C', true);
+        $this->Cell(8, 12, 'Sat', 1, 0, 'C', true);
+        $this->Cell(12, 12, 'Jum', 1, 0, 'C', true);
+        $this->Cell(12, 12, 'Kgs', 1, 0, 'C', true);
+        $this->Cell(20, 12, 'Nilai (IDR)', 1, 0, 'C', true);
+        $this->Cell(15, 12, 'Nilai (USD)', 1, 1, 'C', true);
+    }
+
+    function Footer()
+    {
+        $this->SetY(-15);
+        $this->SetFont('Lato', '', 7);
+        $this->SetTextColor(100, 100, 100);
+
+        $this->Cell(0, 5, 'Halaman ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
+    }
+
+
+    function NbLines($w, $txt)
+    {
+        $cw = &$this->CurrentFont['cw'];
+        if ($w == 0)
+            $w = $this->w - $this->rMargin - $this->x;
+        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', $txt);
+        $nb = strlen($s);
+        if ($nb > 0 && $s[$nb - 1] == "\n")
+            $nb--;
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $nl = 1;
+        while ($i < $nb) {
+            $c = $s[$i];
+            if ($c == "\n") {
+                $i++;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $nl++;
+                continue;
+            }
+            if ($c == ' ')
+                $sep = $i;
+            $l += $cw[$c];
+            if ($l > $wmax) {
+                if ($sep == -1) {
+                    if ($i == $j)
+                        $i++;
+                } else
+                    $i = $sep + 1;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $nl++;
+            } else
+                $i++;
+        }
+        return $nl;
+    }
+}
+class PDF_Bckeluar extends FPDF
+{
+    function Header()
+    {
+        $this->SetFont('Latob', '', 10);
+        $this->Cell(0, 4, 'KAWASAN BERIKAT PT. INDONEPTUNE NET MANUFACTURING', 0, 1, 'L');
+        $this->Cell(0, 4, 'LAPORAN PEMASUKAN BARANG PER DOKUMEN PABEAN', 0, 1, 'L');
+        $this->Cell(0, 4, 'PERIODE: ' . $_SESSION['tglawal'] . ' S/D ' . $_SESSION['tglakhir'], 0, 1, 'L');
+        $this->Ln(2);
+
+        $this->SetFont('Latob', '', 8);
+        $this->SetFillColor(220, 220, 220);
+        $this->SetDrawColor(0, 0, 0);
+
+        $y = $this->GetY();
+
+        $this->Cell(6, 12, 'No', 1, 0, 'C', true);
+        $this->Cell(8, 12, 'Jenis', 1, 0, 'C', true);
+        $x_doc = $this->GetX();
+        $this->Cell(27, 6, 'Dokumen Pabean', 1, 0, 'C', true);
+        $this->SetXY($x_doc, $y + 6);
+        $this->Cell(12, 6, 'Nomor', 1, 0, 'C', true);
+        $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
+        $this->SetXY($x_doc + 27, $y);
+
+        $x_bukti = $this->GetX();
+        $this->Cell(42, 6, 'Bukti Penerimaan Barang', 1, 0, 'C', true);
+        $this->SetXY($x_bukti, $y + 6);
+        $this->Cell(27, 6, 'Nomor', 1, 0, 'C', true);
+        $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
+        $this->SetXY($x_bukti + 42, $y);
+
+        $this->Cell(45, 12, 'Customer', 1, 0, 'C', true);
+        $this->Cell(15, 12, 'Kode', 1, 0, 'C', true);
+        $this->Cell(70, 12, 'Nama Barang', 1, 0, 'C', true);
+        $this->Cell(8, 12, 'Sat', 1, 0, 'C', true);
+        $this->Cell(12, 12, 'Jum', 1, 0, 'C', true);
+        $this->Cell(12, 12, 'Kgs', 1, 0, 'C', true);
+        $this->Cell(20, 12, 'Nilai (IDR)', 1, 0, 'C', true);
+        $this->Cell(15, 12, 'Nilai (USD)', 1, 1, 'C', true);
+    }
+
+    function Footer()
+    {
+        $this->SetY(-15);
+        $this->SetFont('Lato', '', 7);
+        $this->SetTextColor(100, 100, 100);
+
+        $this->Cell(0, 5, 'Halaman ' . $this->PageNo() . '/{nb}', 0, 0, 'C');
+    }
+
+    function NbLines($w, $txt)
+    {
+
+        $cw = &$this->CurrentFont['cw'];
+        if ($w == 0)
+            $w = $this->w - $this->rMargin - $this->x;
+        $wmax = ($w - 2 * $this->cMargin) * 1000 / $this->FontSize;
+        $s = str_replace("\r", '', $txt);
+        $nb = strlen($s);
+        if ($nb > 0 && $s[$nb - 1] == "\n")
+            $nb--;
+        $sep = -1;
+        $i = 0;
+        $j = 0;
+        $l = 0;
+        $nl = 1;
+        while ($i < $nb) {
+            $c = $s[$i];
+            if ($c == "\n") {
+                $i++;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $nl++;
+                continue;
+            }
+            if ($c == ' ')
+                $sep = $i;
+            $l += $cw[$c];
+            if ($l > $wmax) {
+                if ($sep == -1) {
+                    if ($i == $j)
+                        $i++;
+                } else
+                    $i = $sep + 1;
+                $sep = -1;
+                $j = $i;
+                $l = 0;
+                $nl++;
+            } else
+                $i++;
+        }
+        return $nl;
+    }
+}
