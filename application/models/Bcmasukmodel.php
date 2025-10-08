@@ -8,8 +8,16 @@ class Bcmasukmodel extends CI_Model
         $jnsbc = $this->session->userdata('jnsbc');
 
         $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_kemas.kemasan,tb_rekanan.nama_rekanan,tb_rekanan.alamat_rekanan,tb_rekanan.npwp as npwp_rekanan');
+        if ($jnsbc == '262') {
+            $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
+        } elseif ($jnsbc == 'Y') {
+            $this->db->join('tb_detail', '(tb_detail.id_header = tb_header.id OR tb_detail.id_akb = tb_header.id)', 'left');
+        } else {
+            $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
+        }
+
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
-        $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
+
         $this->db->join('ref_kemas', 'ref_kemas.kdkem = tb_header.kd_kemasan', 'left');
         $this->db->join('tb_rekanan', 'tb_rekanan.id = tb_header.id_rekanan', 'left');
         $this->db->where("tgl_bc between '" . tglmysql($tglawal) . "' AND '" . tglmysql($tglakhir) . "' ");
@@ -24,7 +32,7 @@ class Bcmasukmodel extends CI_Model
         }
         $this->db->where('data_ok', 1);
         $this->db->where('ok_tuju', 1);
-        $this->db->where('ok_valid', 1);
+        // $this->db->where('ok_valid', 1);
         $this->db->group_by('nomor_bc');
         return $this->db->get('tb_header');
     }
@@ -42,11 +50,17 @@ class Bcmasukmodel extends CI_Model
     }
     public function getdetailbyid($id)
     {
+        $header = $this->db->get_where('tb_header', ['id' => $id])->row_array();
         $this->db->select('tb_detail.*,satuan.kodesatuan,barang.nama_barang,barang.kode,barang.nohs');
+        $this->db->from('tb_detail');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-        $this->db->where('tb_detail.id_header', $id);
-        return $this->db->get('tb_detail');
+        if ($header['jns_bc'] == '262') {
+            $this->db->where('tb_detail.id_akb', $id);
+        } else {
+            $this->db->where('tb_detail.id_header', $id);
+        }
+        return $this->db->get();
     }
     public function getdata_export()
     {
@@ -64,7 +78,7 @@ class Bcmasukmodel extends CI_Model
 
         if ($this->session->userdata('jnsbc') != 'Y') {
             $this->db->where("tb_header.jns_bc", $this->session->userdata('jnsbc'));
-        }else{
+        } else {
             $this->db->where_in("tb_header.jns_bc", [23, 262, 40]);
         }
 
