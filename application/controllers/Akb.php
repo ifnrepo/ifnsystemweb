@@ -1598,11 +1598,15 @@ class Akb extends CI_Controller
             $uraian = trim($detx['po']) != '' ? spekpo($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
             $hs = trim($detx['po']) == '' ? substr($detx['nohs'], 0, 8) : substr($detx['hsx'], 0, 8);
             $kodebc = str_contains($detx['nomor_dok'], 'NET/') ? 'KGM' : $detx['kodebc'];
-            if (str_contains($detx['nomor_dok'], 'NET/')) {
+            if(str_contains($data['nomor_inv'], 'NET/') || str_contains($data['nomor_inv'], 'RSC/')){
                 $kodebc = 'KGM';
-            } else {
-                if (str_contains($detx['nomor_dok'], 'RSC/')) {
+            }else{
+                if (str_contains($detx['nomor_dok'], 'NET/')) {
                     $kodebc = 'KGM';
+                } else {
+                    if (str_contains($detx['nomor_dok'], 'RSC/')) {
+                        $kodebc = 'KGM';
+                    }
                 }
             }
             $arraykebarang = [

@@ -1486,7 +1486,7 @@ class Ib extends CI_Controller
             "kodeDokumen" => $data['jns_bc'],
             "kodeKantor" => "050500",
             "kodeTujuanPemasukan" => "2",
-            "kodeValuta" => $data['mt_uang'],
+            "kodeValuta" => "USD",
             "kotaTtd" => "BANDUNG",
             "namaTtd" => strtoupper($data['tg_jawab']),
             "ndpbm" => (float) $kurs['usd'],
@@ -1507,10 +1507,11 @@ class Ib extends CI_Controller
             $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
             $kodeentitas = $ke==1 ? "3" : (($ke==2) ? "7" : "9");
             if($ke == 3){
-                $nomoridentitas = datadepartemen($data['dept_id'],'npwp');
+                $nomoridentitas = '0' . trim(datadepartemen($data['dept_id'],'npwp')) . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', trim(datadepartemen($data['dept_id'],'npwp')))))) + 1));
             }else{
                 $nomoridentitas = "0010017176057000000000";
             }
+            
             $namaidentitas = $ke==1 ? "PT. INDONEPTUNE NET MANUFACTURING" : (($ke==2) ? "PT. INDONEPTUNE NET MANUFACTURING" : datadepartemen($data['dept_id'],'nama_subkon'));
             $alamat = $ke==1 ? $alamatifn : (($ke==2) ? $alamatifn : datadepartemen($data['dept_id'],'alamat_subkon'));
             $nibidentitas = $ke==1 ? "9120011042693" : "";
@@ -1586,10 +1587,19 @@ class Ib extends CI_Controller
         $datadet = $this->ibmodel->getdatadetailib($id,1);
         $no = 0;
         $jumlahfasilitas = 0;
+        $jumcife=0;
         foreach ($datadet as $detx) {
             $no++;
-            $jumlah = $detx['kodesatuan']=='KGS' ? $detx['kgs'] : $detx['pcs'];
+            // $jumlah = (trim($detx['po'])=='' && $detx['id_barang'] != 0) ? $detx['kgsx'] : $detx['pcsx'];
+            $jumlah = $detx['pcsx'];
             $cifrupiah = (float) $data['kurs_usd']*($detx['harga']*$jumlah);
+            // $satuan = (trim($detx['po'])=='' && $detx['id_barang'] != 0) ? 'KGM' : $detx['satbc'];
+            $satuan = $detx['satbc'];
+            if(str_contains($data['nomor_dok'],'/NET')){
+                $satuan = 'KGM';
+                $jumlah = $detx['kgsx'];
+            }
+            $jumcife += (float) $detx['xcif'];
             $arrayke = [
                 "seriBarang" => $no,
                 "asuransi" => 0,
@@ -1601,13 +1611,13 @@ class Ib extends CI_Controller
                 "hargaSatuan" => 0,
                 "bruto" => 0,
                 "hargaPenyerahan" => 0,
-                "jumlahSatuan" => (int) $detx['pcsx'],
+                "jumlahSatuan" => (float) $jumlah,
                 "kodeAsalBarang" => "1",
                 "kodeBarang" => trim($detx['po'])=='' ? $detx['kode'] : viewsku($detx['po'],$detx['item'],$detx['dis']),
                 "kodeDokumen" => "",
                 "kodeJenisKemasan" => $data['kd_kemasan'],
                 "isiPerKemasan" => 0,
-                "kodeSatuanBarang" => $detx['satbc'],
+                "kodeSatuanBarang" => $satuan,
                 "kodeKategoriBarang" => "11",
                 "kodeNegaraAsal" => "ID", //$data['kodenegara'],
                 "kodePerhitungan" => "1",
@@ -1638,8 +1648,8 @@ class Ib extends CI_Controller
                 "cifRupiah" => 0,
                 "hargaPenyerahan" => 0,
                 "hargaPerolehan" => 0,
-                "jumlahSatuan" => (int) $detx['pcsx'],
-                "kodeSatuanBarang" => $detx['satbc'],
+                "jumlahSatuan" => (float) $jumlah,
+                "kodeSatuanBarang" => $satuan,
                 "kodeAsalBahanBaku" => "1",
                 "kodeBarang" => trim($detx['po'])=='' ? $detx['kode'] : viewsku($detx['po'],$detx['item'],$detx['dis']),
                 "kodeDokAsal" => "261",
@@ -1703,11 +1713,15 @@ class Ib extends CI_Controller
         // ];
         // array_push($arraypungutan,$pungutanarray);
         $datajamin = $this->ibmodel->getdatakontrakbyid($dataexbc['id_kontrak']);
+        $datakursasal = $dataexbc['devisa_usd']==0 ? 1 : $dataexbc['devisa_usd'];
+        $jaminanbm = ($dataexbc['bmrupiah']/$datakursasal)*$jumcife;
+        $jaminanppn = ($dataexbc['ppnrupiah']/$datakursasal)*$jumcife;
+        $jaminanpph = ($dataexbc['pphrupiah']/$datakursasal)*$jumcife;
         $arrayjaminan = [];
         $jaminanarray = [
             "idJaminan" => "",
             "kodeJenisJaminan" => "3",
-            "nilaiJaminan" => (float) $datajamin['jml_ssb'],
+            "nilaiJaminan" => (float) round($jaminanbm+$jaminanppn+$jaminanpph,2),
             "nomorBpj" => $datajamin['nomor_bpj'],
             "nomorJaminan" => $datajamin['nomor_ssb'],
             "penjamin" => $datajamin['penjamin'],
@@ -2047,21 +2061,38 @@ class Ib extends CI_Controller
         $data['idheader'] = $id;
         $header = $this->ibmodel->getdatabyid($id);
         $detail = $this->ibmodel->getdatadetailbyid($iddetail)->row_array();
-        $arrkond = [
+        if(trim($detail['po'])=='' && $detail['id_barang'] != 0 && trim($detail['insno'])==''){
+            $arrkond = [
+            'trim(a.po)' => trim($detail['po']),
+            'trim(a.item)' => trim($detail['item']),
+            'a.dis' => $detail['dis'],
+            'a.id_barang' => $detail['id_barang'],
+            ];
+            $arrkond2 = [
+                'id_akb' => $id,
+                'trim(po)' => trim($detail['po']),
+                'trim(item)' => trim($detail['item']),
+                'dis' => $detail['dis'],
+                'id_barang' => $detail['id_barang'],
+            ];
+        }else{
+            $arrkond = [
             'trim(a.po)' => trim($detail['po']),
             'trim(a.item)' => trim($detail['item']),
             'a.dis' => $detail['dis'],
             'a.id_barang' => $detail['id_barang'],
             'trim(a.insno)' => trim($detail['insno']),
-        ];
-        $arrkond2 = [
-            'id_akb' => $id,
-            'trim(po)' => trim($detail['po']),
-            'trim(item)' => trim($detail['item']),
-            'dis' => $detail['dis'],
-            'id_barang' => $detail['id_barang'],
-            'trim(insno)' => trim($detail['insno']),
-        ];
+            ];
+            $arrkond2 = [
+                'id_akb' => $id,
+                'trim(po)' => trim($detail['po']),
+                'trim(item)' => trim($detail['item']),
+                'dis' => $detail['dis'],
+                'id_barang' => $detail['id_barang'],
+                'trim(insno)' => trim($detail['insno']),
+            ];
+        }
+        
         $arrayid = explode(',',$detail['arr_seri_exbc']);
         $detail2 = $this->ibmodel->getdatadetailbyidbcasal($arrkond2)->row_array();
         $cekheader = $this->ibmodel->getdatabynomorbc($header['exnomor_bc']);
@@ -2097,13 +2128,20 @@ class Ib extends CI_Controller
 
         $cek = $this->ibmodel->updatebcasal($exseribc,$arrkond,$bcasal,$cife,$kursasal['usd'],$jmlkembali);
         if($cek){
-            echo 1;
+            echo json_encode($cek);
         }
     }
     public function resetbcasal($header,$id){
         $cek = $this->ibmodel->resetbcasal($header,$id);
         if($cek){
             $url = base_url().'ib/isidokbc/'.$header.'/1';
+            redirect($url);
+        }
+    }
+    public function autolampiran($id){
+        $cek = $this->ibmodel->autolampiran($id);
+        if($cek){
+            $url = base_url().'ib/isidokbc/'.$id.'/1';
             redirect($url);
         }
     }

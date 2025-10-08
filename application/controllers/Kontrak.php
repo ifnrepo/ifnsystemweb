@@ -135,15 +135,11 @@ class Kontrak extends CI_Controller
     }
     public function view($sesi, $mode = 0)
     {
-
         $this->session->set_userdata('sesikontrak', $sesi);
         $data['header'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $data['detail'] = $this->kontrakmodel->getDetail_kontrak($sesi);
-
-        // var_dump($cek);
-        // die();
-
+        $data['terima'] = $this->kontrakmodel->getdatapengembalian($sesi);
         $data['mode'] = $mode;
         $this->load->view('kontrak/view', $data);
     }
@@ -168,6 +164,12 @@ class Kontrak extends CI_Controller
             $url = base_url('kontrak/' . $id2);
             redirect($url);
         }
+    }
+    public function viewdetail($id, $mode = 0)
+    {
+        $data['header'] = $this->kontrakmodel->getdata($id)->row_array();
+        $data['transaksi'] = $this->kontrakmodel->gettransaksikontrak($id);
+        $this->load->view('kontrak/viewdetail', $data);
     }
     public function simpankedatabase()
     {

@@ -89,22 +89,25 @@
                     $spekbarang = trim($detail['po'])=='' ? namaspekbarang($detail['id_barang']) : spekpo($detail['po'],$detail['item'],$detail['dis']);
                     $inidipakai = in_array($detail['id'],$arrayid) ? 'text-teal' : '';
                     $inidanger = $detail['cif']==0 ? 'text-danger' : '';
+                    $kgsasal = $detail['kgs'];
+                    $kgskurang = $detail['kgs']-$detail['in_exbc'];
+                    $jmlcif = ($kgskurang/$kgsasal)*$detail['cif'];
                 ?>
                     <tr>
                         <td><?= $detail['seri_urut_akb'] ?></td>
                         <td><?= $sku ?></td>
                         <td class="<?= $inidipakai ?>"><?= $spekbarang ?></td>
-                        <td class="<?= $inidanger ?>"><?= round($detail['cif'],2) ?></td>
-                        <td id="pcsx<?= $no ?>"><?= rupiah($detail['pcs']-$detail['in_exbc'],0) ?></td>
-                        <td><?= rupiah($detail['kgs'],2) ?></td>
+                        <td class="<?= $inidanger ?>"><?= round($jmlcif,2) ?></td>
+                        <td id="pcsx<?= $no ?>"><?= rupiah($detail['pcs'],0) ?></td>
+                        <td><?= rupiah($detail['kgs']-$detail['in_exbc'],2) ?></td>
                         <td class="text-center">
                             <label class="form-check mb-0">
-                                <input class="form-check-input pilihcek" rel2="<?= round($detail['cif'],2) ?>" rel3="<?= $detail['kgs'] ?>" rel4="<?= $detail['pcs']-$detail['in_exbc'] ?>" name="cekpilihbcasal" id="cekbok<?= $no; ?>" rel="<?= $detail['id']; ?>" type="checkbox" title="<?= $detail['id']; ?>">
+                                <input class="form-check-input pilihcek" rel2="<?= round($jmlcif,2) ?>" rel3="<?= round($detail['kgs']-$detail['in_exbc'],2) ?>" rel4="<?= $detail['pcs'] ?>" name="cekpilihbcasal" id="cekbok<?= $no; ?>" rel="<?= $detail['id']; ?>" type="checkbox" title="<?= $detail['id']; ?>">
                                 <span class="form-check-label">Pilih</span>
                             </label>
                         </td>
                         <td class="text-center">
-                            <input type="text" class="form-control font-kecil btn-flat text-center iniinput" style="max-width: 50px !important; height: 20px;"   rel="<?= $detail['id']; ?>" id="input<?= $no; ?>" value="" aria-describedby="emailHelp" placeholder="Pcs Dipilih">
+                            <input type="text" class="form-control font-kecil btn-flat text-center iniinput" style="max-width: 50px !important; height: 20px;"   rel="<?= $detail['id']; ?>" id="input<?= $no; ?>" value="" aria-describedby="emailHelp" placeholder="Kgs">
                         </td>
                     </tr>
                 <?php }}else{ ?>
@@ -119,10 +122,10 @@
     <div class="mb-1 row">
         <div class="col">
             <div class="row">
-                <label class="col-3 col-form-label font-kecil">Pcs Dipilih</label>
+                <label class="col-3 col-form-label font-kecil">Kgs Dipilih</label>
                 <div class="col">
                     <input type="text" name="pcsasli" id="pcsasli" class="hilang">
-                    <input type="text" class="form-control font-kecil btn-flat text-right" id="inipcs" value="" aria-describedby="emailHelp" placeholder="Pcs Dipilih">
+                    <input type="text" class="form-control font-kecil btn-flat text-right" id="inipcs" value="" aria-describedby="emailHelp" placeholder="Kgs Dipilih">
                 </div>
             </div>
         </div>
@@ -210,6 +213,7 @@
                 text2.push($("#input"+i).val());
             }
         }
+        var iddetail = $("#id_detail").val();
         if(text.length > 0){
             $.ajax({
                 dataType: "json",
@@ -224,7 +228,8 @@
                 },
                 success: function (data) {
                     $('#modal-large-loading').modal('hide');
-                    window.location.reload();
+                    $("#jumlahcif"+iddetail).text(data['cif']);
+                    // window.location.reload();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {
                     console.log(xhr.status);

@@ -84,7 +84,12 @@ class Ib_model extends CI_Model
         return $this->db->get()->result_array();
     }
     public function getdatabynomorbc($kode){
-        return $this->db->get_where('tb_header',['trim(nomor_bc)' => $kode])->row_array();
+        $this->db->select('tb_header.*,sum(bm_rupiah) as bmrupiah,sum(ppn_rupiah) as ppnrupiah,sum(pph_rupiah) as pphrupiah');
+        $this->db->from('tb_header');
+        $this->db->join('tb_bombc','tb_bombc.id_header = tb_header.id','left');
+        $this->db->where('trim(tb_header.nomor_bc)',$kode);
+        return $this->db->get()->row_array();
+        // return $this->db->get_where('tb_header',['trim(nomor_bc)' => $kode])->row_array();
     }
     public function getdepttuju($kode)
     {
@@ -1068,7 +1073,9 @@ class Ib_model extends CI_Model
         }
         $this->db->where($kondisi);
         $this->db->update('tb_detail',['arr_seri_exbc' => implode(",",$nilai),'exbc_cif'=>$cife,'id_seri_exbc'=>$id,'exbc_ndpbm'=>$ndpbm,'in_pcs_exbc'=>implode(",",$jmll)]);
-        return $this->db->trans_complete();
+        $this->db->trans_complete();
+        $arraymasuk = ['cif' => $cife,'ndpbm'=>$ndpbm];
+        return $arraymasuk;
     }
     public function resetbcasal($idheader,$id){
         $this->db->trans_start();
@@ -1099,5 +1106,37 @@ class Ib_model extends CI_Model
     }
     public function getdatakontrakbyid($id){
         return $this->db->get_where('tb_kontrak',['id'=>$id])->row_array();
+    }
+    public function autolampiran($id){
+        $this->db->trans_start();
+        $header = $this->ibmodel->getdatabyid($id);
+        $dataexbc = $this->ibmodel->getdatabynomorbc($header['exnomor_bc']);
+        $datakontrak = $this->getdatakontrakbyid($dataexbc['id_kontrak']);
+        for($x=1;$x<=4;$x++){
+            switch ($x) {
+                case 1:
+                    $kode = '203';
+                    $nomordok = $datakontrak['nomor_kep'];
+                    $tgldok = $datakontrak['tgl_kep'];
+                    break;
+                case 2:
+                    $kode = '315';
+                    $nomordok = $datakontrak['nomor'];
+                    $tgldok = $datakontrak['tgl'];
+                    break;
+                case 3:
+                    $kode = '261';
+                    $nomordok = $dataexbc['nomor_bc'];
+                    $tgldok = $dataexbc['tgl_bc'];
+                    break;
+                case 4:
+                    $kode = '999';
+                    $nomordok = substr($datakontrak['nomor'],0,3);
+                    $tgldok = $header['tgl'];
+                    break;
+            }
+            $this->db->insert('lampiran',['id_header'=>$id,'kode_dokumen'=>$kode,'nomor_dokumen'=>$nomordok,'tgl_dokumen'=>$tgldok]);
+        }
+        return $this->db->trans_complete();
     }
 }
