@@ -36,7 +36,7 @@ class Kontrak_model extends CI_Model
         if (isset($kode['datkecuali'])) {
             $datkont = $this->db->query("SELECT id_kontrak FROM tb_header WHERE id_kontrak IS NOT NULL")->result_array();
         }
-
+        $this->db->where('tb_header.send_ceisa', 1);
         $this->db->group_by('tb_kontrak.id');
         $this->db->order_by('tgl_akhir');
 
