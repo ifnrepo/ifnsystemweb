@@ -13,7 +13,7 @@ class Kontrak_model extends CI_Model
     {
         $this->db->select("tb_kontrak.*,dept.departemen,SUM(tb_detail.kgs) AS total_kgs");
         $this->db->from('tb_kontrak');
-        $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id','left');
+        $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id', 'left');
         $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
 
@@ -36,7 +36,7 @@ class Kontrak_model extends CI_Model
         if (isset($kode['datkecuali'])) {
             $datkont = $this->db->query("SELECT id_kontrak FROM tb_header WHERE id_kontrak IS NOT NULL")->result_array();
         }
-
+        $this->db->where('tb_header.send_ceisa', 1);
         $this->db->group_by('tb_kontrak.id');
         $this->db->order_by('tgl_akhir');
 
