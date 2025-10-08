@@ -1590,9 +1590,15 @@ class Ib extends CI_Controller
         $jumcife=0;
         foreach ($datadet as $detx) {
             $no++;
-            $jumlah = (trim($detx['po'])=='' && $detx['id_barang'] != 0) ? $detx['kgsx'] : $detx['pcsx'];
+            // $jumlah = (trim($detx['po'])=='' && $detx['id_barang'] != 0) ? $detx['kgsx'] : $detx['pcsx'];
+            $jumlah = $detx['pcsx'];
             $cifrupiah = (float) $data['kurs_usd']*($detx['harga']*$jumlah);
-            $satuan = (trim($detx['po'])=='' && $detx['id_barang'] != 0) ? 'KGM' : $detx['satbc'];
+            // $satuan = (trim($detx['po'])=='' && $detx['id_barang'] != 0) ? 'KGM' : $detx['satbc'];
+            $satuan = $detx['satbc'];
+            if(str_contains($data['nomor_dok'],'/NET')){
+                $satuan = 'KGM';
+                $jumlah = $detx['kgsx'];
+            }
             $jumcife += (float) $detx['xcif'];
             $arrayke = [
                 "seriBarang" => $no,

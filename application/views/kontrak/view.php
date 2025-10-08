@@ -198,66 +198,130 @@
                         </div>
                     </div>
                 </div>
+                <ul class="nav nav-tabs card-header-tabs font-kecil" data-bs-toggle="tabs">
+                    <li class="nav-item">
+                        <a href="#tabs-realisasi" class="nav-link bg-primary-lt active btn-flat text-black" data-bs-toggle="tab">Realisasi (261)</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tabs-penerimaan" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Pengembalian (262)</a>
+                    </li>
+                </ul>
+                <hr class='m-1'>
                 <div class="row">
-                    <hr class='m-1'>
-                    <div class="font-kecil font-bold bg-primary-lt p-1">DETAIL BARANG</div>
-                    <div class="card card-lg">
-                        <div id="table-default" class="table-responsive">
-                            <table class="table datatable">
-                                <thead>
-                                    <tr>
-                                        <!-- <th class="text-dark text-center">No</th> -->
-                                        <!-- <th class="text-danger text-center">Kode</th>
-                                        <th class="text-danger text-center">Kode Kategori</th>
-                                        <th class="text-danger text-center">Kategori</th>
-                                        <th class="text-danger text-center">Uraian</th>
-                                        <th class="text-danger text-center">HsCode</th>
-                                        <th class="text-danger text-center">Pcs</th>
-                                        <th class="text-danger text-center">Kgs</th> -->
-                                        <th class="text-primary">Seri</th>
-                                        <th class="text-primary">SKU</th>
-                                        <th class="text-primary">Nama Barang</th>
-                                        <th class="text-primary">Satuan</th>
-                                        <th class="text-primary">Pcs</th>
-                                        <th class="text-primary">Kgs</th>
-
-                                    </tr>
-                                </thead>
-                                <tbody class=" table-tbody" style="font-size: 13px !important;">
-                                    <?php
-                                    $no = 0;
-                                    $total_kgs = 0;
-                                    if (!empty($detail)) {
-                                        foreach ($detail as $key) :
-                                            $total_kgs += $key['kgs'];
-                                            $no++;
-                                            $sku = trim($key['po']) == '' ? $key['kode'] : viewsku($key['po'], $key['item'], $key['dis']);
-                                            $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
-                                    ?>
+                    <div class="tab-content">
+                        <div class="tab-pane fade active show p-2" id="tabs-realisasi">
+                            <div class="font-kecil font-bold bg-primary-lt p-1">DETAIL BARANG</div>
+                            <div class="card card-lg">
+                                <div id="table-default" class="table-responsive">
+                                    <table class="table datatable">
+                                        <thead>
                                             <tr>
-                                                <td class="text-primary"><?= trim($key['seri_urut_akb']) !== '' ? $key['seri_urut_akb'] : '-'; ?></td>
-                                                <td class="text-primary"><?= $sku ?></td>
-                                                <td class="text-primary"><?= $spekbarang ?></td>
-                                                <td class="text-primary"><?= trim($key['kodesatuan']) !== '' ? $key['kodesatuan'] : '-'; ?> </td>
-                                                <td class="text-primary text-right"><?= trim($key['pcs']) !== '' ? rupiah($key['pcs'], 0) : '-'; ?></td>
-                                                <td class="text-primary text-right"><?= trim($key['kgs']) !== '' ? rupiah($key['kgs'], 2) : '-'; ?></td>
+                                                <th class="text-primary">Seri</th>
+                                                <th class="text-primary">SKU</th>
+                                                <th class="text-primary">Nama Barang</th>
+                                                <th class="text-primary">Satuan</th>
+                                                <th class="text-primary">Pcs</th>
+                                                <th class="text-primary">Kgs</th>
+
                                             </tr>
-                                        <?php endforeach; ?>
+                                        </thead>
+                                        <tbody class=" table-tbody" style="font-size: 13px !important;">
+                                            <?php
+                                            $no = 0;
+                                            $total_kgs = 0;
+                                            if (!empty($detail)) {
+                                                foreach ($detail as $key) :
+                                                    $total_kgs += $key['kgs'];
+                                                    $no++;
+                                                    $sku = trim($key['po']) == '' ? $key['kode'] : viewsku($key['po'], $key['item'], $key['dis']);
+                                                    $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
+                                            ?>
+                                                    <tr>
+                                                        <td class="text-primary"><?= trim($key['seri_urut_akb']) !== '' ? $key['seri_urut_akb'] : '-'; ?></td>
+                                                        <td class="text-primary"><?= $sku ?></td>
+                                                        <td class="text-primary"><?= $spekbarang ?></td>
+                                                        <td class="text-primary"><?= trim($key['kodesatuan']) !== '' ? $key['kodesatuan'] : '-'; ?> </td>
+                                                        <td class="text-primary text-right"><?= trim($key['pcs']) !== '' ? rupiah($key['pcs'], 0) : '-'; ?></td>
+                                                        <td class="text-primary text-right"><?= trim($key['kgs']) !== '' ? rupiah($key['kgs'], 2) : '-'; ?></td>
+                                                    </tr>
+                                                <?php endforeach; ?>
+                                                <tr>
+                                                    <td colspan="4" class="text-center fw-bold text-danger">Total Kgs</td>
+                                                    <td></td>
+
+                                                    <td class="font-bold text-danger text-right"><?= rupiah($total_kgs, 2) ?></td>
+                                                </tr>
+
+                                            <?php } else { ?>
+                                                <tr>
+                                                    <td colspan="7" class="text-center text-danger">--- Data Belum Terlampir ---</td>
+                                                </tr>
+                                            <?php } ?>
+
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="tab-pane fade show p-2" id="tabs-penerimaan">
+                            <div class="font-kecil font-bold bg-red-lt p-1">DETAIL BARANG</div>
+                            <div class="card card-lg">
+                                <table class="table datatable">
+                                    <thead>
                                         <tr>
-                                            <td colspan="4" class="text-center fw-bold text-danger">Total Kgs</td>
-                                            <td></td>
-
-                                            <td class="font-bold text-danger text-right"><?= rupiah($total_kgs, 2) ?></td>
+                                            <th class="text-primary">Tgl Terima</th>
+                                            <th class="text-primary">Nomor BC</th>
+                                            <th class="text-primary">SKU</th>
+                                            <th class="text-primary">Nama Barang</th>
+                                            <th class="text-primary">Satuan</th>
+                                            <th class="text-primary">Pcs</th>
+                                            <th class="text-primary">Kgs</th>
                                         </tr>
-
-                                    <?php } else { ?>
-                                        <tr>
-                                            <td colspan="7" class="text-center text-danger">--- Data Belum Terlampir ---</td>
-                                        </tr>
-                                    <?php } ?>
-
-                                </tbody>
-                            </table>
+                                    </thead>
+                                    <tbody class=" table-tbody" style="font-size: 13px !important;">
+                                        <?php
+                                        $no = 0;
+                                        $jumlahkgs = 0;$jumlahpcs=0;
+                                        if($terima->num_rows() > 0){
+                                            $tglx = '';$tglu='';
+                                            foreach($terima->result_array() as $terima){
+                                                $sku = trim($terima['po'])=='' ? $terima['kode'] : viewsku($terima['po'],$terima['item'],$terima['dis']);
+                                                $spekbarang = trim($terima['po'])=='' ? namaspekbarang($terima['id_barang']) : spekpo($terima['po'],$terima['item'],$terima['dis']);
+                                                $jumlahkgs += $terima['kgs'];
+                                                $jumlahpcs += $terima['pcs'];
+                                                $tglu = $terima['tgl_bc'];
+                                                if($tglx != $tglu){
+                                                    $tg = $terima['tgl_bc'];
+                                                    $nombc = $terima['nomor_bc'];
+                                                }else{
+                                                    $tg = '';
+                                                    $nombc = '';
+                                                }
+                                                $tglx = $tglu;
+                                            ?>
+                                            <tr>
+                                                <td class="text-primary"><?= $tg ?></td>
+                                                <td class="text-primary"><?= $nombc ?></td>
+                                                <td class="text-primary line-12"><?= $sku ?><br><span class="font-11 text-teal"><?= $terima['insno'] ?></span></td>
+                                                <td class="text-primary"><?= $spekbarang ?></td>
+                                                <td class="text-primary"><?= $terima['kodesatuan'] ?></td>
+                                                <td class="text-primary text-right"><?= $terima['pcs'] ?></td>
+                                                <td class="text-primary text-right"><?= $terima['kgs'] ?></td>
+                                            </tr>
+                                            <?php } ?>
+                                            <tr class="font-bold">
+                                                <td colspan="5" class="text-center text-red">TOTAL</td>
+                                                <td class="text-right text-red"><?= $jumlahpcs ?></td>
+                                                <td class="text-right text-red"><?= $jumlahkgs ?></td>
+                                            </tr>
+                                        <?php }else{ ?>
+                                            <tr>
+                                                <td colspan="7" class="text-center">--- Belum ada Pengembalian Barang --</td>
+                                            </tr>
+                                        <?php } ?>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
                 </div>
