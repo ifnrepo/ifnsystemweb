@@ -955,4 +955,12 @@ class Helper_model extends CI_Model
         $this->db->limit(1);
         return $this->db->get();
     }
+    public function getjumlahbcmasuk($nomorbc){
+        $this->db->select('SUM(round(tb_detail.kgs,2)) AS tot_kgs');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
+        $this->db->where('tb_header.exnomor_bc',$nomorbc);
+        $this->db->where('tb_header.send_ceisa = 1 and trim(tb_header.exnomor_bc) != "" ');
+        return $this->db->get();
+    }
 }

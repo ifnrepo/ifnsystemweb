@@ -87,8 +87,9 @@ class Kontrak extends CI_Controller
         $this->session->set_userdata('jnsbckontrak', $_POST['jnsbc']);
         $this->session->set_userdata('statuskontrak', $_POST['status']);
         $this->session->set_userdata('thkontrak', $_POST['thkontrak']);
-        $url = base_url('kontrak');
-        redirect($url);
+        // $url = base_url('kontrak');
+        // redirect($url);
+        echo 1;
     }
 
     public function hapuskontrak($id)

@@ -902,3 +902,8 @@ function getbcasal($exbc,$data){
     $get = $CI->helpermodel->getdetailbcasal($exbc,$data);
     return $get;
 }
+function getjumlahbcmasuk($nobc){
+    $CI = &get_instance();
+    $get = $CI->helpermodel->getjumlahbcmasuk($nobc);
+    return $get;
+}

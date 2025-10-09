@@ -908,6 +908,7 @@ class Ib_model extends CI_Model
     }
      public function getdatabcasaluntukedit($data,$qu=0,$kondisi=[])
     {
+        $arraybarcek = ['40394','39991'];
         $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs,c.kode as brg_id,c.kode,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,h.exnomor_bc,'56081100' as hsx,");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
@@ -926,7 +927,7 @@ class Ib_model extends CI_Model
         $this->db->join('tb_bombc', 'tb_bombc.id_header=a.id_akb and tb_bombc.seri_barang = a.seri_urut_akb', 'left');
         $this->db->where('a.id_akb', $data);
         $this->db->where($kondisi);
-        $this->db->where('(a.kgs-a.in_exbc) > 0');
+        $this->db->where('if(a.id_barang = 40394 OR a.id_barang = 39981,(a.pcs-a.in_exbc) > 0,(a.kgs-a.in_exbc) > 0)');
         if($qu=0){
             $this->db->group_by('a.po,a.item,a.dis,a.id_barang,a.insno,a.nobontr');
             $this->db->order_by('a.po,a.item,a.dis,c.kode,a.insno');
