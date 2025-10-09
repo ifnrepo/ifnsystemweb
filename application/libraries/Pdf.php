@@ -130,28 +130,28 @@ class PDF_Bcmasuk extends FPDF
         $y = $this->GetY();
 
         $this->Cell(6, 12, 'No', 1, 0, 'C', true);
-        $this->Cell(8, 12, 'Jenis', 1, 0, 'C', true);
+        $this->Cell(10, 12, 'Jenis', 1, 0, 'C', true);
         $x_doc = $this->GetX();
-        $this->Cell(27, 6, 'Dokumen Pabean', 1, 0, 'C', true);
+        $this->Cell(25, 6, 'Dokumen Pabean', 1, 0, 'C', true);
         $this->SetXY($x_doc, $y + 6);
-        $this->Cell(12, 6, 'Nomor', 1, 0, 'C', true);
+        $this->Cell(10, 6, 'Nomor', 1, 0, 'C', true);
         $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
-        $this->SetXY($x_doc + 27, $y);
+        $this->SetXY($x_doc + 25, $y);
 
         $x_bukti = $this->GetX();
-        $this->Cell(42, 6, 'Bukti Penerimaan Barang', 1, 0, 'C', true);
+        $this->Cell(50, 6, 'Bukti Penerimaan Barang', 1, 0, 'C', true);
         $this->SetXY($x_bukti, $y + 6);
-        $this->Cell(27, 6, 'Nomor', 1, 0, 'C', true);
+        $this->Cell(35, 6, 'Nomor', 1, 0, 'C', true);
         $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
-        $this->SetXY($x_bukti + 42, $y);
+        $this->SetXY($x_bukti + 50, $y);
 
         $this->Cell(45, 12, 'Pemasok/Pengirim', 1, 0, 'C', true);
-        $this->Cell(15, 12, 'Kode', 1, 0, 'C', true);
+        $this->Cell(13, 12, 'Kode', 1, 0, 'C', true);
         $this->Cell(70, 12, 'Nama Barang', 1, 0, 'C', true);
-        $this->Cell(8, 12, 'Sat', 1, 0, 'C', true);
+        $this->Cell(6, 12, 'Sat', 1, 0, 'C', true);
         $this->Cell(12, 12, 'Jum', 1, 0, 'C', true);
-        $this->Cell(12, 12, 'Kgs', 1, 0, 'C', true);
-        $this->Cell(20, 12, 'Nilai (IDR)', 1, 0, 'C', true);
+        $this->Cell(10, 12, 'Kgs', 1, 0, 'C', true);
+        $this->Cell(18, 12, 'Nilai (IDR)', 1, 0, 'C', true);
         $this->Cell(15, 12, 'Nilai (USD)', 1, 1, 'C', true);
     }
 
@@ -226,13 +226,13 @@ class PDF_Bckeluar extends FPDF
         $y = $this->GetY();
 
         $this->Cell(6, 12, 'No', 1, 0, 'C', true);
-        $this->Cell(8, 12, 'Jenis', 1, 0, 'C', true);
+        $this->Cell(10, 12, 'Jenis', 1, 0, 'C', true);
         $x_doc = $this->GetX();
-        $this->Cell(27, 6, 'Dokumen Pabean', 1, 0, 'C', true);
+        $this->Cell(25, 6, 'Dokumen Pabean', 1, 0, 'C', true);
         $this->SetXY($x_doc, $y + 6);
-        $this->Cell(12, 6, 'Nomor', 1, 0, 'C', true);
+        $this->Cell(10, 6, 'Nomor', 1, 0, 'C', true);
         $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
-        $this->SetXY($x_doc + 27, $y);
+        $this->SetXY($x_doc + 25, $y);
 
         $x_bukti = $this->GetX();
         $this->Cell(42, 6, 'Bukti Penerimaan Barang', 1, 0, 'C', true);
@@ -241,13 +241,13 @@ class PDF_Bckeluar extends FPDF
         $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
         $this->SetXY($x_bukti + 42, $y);
 
-        $this->Cell(45, 12, 'Customer', 1, 0, 'C', true);
-        $this->Cell(15, 12, 'Kode', 1, 0, 'C', true);
+        $this->Cell(43, 12, 'Customer', 1, 0, 'C', true);
+        $this->Cell(13, 12, 'Kode', 1, 0, 'C', true);
         $this->Cell(70, 12, 'Nama Barang', 1, 0, 'C', true);
         $this->Cell(8, 12, 'Sat', 1, 0, 'C', true);
         $this->Cell(12, 12, 'Jum', 1, 0, 'C', true);
         $this->Cell(12, 12, 'Kgs', 1, 0, 'C', true);
-        $this->Cell(20, 12, 'Nilai (IDR)', 1, 0, 'C', true);
+        $this->Cell(27, 12, 'Nilai (IDR)', 1, 0, 'C', true);
         $this->Cell(15, 12, 'Nilai (USD)', 1, 1, 'C', true);
     }
 

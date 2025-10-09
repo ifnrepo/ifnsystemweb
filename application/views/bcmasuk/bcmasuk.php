@@ -104,13 +104,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php $cntbrg = 0;
               $jmpcs = 0;
               $jmkgs = 0;
-              $jmidr = 0;$jmusd=0;
+              $jmidr = 0;
+              $jmusd = 0;
               if ($data != null) : foreach ($data->result_array() as $detail) {
-                  $suppl = $detail['nama_supplier'] == '' ? $detail['nama_rekanan'] : $detail['nama_supplier'];
+                  if (!empty($detail['nama_supplier'])) {
+                    $suppl = $detail['nama_supplier'];
+                  } elseif (!empty($detail['nama_rekanan'])) {
+                    $suppl = $detail['nama_rekanan'];
+                  } else {
+                    $suppl = $detail['departemen'];
+                  }
+
                   $exbcno = $detail['exnomor_bc'] == '' ? '' : '<span class="text-teal font-kecil">EX BC No. ' . $detail['exnomor_bc'] . '<br> Tgl ' . $detail['extgl_bc'] . '</span>';
-                  $pengali = $detail['mtuang']==2 ? $detail['nilai_pab']*$detail['kurs_usd'] : ($detail['mtuang']==3 ? $detail['nilai_pab']*$detail['kurs_yen'] : $detail['nilai_pab']);
-                  $usd = $detail['kurs_usd']==0 ? 1 : $detail['kurs_usd'];
-                  $xpengali = $detail['mtuang']==2 ? $detail['nilai_pab'] : ($detail['mtuang']==3 ? ($detail['nilai_pab']*$detail['kurs_yen'])/$usd : $detail['nilai_pab']/$usd);
+                  $pengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] * $detail['kurs_usd'] : ($detail['mtuang'] == 3 ? $detail['nilai_pab'] * $detail['kurs_yen'] : $detail['nilai_pab']);
+                  $usd = $detail['kurs_usd'] == 0 ? 1 : $detail['kurs_usd'];
+                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $detail['kurs_yen']) / $usd : $detail['nilai_pab'] / $usd);
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
@@ -119,8 +127,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td class="text-left line-12"><?= ucwords(strtolower($suppl)); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
-                    <td class="text-right font-kecil "><?= rupiah($pengali,2); ?></td>
-                    <td class="text-right font-kecil"><?= rupiah($xpengali,2); ?></td>
+                    <td class="text-right font-kecil "><?= rupiah($pengali, 2); ?></td>
+                    <td class="text-right font-kecil"><?= rupiah($xpengali, 2); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $exbcno ?></td>
                   </tr>
               <?php $cntbrg++;

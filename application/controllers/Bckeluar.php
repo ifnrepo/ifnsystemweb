@@ -211,13 +211,18 @@ class Bckeluar extends CI_Controller
                 $no++;
             }
 
+            if (!empty($data['nama_customer'])) {
+                $cus = $data['nama_customer'];
+            } else {
+                $cus = $data['departemen'];
+            }
 
             $sheet->setCellValue('C' . $numrow, "BC " . $data['jns_bc']);
             $sheet->setCellValue('D' . $numrow, $data['nomor_bc']);
             $sheet->setCellValue('E' . $numrow, $data['tgl_bc']);
             $sheet->setCellValue('F' . $numrow, $data['nomor_dok']);
             $sheet->setCellValue('G' . $numrow, $data['tgl']);
-            $sheet->setCellValue('H' . $numrow, $data['nama_customer']);
+            $sheet->setCellValue('H' . $numrow, $cus);
             $sheet->setCellValue('I' . $numrow, $data['kode']);
             $sheet->setCellValue('J' . $numrow, $data['nama_barang']);
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
@@ -279,6 +284,11 @@ class Bckeluar extends CI_Controller
                 $nilaiusd = $nilaiidr / $data['kurs_usd'];
             }
 
+            if (!empty($data['nama_customer'])) {
+                $cus = $data['nama_customer'];
+            } else {
+                $cus = $data['departemen'];
+            }
 
             $tinggi = 6;
 
@@ -297,13 +307,13 @@ class Bckeluar extends CI_Controller
                 $no++;
             }
 
-            $pdf->Cell(8, $tinggiMaks, 'BC ' . $data['jns_bc'], 1, 0, 'L');
-            $pdf->Cell(12, $tinggiMaks, $data['nomor_bc'], 1, 0, 'L');
+            $pdf->Cell(10, $tinggiMaks, 'BC ' . $data['jns_bc'], 1, 0, 'L');
+            $pdf->Cell(10, $tinggiMaks, $data['nomor_bc'], 1, 0, 'L');
             $pdf->Cell(15, $tinggiMaks, $data['tgl_bc'], 1, 0, 'L');
             $pdf->Cell(27, $tinggiMaks, $data['nomor_dok'], 1, 0, 'L');
             $pdf->Cell(15, $tinggiMaks, $data['tgl'], 1, 0, 'L');
-            $pdf->Cell(45, $tinggiMaks, $data['nama_customer'], 1, 0, 'L');
-            $pdf->Cell(15, $tinggiMaks, $data['kode'], 1, 0, 'L');
+            $pdf->Cell(43, $tinggiMaks, $cus, 1, 0, 'L');
+            $pdf->Cell(13, $tinggiMaks, $data['kode'], 1, 0, 'L');
 
 
             $x_nama = $pdf->GetX();
@@ -316,7 +326,7 @@ class Bckeluar extends CI_Controller
             $pdf->Cell(8, $tinggiMaks, $data['kodesatuan'], 1, 0, 'L');
             $pdf->Cell(12, $tinggiMaks, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
             $pdf->Cell(12, $tinggiMaks, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(20, $tinggiMaks, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(27, $tinggiMaks, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
             $pdf->Cell(15, $tinggiMaks, number_format($nilaiusd, 2, ',', '.'), 1, 1, 'R');
 
             $ceknomor_bc = $data['nomor_bc'];
