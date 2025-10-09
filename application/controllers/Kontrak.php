@@ -11,6 +11,7 @@ class Kontrak extends CI_Controller
             redirect($url);
         }
         $this->load->model('kontrak_model', 'kontrakmodel');
+        $this->load->model('ib_model', 'ibmodel');
         $this->load->model('barangmodel');
         $this->load->model('dept_model', 'deptmodel');
         $this->load->model('satuanmodel');
@@ -170,6 +171,8 @@ class Kontrak extends CI_Controller
     {
         $data['header'] = $this->kontrakmodel->getdata($id)->row_array();
         $data['transaksi'] = $this->kontrakmodel->gettransaksikontrak($id);
+        $data['totaljaminan'] = $this->kontrakmodel->getdatajaminan($data['header']['idheader'])->row_array();
+        $data['terima'] = $this->kontrakmodel->getdatajaminkiriman($data['header']['nomor_bc']);
         $this->load->view('kontrak/viewdetail', $data);
     }
     public function simpankedatabase()

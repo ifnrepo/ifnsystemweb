@@ -41,8 +41,8 @@
                     <th class="text-primary text-center">Kgs OUT</th>
                     <th class="text-primary text-center">Pcs IN</th>
                     <th class="text-primary text-center">Kgs IN</th>
-                    <th class="text-primary text-center">Saldo</th>
-                    <th class="text-primary text-center">Saldo</th>
+                    <th class="text-primary text-center">Saldo Pcs</th>
+                    <th class="text-primary text-center">Saldo Kgs</th>
                 </tr>
             </thead>
             <tbody class=" table-tbody" style="font-size: 12px !important;">
@@ -61,10 +61,10 @@
         <hr class="m-1">
         <ul class="nav nav-tabs card-header-tabs font-kecil" data-bs-toggle="tabs">
             <li class="nav-item">
-                <a href="#tabs-rekap" class="nav-link bg-primary-lt active btn-flat text-black" data-bs-toggle="tab">Rekap</a>
+                <a href="#tabs-rekap" class="nav-link bg-primary-lt active btn-flat text-black" data-bs-toggle="tab">Rekap Monitoring</a>
             </li>
             <li class="nav-item">
-                <a href="#tabs-jamin" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Jaminan</a>
+                <a href="#tabs-jamin" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Perhitungan Jaminan</a>
             </li>
         </ul>
         <div class="tab-content">
@@ -105,6 +105,7 @@
                                         $jumpcsterima += $transaksi['pcsx'];
                                     }
                                     $indexkode = $transaksi['po'].$transaksi['item'].$transaksi['dis'].$transaksi['id_barang'].$transaksi['insno'];
+                                    $bold = 'font-bold';
                                     if($kodmas == $indexkode){
                                         if($transaksi['kirter']==0){
                                             $saldokgs += round($transaksi['kgsx'],2);
@@ -116,6 +117,7 @@
                                     }else{
                                         $saldokgs = round($transaksi['kgsx'],2);
                                         $saldopcs = $transaksi['pcsx'];
+                                        $bold = '';
                                     }
                                     $kodmas = $indexkode;
                                     $kirter = $transaksi['kirter']==0 ? 'OUT' : 'IN';
@@ -128,7 +130,7 @@
                                     <td class="<?= $warnakirter ?>"><?= $kirter ?></td>
                                     <td><?= $sku ?></td>
                                     <td class="line-12"><?= $spekbarang ?><br><span class="text-teal font-11"><?= $transaksi['insno'] ?></span></td>
-                                    <td><?= $transaksi['insno'] ?></td>
+                                    <td></td>
                                     <?php if($transaksi['kirter']==0){ ?>
                                         <td class="text-right"><?= rupiah($transaksi['pcsx'],0) ?></td>
                                         <td class="text-right"><?= rupiah($transaksi['kgsx'],2) ?></td>
@@ -161,7 +163,55 @@
             <div class="tab-pane fade active p-2" id="tabs-jamin">
                 <div class="font-kecil font-bold bg-red-lt p-1">PERHITUNGAN</div>
                 <div class="card card-lg">
-                    ON PROGRESS
+                    <table class="table datatable table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-primary">NILAI PADA DOKUMEN 261</th>
+                                <th class="text-primary text-center">PCS</th>
+                                <th class="text-primary text-center">KGS</th>
+                                <th class="text-primary text-center">CIF (IDR)</th>
+                                <th class="text-primary text-center">CIF (USD)</th>
+                            </tr>
+                        </thead>
+                        <tbody class=" table-tbody" style="font-size: 12px !important;">
+                            <tr>
+                                <td class="text-center font-bold">BC 261</td>
+                                <td class="text-right"  id="pcskirim"></td>
+                                <td class="text-right"  id="kgskirim"></td>
+                                <td class="text-right"><?= rupiah($totaljaminan['cifrupiah'],2); ?></td>
+                                <td class="text-right"><?= rupiah($totaljaminan['cifrupiah']/$totaljaminan['ndpbm'],2) ?></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <table class="table datatable table-bordered">
+                        <thead>
+                            <tr>
+                                <th class="text-primary">NILAI PADA DOKUMEN 262</th>
+                                <th class="text-primary text-center">PCS</th>
+                                <th class="text-primary text-center">KGS</th>
+                                <th class="text-primary text-center">CIF (IDR)</th>
+                                <th class="text-primary text-center">CIF (USD)</th>
+                            </tr>
+                        </thead>
+                        <tbody class=" table-tbody" style="font-size: 12px !important;">
+                            <?php foreach($terima->result_array() as $terima){ ?>
+                                <tr>
+                                    <td><?= $terima['nomor_bc']; ?></td>
+                                    <td class="text-right"><?= $terima['pcs']; ?></td>
+                                    <td class="text-right"><?= $terima['kgs']; ?></td>
+                                    <td class="text-right"><?= rupiah($terima['cifnya']*$terima['exbc_ndpbm'],2); ?></td>
+                                    <td class="text-right"><?= rupiah($terima['cifnya'],2); ?></td>
+                                </tr>
+                            <?php }; ?>
+                            <tr>
+                                <td colspan="5"></td>
+                            </tr>
+                            <tr>
+                                <td colspan="4" class="text-center font-bold">SISA CIF</td>
+                                <td id="sisanya" class="font-bold text-right">XXXX</td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
             </div>
         </div>
@@ -177,5 +227,7 @@
         $("#inkgs").text($("#inkgsx").text());
         $("#saldopcs").text($("#saldopcsx").text());
         $("#saldokgs").text($("#saldokgsx").text());
+        $("#pcskirim").text($("#outpcsx").text());
+        $("#kgskirim").text($("#outkgsx").text());
     })
 </script>
