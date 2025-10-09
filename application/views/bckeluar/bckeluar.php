@@ -63,7 +63,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="text-blue font-bold">Jumlah USD : <span id="jumlahusd" style="font-weight: normal;">Loading ..</span></div>
                 </div>
                 <div class="col-3 font-kecil">
-                  
+
                 </div>
                 <div class="col-3">
                   <div class="">
@@ -110,25 +110,37 @@ defined('BASEPATH') or exit('No direct script access allowed');
               $jmidr = 0;
               $jmusd = 0;
               $no = 0;
-              if ($data != null) : foreach ($data->result_array() as $detail) { 
-                $pengali = $detail['mtuang']==2 ? $detail['kurs_usd'] : ($detail['mtuang']==3 ? $detail['kurs_yen'] : 1);
-                $xpengali = $detail['mtuang']==2 ? $detail['nilai_pab'] : ($detail['mtuang']==3 ? ($detail['nilai_pab']*$detail['kurs_yen'])/$detail['kurs_usd'] : 1); ?>
+              if ($data != null) : foreach ($data->result_array() as $detail) {
+                  $pengali = $detail['mtuang'] == 2 ? $detail['kurs_usd'] : ($detail['mtuang'] == 3 ? $detail['kurs_yen'] : 1);
+                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $detail['kurs_yen']) / $detail['kurs_usd'] : 1); ?>
+
+
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bckeluar/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
                     <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl']; ?></td>
-                    <td class="text-left line-12"><?= ucwords(strtolower(trim($detail['nama_customer']))); ?><?php if ($detail['port'] != '') {
-                                                                                                        echo '- ' . ucwords(strtolower($detail['port']));
-                                                                                                      } ?></td>
+                    <td class="text-left line-12">
+                      <?php
+                      if (!empty($detail['nama_customer'])) {
+                        echo ucwords(strtolower(trim($detail['nama_customer'])));
+                        if (!empty($detail['port'])) {
+                          echo ' - ' . ucwords(strtolower($detail['port']));
+                        }
+                      } else {
+                        echo ucwords(strtolower(trim($detail['departemen'])));
+                      }
+                      ?>
+                    </td>
+
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
-                    <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab']*$pengali,2); ?></td>
-                    <td class="text-right font-kecil"><?= rupiah($xpengali,2); ?></td>
+                    <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab'] * $pengali, 2); ?></td>
+                    <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab'] * $xpengali, 2); ?></td>
                   </tr>
               <?php $cntbrg++;
                   $jmpcs += $detail['pcs'];
                   $jmkgs += $detail['kgs'];
-                  $jmidr += $detail['nilai_pab']*$pengali;
+                  $jmidr += $detail['nilai_pab'] * $pengali;
                   $jmusd += $xpengali;
                 }
               endif; ?>

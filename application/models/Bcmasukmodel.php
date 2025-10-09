@@ -7,13 +7,16 @@ class Bcmasukmodel extends CI_Model
         $tglakhir = $this->session->userdata('tglakhir');
         $jnsbc = $this->session->userdata('jnsbc');
 
-        $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_kemas.kemasan,tb_rekanan.nama_rekanan,tb_rekanan.alamat_rekanan,tb_rekanan.npwp as npwp_rekanan');
+        $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_kemas.kemasan,tb_rekanan.nama_rekanan,tb_rekanan.alamat_rekanan,tb_rekanan.npwp as npwp_rekanan, dept.departemen');
         if ($jnsbc == '262') {
             $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         } elseif ($jnsbc == 'Y') {
             $this->db->join('tb_detail', '(tb_detail.id_header = tb_header.id OR tb_detail.id_akb = tb_header.id)', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         } else {
             $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         }
 
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
@@ -62,32 +65,60 @@ class Bcmasukmodel extends CI_Model
         }
         return $this->db->get();
     }
+
     public function getdata_export()
     {
         $tglawal = $this->session->userdata('tglawal');
         $tglakhir = $this->session->userdata('tglakhir');
+        $jnsbc = $this->session->userdata('jnsbc');
 
-        $this->db->select('tb_detail.*, tb_header.*, barang.nama_barang, barang.nama_alias, barang.kode, satuan.kodesatuan, supplier.nama_supplier, ref_mt_uang.mt_uang as xmtuang');
-        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+        $this->db->select('
+        tb_detail.*, 
+        tb_header.*, 
+        barang.nama_barang, 
+        barang.nama_alias, 
+        barang.kode, 
+        satuan.kodesatuan, 
+        supplier.nama_supplier, 
+        ref_mt_uang.mt_uang as xmtuang, 
+        dept.departemen,
+        tb_rekanan.nama_rekanan,tb_rekanan.alamat_rekanan,tb_rekanan.npwp as npwp_rekanan
+       
+         ');
+
+        if ($jnsbc == '262') {
+            $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+        } elseif ($jnsbc == 'Y') {
+            $this->db->join('tb_detail', '(tb_detail.id_header = tb_header.id OR tb_detail.id_akb = tb_header.id)', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+        } else {
+            $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+        }
+        $this->db->join('tb_rekanan', 'tb_rekanan.id = tb_header.id_rekanan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->join('ref_mt_uang', 'ref_mt_uang.id = tb_header.mtuang', 'left');
-        $this->db->where("tb_header.tgl_bc between '" . tglmysql($tglawal) . "' AND '" . tglmysql($tglakhir) . "' ");
+
+        $this->db->where('tb_header.tgl_bc >=', tglmysql($tglawal));
+        $this->db->where('tb_header.tgl_bc <=', tglmysql($tglakhir));
         $this->db->where('trim(tb_header.nomor_bc) !=', '');
 
-        if ($this->session->userdata('jnsbc') != 'Y') {
-            $this->db->where("tb_header.jns_bc", $this->session->userdata('jnsbc'));
+        if ($jnsbc != 'Y') {
+            $this->db->where('tb_header.jns_bc', $jnsbc);
         } else {
-            $this->db->where_in("tb_header.jns_bc", [23, 262, 40]);
+            $this->db->where_in('tb_header.jns_bc', [23, 262, 40]);
         }
 
         $this->db->where('tb_header.data_ok', 1);
         $this->db->where('tb_header.ok_tuju', 1);
-        $this->db->where('tb_header.ok_valid', 1);
 
-        return $this->db->get('tb_detail');
+        return $this->db->get('tb_header');
     }
+
+
 
 
 

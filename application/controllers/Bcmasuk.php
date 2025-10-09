@@ -156,7 +156,11 @@ class Bcmasuk extends CI_Controller
                 $nilaiidr = $nilaiusd * $data['kurs_usd'];
             } else {
                 $nilaiidr = $data['harga'] * $nilaiqty;
-                $nilaiusd = $nilaiidr / $data['kurs_usd'];
+                if (!empty($data['kurs_usd']) && $data['kurs_usd'] != 0) {
+                    $nilaiusd = $nilaiidr / $data['kurs_usd'];
+                } else {
+                    $nilaiusd = 0;
+                }
             }
 
 
@@ -167,13 +171,21 @@ class Bcmasuk extends CI_Controller
                 $no++;
             }
 
+            if (!empty($data['nama_supplier'])) {
+                $suppl = $data['nama_supplier'];
+            } elseif (!empty($data['nama_rekanan'])) {
+                $suppl = $data['nama_rekanan'];
+            } else {
+                $suppl = $data['departemen'];
+            }
+
 
             $sheet->setCellValue('C' . $numrow, "BC " . $data['jns_bc']);
             $sheet->setCellValue('D' . $numrow, $data['nomor_bc']);
             $sheet->setCellValue('E' . $numrow, $data['tgl_bc']);
             $sheet->setCellValue('F' . $numrow, $data['nomor_dok']);
             $sheet->setCellValue('G' . $numrow, $data['tgl']);
-            $sheet->setCellValue('H' . $numrow, $data['nama_supplier']);
+            $sheet->setCellValue('H' . $numrow, $suppl);
             $sheet->setCellValue('I' . $numrow, $data['kode']);
             $sheet->setCellValue('J' . $numrow, $data['nama_barang']);
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
@@ -232,7 +244,21 @@ class Bcmasuk extends CI_Controller
                 $nilaiidr = $nilaiusd * $data['kurs_usd'];
             } else {
                 $nilaiidr = $data['harga'] * $nilaiqty;
-                $nilaiusd = $nilaiidr / $data['kurs_usd'];
+                if (!empty($data['kurs_usd']) && $data['kurs_usd'] != 0) {
+                    $nilaiusd = $nilaiidr / $data['kurs_usd'];
+                } else {
+                    $nilaiusd = 0;
+                }
+            }
+
+
+
+            if (!empty($data['nama_supplier'])) {
+                $suppl = $data['nama_supplier'];
+            } elseif (!empty($data['nama_rekanan'])) {
+                $suppl = $data['nama_rekanan'];
+            } else {
+                $suppl = $data['departemen'];
             }
 
 
@@ -246,6 +272,8 @@ class Bcmasuk extends CI_Controller
             $nbNama = $pdf->NbLines($lebarNamaBarang, $data['nama_barang']);
             $tinggiMaks = $nbNama * $tinggi;
 
+
+
             if ($data['nomor_bc'] == $ceknomor_bc) {
                 $pdf->Cell(6, $tinggiMaks, '', 1, 0, 'C');
             } else {
@@ -253,13 +281,15 @@ class Bcmasuk extends CI_Controller
                 $no++;
             }
 
-            $pdf->Cell(8, $tinggiMaks, 'BC ' . $data['jns_bc'], 1, 0, 'L');
-            $pdf->Cell(12, $tinggiMaks, $data['nomor_bc'], 1, 0, 'L');
+            $pdf->Cell(10, $tinggiMaks, 'BC ' . $data['jns_bc'], 1, 0, 'L');
+            $pdf->Cell(10, $tinggiMaks, $data['nomor_bc'], 1, 0, 'L');
             $pdf->Cell(15, $tinggiMaks, $data['tgl_bc'], 1, 0, 'L');
-            $pdf->Cell(27, $tinggiMaks, $data['nomor_dok'], 1, 0, 'L');
+            $nomor_dok = trim(str_replace([',', '.', '…'], '', $data['nomor_dok']));
+            $pdf->Cell(35, $tinggiMaks, $nomor_dok, 1, 0, 'L');
+
             $pdf->Cell(15, $tinggiMaks, $data['tgl'], 1, 0, 'L');
-            $pdf->Cell(45, $tinggiMaks, $data['nama_supplier'], 1, 0, 'L');
-            $pdf->Cell(15, $tinggiMaks, $data['kode'], 1, 0, 'L');
+            $pdf->Cell(45, $tinggiMaks, $suppl, 1, 0, 'L');
+            $pdf->Cell(13, $tinggiMaks, $data['kode'], 1, 0, 'L');
 
 
             $x_nama = $pdf->GetX();
@@ -269,14 +299,16 @@ class Bcmasuk extends CI_Controller
 
             $pdf->SetXY($x_nama + $lebarNamaBarang, $y_nama);
 
-            $pdf->Cell(8, $tinggiMaks, $data['kodesatuan'], 1, 0, 'L');
+            $pdf->Cell(6, $tinggiMaks, $data['kodesatuan'], 1, 0, 'L');
             $pdf->Cell(12, $tinggiMaks, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(12, $tinggiMaks, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(20, $tinggiMaks, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(10, $tinggiMaks, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(18, $tinggiMaks, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
             $pdf->Cell(15, $tinggiMaks, number_format($nilaiusd, 2, ',', '.'), 1, 1, 'R');
 
             $ceknomor_bc = $data['nomor_bc'];
         }
+
+
 
 
         // Info waktu cetak (opsional)
