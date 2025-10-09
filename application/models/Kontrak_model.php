@@ -11,11 +11,11 @@ class Kontrak_model extends CI_Model
 
     public function getdatakontrak($kode)
     {
-        $this->db->select("tb_kontrak.*,dept.departemen,SUM(round(tb_detail.kgs,2)) AS total_kgs");
-        $this->db->select("(SELECT SUM(round(det.kgs,2)) AS tot_kgs 
-                            FROM tb_detail det 
-                            LEFT JOIN tb_header head ON head.id = det.id_akb 
-                            WHERE det.id_akb = head.id AND head.exnomor_bc = tb_header.nomor_bc AND head.send_ceisa = 1 AND trim(head.exnomor_bc) != '' AND trim(tb_header.nomor_bc) != '') as tot_kgs_masuk");
+        $this->db->select("tb_kontrak.*,dept.departemen,ROUND(SUM(tb_detail.kgs),2) AS total_kgs,tb_header.nomor_bc");
+        // $this->db->select("(SELECT SUM(round(det.kgs,2)) AS tot_kgs 
+        //                     FROM tb_detail det 
+        //                     LEFT JOIN tb_header head ON head.id = det.id_akb 
+        //                     WHERE det.id_akb = head.id AND head.exnomor_bc = tb_header.nomor_bc AND head.send_ceisa = 1 AND trim(head.exnomor_bc) != '' AND trim(tb_header.nomor_bc) != '') as tot_kgs_masuk");
         $this->db->from('tb_kontrak');
         $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id', 'left');
         $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
@@ -46,8 +46,14 @@ class Kontrak_model extends CI_Model
 
         return $this->db->get();
     }
-
-
+    public function getjumlahbcmasuk($nomorbc){
+        $this->db->select('SUM(round(det.kgs,2)) AS tot_kgs');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
+        $this->db->where('tb_header.exnomor_bc',$nomorbc);
+        $this->db->where('tb_detail.id_akb = tb_header.id AND tb_header.send_ceisa = 1 and trim(tb_header.exnomor_bc) != "" ');
+        return $this->db->get()->row_array();
+    }
     public function getdatakontrak261($kode)
     {
         $this->db->select('*');
@@ -223,47 +229,40 @@ class Kontrak_model extends CI_Model
         
         //Cek data Pengiriman
         if($urutakb == 1){
-            $this->db->select("tb_detail.*,round(sum(tb_detail.pcs),2) as pcs,round(sum(tb_detail.kgs),2) as kgs,barang.kode");
+            $this->db->select("'0' as kirter,tb_detail.*,round(sum(tb_detail.pcs),2) as pcsx,round(sum(tb_detail.kgs),2) as kgsx,barang.kode");
             $this->db->from('tb_detail');
             $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
             $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
             $this->db->where('tb_header.id',$header['id']);
             
             $this->db->group_by('tb_header.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
-            $this->db->order_by('tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
+            // $this->db->order_by('tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
         }else{
-            $this->db->select("tb_detail.*");
+            $this->db->select("'0' as kirter,tb_detail.*,tb_detail.pcs as pcsx,tb_detail.kgs as kgsx,barang.kode");
             $this->db->from('tb_detail');
             $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
             $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
             $this->db->where('tb_header.id',$header['id']);
 
-            $this->db->order_by('tb_detail.urut_akb,seri_barang');
+            // $this->db->order_by('tb_detail.urut_akb,seri_barang');
         }
         $datakirim = $this->db->get_compiled_select();
 
         //Cek data Penerimaan
-        $header2 = $this->db->get_where('tb_header',['exnomor_bc' => $header['nomor_bc']])->row_array();
-        if($urutakb == 1){
-            $this->db->select("'1' as kodekirim,tb_detail.seri_barang,tb_detail.urut_akb,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,0 as pcs_keluar,0 as kgs_keluar,barang.kode");
-            $this->db->select('sum(round(tb_detail.pcs,2)) as pcs_masuk,sum(round(tb_detail.kgs,2)) as kgs_masuk');
-            $this->db->from('tb_detail');
-            $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
-            $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-            $this->db->where('tb_header.id',$header2['id']);
-            
-            $this->db->group_by('po,item,dis,id_barang,insno');
-            // $this->db->order_by('po,item,dis,insno,kode');
+        $header2 = $this->db->get_where('tb_header',['exnomor_bc' => $header['nomor_bc']]);
+        if($header2->num_rows() > 0){
+            $xheader2 = $header2->row_array();
         }else{
-            $this->db->select("'1' as kodekirim,tb_detail.seri_barang,tb_detail.urut_akb,tb_detail.id_barang,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,0 as pcs_keluar,tb_detail.kgs as kgs_keluar,barang.kode");
-            $this->db->select('tb_detail.pcs as pcs_masuk,tb_detail.kgs as kgs_masuk');
-            $this->db->from('tb_detail');
-            $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
-            $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-            $this->db->where('tb_header.id',$header2['id']);
-
-            // $this->db->order_by('urut_akb,seri_barang');
+            $xheader2['id'] = '@#$#%$';
         }
+        $this->db->select("'1' as kirter,tb_detail.*,round(sum(tb_detail.pcs),2) as pcsx,round(sum(tb_detail.kgs),2) as kgsx,barang.kode");
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->where('tb_header.id',$xheader2['id']);
+        
+        $this->db->group_by('tb_header.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
+
         $dataterima = $this->db->get_compiled_select();
 
         if($urutakb == 1){
@@ -278,12 +277,10 @@ class Kontrak_model extends CI_Model
         }
 
         // $finalsql = $select.$datakirim." union all ".$dataterima.") pt ".$grup." order by ".$order;
-        $finalsql = $datakirim;
+        $finalsql = "Select * from (".$datakirim." UNION ALL ".$dataterima.")pt order by po,item,dis,kode,kirter";
 
         return $this->db->query($finalsql);
     }
-
-
 
 
     public function simpankedatabase($data)
@@ -291,6 +288,8 @@ class Kontrak_model extends CI_Model
         $this->db->where('id', $data['id']);
         return $this->db->update($data['tabel'], [$data['kolom'] => $data['isi']]);
     }
+    //End KONTRAK MODEL
+
     public function depttujupb($kode)
     {
         $hasil = '';
@@ -318,88 +317,7 @@ class Kontrak_model extends CI_Model
         }
         return $hasil;
     }
-    public function tambahpb($data)
-    {
-        $kode = $data['nomor_dok'];
-        $query = $this->db->insert('tb_header', $data);
-        $this->helpermodel->isilog($this->db->last_query());
-        if ($query) {
-            $this->db->where('nomor_dok', $kode);
-            $kodex = $this->db->get('tb_header')->row_array();
-        }
-        return $kodex;
-    }
-    public function updatepb($data)
-    {
-        $this->db->where('id', $data['id']);
-        $query = $this->db->update('tb_header', $data);
-        $this->helpermodel->isilog($this->db->last_query());
-        return $query;
-    }
-    public function simpanpb($data)
-    {
-        $jmlrec = $this->db->query("Select count(id) as jml from tb_detail where id_header = " . $data['id'])->row_array();
-        $data['jumlah_barang'] = $jmlrec['jml'];
-        $this->db->where('id', $data['id']);
-        $query = $this->db->update('tb_header', $data);
-        $this->helpermodel->isilog($this->db->last_query());
 
-        //Isi data ke detailgen 
-        if ($this->session->userdata('tujusekarang') == 'GS' || $this->session->userdata('tujusekarang') == 'GM') {
-            $datadet = $this->db->get_where('tb_detail', ['id_header' => $data['id']]);
-            foreach ($datadet->result_array() as $keydet) {
-                $keydet['id_detail'] = $keydet['id'];
-                unset($keydet['id']);
-                $this->db->insert('tb_detailgen', $keydet);
-            }
-        }
-        return $query;
-    }
-    public function validasipb($data)
-    {
-        $this->db->where('id', $data['id']);
-        $query = $this->db->update('tb_header', $data);
-        return $query;
-    }
-    public function getnomorpb($bl, $th, $asal, $tuju)
-    {
-        $hasil = $this->db->query("SELECT MAX(SUBSTR(trim(nomor_dok),-3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'PB' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_id = '" . $asal . "' AND dept_tuju = '" . $tuju . "' ")->row_array();
-        return $hasil;
-    }
-    public function getdatapb($data)
-    {
-        $this->db->select('tb_header.*,user.name,(select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
-        $this->db->join('user', 'user.id=tb_header.user_ok', 'left');
-        $this->db->where('kode_dok', 'PB');
-        $this->db->where('dept_id', $data['dept_id']);
-        $this->db->where('dept_tuju', $data['dept_tuju']);
-        if ($data['level'] == 2) {
-            $this->db->where('data_ok', 1);
-            $this->db->where('ok_valid', 0);
-        }
-        $this->db->where('month(tgl)', $this->session->userdata('bl'));
-        $this->db->where('year(tgl)', $this->session->userdata('th'));
-        return $this->db->get('tb_header')->result_array();
-    }
-    public function getdatadetailpb($data)
-    {
-        $this->db->select("tb_detail.*,satuan.namasatuan,satuan.kodesatuan,barang.kode,barang.nama_barang,barang.kode as brg_id,CONCAT(TRIM(po),'#',TRIM(item),IF(dis > 0,' dis ',''),if(dis > 0,dis,'')) AS sku");
-        $this->db->from('tb_detail');
-        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
-        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-        $this->db->where('id_header', $data);
-        return $this->db->get()->result_array();
-    }
-    public function getdatadetailpbbyid($data)
-    {
-        $this->db->select("tb_detail.*,satuan.namasatuan,barang.kode,barang.nama_barang,satuan.id as id_satuan");
-        $this->db->from('tb_detail');
-        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
-        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-        $this->db->where('tb_detail.id', $data);
-        return $this->db->get()->result();
-    }
     public function getspecbarang($mode, $spec)
     {
         if ($mode == 0) {
@@ -501,29 +419,5 @@ class Kontrak_model extends CI_Model
             $que = $this->db->get('tb_header')->row_array();
         }
         return $que;
-    }
-    public function hapusdetailpb($id)
-    {
-        $this->db->trans_start();
-        $cek = $this->db->get_where('tb_detail', ['id' => $id])->row_array();
-        $this->db->where('id_detail', $id);
-        $hasil = $this->db->delete('tb_detmaterial');
-        $this->db->where('id', $id);
-        $this->db->delete('tb_detailgen');
-        $this->db->where('id', $id);
-        $this->db->delete('tb_detail');
-        $this->helpermodel->isilog($this->db->last_query());
-        $hasil = $this->db->trans_complete();
-        if ($hasil) {
-            $this->db->where('id', $cek['id_header']);
-            $que = $this->db->get('tb_header')->row_array();
-        }
-        return $que;
-    }
-    public function simpancancelpb($data)
-    {
-        $this->db->where('id', $data['id']);
-        return $this->db->update('tb_header', $data);
-        $this->helpermodel->isilog($this->db->last_query());
     }
 }

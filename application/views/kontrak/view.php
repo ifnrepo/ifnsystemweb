@@ -37,7 +37,6 @@
             <div class="col-12 m-1">
                 <div class="row ">
                     <div class="col-md-6 mt-3  text-dark font-bold font-kecil">
-
                         <div class="mb-1 row  ">
                             <label class="col-3 col-form-label required"><i>Nomor Kontrak</i> </label>
                             <div class="col">
