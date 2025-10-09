@@ -54,6 +54,7 @@
                     <td class="text-right" id="inkgs">...</td>
                     <td class="text-right" id="saldopcs">...</td>
                     <td class="text-right" id="saldokgs">...</td>
+                    
                 </tr>
             </tbody>
         </table>
