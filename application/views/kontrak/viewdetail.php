@@ -95,6 +95,7 @@
                                 $kodmas = '';
                                 $saldokgs = 0;
                                 $saldopcs = 0;
+                                $warnawarni = '';
                                 foreach($transaksi->result_array() as $transaksi){ 
                                     $no++;
                                     if($transaksi['kirter']==0){
@@ -118,6 +119,7 @@
                                         $saldokgs = round($transaksi['kgsx'],2);
                                         $saldopcs = $transaksi['pcsx'];
                                         $bold = '';
+                                        $warnawarni = $warnawarni=='' ? 'bg-primary-lt' : '';
                                     }
                                     $kodmas = $indexkode;
                                     $kirter = $transaksi['kirter']==0 ? 'OUT' : 'IN';
@@ -126,7 +128,7 @@
                                     $sku = trim($transaksi['po'])=='' ? $transaksi['kode'] : viewsku($transaksi['po'],$transaksi['item'],$transaksi['dis']);
                                     $spekbarang = trim($transaksi['po'])=='' ? namaspekbarang($transaksi['id_barang']) : spekpo($transaksi['po'],$transaksi['item'],$transaksi['dis']);
                             ?>
-                                <tr>
+                                <tr class="<?= $warnawarni ?>">
                                     <td class="<?= $warnakirter ?>"><?= $kirter ?></td>
                                     <td><?= $sku ?></td>
                                     <td class="line-12"><?= $spekbarang ?><br><span class="text-teal font-11"><?= $transaksi['insno'] ?></span></td>
@@ -175,11 +177,12 @@
                         </thead>
                         <tbody class=" table-tbody" style="font-size: 12px !important;">
                             <tr>
-                                <td class="text-center font-bold">BC 261</td>
+                                <td class="font-bold"><?= $totaljaminan['nomor_bc'].' Tgl.'.tglmysql($totaljaminan['tgl_bc']) ?></td>
                                 <td class="text-right"  id="pcskirim"></td>
                                 <td class="text-right"  id="kgskirim"></td>
                                 <td class="text-right"><?= rupiah($totaljaminan['cifrupiah'],2); ?></td>
-                                <td class="text-right"><?= rupiah($totaljaminan['cifrupiah']/$totaljaminan['ndpbm'],2) ?></td>
+                                <?php $ndpbm = isset($totaljaminan['ndpbm']) ? $totaljaminan['ndpbm'] : 1;  ?>
+                                <td class="text-right" id="cifrup"><?= rupiah($totaljaminan['cifrupiah']/$ndpbm,2) ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -194,9 +197,14 @@
                             </tr>
                         </thead>
                         <tbody class=" table-tbody" style="font-size: 12px !important;">
-                            <?php foreach($terima->result_array() as $terima){ ?>
+                            <?php 
+                                $cifterima=0; 
+                                foreach($terima->result_array() as $terima){ 
+                                    $cifterima += $terima['cifnya'];  
+                                    $ket = $terima['tgl_bc']=='' ? '' : ' Tgl.'.tglmysql($terima['tgl_bc']);
+                            ?>
                                 <tr>
-                                    <td><?= $terima['nomor_bc']; ?></td>
+                                    <td><?= $terima['nomor_bc'].$ket; ?></td>
                                     <td class="text-right"><?= $terima['pcs']; ?></td>
                                     <td class="text-right"><?= $terima['kgs']; ?></td>
                                     <td class="text-right"><?= rupiah($terima['cifnya']*$terima['exbc_ndpbm'],2); ?></td>
@@ -208,7 +216,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4" class="text-center font-bold">SISA CIF</td>
-                                <td id="sisanya" class="font-bold text-right">XXXX</td>
+                                <td id="sisanya" class="font-bold text-right"><?= rupiah(($totaljaminan['cifrupiah']/$ndpbm)-$cifterima,2) ?></td>
                             </tr>
                         </tbody>
                     </table>

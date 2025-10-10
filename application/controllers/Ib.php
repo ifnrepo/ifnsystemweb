@@ -98,11 +98,12 @@ class Ib extends CI_Controller
         }
     }
 
-    public function viewdetail($id)
+    public function viewdetail($id,$mode=0)
     {
         $data['header'] = $this->ibmodel->getdatabyid($id);
-        $data['detail'] = $this->ibmodel->getdatadetailib($id);
+        $data['detail'] = $this->ibmodel->getdatadetailib($id,$mode);
         $data['lampiran'] = $this->ibmodel->getdatalampiran($id);
+        $data['mode'] = $mode;
         $this->load->view('ib/viewdetailib', $data);
     }
     public function dataib($kode)

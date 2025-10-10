@@ -9,7 +9,7 @@ class In_model extends CI_Model{
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
             'data_ok' => 1,
-            'ok_tuju' => 1,
+            'ok_tuju' => 1
             // 'ok_valid' => 0,
         ];
         $kondisi = " (kode_dok='T' OR (kode_dok = 'IB' AND (nomor_bc != '' OR tanpa_bc = 1)))";
@@ -17,6 +17,7 @@ class In_model extends CI_Model{
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->where($arrkondisi);
+        $this->db->where('left(nomor_dok,3) !=','IFN');
         if($kode['katedept']==3){
             $this->db->where($kondisisubkon);
         }else{

@@ -112,7 +112,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
-                  <td class='font-bold'><a href="<?= base_url().'ib/viewdetail/'.$datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail IB (AJU Masuk Barang)"><?= $datdet['nomor_dok'] ?></a></td>
+                  <td class='font-bold'><a href="<?= base_url().'ib/viewdetail/'.$datdet['id'].$tmb; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail IB (AJU Masuk Barang)"><?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $namasup ?></td>
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
