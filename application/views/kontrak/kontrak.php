@@ -163,9 +163,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= tglmysql($datdet['tgl_akhir']); ?></td>
                   <td class="text-right"><?= rupiah($datdet['pcs'], 2); ?></td>
                   <td class="text-right"><?= rupiah($datdet['kgs'], 2); ?></td>
-                  <td class="text-right <?= $warnahuruf ?> <?= $bold ?>"><a href="<?= base_url().'kontrak/viewdetail/'.$datdet['id'] ?>" class="<?= $warnahuruf ?>" title="View detail" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Realisasi dan Pengembalian"><?= rupiah($datdet['total_kgs'],2); ?></a></td>
+                  <td class="text-right <?= $warnahuruf ?> <?= $bold ?>"><?= rupiah($datdet['total_kgs'],2); ?></td>
                   <td class="text-right"><?= rupiah($jumlahbcmasuk,2) ?></td>
-                  <td class="text-right"><?= rupiah($saldo,2) ?></td>
+                  <td class="text-right <?= $warnahuruf ?> "><a href="<?= base_url().'kontrak/viewdetail/'.$datdet['id'] ?>" class="" title="View detail" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Realisasi dan Pengembalian"><?= rupiah($saldo,2)  ?></a></td>
                   <td>
                     <a href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" style="padding: 3px 5px !important;" class="btn btn-sm btn-success btn-icon p-0">View</a>
                     <a href="<?= base_url() . 'kontrak/editdata/' . $datdet['id']; ?>" class="onprogress btn btn-sm btn-primary btn-icon p-0" style="padding: 3px 5px !important;">Edit</a>
