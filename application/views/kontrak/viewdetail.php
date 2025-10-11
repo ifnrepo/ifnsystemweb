@@ -72,7 +72,7 @@
                 <div class="card-body">
                     <div class="font-kecil font-bold bg-primary-lt p-1">DETAIL BARANG</div>
                     <div class="card card-lg">
-                        <table class="table datatable">
+                        <table class="table datatable table-hover">
                             <thead class="sticky-top">
                                 <tr>
                                     <th class="text-primary">X</th>
@@ -96,6 +96,18 @@
                                 $saldokgs = 0;
                                 $saldopcs = 0;
                                 $warnawarni = '';
+                                $arrno = [];
+                                foreach($transaksi->result_array() as $transaksix){ 
+                                    $no++;
+                                    $indexkode = $transaksix['po'].$transaksix['item'].$transaksix['dis'].$transaksix['id_barang']; //.$transaksi['insno'];
+                                    if($kodmas != $indexkode){
+                                        array_push($arrno,$no-1);
+                                    }
+                                    $kodmas = $indexkode;
+                                }
+                                array_push($arrno,$no);
+                                $kodmas = '';
+                                $no=0;
                                 foreach($transaksi->result_array() as $transaksi){ 
                                     $no++;
                                     if($transaksi['kirter']==0){
@@ -105,8 +117,8 @@
                                         $jumkgsterima += round($transaksi['kgsx'],2);
                                         $jumpcsterima += $transaksi['pcsx'];
                                     }
-                                    $indexkode = $transaksi['po'].$transaksi['item'].$transaksi['dis'].$transaksi['id_barang'].$transaksi['insno'];
-                                    $bold = 'font-bold';
+                                    $indexkode = $transaksi['po'].$transaksi['item'].$transaksi['dis'].$transaksi['id_barang']; //.$transaksi['insno'];
+                                    $bold = in_array($no,$arrno) ? 'font-bold text-pink' : '';
                                     if($kodmas == $indexkode){
                                         if($transaksi['kirter']==0){
                                             $saldokgs += round($transaksi['kgsx'],2);
@@ -118,17 +130,16 @@
                                     }else{
                                         $saldokgs = round($transaksi['kgsx'],2);
                                         $saldopcs = $transaksi['pcsx'];
-                                        $bold = '';
+                                        // $bold = 'font-bold';
                                         $warnawarni = $warnawarni=='' ? 'bg-primary-lt' : '';
                                     }
                                     $kodmas = $indexkode;
                                     $kirter = $transaksi['kirter']==0 ? 'OUT' : 'IN';
                                     $warnakirter = $transaksi['kirter']==0 ? 'text-teal' : 'text-pink';
-                                    // $jumkgskirim += round($transaksi['kgs'],2);
                                     $sku = trim($transaksi['po'])=='' ? $transaksi['kode'] : viewsku($transaksi['po'],$transaksi['item'],$transaksi['dis']);
                                     $spekbarang = trim($transaksi['po'])=='' ? namaspekbarang($transaksi['id_barang']) : spekpo($transaksi['po'],$transaksi['item'],$transaksi['dis']);
                             ?>
-                                <tr class="<?= $warnawarni ?>">
+                                <tr class="<?= $warnawarni ?> text-primary font-kecil">
                                     <td class="<?= $warnakirter ?>"><?= $kirter ?></td>
                                     <td><?= $sku ?></td>
                                     <td class="line-12"><?= $spekbarang ?><br><span class="text-teal font-11"><?= $transaksi['insno'] ?></span></td>
@@ -144,10 +155,10 @@
                                         <td class="text-right"><?= rupiah($transaksi['pcsx'],0) ?></td>
                                         <td class="text-right"><?= rupiah($transaksi['kgsx'],2) ?></td>
                                     <?php } ?>
-                                    <td class="text-right"><?= rupiah($saldopcs,0) ?></td>
-                                    <td class="text-right"><?= rupiah($saldokgs,2) ?></td>
+                                    <td class="text-right <?= $bold ?>"><?= rupiah($saldopcs,0) ?></td>
+                                    <td class="text-right <?= $bold ?>"><?= rupiah($saldokgs,2) ?></td>
                                 </tr>
-                            <?php } ?>
+                            <?php  } ?>
                             <tr>
                                 <td colspan="4" class="font-bold text-center">TOTAL</td>
                                 <td class="text-right font-bold text-teal" id="outpcsx"><?= rupiah($jumpcskirim,0) ?></td>

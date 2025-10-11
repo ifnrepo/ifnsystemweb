@@ -567,8 +567,10 @@ class Out_model extends CI_Model{
                         'trim(nobale)' => ($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='FN') ? trim($datdet['nobale']) : '',
                         // 'exnet' => $datdet['exnet'],
                         'stok' => $datdet['stok'],
-                        'trim(nomor_bc)' => in_array($this->session->userdata('deptsekarang'),daftardeptsubkon()) ? trim($nomorbc['nomor_bc']) : '',
                     ];
+                    if(in_array($this->session->userdata('deptsekarang'),daftardeptsubkon())){
+                        $this->db->where('trim(nomor_bc)',trim($nomorbc['nomor_bc']));
+                    }
                     $this->db->where($kondisistok);
                     $adaisi = $this->db->get('stokdept');
                     if($adaisi->num_rows()==0){
