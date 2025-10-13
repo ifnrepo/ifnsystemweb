@@ -2896,13 +2896,18 @@ class Akb extends CI_Controller
                 }
                 $numawal = $numrow;
                 $numakhir = $numrow - 1;
+                if(str_contains($header['nomor_inv'],'NET/') || str_contains($header['nomor_inv'],'RSC/')) { 
+                    $sat = 'KGM'; 
+                }else{ 
+                    $sat = $data['kodebc'];
+                }
                 // Lakukan looping pada variabel      
-                $sheet->setCellValue('A' . $numrow, $no);
+                $sheet->setCellValue('A' . $numrow, $no.$header['nomor_dok']);
                 $sheet->setCellValue('B' . $numrow, htmlspecialchars_decode($spekbarang));
                 $sheet->setCellValue('C' . $numrow, $hs);
                 $sheet->setCellValue('D' . $numrow, $sku);
                 $sheet->setCellValue('E' . $numrow, $pcs);
-                $sheet->setCellValue('F' . $numrow, $data['kodebc']);
+                $sheet->setCellValue('F' . $numrow, $sat);
                 // $sheet->setCellValue('G' . $numrow, $data['kgs']);
                 $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
                 $jmlrekinv2 = $inv2->num_rows();
@@ -3233,13 +3238,18 @@ class Akb extends CI_Controller
             }
             $numawal = $numrow;
             $numakhir = $numrow - 1;
+            if(str_contains($header['nomor_inv'],'NET/') || str_contains($header['nomor_inv'],'RSC/')) { 
+                    $sat = 'KGM'; 
+                }else{ 
+                    $sat = $data['kodebc'];
+                }
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, htmlspecialchars_decode($spekbarang));
             $sheet->setCellValue('C' . $numrow, $hs);
             $sheet->setCellValue('D' . $numrow, $sku);
             $sheet->setCellValue('E' . $numrow, $pcs);
-            $sheet->setCellValue('F' . $numrow, $data['kodebc']);
+            $sheet->setCellValue('F' . $numrow, $sat);
             $sheet->setCellValue('G' . $numrow, round($data['kgs'], 2));
 
             $sheet->getStyle('A' . $numrow . ':A' . $numrow)->applyFromArray($styleArray);

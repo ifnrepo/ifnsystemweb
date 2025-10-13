@@ -33,7 +33,10 @@
 	border-bottom: red;
 } */
 .text-teal-green {
-	color: #175873 !important;
+	color: hsl(198, 67%, 27%) !important;
+}
+.text-hitam {
+	color: black !important;
 }
 .pull-left {
 	float: left !important;

@@ -22,12 +22,21 @@
                         <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
                         <hr class="m-0">
                         <div class="font-kecil p-1">
+                            <?php if($mode==0){ ?>
                             Supplier : <br>
                             <div style="font-weight: normal !important;">
                                 <?= $header['id_pemasok'].' - '.$header['namasupplier']; ?><br>
                                 <?= $header['alamat']; ?><br>
                                 Attn. <?= $header['kontak']; ?>
                             </div>
+                            <?php }else{ ?>
+                            Subkontrak : <br>
+                            <div style="font-weight: normal !important;">
+                                <?= $header['dept_id'].' - '.datadepartemen($header['dept_id'],'nama_subkon'); ?><br>
+                                <?= datadepartemen($header['dept_id'],'alamat_subkon'); ?><br>
+                                Attn. <?= datadepartemen($header['dept_id'],'pic'); ?>
+                            </div>
+                            <?php } ?>
                         </div>
                         <hr class="m-1 <?= $tanpabc; ?>">
                         <div class="font-kecil text-primary p-1 <?= $tanpabc; ?>">
@@ -162,10 +171,12 @@
                                     $jumlah = $val['kodesatuan']=='KGS' ? $val['kgs'] : $val['pcs'];
                                     $jmlpcs += $val['pcs']; $jmlkgs += $val['kgs'];
                                     $Jmltotal += $val['harga']*$jumlah;
+                                    $spekbarang = trim($val['po'])=='' ? namaspekbarang($val['id_barang']) : spekpo($val['po'],$val['item'],$val['dis']); 
+                                    $sku = trim($val['po'])=='' ? $val['brg_id'] : viewsku($val['po'],$val['item'],$val['dis']); 
                                      ?>
                                     <tr>
-                                        <td><?= $val['nama_barang']; ?></td>
-                                        <td><?= $val['brg_id']; ?></td>
+                                        <td><?= $spekbarang; ?></td>
+                                        <td><?= $sku; ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= rupiah($val['pcs'],0); ?></td>
                                         <td><?= rupiah($val['kgs'],2); ?></td>

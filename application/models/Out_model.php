@@ -441,7 +441,7 @@ class Out_model extends CI_Model{
                         // 'harga' => $datdet['harga'],
                         // 'stok' => $datdet['stok'],
                         // 'exnet' => $datdet['exnet']
-                    ];
+                    ];    
                 }
                 if($this->session->userdata('deptsekarang')=='GS'){ // Untuk Looping pengeluaran Dept GS
                     $this->db->select('stokdept.*,sum(stokdept.pcs_akhir) as xpcs_akhir,sum(stokdept.kgs_akhir) as xkgs_akhir,barang.nama_barang');
@@ -552,6 +552,8 @@ class Out_model extends CI_Model{
                 }else{
                     // Untuk pengeluaran selain dari departemen GS
                     // if ($datdet['id_barang'] == 40396) continue; // Spek KARUNG di skip
+                    $cekbckeluar = $this->db->get_where('tb_header',['id' => $id])->row_array();
+                    $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => $cekbckeluar['keterangan'],'jns_bc' => '261'])->row_array();
                     $kondisistok = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
@@ -564,8 +566,11 @@ class Out_model extends CI_Model{
                         'dln' => $datdet['dln'],
                         'trim(nobale)' => ($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='FN') ? trim($datdet['nobale']) : '',
                         // 'exnet' => $datdet['exnet'],
-                        'stok' => $datdet['stok']
+                        'stok' => $datdet['stok'],
                     ];
+                    if(in_array($this->session->userdata('deptsekarang'),daftardeptsubkon())){
+                        $this->db->where('trim(nomor_bc)',trim($nomorbc['nomor_bc']));
+                    }
                     $this->db->where($kondisistok);
                     $adaisi = $this->db->get('stokdept');
                     if($adaisi->num_rows()==0){
@@ -879,8 +884,8 @@ class Out_model extends CI_Model{
     public function viewrekapbom($id){
         $periode = tambahnol($this->session->userdata('bl')).$this->session->userdata('th');
         $this->db->select('tb_detailgen.*,sum(pcs) as totpcs,sum(kgs) as totkgs,barang.nama_barang,satuan.kodesatuan as kode');
-        $this->db->select('(SELECT kgs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as kgsstok');
-        $this->db->select('(SELECT pcs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as pcsstok');
+        $this->db->select('(SELECT sum(kgs_akhir) as kgs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as kgsstok');
+        $this->db->select('(SELECT sum(pcs_akhir) as pcs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as pcsstok');
         $this->db->from('tb_detailgen');
         $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');

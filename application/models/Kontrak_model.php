@@ -246,8 +246,9 @@ class Kontrak_model extends CI_Model
             $this->db->from('tb_detail');
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
             $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-            $this->db->where('tb_header.id', $header['id']);
-
+            $this->db->where('tb_header.id',$header['id']);
+            $this->db->where('tb_header.send_ceisa',1);
+            
             $this->db->group_by('tb_header.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
             // $this->db->order_by('tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
         } else {
@@ -255,7 +256,8 @@ class Kontrak_model extends CI_Model
             $this->db->from('tb_detail');
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
             $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-            $this->db->where('tb_header.id', $header['id']);
+            $this->db->where('tb_header.id',$header['id']);
+            $this->db->where('tb_header.send_ceisa',1);
 
             // $this->db->order_by('tb_detail.urut_akb,seri_barang');
         }
@@ -272,8 +274,9 @@ class Kontrak_model extends CI_Model
         $this->db->from('tb_detail');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-        $this->db->where('tb_header.exnomor_bc', $header['nomor_bc']);
-
+        $this->db->where('tb_header.exnomor_bc',$header['nomor_bc']);
+        $this->db->where('tb_header.send_ceisa',1);
+        
         $this->db->group_by('tb_header.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
 
         $dataterima = $this->db->get_compiled_select();
@@ -300,11 +303,11 @@ class Kontrak_model extends CI_Model
         $this->db->where('id', $data['id']);
         return $this->db->update($data['tabel'], [$data['kolom'] => $data['isi']]);
     }
-    public function getdatajaminan($id)
-    {
-        $this->db->select('Sum(cif*ndpbm) as cifrupiah,ndpbm');
+    public function getdatajaminan($id){
+        $this->db->select('Sum(tb_bombc.cif*tb_bombc.ndpbm) as cifrupiah,ndpbm,tb_header.nomor_bc,tb_header.tgl_bc');
         $this->db->from('tb_bombc');
-        $this->db->where('id_header', $id);
+        $this->db->join('tb_header','tb_header.id = tb_bombc.id_header','left');
+        $this->db->where('id_header',$id);
         return $this->db->get();
     }
     public function getdatajaminkiriman($nobc)
@@ -324,8 +327,13 @@ class Kontrak_model extends CI_Model
         $this->db->select('tb_detail.id_akb,sum(pcs) AS pcs,sum(kgs) AS kgs,exbc_ndpbm,tb_header.nomor_bc,tb_header.tgl_bc');
         $this->db->select('(SELECT sum(det.exbc_cif) OVER() FROM tb_detail det WHERE det.id_akb = tb_detail.id_akb GROUP BY id_seri_exbc LIMIT 1) as cifnya');
         $this->db->from('tb_detail');
-        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
-        $this->db->where_in('id_akb', implode(',', $array_in), false);
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_akb','left');
+        if(count($array_in) > 0){
+            $this->db->where_in('id_akb',implode(',',$array_in),false);
+            $this->db->where('tb_header.send_ceisa',1);
+        }else{
+            $this->db->where_in('id_akb','');
+        }
         $this->db->group_by('id_akb');
         return $this->db->get();
     }
