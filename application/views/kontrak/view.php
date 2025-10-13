@@ -197,14 +197,23 @@
                         </div>
                     </div>
                 </div>
-                <ul class="nav nav-tabs card-header-tabs font-kecil" data-bs-toggle="tabs">
-                    <li class="nav-item">
-                        <a href="#tabs-realisasi" class="nav-link bg-primary-lt active btn-flat text-black" data-bs-toggle="tab">Realisasi (261)</a>
-                    </li>
-                    <li class="nav-item">
-                        <a href="#tabs-penerimaan" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Pengembalian (262)</a>
-                    </li>
-                </ul>
+                <div class="row">
+                    <div class="col-md-6">
+                        <ul class="nav nav-tabs card-header-tabs font-kecil" data-bs-toggle="tabs">
+                            <li class="nav-item">
+                                <a href="#tabs-realisasi" class="nav-link bg-primary-lt active btn-flat text-black" data-bs-toggle="tab">Realisasi (261)</a>
+                            </li>
+                            <li class="nav-item">
+                                <a href="#tabs-penerimaan" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Pengembalian (262)</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-md-6" style="text-align: right;">
+                        <a href="<?= base_url() . 'kontrak/excel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
+                    </div>
+                </div>
+
+
                 <hr class='m-1'>
                 <div class="row">
                     <div class="tab-content">
@@ -280,40 +289,42 @@
                                     <tbody class=" table-tbody" style="font-size: 13px !important;">
                                         <?php
                                         $no = 0;
-                                        $jumlahkgs = 0;$jumlahpcs=0;
-                                        if($terima->num_rows() > 0){
-                                            $tglx = '';$tglu='';
-                                            foreach($terima->result_array() as $terima){
-                                                $sku = trim($terima['po'])=='' ? $terima['kode'] : viewsku($terima['po'],$terima['item'],$terima['dis']);
-                                                $spekbarang = trim($terima['po'])=='' ? namaspekbarang($terima['id_barang']) : spekpo($terima['po'],$terima['item'],$terima['dis']);
+                                        $jumlahkgs = 0;
+                                        $jumlahpcs = 0;
+                                        if ($terima->num_rows() > 0) {
+                                            $tglx = '';
+                                            $tglu = '';
+                                            foreach ($terima->result_array() as $terima) {
+                                                $sku = trim($terima['po']) == '' ? $terima['kode'] : viewsku($terima['po'], $terima['item'], $terima['dis']);
+                                                $spekbarang = trim($terima['po']) == '' ? namaspekbarang($terima['id_barang']) : spekpo($terima['po'], $terima['item'], $terima['dis']);
                                                 $jumlahkgs += $terima['kgs'];
                                                 $jumlahpcs += $terima['pcs'];
                                                 $tglu = $terima['tgl_bc'];
-                                                if($tglx != $tglu){
+                                                if ($tglx != $tglu) {
                                                     $tg = $terima['tgl_bc'];
                                                     $nombc = $terima['nomor_bc'];
-                                                }else{
+                                                } else {
                                                     $tg = '';
                                                     $nombc = '';
                                                 }
                                                 $tglx = $tglu;
-                                            ?>
-                                            <tr>
-                                                <td class="text-primary"><?= $tg ?></td>
-                                                <td class="text-primary"><?= $nombc ?></td>
-                                                <td class="text-primary line-12"><?= $sku ?><br><span class="font-11 text-teal"><?= $terima['insno'] ?></span></td>
-                                                <td class="text-primary"><?= $spekbarang ?></td>
-                                                <td class="text-primary"><?= $terima['kodesatuan'] ?></td>
-                                                <td class="text-primary text-right"><?= $terima['pcs'] ?></td>
-                                                <td class="text-primary text-right"><?= $terima['kgs'] ?></td>
-                                            </tr>
+                                        ?>
+                                                <tr>
+                                                    <td class="text-primary"><?= $tg ?></td>
+                                                    <td class="text-primary"><?= $nombc ?></td>
+                                                    <td class="text-primary line-12"><?= $sku ?><br><span class="font-11 text-teal"><?= $terima['insno'] ?></span></td>
+                                                    <td class="text-primary"><?= $spekbarang ?></td>
+                                                    <td class="text-primary"><?= $terima['kodesatuan'] ?></td>
+                                                    <td class="text-primary text-right"><?= $terima['pcs'] ?></td>
+                                                    <td class="text-primary text-right"><?= $terima['kgs'] ?></td>
+                                                </tr>
                                             <?php } ?>
                                             <tr class="font-bold">
                                                 <td colspan="5" class="text-center text-red">TOTAL</td>
                                                 <td class="text-right text-red"><?= $jumlahpcs ?></td>
                                                 <td class="text-right text-red"><?= $jumlahkgs ?></td>
                                             </tr>
-                                        <?php }else{ ?>
+                                        <?php } else { ?>
                                             <tr>
                                                 <td colspan="7" class="text-center">--- Belum ada Pengembalian Barang --</td>
                                             </tr>
