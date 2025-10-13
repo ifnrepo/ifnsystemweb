@@ -61,9 +61,15 @@
                                 Alamat : <?= $datheader['alamat']; ?></br>
                                 NPWP : <?= $datheader['npwp']; ?>
                                 <?php }else{ ?>
-                                Nama Subkontrak : <?= datadepartemen($datheader['dept_tuju'],'nama_subkon'); ?><br>
-                                Alamat : <?= datadepartemen($datheader['dept_tuju'],'alamat_subkon'); ?></br>
-                                NPWP : <?= datadepartemen($datheader['dept_tuju'],'npwp'); ?>
+                                    <?php if($datheader['dept_tuju']!='SU'){ ?>
+                                        Nama Subkontrak : <?= datadepartemen($datheader['dept_tuju'],'nama_subkon'); ?><br>
+                                        Alamat : <?= datadepartemen($datheader['dept_tuju'],'alamat_subkon'); ?></br>
+                                        NPWP : <?= datadepartemen($datheader['dept_tuju'],'npwp'); ?>
+                                    <?php }else{ ?>
+                                        Nama Supplier : <?= datasupplier($datheader['id_rekanan'],'nama_supplier'); ?><br>
+                                        Alamat : <?= datasupplier($datheader['id_rekanan'],'alamat'); ?></br>
+                                        NPWP : <?= datasupplier($datheader['id_rekanan'],'npwp'); ?>
+                                    <?php } ?>
                                 <?php } ?>
                                 <button href="#" id="kirimkeceisa" data-href="<?= base_url().'akb/kirimdatakeceisa'.$datheader['jns_bc'].'/'.$datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                             </div>

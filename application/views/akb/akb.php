@@ -89,8 +89,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <tr>
                 <th>Tgl</th>
                 <th>Nomor</th>
-                <th>Customer</th>
-                <th>Jumlah Item</th>
+                <th>Subkon/Rekanan</th>
+                <?php if($this->session->userdata('deptdari')=='FG'){ ?>
+                  <th>Dok</th>
+                <?php }else{ ?>
+                  <th>Jumlah Item</th>
+                <?php } ?>
                 <th>Diajukan Oleh</th>
                 <th>BC</th>
                 <th>Keterangan</th>
@@ -102,7 +106,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item';
                 $tmb = '';
                 if($this->session->userdata('deptdari')=='FG'){
-                  $namasup = datadepartemen($datdet['dept_tuju'],'nama_subkon');
+                  if($datdet['dept_tuju']!='SU'){
+                    $namasup = datadepartemen($datdet['dept_tuju'],'nama_subkon');
+                  }else{
+                    $namasup = datasupplier($datdet['id_rekanan'],'nama_supplier');
+                  }
                   $tmb = '/1';
                 }else{
                   $namasup = $datdet['namacustomer'] != null ? $datdet['namacustomer']  : 'Not Set'; 
@@ -114,14 +122,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= tglmysql($datdet['tgl']); ?></td>
                   <td class='font-bold'><a href="<?= base_url().'akb/viewdetail/'.$datdet['id'].$tmb; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail OUT (AJU Keluar Barang)"><?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $namasup ?></td>
-                  <td><?= $jmlrek ?></td>
+                  <?php if($this->session->userdata('deptdari')=='FG'){ ?>
+                    <td class="text-teal"><?= $datdet['keterangan'] ?></td>
+                  <?php }else{ ?>
+                    <td><?= $jmlrek ?></td>
+                  <?php } ?>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
-                  <?php if($datdet['tanpa_bc']==0){ ?>
-                    <td style="font-size: 17px" class="text-info"><?= $datdet['jns_bc']; ?></td>
+                  <?php if($datdet['tanpa_bc']==0){ $service = $datdet['dept_tuju']=='SU' ? 'Service' : ''; ?>
+                    <td style="font-size: 17px" class="text-info line-11"><?= $datdet['jns_bc']; ?><br><span class="font-11 text-pink"><?= $service ?></span></td>
                       <?php if($datdet['send_ceisa']==1){ ?>
-                        <td class="line-12"><a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb; ?>"><?= $isibc; ?></a><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                        <td class="line-12"><a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb; ?>"><?= $isibc; ?></a></span></td>
                         <?php }else{ ?>
-                          <td class="line-12"><?= $isibc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                          <td class="line-12"><?= $isibc; ?></span></td>
                       <?php } ?>
                     <?php }else{ ?>
                       <td style="font-size: 17px" class="text-info">-</td>
@@ -140,7 +152,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                        ?>
                       <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
                       <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
-                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" href="<?= base_url().'akb/getbongaichu/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-success <?= $butsudahkirim; ?> <?php if($tmb!='/1'){ echo "hilang";} ?>' data-title="Add Bon Gaichu" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>GET BON GAICHU</a>
+                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" href="<?= base_url().'akb/getbongaichu/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-success <?= $butsudahkirim; ?> <?php if($tmb!='/1'){ echo "hilang";} ?>' data-title="Add Bon Gaichu" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>GET BON/PO</a>
                       <a href="#" data-href="<?= base_url() . 'akb/hapusaju/' . $datdet['id'] ?>" class='btn btn-sm btn-danger <?= $butsudahkirim ?> <?php if($tmb!='/1'){ echo "hilang";} ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus AJU <br><?= $datdet['nomor_dok']; ?>" title='Hapus data Transaksi'><i class="fa fa-trash"></i></a>
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { $inoleh = $datdet['dept_tuju']=='CU' ? 'Marketing' : 'Departemen'; ?>
                       <span class="text-teal">DOKUMEN SELESAI <br>Tunggu Verifikasi <b>Out</b> <?= $inoleh; ?></span>

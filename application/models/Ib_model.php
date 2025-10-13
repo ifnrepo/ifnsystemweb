@@ -1140,4 +1140,39 @@ class Ib_model extends CI_Model
         }
         return $this->db->trans_complete();
     }
+    public function simpankehargamaterial($id){
+        $this->db->trans_start();
+        $header = $this->getdatabyid($id);
+        $this->db->where('id_header',$id);
+        $hasil = $this->db->get('tb_detail');
+        foreach($hasil->result_array() as $hasil){
+            $datacekrekod = [
+                'id_barang' => $hasil['id_barang'],
+                'nobontr' => $header['nomor_dok']
+            ];
+            $cekrekod = $this->db->get_where('tb_hargamaterial',$datacekrekod);
+            if($cekrekod->num_rows() == 0){
+                $datasimpan = [
+                    'id_barang' => $hasil['id_barang'],
+                    'nobontr' => $header['nomor_dok'],
+                    'price' => $hasil['harga'],
+                    'qty' => $hasil['pcs'],
+                    'weight' => $hasil['kgs'],
+                    'id_satuan' => $hasil['id_satuan'],
+                    'id_supplier' => $header['id_pemasok'],
+                    'mt_uang' => "IDR",
+                    'jns_bc' => $header['jns_bc'],
+                    'nomor_bc' => $header['nomor_bc'],
+                    'tgl_bc' => $header['tgl_bc'],  
+                    'tgl' => $header['tgl'],
+                    'seri_barang' => $hasil['seri_barang'],
+                    'nomor_aju' => $this->getdatanomoraju($id),
+                    'tgl_aju' => $header['tgl_aju'],
+                    'kode_negara' => "ID"
+                ];
+                $this->db->insert('tb_hargamaterial',$datasimpan);
+            }
+        }
+        return $this->db->trans_complete();
+    }
 }

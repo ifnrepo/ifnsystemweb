@@ -625,6 +625,7 @@ class Ib extends CI_Controller
     }
     public function getresponhost($id){
         $dataaju = $this->ibmodel->getdatanomoraju($id);
+        $headerib = $this->ibmodel->getdatabyid($id);
         $token = $this->ibmodel->gettoken();
         $curl = curl_init();
         // $token = $consID;
@@ -662,6 +663,9 @@ class Ib extends CI_Controller
                     $this->helpermodel->isilog("Berhasil GET RESPON AJU ".$dataaju." (".$databalik['dataStatus'][0]['nomorDaftar'].")");
                     $this->session->set_flashdata('errorsimpan',2);
                     $this->session->set_flashdata('pesanerror','Respon sudah berhasil di Tarik');
+                }
+                if($headerib['jns_bc']=='40'){
+                    $simpankehargamaterial = $this->ibmodel->simpankehargamaterial($id);
                 }
             }else{
                 $this->session->set_flashdata('errorsimpan',1);
@@ -2142,6 +2146,13 @@ class Ib extends CI_Controller
     public function autolampiran($id){
         $cek = $this->ibmodel->autolampiran($id);
         if($cek){
+            $url = base_url().'ib/isidokbc/'.$id.'/1';
+            redirect($url);
+        }
+    }
+    public function simpankehargamaterial($id,$tmb){
+        $hasil = $this->ibmodel->simpankehargamaterial($id);
+        if($hasil){
             $url = base_url().'ib/isidokbc/'.$id.'/1';
             redirect($url);
         }

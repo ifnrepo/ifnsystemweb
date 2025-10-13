@@ -399,6 +399,9 @@ class Helper_model extends CI_Model
     public function getdatadepartemen($kode){
         return $this->db->get_where('dept',['dept_id'=>$kode]);
     }
+    public function getdatasupplier($kode){
+        return $this->db->get_where('supplier',['id'=>$kode]);
+    }
     public function getdatafooter(){
         return $this->db->get('page_footer');
     }
@@ -924,7 +927,7 @@ class Helper_model extends CI_Model
             'year(tgl)' => date('Y'),
             'dept_id' => 'FG',
             'dept_tuju' => $kode,
-            'left(nomor_dok,3)' => 'IFN'
+            'left(nomor_dok,6)' => 'IFN-'.$kode
         ];
         $this->db->select('max(right(trim(nomor_dok),3)) as maxkode');
         $this->db->from('tb_header');
