@@ -212,9 +212,17 @@ class Po_model extends CI_Model
         return $hasil;
     }
     public function cekdetail($id){
-        $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
-        $this->db->from('tb_detail');
-        $this->db->where('id_header',$id);
+        $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
+
+        if(str_contains($header['nomor_dok'],'SV/')){
+            $this->db->select("*,sum(if(kgs=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
+            $this->db->from('tb_detail');
+            $this->db->where('id_header',$id);
+        }else{
+            $this->db->select("*,sum(if(harga=0,1,0)) AS xharga,sum(if(pcs=0,kgs,pcs)*harga) AS totalharga");
+            $this->db->from('tb_detail');
+            $this->db->where('id_header',$id);
+        }
         return $this->db->get()->row_array();
     }
     public function simpanpo($data)

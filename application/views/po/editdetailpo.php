@@ -15,15 +15,21 @@
                 </div>
             </div>
             <div class="row mt-1">
+                <label class="col-3 col-form-label">Satuan</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" aria-label="Text input" placeholder="Nama Barang" value="<?= $data['namasatuan']; ?>" readonly>
+                </div>
+            </div>
+            <div class="row mt-1">
                 <label class="col-3 col-form-label">Qty</label>
                 <div class="col">
                     <input type="text" class="form-control font-kecil" id="qty" name="qty" aria-label="Text input" placeholder="Nama Barang" value="<?= $data['pcs']; ?>" >
                 </div>
             </div>
             <div class="row mt-1">
-                <label class="col-3 col-form-label">Satuan</label>
+                <label class="col-3 col-form-label">Kgs</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" aria-label="Text input" placeholder="Nama Barang" value="<?= $data['namasatuan']; ?>" readonly>
+                    <input type="text" class="form-control font-kecil" id="kgs" name="kgs" aria-label="Text input" placeholder="Berat Barang" value="<?= $data['kgs']; ?>" >
                 </div>
             </div>
             <div class="row mt-1">
@@ -65,6 +71,7 @@
 			id: $("#iddetail").val(),
             harga: toAngka($("#harga").val()),
             qty: toAngka($("#qty").val()),
+            kgs: toAngka($("#kgs").val())
 		},
 		success: function (data) {
 			window.location.reload();
