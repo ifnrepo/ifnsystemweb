@@ -651,6 +651,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 24); ?>" href="<?= base_url('billmaterial'); ?>">
                       Bill Of Material
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 25); ?>" href="<?= base_url('billmaterial_cost'); ?>">
+                      Bill Of Material Cost
+                    </a>
                   </div>
                 </div>
               </div>

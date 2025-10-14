@@ -14,13 +14,13 @@ class bckeluarmodel extends CI_Model
 
         if ($jnsbc == '261') {
             $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         } elseif ($jnsbc == 'Y') {
             $this->db->join('tb_detail', '(tb_detail.id_header = tb_header.id OR tb_detail.id_akb = tb_header.id)', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         } else {
             $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         }
 
 
