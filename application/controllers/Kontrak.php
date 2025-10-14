@@ -359,12 +359,6 @@ class Kontrak extends CI_Controller
         exit;
     }
 
-
-
-
-
-
-
     public function simpankedatabase()
     {
         $data = [
