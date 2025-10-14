@@ -257,8 +257,6 @@ class Bckeluar extends CI_Controller
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
     }
-
-
     public function cetakpdf()
     {
         $pdf = new PDF_Bckeluar('L', 'mm', 'A4');
@@ -266,7 +264,6 @@ class Bckeluar extends CI_Controller
         $pdf->AddFont('Lato', '', 'Lato-Regular.php');
         $pdf->AddFont('Latob', '', 'Lato-Bold.php');
         $pdf->AddPage();
-
         $pdf->SetFont('Lato', '', 7);
         $bckeluar = $this->bckeluarmodel->getdata_export();
         $no = 1;

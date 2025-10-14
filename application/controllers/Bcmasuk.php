@@ -83,7 +83,6 @@ class Bcmasuk extends CI_Controller
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-
         $sheet->mergeCells('B2:H2')->setCellValue('B2', 'KAWASAN BERIKAT PT. INDONEPTUNE NET MANUFACTURING');
         $sheet->mergeCells('B3:H3')->setCellValue('B3', 'LAPORAN PEMASUKAN BARANG PER DOKUMEN PABEAN');
         $sheet->mergeCells('B4:H4')->setCellValue('B4', "PERIODE: " . $this->session->userdata('tglawal') . " S/D " . $this->session->userdata('tglakhir'));
@@ -106,7 +105,6 @@ class Bcmasuk extends CI_Controller
         $sheet->setCellValue('E7', 'Tanggal');
         $sheet->setCellValue('F7', 'Nomor');
         $sheet->setCellValue('G7', 'Tanggal');
-
 
         $sheet->getColumnDimension('B')->setWidth(6);
         $sheet->getColumnDimension('C')->setWidth(10);
@@ -220,8 +218,6 @@ class Bcmasuk extends CI_Controller
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
     }
-
-
     public function cetakpdf()
     {
         $pdf = new PDF_Bcmasuk('L', 'mm', 'A4');

@@ -452,6 +452,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master24" name="master24" type="checkbox">
                                 <span class="form-check-label">Bill Of Material</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master25" name="master25" type="checkbox">
+                                <span class="form-check-label">Bill Of Material Cost</span>
+                              </label>
                               <!-- xx -->
                             </div>
                           </div>

@@ -143,33 +143,36 @@
 <?php if (isset($fungsi) && $fungsi == 'billmaterial') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/billmaterial.js?<?= $updatejs; ?>"></script>
 <?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'billmaterial_cost') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/billmaterial_cost.js?<?= $updatejs; ?>"></script>
+<?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
 	// print_r(json_encode($dataproduksi['data_isi'])); 
-			// echo 'XXXX';
-			// echo json_encode($datakurs->result_array());
-			$arraydate = [];
-			$arrayusd = [];
-			$arrayjpy = [];
-			$date = date('Y-m-d');
-			for($x=30;$x>=1;$x--){
-				$dateawal =  strtotime('-'.$x.' day', strtotime($date));
-				$xdate = date('Y-m-d', $dateawal);
-				$kurssekarang = $this->helpermodel->getkurssekarang($xdate)->row_array();
-				if(isset($kurssekarang['usd']) && $kurssekarang['usd']!=null){
-					$usd = round($kurssekarang['usd'],0);
-				}else{
-					$usd = 0;
-				}
-				if(isset($kurssekarang['jpy']) && $kurssekarang['jpy']!=null){
-					$jpy = round($kurssekarang['jpy'],2);
-				}else{
-					$jpy = 0;
-				}
-				array_push($arraydate,$xdate);
-				array_push($arrayusd,$usd);
-				array_push($arrayjpy,$jpy);
-			}
-			// print_r(json_encode($arrayusd));
+	// echo 'XXXX';
+	// echo json_encode($datakurs->result_array());
+	$arraydate = [];
+	$arrayusd = [];
+	$arrayjpy = [];
+	$date = date('Y-m-d');
+	for ($x = 30; $x >= 1; $x--) {
+		$dateawal =  strtotime('-' . $x . ' day', strtotime($date));
+		$xdate = date('Y-m-d', $dateawal);
+		$kurssekarang = $this->helpermodel->getkurssekarang($xdate)->row_array();
+		if (isset($kurssekarang['usd']) && $kurssekarang['usd'] != null) {
+			$usd = round($kurssekarang['usd'], 0);
+		} else {
+			$usd = 0;
+		}
+		if (isset($kurssekarang['jpy']) && $kurssekarang['jpy'] != null) {
+			$jpy = round($kurssekarang['jpy'], 2);
+		} else {
+			$jpy = 0;
+		}
+		array_push($arraydate, $xdate);
+		array_push($arrayusd, $usd);
+		array_push($arrayjpy, $jpy);
+	}
+	// print_r(json_encode($arrayusd));
 ?>
 	<?php
 	// Untuk Warna Chart Produksi 

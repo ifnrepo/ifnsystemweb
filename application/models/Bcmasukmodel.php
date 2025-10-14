@@ -10,13 +10,13 @@ class Bcmasukmodel extends CI_Model
         $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_kemas.kemasan,tb_rekanan.nama_rekanan,tb_rekanan.alamat_rekanan,tb_rekanan.npwp as npwp_rekanan, dept.departemen');
         if ($jnsbc == '262') {
             $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
         } elseif ($jnsbc == 'Y') {
             $this->db->join('tb_detail', '(tb_detail.id_header = tb_header.id OR tb_detail.id_akb = tb_header.id)', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
         } else {
             $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
         }
 
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
@@ -88,13 +88,13 @@ class Bcmasukmodel extends CI_Model
 
         if ($jnsbc == '262') {
             $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
         } elseif ($jnsbc == 'Y') {
             $this->db->join('tb_detail', '(tb_detail.id_header = tb_header.id OR tb_detail.id_akb = tb_header.id)', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
         } else {
             $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
-            $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
+            $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
         }
         $this->db->join('tb_rekanan', 'tb_rekanan.id = tb_header.id_rekanan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');

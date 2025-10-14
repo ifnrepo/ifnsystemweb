@@ -128,7 +128,6 @@ class PDF_Bcmasuk extends FPDF
         $this->SetDrawColor(0, 0, 0);
 
         $y = $this->GetY();
-
         $this->Cell(6, 12, 'No', 1, 0, 'C', true);
         $this->Cell(10, 12, 'Jenis', 1, 0, 'C', true);
         $x_doc = $this->GetX();
@@ -240,7 +239,6 @@ class PDF_Bckeluar extends FPDF
         $this->Cell(27, 6, 'Nomor', 1, 0, 'C', true);
         $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
         $this->SetXY($x_bukti + 42, $y);
-
         $this->Cell(43, 12, 'Customer', 1, 0, 'C', true);
         $this->Cell(13, 12, 'Kode', 1, 0, 'C', true);
         $this->Cell(70, 12, 'Nama Barang', 1, 0, 'C', true);
