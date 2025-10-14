@@ -212,8 +212,6 @@
                         <a href="<?= base_url() . 'kontrak/excel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
                     </div>
                 </div>
-
-
                 <hr class='m-1'>
                 <div class="row">
                     <div class="tab-content">
