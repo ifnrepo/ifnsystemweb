@@ -193,6 +193,7 @@ class Bckeluar extends CI_Controller
         $ceknomor_bc = '';
 
         foreach ($bckeluar->result_array() as $data) {
+            $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
             if ($data['xmtuang'] == 'USD') {
@@ -223,7 +224,7 @@ class Bckeluar extends CI_Controller
             $sheet->setCellValue('F' . $numrow, $data['nomor_dok']);
             $sheet->setCellValue('G' . $numrow, $data['tgl']);
             $sheet->setCellValue('H' . $numrow, $cus);
-            $sheet->setCellValue('I' . $numrow, $data['kode']);
+            $sheet->setCellValue('I' . $numrow, $sku);
             $sheet->setCellValue('J' . $numrow, $data['nama_barang']);
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
@@ -270,7 +271,7 @@ class Bckeluar extends CI_Controller
         $ceknomor_bc = '';
 
         foreach ($bckeluar->result_array() as $data) {
-
+            $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
             if ($data['xmtuang'] == 'USD') {
@@ -310,7 +311,7 @@ class Bckeluar extends CI_Controller
             $pdf->Cell(27, $tinggiMaks, $data['nomor_dok'], 1, 0, 'L');
             $pdf->Cell(15, $tinggiMaks, $data['tgl'], 1, 0, 'L');
             $pdf->Cell(43, $tinggiMaks, $cus, 1, 0, 'L');
-            $pdf->Cell(13, $tinggiMaks, $data['kode'], 1, 0, 'L');
+            $pdf->Cell(13, $tinggiMaks, $sku, 1, 0, 'L');
 
 
             $x_nama = $pdf->GetX();

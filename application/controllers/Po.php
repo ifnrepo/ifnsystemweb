@@ -177,6 +177,7 @@ class Po extends CI_Controller
             'id' => $_POST['id'],
             'harga' => $_POST['harga'],
             'pcs' => $_POST['qty'],
+            'kgs' => $_POST['kgs'],
         ];
         $hasil = $this->pomodel->updatehargadetail($kondisi);
         echo $hasil;

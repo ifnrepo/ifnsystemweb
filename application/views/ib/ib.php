@@ -25,8 +25,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
               <?php $disab=''; if($this->session->userdata('depttuju')=='' || $this->session->userdata('depttuju')==null){ $disab = 'disabled';} ?>
-              <?php $cekpakaibc = datauser($this->session->userdata('id'),'cekpakaibc')==1 ? '' : 'hilang'; ?>
-              <a href="<?= base_url() . 'ib/tambahdataib'; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?><?= $disab; ?>" id="adddataib"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <?php $cekpakaibc = datauser($this->session->userdata('id'),'cekpakaibc')==1 ? '' : 'hilang'; $tmb = $this->session->userdata('depttuju')=='FG' ? '/1' : ''; ?>
+              <a href="<?= base_url() . 'ib/tambahdataib'.$tmb; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?><?= $disab; ?>" id="adddataib"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <a href="<?= base_url() . 'ib/cekbc'; ?>" class="btn btn-cyan btn-sm hilang <?= cekclosebook(); ?><?= $disab; ?><?= $cekpakaibc; ?>" id="adddataib"><i class="fa fa-h-square"></i><span class="ml-1">Cek BC</span></a>
               <a href="<?= base_url() . 'ib/hosttohost/99'; ?>" class="btn btn-yellow btn-sm text-black <?= cekclosebook(); ?><?= $disab; ?>" id="addtoken"><i class="fa fa-cloud"></i><span class="ml-1">H2H Token</span></a>
               <?php $date = date("Y-m-d H:i:s",strtotime("+2 hours",strtotime($datatoken['update_at']))); ?>

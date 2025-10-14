@@ -559,7 +559,9 @@
                         </span>
                     </div>
                     <div>
+                        <?php $hilangbc40kustom = $datheader['jns_bc']=="40" && trim($datheader['nomor_bc'])!='' ? "" : "hilang" ?>
                         <a href="<?= base_url().'ib/getbcasal/'.$datheader['id'].'/1'; ?>" id="tombolgetbcasal" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="BC Asal Default" class="btn btn-sm btn-primary hilang <?= $hilangbc23.' '.$hilangbc40 ?>"><i class="fa fa-calculator mr-1"></i> BC Asal Default</a>
+                        <a href="#" data-href="<?= base_url().'ib/simpankehargamaterial/'.$datheader['id'].'/1'; ?>" id="tombolexpmaterial" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengexport data ke Harga Material" data-title="Export Harga Material" class="btn btn-sm btn-primary <?= $hilangbc40kustom ?>"><i class="fa fa-cloud mr-1"></i> Export ke Harga Material</a>
                     </div>
                 </div>
                 <div class="card card-lg font-kecil">
@@ -629,8 +631,8 @@
                                 <?php } ?>
                                 <tr class="bg-primary-lt">
                                     <td class="text-black text-center font-bold" colspan="4">TOTAL</td>
-                                    <td class="text-black text-right font-bold"><?= rupiah($sumpcs,0); ?></td>
-                                    <td class="text-black text-right font-bold"><?= rupiah($sumkgs,2); ?></td>
+                                    <td class="text-black text-right font-bold" id="pcssum"><?= rupiah($sumpcs,0); ?></td>
+                                    <td class="text-black text-right font-bold" id="txtsum"><?= rupiah($sumkgs,2); ?></td>
                                     <td></td>
                                     <td class="text-black text-right font-bold line-12"><?= rupiah($sumdetail,2); ?>
                                     <?php if($mode==1): ?>

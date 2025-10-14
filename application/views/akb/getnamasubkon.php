@@ -2,17 +2,17 @@
     <div class="row font-kecil">
         <input type="text" class="hilang" name="idheader" id="idheader" value="">
         <div class="mb-1 row">
-            <label class="col-3 col-form-label font-bold">PILIH SUBKON</label>
+            <label class="col-3 col-form-label font-bold">PILIH TUJUAN</label>
             <div class="col">
                 <div class="input-group mb-2">
                     <select class="form-select form-control font-kecil font-bold" id="namasubkon">
                         <?php foreach ($datasubkon as $key => $value) { ?>
                             <option value="<?= $value; ?>"><?= datadepartemen($value,'departemen'); ?></option>
                         <?php } ?>
+                        <option value="SU" class="text-pink">SUPPLIER / BC SERVICE</option>
                     </select>
                     <button class="btn font-kecil btn-primary" id="submit-pilih" type="button">Pilih</button>
                 </div>
-                
             </div>
         </div>
         <div class="col-12 mb-5 text-center" style="min-height: 150px;">

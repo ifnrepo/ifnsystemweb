@@ -340,6 +340,18 @@ function datadepartemen($kode, $kolom)
     }
     return $kore;
 }
+function datasupplier($kode, $kolom)
+{
+    $kore = '';
+    if ($kode == '' || $kode == 0) {
+        $kore = '';
+    } else {
+        $CI = &get_instance();
+        $kodex = $CI->helpermodel->getdatasupplier($kode)->row_array();
+        $kore = $kodex[$kolom];
+    }
+    return $kore;
+}
 function kodebulan($bl)
 {
     $hasil = $bl;

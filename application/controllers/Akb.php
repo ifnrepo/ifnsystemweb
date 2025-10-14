@@ -303,9 +303,40 @@ class Akb extends CI_Controller
     }
     public function getbongaichu($id, $kode = 0)
     {
-        $data['databongaichu'] = $this->akbmodel->getbongaichu($id);
+        // $data['databongaichu'] = $this->akbmodel->getbongaichu($id);
         $data['idheader'] = $id;
         $this->load->view('akb/getbongaichu', $data);
+    }
+    public function getdokumenakb(){
+        $id = $_POST['id'];
+        $asal = $_POST['asal'];
+        $hasil = $this->akbmodel->getbongaichu($id,$asal);
+        $html = '';
+        if($hasil->num_rows() > 0){
+            $no=0;
+            foreach($hasil->result_array() as $hasil){
+                $no++;
+                $html .= "<tr>";
+                $html .= "<td>".$no."</td>";
+                $html .= "<td class='text-blue font-bold'>".$hasil['nomor_dok']."</td>";
+                $html .= "<td>".$hasil['tgl']."</td>";
+                $html .= "<td>".$hasil['ket']."</td>";
+                $html .= "<td class='text-right'>".rupiah($hasil['pcs'],0)."</td>";
+                $html .= "<td class='text-right'>".rupiah($hasil['kgs'],2)."</td>";
+                $html .= "<td class='text-center'>";
+                $html .= "<label class='form-check m-0'>";
+                $html .= "<input class='form-check-input' name='cekpilihbarang' id='cekbok".$no."' rel='".$hasil['id']."' type='checkbox' title='".$hasil['id']."' >";
+                $html .= "<span class='form-check-label'></span></label>";
+                $html .= "</td>";
+                $html .= "</tr>";
+            }
+        }else{
+            $html .= '<tr>';
+            $html .= "<td colspan='7' class='text-center'>Data yang dicari tidak ditemukan !</td>";
+            $html .= '</tr>';
+        }
+        $cocok = array('datagroup' => $html,'id'=>$id);
+        echo json_encode($cocok);
     }
     public function tambahajusubkon()
     {
@@ -1458,7 +1489,7 @@ class Akb extends CI_Controller
             "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
             "jumlahKontainer" => 0,
             "kodeKantor" => "050500",
-            "kodeTujuanPengiriman" => "2",
+            "kodeTujuanPengiriman" => $data['dept_tuju'] == 'SU' ? "1" : "2",
             "kodeValuta" => "USD", //$data['mt_uang'],
             "kotaTtd" => "BANDUNG",
             "namaTtd" => strtoupper($data['tg_jawab']),
@@ -2902,7 +2933,7 @@ class Akb extends CI_Controller
                     $sat = $data['kodebc'];
                 }
                 // Lakukan looping pada variabel      
-                $sheet->setCellValue('A' . $numrow, $no.$header['nomor_dok']);
+                $sheet->setCellValue('A' . $numrow, $no);
                 $sheet->setCellValue('B' . $numrow, htmlspecialchars_decode($spekbarang));
                 $sheet->setCellValue('C' . $numrow, $hs);
                 $sheet->setCellValue('D' . $numrow, $sku);

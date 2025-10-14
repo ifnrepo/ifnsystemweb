@@ -147,6 +147,8 @@ class Bcmasuk extends CI_Controller
         $ceknomor_bc = '';
 
         foreach ($bcmasuk->result_array() as $data) {
+
+            $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
             if ($data['xmtuang'] == 'USD') {
@@ -184,7 +186,7 @@ class Bcmasuk extends CI_Controller
             $sheet->setCellValue('F' . $numrow, $data['nomor_dok']);
             $sheet->setCellValue('G' . $numrow, $data['tgl']);
             $sheet->setCellValue('H' . $numrow, $suppl);
-            $sheet->setCellValue('I' . $numrow, $data['kode']);
+            $sheet->setCellValue('I' . $numrow, $sku);
             $sheet->setCellValue('J' . $numrow, $data['nama_barang']);
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
@@ -214,7 +216,7 @@ class Bcmasuk extends CI_Controller
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="LAPORAN BC KELUAR.xlsx"');
+        header('Content-Disposition: attachment;filename="LAPORAN BC MASUK.xlsx"');
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
     }
@@ -232,7 +234,7 @@ class Bcmasuk extends CI_Controller
         $ceknomor_bc = '';
 
         foreach ($bcmasuk->result_array() as $data) {
-
+            $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
             if ($data['xmtuang'] == 'USD') {
@@ -285,7 +287,7 @@ class Bcmasuk extends CI_Controller
 
             $pdf->Cell(15, $tinggiMaks, $data['tgl'], 1, 0, 'L');
             $pdf->Cell(45, $tinggiMaks, $suppl, 1, 0, 'L');
-            $pdf->Cell(13, $tinggiMaks, $data['kode'], 1, 0, 'L');
+            $pdf->Cell(13, $tinggiMaks, $sku, 1, 0, 'L');
 
 
             $x_nama = $pdf->GetX();

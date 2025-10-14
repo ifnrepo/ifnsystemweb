@@ -1,6 +1,10 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+use PhpOffice\PhpSpreadsheet\Style\Alignment;
+
 class Kontrak extends CI_Controller
 {
     function __construct()
@@ -175,6 +179,192 @@ class Kontrak extends CI_Controller
         $data['terima'] = $this->kontrakmodel->getdatajaminkiriman($data['header']['nomor_bc']);
         $this->load->view('kontrak/viewdetail', $data);
     }
+
+    public function excel()
+    {
+        $this->load->model('kontrakmodel');
+        $sesi = $this->session->userdata('sesikontrak');
+        $header = $this->kontrakmodel->getHeader_kontrak($sesi);
+        $detail = $this->kontrakmodel->getDetail_kontrak($sesi);
+        $terima = $this->kontrakmodel->getdatapengembalian($sesi);
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+
+        $sheet->mergeCells('B2:R2');
+        $sheet->setCellValue('B2', 'REALISASI PENGELUARAN SEMENTARA DAN PEMASUKAN KEMBALI BARANG IMPOR ATAS KEGIATAN DARI/KE TLDPP');
+        $sheet->mergeCells('B3:R3');
+        $sheet->setCellValue('B3', 'UNTUK PENGEMBALIAN JAMINAN');
+        $sheet->getStyle('B2:R3')->getFont()->setBold(true);
+        $sheet->getStyle('B2:R3')->getAlignment()->setHorizontal('center');
+
+
+        $sheet->mergeCells('G6:I6');
+        $sheet->setCellValue('G6', 'Nama Perusahaan');
+        $sheet->setCellValue('J6', ': ');
+        $sheet->mergeCells('G7:I7');
+        $sheet->setCellValue('G7', 'Nomor Surat Persetujuan');
+        $sheet->setCellValue('J7', ':');
+        $sheet->mergeCells('G8:I8');
+        $sheet->setCellValue('G8', 'Tanggal Surat Persetujuan');
+        $sheet->setCellValue('J8', ': ');
+        $sheet->mergeCells('G9:I9');
+        $sheet->setCellValue('G9', 'Nomor BPJ');
+        $sheet->setCellValue('J9', ': ');
+        $sheet->mergeCells('G10:I10');
+        $sheet->setCellValue('G10', 'Jatuh Tempo Jaminan');
+        $sheet->setCellValue('J10', ': ');
+
+
+
+        // $sheet->setCellValue('K6', $header['departemen']);
+        // $sheet->setCellValue('K7', $header['nomor_surat']);
+        // $sheet->setCellValue('K8', $header['tgl_surat']);
+        // $sheet->setCellValue('K9', $header['nomor_bpj']);
+        // $sheet->setCellValue('K10', $header['tgl_expired']);
+
+        $sheet->setCellValue('K6', '');
+        $sheet->setCellValue('K7', '');
+        $sheet->setCellValue('K8', '');
+        $sheet->setCellValue('K9', '');
+        $sheet->setCellValue('K10', '');
+
+
+        $sheet->setCellValue('B12', 'PENGELUARAN SEMENTARA');
+        $sheet->getStyle('B12')->getFont()->setBold(true);
+
+        $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCS', 'KGS'], NULL, 'B13');
+        $sheet->getStyle('B13:I13')->getFont()->setBold(true);
+        $sheet->getStyle('B13:I13')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('B13:I13')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('FFD9D9D9');
+
+        $rowOut = 14;
+        $no = 1;
+        $totalKgsOut = 0;
+        $ceknomor_bc = '';
+
+        if (!empty($detail)) {
+            foreach ($detail as $key) {
+                $sku = trim($key['po']) == '' ? $key['kode'] : (function_exists('viewsku') ? viewsku($key['po'], $key['item'], $key['dis']) : $key['kode']);
+
+                if ($key['nomor_bc'] == $ceknomor_bc) {
+                    $sheet->setCellValue("B{$rowOut}", '');
+                    $sheet->setCellValue("C{$rowOut}", '');
+                    $sheet->setCellValue("D{$rowOut}", '');
+                } else {
+                    $sheet->setCellValue("B{$rowOut}", $no++);
+                    $sheet->setCellValue("C{$rowOut}", $key['nomor_bc']);
+                    $sheet->setCellValue("D{$rowOut}", $key['tgl_bc']);
+                }
+
+                $sheet->setCellValue("E{$rowOut}", $sku);
+                $sheet->setCellValue("F{$rowOut}", $key['nama_barang']);
+                $sheet->setCellValue("G{$rowOut}", $key['satuan'] ?? 'PCS');
+                $sheet->setCellValue("H{$rowOut}", '-');
+                $sheet->setCellValue("I{$rowOut}", $key['kgs']);
+
+                $totalKgsOut += (float)$key['kgs'];
+                $ceknomor_bc = $key['nomor_bc'];
+                $rowOut++;
+            }
+        }
+
+
+        $sheet->getStyle("E14:E{$rowOut}")->getAlignment()->setHorizontal('left');
+        $sheet->mergeCells("B{$rowOut}:H{$rowOut}");
+        $sheet->setCellValue("B{$rowOut}", 'Total');
+        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue("I{$rowOut}", $totalKgsOut);
+        $sheet->getStyle("B{$rowOut}:I{$rowOut}")->getFont()->setBold(true);
+        $sheet->getStyle("I{$rowOut}")->getNumberFormat()->setFormatCode('#,##0.00');
+        $sheet->getStyle("I14:I{$rowOut}")->getAlignment()->setHorizontal('right');
+
+
+        // pengemvalian
+        $sheet->setCellValue('K12', 'PEMASUKAN KEMBALI');
+        $sheet->getStyle('K12')->getFont()->setBold(true);
+
+        $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCS', 'KGS'], NULL, 'K13');
+        $sheet->getStyle('K13:R13')->getFont()->setBold(true);
+        $sheet->getStyle('K13:R13')->getAlignment()->setHorizontal('center');
+        $sheet->getStyle('K13:R13')->getFill()
+            ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+            ->getStartColor()->setARGB('FFD9D9D9');
+
+        $rowIn = 14;
+        $no = 1;
+        $totalKgsIn = 0;
+        $ceknomor_bcmasuk = '';
+
+        if (!empty($terima) && is_object($terima) && $terima->num_rows() > 0) {
+            foreach ($terima->result_array() as $trm) {
+                $sku = trim($trm['po']) == '' ? $trm['kode'] : (function_exists('viewsku') ? viewsku($trm['po'], $trm['item'], $trm['dis']) : $trm['kode']);
+                $spekbarang = trim($trm['po']) == '' ? namaspekbarang($trm['id_barang']) : spekpo($trm['po'], $trm['item'], $trm['dis']);
+                if ($trm['nomor_bc'] == $ceknomor_bcmasuk) {
+                    $sheet->setCellValue("K{$rowIn}", '');
+                    $sheet->setCellValue("L{$rowIn}", '');
+                    $sheet->setCellValue("M{$rowIn}", '');
+                } else {
+                    $sheet->setCellValue("K{$rowIn}", $no++);
+                    $sheet->setCellValue("L{$rowIn}", $trm['nomor_bc']);
+                    $sheet->setCellValue("M{$rowIn}", $trm['tgl_bc']);
+                }
+
+                $sheet->setCellValue("N{$rowIn}", $sku);
+                $sheet->setCellValue("O{$rowIn}",  $spekbarang);
+                $sheet->setCellValue("P{$rowIn}", $trm['satuan'] ?? 'PCS');
+                $sheet->setCellValue("Q{$rowIn}", '-');
+                $sheet->setCellValue("R{$rowIn}", $trm['kgs']);
+
+                $totalKgsIn += (float)$trm['kgs'];
+                $ceknomor_bcmasuk = $trm['nomor_bc'];
+                $rowIn++;
+            }
+        }
+        $sheet->getStyle("N14:N{$rowIn}")->getAlignment()->setHorizontal('left');
+        $sheet->mergeCells("K{$rowIn}:Q{$rowIn}");
+        $sheet->setCellValue("K{$rowIn}", 'TOTAL');
+        $sheet->setCellValue("R{$rowIn}", $totalKgsIn);
+        $sheet->getStyle("K{$rowIn}:R{$rowIn}")->getFont()->setBold(true);
+        $sheet->getStyle("R{$rowIn}")->getNumberFormat()->setFormatCode('#,##0.00');
+        $sheet->getStyle("R14:R{$rowIn}")->getAlignment()->setHorizontal('right');
+        $sheet->getStyle("K{$rowIn}")->getAlignment()->setHorizontal('center');
+
+
+        $sheet->getStyle("B13:I{$rowOut}")
+            ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $sheet->getStyle("K13:R{$rowIn}")
+            ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+
+        $columns = [
+            'B' => 6, 'C' => 12, 'D' => 17, 'E' => 10, 'F' => 70, 'G' => 8, 'H' => 8, 'I' => 15, 'J' => 2,
+            'K' => 6, 'L' => 12, 'M' => 17, 'N' => 10, 'O' => 70, 'P' => 8, 'Q' => 8, 'R' => 15
+        ];
+        foreach ($columns as $col => $width) {
+            $sheet->getColumnDimension($col)->setWidth($width);
+        }
+
+        $filename = 'Realisasi Pengeluaran & Pemasukan' . date('Ymd') . '.xlsx';
+        ob_end_clean();
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header("Content-Disposition: attachment; filename=\"$filename\"");
+        header('Cache-Control: max-age=0');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
+
+
+
+
+
+
     public function simpankedatabase()
     {
         $data = [

@@ -8,7 +8,7 @@ class Out_model extends CI_Model{
             'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
-            'left(nomor_dok,6) != ' => 'IFN-TR',
+            'left(nomor_dok,3) != ' => 'IFN',
             // '' => ''
         ];
         if($kode['filterbon']==1){
@@ -18,7 +18,6 @@ class Out_model extends CI_Model{
             $kolom = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'));
             $arrkondisi[$kolom] = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'),1);
         }
-        
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->select('(SELECT SUM(pcs) AS pcs FROM tb_detail WHERE tb_detail.id_header = tb_header.id GROUP BY id_header ) AS jumlahpcs');
