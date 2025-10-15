@@ -64,7 +64,8 @@
                 </table>
                 <hr class="small m-1">
                 <div class="text-center">
-                    <a href="#" data-href="<?= base_url().'akb/simpanbomjf/'.$idheader.'/1'; ?>" id="simpankedb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini " data-title="Bill Of Material" class="btn btn-sm btn-flat btn-primary">Simpan</a>
+                    <?php $tmb = ($mode==0) ? '' : '/1'; ?>
+                    <a href="#" data-href="<?= base_url().'akb/simpanbomjf/'.$idheader.$tmb; ?>" id="simpankedb" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data ini " data-title="Bill Of Material" class="btn btn-sm btn-flat btn-primary">Simpan</a>
                     <a href="<?= base_url().'akb/simpanbomkeexcel/'.$idheader.'/1'; ?>" id="simpanexcel" class="btn btn-sm btn-flat btn-success">Simpan ke Excel</a>
                     <a href="#" class="btn btn-sm btn-flat btn-danger" id="tutupmodal" data-bs-dismiss="modal">Batal</a>
                     <div id="peringatan">XXX</div>

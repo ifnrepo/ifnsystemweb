@@ -457,6 +457,22 @@ class Helper_model extends CI_Model
         }
         return htmlspecialchars($nilai);
     }
+    public function spekdom($po,$item,$dis){
+        $nilai = '';
+        $data = [
+            'po' => trim($po),
+            'trim(item)' => trim($item),
+            'dis' => $dis
+        ];
+        $hasil  = $this->db->get_where('tb_po',$data);
+        if($hasil->num_rows() == 0){
+            $nilai = '';
+        }else{
+            $hasilnya = $hasil->row_array();
+            $nilai = trim($hasilnya['labdom']).' K. White Cart '.trim($hasilnya['ways']);
+        }
+        return htmlspecialchars_decode(htmlspecialchars($nilai));
+    }
     public function getpros($kode){
         if(trim($kode)==''){
             $hasil = '';
@@ -882,6 +898,55 @@ class Helper_model extends CI_Model
         }
         return $data;
     }
+    public function showbomjfdom($po,$item,$dis,$idbarang,$insno,$nobontr,$kgs,$noe,$pcs){
+        $data = [];
+        $datakondisi = [
+            'trim(po)' => trim($po),
+            'trim(item)' => trim($item),
+            'dis' => $dis,
+            'id_barang' => $idbarang,
+            'trim(insno)' => trim($insno),
+            'trim(nobontr)' => trim($nobontr)
+        ];
+        $this->db->where($datakondisi);
+        $hasil = $this->db->get('ref_bom_cost');
+        if($hasil->num_rows() > 0){
+            $cekhasil = $hasil->row_array();
+            $this->db->select("id_barang,nobontr,persen");
+            $this->db->from('ref_bom_detail_cost');
+            $this->db->where('id_bom',$cekhasil['id']);
+            $this->db->where('persen >',0);
+            $databom = $this->db->get();
+            $jmlrekdet = $databom->num_rows();
+            $nor=0;$jmlkgsdet=0;
+            foreach($databom->result_array() as $detbom){
+                $nor++;
+                $jmlkgsdet += $kgs*($detbom['persen']/100);
+                $tambahnya=0;
+                if($nor == $jmlrekdet){
+                    $tambahnya = $kgs-$jmlkgsdet;
+                }
+                $dataxspin['po'] = $po;
+                $dataxspin['item'] = $item;
+                $dataxspin['dis'] = $dis;
+                $dataxspin['id_barang'] =  $detbom['id_barang'];
+                $dataxspin['insno'] = $insno;
+                $dataxspin['nobontr'] = $detbom['nobontr'];
+                $dataxspin['persen'] = $detbom['persen'];
+                $dataxspin['kgs_asli'] = ($kgs*($detbom['persen']/100))+$tambahnya;
+                $dataxspin['xinsno'] = $insno;
+                $dataxspin['xinsnox'] = $insno;
+                $dataxspin['cuy'] = formatsku($po,$item,$dis,$idbarang);
+                $dataxspin['noe'] = $noe;
+                $dataxspin['kgs'] = $kgs;
+                $dataxspin['kunci'] = $dataxspin['id_barang'].trim($dataxspin['nobontr']);
+                $dataxspin['pcs_asli'] = 0;
+
+                array_push($data,$dataxspin);
+            }
+        }
+        return $data;
+    }
     public function ceknomorbc($data,$idbarang){
         $datahasil= [];
         $xhasil2= [];
@@ -948,6 +1013,19 @@ class Helper_model extends CI_Model
         $xdate = date('Y-m-d', $new_date_timestamp);
         // echo $xdate; // Output: 2025-08-23
         return $this->db->get_where('tb_kurs',['tgl >=' => $xdate]);
+    }
+    public function getpersonloginpermonth($date=''){
+         if($date=='' || $date==NULL){
+            $date = date('Y-m-d');
+        }
+        $new_date_timestamp = strtotime('-1 month', strtotime($date));
+        $xdate = date('Y-m-d', $new_date_timestamp);
+        $this->db->select('date(datetimelog) as tgllog,COUNT(DISTINCT iduserlog) personlog');
+        $this->db->from('tb_logactivity');
+        $this->db->where('DATE(datetimelog) >= ',$xdate);
+        $this->db->like('activitylog','LOGIN');
+        $this->db->group_by("1");
+        return $this->db->get();
     }
     public function getdetailbcasal($exbc,$data){
         $this->db->select('tb_detail.*,tb_header.nomor_aju');

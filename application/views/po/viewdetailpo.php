@@ -73,8 +73,8 @@
                                     <td><?= $val['namasatuan']; ?></td>
                                     <td><?= rupiah($val['pcs'],0); ?></td>
                                     <td><?= rupiah($val['kgs'],2); ?></td>
-                                    <td><?= rupiah($val['harga'],4); ?></td>
-                                    <td><?= rupiah($val['harga']*$tampil,2); ?></td>
+                                    <td class="text-right"><?= rupiah($val['harga'],4); ?></td>
+                                    <td class="text-right"><?= rupiah($val['harga']*$tampil,2); ?></td>
                                     <td><?= $val['keter']; ?></td>
                                 </tr>
                             <?php } ?>
