@@ -353,9 +353,9 @@ class Akb extends CI_Controller
         $kode = $this->akbmodel->tambahbongaichu($arrgo);
         echo $kode;
     }
-    public function hapusaju($id)
+    public function hapusaju($id,$mode=0)
     {
-        $hasil = $this->akbmodel->hapusaju($id);
+        $hasil = $this->akbmodel->hapusaju($id,$mode);
         if ($hasil) {
             $url = base_url() . 'akb';
             redirect($url);
@@ -2142,7 +2142,7 @@ class Akb extends CI_Controller
         $hasil = $this->akbmodel->hitungbomjf($id, $mode, $data['datheader']['urutakb']);
         $simpan = $this->akbmodel->simpanbom($hasil['ok'], $id);
         if ($simpan) {
-            if ($mode = 0) {
+            if ($mode == 0) {
                 $url = base_url() . 'akb/isidokbc/' . $id;
             } else {
                 $url = base_url() . 'akb/isidokbc/' . $id . '/1';
@@ -2161,6 +2161,7 @@ class Akb extends CI_Controller
         $datheader = $this->akbmodel->getdatabyid($id);
         $hasil['hasil'] = $this->akbmodel->hitungbomjf($id, $mode,$datheader['urutakb']);
         $hasil['idheader'] = $id;
+        $hasil['mode'] = $mode;
         $this->load->view('akb/viewhitungbom', $hasil);
     }
     public function editbombc($id)

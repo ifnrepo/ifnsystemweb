@@ -1,8 +1,11 @@
 $(document).ready(function () {
 	$(".tgl").datepicker({
+		showButtonPanel: true,
 		autoclose: true,
 		format: "dd-mm-yyyy",
 		todayHighlight: true,
+		todayBtn: "linked",
+  		// clearBtn: true,
 	});
 
 	$(".pelabuhan").select2({

@@ -968,8 +968,9 @@ class Akb_model extends CI_Model
                 $this->db->order_by('tb_detail.urut_akb,seri_barang');
             }
         }else{
-            $this->db->select("*");
+            $this->db->select("*,'' as ketprc,barang.kode");
             $this->db->from('tb_detail');
+            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
             $this->db->where('id_header', $id);
         }
         $hasil = $this->db->get();
@@ -977,15 +978,27 @@ class Akb_model extends CI_Model
         $arrnotbom = [];
         $no = 1;
         foreach ($hasil->result_array() as $hsl) {
-            $kondisi = [
-                'id_akb' => $id,
-                'tb_header.ketprc' => $hsl['ketprc'],
-                'tb_detail.po' => $hsl['po'],
-                'tb_detail.item' => $hsl['item'],
-                'tb_detail.dis' => $hsl['dis'],
-                'tb_detail.insno' => $hsl['insno'],
-                'barang.kode' => $hsl['kode']
-            ];
+            if($mode==1){
+                $kondisi = [
+                    'id_akb' => $id,
+                    'tb_header.ketprc' => $hsl['ketprc'],
+                    'tb_detail.po' => $hsl['po'],
+                    'tb_detail.item' => $hsl['item'],
+                    'tb_detail.dis' => $hsl['dis'],
+                    'tb_detail.insno' => $hsl['insno'],
+                    'barang.kode' => $hsl['kode']
+                ];
+            }else{
+                $kondisi = [
+                    'id_header' => $id,
+                    'tb_header.ketprc' => $hsl['ketprc'],
+                    'tb_detail.po' => $hsl['po'],
+                    'tb_detail.item' => $hsl['item'],
+                    'tb_detail.dis' => $hsl['dis'],
+                    'tb_detail.insno' => $hsl['insno'],
+                    'barang.kode' => $hsl['kode']
+                ];
+            }
             $this->db->select("tb_detail.id");
             $this->db->from('tb_detail');
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
@@ -1001,7 +1014,7 @@ class Akb_model extends CI_Model
             $this->db->where_in('id', $xhasil);
             $this->db->update('tb_detail');
 
-            $arrbom = showbomjf($hsl['po'], $hsl['item'], $hsl['dis'], $hsl['id_barang'], $hsl['insno'], $hsl['nobontr'], round($hsl['kgs'], 2), $no++, $hsl['pcs']);
+            $arrbom = showbomjf($hsl['po'], $hsl['item'], $hsl['dis'], $hsl['id_barang'], $hsl['insno'], $hsl['nobontr'], round($hsl['kgs'], 2), $no++, $hsl['pcs'],$mode);
             if (count($arrbom) > 0) {
                 foreach ($arrbom as $hasilshowbom) {
                     array_push($arrhasil, $hasilshowbom);
@@ -1355,12 +1368,17 @@ class Akb_model extends CI_Model
         $this->db->trans_complete();
         return $dataheader['id'];
     }
-    public function hapusaju($id)
+    public function hapusaju($id,$mode)
     {
         $this->db->trans_start();
-        $this->db->where('id_akb', $id);
-        $this->db->update('tb_detail', ['id_akb' => NULL]);
-        $this->helpermodel->isilog($this->db->last_query());
+        if($mode==0){
+            $this->db->where('id_header', $id);
+            $this->db->delete('tb_detail');
+        }else{
+            $this->db->where('id_akb', $id);
+            $this->db->update('tb_detail', ['id_akb' => NULL]);
+            $this->helpermodel->isilog($this->db->last_query());
+        }
 
         $this->db->where('id', $id);
         $this->db->delete('tb_header');

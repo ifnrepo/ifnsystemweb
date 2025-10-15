@@ -19,14 +19,17 @@ class Main extends CI_Controller {
         $dataproduksi = $this->helpermodel->dataproduksi();
         $kurshariini = $this->helpermodel->getkurssekarang(date('Y-m-d'))->row_array();
         $datakurs = $this->helpermodel->getkurs30hari();
+        $datapersonlogin = $this->helpermodel->getpersonloginpermonth(date('Y-m-d'));
 		$this->load->view('layouts/header');
         $data['dataproduksi'] = $dataproduksi;
         $data['kurshariini'] = $kurshariini;
+        $data['personlogin'] = $datapersonlogin;
 		$this->load->view('main',$data);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'main';
         $footer['dataproduksi'] = $dataproduksi;
         $footer['datakurs'] = $datakurs;
+        $footer['personlogin'] = $datapersonlogin;
 		$this->load->view('layouts/footer',$footer);
 	}
     public function ceknotif(){

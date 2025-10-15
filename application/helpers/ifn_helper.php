@@ -676,6 +676,11 @@ function spekpo($po, $item, $dis)
     $CI = &get_instance();
     return $CI->helpermodel->spekpo($po, $item, $dis);
 }
+function spekdom($po, $item, $dis)
+{
+    $CI = &get_instance();
+    return $CI->helpermodel->spekdom($po, $item, $dis);
+}
 function getpros($kode)
 {
     $CI = &get_instance();
@@ -852,10 +857,14 @@ function showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs
     $getkode = $CI->helpermodel->showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
     return $getkode;
 }
-function showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs)
+function showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs ,$mode)
 {
     $CI = &get_instance();
-    $getkode = $CI->helpermodel->showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
+    if($mode==1){
+        $getkode = $CI->helpermodel->showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
+    }else{
+        $getkode = $CI->helpermodel->showbomjfdom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
+    }
     return $getkode;
 }
 function getarrayindex(string $value, array $array, string $key)

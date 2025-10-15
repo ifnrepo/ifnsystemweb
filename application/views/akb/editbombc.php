@@ -44,8 +44,8 @@
                         <td><?= $isipajak; ?></td>
                         <td>
                             <label class="form-check form-switch">
-                              <input class="form-check-input" id="<?= strtolower($isipajak); ?>" type="checkbox" <?= $ceked; ?> <?= $disabel; ?>>
-                              <span class="form-check-label <?= $kethilang; ?>">BC 40 tidak dipungut</span>
+                              <input class="form-check-input" id="<?= strtolower($isipajak); ?>" type="checkbox" <?= $ceked; ?>>
+                              <span class="form-check-label hilang <?= $kethilang; ?>">BC 40 tidak dipungut</span>
                             </label>
                         </td>
                     </tr>

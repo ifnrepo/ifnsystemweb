@@ -9,7 +9,7 @@
             <li class="nav-item">
                 <a href="#tabs-barang-8" class="nav-link bg-cyan-lt btn-flat font-bold" data-bs-toggle="tab">Detail Barang</a>
             </li>
-            <?php $navhilang = $datheader['jns_bc']!=261 ?  "hilang" : ""; ?>
+            <?php $navhilang = ($datheader['jns_bc']==261 || $datheader['jns_bc']==25 || $datheader['jns_bc']==41)  ?  "" : "hilang"; ?>
             <li class="nav-item <?= $navhilang; ?>">
                 <a href="#tabs-barangdet-8" class="nav-link bg-purple-lt btn-flat font-bold" data-bs-toggle="tab">Detail Ver. BC </a>
             </li>
@@ -42,6 +42,8 @@
                         <?php $hilangbc40 = $datheader['jns_bc']==40 ? "hilang" : ""; ?>
                         <?php $hilangbc262 = $datheader['jns_bc']==262 ? "hilang" : ""; ?>
                         <?php $hilangbc261 = $datheader['jns_bc']==261 ? "hilang" : ""; ?>
+                        <?php $hilangbc25 = $datheader['jns_bc']==25 ? "hilang" : ""; ?>
+                        <?php $hilangbc41 = $datheader['jns_bc']==41 ? "hilang" : ""; ?>
                         <?php $selectnonaktif = $datheader['send_ceisa']==1 ? "disabled" : ""; ?>
                         <a href="<?= base_url().'akb/ceisa40excel/'.$datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url().'akb/getresponhost/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow text-black <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url().'akb/getresponpdf/'.$datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                         <!-- <a href="<?= base_url().'akb/hosttohost/'.$datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
@@ -228,7 +230,7 @@
                                         </div>
                                     </div>
                                     <!-- Ex BC  -->
-                                    <div class="<?= $hilangbc30; ?><?= $hilangbc40; ?><?= $hilangbc261; ?>">
+                                    <div class="<?= $hilangbc30; ?><?= $hilangbc40; ?><?= $hilangbc261; ?><?= $hilangbc41; ?><?= $hilangbc25; ?>">
                                         <div class="text-center bg-danger-lt mb-1 font-bold">Ex BC</div>
                                         <div class="mb-1 row">
                                             <div class="col">
@@ -250,7 +252,7 @@
                                         </div>
                                     </div>
                                     <!-- BL AWB  -->
-                                    <div class="<?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
+                                    <div class="<?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
                                         <div class="text-center bg-primary-lt mb-1 font-bold">Nomor BL / AWB</div>
                                         <div class="mb-1 row">
                                             <div class="col">
@@ -272,7 +274,7 @@
                                         </div>
                                     </div>
                                     <!-- BL AWB  -->
-                                    <div class="<?= $hilangbc30; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
+                                    <div class="<?= $hilangbc30; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
                                         <div class="text-center bg-danger-lt mb-1 font-bold"><span class="text-black">BC 1.1</span></div>
                                         <div class="mb-1 row">
                                             <div class="col">
@@ -319,7 +321,7 @@
                                         <div class="col font-kecil">
                                             <select class="form-select font-kecil font-bold btn-flat pelabuhan" name="pelabuhan_muat" data-placeholder="Pilih Pelabuhan" id="pelabuhan_muat" <?= $selectnonaktif; ?> >
                                                 <!-- <option value="">Pilih Pelabuhan Muat</option> -->
-                                                 <option value="<?= $datheader['pelabuhan_muat']; ?>"><?= $datheader['p elabuhan_muat'].' - '.$datheader['pelmuat']; ?></option>
+                                                 <option value="<?= $datheader['pelabuhan_muat']; ?>"><?= $datheader['pelabuhan_muat'].' - '.$datheader['pelmuat']; ?></option>
                                             </select>
                                         </div>
                                     </div>
@@ -332,7 +334,7 @@
                                         </div>
                                     </div>
                                     <div class="text-center bg-primary-lt mb-1 font-bold">Sarana / Cara Angkutan</div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc41; ?><?= $hilangbc25; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">No & Tipe Peti Kemas</label>
                                         <div class="col font-kecil">
                                             <div class="mb-1 text-right">
@@ -374,7 +376,7 @@
                                             <input type="text" class="form-control font-kecil btn-flat" id="no_kendaraan" name="no_kendaraan" value="<?= $datheader['no_kendaraan']; ?>" aria-describedby="emailHelp" placeholder="No Kendaraan" <?= $nonaktif; ?>>
                                         </div>
                                     </div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">Bendera</label>
                                         <div class="col">
                                             <select class="form-select font-kecil font-bold btn-flat" name="bendera_angkutan" id="bendera_angkutan" <?= $selectnonaktif; ?> >
@@ -478,7 +480,7 @@
                                                     <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
-                                            <div class="mb-1 row <?= $hilangbc30; ?> <?= $hilangbc40; ?>">
+                                            <div class="mb-1 row <?= $hilangbc30; ?> <?= $hilangbc40; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
                                                 <?php 
                                                     $hilangtomboladdkontrak = $datheader['nomorkontrak']==NULL && $datheader['send_ceisa']==0 ? '' : 'hilang';  
                                                     $hilangtombolhapuskontrak = $datheader['nomorkontrak']!=NULL && $datheader['send_ceisa']==0  ? '' : 'hilang';  
@@ -613,6 +615,10 @@
                                         $nambar = trim($data['po'])=='' ? $data['nama_barang'] : spekpo($data['po'],$data['item'],$data['dis']);
                                         if($datheader['jns_bc']==30){
                                             $nambar = $data['engklp'];
+                                        }else{
+                                            if($datheader['jns_bc']==25 || $datheader['jns_bc']==41){
+                                                $nambar = spekdom($data['po'],$data['item'],$data['dis']);
+                                            }
                                         }
                                         $hs = trim($data['po'])=='' ? substr($data['hsx'],0,8) : substr($data['nohs'],0,8) ;
                                         if(trim($hs) == '' || $hs==NULL){
@@ -678,7 +684,8 @@
                         Jumlah Kgs : <span id="jumlahkgsdetailbarang2"></span>
                     </span>
                     <span>
-                        <a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].'/1'; ?>" id="tombolhitung" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
+                        <?php $tmb = ($datheader['jns_bc']==25 || $datheader['jns_bc']==41) ? '' : '/1'; ?>
+                        <a href="<?= base_url().'akb/hitungbomjf/'.$datheader['id'].$tmb; ?>" id="tombolhitung" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
                         <a href="#" data-href="<?= base_url().'akb/tambahkelampiran/'.$datheader['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" class="btn btn-sm btn-success"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
                         <span class="dropdown">
                             <button class="btn btn-sm btn-info" style="height: 32px;" data-bs-boundary="viewport" data-bs-toggle="dropdown"><i class="fa fa-chevron-down"></i></button>

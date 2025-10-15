@@ -664,7 +664,7 @@ class Ib extends CI_Controller
                     $this->session->set_flashdata('errorsimpan',2);
                     $this->session->set_flashdata('pesanerror','Respon sudah berhasil di Tarik');
                 }
-                if($headerib['jns_bc']=='40'){
+                if($headerib['jns_bc']=='40' || $headerib['jns_bc']=='23'){
                     $simpankehargamaterial = $this->ibmodel->simpankehargamaterial($id);
                 }
             }else{
