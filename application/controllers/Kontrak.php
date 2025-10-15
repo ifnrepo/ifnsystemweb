@@ -173,6 +173,7 @@ class Kontrak extends CI_Controller
     }
     public function viewdetail($id, $mode = 0)
     {
+        $this->session->set_userdata('sesikontrak_detail', $id);
         $data['header'] = $this->kontrakmodel->getdata($id)->row_array();
         $data['transaksi'] = $this->kontrakmodel->gettransaksikontrak($id);
         $data['totaljaminan'] = $this->kontrakmodel->getdatajaminan($data['header']['idheader'])->row_array();
@@ -187,6 +188,7 @@ class Kontrak extends CI_Controller
         $header = $this->kontrakmodel->getHeader_kontrak($sesi);
         $detail = $this->kontrakmodel->getDetail_kontrak($sesi);
         $terima = $this->kontrakmodel->getdatapengembalian($sesi);
+        $ttd = $this->kontrakmodel->get_Ttd($sesi);
 
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -198,7 +200,6 @@ class Kontrak extends CI_Controller
         $sheet->setCellValue('B3', 'UNTUK PENGEMBALIAN JAMINAN');
         $sheet->getStyle('B2:R3')->getFont()->setBold(true);
         $sheet->getStyle('B2:R3')->getAlignment()->setHorizontal('center');
-
 
         $sheet->mergeCells('G6:I6');
         $sheet->setCellValue('G6', 'Nama Perusahaan');
@@ -216,19 +217,11 @@ class Kontrak extends CI_Controller
         $sheet->setCellValue('G10', 'Jatuh Tempo Jaminan');
         $sheet->setCellValue('J10', ': ');
 
-
-
-        // $sheet->setCellValue('K6', $header['departemen']);
-        // $sheet->setCellValue('K7', $header['nomor_surat']);
-        // $sheet->setCellValue('K8', $header['tgl_surat']);
-        // $sheet->setCellValue('K9', $header['nomor_bpj']);
-        // $sheet->setCellValue('K10', $header['tgl_expired']);
-
-        $sheet->setCellValue('K6', '');
-        $sheet->setCellValue('K7', '');
-        $sheet->setCellValue('K8', '');
-        $sheet->setCellValue('K9', '');
-        $sheet->setCellValue('K10', '');
+        $sheet->setCellValue('K6', 'PT. INDONEPTUNE NET MANUCTURING');
+        $sheet->setCellValue('K7', $header['nomor_surat']);
+        $sheet->setCellValue('K8', $header['tgl_surat']);
+        $sheet->setCellValue('K9', $header['nomor_bpj']);
+        $sheet->setCellValue('K10', $header['tgl_expired']);
 
 
         $sheet->setCellValue('B12', 'PENGELUARAN SEMENTARA');
@@ -244,46 +237,92 @@ class Kontrak extends CI_Controller
         $rowOut = 14;
         $no = 1;
         $totalKgsOut = 0;
-        $ceknomor_bc = '';
 
         if (!empty($detail)) {
+            $grouped = [];
             foreach ($detail as $key) {
+                $nomor_bc = $key['nomor_bc'];
+                $tgl_bc = $key['tgl_bc'];
                 $sku = trim($key['po']) == '' ? $key['kode'] : (function_exists('viewsku') ? viewsku($key['po'], $key['item'], $key['dis']) : $key['kode']);
+                $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
+                $satuan = $key['satuan'] ?? 'PCS';
 
-                if ($key['nomor_bc'] == $ceknomor_bc) {
+                $group_key = $nomor_bc . '|' . $sku;
+                if (!isset($grouped[$group_key])) {
+                    $grouped[$group_key] = [
+                        'nomor_bc' => $nomor_bc,
+                        'tgl_bc' => $tgl_bc,
+                        'sku' => $sku,
+                        'spekbarang' => $spekbarang,
+                        'satuan' => $satuan,
+                        'total_kgs' => 0
+                    ];
+                }
+                $grouped[$group_key]['total_kgs'] += (float)$key['kgs'];
+            }
+
+
+            $ceknomor_bc = '';
+            foreach ($grouped as $row) {
+                if ($row['nomor_bc'] == $ceknomor_bc) {
                     $sheet->setCellValue("B{$rowOut}", '');
                     $sheet->setCellValue("C{$rowOut}", '');
                     $sheet->setCellValue("D{$rowOut}", '');
                 } else {
                     $sheet->setCellValue("B{$rowOut}", $no++);
-                    $sheet->setCellValue("C{$rowOut}", $key['nomor_bc']);
-                    $sheet->setCellValue("D{$rowOut}", $key['tgl_bc']);
+                    $sheet->setCellValue("C{$rowOut}", $row['nomor_bc']);
+                    $sheet->setCellValue("D{$rowOut}", $row['tgl_bc']);
                 }
 
-                $sheet->setCellValue("E{$rowOut}", $sku);
-                $sheet->setCellValue("F{$rowOut}", $key['nama_barang']);
-                $sheet->setCellValue("G{$rowOut}", $key['satuan'] ?? 'PCS');
+                $sheet->setCellValue("E{$rowOut}", $row['sku']);
+                $sheet->setCellValue("F{$rowOut}", html_entity_decode($row['spekbarang']));
+                $sheet->setCellValue("G{$rowOut}", $row['satuan']);
                 $sheet->setCellValue("H{$rowOut}", '-');
-                $sheet->setCellValue("I{$rowOut}", $key['kgs']);
+                $sheet->setCellValue("I{$rowOut}", $row['total_kgs']);
 
-                $totalKgsOut += (float)$key['kgs'];
-                $ceknomor_bc = $key['nomor_bc'];
+                $totalKgsOut += $row['total_kgs'];
+                $ceknomor_bc = $row['nomor_bc'];
                 $rowOut++;
             }
         }
 
-
-        $sheet->getStyle("E14:E{$rowOut}")->getAlignment()->setHorizontal('left');
         $sheet->mergeCells("B{$rowOut}:H{$rowOut}");
         $sheet->setCellValue("B{$rowOut}", 'Total');
-        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
         $sheet->setCellValue("I{$rowOut}", $totalKgsOut);
         $sheet->getStyle("B{$rowOut}:I{$rowOut}")->getFont()->setBold(true);
         $sheet->getStyle("I{$rowOut}")->getNumberFormat()->setFormatCode('#,##0.00');
         $sheet->getStyle("I14:I{$rowOut}")->getAlignment()->setHorizontal('right');
+        $sheet->getStyle("I14:I{$rowOut}")->getAlignment()->setHorizontal('right');
+        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+
+        $sheet->getStyle("C6:G{$rowOut}")
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT)
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+        $batasborderTable = $rowOut;
 
 
-        // pengemvalian
+        $rowOut += 2;
+        $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
+        $sheet->setCellValue("B{$rowOut}", 'PT. INDONEPTUNE NET MANUFACTURING');
+        $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+
+        $rowOut += 3;
+        $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
+        $sheet->setCellValue("B{$rowOut}", $ttd['tg_jawab']);
+        $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+
+        $rowOut++;
+        $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
+        $sheet->setCellValue("B{$rowOut}", $ttd['jabat_tg_jawab']);
+        $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+
+
+        //    PENGEMVALIAN
         $sheet->setCellValue('K12', 'PEMASUKAN KEMBALI');
         $sheet->getStyle('K12')->getFont()->setBold(true);
 
@@ -297,34 +336,54 @@ class Kontrak extends CI_Controller
         $rowIn = 14;
         $no = 1;
         $totalKgsIn = 0;
-        $ceknomor_bcmasuk = '';
 
-        if (!empty($terima) && is_object($terima) && $terima->num_rows() > 0) {
+        if (!empty($terima)) {
+            $groupedIn = [];
             foreach ($terima->result_array() as $trm) {
+                $nomor_bc = $trm['nomor_bc'];
+                $tgl_bc = $trm['tgl_bc'];
                 $sku = trim($trm['po']) == '' ? $trm['kode'] : (function_exists('viewsku') ? viewsku($trm['po'], $trm['item'], $trm['dis']) : $trm['kode']);
                 $spekbarang = trim($trm['po']) == '' ? namaspekbarang($trm['id_barang']) : spekpo($trm['po'], $trm['item'], $trm['dis']);
-                if ($trm['nomor_bc'] == $ceknomor_bcmasuk) {
+                $satuan = $trm['satuan'] ?? 'PCS';
+
+                $group_key = $nomor_bc . '|' . $sku;
+                if (!isset($groupedIn[$group_key])) {
+                    $groupedIn[$group_key] = [
+                        'nomor_bc' => $nomor_bc,
+                        'tgl_bc' => $tgl_bc,
+                        'sku' => $sku,
+                        'spekbarang' => $spekbarang,
+                        'satuan' => $satuan,
+                        'total_kgs' => 0
+                    ];
+                }
+                $groupedIn[$group_key]['total_kgs'] += (float)$trm['kgs'];
+            }
+
+            $ceknomor_bcmasuk = '';
+            foreach ($groupedIn as $row) {
+                if ($row['nomor_bc'] == $ceknomor_bcmasuk) {
                     $sheet->setCellValue("K{$rowIn}", '');
                     $sheet->setCellValue("L{$rowIn}", '');
                     $sheet->setCellValue("M{$rowIn}", '');
                 } else {
                     $sheet->setCellValue("K{$rowIn}", $no++);
-                    $sheet->setCellValue("L{$rowIn}", $trm['nomor_bc']);
-                    $sheet->setCellValue("M{$rowIn}", $trm['tgl_bc']);
+                    $sheet->setCellValue("L{$rowIn}", $row['nomor_bc']);
+                    $sheet->setCellValue("M{$rowIn}", $row['tgl_bc']);
                 }
 
-                $sheet->setCellValue("N{$rowIn}", $sku);
-                $sheet->setCellValue("O{$rowIn}",  $spekbarang);
-                $sheet->setCellValue("P{$rowIn}", $trm['satuan'] ?? 'PCS');
+                $sheet->setCellValue("N{$rowIn}", $row['sku']);
+                $sheet->setCellValue("O{$rowIn}", html_entity_decode($row['spekbarang']));
+                $sheet->setCellValue("P{$rowIn}", $row['satuan']);
                 $sheet->setCellValue("Q{$rowIn}", '-');
-                $sheet->setCellValue("R{$rowIn}", $trm['kgs']);
+                $sheet->setCellValue("R{$rowIn}", $row['total_kgs']);
 
-                $totalKgsIn += (float)$trm['kgs'];
-                $ceknomor_bcmasuk = $trm['nomor_bc'];
+                $totalKgsIn += $row['total_kgs'];
+                $ceknomor_bcmasuk = $row['nomor_bc'];
                 $rowIn++;
             }
         }
-        $sheet->getStyle("N14:N{$rowIn}")->getAlignment()->setHorizontal('left');
+
         $sheet->mergeCells("K{$rowIn}:Q{$rowIn}");
         $sheet->setCellValue("K{$rowIn}", 'TOTAL');
         $sheet->setCellValue("R{$rowIn}", $totalKgsIn);
@@ -333,22 +392,29 @@ class Kontrak extends CI_Controller
         $sheet->getStyle("R14:R{$rowIn}")->getAlignment()->setHorizontal('right');
         $sheet->getStyle("K{$rowIn}")->getAlignment()->setHorizontal('center');
 
+        $batasborderTable_in = $rowIn;
 
-        $sheet->getStyle("B13:I{$rowOut}")
-            ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-        $sheet->getStyle("K13:R{$rowIn}")
+        $rowIn += 2;
+        $sheet->mergeCells("K{$rowIn}:R{$rowIn}");
+        $sheet->setCellValue("K{$rowIn}", 'Mengetahui, Hanggar');
+        $sheet->getStyle("K{$rowIn}")->getFont()->setBold(true)->getColor()->setARGB('000000');
+        $sheet->getStyle("K{$rowIn}")->getAlignment()->setHorizontal('center');
+
+
+        $sheet->getStyle("B13:I{$batasborderTable}")
             ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
+        $sheet->getStyle("K13:R{$batasborderTable_in}")
+            ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
 
         $columns = [
-            'B' => 6, 'C' => 12, 'D' => 17, 'E' => 10, 'F' => 70, 'G' => 8, 'H' => 8, 'I' => 15, 'J' => 2,
-            'K' => 6, 'L' => 12, 'M' => 17, 'N' => 10, 'O' => 70, 'P' => 8, 'Q' => 8, 'R' => 15
+            'B' => 6, 'C' => 12, 'D' => 17, 'E' => 15, 'F' => 70, 'G' => 8, 'H' => 8, 'I' => 15, 'J' => 2,
+            'K' => 6, 'L' => 12, 'M' => 17, 'N' => 15, 'O' => 70, 'P' => 8, 'Q' => 8, 'R' => 15
         ];
         foreach ($columns as $col => $width) {
             $sheet->getColumnDimension($col)->setWidth($width);
         }
-
-        $filename = 'Realisasi Pengeluaran & Pemasukan' . date('Ymd') . '.xlsx';
+        $filename = 'Realisasi Pengeluaran & Pemasukan_' . date('Ymd') . '.xlsx';
         ob_end_clean();
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header("Content-Disposition: attachment; filename=\"$filename\"");
@@ -358,6 +424,163 @@ class Kontrak extends CI_Controller
         $writer->save('php://output');
         exit;
     }
+    public function excel_detail()
+    {
+        $this->load->model('kontrakmodel');
+        $datanya = $this->session->userdata('sesikontrak_detail');
+        $transaksi = $this->kontrakmodel->gettransaksikontrak($datanya);
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+
+        $sheet->mergeCells('B2:G2')->setCellValue('B2', 'REKAP MONITORING');
+        $sheet->getStyle('B2')->getFont()->setBold(true)->setSize(12);
+        $sheet->getStyle('B2')->getAlignment()->setHorizontal('left');
+
+
+        $headers = ["X", "SKU", "NAMA BARANG", "SATUAN", "PCS OUT", "KGS OUT", "PCS IN", "KGS IN", "SALDO PCS", "SALDO KGS"];
+        $col = 'B';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . '5', $header);
+            $col++;
+        }
+
+
+        foreach (range('B', 'K') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+
+        $sheet->getStyle('B5:K5')->applyFromArray([
+            'font' => ['bold' => true],
+            'alignment' => [
+                'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
+                'vertical' => \PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER,
+            ],
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                ],
+            ],
+            'fill' => [
+                'fillType' => \PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID,
+                'startColor' => ['argb' => 'FFD9D9D9'],
+            ],
+        ]);
+
+
+        $jumkgskirim = $jumpcskirim = $jumkgsterima = $jumpcsterima = 0;
+        $kodmas = '';
+        $saldokgs = $saldopcs = 0;
+        $numrow = 6;
+
+        foreach ($transaksi->result_array() as $transaksi) {
+            $kirter = $transaksi['kirter'] == 0 ? 'OUT' : 'IN';
+            $sku = trim($transaksi['po']) == '' ? $transaksi['kode'] : viewsku($transaksi['po'], $transaksi['item'], $transaksi['dis']);
+            $spekbarang = trim($transaksi['po']) == '' ? namaspekbarang($transaksi['id_barang']) : spekpo($transaksi['po'], $transaksi['item'], $transaksi['dis']);
+
+
+            if ($transaksi['kirter'] == 0) {
+                $jumkgskirim += round($transaksi['kgsx'], 2);
+                $jumpcskirim += $transaksi['pcsx'];
+            } else {
+                $jumkgsterima += round($transaksi['kgsx'], 2);
+                $jumpcsterima += $transaksi['pcsx'];
+            }
+
+
+            $indexkode = $transaksi['po'] . $transaksi['item'] . $transaksi['dis'] . $transaksi['id_barang'];
+            if ($kodmas == $indexkode) {
+                if ($transaksi['kirter'] == 0) {
+                    $saldokgs += round($transaksi['kgsx'], 2);
+                    $saldopcs += $transaksi['pcsx'];
+                } else {
+                    $saldokgs -= round($transaksi['kgsx'], 2);
+                    $saldopcs -= $transaksi['pcsx'];
+                }
+            } else {
+                $saldokgs = round($transaksi['kgsx'], 2);
+                $saldopcs = $transaksi['pcsx'];
+            }
+            $kodmas = $indexkode;
+
+
+            $sheet->setCellValue("B{$numrow}", $kirter);
+            $sheet->setCellValue("C{$numrow}", $sku);
+            $sheet->setCellValue("D{$numrow}", html_entity_decode($spekbarang) . ' # ' . $transaksi['insno']);
+            $sheet->setCellValue("E{$numrow}", '');
+            if ($transaksi['kirter'] == 0) {
+                $sheet->setCellValue("F{$numrow}", $transaksi['pcsx']);
+                $sheet->setCellValue("G{$numrow}", round($transaksi['kgsx'], 2));
+                $sheet->setCellValue("H{$numrow}", 0);
+                $sheet->setCellValue("I{$numrow}", 0);
+            } else {
+                $sheet->setCellValue("F{$numrow}", 0);
+                $sheet->setCellValue("G{$numrow}", 0);
+                $sheet->setCellValue("H{$numrow}", $transaksi['pcsx']);
+                $sheet->setCellValue("I{$numrow}", round($transaksi['kgsx'], 2));
+            }
+            $sheet->setCellValue("J{$numrow}", $saldopcs);
+            $sheet->setCellValue("K{$numrow}", $saldokgs);
+
+
+            if ($kirter == 'IN') {
+                $sheet->getStyle("B{$numrow}")->getFont()->getColor()->setRGB('FF1493');
+            } else {
+                $sheet->getStyle("B{$numrow}")->getFont()->getColor()->setRGB('008000');
+            }
+
+            $numrow++;
+        }
+
+
+        $sheet->setCellValue("E{$numrow}", "TOTAL");
+        $sheet->setCellValue("F{$numrow}", $jumpcskirim);
+        $sheet->setCellValue("G{$numrow}", $jumkgskirim);
+        $sheet->setCellValue("H{$numrow}", $jumpcsterima);
+        $sheet->setCellValue("I{$numrow}", $jumkgsterima);
+        $sheet->setCellValue("J{$numrow}", $jumpcskirim - $jumpcsterima);
+        $sheet->setCellValue("K{$numrow}", $jumkgskirim - $jumkgsterima);
+
+
+        $sheet->getStyle("E{$numrow}:K{$numrow}")->getFont()->setBold(true);
+
+
+        $sheet->getStyle("B5:K{$numrow}")->applyFromArray([
+            'borders' => [
+                'allBorders' => [
+                    'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,
+                    'color' => ['argb' => 'FF000000'],
+                ],
+            ],
+        ]);
+
+
+        $sheet->getStyle("B6:E{$numrow}")
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT);
+        $sheet->getStyle("F6:K{$numrow}")
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+
+        $sheet->getStyle("F6:K{$numrow}")
+            ->getNumberFormat()->setFormatCode('#,##0.00');
+
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="LAPORAN MONITORING.xlsx"');
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+        $writer->save('php://output');
+    }
+
+
+
+
+
 
     public function simpankedatabase()
     {

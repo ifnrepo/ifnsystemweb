@@ -4,13 +4,13 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label"><i>Nomor/Tgl Kontrak</i> </label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil btn-flat" value="<?= $header['nomor'].' Tgl.'.tglmysql($header['tgl']) ?>" disabled>
+                    <input type="text" class="form-control font-kecil btn-flat" value="<?= $header['nomor'] . ' Tgl.' . tglmysql($header['tgl']) ?>" disabled>
                 </div>
             </div>
             <div class="mb-1 row">
                 <label class="col-3 col-form-label"><i>Tgl Berlaku</i> </label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil btn-flat" value="<?= tglmysql($header['tgl_awal']).' s/d '.tglmysql($header['tgl_akhir']) ?>" disabled>
+                    <input type="text" class="form-control font-kecil btn-flat" value="<?= tglmysql($header['tgl_awal']) . ' s/d ' . tglmysql($header['tgl_akhir']) ?>" disabled>
                 </div>
             </div>
             <div class="mb-1 row">
@@ -20,13 +20,13 @@
                         <div class="mb-1 row pr-0">
                             <label class="col-3 col-form-label"><i>Qty</i> </label>
                             <div class="col pr-0">
-                                <input type="text" class="form-control font-kecil text-right btn-flat" value="<?= rupiah($header['pcs'],0) ?>" disabled>
+                                <input type="text" class="form-control font-kecil text-right btn-flat" value="<?= rupiah($header['pcs'], 0) ?>" disabled>
                             </div>
                         </div>
                         <div class="mb-1 row pr-0">
                             <label class="col-3 col-form-label"><i>Kgs</i> </label>
                             <div class="col pr-0">
-                                <input type="text" class="form-control font-kecil text-right btn-flat" value="<?= rupiah($header['kgs'],2) ?>" disabled>
+                                <input type="text" class="form-control font-kecil text-right btn-flat" value="<?= rupiah($header['kgs'], 2) ?>" disabled>
                             </div>
                         </div>
                     </div>
@@ -54,19 +54,27 @@
                     <td class="text-right" id="inkgs">...</td>
                     <td class="text-right" id="saldopcs">...</td>
                     <td class="text-right" id="saldokgs">...</td>
-                    
+
                 </tr>
             </tbody>
         </table>
         <hr class="m-1">
-        <ul class="nav nav-tabs card-header-tabs font-kecil" data-bs-toggle="tabs">
-            <li class="nav-item">
-                <a href="#tabs-rekap" class="nav-link bg-primary-lt active btn-flat text-black" data-bs-toggle="tab">Rekap Monitoring</a>
-            </li>
-            <li class="nav-item">
-                <a href="#tabs-jamin" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Perhitungan Jaminan</a>
-            </li>
-        </ul>
+        <div class="row">
+            <div class="col-md-6">
+                <ul class="nav nav-tabs card-header-tabs font-kecil" data-bs-toggle="tabs">
+                    <li class="nav-item">
+                        <a href="#tabs-rekap" class="nav-link bg-primary-lt active btn-flat text-black" data-bs-toggle="tab">Rekap Monitoring</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#tabs-jamin" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Perhitungan Jaminan</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="col-md-6" style="text-align: right;">
+                <a href="<?= base_url() . 'kontrak/excel_detail'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export To Excel</span></a>
+            </div>
+        </div>
+
         <div class="tab-content">
             <div class="tab-pane fade active show p-2" id="tabs-rekap">
                 <div class="card-body">
@@ -88,86 +96,88 @@
                                 </tr>
                             </thead>
                             <tbody class=" table-tbody" style="font-size: 13px !important;">
-                            <?php 
-                                $no=0;
-                                $jumkgskirim =0;$jumpcskirim=0;
-                                $jumkgsterima =0;$jumpcsterima=0;
+                                <?php
+                                $no = 0;
+                                $jumkgskirim = 0;
+                                $jumpcskirim = 0;
+                                $jumkgsterima = 0;
+                                $jumpcsterima = 0;
                                 $kodmas = '';
                                 $saldokgs = 0;
                                 $saldopcs = 0;
                                 $warnawarni = '';
                                 $arrno = [];
-                                foreach($transaksi->result_array() as $transaksix){ 
+                                foreach ($transaksi->result_array() as $transaksix) {
                                     $no++;
-                                    $indexkode = $transaksix['po'].$transaksix['item'].$transaksix['dis'].$transaksix['id_barang']; //.$transaksi['insno'];
-                                    if($kodmas != $indexkode){
-                                        array_push($arrno,$no-1);
+                                    $indexkode = $transaksix['po'] . $transaksix['item'] . $transaksix['dis'] . $transaksix['id_barang']; //.$transaksi['insno'];
+                                    if ($kodmas != $indexkode) {
+                                        array_push($arrno, $no - 1);
                                     }
                                     $kodmas = $indexkode;
                                 }
-                                array_push($arrno,$no);
+                                array_push($arrno, $no);
                                 $kodmas = '';
-                                $no=0;
-                                foreach($transaksi->result_array() as $transaksi){ 
+                                $no = 0;
+                                foreach ($transaksi->result_array() as $transaksi) {
                                     $no++;
-                                    if($transaksi['kirter']==0){
-                                        $jumkgskirim += round($transaksi['kgsx'],2);
+                                    if ($transaksi['kirter'] == 0) {
+                                        $jumkgskirim += round($transaksi['kgsx'], 2);
                                         $jumpcskirim += $transaksi['pcsx'];
-                                    }else{
-                                        $jumkgsterima += round($transaksi['kgsx'],2);
+                                    } else {
+                                        $jumkgsterima += round($transaksi['kgsx'], 2);
                                         $jumpcsterima += $transaksi['pcsx'];
                                     }
-                                    $indexkode = $transaksi['po'].$transaksi['item'].$transaksi['dis'].$transaksi['id_barang']; //.$transaksi['insno'];
-                                    $bold = in_array($no,$arrno) ? 'font-bold text-pink' : '';
-                                    if($kodmas == $indexkode){
-                                        if($transaksi['kirter']==0){
-                                            $saldokgs += round($transaksi['kgsx'],2);
+                                    $indexkode = $transaksi['po'] . $transaksi['item'] . $transaksi['dis'] . $transaksi['id_barang']; //.$transaksi['insno'];
+                                    $bold = in_array($no, $arrno) ? 'font-bold text-pink' : '';
+                                    if ($kodmas == $indexkode) {
+                                        if ($transaksi['kirter'] == 0) {
+                                            $saldokgs += round($transaksi['kgsx'], 2);
                                             $saldopcs += $transaksi['pcsx'];
-                                        }else{
-                                            $saldokgs -= round($transaksi['kgsx'],2);
+                                        } else {
+                                            $saldokgs -= round($transaksi['kgsx'], 2);
                                             $saldopcs -= $transaksi['pcsx'];
                                         }
-                                    }else{
-                                        $saldokgs = round($transaksi['kgsx'],2);
+                                    } else {
+                                        $saldokgs = round($transaksi['kgsx'], 2);
                                         $saldopcs = $transaksi['pcsx'];
                                         // $bold = 'font-bold';
-                                        $warnawarni = $warnawarni=='' ? 'bg-primary-lt' : '';
+                                        $warnawarni = $warnawarni == '' ? 'bg-primary-lt' : '';
                                     }
                                     $kodmas = $indexkode;
-                                    $kirter = $transaksi['kirter']==0 ? 'OUT' : 'IN';
-                                    $warnakirter = $transaksi['kirter']==0 ? 'text-teal' : 'text-pink';
-                                    $sku = trim($transaksi['po'])=='' ? $transaksi['kode'] : viewsku($transaksi['po'],$transaksi['item'],$transaksi['dis']);
-                                    $spekbarang = trim($transaksi['po'])=='' ? namaspekbarang($transaksi['id_barang']) : spekpo($transaksi['po'],$transaksi['item'],$transaksi['dis']);
-                            ?>
-                                <tr class="<?= $warnawarni ?> text-primary font-kecil">
-                                    <td class="<?= $warnakirter ?>"><?= $kirter ?></td>
-                                    <td><?= $sku ?></td>
-                                    <td class="line-12"><?= $spekbarang ?><br><span class="text-teal font-11"><?= $transaksi['insno'] ?></span></td>
-                                    <td></td>
-                                    <?php if($transaksi['kirter']==0){ ?>
-                                        <td class="text-right"><?= rupiah($transaksi['pcsx'],0) ?></td>
-                                        <td class="text-right"><?= rupiah($transaksi['kgsx'],2) ?></td>
-                                        <td class="text-right"><?= rupiah(0,0) ?></td>
-                                        <td class="text-right"><?= rupiah(0,2) ?></td>
-                                    <?php }else{ ?>
-                                        <td class="text-right"><?= rupiah(0,0) ?></td>
-                                        <td class="text-right"><?= rupiah(0,2) ?></td>
-                                        <td class="text-right"><?= rupiah($transaksi['pcsx'],0) ?></td>
-                                        <td class="text-right"><?= rupiah($transaksi['kgsx'],2) ?></td>
-                                    <?php } ?>
-                                    <td class="text-right <?= $bold ?>"><?= rupiah($saldopcs,0) ?></td>
-                                    <td class="text-right <?= $bold ?>"><?= rupiah($saldokgs,2) ?></td>
+                                    $kirter = $transaksi['kirter'] == 0 ? 'OUT' : 'IN';
+                                    $warnakirter = $transaksi['kirter'] == 0 ? 'text-teal' : 'text-pink';
+                                    $sku = trim($transaksi['po']) == '' ? $transaksi['kode'] : viewsku($transaksi['po'], $transaksi['item'], $transaksi['dis']);
+                                    $spekbarang = trim($transaksi['po']) == '' ? namaspekbarang($transaksi['id_barang']) : spekpo($transaksi['po'], $transaksi['item'], $transaksi['dis']);
+                                ?>
+                                    <tr class="<?= $warnawarni ?> text-primary font-kecil">
+                                        <td class="<?= $warnakirter ?>"><?= $kirter ?></td>
+                                        <td><?= $sku ?></td>
+                                        <td class="line-12"><?= $spekbarang ?><br><span class="text-teal font-11"><?= $transaksi['insno'] ?></span></td>
+                                        <td></td>
+                                        <?php if ($transaksi['kirter'] == 0) { ?>
+                                            <td class="text-right"><?= rupiah($transaksi['pcsx'], 0) ?></td>
+                                            <td class="text-right"><?= rupiah($transaksi['kgsx'], 2) ?></td>
+                                            <td class="text-right"><?= rupiah(0, 0) ?></td>
+                                            <td class="text-right"><?= rupiah(0, 2) ?></td>
+                                        <?php } else { ?>
+                                            <td class="text-right"><?= rupiah(0, 0) ?></td>
+                                            <td class="text-right"><?= rupiah(0, 2) ?></td>
+                                            <td class="text-right"><?= rupiah($transaksi['pcsx'], 0) ?></td>
+                                            <td class="text-right"><?= rupiah($transaksi['kgsx'], 2) ?></td>
+                                        <?php } ?>
+                                        <td class="text-right <?= $bold ?>"><?= rupiah($saldopcs, 0) ?></td>
+                                        <td class="text-right <?= $bold ?>"><?= rupiah($saldokgs, 2) ?></td>
+                                    </tr>
+                                <?php  } ?>
+                                <tr>
+                                    <td colspan="4" class="font-bold text-center">TOTAL</td>
+                                    <td class="text-right font-bold text-teal" id="outpcsx"><?= rupiah($jumpcskirim, 0) ?></td>
+                                    <td class="text-right font-bold text-teal" id="outkgsx"><?= rupiah($jumkgskirim, 2) ?></td>
+                                    <td class="text-right font-bold text-pink" id="inpcsx"><?= rupiah($jumpcsterima, 0) ?></td>
+                                    <td class="text-right font-bold text-pink" id="inkgsx"><?= rupiah($jumkgsterima, 2) ?></td>
+                                    <td class="text-right font-bold" id="saldopcsx"><?= rupiah($jumpcskirim - $jumpcsterima, 0) ?></td>
+                                    <td class="text-right font-bold" id="saldokgsx"><?= rupiah($jumkgskirim - $jumkgsterima, 2) ?></td>
                                 </tr>
-                            <?php  } ?>
-                            <tr>
-                                <td colspan="4" class="font-bold text-center">TOTAL</td>
-                                <td class="text-right font-bold text-teal" id="outpcsx"><?= rupiah($jumpcskirim,0) ?></td>
-                                <td class="text-right font-bold text-teal" id="outkgsx"><?= rupiah($jumkgskirim,2) ?></td>
-                                <td class="text-right font-bold text-pink" id="inpcsx"><?= rupiah($jumpcsterima,0) ?></td>
-                                <td class="text-right font-bold text-pink" id="inkgsx"><?= rupiah($jumkgsterima,2) ?></td>
-                                <td class="text-right font-bold" id="saldopcsx"><?= rupiah($jumpcskirim-$jumpcsterima,0) ?></td>
-                                <td class="text-right font-bold" id="saldokgsx"><?= rupiah($jumkgskirim-$jumkgsterima,2) ?></td>
-                            </tr>
                             </tbody>
                         </table>
                     </div>
@@ -188,12 +198,12 @@
                         </thead>
                         <tbody class=" table-tbody" style="font-size: 12px !important;">
                             <tr>
-                                <td class="font-bold"><?= $totaljaminan['nomor_bc'].' Tgl.'.tglmysql($totaljaminan['tgl_bc']) ?></td>
-                                <td class="text-right"  id="pcskirim"></td>
-                                <td class="text-right"  id="kgskirim"></td>
-                                <td class="text-right"><?= rupiah($totaljaminan['cifrupiah'],2); ?></td>
+                                <td class="font-bold"><?= $totaljaminan['nomor_bc'] . ' Tgl.' . tglmysql($totaljaminan['tgl_bc']) ?></td>
+                                <td class="text-right" id="pcskirim"></td>
+                                <td class="text-right" id="kgskirim"></td>
+                                <td class="text-right"><?= rupiah($totaljaminan['cifrupiah'], 2); ?></td>
                                 <?php $ndpbm = isset($totaljaminan['ndpbm']) ? $totaljaminan['ndpbm'] : 1;  ?>
-                                <td class="text-right" id="cifrup"><?= rupiah($totaljaminan['cifrupiah']/$ndpbm,2) ?></td>
+                                <td class="text-right" id="cifrup"><?= rupiah($totaljaminan['cifrupiah'] / $ndpbm, 2) ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -208,18 +218,18 @@
                             </tr>
                         </thead>
                         <tbody class=" table-tbody" style="font-size: 12px !important;">
-                            <?php 
-                                $cifterima=0; 
-                                foreach($terima->result_array() as $terima){ 
-                                    $cifterima += $terima['cifnya'];  
-                                    $ket = $terima['tgl_bc']=='' ? '' : ' Tgl.'.tglmysql($terima['tgl_bc']);
+                            <?php
+                            $cifterima = 0;
+                            foreach ($terima->result_array() as $terima) {
+                                $cifterima += $terima['cifnya'];
+                                $ket = $terima['tgl_bc'] == '' ? '' : ' Tgl.' . tglmysql($terima['tgl_bc']);
                             ?>
                                 <tr>
-                                    <td><?= $terima['nomor_bc'].$ket; ?></td>
+                                    <td><?= $terima['nomor_bc'] . $ket; ?></td>
                                     <td class="text-right"><?= $terima['pcs']; ?></td>
                                     <td class="text-right"><?= $terima['kgs']; ?></td>
-                                    <td class="text-right"><?= rupiah($terima['cifnya']*$terima['exbc_ndpbm'],2); ?></td>
-                                    <td class="text-right"><?= rupiah($terima['cifnya'],2); ?></td>
+                                    <td class="text-right"><?= rupiah($terima['cifnya'] * $terima['exbc_ndpbm'], 2); ?></td>
+                                    <td class="text-right"><?= rupiah($terima['cifnya'], 2); ?></td>
                                 </tr>
                             <?php }; ?>
                             <tr>
@@ -227,7 +237,7 @@
                             </tr>
                             <tr>
                                 <td colspan="4" class="text-center font-bold">SISA CIF</td>
-                                <td id="sisanya" class="font-bold text-right"><?= rupiah(($totaljaminan['cifrupiah']/$ndpbm)-$cifterima,2) ?></td>
+                                <td id="sisanya" class="font-bold text-right"><?= rupiah(($totaljaminan['cifrupiah'] / $ndpbm) - $cifterima, 2) ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -239,7 +249,7 @@
 <hr class="m-0">
 
 <script>
-    $(document).ready(function(){
+    $(document).ready(function() {
         $("#outpcs").text($("#outpcsx").text());
         $("#outkgs").text($("#outkgsx").text());
         $("#inpcs").text($("#inpcsx").text());
