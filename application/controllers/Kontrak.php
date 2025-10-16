@@ -186,7 +186,7 @@ class Kontrak extends CI_Controller
         $this->load->model('kontrakmodel');
         $sesi = $this->session->userdata('sesikontrak');
         $header = $this->kontrakmodel->getHeader_kontrak($sesi);
-        $detail = $this->kontrakmodel->getDetail_kontrak($sesi);
+        $detail = $this->kontrakmodel->getDetail_kontrak_ex($sesi);
         $terima = $this->kontrakmodel->getdatapengembalian($sesi);
         $ttd = $this->kontrakmodel->get_Ttd($sesi);
 
@@ -227,7 +227,7 @@ class Kontrak extends CI_Controller
         $sheet->setCellValue('B12', 'PENGELUARAN SEMENTARA');
         $sheet->getStyle('B12')->getFont()->setBold(true);
 
-        $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCS', 'KGS'], NULL, 'B13');
+        $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCE', 'KGM'], NULL, 'B13');
         $sheet->getStyle('B13:I13')->getFont()->setBold(true);
         $sheet->getStyle('B13:I13')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('B13:I13')->getFill()
@@ -245,7 +245,7 @@ class Kontrak extends CI_Controller
                 $tgl_bc = $key['tgl_bc'];
                 $sku = trim($key['po']) == '' ? $key['kode'] : (function_exists('viewsku') ? viewsku($key['po'], $key['item'], $key['dis']) : $key['kode']);
                 $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
-                $satuan = $key['satuan'] ?? 'PCS';
+                $satuan = $key['satuan'] ?? 'PCE';
 
                 $group_key = $nomor_bc . '|' . $sku;
                 if (!isset($grouped[$group_key])) {
@@ -326,7 +326,7 @@ class Kontrak extends CI_Controller
         $sheet->setCellValue('K12', 'PEMASUKAN KEMBALI');
         $sheet->getStyle('K12')->getFont()->setBold(true);
 
-        $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCS', 'KGS'], NULL, 'K13');
+        $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCE', 'KGM'], NULL, 'K13');
         $sheet->getStyle('K13:R13')->getFont()->setBold(true);
         $sheet->getStyle('K13:R13')->getAlignment()->setHorizontal('center');
         $sheet->getStyle('K13:R13')->getFill()
@@ -344,7 +344,7 @@ class Kontrak extends CI_Controller
                 $tgl_bc = $trm['tgl_bc'];
                 $sku = trim($trm['po']) == '' ? $trm['kode'] : (function_exists('viewsku') ? viewsku($trm['po'], $trm['item'], $trm['dis']) : $trm['kode']);
                 $spekbarang = trim($trm['po']) == '' ? namaspekbarang($trm['id_barang']) : spekpo($trm['po'], $trm['item'], $trm['dis']);
-                $satuan = $trm['satuan'] ?? 'PCS';
+                $satuan = $trm['satuan'] ?? 'PCE';
 
                 $group_key = $nomor_bc . '|' . $sku;
                 if (!isset($groupedIn[$group_key])) {

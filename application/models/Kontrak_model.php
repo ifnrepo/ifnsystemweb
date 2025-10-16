@@ -171,11 +171,37 @@ class Kontrak_model extends CI_Model
         $this->db->order_by('tb_detail.seri_urut_akb');
         return $this->db->get()->result_array();
     }
+    public function getDetail_kontrak_ex($sesi)
+    {
+        $this->db->select("tb_detail.*,tb_header.*, barang.nama_barang, satuan.kodebc,barang.kode");
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+        $this->db->where('tb_header.id_kontrak', $sesi);
+        $this->db->where('tb_header.send_ceisa', 1);
+        $this->db->order_by('tb_detail.seri_urut_akb');
+        return $this->db->get()->result_array();
+    }
 
     public function getdatapengembalian($id)
     {
         $header = $this->db->get_where('tb_header', ['id_kontrak' => $id])->row_array();
         $this->db->select('tb_detail.*,sum(round(tb_detail.kgs,2)) as kgs,sum(round(tb_detail.pcs,2)) as pcs,tb_header.tgl,tb_header.nomor_dok,tb_header.nomor_bc,tb_header.tgl_bc,tb_header.jns_bc,barang.kode,satuan.kodesatuan');
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+        $this->db->where('tb_header.exnomor_bc', $header['nomor_bc']);
+        $this->db->where('tb_header.send_ceisa', 1);
+        $this->db->where('tb_header.nomor_bc != ""');
+        $this->db->group_by('tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_detail.insno');
+        return $this->db->get();
+    }
+    public function getdatapengembalian_ex($id)
+    {
+        $header = $this->db->get_where('tb_header', ['id_kontrak' => $id])->row_array();
+        $this->db->select('tb_detail.*,sum(round(tb_detail.kgs,2)) as kgs,sum(round(tb_detail.pcs,2)) as pcs,tb_header.tgl,tb_header.nomor_dok,tb_header.nomor_bc,tb_header.tgl_bc,tb_header.jns_bc,barang.kode,satuan.kodebc');
         $this->db->from('tb_detail');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
