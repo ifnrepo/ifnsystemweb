@@ -182,10 +182,24 @@ class Po extends CI_Controller
         $hasil = $this->pomodel->updatehargadetail($kondisi);
         echo $hasil;
     }
+    public function updateadditional()
+    {
+        $data = [
+            'id' => $_POST['id'],
+            'ketongkir_jasa' => ucwords(strtolower($_POST['addi'])),
+            'ongkir_jasa' => toAngka($_POST['jumaddi'])
+        ];
+        $simpan = $this->pomodel->updatepo($data);
+        echo $simpan;
+    }
 
     public function edittgl()
     {
         $this->load->view('po/edit_tgl');
+    }
+    public function editongkir()
+    {
+        $this->load->view('po/edit_ongkir');
     }
     public function editsupplier()
     {

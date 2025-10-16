@@ -91,6 +91,9 @@
                             <li> <?= $header['catatan1']; ?></li>
                             <li> <?= $header['catatan2']; ?></li>
                             <li> <?= $header['catatan3']; ?></li>
+                            <li> <?= $header['catatan4']; ?></li>
+                            <li> <?= $header['catatan5']; ?></li>
+                            <li> <?= $header['catatan6']; ?></li>
                         </ul>
                     </div>
                     <div class="col-sm-3 text-right">

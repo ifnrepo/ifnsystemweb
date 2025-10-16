@@ -21,7 +21,7 @@ class Po_model extends CI_Model
     }
     public function getdatabyid($kode)
     {
-        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,catatan_po.header_po,catatan_po.catatan1,catatan_po.catatan2,catatan_po.catatan3,term_payment.detail as detterm,ref_mt_uang.mt_uang');
+        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,catatan_po.header_po,catatan_po.catatan1,catatan_po.catatan2,catatan_po.catatan3,catatan_po.catatan4,catatan_po.catatan5,catatan_po.catatan6,term_payment.detail as detterm,ref_mt_uang.mt_uang');
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
         $this->db->join('supplier', 'supplier.id=tb_header.id_pemasok', 'left');
         $this->db->join('catatan_po', 'catatan_po.id_header=tb_header.id', 'left');
@@ -77,7 +77,10 @@ class Po_model extends CI_Model
         $this->helpermodel->isilog($this->db->last_query());
         $catatan = [
          'id_header' => $hasil,
-         'header_po' => 'Berdasarkan surat penawaran dari [namasupplier] tanggal [tgl], maka kami memesan barang-barang sebagai berikut :'
+         'header_po' => 'Berdasarkan surat penawaran dari [namasupplier] tanggal [tgl], maka kami memesan barang-barang sebagai berikut :',
+         'catatan1' => 'Pesanan dikirim ke PT. Indoneptune Net Manufacturing, Jl. Raya Bandung-Garut Km.25 Rancaekek',
+         'catatan2' => 'Pembayaran 1 (satu) bulan setelah barang di terima',
+         'catatan3' => 'Setiap Supplier wajib mentaati aturan K3LH dari PT. Indoneptune Net Manufacturing',
         ];
         $this->db->insert('catatan_po', $catatan);
         $this->db->trans_complete();

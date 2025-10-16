@@ -131,52 +131,64 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div class="row">
-          <div class="col-8">
+          <div class="col-7">
             <p class="mb-1">Catatan :</p>
             <input type="text" class="form-control" id="catatan1" aria-label="Text input with dropdown button" placeholder="Catatan 1" value="<?= $data['catatan1']; ?>">
             <input type="text" class="form-control mt-1" id="catatan2" aria-label="Text input with dropdown button" placeholder="Catatan 2" value="<?= $data['catatan2']; ?>">
-            <input type="text" class="form-control mt-1" id="catatan3" aria-label="Text input with dropdown button" placeholder="Catatan 2" value="<?= $data['catatan3']; ?>">
+            <input type="text" class="form-control mt-1" id="catatan3" aria-label="Text input with dropdown button" placeholder="Catatan 3" value="<?= $data['catatan3']; ?>">
+            <input type="text" class="form-control mt-1" id="catatan4" aria-label="Text input with dropdown button" placeholder="Catatan 4" value="<?= $data['catatan4']; ?>">
+            <input type="text" class="form-control mt-1" id="catatan5" aria-label="Text input with dropdown button" placeholder="Catatan 5" value="<?= $data['catatan5']; ?>">
+            <input type="text" class="form-control mt-1" id="catatan6" aria-label="Text input with dropdown button" placeholder="Catatan 6" value="<?= $data['catatan6']; ?>">
           </div>
           <!-- <div class="col-4"></div> -->
-          <div class="col-4">
+          <div class="col-5">
             <div class="row mt-1">
-              <label class="col-3 col-form-label">Jumlah</label>
+              <label class="col-6 col-form-label text-right">Jumlah</label>
               <div class="col">
                 <input type="text" class="form-control font-bold text-right" id="totalharga" aria-label="Text input with dropdown button" placeholder="Jumlah" value="" readonly>
               </div>
             </div>
             <div class="row mt-1">
-              <label class="col-3 col-form-label">Diskon</label>
+              <label class="col-6 col-form-label text-right">Diskon</label>
               <div class="col">
                 <input type="text" class="form-control inputangka text-right" id="diskon" placeholder="Diskon" value="<?= rupiah($data['diskon'],2); ?>" >
               </div>
             </div>
             <div class="row mt-1">
-              <label class="col-3 col-form-label">DPP</label>
+              <label class="col-6 col-form-label text-right">DPP</label>
               <div class="col">
                 <input type="text" class="form-control font-bold text-right" id="total" aria-label="Text input with dropdown button" placeholder="DPP" value="" readonly>
               </div>
             </div>
             <div class="row mt-1">
-              <label class="col-3 col-form-label">% PPN</label>
+              <label class="col-6 col-form-label text-right">% PPN</label>
               <div class="col">
                 <input type="text" class="form-control inputangka text-right" id="cekppn" aria-label="Text input with dropdown button" placeholder="Persentase PPN" value="<?= rupiah($data['cekppn'],2); ?>">
               </div>
             </div>
             <div class="row mt-1">
-              <label class="col-3 col-form-label">Nilai PPN</label>
+              <label class="col-6 col-form-label text-right">Nilai PPN</label>
               <div class="col">
                 <input type="text" class="form-control font-bold text-right" id="hargappn" aria-label="Text input with dropdown button" placeholder="Total PPN" value="<?= rupiah($data['ppn'],2); ?>" readonly>
               </div>
             </div>
             <div class="row mt-1">
-              <label class="col-3 col-form-label">PPH</label>
+              <label class="col-6 col-form-label text-right">PPH</label>
               <div class="col">
                 <input type="text" class="form-control inputangka text-right" id="pph" aria-label="Text input with dropdown button" placeholder="Total PPH" value="<?= rupiah($data['pph'],2); ?>">
               </div>
             </div>
             <div class="row mt-1">
-              <label class="col-3 col-form-label">TOTAL</label>
+              <label class="col-6 col-form-label text-right" id="ketongkir_jasa"><?= $data['ketongkir_jasa'] ?></label>
+              <div class="col">
+                <div class="input-group">
+                  <input type="text" class="form-control inputangka text-right" id="ongkir_jasa" placeholder="Total Additional" value="<?= rupiah($data['ongkir_jasa'],2); ?>" readonly>
+                  <a href="<?= base_url() . 'po/editongkir'; ?>" class="btn btn-primary" title="Add Additional" id="tglpo" name="tglpo" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Additional"><i class="fa fa-plus"></i></a>
+                </div>
+              </div>
+            </div>
+            <div class="row mt-1">
+              <label class="col-6 col-form-label text-right">TOTAL</label>
               <div class="col">
                 <input type="text" class="form-control font-bold text-right" id="jumlah" aria-label="Text input with dropdown button" placeholder="Total" value="" readonly>
               </div>
