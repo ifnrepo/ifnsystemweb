@@ -1826,6 +1826,336 @@ class Akb extends CI_Controller
         // echo '<pre>'.json_encode($arrayheader)."</pre>";
         $this->kirim261($arrayheader, $id);
     }
+    function kirimdatakeceisa25($id)
+    {
+        $data = $this->akbmodel->getdatabyid($id);
+        $datakon = $this->akbmodel->getdatakontainer($id);
+        $noaju = isikurangnol($data['jns_bc']) . '010017' . str_replace('-', '', $data['tgl_aju']) . $data['nomor_aju'];
+        $kurs = $data['kurs_usd']; //$data['mtuang']==2 ? $data['kurs_usd'] : ($data['mtuang']==3 ? $data['kurs_yen'] : $data['kurs_idr']);
+        $kurssekarang = getkurssekarang($data['tgl_aju'])->row_array();
+        $arrayheader = [
+            "asalData" => "S",
+            "bruto" => (float) $data['bruto'],
+            "cif" => (float) $data['cif'],
+            "disclaimer" => "1",
+            "hargaPenyerahan" => (float) $data['nilai_serah'],
+            "idPengguna" => "",
+            "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
+            "jumlahKontainer" => $datakon->num_rows(),
+            "kodeCaraBayar" => "1",
+            "kodeDokumen" => $data['jns_bc'],
+            "kodeJenisTpb" => "1",
+            "kodeKantor" => "050500",
+            "kodeLokasiBayar" => "1",
+            "kodeTujuanPengiriman" => "5",
+            "kodeValuta" => "USD", //$data['mt_uang'],
+            "kotaTtd" => "BANDUNG",
+            "namaTtd" => strtoupper($data['tg_jawab']),
+            "ndpbm" => (float) $kurs,
+            "netto" => (float) $data['netto'],
+            "nomorAju" => $noaju,
+            "seri" => 0,
+            "tanggalAju" => $data['tgl_aju'],
+            "tanggalTtd" => $data['tgl_aju'],
+            "volume" => 0
+        ];
+    
+        $arrayentitas = [];
+        for ($ke = 1; $ke <= 3; $ke++) {
+            $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
+            $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
+            $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
+            $kodejnent = "6";
+            $status = $ke == 2 ? "10" : "";
+            $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
+            // $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . trim(datacustomer($data['id_buyer'],'npwp')) . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', trim(datacustomer($data['id_buyer'],'npwp')))))) + 1)));
+            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : datacustomer($data['id_buyer'],'npwp'));
+            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'],'alamat'));
+            $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'],'nama_customer'));
+            $kodejenisapi = $ke == 2 ? "02" : "";
+            $arrayke = [
+                "alamatEntitas" => $alamat,
+                "kodeEntitas" => $kodeentitas,
+                "kodeJenisIdentitas" => $kodejnent,
+                "kodeJenisApi" => "02",
+                "kodeNegara" => "ID",
+                "kodeStatus" => $status,
+                "namaEntitas" => trim($namaidentitas),
+                "nomorIdentitas" => trim(str_replace('-', '', str_replace('.', '', $nomoridentitas))),
+                "nibEntitas" => $nibidentitas,
+                "seriEntitas" => (int) $serient,
+                "niperEntitas" => ""
+            ];
+            if ($ke == 3) {
+                $arrayke["nomorIjinEntitas"] = $data['noijin'];
+                $arrayke["tanggalIjinEntitas"] =  $data['tglijin'];
+            }
+            if ($ke == 1) {
+                $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
+                $arrayke["tanggalIjinEntitas"] = "2017-07-10";
+            }
+            array_push($arrayentitas, $arrayke);
+        }
+        $arraydokumen = [];
+        $dokmen = $this->akbmodel->getdatadokumen($id);
+        $no = 1;
+        foreach ($dokmen->result_array() as $doku) {
+            $arrayke = [
+                "kodeDokumen" => $doku['kode_dokumen'],
+                "nomorDokumen" => $doku['nomor_dokumen'],
+                "seriDokumen" => $no++,
+                "tanggalDokumen" => $doku['tgl_dokumen']
+            ];
+            array_push($arraydokumen, $arrayke);
+        }
+        $carangkut = $data['jns_angkutan'];
+        switch ($carangkut) {
+            case 2:
+                $carangkut = "3";
+                break;
+            case 3:
+                $carangkut = "4";
+                break;
+            case 4:
+                $carangkut = "9";
+                break;
+        }
+        $arrangkut = [];
+        $arrayangkutan = [
+            "idPengangkut" => "",
+            "namaPengangkut" => trim($data['angkutan']),
+            "nomorPengangkut" => $data['no_kendaraan'],
+            "seriPengangkut" => 1,
+            "kodeCaraAngkut" => $carangkut,
+            // "kodeBendera" => $data['kode_negara']
+        ];
+        array_push($arrangkut, $arrayangkutan);
+        $arrkemas = [];
+        $arraykemasan = [
+            "jumlahKemasan" => (int) $data['jml_kemasan'],
+            "kodeJenisKemasan" => $data['kd_kemasan'],
+            "merkKemasan" => "-",
+            "seriKemasan" => 1
+        ];
+        array_push($arrkemas, $arraykemasan);
+        $arraybarang = [];
+        $datadet = $this->akbmodel->getbarangdetail($id);
+        $no = 0;
+        $jumlahfasilitas = 0;
+        $pungutanbm = 0;
+        $pungutanppn = 0;
+        $pungutanppnlokal = 0;
+        $pungutanpph = 0;
+        foreach ($datadet->result_array() as $detx) {
+            $no++;
+            $jumlah = $detx['kodebc'] == 'KGM' ? $detx['kgs'] : $detx['pcs'];
+            if ($jumlah == 0 && $detx['kodebc'] != 'KGM') {
+                $jumlah = $detx['kgs'];
+            } else {
+                if ($jumlah == 0) {
+                    $jumlah = $detx['kgs'];
+                }
+            }
+            
+            $uraian = trim($detx['po']) != '' ? spekpo($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
+            // $hs = trim($detx['po']) == '' ? substr($detx['nohs'], 0, 8) : substr($detx['hsx'], 0, 8);
+            // $kodebc = str_contains($detx['nomor_dok'], 'NET/') ? 'KGM' : $detx['kodebc'];
+            $kodebarang = trim($detx['po']) != '' ? viewsku($detx['po'], $detx['item'], $detx['dis']) : $detx['kode'];
+            $arraykebarang = [
+                "cif" => (float) round($detx['cifnya'], 2),
+                "cifRupiah" => round($detx['cifnya']*$detx['ndpbm'], 2),
+                "diskon" => 0,
+                "fob" => 0,
+                "freight" => 0,
+                "hargaEkspor" => 0,
+                "hargaPenyerahan" => (float) round($detx['harga']-$detx['sp_disc']-$detx['cash_disc'],2),
+                "hargaPerolehan" => 0,
+                "isiPerKemasan" => 0,
+                "jumlahKemasan" => (float) $detx['pcs'],
+                "jumlahSatuan" => (float) $detx['kgs'],
+                "kodeBarang" => $kodebarang,
+                "kodeDokAsal" => "",
+                "kodeGunaBarang" => "3",
+                "kodeJenisKemasan" => "BL",
+                "kodeKategoriBarang" => "1",
+                "kodeKondisiBarang" =>  "1",
+                "kodePerhitungan" => "0",
+                "kodeSatuanBarang" => $detx['kodebc'],
+                "merk" => "-",
+                "ndpbm" => (float) $detx['ndpbm'],
+                "netto" => (float) round($detx['kgs'], 2),
+                "nilaiBarang" => 0,
+                "posTarif" => $detx['nohs'],
+                "seriBarang" => (int) $detx['seri_barang'],
+                "spesifikasiLain" => "-",
+                "tipe" => "-",
+                "ukuran" => "-",
+                "uraian" => htmlspecialchars_decode($uraian),
+                "barangDokumen" => [],
+                "barangTarif" => []
+            ];
+            $arr_bahanbaku = [];
+            $nob = 0;
+            $bahanbaku = $this->akbmodel->getdetailbahanbaku($detx['id_header'],$detx['seri_barang']);
+            foreach ($bahanbaku->result_array() as $bahanbaku) {
+                $nob++;
+                $asalbar = $bahanbaku['jns_bc'] == 23 ? "0" : "1";
+                $kursusd = $kurssekarang['usd'];
+                $ndpbm = $bahanbaku['ndpbm'];
+                $cifrupiah = $bahanbaku['hamat_cif'] * $ndpbm;
+                $hrgserah = $bahanbaku['jns_bc'] == 23 ? (float) $bahanbaku['hamat_cif'] : (float) $bahanbaku['hargaperolehan'];
+                $barangbahanbaku = [
+                    "cif" => (float) round($bahanbaku['cif'], 2),
+                    "cifRupiah" => (float) round($bahanbaku['cif']*$bahanbaku['ndpbm'], 2),
+                    "hargaPenyerahan" => $hrgserah,
+                    "hargaPerolehan" => $hrgserah,
+                    "jumlahSatuan" => (float) $bahanbaku['kgs'],
+                    "kodeAsalBahanBaku" => $asalbar,
+                    "kodeBarang" => $bahanbaku['kode'],
+                    "kodeDokAsal" => $bahanbaku['jns_bc'],
+                    "kodeKantor" => "050500",
+                    "kodeSatuanBarang" => $bahanbaku['kodebc'],
+                    "merkBarang" => "-",
+                    "ndpbm" => 0,
+                    "nomorAjuDokAsal" => str_replace('-','',$bahanbaku['nomor_aju']),
+                    "nomorDaftarDokAsal" => $bahanbaku['nomor_bc'],
+                    "posTarif" => substr($bahanbaku['nohs'], 0, 8),
+                    "seriBahanBaku" => $nob,
+                    "seriBarang" => $no,
+                    "seriBarangDokAsal" => (int) $bahanbaku['hamat_seri'],
+                    "seriIjin" => 0,
+                    "spesifikasiLainBarang" => "-",
+                    "tanggalDaftarDokAsal" => $bahanbaku['tgl_bc'],
+                    "tipeBarang" => "-",
+                    "ukuranBarang" => "-",
+                    "uraianBarang" => $bahanbaku['nama_barang'],                      
+                ];
+                $arraybahanbakutarif = [];
+                $tarifbm = 0;
+                for ($ke = 1; $ke <= 3; $ke++) {
+                    $kodepungut = $bahanbaku['jns_bc'] == '40' ? 'PPNLOKAL' : ($ke == 1 ? 'BM' : ($ke == 2 ? 'PPN' : 'PPH'));
+                    $tarif = 0;
+                    $ada = 0;
+                    switch ($kodepungut) {
+                        case 'PPNLOKAL':
+                            $tarif = 11;
+                            $ke = 4;
+                            $pungutanppnlokal += $bahanbaku['ppn_rupiah'];
+                            $jmltarif = $bahanbaku['ppn_rupiah'];
+                            $ada=1;
+                            break;
+                        case 'BM':
+                            if ($bahanbaku['bm'] > 0) {
+                                $tarif = $bahanbaku['bm'];
+                                $pungutanbm += $bahanbaku['bm_rupiah'];
+                                $tarifbm = $bahanbaku['bm_rupiah'];
+                                $jmltarif = $bahanbaku['bm_rupiah'];
+                                $ada=1;
+                            }
+                            break;
+                        case 'PPN':
+                            if ($bahanbaku['ppn'] > 0) {
+                                $tarif = $bahanbaku['ppn'];
+                                $pungutanppn += $bahanbaku['ppn_rupiah'];
+                                $jmltarif = $bahanbaku['ppn_rupiah'];
+                                $ada=1;
+                            }
+                            break;
+                        case 'PPH':
+                            if ($bahanbaku['pph'] > 0) {
+                                $tarif = $bahanbaku['pph'];
+                                $pungutanpph += $bahanbaku['pph_rupiah'];
+                                $jmltarif = $bahanbaku['pph_rupiah'];
+                                $ada=1;
+                            }
+                            break;
+                        default:
+                            # code...
+                            break;
+                    }
+                    if($ada==1){
+                        $bahanbakutarif = [
+                            "kodeJenisTarif" => "1",
+                            "jumlahSatuan" => (float) round($bahanbaku['kgs'], 2),
+                            "kodeFasilitasTarif" => "1",
+                            "kodeJenisPungutan" => $kodepungut,
+                            "nilaiBayar" => (float) $jmltarif,
+                            "nilaiFasilitas" => 0,
+                            "nilaiSudahDilunasi" => 0,
+                            "seriBahanBaku" => $nob,
+                            "tarif" => (float) $tarif,
+                            "tarifFasilitas" => 100,
+                        ];
+                        array_push($arraybahanbakutarif, $bahanbakutarif);
+                    }
+                }
+                $barangbahanbaku['bahanBakuTarif'] = $arraybahanbakutarif;
+                array_push($arr_bahanbaku, $barangbahanbaku);
+            }
+            $arraykebarang['bahanBaku'] = $arr_bahanbaku;
+            array_push($arraybarang, $arraykebarang);
+        }
+        $arraypungutan = [];
+        for ($ke = 1; $ke <= 4; $ke++) {
+            switch ($ke) {
+                case 1:
+                    $jenispungut = 'BM';
+                    $jmlpungut = $pungutanbm;
+                    break;
+                case 2:
+                    $jenispungut = 'PPN';
+                    $jmlpungut = $pungutanppn;
+                    break;
+                case 3:
+                    $jenispungut = 'PPH';
+                    $jmlpungut = $pungutanpph;
+                    break;
+                case 4:
+                    $jenispungut = 'PPNLOKAL';
+                    $jmlpungut = $pungutanppnlokal;
+                    break;
+                default:
+                    # code...
+                    break;
+            }
+            $pungutan = [
+                "idPungutan" => "",
+                "kodeFasilitasTarif" => "1",
+                "kodeJenisPungutan" => $jenispungut,
+                "nilaiPungutan" => round((float) $jmlpungut, 2),
+            ];
+            array_push($arraypungutan, $pungutan);
+        }
+        // $datakontrak = $this->akbmodel->getdatakontrak($data['id_kontrak'])->row_array();
+        // $arrayjaminan = [];
+        // $jaminan = [
+        //     "idJaminan" => "",
+        //     "kodeJenisJaminan" => "3",
+        //     "nomorJaminan" => $datakontrak['nomor_ssb'],
+        //     "tanggalJaminan" => $datakontrak['tgl_ssb'],
+        //     "nilaiJaminan" => (float) $datakontrak['jml_ssb'],
+        //     "penjamin" => $datakontrak['penjamin'] == NULL ? "" : $datakontrak['penjamin'],
+        //     "tanggalJatuhTempo" => $datakontrak['tgl_akhir'],
+        //     "nomorBpj" => $datakontrak['nomor_bpj'],
+        //     "tanggalBpj" => $datakontrak['tgl_bpj']
+        // ];
+        // array_push($arrayjaminan, $jaminan);
+        // $jumlahfasilitas += ($detx['harga'] * $jumlah) * 0.11;
+        // $arrayke['bahanbaku'] = $arr_bahanbaku;
+        // array_push($arraybarang,$arrayke);
+        // }
+        $arraykontainer = [];
+        $arrayheader['entitas'] = $arrayentitas;
+        $arrayheader['dokumen'] = $arraydokumen;
+        $arrayheader['pengangkut'] = $arrangkut;
+        $arrayheader['kemasan'] = $arrkemas;
+        $arrayheader['barang'] = $arraybarang;
+        $arrayheader['pungutan'] = $arraypungutan;
+        $arrayheader['kontainer'] = $arraykontainer;
+        // $arrayheader['jaminan'] = $arrayjaminan;
+        // echo '<pre>'.json_encode($arrayheader)."</pre>";
+        $this->kirim30($arrayheader, $id);
+    }
     public function kirim30($data, $id)
     {
         $token = $this->akbmodel->gettoken();
@@ -1852,7 +2182,7 @@ class Akb extends CI_Controller
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL" . $data['nomorAju']);
             $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message']);
-            $this->akbmodel->updatesendceisa($id);
+            // $this->akbmodel->updatesendceisa($id);
             $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
         } else {

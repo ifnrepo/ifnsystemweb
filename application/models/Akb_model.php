@@ -1053,6 +1053,28 @@ class Akb_model extends CI_Model
         $arrhasil2 = array('ok' => $arrhasil, 'ng' => $arrnotbom);
         return $arrhasil2;
     }
+    public function getbarangdetail($id){
+        $this->db->select('tb_detail.*,satuan.kodebc,tb_bombc.ndpbm,barang.kode,tb_header.nilai_serah');
+        $this->db->select("(SELECT SUM(cif) FROM tb_bombc WHERE seri_barang = tb_detail.seri_barang AND id_header = tb_detail.id_header) AS cifnya");
+        $this->db->from('tb_detail');
+        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->join('satuan','satuan.id = tb_detail.id_satuan','left');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->join('tb_bombc','tb_bombc.id_header = tb_detail.id_header AND tb_bombc.seri_barang = tb_detail.seri_barang','left');
+        $this->db->where('tb_detail.id_header',$id);
+        $this->db->group_by('tb_detail.id');
+        return $this->db->get();
+    }
+    public function getdetailbahanbaku($idheader,$seri){
+        $this->db->select('tb_bombc.*,tb_hargamaterial.cif as hamat_cif,satuan.kodebc,tb_hargamaterial.nomor_aju,tb_hargamaterial.tgl_bc,tb_hargamaterial.nomor_bc,barang.nohs,barang.nama_barang,barang.kode,tb_hargamaterial.seri_barang as hamat_seri');
+        $this->db->from('tb_bombc');
+        $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->join('tb_hargamaterial','CONCAT(tb_hargamaterial.nobontr,tb_hargamaterial.id_barang) = CONCAT(tb_bombc.nobontr,tb_bombc.id_barang)','left');
+        $this->db->where('tb_bombc.seri_barang',$seri);
+        $this->db->where('tb_bombc.id_header',$idheader);
+        return $this->db->get();
+    }
     public function excellampiran261($id, $qu = 0)
     {
         if ($qu == 0) {
@@ -1186,7 +1208,7 @@ class Akb_model extends CI_Model
                                 $hargaperolehan = $cekjenisbc['price']*$hasilshowbom['kgs_asli'];
                                 $datasimpan['hargaperolehan'] = round($hargaperolehan,0);
                                 $datasimpan['ppn'] = 11;
-                                $datasimpan['ppn_rupiah'] = round($hargaperolehan,0)*0.11;
+                                $datasimpan['ppn_rupiah'] = round($hargaperolehan*0.11,0);
                             }
                         }
                     }
@@ -1224,13 +1246,21 @@ class Akb_model extends CI_Model
             $data['jns_bc'] = $cekjenisbc['jns_bc'];
             if($cekjenisbc['jns_bc']=='23'){
                 // if($cekjenisbc['co']==0){
-                $data['bm'] = $cekjenisbc['bm'];
+                $data['bm'] = $data['bm'] > 0 ? $cekjenisbc['bm'] : $data['bm'];
                 // }
-                $data['ppn'] = 11;
-                $data['pph'] = 2.5;
+                $data['ppn'] = $data['ppn'] > 0 ? 11 : $data['ppn'];
+                $data['pph'] = $data['pph'] > 0 ? 2.5 : $data['pph'];
                 $data['bm_rupiah'] = round($nilaibm,0);
-                $data['ppn_rupiah'] = round(($nilaibm+($xcif*$kursusd))*0.11,0); 
-                $data['pph_rupiah'] = round(($nilaibm+($xcif*$kursusd))*0.025,0); 
+                $data['ppn_rupiah'] = round(($nilaibm+($xcif*$kursusd))*($data['ppn']/100),0); 
+                $data['pph_rupiah'] = round(($nilaibm+($xcif*$kursusd))*($data['pph']/100),0); 
+            }else{
+                if(($header['jns_bc']=='25' || $header['jns_bc']=='41') && $cekjenisbc['jns_bc']=='40'){
+                    $apappn = $data['ppn'] > 0 ? 1 : 0;
+                    $hargaperolehan = ($cekjenisbc['price']*$det['kgs']);
+                    $data['hargaperolehan'] = round($hargaperolehan,0)*$apappn;
+                    $data['ppn'] = $data['ppn'] > 0 ? 11 : $data['ppn'];
+                    $data['ppn_rupiah'] = round($hargaperolehan*($data['ppn']/100),0);
+                }
             }
         }
         unset($data['id_barang']);

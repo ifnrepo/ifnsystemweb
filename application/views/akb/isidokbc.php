@@ -441,7 +441,7 @@
                                 <div class="card-body p-1">
                                     <div class="row">
                                         <div class="col-sm-6">
-                                            <div class="mb-1 row <?= $hilangbc261; ?>">
+                                            <div class="mb-1 row <?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
                                                 <label class="col-3 col-form-label font-kecil mx-2">Kode Cara Bayar</label>
                                                 <div class="col">
                                                     <!-- <input type="text" class="form-control font-kecil" id="netto" name="netto" aria-describedby="emailHelp" placeholder="Netto Kgs"> -->
@@ -478,6 +478,12 @@
                                                 </div>
                                                 <div class="col">
                                                     <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
+                                                </div>
+                                            </div>
+                                            <div class="mb-1 row">
+                                                <label class="col-3 col-form-label font-kecil mx-2">Nilai Penyerahan</label>
+                                                <div class="col">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_serah" name="nilai_serah" value="<?= rupiah($datheader['nilai_serah'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Penyerahan" >
                                                 </div>
                                             </div>
                                             <div class="mb-1 row <?= $hilangbc30; ?> <?= $hilangbc40; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
@@ -606,9 +612,13 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-tablee" style="font-size: 13px !important;" >
-                                    <?php $sumdetail=0; $sumpcs=0; $sumkgs=0; $nom=0; $jumlahhskosong=0; foreach ($header as $data) {  $nom++;
+                                    <?php $sumdetail=0; $sumdetail2=0; $jmspdiskon=0; $jmcashdiskon=0; $sumpcs=0; $sumkgs=0; $nom=0; $jumlahhskosong=0; foreach ($header as $data) {  $nom++;
                                         $jumlah = $data['kodesatuan']=='KGS' ? $data['kgs'] : $data['pcs']; 
                                         $sumdetail += $data['harga']; //*$jumlah;
+                                        $sumdetail2 += $data['harga']-round($data['sp_disc'],0)-round($data['cash_disc'],0); //*$jumlah;
+                                        $jmcashdiskon += $data['cash_disc'];
+                                        $jmspdiskon += $data['sp_disc'];
+                                        
                                         $sumpcs += $data['pcs'];
                                         $sumkgs += round($data['kgs'],2);
                                         // $nambar = $data['po']!='' ? $data['spek'] : $data['nama_barang'];
@@ -648,9 +658,23 @@
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail,2); ?></td>
                                 </tr>
+                                <?php if($datheader['jns_bc']=='25' || $datheader['jns_bc']=='41'): ?>
+                                    <tr class="bg-primary-lt">
+                                        <td colspan="7" class="text-black text-right font-bold">Spesial Diskon</td>
+                                        <td class="text-black text-right font-bold"><?= rupiah($jmspdiskon,2); ?></td>
+                                    </tr>
+                                    <tr class="bg-primary-lt">
+                                        <td colspan="7" class="text-black text-right font-bold">Cash Diskon</td>
+                                        <td class="text-black text-right font-bold"><?= rupiah(round($jmcashdiskon,0),2); ?></td>
+                                    </tr>
+                                    <tr class="bg-primary-lt">
+                                        <td colspan="7" class="text-black text-right font-bold">Nilai Penyerahan</td>
+                                        <td class="text-black text-right font-bold"><?= rupiah($sumdetail2,2); ?></td>
+                                    </tr>
+                                <?php endif; ?>
                             </tbody>
                         </table>
-                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail,2); ?>">
+                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail2,2); ?>">
                         <input type="text" id="jumlahhskosong" class="hilang" value="<?= $jumlahhskosong; ?>">
                     </div>
                 </div>
@@ -726,7 +750,7 @@
                                     $serbar=0; 
                                     $jmlkgs=0;
                                     $jumlahtot=0;
-                                    $jmbm=0;$jmppn=0;$jmpph=0;$totpajak=0;
+                                    $jmbm=0;$jmppn=0;$jmppnlokal=0;$jmpph=0;$totpajak=0;
                                     $jumlahnobontrkosong = 0;
                                     $kurssekarang = getkurssekarang($datheader['tgl_aju'])->row_array();
                                     $kursusd = $kurssekarang['usd'];
@@ -751,28 +775,32 @@
                                         $serbar = $detbom['seri_barang'];
                                         $jns_bc = $detbom['hamat_jnsbc'];
                                         $nomor_bc = $detbom['hamat_nomorbc'];
-                                        if($jns_bc==40 && $datheader['jns_bc']==25){
-                                            $cif = ($detbom['hargaperolehan']/$kursusd)*$detbom['kgs'];
-                                            $ndpbm = $kursusd;
-                                        }
                                         $jumlahhargaperkilo = (($cif/$pembagi)*$ndpbm)*round($detbom['kgs'],2);
                                         $jmmm = (($cif/$pembagi)*$ndpbm)*$detbom['kgs'];
-                                        $hargaperkilo = round(($cif/$pembagi)*$detbom['kgs'],2)*$ndpbm;
-                                        $xcif = round(($cif/$pembagi)*$detbom['kgs'],2);
+                                        // $hargaperkilo = round(($cif/$pembagi)*$detbom['kgs'],2)*$ndpbm;
+                                        $hargaperkilo = round($detbom['cif']*$detbom['ndpbm'],2);
+                                        $xcif = $detbom['cif'];
+                                        if($jns_bc==40 && $datheader['jns_bc']==25){
+                                            $hargaperkilo = $detbom['hargaperolehan'];
+                                            $ndpbm = $kursusd;
+                                        }
                                         $jumlahtot += $hargaperkilo; //$jumlahhargaperkilo;
                                         $hitungbm = $detbom['bm'] > 0 ? '' : 'hilang';
                                         $hitungppn = $detbom['ppn'] > 0 ? '' : 'hilang';
                                         $hitungpph = $detbom['pph'] > 0 ? '' : 'hilang';
                                         $lokal40 = $jns_bc==40 ? ' LOKAL' : '';
                                         // $adabm = $detbom['bm'] > 0 ? $jumlahhargaperkilo*($detbom['bm']/100) : 0;
-                                        $adabm = $detbom['bm'] > 0 ? $jmmm*($detbom['bm']/100) : 0;
+                                        $adabm = $detbom['bm_rupiah']; //$detbom['bm'] > 0 ? $jmmm*($detbom['bm']/100) : 0;
                                         if($jns_bc == 23){
-                                            $jmbm += round($hargaperkilo*($detbom['bm']/100),0);
-                                            $jmppn += round(($adabm+$hargaperkilo)*($detbom['ppn']/100),0);
-                                            $jmpph += round(($adabm+$hargaperkilo)*($detbom['pph']/100),0);
+                                            // $jmbm += round($hargaperkilo*($detbom['bm']/100),0);
+                                            // $jmppn += round(($adabm+$hargaperkilo)*($detbom['ppn']/100),0);
+                                            // $jmpph += round(($adabm+$hargaperkilo)*($detbom['pph']/100),0);
+                                            $jmbm += $detbom['bm_rupiah'];
+                                            $jmppn += $detbom['ppn_rupiah'];
+                                            $jmpph += $detbom['pph_rupiah'];
                                         }else{
                                             if($jns_bc==40 && $datheader['jns_bc']==25){
-                                                $jmppn +=  $detbom['ppn_rupiah'];
+                                                $jmppnlokal +=  $detbom['ppn_rupiah'];
                                             }
                                         }
                                 ?>
@@ -781,10 +809,9 @@
                                         <td class="line-12">
                                             <?= $detbom['nama_barang']; ?><br>
                                             <span style="font-size:12px;" class="text-pink"><?= $detbom['nobontr']; ?></span>
-                                            <span style="font-size:9px;" class="badge bg-blue text-blue-fg <?= $hitungbm; ?>" title="<?= rupiah($hargaperkilo*($detbom['bm']/100),0) ?>">BM</span>
-                                            <span style="font-size:9px;" class="badge bg-yellow text-black <?= $hitungppn; ?>" title="<?= rupiah(($adabm+$hargaperkilo)*($detbom['ppn']/100),0) ?>">PPN <?= $lokal40 ?></span>
-                                            <span style="font-size:9px;" class="badge bg-azure text-azure-fg <?= $hitungpph; ?>" title="<?= rupiah(($adabm+$hargaperkilo)*($detbom['pph']/100),0) ?>">PPH</span>
-                                            <br><?= $hargaperkilo ?>
+                                            <span style="font-size:9px;" class="badge bg-blue text-blue-fg <?= $hitungbm; ?>" title="<?= rupiah($detbom['bm_rupiah'],0) ?>">BM</span>
+                                            <span style="font-size:9px;" class="badge bg-yellow text-black <?= $hitungppn; ?>" title="<?= rupiah($detbom['ppn_rupiah'],0) ?>">PPN <?= $lokal40 ?></span>
+                                            <span style="font-size:9px;" class="badge bg-azure text-azure-fg <?= $hitungpph; ?>" title="<?= rupiah($detbom['pph_rupiah'],0) ?>">PPH</span>
                                         </td>
                                         <td><?= $detbom['kode']; ?></td>
                                         <td><?= $detbom['nohs']; ?></td>
@@ -819,6 +846,7 @@
                                     <th>BM</th>
                                     <th>BMT</th>
                                     <th>Cukai</th>
+                                    <th>PPNLokal</th> 
                                     <th>PPN</th>
                                     <th>PPNBM</th>
                                     <th>PPH</th>
@@ -830,6 +858,7 @@
                                     <td class="text-right"><?= rupiah($jmbm,2); ?></td>
                                     <td></td>
                                     <td></td>
+                                    <td class="text-right"><?= rupiah($jmppnlokal,2); ?></td>
                                     <td class="text-right"><?= rupiah($jmppn,2); ?></td>
                                     <td></td>
                                     <td class="text-right"><?= rupiah($jmpph,2); ?></td>

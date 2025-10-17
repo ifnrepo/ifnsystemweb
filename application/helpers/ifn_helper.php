@@ -353,6 +353,18 @@ function datasupplier($kode, $kolom)
     }
     return $kore;
 }
+function datacustomer($kode, $kolom)
+{
+    $kore = '';
+    if ($kode == '' || $kode == 0) {
+        $kore = '';
+    } else {
+        $CI = &get_instance();
+        $kodex = $CI->helpermodel->getdatacustomer($kode)->row_array();
+        $kore = $kodex[$kolom];
+    }
+    return $kore;
+}
 function kodebulan($bl)
 {
     $hasil = $bl;
@@ -875,9 +887,14 @@ function getarrayindex(string $value, array $array, string $key)
 }
 function bulatkan($jml, $nilai)
 {
-    $pembulatan = round($jml / $nilai);
+    $pembulatan = ceil($jml / $nilai);
     return $pembulatan * $nilai;
 }
+// function bulatkan($jml, $nilai)
+// {
+//     $pembulatan = round($jml / $nilai);
+//     return $pembulatan * $nilai;
+// }
 function ceknomorbc($data, $idbarang)
 {
     $CI = &get_instance();
