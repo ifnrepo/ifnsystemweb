@@ -407,6 +407,10 @@ class Helper_model extends CI_Model
     {
         return $this->db->get_where('supplier', ['id' => $kode]);
     }
+    public function getdatacustomer($kode)
+    {
+        return $this->db->get_where('customer', ['id' => $kode]);
+    }
     public function getdatafooter()
     {
         return $this->db->get('page_footer');
@@ -1031,7 +1035,7 @@ class Helper_model extends CI_Model
         if ($date == '' || $date == NULL) {
             $date = date('Y-m-d');
         }
-        $this->db->select('usd');
+        $this->db->select('*');
         $this->db->from('tb_kurs');
         $this->db->where('tgl', $date);
         $this->db->limit(1);

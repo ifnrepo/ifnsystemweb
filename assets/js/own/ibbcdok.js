@@ -292,6 +292,16 @@ $("#nilai_pab").blur(function () {
 	savedata("nilai_pab", toAngka($(this).val()));
 	hitungdevisa();
 });
+$("#nilai_serah").on("keypress", function (e) {
+	if (e.keyCode == 13) {
+		savedata("nilai_serah", toAngka($(this).val()));
+		$("#nilai_serah").blur();
+	}
+});
+$("#nilai_serah").blur(function () {
+	savedata("nilai_serah", toAngka($(this).val()));
+	// hitungdevisa();
+});
 $("#pelabuhan_muat").change(function () {
 	savedata("pelabuhan_muat", $(this).val());
 });
@@ -414,6 +424,11 @@ function cekkolom(mode) {
 		pesan("Jumlah Bruto dan Netto Harus di isi !", "error");
 		return false;
 	}
+	if ($("#txtsum").text() != $("#netto").val()) {
+		// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+		pesan("Cek Jumlah Netto dan Jumlah detail harus Sama", "error");
+		return false;
+	}
 	if ($("#jns_bc").val() == "261") {
 		if ($("#sumdetailbc").val() != $("#nilai_pab").val()) {
 			// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
@@ -421,10 +436,18 @@ function cekkolom(mode) {
 			return false;
 		}
 	} else {
-		if ($("#sumdetail").val() != $("#nilai_pab").val()) {
-			// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
-			pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
-			return false;
+		if ($("#jns_bc").val() == "25" || $("#jns_bc").val() == "25") {
+			if ($("#sumdetail").val() != $("#nilai_serah").val()) {
+				// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+				pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
+				return false;
+			}
+		}else{
+			if ($("#sumdetail").val() != $("#nilai_pab").val()) {
+				// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+				pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
+				return false;
+			}
 		}
 	}
 	if ($("#tg_jawab").val() == "") {
