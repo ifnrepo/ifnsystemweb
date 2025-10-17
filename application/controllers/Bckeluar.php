@@ -221,7 +221,7 @@ class Bckeluar extends CI_Controller
             $sheet->setCellValue('C' . $numrow, "BC " . $data['jns_bc']);
             $sheet->setCellValue('D' . $numrow, $data['nomor_bc']);
             $sheet->setCellValue('E' . $numrow, $data['tgl_bc']);
-            $sheet->setCellValue('F' . $numrow, $data['nomor_dok']);
+            $sheet->setCellValue('F' . $numrow, $data['nomor_sj']);
             $sheet->setCellValue('G' . $numrow, $data['tgl_sj']);
             $sheet->setCellValue('H' . $numrow, $cus);
             $sheet->setCellValue('I' . $numrow, $sku);
@@ -308,7 +308,7 @@ class Bckeluar extends CI_Controller
             $pdf->Cell(10, $tinggiMaks, 'BC ' . $data['jns_bc'], 1, 0, 'L');
             $pdf->Cell(10, $tinggiMaks, $data['nomor_bc'], 1, 0, 'L');
             $pdf->Cell(15, $tinggiMaks, $data['tgl_bc'], 1, 0, 'L');
-            $pdf->Cell(27, $tinggiMaks, $data['nomor_dok'], 1, 0, 'L');
+            $pdf->Cell(27, $tinggiMaks, $data['nomor_sj'], 1, 0, 'L');
             $pdf->Cell(15, $tinggiMaks, $data['tgl_sj'], 1, 0, 'L');
             $pdf->Cell(43, $tinggiMaks, $cus, 1, 0, 'L');
             $pdf->Cell(13, $tinggiMaks, $sku, 1, 0, 'L');
