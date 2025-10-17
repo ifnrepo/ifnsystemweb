@@ -1036,9 +1036,9 @@ class Helper_model extends CI_Model
         $this->db->where('tgl', $date);
         $this->db->limit(1);
         $query = $this->db->get();
-        $row = $query->row();
+        // $row = $query->row();
 
-        return $row ? (float)$row->usd : 1;
+         return $query;
     }
     // public function getkurssekarang($date)
     // {
