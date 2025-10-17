@@ -457,10 +457,10 @@ function hitunggrandtotal() {
 	var pph = toAngka($("#pph").val());
 	var ongkir = toAngka($("#ongkir_jasa").val());
 	// alert(jumlah);
-	var isi = jumlah - diskon + ongkir;
+	var isi = jumlah - diskon;
 	$("#total").val(rupiah(isi, ".", ",", 2));
 	$("#jumlah").val(
-		rupiah(isi + parseFloat(ppn) - parseFloat(pph), ".", ",", 2),
+		rupiah(isi + ongkir + parseFloat(ppn) - parseFloat(pph), ".", ",", 2),
 	);
 	// alert(jumlah - diskon);
 }

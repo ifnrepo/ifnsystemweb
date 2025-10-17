@@ -617,7 +617,7 @@
                                             <?php }else{ ?>
                                                 <?php $datkgs = $data['kgsx']==0 ? 1 : $data['kgsx']; ?>
                                                 <td class="text-right"><?= rupiah($data['pcsx'],0); ?></td>
-                                                <td class="text-right"><?= rupiah($data['kgsx'],2); ?></td>
+                                                <td class="text-right" id="kgss<?= $data['id'] ?>"><?= rupiah($data['kgsx'],2); ?></td>
                                                 <td id="jumlahcif<?= $data['id'] ?>" class="text-right line-12"><?= rupiah(($data['xcif']/$datkgs)*$data['xndpbm'],2); ?><br><span class="font-11 text-pink"><?= rupiah($data['xcif'],2) ?></span></td>
                                                 <td class="text-right"><?= rupiah($data['xcif']*$data['xndpbm'],2); ?></td>
                                         <?php } ?>
@@ -625,6 +625,7 @@
                                         <td class="text-center">
                                             <a href="<?= base_url().'ib/editbcasal/'.$datheader['id'].'/'.$data['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261" >EDIT</a>
                                             <a href="#" data-href="<?= base_url().'ib/resetbcasal/'.$datheader['id'].'/'.$data['id']; ?>" class="btn btn-sm btn-danger font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Me-reset BC ASAL 261" >RESET</a>
+                                            <a href="<?= base_url().'ib/editkgsbcasal/'.$datheader['id'].'/'.$data['id']; ?>" class="btn btn-sm btn-info font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC KGS ASAL 261" >EDIT KGS</a>
                                         </td>
                                         <?php endif; ?>
                                     </tr>
