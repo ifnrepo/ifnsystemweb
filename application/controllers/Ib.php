@@ -2107,6 +2107,47 @@ class Ib extends CI_Controller
         $data['arrayid'] = $arrayid;
         $this->load->view('ib/editbcasal',$data);
     }
+    public function editkgsbcasal($id,$iddetail){
+        $data['idheader'] = $id;
+        $data['iddetail'] = $iddetail;
+        $header = $this->ibmodel->getdatabyid($id);
+        $detail = $this->ibmodel->getdatadetailbyid($iddetail)->row_array();
+        if(trim($detail['po'])=='' && $detail['id_barang'] != 0 && trim($detail['insno'])==''){
+            $arrkond = [
+            'trim(a.po)' => trim($detail['po']),
+            'trim(a.item)' => trim($detail['item']),
+            'a.dis' => $detail['dis'],
+            'a.id_barang' => $detail['id_barang'],
+            ];
+            $arrkond2 = [
+                'id_akb' => $id,
+                'trim(po)' => trim($detail['po']),
+                'trim(item)' => trim($detail['item']),
+                'dis' => $detail['dis'],
+                'id_barang' => $detail['id_barang'],
+            ];
+        }else{
+            $arrkond = [
+            'trim(a.po)' => trim($detail['po']),
+            'trim(a.item)' => trim($detail['item']),
+            'a.dis' => $detail['dis'],
+            'a.id_barang' => $detail['id_barang'],
+            'trim(a.insno)' => trim($detail['insno']),
+            ];
+            $arrkond2 = [
+                'id_akb' => $id,
+                'trim(po)' => trim($detail['po']),
+                'trim(item)' => trim($detail['item']),
+                'dis' => $detail['dis'],
+                'id_barang' => $detail['id_barang'],
+                'trim(insno)' => trim($detail['insno']),
+            ];
+        }
+        $hasil = $this->ibmodel->getdatakgsbcasal($arrkond2);
+        // return $hasil;
+        $data['arrayhasil'] = $hasil;
+        $this->load->view('ib/editkgsbcasal',$data);
+    }
     public function simpaneditbcasal(){
         $id = $_POST['id'];
         $xdetail = $_POST['iddetail'];
@@ -2135,6 +2176,13 @@ class Ib extends CI_Controller
         if($cek){
             echo json_encode($cek);
         }
+    }
+    public function simpaneditkgsbcasal(){
+        $arrayid = $_POST['idasal'];
+        $kgsbaru = $_POST['jmlbaru'];
+
+        $cek = $this->ibmodel->updatekgsbcasal($arrayid,$kgsbaru);
+        echo $cek;
     }
     public function resetbcasal($header,$id){
         $cek = $this->ibmodel->resetbcasal($header,$id);

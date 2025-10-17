@@ -94,7 +94,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <td class="text-end p-1" style="font-size: 16px !important;"><?= rupiah($datdet['harga'] * $tampil, 2); ?></td>
               </tr>
             <?php } ?>
-            <?php for ($x = 0; $x <= (12 - $no); $x++) { ?>
+            <?php for ($x = 0; $x <= (10 - $no); $x++) { ?>
               <tr>
                 <td class="text-center p-1" style="font-size: 16px !important;">&nbsp;<?= $x + $no; ?></td>
                 <td class="p-1" style="font-size: 16px !important;">
@@ -107,7 +107,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </tr>
             <?php } ?>
             <tr>
-              <td class="p-1" colspan="4" rowspan="5" style="font-size: 16px !important;">
+              <td class="p-1" colspan="3" rowspan="6" style="font-size: 16px !important;">
                 Terbilang : <strong><?= terbilang(($header['totalharga'] - $header['diskon']) + $header['ppn'] - $header['pph']); ?></strong>
                 <br>
                 <br>
@@ -115,23 +115,29 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <br>
                 Tanggal rencana Datang barang : <?= tgl_indo($header['tgl_dtb']); ?>
               </td>
-              <td class="strong text-end p-1" style="font-size: 16px !important;">Subtotal</td>
+              <td class="strong text-end p-1" colspan="2" style="font-size: 16px !important;">Subtotal</td>
               <td class="text-end p-1" style="font-size: 16px !important;"><?= rupiah($header['totalharga'], 2); ?></td>
             </tr>
             <tr>
-              <td class="strong text-end p-1" style="font-size: 16px !important;">Diskon</td>
+              <td class="strong text-end p-1"  colspan="2" style="font-size: 16px !important;">Diskon</td>
               <td class="text-end p-1"><?= rupiah($header['diskon'], 2); ?></td>
             </tr>
             <tr>
-              <td class="strong text-end p-1" style="font-size: 16px !important;">PPN(<?= rupiah($header['cekppn'], 0); ?>%)</td>
+              <td class="strong text-end p-1" colspan="2" style="font-size: 16px !important;">PPN(<?= rupiah($header['cekppn'], 0); ?>%)</td>
               <td class="text-end p-1" style="font-size: 14px !important;"><?= rupiah($header['ppn'], 2); ?></td>
             </tr>
             <tr>
-              <td class="strong text-end p-1" style="font-size: 16px !important;">PPH</td>
+              <td class="strong text-end p-1" colspan="2" style="font-size: 16px !important;">PPH</td>
               <td class="text-end p-1" style="font-size: 16px !important;"><?= rupiah($header['pph'], 2); ?></td>
             </tr>
+            <?php if($header['ongkir_jasa'] > 0): ?>
+              <tr>
+                <td class="strong text-end p-1" colspan="2" style="font-size: 16px !important;"><?= $header['ketongkir_jasa'] ?></td>
+                <td class="text-end p-1" style="font-size: 16px !important;"><?= rupiah($header['ongkir_jasa'], 2); ?></td>
+              </tr>
+            <?php endif; ?>
             <tr>
-              <td class="font-weight-bold text-uppercase text-end p-1" style="font-size: 16px !important;">Total</td>
+              <td class="font-weight-bold text-uppercase text-end p-1" colspan="2" style="font-size: 16px !important;">Total</td>
               <td class="font-weight-bold text-end p-1" style="font-size: 16px !important;"><?= rupiah(($header['totalharga'] - $header['diskon']) + $header['ppn'] - $header['pph'], 2); ?></td>
             </tr>
             <tr>
@@ -140,19 +146,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <tr>
               <td colspan="8" class="p-1">
                 <ol style="font-size: 22px !important; line-height : 22px !important;">
-                  <li>Pesanan dikirim ke PT. Indoneptune Net Manufacturing, Jl. Raya Bandung-Garut Km.25 Rancaekek</li>
-                  <li>Pembayaran 1 (satu) bulan setelah barang di terima</li>
-                  <?php for ($x = 1; $x <= 3; $x++) { ?>
-                    <?php if ($x == 2) { ?>
-                      <li>Setiap Supplier wajib mentaati aturan K3LH dari PT. Indoneptune Net Manufacturing</li>
-                      <!-- <li>Our Reff BBL (PG-PC/BB/0824/024) Kalender 2025</li>
-                      <li>Ket=tatakan harian medium (TH 9908+sablon 2 warna)</li> -->
-                      <?php } else {
-                      $y = $x > 2 ? $x - 1 : $x;
-                      if ($header['catatan' . $y] != '') : ?>
-                        <li><?= $header['catatan' . $y]; ?></li>
-                    <?php endif;
-                    } ?>
+                  <?php for ($x = 1; $x <= 6; $x++) { ?>
+                    <li><?= $header['catatan' . $x]; ?></li>
                   <?php } ?>
                 </ol>
               </td>

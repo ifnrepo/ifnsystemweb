@@ -1078,6 +1078,16 @@ class Ib_model extends CI_Model
         $arraymasuk = ['cif' => $cife,'ndpbm'=>$ndpbm];
         return $arraymasuk;
     }
+    public function updatekgsbcasal($arrayid,$arrayjml){
+        $this->db->trans_start();
+        $ke=0;
+        foreach($arrayid as $nil){
+            $ke++;
+            $this->db->where('id',$nil);
+            $this->db->update('tb_detail',['kgs' => $arrayjml[$ke-1]]);
+        }
+        return $this->db->trans_complete();
+    }
     public function resetbcasal($idheader,$id){
         $this->db->trans_start();
         $hasil = $this->db->get_where('tb_detail',['id' => $id])->row_array();
@@ -1174,5 +1184,12 @@ class Ib_model extends CI_Model
             }
         }
         return $this->db->trans_complete();
+    }
+    public function getdatakgsbcasal($arrkonds){
+        $this->db->select('tb_detail.*,barang.kode');
+        $this->db->from('tb_detail');
+        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->where($arrkonds);
+        return $this->db->get();
     }
 }

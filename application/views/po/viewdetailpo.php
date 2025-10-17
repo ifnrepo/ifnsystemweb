@@ -91,6 +91,9 @@
                             <li> <?= $header['catatan1']; ?></li>
                             <li> <?= $header['catatan2']; ?></li>
                             <li> <?= $header['catatan3']; ?></li>
+                            <li> <?= $header['catatan4']; ?></li>
+                            <li> <?= $header['catatan5']; ?></li>
+                            <li> <?= $header['catatan6']; ?></li>
                         </ul>
                     </div>
                     <div class="col-sm-3 text-right">
@@ -99,6 +102,9 @@
                         Total :<br>
                         PPN <?= rupiah($header['cekppn'],0).'%'; ?>:<br>
                         PPh :<br>
+                        <?php if($header['ongkir_jasa'] > 0): ?>
+                            <?= $header['ketongkir_jasa'] ?> :<br>
+                        <?php endif; ?>
                         Jumlah :
                     </div>
                     <div class="col-sm-3 text-right">
@@ -107,6 +113,9 @@
                         <strong><?= rupiah($header['totalharga']-$header['diskon'],2); ?></strong><br>
                         <strong><?= rupiah($header['ppn'],2); ?></strong><br>
                         <strong><?= rupiah($header['pph'],2); ?></strong><br>
+                        <?php if($header['ongkir_jasa'] > 0 ): ?>
+                            <strong><?= rupiah($header['ongkir_jasa'],2); ?></strong><br>
+                        <?php endif; ?>
                         <strong><?= rupiah(($header['totalharga']-$header['diskon'])+$header['ppn']-$header['pph'],2); ?></strong>
                     </div>
                 </div>

@@ -400,6 +400,15 @@ $("#catatan2").focus(function () {
 $("#catatan3").focus(function () {
 	value_old = $(this).val();
 });
+$("#catatan4").focus(function () {
+	value_old = $(this).val();
+});
+$("#catatan5").focus(function () {
+	value_old = $(this).val();
+});
+$("#catatan6").focus(function () {
+	value_old = $(this).val();
+});
 $("#header_po").blur(function () {
 	updatekolom($("#id_header").val(), "catatan_po", "header_po", $(this).val());
 });
@@ -411,6 +420,15 @@ $("#catatan2").blur(function () {
 });
 $("#catatan3").blur(function () {
 	updatekolom($("#id_header").val(), "catatan_po", "catatan3", $(this).val());
+});
+$("#catatan4").blur(function () {
+	updatekolom($("#id_header").val(), "catatan_po", "catatan4", $(this).val());
+});
+$("#catatan5").blur(function () {
+	updatekolom($("#id_header").val(), "catatan_po", "catatan5", $(this).val());
+});
+$("#catatan6").blur(function () {
+	updatekolom($("#id_header").val(), "catatan_po", "catatan6", $(this).val());
 });
 function updatekolom(idx, tabel, kolom, isi) {
 	$.ajax({
@@ -437,11 +455,12 @@ function hitunggrandtotal() {
 	var diskon = toAngka($("#diskon").val());
 	var ppn = toAngka($("#hargappn").val());
 	var pph = toAngka($("#pph").val());
+	var ongkir = toAngka($("#ongkir_jasa").val());
 	// alert(jumlah);
 	var isi = jumlah - diskon;
 	$("#total").val(rupiah(isi, ".", ",", 2));
 	$("#jumlah").val(
-		rupiah(isi + parseFloat(ppn) - parseFloat(pph), ".", ",", 2),
+		rupiah(isi + ongkir + parseFloat(ppn) - parseFloat(pph), ".", ",", 2),
 	);
 	// alert(jumlah - diskon);
 }

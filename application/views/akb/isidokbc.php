@@ -740,31 +740,40 @@
                                         $pembagi = $detbom['hamat_weight']==0 ? 1 : round($detbom['hamat_weight'],2);
                                         switch ($detbom['mt_uang']) {
                                             case 'JPY':
-                                                $jpy = $detbom['cif']*$kurssekarang[strtolower($detbom['mt_uang'])];
+                                                $jpy = $detbom['hamat_cif']*$kurssekarang[strtolower($detbom['mt_uang'])];
                                                 $cif = $jpy/$kursusd;
                                                 break;
                                             default:
-                                                $cif = $detbom['cif'];
+                                                $cif = $detbom['hamat_cif'];
                                                 break;
                                         }
                                         $jmlkgs += round($detbom['kgs'],2);
                                         $serbar = $detbom['seri_barang'];
                                         $jns_bc = $detbom['hamat_jnsbc'];
                                         $nomor_bc = $detbom['hamat_nomorbc'];
-                                        // $jumlahhargaperkilo = round((($cif/$pembagi)*round($detbom['kgs'],2)),2)*$ndpbm;
+                                        if($jns_bc==40 && $datheader['jns_bc']==25){
+                                            $cif = ($detbom['hargaperolehan']/$kursusd)*$detbom['kgs'];
+                                            $ndpbm = $kursusd;
+                                        }
                                         $jumlahhargaperkilo = (($cif/$pembagi)*$ndpbm)*round($detbom['kgs'],2);
                                         $jmmm = (($cif/$pembagi)*$ndpbm)*$detbom['kgs'];
                                         $hargaperkilo = round(($cif/$pembagi)*$detbom['kgs'],2)*$ndpbm;
+                                        $xcif = round(($cif/$pembagi)*$detbom['kgs'],2);
                                         $jumlahtot += $hargaperkilo; //$jumlahhargaperkilo;
                                         $hitungbm = $detbom['bm'] > 0 ? '' : 'hilang';
                                         $hitungppn = $detbom['ppn'] > 0 ? '' : 'hilang';
                                         $hitungpph = $detbom['pph'] > 0 ? '' : 'hilang';
+                                        $lokal40 = $jns_bc==40 ? ' LOKAL' : '';
                                         // $adabm = $detbom['bm'] > 0 ? $jumlahhargaperkilo*($detbom['bm']/100) : 0;
                                         $adabm = $detbom['bm'] > 0 ? $jmmm*($detbom['bm']/100) : 0;
                                         if($jns_bc == 23){
                                             $jmbm += round($hargaperkilo*($detbom['bm']/100),0);
                                             $jmppn += round(($adabm+$hargaperkilo)*($detbom['ppn']/100),0);
                                             $jmpph += round(($adabm+$hargaperkilo)*($detbom['pph']/100),0);
+                                        }else{
+                                            if($jns_bc==40 && $datheader['jns_bc']==25){
+                                                $jmppn +=  $detbom['ppn_rupiah'];
+                                            }
                                         }
                                 ?>
                                     <tr>
@@ -772,9 +781,10 @@
                                         <td class="line-12">
                                             <?= $detbom['nama_barang']; ?><br>
                                             <span style="font-size:12px;" class="text-pink"><?= $detbom['nobontr']; ?></span>
-                                            <span style="font-size:9px;" class="badge bg-blue text-blue-fg <?= $hitungbm; ?>">BM</span>
-                                            <span style="font-size:9px;" class="badge bg-yellow text-black <?= $hitungppn; ?>">PPN</span>
-                                            <span style="font-size:9px;" class="badge bg-azure text-azure-fg <?= $hitungpph; ?>">PPH</span>
+                                            <span style="font-size:9px;" class="badge bg-blue text-blue-fg <?= $hitungbm; ?>" title="<?= rupiah($hargaperkilo*($detbom['bm']/100),0) ?>">BM</span>
+                                            <span style="font-size:9px;" class="badge bg-yellow text-black <?= $hitungppn; ?>" title="<?= rupiah(($adabm+$hargaperkilo)*($detbom['ppn']/100),0) ?>">PPN <?= $lokal40 ?></span>
+                                            <span style="font-size:9px;" class="badge bg-azure text-azure-fg <?= $hitungpph; ?>" title="<?= rupiah(($adabm+$hargaperkilo)*($detbom['pph']/100),0) ?>">PPH</span>
+                                            <br><?= $hargaperkilo ?>
                                         </td>
                                         <td><?= $detbom['kode']; ?></td>
                                         <td><?= $detbom['nohs']; ?></td>
