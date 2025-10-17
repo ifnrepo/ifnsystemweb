@@ -162,12 +162,13 @@ function nomoradj($tgl, $asal)
     $urut++;
     return $asal . "/A/" . $bl . $th . "/" . sprintf("%03s", $urut);
 }
-function getnomoraju($kodex){
+function getnomoraju($kodex)
+{
     $CI = &get_instance();
     $kode = $CI->helpermodel->getnomoraju($kodex)->row_array();
     $urut = (int) $kode['maxkode'];
     $urut++;
-    return $kodex.'-'.date('Ymd') . "-" . sprintf("%03s", $urut);
+    return $kodex . '-' . date('Ymd') . "-" . sprintf("%03s", $urut);
 }
 function tglmysql($tgl)
 {
@@ -377,7 +378,7 @@ function viewsku($po = '', $no = '', $dis = '', $id = '')
     } else {
         $xdis = $dis == 0 ? '' : ' dis ' . $dis;
         $xid = $id == '' ? '' : ' brg ' . $id;
-        $hasil = trim($po).' # '.trim($no).' '. $xdis;
+        $hasil = trim($po) . ' # ' . trim($no) . ' ' . $xdis;
     }
     return trim($hasil);
 }
@@ -857,12 +858,12 @@ function showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs
     $getkode = $CI->helpermodel->showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
     return $getkode;
 }
-function showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs ,$mode)
+function showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs, $mode)
 {
     $CI = &get_instance();
-    if($mode==1){
+    if ($mode == 1) {
         $getkode = $CI->helpermodel->showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
-    }else{
+    } else {
         $getkode = $CI->helpermodel->showbomjfdom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs);
     }
     return $getkode;
@@ -877,10 +878,10 @@ function bulatkan($jml, $nilai)
     $pembulatan = round($jml / $nilai);
     return $pembulatan * $nilai;
 }
-function ceknomorbc($data,$idbarang)
+function ceknomorbc($data, $idbarang)
 {
     $CI = &get_instance();
-    $getkode = $CI->helpermodel->ceknomorbc($data,$idbarang);
+    $getkode = $CI->helpermodel->ceknomorbc($data, $idbarang);
     return $getkode;
 }
 function getjumlahcifbom($id, $no)
@@ -895,35 +896,42 @@ function getdokumenbcbynomordaftar($nodaf, $mode = 0)
     $getkode = $CI->helpermodel->getdokumenbcbynomordaftar($nodaf, $mode);
     return $getkode;
 }
-function getkettujuanout($kode){
+function getkettujuanout($kode)
+{
     // $xkode = trim($kode);
     $CI = &get_instance();
     $getkode = $CI->helpermodel->getkettujuanout($kode);
     return $getkode;
 }
-function getquerytujuanout($kode,$val,$ke=0){
+function getquerytujuanout($kode, $val, $ke = 0)
+{
     $CI = &get_instance();
-    $getkode = $CI->helpermodel->getquerytujuanout($kode,$val,$ke);
+    $getkode = $CI->helpermodel->getquerytujuanout($kode, $val, $ke);
     return $getkode;
 }
-function getkurssekarang($date = ''){
+function getkurssekarang($date = '')
+{
     $CI = &get_instance();
     $getkode = $CI->helpermodel->getkurssekarang($date);
     return $getkode;
 }
-function getcurrentperiode(){
+
+function getcurrentperiode()
+{
     $bulan = date('m');
     // if($bulan <= 9){
     //     $bulan = '0'.$bulan;
     // }
-    return $bulan.date('Y');
+    return $bulan . date('Y');
 }
-function getbcasal($exbc,$data){
+function getbcasal($exbc, $data)
+{
     $CI = &get_instance();
-    $get = $CI->helpermodel->getdetailbcasal($exbc,$data);
+    $get = $CI->helpermodel->getdetailbcasal($exbc, $data);
     return $get;
 }
-function getjumlahbcmasuk($nobc){
+function getjumlahbcmasuk($nobc)
+{
     $CI = &get_instance();
     $get = $CI->helpermodel->getjumlahbcmasuk($nobc);
     return $get;

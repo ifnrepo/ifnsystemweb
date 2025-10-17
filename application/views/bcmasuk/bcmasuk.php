@@ -117,7 +117,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                   $exbcno = $detail['exnomor_bc'] == '' ? '' : '<span class="text-teal font-kecil">EX BC No. ' . $detail['exnomor_bc'] . '<br> Tgl ' . $detail['extgl_bc'] . '</span>';
                   $pengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] * $detail['kurs_usd'] : ($detail['mtuang'] == 3 ? $detail['nilai_pab'] * $detail['kurs_yen'] : $detail['nilai_pab']);
-                  $usd = $detail['kurs_usd'] == 0 ? 1 : $detail['kurs_usd'];
+                  // $usd = $detail['kurs_usd'] == 0 ? 1 : $detail['kurs_usd'];
+
+                  $usd = $detail['kurs_usd'] == 0 ? getkurssekarang(date('Y-m-d')) : $detail['kurs_usd'];
+
                   $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $detail['kurs_yen']) / $usd : $detail['nilai_pab'] / $usd);
               ?>
                   <tr>
