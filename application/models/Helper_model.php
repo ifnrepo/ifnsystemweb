@@ -1040,6 +1040,13 @@ class Helper_model extends CI_Model
 
         return $row ? (float)$row->usd : 1;
     }
+    // public function getkurssekarang($date)
+    // {
+    //     if ($date == '' || $date == NULL) {
+    //         $date = date('Y-m-d');
+    //     }
+    //     return $this->db->get_where('tb_kurs', ['tgl' => $date]);
+    // }
 
     public function getkurs30hari($date = '')
     {
