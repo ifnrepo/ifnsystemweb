@@ -67,7 +67,8 @@ class Customer extends CI_Controller
             'region' => $_POST['region'],
             'kode_negara' => $_POST['kode_negara'],
             'pembeli' => $_POST['pembeli'],
-            'cust_id' => $_POST['cust_id']
+            'cust_id' => $_POST['cust_id'],
+            'jns_pkp' => $_POST['jns_pkp']
         ];
         $hasil = $this->customer_model->simpancustomer($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -113,7 +114,8 @@ class Customer extends CI_Controller
             'region' => $_POST['region'],
             'kode_negara' => $_POST['kode_negara'],
             'pembeli' => $this->input->post('pembeli') ? 1 : 0,
-            'cust_id' => $_POST['cust_id']
+            'cust_id' => $_POST['cust_id'],
+            'jns_pkp' => $_POST['jns_pkp']
         ];
         $hasil = $this->customer_model->updatecustomer($data);
         // if ($hasil) {
@@ -202,11 +204,11 @@ class Customer extends CI_Controller
         }
 
 
-        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+
         $sheet->getDefaultRowDimension()->setRowHeight(-1);
-        // Set orientasi kertas jadi LANDSCAPE    
+
         $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
-        // Set judul file excel nya    
+
         $sheet->setTitle(" DATA CUSTOMER");
 
         // Proses file excel    

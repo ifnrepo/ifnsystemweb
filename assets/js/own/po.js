@@ -38,6 +38,36 @@ $(document).ready(function () {
 });
 // $("#tglpb").datepicker();
 
+$("#buttoncari").click(function(){
+	var inputcari = $("#textcari").val();
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "po/caripo",
+		data: {
+			kode: inputcari,
+		},
+		success: function (data) {
+			if (data === "ok") {
+				window.location.reload();
+			}
+		},
+		
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+})
+
+$("#kosongkankatcari").click(function(e){
+	e.preventDefault();
+	$.post(base_url + "po/kosongkancari", {}, function(){
+		window.location.reload();
+	});
+});
+
+
 $("#dept_kirim").change(function () {
 	$.ajax({
 		// dataType: "json",

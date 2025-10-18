@@ -18,7 +18,7 @@ class Po extends CI_Controller
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('mtuangmodel');
-        $this->load->model('helper_model','helpermodel');
+        $this->load->model('helper_model', 'helpermodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -34,11 +34,27 @@ class Po extends CI_Controller
         ];
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $data['data'] = $this->pomodel->getdata($kode);
+        $data['jumlah_po'] = $this->pomodel->countdata($kode);
+        $data['jumlah_item'] = $this->pomodel->jmlItem($kode);
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
         $this->load->view('po/po', $data);
         $this->load->view('layouts/footer', $footer);
     }
+
+    public function caripo()
+    {
+        $kode = $this->input->post('kode');
+        $this->session->set_userdata('katcari', $kode);
+        echo "ok";
+    }
+
+    public function kosongkancari()
+    {
+        $this->session->unset_userdata('katcari');
+        echo "ok";
+    }
+
     public function clear()
     {
         $this->session->set_userdata('bl', (int)date('m'));
@@ -71,7 +87,7 @@ class Po extends CI_Controller
         $header['header'] = 'transaksi';
         $data['data'] = $this->pomodel->getdatabyid($kode);
         $data['mtuang'] = $this->mtuangmodel->getdata();
-        $jne = $this->session->userdata('jn_po')=='DO' ? 0 : 1;
+        $jne = $this->session->userdata('jn_po') == 'DO' ? 0 : 1;
         $data['termspay'] = $this->helpermodel->getterms($jne);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'po';
@@ -94,19 +110,21 @@ class Po extends CI_Controller
         // $data['datadetail'] = $this->pomodel->getbarangpo();
         $this->load->view('po/getbarangpo');
     }
-    public function getdetailbarangpo(){
+    public function getdetailbarangpo()
+    {
         $data = $_POST['data'];
         $query = $this->pomodel->getbarangpo($data);
         $html  = '';
-        $no=0; 
-        foreach ($query->result_array() as $que) { $no++;
+        $no = 0;
+        foreach ($query->result_array() as $que) {
+            $no++;
             $html .= "<tr>";
-            $html .= "<td>".$que['nomor_dok']."</td>";
+            $html .= "<td>" . $que['nomor_dok'] . "</td>";
             $html .= "<td>" . $que['nomorpb'] . "</td>";
             $html .= "<td>" . $que['nama_barang'] . "</td>";
             $html .= "<td>";
             $html .= "<label class='form-check'>";
-            $html .= "<input class='form-check-input' name='cekpilihbarang' title='cekbok".$no."' id='cekbok".$no."' rel='".$que['iddetbbl']."' type='checkbox'>";
+            $html .= "<input class='form-check-input' name='cekpilihbarang' title='cekbok" . $no . "' id='cekbok" . $no . "' rel='" . $que['iddetbbl'] . "' type='checkbox'>";
             $html .= "<span class='form-check-label'>Pilih</span>";
             $html .= "</label>";
             $html .= "</td>";
@@ -115,7 +133,8 @@ class Po extends CI_Controller
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function adddetailpo(){
+    public function adddetailpo()
+    {
         $id = $_POST['id'];
         $brg = $_POST['brg'];
         $data = [
@@ -141,7 +160,7 @@ class Po extends CI_Controller
         $no = 0;
         foreach ($query as $que) {
             $no++;
-            $tampil = $que['pcs']==0 ? $que['kgs'] : $que['pcs'];
+            $tampil = $que['pcs'] == 0 ? $que['kgs'] : $que['pcs'];
             $hasil .= "<tr>";
             $hasil .= "<td>" . $no . "</td>";
             $hasil .= "<td>" . $que['nama_barang'] . "</td>";
@@ -149,25 +168,27 @@ class Po extends CI_Controller
             $hasil .= "<td>" . rupiah($tampil, 0) . "</td>";
             $hasil .= "<td>" . $que['namasatuan'] . "</td>";
             $hasil .= "<td>" . rupiah($que['harga'], 4) . "</td>";
-            $hasil .= "<td>" . rupiah($que['harga']*$tampil, 2) . "</td>";
+            $hasil .= "<td>" . rupiah($que['harga'] * $tampil, 2) . "</td>";
             $hasil .= "<td>";
             $hasil .= "<a href=" . base_url() . 'po/editdetailpo/' . $que['id'] . " class='btn btn-sm btn-primary mr-1' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah</a>";
-            $hasil .= "<a href='#' data-href=" . base_url() . 'po/hapusdetailpo/' . $que['id'] .'/'.$que['id_header']. " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
+            $hasil .= "<a href='#' data-href=" . base_url() . 'po/hapusdetailpo/' . $que['id'] . '/' . $que['id_header'] . " class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-message='Akan menghapus data ini ' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
             $hasil .= "</td>";
             $hasil .= "</tr>";
-            $totalharga += $que['harga']*$tampil;
+            $totalharga += $que['harga'] * $tampil;
         }
-        $cocok = array('datagroup' => $hasil,'totalharga' => $totalharga);
+        $cocok = array('datagroup' => $hasil, 'totalharga' => $totalharga);
         echo json_encode($cocok);
     }
-    public function editdetailpo($id){
+    public function editdetailpo($id)
+    {
         $data['data'] = $this->pomodel->getdetailpobyid($id);
-        $this->load->view('po/editdetailpo',$data);
+        $this->load->view('po/editdetailpo', $data);
     }
-    public function hapusdetailpo($id,$detid){
+    public function hapusdetailpo($id, $detid)
+    {
         $hasil = $this->pomodel->hapusdetailpo($id);
-        if($hasil){
-            $url = base_url().'po/datapo/'.$detid;
+        if ($hasil) {
+            $url = base_url() . 'po/datapo/' . $detid;
             redirect($url);
         }
     }
@@ -237,7 +258,7 @@ class Po extends CI_Controller
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'po';
         $this->load->view('layouts/header', $header);
-        $this->load->view('po/invoice',$data);
+        $this->load->view('po/invoice', $data);
         $this->load->view('layouts/footer', $footer);
     }
     public function addnobontr($id, $idbarang)
@@ -268,7 +289,8 @@ class Po extends CI_Controller
         $query = $this->out_model->updatedetail($data);
         echo $query;
     }
-    public function updatesupplier(){
+    public function updatesupplier()
+    {
         $data = [
             'id' => $_POST['id'],
             'id_supplier' => $_POST['rel']
@@ -276,7 +298,8 @@ class Po extends CI_Controller
         $hasil = $this->pomodel->updatesupplier($data);
         echo $hasil;
     }
-    public function updatebykolom($kolom){
+    public function updatebykolom($kolom)
+    {
         $data = [
             'id' => $_POST['id'],
             $kolom => $_POST['isinya']
@@ -284,19 +307,20 @@ class Po extends CI_Controller
         $hasil = $this->pomodel->updatebykolom($data);
         echo $hasil;
     }
-    public function updatekolom($kolom){
+    public function updatekolom($kolom)
+    {
         $data = [
             'id_header' => $_POST['id'],
             $kolom => $_POST['isinya']
         ];
-        $hasil = $this->pomodel->updatekolom($_POST['tbl'],$data,'id_header');
+        $hasil = $this->pomodel->updatekolom($_POST['tbl'], $data, 'id_header');
         echo $hasil;
     }
 
     public function simpanpo($id)
     {
         $cekdetail = $this->pomodel->cekdetail($id);
-        if($cekdetail['xharga']==0){
+        if ($cekdetail['xharga'] == 0) {
             $data = [
                 'user_ok' => $this->session->userdata('id'),
                 'data_ok' => 1,
@@ -311,30 +335,31 @@ class Po extends CI_Controller
                 $url = base_url() . 'po';
                 redirect($url);
             }
-        }else{
-            $this->session->set_flashdata('errorsimpan',1);
-            $url = base_url() . 'po/datapo/'.$id;
+        } else {
+            $this->session->set_flashdata('errorsimpan', 1);
+            $url = base_url() . 'po/datapo/' . $id;
             redirect($url);
         }
     }
     public function hapuspo($id)
     {
-        $cek = $this->pomodel->cekfield($id,'data_ok',0)->num_rows();
-        if($cek==1){
+        $cek = $this->pomodel->cekfield($id, 'data_ok', 0)->num_rows();
+        if ($cek == 1) {
             $query = $this->pomodel->hapuspo($id);
             if ($query) {
                 $url = base_url() . 'po';
                 redirect($url);
             }
-        }else{
-            $this->session->set_flashdata('errorsimpan',2);
-            $url = base_url().'po';
+        } else {
+            $this->session->set_flashdata('errorsimpan', 2);
+            $url = base_url() . 'po';
             redirect($url);
         }
     }
-    public function editpo($id){
-        $cek = $this->pomodel->cekfield($id,'ok_valid',0)->num_rows();
-        if($cek==1){
+    public function editpo($id)
+    {
+        $cek = $this->pomodel->cekfield($id, 'ok_valid', 0)->num_rows();
+        if ($cek == 1) {
             $data = [
                 'data_ok' => 0,
                 'user_ok' => null,
@@ -342,21 +367,21 @@ class Po extends CI_Controller
                 'id' => $id
             ];
             $hasil = $this->pomodel->editpo($data);
-            if($hasil){
-                $url = base_url().'po';
+            if ($hasil) {
+                $url = base_url() . 'po';
                 redirect($url);
-            }else{
-                $this->session->set_flashdata('errorsimpan',3);
-                $url = base_url().'po';
+            } else {
+                $this->session->set_flashdata('errorsimpan', 3);
+                $url = base_url() . 'po';
                 redirect($url);
             }
-        }else{
-            $this->session->set_flashdata('errorsimpan',2);
-            $url = base_url().'po';
+        } else {
+            $this->session->set_flashdata('errorsimpan', 2);
+            $url = base_url() . 'po';
             redirect($url);
         }
     }
-    public function viewdetail($id,$mode=0)
+    public function viewdetail($id, $mode = 0)
     {
         $data['header'] = $this->pomodel->getdatabyid($id);
         $data['detail'] = $this->pomodel->getdatadetailpo($id);

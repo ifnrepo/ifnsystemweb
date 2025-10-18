@@ -37,7 +37,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
               <div class="row">
-                <div class="col-2">
+                <div class="col-3">
                   <h4 class="mb-1 font-kecil">Jenis PO</h4>
                   <span class="font-kecil">
                     <div class="font-kecil">
@@ -58,22 +58,35 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                   </span>
                 </div>
-                <div class="col-3">
+                <div class="col-1">
                   <h4 class="mb-1 font-kecil">.</h4>
                   <span class="font-kecil">
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-1"></h4>
+
                 </div>
-                <div class="col-2">
-                  <h4 class="mb-1"></h4>
+                <div class="\col-5" style="text-align: right;">
+                  <div class="input-group mb-0">
+                    <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
+                    <input type="text" class="form-control form-sm font-kecil" placeholder="Cari No Dokumen / Nama Supplier" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
+                    <button class="btn btn-primary text-center font-kecil" type="button" id="buttoncari" style="height: 38px;">
+                      Cari Data
+                    </button>
+                    <a href="#" class="btn btn-sm btn-danger" id="kosongkankatcari">Kosongkan</a>
+
+                  </div>
+                  <br>
+                  <span class="text-info">Jumlah Record:</span> <strong class="text-danger"><?= $jumlah_po; ?></strong> |
+                  <span class="text-success">Jumlah Item:</span> <strong class="text-danger"><?= $jumlah_item; ?></strong>
                 </div>
               </div>
-              <!-- <div class="hr m-1"></div> -->
+
             </div>
           </div>
+
+
 
         </div>
         <div>
@@ -92,16 +105,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php foreach ($data as $datdet) {
                 $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item';
-                $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set'; 
-                $kensel = $datdet['ok_valid']==2 ? 'text-danger' : ''; ?>
+                $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set';
+                $kensel = $datdet['ok_valid'] == 2 ? 'text-danger' : ''; ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
-                  <td class='font-bold'><a href="<?= base_url().'po/viewdetail/'.$datdet['id']; ?>" class="<?= $kensel; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail PO (Purchase Order)"><?= $datdet['nomor_dok'] ?></a></td>
+                  <td class='font-bold'><a href="<?= base_url() . 'po/viewdetail/' . $datdet['id']; ?>" class="<?= $kensel; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail PO (Purchase Order)"><?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $namasup ?></td>
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
                   <td>
-                    <?php if($datdet['data_ok']==1 && $datdet['ok_valid']==0){ ?>
+                    <?php if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0) { ?>
                       Menunggu validasi Kep Departemen
                     <?php } ?>
                   </td>
@@ -109,18 +122,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'po/datapo/' . $datdet['id'] ?>" class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
                       <a href="#" data-href="<?= base_url() . 'po/hapuspo/' . $datdet['id'] ?>" class='btn btn-sm btn-danger <?= cekclosebook(); ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus PO <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
-                    <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0) { ?>
+                    <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0) { ?>
                       <a href="#" data-href="<?= base_url() . 'po/editpo/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit PO <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'><i class='fa fa-refresh mr-1'></i> Edit PO</a>
-                      <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Disetujui :'; $hilang = $datdet['ok_valid']==2 ? 'hilang' : ''; ?>
-                        <div class="d-flex flex-row-reverse m-0">
-                          <div class="ml-2 <?= $hilang; ?>">
-                            <a href="<?= base_url().'po/invoice/'.$datdet['id']; ?>" class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-print mr-1'></i> Cetak PO</a>
-                          </div>
-                          <div>
-                            <?= $katakata.datauser($datdet['user_valid'], 'name') ?><br>
-                            <span style='font-size: 11px;'><?= ' on '.tglmysql2($datdet['tgl_valid']) ?></span>
-                          </div>
+                    <?php } else {
+                      $katakata = $datdet['ok_valid'] == 2 ? 'Dicancel : ' : 'Disetujui :';
+                      $hilang = $datdet['ok_valid'] == 2 ? 'hilang' : ''; ?>
+                      <div class="d-flex flex-row-reverse m-0">
+                        <div class="ml-2 <?= $hilang; ?>">
+                          <a href="<?= base_url() . 'po/invoice/' . $datdet['id']; ?>" class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Cetak Data'><i class='fa fa-print mr-1'></i> Cetak PO</a>
                         </div>
+                        <div>
+                          <?= $katakata . datauser($datdet['user_valid'], 'name') ?><br>
+                          <span style='font-size: 11px;'><?= ' on ' . tglmysql2($datdet['tgl_valid']) ?></span>
+                        </div>
+                      </div>
                     <?php } ?>
                   </td>
                 </tr>

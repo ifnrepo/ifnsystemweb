@@ -245,6 +245,16 @@
                 <input type="text" class="form-control font-kecil" name="cust_id" id="cust_id" placeholder="CustId" value="<?= $data['cust_id']; ?>">
             </div>
         </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">Jenis PKP</label>
+            <div class="col">
+                <select class="form-select" name="jns_pkp" id="jns_pkp" aria-label="Default select example">
+                    <option value="0" selected>-</option>
+                    <option value="1" <?= ($data['jns_pkp'] == 1) ? 'selected' : ''; ?>>PERSEORANGAN</option>
+                    <option value="2" <?= ($data['jns_pkp'] == 2) ? 'selected' : ''; ?>>PKP</option>
+                </select>
+            </div>
+        </div>
     </div>
 </div>
 <div class="modal-footer">
@@ -293,6 +303,7 @@
                 kode_negara: $("#kode_negara").val(),
                 pembeli: pembeli,
                 cust_id: $("#cust_id").val(),
+                jns_pkp: $("#jns_pkp").val(),
                 id: $("#id").val()
             },
             success: function(data) {
