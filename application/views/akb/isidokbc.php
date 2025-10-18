@@ -315,7 +315,7 @@
                                 <div class="bg-info-lt px-2 py-1 font-bold">Sarana Angkut & Kemasan</div>
                                 <div class="card-body p-1">
                                     <!-- SARANA ANGKUT -->
-                                    <div class="text-center bg-primary-lt mb-1 font-bold <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">Pelabuhan & Tempat Penimbunan</div>
+                                    <div class="text-center bg-primary-lt mb-1 font-bold <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">Pelabuhan & Tempat Penimbunan</div>
                                     <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">Pelabuhan Muat</label>
                                         <div class="col font-kecil">
@@ -780,7 +780,7 @@
                                         // $hargaperkilo = round(($cif/$pembagi)*$detbom['kgs'],2)*$ndpbm;
                                         $hargaperkilo = round($detbom['cif']*$detbom['ndpbm'],2);
                                         $xcif = $detbom['cif'];
-                                        if($jns_bc==40 && $datheader['jns_bc']==25){
+                                        if($jns_bc==40 && ($datheader['jns_bc']==25 || $datheader['jns_bc']==41)){
                                             $hargaperkilo = $detbom['hargaperolehan'];
                                             $ndpbm = $kursusd;
                                         }
@@ -799,7 +799,7 @@
                                             $jmppn += $detbom['ppn_rupiah'];
                                             $jmpph += $detbom['pph_rupiah'];
                                         }else{
-                                            if($jns_bc==40 && $datheader['jns_bc']==25){
+                                            if($jns_bc==40 && ($datheader['jns_bc']==25 || $datheader['jns_bc']==41)){
                                                 $jmppnlokal +=  $detbom['ppn_rupiah'];
                                             }
                                         }

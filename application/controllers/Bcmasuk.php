@@ -18,6 +18,7 @@ class Bcmasuk extends CI_Controller
         $this->load->model('dept_model');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('helper_model', 'helpermodel');
+        $this->load->model('barangmodel');
         $this->load->model('bcmasukmodel');
 
         $this->load->library('Pdf');
