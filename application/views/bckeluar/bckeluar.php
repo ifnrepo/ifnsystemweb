@@ -118,7 +118,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bckeluar/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
-                    <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl_sj']; ?></td>
+                    <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_sj']; ?><br><?= $detail['tgl_sj']; ?></td>
                     <td class="text-left line-12">
                       <?php
                       if (!empty($detail['nama_customer'])) {
