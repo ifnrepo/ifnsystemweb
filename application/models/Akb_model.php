@@ -1017,6 +1017,7 @@ class Akb_model extends CI_Model
             $arrbom = showbomjf($hsl['po'], $hsl['item'], $hsl['dis'], $hsl['id_barang'], $hsl['insno'], $hsl['nobontr'], round($hsl['kgs'], 2), $no++, $hsl['pcs'],$mode);
             if (count($arrbom) > 0) {
                 foreach ($arrbom as $hasilshowbom) {
+                    $hasilshowbom['harga_satuan'] = $hsl['harga_satuan'];
                     array_push($arrhasil, $hasilshowbom);
                 }
             } else {
@@ -1205,7 +1206,11 @@ class Akb_model extends CI_Model
                             $datasimpan['pph_rupiah'] = round(($nilaibm+($xcif*$kursusd))*0.025,0); 
                         }else{
                             if(($header['jns_bc']=='25' || $header['jns_bc']=='41') && $cekjenisbc['jns_bc']=='40'){
-                                $hargaperolehan = $cekjenisbc['price']*$hasilshowbom['kgs_asli'];
+                                if($header['jns_bc']=='25'){
+                                    $hargaperolehan = $cekjenisbc['price']*$hasilshowbom['kgs_asli'];
+                                }else{
+                                    $hargaperolehan = $hasilshowbom['harga_satuan']*$hasilshowbom['kgs_asli'];
+                                }
                                 $datasimpan['hargaperolehan'] = round($hargaperolehan,0);
                                 $datasimpan['ppn'] = 11;
                                 $datasimpan['ppn_rupiah'] = round($hargaperolehan*0.11,0);
