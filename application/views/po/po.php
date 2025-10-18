@@ -67,7 +67,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col-3">
 
                 </div>
-                <div class="\col-5" style="text-align: right;">
+                <div class="col-5" style="text-align: right;">
                   <div class="input-group mb-0">
                     <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
                     <input type="text" class="form-control form-sm font-kecil" placeholder="Cari No Dokumen / Nama Supplier" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
