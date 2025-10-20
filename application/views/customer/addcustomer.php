@@ -1,5 +1,4 @@
-<div class="row font-kecil">
-
+<div class="row font-kecil p-2">
     <div class="col-6">
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Kode</label>
@@ -85,6 +84,12 @@
             <label class="col-3 col-form-label required">Npwp</label>
             <div class="col">
                 <input type="text" class="form-control font-kecil" name="npwp" id="npwp" placeholder="NPWP">
+            </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">NIK</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="nik" id="nik" placeholder="Nomor KTP">
             </div>
         </div>
 
@@ -269,7 +274,8 @@
                 kode_negara: $("#kode_negara").val(),
                 pembeli: pembeli,
                 cust_id: $("#cust_id").val(),
-                jns_pkp: $("#jns_pkp").val()
+                jns_pkp: $("#jns_pkp").val(),
+                nik: $("#nik").val()
 
             },
             success: function(data) {

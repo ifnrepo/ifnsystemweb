@@ -68,7 +68,8 @@ class Customer extends CI_Controller
             'kode_negara' => $_POST['kode_negara'],
             'pembeli' => $_POST['pembeli'],
             'cust_id' => $_POST['cust_id'],
-            'jns_pkp' => $_POST['jns_pkp']
+            'jns_pkp' => $_POST['jns_pkp'],
+            'nik' => $_POST['nik']
         ];
         $hasil = $this->customer_model->simpancustomer($data);
         $this->helpermodel->isilog($this->db->last_query());
@@ -115,7 +116,8 @@ class Customer extends CI_Controller
             'kode_negara' => $_POST['kode_negara'],
             'pembeli' => $this->input->post('pembeli') ? 1 : 0,
             'cust_id' => $_POST['cust_id'],
-            'jns_pkp' => $_POST['jns_pkp']
+            'jns_pkp' => $_POST['jns_pkp'],
+            'nik' => $_POST['nik']
         ];
         $hasil = $this->customer_model->updatecustomer($data);
         // if ($hasil) {
