@@ -23,7 +23,7 @@
 
 <script>
     $("#tomboliya").click(function(){
-        var tombolnya = $("nomorib").val();
+        // var tombolnya = $("nomorib").val();
 
         $.ajax({
             dataType: "json",
