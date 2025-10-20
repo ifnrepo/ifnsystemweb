@@ -127,7 +127,7 @@ class Billmaterial_cost extends CI_Controller
             'nobontr' => strtoupper($_POST['nobontr']),
             'dl' => $_POST['dl'],
         ];
-        $hasil = $this->billmaterialmodel_cost->simpandata($data);
+        $hasil = $this->billmaterial_cost_model->simpandata($data);
         echo $hasil;
     }
     public function hapus($id)
