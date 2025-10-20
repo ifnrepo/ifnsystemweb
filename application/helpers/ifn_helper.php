@@ -151,6 +151,19 @@ function nomorib()
     $urut++;
     return "SU-" . $deptr . '/P/' . $bl . $thp . "/" . sprintf("%03s", $urut);
 }
+function nomorproforma()
+{
+    $CI = &get_instance();
+    $tgl = $CI->session->userdata('th') . '-' . kodebulan($CI->session->userdata('bl')) . '-01';
+    $bl = date('m', strtotime($tgl));
+    $th = date('Y', strtotime($tgl));
+    $thp = date('y', strtotime($tgl));
+    $deptr = $CI->session->userdata('depttuju');
+    $kode = $CI->ibmodel->getnomorproforma($bl, $th);
+    $urut = (int) $kode['maxkode'];
+    $urut++;
+    return "PROFORMA-" . $urut;
+}
 function nomoradj($tgl, $asal)
 {
     $bl = date('m', strtotime($tgl));

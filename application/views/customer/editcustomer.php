@@ -1,4 +1,4 @@
-<div class="row font-kecil">
+<div class="row font-kecil p-2">
     <div class="col-6">
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Kode</label>
@@ -86,6 +86,12 @@
             <label class="col-3 col-form-label required">Npwp</label>
             <div class="col">
                 <input type="text" class="form-control font-kecil" name="npwp" id="npwp" value="<?= $data['npwp']; ?>" placeholder="NPWP">
+            </div>
+        </div>
+        <div class="mb-1 row">
+            <label class="col-3 col-form-label required">NIK</label>
+            <div class="col">
+                <input type="text" class="form-control font-kecil" name="nik" id="nik" value="<?= $data['nik']; ?>" placeholder="Nomor KTP">
             </div>
         </div>
     </div>
@@ -248,7 +254,7 @@
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Jenis PKP</label>
             <div class="col">
-                <select class="form-select" name="jns_pkp" id="jns_pkp" aria-label="Default select example">
+                <select class="form-select" name="jns_pkp" id="jns_pkp" aria-label="Default">
                     <option value="0" selected>-</option>
                     <option value="1" <?= ($data['jns_pkp'] == 1) ? 'selected' : ''; ?>>PERSEORANGAN</option>
                     <option value="2" <?= ($data['jns_pkp'] == 2) ? 'selected' : ''; ?>>PKP</option>
@@ -304,7 +310,8 @@
                 pembeli: pembeli,
                 cust_id: $("#cust_id").val(),
                 jns_pkp: $("#jns_pkp").val(),
-                id: $("#id").val()
+                id: $("#id").val(),
+                nik: $("#nik").val()
             },
             success: function(data) {
                 window.location.reload();

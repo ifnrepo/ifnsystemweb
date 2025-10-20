@@ -1866,10 +1866,15 @@ class Akb extends CI_Controller
             $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6";
+            if(datacustomer($data['id_buyer'],'jns_pkp')!=1){
+                $nomiden = datacustomer($data['id_buyer'],'nik');
+                $kodejnent = "3";
+            }else{
+                $nomiden = datacustomer($data['id_buyer'],'npwp');
+            }
             $status = $ke == 2 ? "10" : "";
             $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
-            // $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . trim(datacustomer($data['id_buyer'],'npwp')) . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', trim(datacustomer($data['id_buyer'],'npwp')))))) + 1)));
-            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : datacustomer($data['id_buyer'],'npwp'));
+            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : $nomiden);
             $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'],'alamat'));
             $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'],'nama_customer'));
             $kodejenisapi = $ke == 2 ? "02" : "";
@@ -2199,10 +2204,15 @@ class Akb extends CI_Controller
             $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6";
+            if(datacustomer($data['id_buyer'],'jns_pkp')!=1){
+                $nomiden = datacustomer($data['id_buyer'],'nik');
+                $kodejnent = "3";
+            }else{
+                $nomiden = datacustomer($data['id_buyer'],'npwp');
+            }
             $status = $ke == 3 ? "10" : "5";
             $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
-            // $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . trim(datacustomer($data['id_buyer'],'npwp')) . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', trim(datacustomer($data['id_buyer'],'npwp')))))) + 1)));
-            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : datacustomer($data['id_buyer'],'npwp'));
+            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : $nomiden);
             $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'],'alamat'));
             $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'],'nama_customer'));
             $kodejenisapi = $ke == 2 ? "02" : "";
@@ -2219,10 +2229,6 @@ class Akb extends CI_Controller
                 "seriEntitas" => (int) $serient,
                 "niperEntitas" => ""
             ];
-            // if ($ke == 3) {
-            //     $arrayke["nomorIjinEntitas"] = $data['noijin'];
-            //     $arrayke["tanggalIjinEntitas"] =  $data['tglijin'];
-            // }
             if ($ke == 1 || $ke==2) {
                 $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
                 $arrayke["tanggalIjinEntitas"] = "2017-07-10";

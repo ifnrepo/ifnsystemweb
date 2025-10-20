@@ -12,6 +12,7 @@ class In extends CI_Controller {
         $this->load->model('pb_model');
         $this->load->model('out_model');
         $this->load->model('in_model','inmodel');
+        $this->load->model('ib_model','ibmodel');
         $this->load->model('barangmodel');
         $this->load->model('dept_model','deptmodel');
         $this->load->model('satuanmodel');
@@ -105,10 +106,26 @@ class In extends CI_Controller {
             redirect($url);
         }
     }
+    public function simpaningm(){
+        $id = $_POST['id'];
+        $mode = 0;
+        $nomor = trim(strtoupper($_POST['nomor']));
+        $hasil = $this->inmodel->simpanin($id,$mode,$nomor);
+        if($hasil){
+            // $url = base_url().'in';
+            // redirect($url);
+            echo 1;
+        }
+    }
     public function viewdetailin($id,$mode=0){
         $data['header'] = $this->inmodel->getdatabyid($id);
         $data['detail'] = $this->inmodel->getdatadetail($id,$mode);
         $this->load->view('in/viewdetailin',$data);
+    }
+    public function konfirmasinobon($id){
+        $data['header'] = $this->inmodel->getdatabyid($id);
+        $data['nomorib'] = nomorib();
+        $this->load->view('in/konfirmasinomor',$data);
     }
     // End In Controller
     public function getdatadetailout(){
