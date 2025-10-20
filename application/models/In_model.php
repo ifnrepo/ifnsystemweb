@@ -81,7 +81,7 @@ class In_model extends CI_Model{
             return $query->result();
         }
     }
-    public function simpanin($id,$mode=0){
+    public function simpanin($id,$mode=0,$ibnya=''){
         $this->db->trans_start();
         $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
         $dataheader = $this->db->get_where('tb_header',['id' => $id])->row_array();
@@ -161,7 +161,8 @@ class In_model extends CI_Model{
             $dataubah = [
                 'ok_valid' => 1,
                 'user_valid' => $this->session->userdata('id'),
-                'tgl_valid' => date('Y-m-d H:i:s')
+                'tgl_valid' => date('Y-m-d H:i:s'),
+                'nomor_dok' => $ibnya=='' ? $dataheader['nomor_dok'] : $ibnya
             ];
             $this->db->where('id',$id);
             $this->db->update('tb_header',$dataubah);

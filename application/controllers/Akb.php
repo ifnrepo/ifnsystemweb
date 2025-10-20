@@ -2229,10 +2229,6 @@ class Akb extends CI_Controller
                 "seriEntitas" => (int) $serient,
                 "niperEntitas" => ""
             ];
-            // if ($ke == 3) {
-            //     $arrayke["nomorIjinEntitas"] = $data['noijin'];
-            //     $arrayke["tanggalIjinEntitas"] =  $data['tglijin'];
-            // }
             if ($ke == 1 || $ke==2) {
                 $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
                 $arrayke["tanggalIjinEntitas"] = "2017-07-10";
