@@ -436,7 +436,7 @@ function cekkolom(mode) {
 			return false;
 		}
 	} else {
-		if ($("#jns_bc").val() == "25" || $("#jns_bc").val() == "25") {
+		if ($("#jns_bc").val() == "25" || $("#jns_bc").val() == "41") {
 			if ($("#sumdetail").val() != $("#nilai_serah").val()) {
 				// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
 				pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
