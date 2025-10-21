@@ -32,7 +32,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-3 bg-cyan-lt">
-                  <?= $header['xid'] ?>
                  <span>Nomor Dokumen : <strong class="font-bold"><?= $header['nomor_dok']; ?></strong></span><br>
                  <span>Tgl Dokumen : <strong class="font-bold"><?= tgl_indo($header['tgl']); ?></strong></span>
                 </div>

@@ -476,6 +476,26 @@
                                                     <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'],2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
+                                            <div class="mb-1 row">
+                                                <?php 
+                                                    $hilangtomboladdkontrak = $datheader['nomorkontrak']==NULL && $datheader['send_ceisa']==0 ? '' : 'hilang';  
+                                                    $hilangtombolhapuskontrak = $datheader['nomorkontrak']!=NULL && $datheader['send_ceisa']==0  ? '' : 'hilang';  
+                                                ?>
+                                                <label class="col-3 col-form-label font-kecil">Nomor Kontrak</label>
+                                                <div class="col">
+                                                    <div class="input-group mb-2">
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat " id="nomorkontrak" value="<?= $datheader['nomorkontrak']; ?>" placeholder="Nomor Kontrak Kosong" disabled>
+                                                        <a href="<?= base_url().'ib/addkontrak/'.$datheader['id'].'/'.$datheader['dept_tuju']; ?>" class="btn btn-info font-kecil btn-flat <?= $hilangtomboladdkontrak; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Pilih Kontrak" >Pilih</a>
+                                                        <a data-href="<?= base_url().'ib/hapuskontrak/'.$datheader['id']; ?>" class="btn btn-danger font-kecil btn-flat text-white <?= $hilangtombolhapuskontrak; ?>" style="color: white !important;" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus Kontrak ini" data-title="Hapus Kontrak" >Hapus</a>
+                                                        <a class="btn btn-success font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" href="<?= base_url('kontrak/view/') . $datheader['idkontrak'].'/1'; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" >View</a>
+                                                        <a class="btn btn-primary font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" id="addkontraktolampiran" href="#" data-title="Add To Lampiran" ><i class="fa fa-upload"></i></a>
+                                                        <!-- <button class="btn font-kecil btn-flat" type="button">View</button> -->
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tglkontrak" value="<?= tglmysql($datheader['tglkontrak']); ?>" placeholder="Nomor Kontrak Kosong" >
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tgl_kep" value="<?= tglmysql($datheader['tgl_kep']); ?>" placeholder="Nomor Kontrak Kosong" >
+                                                        <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="nomor_kep" value="<?= $datheader['nomor_kep']; ?>" placeholder="Nomor Kontrak Kosong" >
+                                                    </div>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="col-sm-6">
                                             <div class="mb-1 pt-1 row bg-cyan-lt">

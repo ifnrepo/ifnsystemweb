@@ -80,7 +80,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <a href="<?= base_url() . 'billmaterial_cost/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white m-0 mr-0" id="editkategori" title="Edit data">
                                             <i class="fa fa-edit"></i>
                                         </a>
-                                        <a class="btn btn-sm btn-danger btn-icon text-white m-0" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'billmaterial/hapus/' . $key['id']; ?>" title="Hapus data">
+                                        <a class="btn btn-sm btn-danger btn-icon text-white m-0" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'billmaterial_cost/hapus/' . $key['id']; ?>" title="Hapus data">
                                             <i class="fa fa-trash-o"></i>
                                         </a>
                                     </td>

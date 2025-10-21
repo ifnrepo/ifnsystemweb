@@ -140,7 +140,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                        ?>
                       <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'] ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
                       <a href="<?= base_url().'ib/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
-                      <a href="#" data-href="<?= base_url() . 'ib/hapusaju/' . $datdet['id'] ?>" class='btn btn-sm btn-danger <?= $butsudahkirim ?> <?php if($tmb!='/1'){ echo "hilang";} ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus AJU <br><?= $datdet['nomor_dok']; ?>" title='Hapus data Transaksi'><i class="fa fa-trash"></i></a>
+                      <a href="#" data-href="<?= base_url() . 'ib/hapusaju/' . $datdet['id'].$tmb ?>" class='btn btn-sm btn-danger <?= $butsudahkirim ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus AJU <br><?= $datdet['nomor_dok']; ?>" title='Hapus data Transaksi'><i class="fa fa-trash"></i></a>
                     <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { ?>
                       <span class="text-teal">DOKUMEN SELESAI<br>Tunggu Verifikasi <b>IN</b> Departemen</span>
                     <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>

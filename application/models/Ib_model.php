@@ -32,6 +32,7 @@ class Ib_model extends CI_Model
     public function getdatabyid($kode)
     {
         $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier,supplier.alamat,supplier.kontak,supplier.npwp,supplier.nik,supplier.jns_pkp,supplier.nama_di_ceisa as namaceisa,supplier.alamat_di_ceisa as alamatceisa,supplier.kode_negara as kodenegara,ref_mt_uang.mt_uang,ref_jns_angkutan.angkutan as angkutlewat,ref_negara.kode_negara');
+        $this->db->select('tb_kontrak.nomor as nomorkontrak,tb_kontrak.tgl as tglkontrak,tb_kontrak.tgl_kep,tb_kontrak.nomor_kep,tb_kontrak.id as idkontrak');
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_muat) as pelmuat");
         $this->db->select("(select uraian_pelabuhan from ref_pelabuhan where ref_pelabuhan.kode_pelabuhan = tb_header.pelabuhan_bongkar) as pelbongkar");
         $this->db->join('dept', 'dept.dept_id=tb_header.dept_id', 'left');
@@ -39,6 +40,7 @@ class Ib_model extends CI_Model
         $this->db->join('ref_mt_uang', 'ref_mt_uang.id=tb_header.mtuang', 'left');
         $this->db->join('ref_jns_angkutan', 'ref_jns_angkutan.id=tb_header.jns_angkutan', 'left');
         $this->db->join('ref_negara', 'ref_negara.id=tb_header.bendera_angkutan', 'left');
+        $this->db->join('tb_kontrak', 'tb_kontrak.id=tb_header.id_kontrak', 'left');
         $query = $this->db->get_where('tb_header', ['tb_header.id' => $kode]);
         return $query->row_array();
     }
@@ -863,30 +865,34 @@ class Ib_model extends CI_Model
         }
         return $hasil;
     }
-    public function hapusaju($id){
+    public function hapusaju($id,$mode=0){
         $this->db->trans_start();
 
-        $this->db->select("*");
-        $this->db->from('tb_detail');
-        $this->db->where('id_akb',$id);
-        $this->db->group_by('po,item,dis,id_barang,insno,nobontr');
-        $hasil = $this->db->get();
-        foreach($hasil->result_array() as $has){
-            $iddet = explode(',',$has['arr_seri_exbc']);
-            $idjumdet = explode(',',$has['in_pcs_exbc']);
+        if($mode==1){
+            $this->db->select("*");
+            $this->db->from('tb_detail');
+            $this->db->where('id_akb',$id);
+            $this->db->group_by('po,item,dis,id_barang,insno,nobontr');
+            $hasil = $this->db->get();
+            foreach($hasil->result_array() as $has){
+                $iddet = explode(',',$has['arr_seri_exbc']);
+                $idjumdet = explode(',',$has['in_pcs_exbc']);
 
-            $ke=0;
-            foreach($iddet as $iddet){
-                $ke++;
-                $this->db->where('id',$iddet);
-                $this->db->update('tb_detail',['in_exbc' => 'in_exbc - '.$idjumdet[$ke-1]]);
+                $ke=0;
+                foreach($iddet as $iddet){
+                    $ke++;
+                    $this->db->where('id',$iddet);
+                    $this->db->update('tb_detail',['in_exbc' => 'in_exbc - '.$idjumdet[$ke-1]]);
+                }
             }
+
+            $this->db->where('id_akb',$id);
+            $this->db->update('tb_detail',['id_akb'=>NULL,'id_seri_exbc'=>NULL,'arr_seri_exbc'=>NULL,'exbc_cif'=>NULL,'exbc_ndpbm'=>NULL]);
+            $this->helpermodel->isilog($this->db->last_query());
+        }else{
+            $this->db->where('id_header',$id);
+            $this->db->delete('tb_detail');
         }
-
-        $this->db->where('id_akb',$id);
-        $this->db->update('tb_detail',['id_akb'=>NULL,'id_seri_exbc'=>NULL,'arr_seri_exbc'=>NULL,'exbc_cif'=>NULL,'exbc_ndpbm'=>NULL]);
-        $this->helpermodel->isilog($this->db->last_query());
-
         $this->db->where('id',$id);
         $this->db->delete('tb_header');
         $this->helpermodel->isilog($this->db->last_query());

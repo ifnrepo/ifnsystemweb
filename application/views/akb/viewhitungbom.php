@@ -48,7 +48,7 @@
                                 <td class="text-right"><?= rupiah($databom['pcs_asli'],0); ?></td>
                                 <td class="text-right"><?= rupiah($databom['kgs_asli'],5); ?></td>
                             </tr>
-                        <?php $jumlahpcs += $databom['pcs_asli']; $jumlahkgs += round($databom['kgs_asli'],2); } } else { ?>
+                        <?php $jumlahpcs += $databom['pcs_asli']; $jumlahkgs += $databom['kgs_asli']; } } else { ?>
                             <tr>
                                 <td class="text-center" colspan="6">Data tidak bisa di BREAKDOWM !</td>
                             </tr>
