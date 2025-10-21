@@ -1866,7 +1866,7 @@ class Akb extends CI_Controller
             $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6";
-            if(datacustomer($data['id_buyer'],'jns_pkp')!=1){
+            if(datacustomer($data['id_buyer'],'jns_pkp')!=1 && $ke==3){
                 $nomiden = datacustomer($data['id_buyer'],'nik');
                 $kodejnent = "3";
             }else{
@@ -1906,9 +1906,10 @@ class Akb extends CI_Controller
         $no = 1;
         foreach ($dokmen->result_array() as $doku) {
             $arrayke = [
+                "idDokumen" => "",
                 "kodeDokumen" => $doku['kode_dokumen'],
                 "nomorDokumen" => $doku['nomor_dokumen'],
-                "seriDokumen" => $no++,
+                "seriDokumen" => (int) $no++,
                 "tanggalDokumen" => $doku['tgl_dokumen']
             ];
             array_push($arraydokumen, $arrayke);
@@ -2050,29 +2051,29 @@ class Akb extends CI_Controller
                             $ada=1;
                             break;
                         case 'BM':
-                            if ($bahanbaku['bm'] > 0) {
-                                $tarif = $bahanbaku['bm'];
+                            // if ($bahanbaku['bm'] > 0) {
+                                $tarif = 5; //$bahanbaku['bm'];
                                 $pungutanbm += $bahanbaku['bm_rupiah'];
                                 $tarifbm = $bahanbaku['bm_rupiah'];
                                 $jmltarif = $bahanbaku['bm_rupiah'];
                                 $ada=1;
-                            }
+                            // }
                             break;
                         case 'PPN':
-                            if ($bahanbaku['ppn'] > 0) {
-                                $tarif = $bahanbaku['ppn'];
+                            // if ($bahanbaku['ppn'] > 0) {
+                                $tarif = 11; //$bahanbaku['ppn'];
                                 $pungutanppn += $bahanbaku['ppn_rupiah'];
                                 $jmltarif = $bahanbaku['ppn_rupiah'];
                                 $ada=1;
-                            }
+                            // }
                             break;
                         case 'PPH':
-                            if ($bahanbaku['pph'] > 0) {
-                                $tarif = $bahanbaku['pph'];
+                            // if ($bahanbaku['pph'] > 0) {
+                                $tarif = 2.5; //$bahanbaku['pph'];
                                 $pungutanpph += $bahanbaku['pph_rupiah'];
                                 $jmltarif = $bahanbaku['pph_rupiah'];
                                 $ada=1;
-                            }
+                            // }
                             break;
                         default:
                             # code...
@@ -2086,7 +2087,7 @@ class Akb extends CI_Controller
                             "kodeJenisPungutan" => $kodepungut,
                             "nilaiBayar" => (float) $jmltarif,
                             "nilaiFasilitas" => 0,
-                            "nilaiSudahDilunasi" => 0,
+                            "nilaiSudahDilunasi" => 1,
                             "seriBahanBaku" => $nob,
                             "tarif" => (float) $tarif,
                             "tarifFasilitas" => 100,

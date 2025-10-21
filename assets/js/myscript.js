@@ -249,6 +249,14 @@ $(document).ready(function () {
 		order: [[1, "asc"]],
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
+	$(".datatable10").DataTable({
+		paging: true,
+		searching: true,
+		info: true,
+		scrollY: true,
+		ordering: false,
+		pageLength: 50,
+	});
 	$("#modal-danger").on("show.bs.modal", function (e) {
 		document.getElementById("message").innerHTML = $(e.relatedTarget).data(
 			"message",
