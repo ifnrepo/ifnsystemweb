@@ -1071,7 +1071,7 @@ class Akb_model extends CI_Model
         $this->db->from('tb_bombc');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
-        $this->db->join('tb_hargamaterial','CONCAT(tb_hargamaterial.nobontr,tb_hargamaterial.id_barang) = CONCAT(tb_bombc.nobontr,tb_bombc.id_barang)','left');
+        $this->db->join('tb_hargamaterial','CONCAT(TRIM(tb_hargamaterial.nobontr),tb_hargamaterial.id_barang) = CONCAT(TRIM(tb_bombc.nobontr),tb_bombc.id_barang)','left');
         $this->db->where('tb_bombc.seri_barang',$seri);
         $this->db->where('tb_bombc.id_header',$idheader);
         return $this->db->get();
@@ -1220,6 +1220,8 @@ class Akb_model extends CI_Model
                     $hasil = $this->db->insert('tb_bombc', $datasimpan);
                 }
             }
+            $this->db->where('id',$id);
+            $this->db->update('tb_header',['kurs_usd' => $kursusd]);
         }
         return $hasil;
     }
