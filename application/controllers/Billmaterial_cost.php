@@ -132,10 +132,10 @@ class Billmaterial_cost extends CI_Controller
     }
     public function hapus($id)
     {
-        $hasil = $this->billmaterialmodel->hapus($id);
+        $hasil = $this->billmaterial_cost_model->hapus($id);
         if ($hasil) {
             $this->helpermodel->isilog($this->db->last_query());
-            $url = base_url() . 'billmaterial';
+            $url = base_url() . 'billmaterial_cost';
             redirect($url);
         }
     }

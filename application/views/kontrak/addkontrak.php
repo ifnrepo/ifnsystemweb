@@ -57,6 +57,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="col-sm-6 font-kecil">
               <input type="text" id="id" class="hilang" name="id" value="<?= $data['id']; ?>">
               <input type="text" id="mode" class="hilang" name="mode" value="<?= $mode; ?>">
+              <input type="text" id="tbjnsbc" class="hilang" value="<?= $data['jns_bc']; ?>">
               <div class="mb-1 row">
                 <label class="col-3 col-form-label">Nomor Kontrak</label>
                 <div class="col">
@@ -97,6 +98,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <label class="col-3 col-form-label">Kgs Kontrak</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil btn-flat inputangka text-right loss-inputangka" name="kgs" id="kgs" title="Kgs" value="<?= rupiah($data['kgs'], 2); ?>" placeholder="Kgs Kontrak">
+                </div>
+              </div>
+              <?php $hilang = $data['jns_bc']==40 ? '' : 'hilang'; ?>
+              <div class="mb-1 row <?= $hilang ?>">
+                <label class="col-3 col-form-label">Tipe</label>
+                <div class="col">
+                  <select name="tipe" id="tipe" class="form-control btn-flat font-kecil font-bold form-select">
+                    <option value="0">Pilih Tipe</option>
+                    <option value="1" <?php if($data['tipe']==1){ echo "selected"; } ?>>1 Tahap</option>
+                    <option value="2" <?php if($data['tipe']==2){ echo "selected"; } ?>>2 Tahap</option>
+                  </select>
                 </div>
               </div>
               <div class="mb-1 row">

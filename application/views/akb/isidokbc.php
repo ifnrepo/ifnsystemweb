@@ -323,7 +323,7 @@
                                 <div class="card-body p-1">
                                     <!-- SARANA ANGKUT -->
                                     <div class="text-center bg-primary-lt mb-1 font-bold <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">Pelabuhan & Tempat Penimbunan</div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">Pelabuhan Muat</label>
                                         <div class="col font-kecil">
                                             <select class="form-select font-kecil font-bold btn-flat pelabuhan" name="pelabuhan_muat" data-placeholder="Pilih Pelabuhan" id="pelabuhan_muat" <?= $selectnonaktif; ?>>
@@ -332,7 +332,7 @@
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?>">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
                                         <label class="col-3 col-form-label font-kecil mx-2">Pelabuhan Bongkar</label>
                                         <div class="col font-kecil">
                                             <select class="form-select font-kecil btn-flat pelabuhan" name="pelabuhan_bongkar" data-placeholder="Pilih Pelabuhan" id="pelabuhan_bongkar" <?= $selectnonaktif; ?>>

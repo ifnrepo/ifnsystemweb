@@ -140,10 +140,10 @@ class Billmaterial_cost_model extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('id_bom', $id);
-        $this->db->delete('ref_bom_detail');
+        $this->db->delete('ref_bom_detail_cost');
 
         $this->db->where('id', $id);
-        $this->db->delete('ref_bom');
+        $this->db->delete('ref_bom_cost');
         return $this->db->trans_complete();
     }
 }

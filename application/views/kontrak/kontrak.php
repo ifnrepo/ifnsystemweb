@@ -128,7 +128,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         </div>
         <div>
-          <table id="pbtabel" class="table nowrap order-column datatable mt-1" style="width: 100% !important;">
+          <table id="pbtabel" class="table nowrap datatable10 order-column mt-1" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Nomor</th>
@@ -155,10 +155,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
               $bold = ($datdet['kgs'] < $datdet['total_kgs']) ? 'font-bold' : '';
               $warnahuruf = ($datdet['kgs'] < $datdet['total_kgs']) ? 'text-pink' : 'text-primary';
               $saldo = $datdet['total_kgs'] - $jumlahbcmasuk;
+              $tahap = $datdet['tipe']==0 ? '' : ($datdet['tipe']==1 ? 'TIPE 1' : 'TIPE 2');
               ?>
                 <tr>
                   <td class="line-12"><?= $datdet['nomor']; ?><br><span class="text-pink" style="font-size: 11px"><?= $datdet['departemen']; ?></span></td>
-                  <td><?= $datdet['proses']; ?></td>
+                  <td class="line-12"><?= $datdet['proses']; ?><br><span class="text-primary" style="font-size: 11px"><?= $tahap ?></span></td>
                   <td><?= tglmysql($datdet['tgl_awal']); ?></td>
                   <td><?= tglmysql($datdet['tgl_akhir']); ?></td>
                   <td class="text-right"><?= rupiah($datdet['pcs'], 2); ?></td>

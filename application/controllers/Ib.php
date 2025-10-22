@@ -22,7 +22,8 @@ class Ib extends CI_Controller
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('mtuangmodel');
-        $this->load->model('helper_model', 'helpermodel');
+        $this->load->model('helper_model','helpermodel');
+        $this->load->model('kontrak_model','kontrakmodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -682,7 +683,7 @@ class Ib extends CI_Controller
                     $this->session->set_flashdata('errorsimpan', 2);
                     $this->session->set_flashdata('pesanerror', 'Respon sudah berhasil di Tarik');
                 }
-                if ($headerib['jns_bc'] == '40' || $headerib['jns_bc'] == '23') {
+                if($headerib['jns_bc']=='40'){
                     $simpankehargamaterial = $this->ibmodel->simpankehargamaterial($id);
                 }
             } else {
@@ -1940,13 +1941,28 @@ class Ib extends CI_Controller
         }
         echo $hasil;
     }
-    public function hapusaju($id)
+    public function hapusaju($id,$mode=0)
     {
-        $hasil = $this->ibmodel->hapusaju($id);
+        $hasil = $this->ibmodel->hapusaju($id,$mode);
         if ($hasil) {
             $url = base_url() . 'ib';
             redirect($url);
         }
+    }
+    public function addkontrak($id, $dept){
+        $data['idheader'] = $id;
+        $kondisi = [
+            'dept_id' => $dept,
+            'status' => 1,
+            'jnsbc' => 40,
+            'thkontrak' => '',
+            'datkecuali' => 1,
+            'nomorbpj != ' => '',
+            'nomor_ssb != ' => '',
+            'penjamin != ' => ''
+        ];
+        $data['kontrak'] = $this->kontrakmodel->getdatakontrak40($kondisi);
+        $this->load->view('akb/addkontrak', $data);
     }
     //End IB Controller
 

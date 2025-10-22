@@ -1867,8 +1867,8 @@ class Akb extends CI_Controller
             $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6";
-            if (datacustomer($data['id_buyer'], 'jns_pkp') != 1) {
-                $nomiden = datacustomer($data['id_buyer'], 'nik');
+            if(datacustomer($data['id_buyer'],'jns_pkp')!=1 && $ke==3 && trim(datacustomer($data['id_buyer'],'nik'))!=''){
+                $nomiden = datacustomer($data['id_buyer'],'nik');
                 $kodejnent = "3";
             } else {
                 $nomiden = datacustomer($data['id_buyer'], 'npwp');
@@ -1907,9 +1907,10 @@ class Akb extends CI_Controller
         $no = 1;
         foreach ($dokmen->result_array() as $doku) {
             $arrayke = [
+                "idDokumen" => "",
                 "kodeDokumen" => $doku['kode_dokumen'],
                 "nomorDokumen" => $doku['nomor_dokumen'],
-                "seriDokumen" => $no++,
+                "seriDokumen" => (int) $no++,
                 "tanggalDokumen" => $doku['tgl_dokumen']
             ];
             array_push($arraydokumen, $arrayke);
@@ -1962,8 +1963,8 @@ class Akb extends CI_Controller
                     $jumlah = $detx['kgs'];
                 }
             }
-
-            $uraian = trim($detx['po']) != '' ? spekpo($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
+            
+            $uraian = trim($detx['po']) != '' ? spekdom($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
             // $hs = trim($detx['po']) == '' ? substr($detx['nohs'], 0, 8) : substr($detx['hsx'], 0, 8);
             // $kodebc = str_contains($detx['nomor_dok'], 'NET/') ? 'KGM' : $detx['kodebc'];
             $kodebarang = trim($detx['po']) != '' ? viewsku($detx['po'], $detx['item'], $detx['dis']) : $detx['kode'];
@@ -2052,7 +2053,7 @@ class Akb extends CI_Controller
                             break;
                         case 'BM':
                             if ($bahanbaku['bm'] > 0) {
-                                $tarif = $bahanbaku['bm'];
+                                $tarif = 5; //$bahanbaku['bm'];
                                 $pungutanbm += $bahanbaku['bm_rupiah'];
                                 $tarifbm = $bahanbaku['bm_rupiah'];
                                 $jmltarif = $bahanbaku['bm_rupiah'];
@@ -2087,7 +2088,7 @@ class Akb extends CI_Controller
                             "kodeJenisPungutan" => $kodepungut,
                             "nilaiBayar" => (float) $jmltarif,
                             "nilaiFasilitas" => 0,
-                            "nilaiSudahDilunasi" => 0,
+                            "nilaiSudahDilunasi" => 1,
                             "seriBahanBaku" => $nob,
                             "tarif" => (float) $tarif,
                             "tarifFasilitas" => 100,
@@ -2185,7 +2186,7 @@ class Akb extends CI_Controller
             "kodeJenisTpb" => "1",
             "kodeKantor" => "050500",
             "kodeLokasiBayar" => "1",
-            "kodePembayar" => "",
+            "kodePembayar" => "3",
             "kodeTujuanPengiriman" => "5",
             "kotaTtd" => "BANDUNG",
             "namaTtd" => strtoupper($data['tg_jawab']),
@@ -2201,21 +2202,22 @@ class Akb extends CI_Controller
 
         $arrayentitas = [];
         for ($ke = 1; $ke <= 3; $ke++) {
-            $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
+            // $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
+            $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25 RT.000 \r\nRW.000, CANGKUANG, RANCAEKEK, KABUPATEN BANDUNG, JAWA BARAT";
             $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6";
-            if (datacustomer($data['id_buyer'], 'jns_pkp') != 1) {
-                $nomiden = datacustomer($data['id_buyer'], 'nik');
+            if(datacustomer($data['id_buyer'],'jns_pkp')!=1 && $ke==3 && trim(datacustomer($data['id_buyer'],'nik'))!=''){
+                $nomiden = datacustomer($data['id_buyer'],'nik');
                 $kodejnent = "3";
             } else {
                 $nomiden = datacustomer($data['id_buyer'], 'npwp');
             }
             $status = $ke == 3 ? "10" : "5";
             $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
-            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : $nomiden);
-            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'], 'alamat'));
-            $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'], 'nama_customer'));
+            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : trim($nomiden));
+            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'],'alamat'));
+            $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'],'nama_customer'));
             $kodejenisapi = $ke == 2 ? "02" : "";
             $arrayke = [
                 "alamatEntitas" => $alamat,
@@ -2319,7 +2321,7 @@ class Akb extends CI_Controller
                 "ndpbm" => (float) $detx['ndpbm'],
                 "netto" => (float) round($detx['kgs'], 2),
                 "nilaiBarang" => 0,
-                "posTarif" => $detx['nohs'],
+                "posTarif" => trim($detx['nohs']),
                 "seriBarang" => (int) $detx['seri_barang'],
                 "spesifikasiLain" => "-",
                 "tipe" => "-",
@@ -2346,8 +2348,8 @@ class Akb extends CI_Controller
                     "kodeSatuanBarang" => $bahanbaku['kodebc'],
                     "kodeAsalBahanBaku" => $asalbar,
                     "kodeBarang" => $bahanbaku['kode'],
-                    "kodeDokAsal" => $bahanbaku['jns_bc'],
-                    "kodeDokumen" => $bahanbaku['jns_bc'],
+                    "kodeDokAsal" => trim($bahanbaku['jns_bc']),
+                    "kodeDokumen" => trim($bahanbaku['jns_bc']),
                     "kodeKantor" => "050500",
                     "ndpbm" => 0,
                     "netto" => (float) $detx['kgs'],
