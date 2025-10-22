@@ -30,7 +30,7 @@ class Akb_model extends CI_Model
         $this->db->join('customer', 'customer.id = tb_header.id_buyer', 'left');
         $this->db->join('tb_kontrak', 'tb_kontrak.id = tb_header.id_kontrak', 'left');
         $this->db->where($arrkondisi);
-        $this->db->order_by('tb_header.id','desc');
+        $this->db->order_by('tb_header.id', 'desc');
         $this->db->order_by('tb_header.tgl', 'desc');
         $this->db->order_by('nomor_dok', 'desc');
         $hasil = $this->db->get('tb_header');
@@ -947,30 +947,31 @@ class Akb_model extends CI_Model
         }
         return $arrhasil;
     }
-    public function hitungbomjf($id,$mode,$qu=0){
-        if($mode==1){
-            if($qu==1){
+    public function hitungbomjf($id, $mode, $qu = 0)
+    {
+        if ($mode == 1) {
+            if ($qu == 1) {
                 $this->db->select("tb_detail.*,round(sum(tb_detail.pcs),2) as pcs,round(sum(tb_detail.kgs),2) as kgs,tb_header.nomor_dok,tb_header.ketprc,barang.kode");
                 $this->db->from('tb_detail');
-                $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
-                $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-                $this->db->where('id_akb',$id);
+                $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+                $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+                $this->db->where('id_akb', $id);
                 // $this->db->limit(1,0);
                 $this->db->group_by('tb_header.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
                 $this->db->order_by('po,item,dis,insno,barang.kode');
-            }else{
+            } else {
                 $this->db->select("tb_detail.*,tb_header.nomor_dok,tb_header.ketprc,barang.kode");
                 $this->db->from('tb_detail');
-                $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
-                $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-                $this->db->where('id_akb',$id);
+                $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+                $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+                $this->db->where('id_akb', $id);
                 // $this->db->limit(1,0);
                 $this->db->order_by('tb_detail.urut_akb,seri_barang');
             }
-        }else{
+        } else {
             $this->db->select("*,'' as ketprc,barang.kode");
             $this->db->from('tb_detail');
-            $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+            $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
             $this->db->where('id_header', $id);
         }
         $hasil = $this->db->get();
@@ -978,7 +979,7 @@ class Akb_model extends CI_Model
         $arrnotbom = [];
         $no = 1;
         foreach ($hasil->result_array() as $hsl) {
-            if($mode==1){
+            if ($mode == 1) {
                 $kondisi = [
                     'id_akb' => $id,
                     'tb_header.ketprc' => $hsl['ketprc'],
@@ -988,7 +989,7 @@ class Akb_model extends CI_Model
                     'tb_detail.insno' => $hsl['insno'],
                     'barang.kode' => $hsl['kode']
                 ];
-            }else{
+            } else {
                 $kondisi = [
                     'id_header' => $id,
                     'tb_header.ketprc' => $hsl['ketprc'],
@@ -1014,7 +1015,7 @@ class Akb_model extends CI_Model
             $this->db->where_in('id', $xhasil);
             $this->db->update('tb_detail');
 
-            $arrbom = showbomjf($hsl['po'], $hsl['item'], $hsl['dis'], $hsl['id_barang'], $hsl['insno'], $hsl['nobontr'], round($hsl['kgs'], 2), $no++, $hsl['pcs'],$mode);
+            $arrbom = showbomjf($hsl['po'], $hsl['item'], $hsl['dis'], $hsl['id_barang'], $hsl['insno'], $hsl['nobontr'], round($hsl['kgs'], 2), $no++, $hsl['pcs'], $mode);
             if (count($arrbom) > 0) {
                 foreach ($arrbom as $hasilshowbom) {
                     $hasilshowbom['harga_satuan'] = $hsl['harga_satuan'];
@@ -1054,19 +1055,21 @@ class Akb_model extends CI_Model
         $arrhasil2 = array('ok' => $arrhasil, 'ng' => $arrnotbom);
         return $arrhasil2;
     }
-    public function getbarangdetail($id){
+    public function getbarangdetail($id)
+    {
         $this->db->select('tb_detail.*,satuan.kodebc,tb_bombc.ndpbm,barang.kode,tb_header.nilai_serah');
         $this->db->select("(SELECT SUM(cif) FROM tb_bombc WHERE seri_barang = tb_detail.seri_barang AND id_header = tb_detail.id_header) AS cifnya");
         $this->db->from('tb_detail');
-        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-        $this->db->join('satuan','satuan.id = tb_detail.id_satuan','left');
-        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
-        $this->db->join('tb_bombc','tb_bombc.id_header = tb_detail.id_header AND tb_bombc.seri_barang = tb_detail.seri_barang','left');
-        $this->db->where('tb_detail.id_header',$id);
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+        $this->db->join('tb_bombc', 'tb_bombc.id_header = tb_detail.id_header AND tb_bombc.seri_barang = tb_detail.seri_barang', 'left');
+        $this->db->where('tb_detail.id_header', $id);
         $this->db->group_by('tb_detail.id');
         return $this->db->get();
     }
-    public function getdetailbahanbaku($idheader,$seri){
+    public function getdetailbahanbaku($idheader, $seri)
+    {
         $this->db->select('tb_bombc.*,tb_hargamaterial.cif as hamat_cif,satuan.kodebc,tb_hargamaterial.nomor_aju,tb_hargamaterial.tgl_bc,tb_hargamaterial.nomor_bc,barang.nohs,barang.nama_barang,barang.kode,tb_hargamaterial.seri_barang as hamat_seri');
         $this->db->from('tb_bombc');
         $this->db->join('barang','barang.id = tb_bombc.id_barang','left');
@@ -1139,17 +1142,18 @@ class Akb_model extends CI_Model
         $this->db->order_by('nama_barang,id_barang,nobontr');
         return $this->db->get();
     }
-    public function simpanbom($data,$id){
-        $header = $this->db->get_where('tb_header',['id'=>$id])->row_array();
-        $det = $this->db->get_where('tb_bombc',['id_header'=>$id])->num_rows();
-        if($det > 0){
-            $this->db->where('id_header',$id);
+    public function simpanbom($data, $id)
+    {
+        $header = $this->db->get_where('tb_header', ['id' => $id])->row_array();
+        $det = $this->db->get_where('tb_bombc', ['id_header' => $id])->num_rows();
+        if ($det > 0) {
+            $this->db->where('id_header', $id);
             $this->db->delete('tb_bombc');
         }
-        if($header['dept_tuju']=='SU'){
-            $detail = $this->db->get_where('tb_detail',['id_akb' => $id]);
-            $no=0;
-            foreach($detail->result_array() as $detail){
+        if ($header['dept_tuju'] == 'SU') {
+            $detail = $this->db->get_where('tb_detail', ['id_akb' => $id]);
+            $no = 0;
+            foreach ($detail->result_array() as $detail) {
                 $no++;
                 $datasimpan = [
                     'id_header' => $id,
@@ -1157,11 +1161,11 @@ class Akb_model extends CI_Model
                     'seri_barang' => $no,
                     'nobontr' => $detail['nobontr'],
                     'kgs' => round($detail['kgs'], 2),
-                    'pcs' => round($detail['kgs'], )
+                    'pcs' => round($detail['kgs'],)
                 ];
                 $hasil = $this->db->insert('tb_bombc', $datasimpan);
             }
-        }else{
+        } else {
             foreach ($data as $hasilshowbom) {
                 if (((float) $hasilshowbom['kgs_asli'] + (float) $hasilshowbom['pcs_asli']) > 0.000009) {
                     $hasilshowbom['id_header'] = $id;
@@ -1173,47 +1177,47 @@ class Akb_model extends CI_Model
                         'kgs' => round($hasilshowbom['kgs_asli'], 2),
                         'pcs' => $hasilshowbom['pcs_asli']
                     ];
-                    $cekjenisbc = ceknomorbc($hasilshowbom['nobontr'],$hasilshowbom['id_barang']);
-                    if(isset($cekjenisbc['id'])){
+                    $cekjenisbc = ceknomorbc($hasilshowbom['nobontr'], $hasilshowbom['id_barang']);
+                    if (isset($cekjenisbc['id'])) {
                         $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
-                        $kursusd = $kurssekarang['usd']==null ? 1 : $kurssekarang['usd'];
-                        $ndpbm = $cekjenisbc['mt_uang']=='' || $cekjenisbc['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                        $pembagi = $cekjenisbc['weight']==0 ? 1 : round($cekjenisbc['weight'],2);
+                        $kursusd = $kurssekarang['usd'] == null ? 1 : $kurssekarang['usd'];
+                        $ndpbm = $cekjenisbc['mt_uang'] == '' || $cekjenisbc['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+                        $pembagi = $cekjenisbc['weight'] == 0 ? 1 : round($cekjenisbc['weight'], 2);
                         switch ($cekjenisbc['mt_uang']) {
                             case 'JPY':
-                                $jpy = $cekjenisbc['cif']*$kurssekarang[strtolower($cekjenisbc['mt_uang'])];
-                                $cif = $jpy/$kursusd;
+                                $jpy = $cekjenisbc['cif'] * $kurssekarang[strtolower($cekjenisbc['mt_uang'])];
+                                $cif = $jpy / $kursusd;
                                 break;
                             default:
                                 $cif = $cekjenisbc['cif'];
                                 break;
                         }
-                        $jmmm = (($cif/$pembagi)*$ndpbm)*$hasilshowbom['kgs_asli'];
-                        $hargaperkilo = round(($cif/$pembagi)*$hasilshowbom['kgs_asli'],2)*$ndpbm;
-                        $xcif = round(($cif/$pembagi)*$hasilshowbom['kgs_asli'],2);
-                        $nilaibm = $cekjenisbc['bm'] > 0 ? ($xcif*$kursusd)*($cekjenisbc['bm']/100) : 0;
+                        $jmmm = (($cif / $pembagi) * $ndpbm) * $hasilshowbom['kgs_asli'];
+                        $hargaperkilo = round(($cif / $pembagi) * $hasilshowbom['kgs_asli'], 2) * $ndpbm;
+                        $xcif = round(($cif / $pembagi) * $hasilshowbom['kgs_asli'], 2);
+                        $nilaibm = $cekjenisbc['bm'] > 0 ? ($xcif * $kursusd) * ($cekjenisbc['bm'] / 100) : 0;
                         $datasimpan['cif'] = $xcif;
                         $datasimpan['ndpbm'] = $kursusd;
                         $datasimpan['jns_bc'] = $cekjenisbc['jns_bc'];
-                        if($cekjenisbc['jns_bc']=='23'){
+                        if ($cekjenisbc['jns_bc'] == '23') {
                             // if($cekjenisbc['co']==0){
                             $datasimpan['bm'] = $cekjenisbc['bm'];
                             // }
                             $datasimpan['ppn'] = 11;
                             $datasimpan['pph'] = 2.5;
-                            $datasimpan['bm_rupiah'] = round($nilaibm,0);
-                            $datasimpan['ppn_rupiah'] = round(($nilaibm+($xcif*$kursusd))*0.11,0); 
-                            $datasimpan['pph_rupiah'] = round(($nilaibm+($xcif*$kursusd))*0.025,0); 
-                        }else{
-                            if(($header['jns_bc']=='25' || $header['jns_bc']=='41') && $cekjenisbc['jns_bc']=='40'){
-                                if($header['jns_bc']=='25'){
-                                    $hargaperolehan = $cekjenisbc['price']*$hasilshowbom['kgs_asli'];
-                                }else{
-                                    $hargaperolehan = $hasilshowbom['harga_satuan']*$hasilshowbom['kgs_asli'];
+                            $datasimpan['bm_rupiah'] = round($nilaibm, 0);
+                            $datasimpan['ppn_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * 0.11, 0);
+                            $datasimpan['pph_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * 0.025, 0);
+                        } else {
+                            if (($header['jns_bc'] == '25' || $header['jns_bc'] == '41') && $cekjenisbc['jns_bc'] == '40') {
+                                if ($header['jns_bc'] == '25') {
+                                    $hargaperolehan = $cekjenisbc['price'] * $hasilshowbom['kgs_asli'];
+                                } else {
+                                    $hargaperolehan = $hasilshowbom['harga_satuan'] * $hasilshowbom['kgs_asli'];
                                 }
-                                $datasimpan['hargaperolehan'] = round($hargaperolehan,0);
+                                $datasimpan['hargaperolehan'] = round($hargaperolehan, 0);
                                 $datasimpan['ppn'] = 11;
-                                $datasimpan['ppn_rupiah'] = round($hargaperolehan*0.11,0);
+                                $datasimpan['ppn_rupiah'] = round($hargaperolehan * 0.11, 0);
                             }
                         }
                     }
@@ -1225,107 +1229,114 @@ class Akb_model extends CI_Model
         }
         return $hasil;
     }
-    
-    public function simpandetailbombc($data){
-        $header = $this->db->get_where('tb_header',['id'=>$data['id_header']])->row_array();
-        $det = $this->db->get_where('tb_bombc',['id'=>$data['id']])->row_array();
-        $cekjenisbc = ceknomorbc($data['nobontr'],$data['id_barang']);
-        if(isset($cekjenisbc['id'])){
+
+    public function simpandetailbombc($data)
+    {
+        $header = $this->db->get_where('tb_header', ['id' => $data['id_header']])->row_array();
+        $det = $this->db->get_where('tb_bombc', ['id' => $data['id']])->row_array();
+        $cekjenisbc = ceknomorbc($data['nobontr'], $data['id_barang']);
+        if (isset($cekjenisbc['id'])) {
             $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
-            $kursusd = $kurssekarang['usd']==null ? 1 : $kurssekarang['usd'];
-            $ndpbm = $cekjenisbc['mt_uang']=='' || $cekjenisbc['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-            $pembagi = $cekjenisbc['weight']==0 ? 1 : round($cekjenisbc['weight'],2);
+            $kursusd = $kurssekarang['usd'] == null ? 1 : $kurssekarang['usd'];
+            $ndpbm = $cekjenisbc['mt_uang'] == '' || $cekjenisbc['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+            $pembagi = $cekjenisbc['weight'] == 0 ? 1 : round($cekjenisbc['weight'], 2);
             switch ($cekjenisbc['mt_uang']) {
                 case 'JPY':
-                    $jpy = $cekjenisbc['cif']*$kurssekarang[strtolower($cekjenisbc['mt_uang'])];
-                    $cif = $jpy/$kursusd;
+                    $jpy = $cekjenisbc['cif'] * $kurssekarang[strtolower($cekjenisbc['mt_uang'])];
+                    $cif = $jpy / $kursusd;
                     break;
                 default:
                     $cif = $cekjenisbc['cif'];
                     break;
             }
-            $jmmm = (($cif/$pembagi)*$ndpbm)*$det['kgs'];
-            $hargaperkilo = round(($cif/$pembagi)*$det['kgs'],2)*$ndpbm;
-            $xcif = round(($cif/$pembagi)*$det['kgs'],2);
-            $nilaibm = $cekjenisbc['bm'] > 0 ? ($xcif*$kursusd)*($cekjenisbc['bm']/100) : 0;
+            $jmmm = (($cif / $pembagi) * $ndpbm) * $det['kgs'];
+            $hargaperkilo = round(($cif / $pembagi) * $det['kgs'], 2) * $ndpbm;
+            $xcif = round(($cif / $pembagi) * $det['kgs'], 2);
+            $nilaibm = $cekjenisbc['bm'] > 0 ? ($xcif * $kursusd) * ($cekjenisbc['bm'] / 100) : 0;
             $data['cif'] = $xcif;
             $data['ndpbm'] = $kursusd;
             $data['jns_bc'] = $cekjenisbc['jns_bc'];
-            if($cekjenisbc['jns_bc']=='23'){
+            if ($cekjenisbc['jns_bc'] == '23') {
                 // if($cekjenisbc['co']==0){
                 $data['bm'] = $data['bm'] > 0 ? $cekjenisbc['bm'] : $data['bm'];
                 // }
                 $data['ppn'] = $data['ppn'] > 0 ? 11 : $data['ppn'];
                 $data['pph'] = $data['pph'] > 0 ? 2.5 : $data['pph'];
-                $data['bm_rupiah'] = round($nilaibm,0);
-                $data['ppn_rupiah'] = round(($nilaibm+($xcif*$kursusd))*($data['ppn']/100),0); 
-                $data['pph_rupiah'] = round(($nilaibm+($xcif*$kursusd))*($data['pph']/100),0); 
-            }else{
-                if(($header['jns_bc']=='25' || $header['jns_bc']=='41') && $cekjenisbc['jns_bc']=='40'){
+                $data['bm_rupiah'] = round($nilaibm, 0);
+                $data['ppn_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * ($data['ppn'] / 100), 0);
+                $data['pph_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * ($data['pph'] / 100), 0);
+            } else {
+                if (($header['jns_bc'] == '25' || $header['jns_bc'] == '41') && $cekjenisbc['jns_bc'] == '40') {
                     $apappn = $data['ppn'] > 0 ? 1 : 0;
-                    $hargaperolehan = ($cekjenisbc['price']*$det['kgs']);
-                    $data['hargaperolehan'] = round($hargaperolehan,0)*$apappn;
+                    $hargaperolehan = ($cekjenisbc['price'] * $det['kgs']);
+                    $data['hargaperolehan'] = round($hargaperolehan, 0) * $apappn;
                     $data['ppn'] = $data['ppn'] > 0 ? 11 : $data['ppn'];
-                    $data['ppn_rupiah'] = round($hargaperolehan*($data['ppn']/100),0);
+                    $data['ppn_rupiah'] = round($hargaperolehan * ($data['ppn'] / 100), 0);
                 }
             }
         }
         unset($data['id_barang']);
         unset($data['id_header']);
-        $this->db->where('id',$data['id']);
-        return $this->db->update('tb_bombc',$data);
+        $this->db->where('id', $data['id']);
+        return $this->db->update('tb_bombc', $data);
     }
-    public function isidatacifbombc($id){
+    public function isidatacifbombc($id)
+    {
         $this->db->trans_start();
-        $header = $this->db->get_where('tb_header',['id'=>$id])->row_array();
-        $det = $this->db->get_where('tb_bombc',['id_header'=>$id]);
-        foreach($det->result_array() as $deta){
-            $data['bm']=0;$data['ppn']=0;$data['pph']=0;
-            $data['bm_rupiah']=0;$data['ppn_rupiah']=0;$data['pph_rupiah']=0;
-            $cekjenisbc = ceknomorbc($deta['nobontr'],$deta['id_barang']);
-            if(isset($cekjenisbc['id'])){
+        $header = $this->db->get_where('tb_header', ['id' => $id])->row_array();
+        $det = $this->db->get_where('tb_bombc', ['id_header' => $id]);
+        foreach ($det->result_array() as $deta) {
+            $data['bm'] = 0;
+            $data['ppn'] = 0;
+            $data['pph'] = 0;
+            $data['bm_rupiah'] = 0;
+            $data['ppn_rupiah'] = 0;
+            $data['pph_rupiah'] = 0;
+            $cekjenisbc = ceknomorbc($deta['nobontr'], $deta['id_barang']);
+            if (isset($cekjenisbc['id'])) {
                 $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
-                $kursusd = $kurssekarang['usd']==null ? 1 : $kurssekarang['usd'];
-                $ndpbm = $cekjenisbc['mt_uang']=='' || $cekjenisbc['mt_uang']=='IDR' ? 0 : $kurssekarang['usd'];
-                $pembagi = $cekjenisbc['weight']==0 ? 1 : round($cekjenisbc['weight'],2);
+                $kursusd = $kurssekarang['usd'] == null ? 1 : $kurssekarang['usd'];
+                $ndpbm = $cekjenisbc['mt_uang'] == '' || $cekjenisbc['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
+                $pembagi = $cekjenisbc['weight'] == 0 ? 1 : round($cekjenisbc['weight'], 2);
                 switch ($cekjenisbc['mt_uang']) {
                     case 'JPY':
-                        $jpy = $cekjenisbc['cif']*$kurssekarang[strtolower($cekjenisbc['mt_uang'])];
-                        $cif = $jpy/$kursusd;
+                        $jpy = $cekjenisbc['cif'] * $kurssekarang[strtolower($cekjenisbc['mt_uang'])];
+                        $cif = $jpy / $kursusd;
                         break;
                     default:
                         $cif = $cekjenisbc['cif'];
                         break;
                 }
-                $jmmm = (($cif/$pembagi)*$ndpbm)*$deta['kgs'];
-                $hargaperkilo = round(($cif/$pembagi)*$deta['kgs'],2)*$ndpbm;
-                $xcif = round(($cif/$pembagi)*$deta['kgs'],2);
-                $nilaibm = $cekjenisbc['bm'] > 0 ? ($xcif*$kursusd)*($cekjenisbc['bm']/100) : 0;
+                $jmmm = (($cif / $pembagi) * $ndpbm) * $deta['kgs'];
+                $hargaperkilo = round(($cif / $pembagi) * $deta['kgs'], 2) * $ndpbm;
+                $xcif = round(($cif / $pembagi) * $deta['kgs'], 2);
+                $nilaibm = $cekjenisbc['bm'] > 0 ? ($xcif * $kursusd) * ($cekjenisbc['bm'] / 100) : 0;
                 $data['cif'] = $xcif;
                 $data['ndpbm'] = $kursusd;
                 $data['jns_bc'] = $cekjenisbc['jns_bc'];
-                if($cekjenisbc['jns_bc']=='23'){
+                if ($cekjenisbc['jns_bc'] == '23') {
                     // if($cekjenisbc['co']==0){
                     $data['bm'] = $cekjenisbc['bm'];
                     // }
                     $data['ppn'] = 11;
                     $data['pph'] = 2.5;
-                    $data['bm_rupiah'] = round($nilaibm,0);
-                    $data['ppn_rupiah'] = round(($nilaibm+($xcif*$kursusd))*0.11,0); 
-                    $data['pph_rupiah'] = round(($nilaibm+($xcif*$kursusd))*0.025,0); 
+                    $data['bm_rupiah'] = round($nilaibm, 0);
+                    $data['ppn_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * 0.11, 0);
+                    $data['pph_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * 0.025, 0);
                 }
             }
             unset($data['id_barang']);
             unset($data['id_header']);
             unset($data['nobontr']);
-            $this->db->where('id',$deta['id']);
-            $this->db->update('tb_bombc',$data);
+            $this->db->where('id', $deta['id']);
+            $this->db->update('tb_bombc', $data);
         }
         return $this->db->trans_complete();
     }
-    public function simpanaddkontrak($data){
-        $this->db->where('id',$data['id']);
-        return $this->db->update('tb_header',$data);
+    public function simpanaddkontrak($data)
+    {
+        $this->db->where('id', $data['id']);
+        return $this->db->update('tb_header', $data);
     }
     public function hapuskontrak($id)
     {
@@ -1356,9 +1367,9 @@ class Akb_model extends CI_Model
         ];
         return $this->db->insert('tb_header', $arrkondisi);
     }
-    public function getbongaichu($id,$asal)
+    public function getbongaichu($id, $asal)
     {
-        if($asal=='FG'){
+        if ($asal == 'FG') {
             $dari = $this->db->get_where('tb_header', ['id' => $id])->row_array();
             $this->db->select('tb_header.nomor_dok,tb_header.id,tb_header.tgl,tb_header.ketprc,ref_proses.ket,sum(tb_detail.kgs) as kgs, sum(tb_detail.pcs) as pcs');
             $this->db->from('tb_detail');
@@ -1369,16 +1380,16 @@ class Akb_model extends CI_Model
             $this->db->where('tb_header.dept_tuju', $dari['dept_tuju']);
             $this->db->where('tb_header.data_ok', 1);
             $this->db->group_by('tb_detail.id_header');
-        }else{
+        } else {
             $this->db->select('tb_header.*,tb_header.keterangan as ket,sum(tb_detail.kgs) as kgs, sum(tb_detail.pcs) as pcs');
             $this->db->from('tb_detail');
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
             $this->db->where('tb_detail.id_akb', NULL);
-            $this->db->where('tb_header.kode_dok','PO');
-            $this->db->where('tb_header.data_ok',1);
+            $this->db->where('tb_header.kode_dok', 'PO');
+            $this->db->where('tb_header.data_ok', 1);
             // $this->db->where('tb_header.ok_tuju',1);
-            $this->db->where('tb_header.ok_valid',1);
-            $this->db->like('tb_header.nomor_dok','SV/');
+            $this->db->where('tb_header.ok_valid', 1);
+            $this->db->like('tb_header.nomor_dok', 'SV/');
             $this->db->group_by('tb_detail.id_header');
         }
         return $this->db->get();
@@ -1393,7 +1404,7 @@ class Akb_model extends CI_Model
             $arrdat = $kode['data'];
             $que = $this->db->get_where('tb_header', ['id' => $arrdat[$x]])->row_array();
 
-            if($que['dept_tuju']=='SU'){
+            if ($que['dept_tuju'] == 'SU') {
                 $idrekanan = $que['id_pemasok'];
             }
             $this->db->where('id_header', $arrdat[$x]);
@@ -1407,18 +1418,18 @@ class Akb_model extends CI_Model
             $hasil = $this->db->get()->row_array();
 
             $this->db->where('id', $dataheader['id']);
-            $this->db->update('tb_header', ['jumlah_barang' => $hasil['jumrek'],'id_rekanan' => $idrekanan]);
+            $this->db->update('tb_header', ['jumlah_barang' => $hasil['jumrek'], 'id_rekanan' => $idrekanan]);
         }
         $this->db->trans_complete();
         return $dataheader['id'];
     }
-    public function hapusaju($id,$mode)
+    public function hapusaju($id, $mode)
     {
         $this->db->trans_start();
-        if($mode==0){
+        if ($mode == 0) {
             $this->db->where('id_header', $id);
             $this->db->delete('tb_detail');
-        }else{
+        } else {
             $this->db->where('id_akb', $id);
             $this->db->update('tb_detail', ['id_akb' => NULL]);
             $this->helpermodel->isilog($this->db->last_query());
@@ -1433,12 +1444,24 @@ class Akb_model extends CI_Model
     {
         return $this->db->insert('lampiran', $data);
     }
-    public function isiurutakb($id,$no,$qu=0,$array=[]){
-        if($qu==0){
-            $this->db->where('id',$id);
-        }else{
+    public function isiurutakb($id, $no, $qu = 0, $array = [])
+    {
+        if ($qu == 0) {
+            $this->db->where('id', $id);
+        } else {
             $this->db->where($array);
         }
-        return $this->db->update('tb_detail',['seri_urut_akb'=>$no]);
+        return $this->db->update('tb_detail', ['seri_urut_akb' => $no]);
+    }
+
+    public function UpdateData_gambar($id, $data)
+    {
+        $this->db->where('id', $id);
+        return $this->db->update('tb_header', $data);
+    }
+    public function UpdateData_gambarkedua($id, $data)
+    {
+        $this->db->where('id', $id);
+        return $this->db->update('tb_header', $data);
     }
 }

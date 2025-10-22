@@ -108,7 +108,7 @@ class Akb extends CI_Controller
     {
         $data['mode'] = $mode;
         $data['header'] = $this->akbmodel->getdatabyid($id, $mode);
-        $data['detail'] = $this->akbmodel->getdatadetailib($id, $mode,$data['header']['urutakb']);
+        $data['detail'] = $this->akbmodel->getdatadetailib($id, $mode, $data['header']['urutakb']);
         $data['lampiran'] = $this->akbmodel->getdatalampiran($id);
         $this->load->view('akb/viewdetailakb', $data);
     }
@@ -307,35 +307,36 @@ class Akb extends CI_Controller
         $data['idheader'] = $id;
         $this->load->view('akb/getbongaichu', $data);
     }
-    public function getdokumenakb(){
+    public function getdokumenakb()
+    {
         $id = $_POST['id'];
         $asal = $_POST['asal'];
-        $hasil = $this->akbmodel->getbongaichu($id,$asal);
+        $hasil = $this->akbmodel->getbongaichu($id, $asal);
         $html = '';
-        if($hasil->num_rows() > 0){
-            $no=0;
-            foreach($hasil->result_array() as $hasil){
+        if ($hasil->num_rows() > 0) {
+            $no = 0;
+            foreach ($hasil->result_array() as $hasil) {
                 $no++;
                 $html .= "<tr>";
-                $html .= "<td>".$no."</td>";
-                $html .= "<td class='text-blue font-bold'>".$hasil['nomor_dok']."</td>";
-                $html .= "<td>".$hasil['tgl']."</td>";
-                $html .= "<td>".$hasil['ket']."</td>";
-                $html .= "<td class='text-right'>".rupiah($hasil['pcs'],0)."</td>";
-                $html .= "<td class='text-right'>".rupiah($hasil['kgs'],2)."</td>";
+                $html .= "<td>" . $no . "</td>";
+                $html .= "<td class='text-blue font-bold'>" . $hasil['nomor_dok'] . "</td>";
+                $html .= "<td>" . $hasil['tgl'] . "</td>";
+                $html .= "<td>" . $hasil['ket'] . "</td>";
+                $html .= "<td class='text-right'>" . rupiah($hasil['pcs'], 0) . "</td>";
+                $html .= "<td class='text-right'>" . rupiah($hasil['kgs'], 2) . "</td>";
                 $html .= "<td class='text-center'>";
                 $html .= "<label class='form-check m-0'>";
-                $html .= "<input class='form-check-input' name='cekpilihbarang' id='cekbok".$no."' rel='".$hasil['id']."' type='checkbox' title='".$hasil['id']."' >";
+                $html .= "<input class='form-check-input' name='cekpilihbarang' id='cekbok" . $no . "' rel='" . $hasil['id'] . "' type='checkbox' title='" . $hasil['id'] . "' >";
                 $html .= "<span class='form-check-label'></span></label>";
                 $html .= "</td>";
                 $html .= "</tr>";
             }
-        }else{
+        } else {
             $html .= '<tr>';
             $html .= "<td colspan='7' class='text-center'>Data yang dicari tidak ditemukan !</td>";
             $html .= '</tr>';
         }
-        $cocok = array('datagroup' => $html,'id'=>$id);
+        $cocok = array('datagroup' => $html, 'id' => $id);
         echo json_encode($cocok);
     }
     public function tambahajusubkon()
@@ -353,9 +354,9 @@ class Akb extends CI_Controller
         $kode = $this->akbmodel->tambahbongaichu($arrgo);
         echo $kode;
     }
-    public function hapusaju($id,$mode=0)
+    public function hapusaju($id, $mode = 0)
     {
-        $hasil = $this->akbmodel->hapusaju($id,$mode);
+        $hasil = $this->akbmodel->hapusaju($id, $mode);
         if ($hasil) {
             $url = base_url() . 'akb';
             redirect($url);
@@ -1585,7 +1586,7 @@ class Akb extends CI_Controller
         ];
         array_push($arrkemas, $arraykemasan);
         $arraybarang = [];
-        $datadet = $this->akbmodel->excellampiran261($id,$data['urutakb']);
+        $datadet = $this->akbmodel->excellampiran261($id, $data['urutakb']);
         $no = 0;
         $jumlahfasilitas = 0;
         $pungutanbm = 0;
@@ -1629,9 +1630,9 @@ class Akb extends CI_Controller
             $uraian = trim($detx['po']) != '' ? spekpo($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
             $hs = trim($detx['po']) == '' ? substr($detx['nohs'], 0, 8) : substr($detx['hsx'], 0, 8);
             $kodebc = str_contains($detx['nomor_dok'], 'NET/') ? 'KGM' : $detx['kodebc'];
-            if(str_contains($data['nomor_inv'], 'NET/') || str_contains($data['nomor_inv'], 'RSC/')){
+            if (str_contains($data['nomor_inv'], 'NET/') || str_contains($data['nomor_inv'], 'RSC/')) {
                 $kodebc = 'KGM';
-            }else{
+            } else {
                 if (str_contains($detx['nomor_dok'], 'NET/')) {
                     $kodebc = 'KGM';
                 } else {
@@ -1859,7 +1860,7 @@ class Akb extends CI_Controller
             "tanggalTtd" => $data['tgl_aju'],
             "volume" => 0
         ];
-    
+
         $arrayentitas = [];
         for ($ke = 1; $ke <= 3; $ke++) {
             $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
@@ -1869,14 +1870,14 @@ class Akb extends CI_Controller
             if(datacustomer($data['id_buyer'],'jns_pkp')!=1 && $ke==3 && trim(datacustomer($data['id_buyer'],'nik'))!=''){
                 $nomiden = datacustomer($data['id_buyer'],'nik');
                 $kodejnent = "3";
-            }else{
-                $nomiden = datacustomer($data['id_buyer'],'npwp');
+            } else {
+                $nomiden = datacustomer($data['id_buyer'], 'npwp');
             }
             $status = $ke == 2 ? "10" : "";
             $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
             $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : $nomiden);
-            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'],'alamat'));
-            $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'],'nama_customer'));
+            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'], 'alamat'));
+            $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'], 'nama_customer'));
             $kodejenisapi = $ke == 2 ? "02" : "";
             $arrayke = [
                 "alamatEntitas" => $alamat,
@@ -1969,12 +1970,12 @@ class Akb extends CI_Controller
             $kodebarang = trim($detx['po']) != '' ? viewsku($detx['po'], $detx['item'], $detx['dis']) : $detx['kode'];
             $arraykebarang = [
                 "cif" => (float) round($detx['cifnya'], 2),
-                "cifRupiah" => round($detx['cifnya']*$detx['ndpbm'], 2),
+                "cifRupiah" => round($detx['cifnya'] * $detx['ndpbm'], 2),
                 "diskon" => 0,
                 "fob" => 0,
                 "freight" => 0,
                 "hargaEkspor" => 0,
-                "hargaPenyerahan" => (float) round($detx['harga']-$detx['sp_disc']-$detx['cash_disc'],2),
+                "hargaPenyerahan" => (float) round($detx['harga'] - $detx['sp_disc'] - $detx['cash_disc'], 2),
                 "hargaPerolehan" => 0,
                 "isiPerKemasan" => 0,
                 "jumlahKemasan" => (float) $detx['pcs'],
@@ -2002,7 +2003,7 @@ class Akb extends CI_Controller
             ];
             $arr_bahanbaku = [];
             $nob = 0;
-            $bahanbaku = $this->akbmodel->getdetailbahanbaku($detx['id_header'],$detx['seri_barang']);
+            $bahanbaku = $this->akbmodel->getdetailbahanbaku($detx['id_header'], $detx['seri_barang']);
             foreach ($bahanbaku->result_array() as $bahanbaku) {
                 $nob++;
                 $asalbar = $bahanbaku['jns_bc'] == 23 ? "0" : "1";
@@ -2012,7 +2013,7 @@ class Akb extends CI_Controller
                 $hrgserah = $bahanbaku['jns_bc'] == 23 ? (float) $bahanbaku['hamat_cif'] : (float) $bahanbaku['hargaperolehan'];
                 $barangbahanbaku = [
                     "cif" => (float) round($bahanbaku['cif'], 2),
-                    "cifRupiah" => (float) round($bahanbaku['cif']*$bahanbaku['ndpbm'], 2),
+                    "cifRupiah" => (float) round($bahanbaku['cif'] * $bahanbaku['ndpbm'], 2),
                     "hargaPenyerahan" => $hrgserah,
                     "hargaPerolehan" => $hrgserah,
                     "jumlahSatuan" => (float) $bahanbaku['kgs'],
@@ -2023,7 +2024,7 @@ class Akb extends CI_Controller
                     "kodeSatuanBarang" => $bahanbaku['kodebc'],
                     "merkBarang" => "-",
                     "ndpbm" => 0,
-                    "nomorAjuDokAsal" => str_replace('-','',$bahanbaku['nomor_aju']),
+                    "nomorAjuDokAsal" => str_replace('-', '', $bahanbaku['nomor_aju']),
                     "nomorDaftarDokAsal" => $bahanbaku['nomor_bc'],
                     "posTarif" => substr($bahanbaku['nohs'], 0, 8),
                     "seriBahanBaku" => $nob,
@@ -2034,7 +2035,7 @@ class Akb extends CI_Controller
                     "tanggalDaftarDokAsal" => $bahanbaku['tgl_bc'],
                     "tipeBarang" => "-",
                     "ukuranBarang" => "-",
-                    "uraianBarang" => $bahanbaku['nama_barang'],                      
+                    "uraianBarang" => $bahanbaku['nama_barang'],
                 ];
                 $arraybahanbakutarif = [];
                 $tarifbm = 0;
@@ -2048,7 +2049,7 @@ class Akb extends CI_Controller
                             $ke = 4;
                             $pungutanppnlokal += $bahanbaku['ppn_rupiah'];
                             $jmltarif = $bahanbaku['ppn_rupiah'];
-                            $ada=1;
+                            $ada = 1;
                             break;
                         case 'BM':
                             if ($bahanbaku['bm'] > 0) {
@@ -2056,7 +2057,7 @@ class Akb extends CI_Controller
                                 $pungutanbm += $bahanbaku['bm_rupiah'];
                                 $tarifbm = $bahanbaku['bm_rupiah'];
                                 $jmltarif = $bahanbaku['bm_rupiah'];
-                                $ada=1;
+                                $ada = 1;
                             }
                             break;
                         case 'PPN':
@@ -2064,7 +2065,7 @@ class Akb extends CI_Controller
                                 $tarif = $bahanbaku['ppn'];
                                 $pungutanppn += $bahanbaku['ppn_rupiah'];
                                 $jmltarif = $bahanbaku['ppn_rupiah'];
-                                $ada=1;
+                                $ada = 1;
                             }
                             break;
                         case 'PPH':
@@ -2072,14 +2073,14 @@ class Akb extends CI_Controller
                                 $tarif = $bahanbaku['pph'];
                                 $pungutanpph += $bahanbaku['pph_rupiah'];
                                 $jmltarif = $bahanbaku['pph_rupiah'];
-                                $ada=1;
+                                $ada = 1;
                             }
                             break;
                         default:
                             # code...
                             break;
                     }
-                    if($ada==1){
+                    if ($ada == 1) {
                         $bahanbakutarif = [
                             "kodeJenisTarif" => "1",
                             "jumlahSatuan" => (float) round($bahanbaku['kgs'], 2),
@@ -2198,7 +2199,7 @@ class Akb extends CI_Controller
             "userPortal" => "",
             "volume" => 0
         ];
-    
+
         $arrayentitas = [];
         for ($ke = 1; $ke <= 3; $ke++) {
             // $alamatifn = "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT";
@@ -2209,8 +2210,8 @@ class Akb extends CI_Controller
             if(datacustomer($data['id_buyer'],'jns_pkp')!=1 && $ke==3 && trim(datacustomer($data['id_buyer'],'nik'))!=''){
                 $nomiden = datacustomer($data['id_buyer'],'nik');
                 $kodejnent = "3";
-            }else{
-                $nomiden = datacustomer($data['id_buyer'],'npwp');
+            } else {
+                $nomiden = datacustomer($data['id_buyer'], 'npwp');
             }
             $status = $ke == 3 ? "10" : "5";
             $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
@@ -2231,7 +2232,7 @@ class Akb extends CI_Controller
                 "seriEntitas" => (int) $serient,
                 "niperEntitas" => ""
             ];
-            if ($ke == 1 || $ke==2) {
+            if ($ke == 1 || $ke == 2) {
                 $arrayke["nomorIjinEntitas"] = "1555/KM.4/2017";
                 $arrayke["tanggalIjinEntitas"] = "2017-07-10";
             }
@@ -2297,16 +2298,16 @@ class Akb extends CI_Controller
                     $jumlah = $detx['kgs'];
                 }
             }
-            
+
             $uraian = trim($detx['po']) != '' ? spekpo($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
             // $hs = trim($detx['po']) == '' ? substr($detx['nohs'], 0, 8) : substr($detx['hsx'], 0, 8);
             // $kodebc = str_contains($detx['nomor_dok'], 'NET/') ? 'KGM' : $detx['kodebc'];
             $kodebarang = trim($detx['po']) != '' ? viewsku($detx['po'], $detx['item'], $detx['dis']) : $detx['kode'];
             $arraykebarang = [
                 "cif" => (float) round($detx['cifnya'], 2),
-                "cifRupiah" => round($detx['cifnya']*$detx['ndpbm'], 2),
+                "cifRupiah" => round($detx['cifnya'] * $detx['ndpbm'], 2),
                 "hargaEkspor" => 0,
-                "hargaPenyerahan" => (float) round($detx['harga'],2),
+                "hargaPenyerahan" => (float) round($detx['harga'], 2),
                 "hargaPerolehan" => 0,
                 "isiPerKemasan" => 0,
                 "jumlahKemasan" => (float) $detx['qty'],
@@ -2330,7 +2331,7 @@ class Akb extends CI_Controller
             ];
             $arr_bahanbaku = [];
             $nob = 0;
-            $bahanbaku = $this->akbmodel->getdetailbahanbaku($detx['id_header'],$detx['seri_barang']);
+            $bahanbaku = $this->akbmodel->getdetailbahanbaku($detx['id_header'], $detx['seri_barang']);
             foreach ($bahanbaku->result_array() as $bahanbaku) {
                 $nob++;
                 $asalbar = $bahanbaku['jns_bc'] == 23 ? "0" : "1";
@@ -2353,7 +2354,7 @@ class Akb extends CI_Controller
                     "ndpbm" => 0,
                     "netto" => (float) $detx['kgs'],
                     "nilaiJasa" => 0,
-                    "nomorAjuDokAsal" => str_replace('-','',$bahanbaku['nomor_aju']),
+                    "nomorAjuDokAsal" => str_replace('-', '', $bahanbaku['nomor_aju']),
                     "nomorDaftarDokAsal" => $bahanbaku['nomor_bc'],
                     "posTarif" => substr($bahanbaku['nohs'], 0, 8),
                     "seriBahanBaku" => $nob,
@@ -2363,7 +2364,7 @@ class Akb extends CI_Controller
                     "tanggalDaftarDokAsal" => $bahanbaku['tgl_bc'],
                     "tipeBarang" => "-",
                     "ukuranBarang" => "-",
-                    "uraianBarang" => $bahanbaku['nama_barang'],   
+                    "uraianBarang" => $bahanbaku['nama_barang'],
                 ];
                 $arraybahanbakutarif = [];
                 $tarifbm = 0;
@@ -2377,7 +2378,7 @@ class Akb extends CI_Controller
                             $ke = 4;
                             $pungutanppnlokal += $bahanbaku['ppn_rupiah'];
                             $jmltarif = $bahanbaku['ppn_rupiah'];
-                            $ada=1;
+                            $ada = 1;
                             break;
                         case 'BM':
                             if ($bahanbaku['bm'] > 0) {
@@ -2385,7 +2386,7 @@ class Akb extends CI_Controller
                                 $pungutanbm += $bahanbaku['bm_rupiah'];
                                 $tarifbm = $bahanbaku['bm_rupiah'];
                                 $jmltarif = $bahanbaku['bm_rupiah'];
-                                $ada=1;
+                                $ada = 1;
                             }
                             break;
                         case 'PPN':
@@ -2393,7 +2394,7 @@ class Akb extends CI_Controller
                                 $tarif = $bahanbaku['ppn'];
                                 $pungutanppn += $bahanbaku['ppn_rupiah'];
                                 $jmltarif = $bahanbaku['ppn_rupiah'];
-                                $ada=1;
+                                $ada = 1;
                             }
                             break;
                         case 'PPH':
@@ -2401,14 +2402,14 @@ class Akb extends CI_Controller
                                 $tarif = $bahanbaku['pph'];
                                 $pungutanpph += $bahanbaku['pph_rupiah'];
                                 $jmltarif = $bahanbaku['pph_rupiah'];
-                                $ada=1;
+                                $ada = 1;
                             }
                             break;
                         default:
                             # code...
                             break;
                     }
-                    if($ada==1){
+                    if ($ada == 1) {
                         $bahanbakutarif = [
                             "kodeJenisTarif" => "1",
                             "jumlahSatuan" => (float) round($bahanbaku['kgs'], 2),
@@ -2824,7 +2825,7 @@ class Akb extends CI_Controller
     public function hitungbomjf($id, $mode = 0)
     {
         $datheader = $this->akbmodel->getdatabyid($id);
-        $hasil['hasil'] = $this->akbmodel->hitungbomjf($id, $mode,$datheader['urutakb']);
+        $hasil['hasil'] = $this->akbmodel->hitungbomjf($id, $mode, $datheader['urutakb']);
         $hasil['idheader'] = $id;
         $hasil['mode'] = $mode;
         $this->load->view('akb/viewhitungbom', $hasil);
@@ -2907,16 +2908,16 @@ class Akb extends CI_Controller
                 'trim(insno)' => trim($hasil['insno']),
                 'trim(nobontr)' => trim($hasil['nobontr'])
             ];
-            $this->akbmodel->isiurutakb($hasil['id'],$no,$data['datheader']['urutakb'],$kondisi);
-
+            $this->akbmodel->isiurutakb($hasil['id'], $no, $data['datheader']['urutakb'], $kondisi);
         }
         $url = base_url() . 'akb/isidokbc/' . $id . '/1';
         redirect($url);
     }
-    public function isidatacifbombc($id){
+    public function isidatacifbombc($id)
+    {
         $hasil = $this->akbmodel->isidatacifbombc($id);
-        if($hasil){
-            $url = base_url().'akb/isidokbc/'.$id.'/1';
+        if ($hasil) {
+            $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             redirect($url);
         }
     }
@@ -3593,9 +3594,9 @@ class Akb extends CI_Controller
                 }
                 $numawal = $numrow;
                 $numakhir = $numrow - 1;
-                if(str_contains($header['nomor_inv'],'NET/') || str_contains($header['nomor_inv'],'RSC/')) { 
-                    $sat = 'KGM'; 
-                }else{ 
+                if (str_contains($header['nomor_inv'], 'NET/') || str_contains($header['nomor_inv'], 'RSC/')) {
+                    $sat = 'KGM';
+                } else {
                     $sat = $data['kodebc'];
                 }
                 // Lakukan looping pada variabel      
@@ -3935,11 +3936,11 @@ class Akb extends CI_Controller
             }
             $numawal = $numrow;
             $numakhir = $numrow - 1;
-            if(str_contains($header['nomor_inv'],'NET/') || str_contains($header['nomor_inv'],'RSC/')) { 
-                    $sat = 'KGM'; 
-                }else{ 
-                    $sat = $data['kodebc'];
-                }
+            if (str_contains($header['nomor_inv'], 'NET/') || str_contains($header['nomor_inv'], 'RSC/')) {
+                $sat = 'KGM';
+            } else {
+                $sat = $data['kodebc'];
+            }
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, htmlspecialchars_decode($spekbarang));
@@ -4532,5 +4533,195 @@ class Akb extends CI_Controller
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         $this->helpermodel->isilog('Download Excel BOM INVENTORY' . $this->session->userdata('currdept'));
+    }
+
+    public function upload($id)
+    {
+        $data['id'] = $id;
+        $this->load->view('akb/upload', $data);
+    }
+    public function edit_file($id)
+    {
+        $data['id'] = $id;
+        $data['detail'] = $this->akbmodel->getdatabyid($id);
+        $this->load->view('akb/edit_file', $data);
+    }
+
+
+    public function simpan_upload($id)
+    {
+        $config['upload_path'] = './assets/image/akb/';
+        $config['allowed_types'] = 'jpg|png|jpeg|gif|mp4|pdf|doc|docx|xls|xlsx|zip';
+        $config['max_size'] = 20240; // 20 MB
+        $this->load->library('upload', $config);
+        $files = $_FILES['file_upload'];
+
+
+        $file_names = [];
+        $file_types = [];
+        $file_paths = [];
+
+
+        $is_file_uploaded = false;
+        for ($i = 0; $i < count($files['name']); $i++) {
+            if (!empty($files['name'][$i])) {
+                $is_file_uploaded = true;
+                $_FILES['file_upload']['name'] = $files['name'][$i];
+                $_FILES['file_upload']['type'] = $files['type'][$i];
+                $_FILES['file_upload']['tmp_name'] = $files['tmp_name'][$i];
+                $_FILES['file_upload']['error'] = $files['error'][$i];
+                $_FILES['file_upload']['size'] = $files['size'][$i];
+
+
+                $this->upload->initialize($config);
+
+                if ($this->upload->do_upload('file_upload')) {
+                    $upload_data = $this->upload->data();
+                    $file_names[] = $upload_data['file_name'];
+                    $file_types[] = $upload_data['file_type'];
+                    $file_paths[] = 'assets/image/akb/' . $upload_data['file_name'];
+                } else {
+
+                    $error = $this->upload->display_errors();
+                    $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error . '</div>');
+                    redirect('akb/isidokbc/' . $id . '/' . '1');
+                    return;
+                }
+            }
+        }
+
+
+        $data = [
+            // 'id' => $this->input->post('id'),
+            'file' => $is_file_uploaded ? json_encode($file_names) : null,
+            'file_type' => $is_file_uploaded ? json_encode($file_types) : null,
+            'path_file' => $is_file_uploaded ? json_encode($file_paths) : null,
+        ];
+
+        $query = $this->akbmodel->UpdateData_gambar($id, $data);
+        if ($query) {
+            $this->session->set_flashdata('message', '
+            <div class="alert alert-info alert-dismissible fade show" role="alert">
+                 File Berhasil Di Upload!
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>');
+        }
+
+        redirect('akb/isidokbc/' . $id . '/' . '1');
+    }
+
+    public function edit_upload($id)
+    {
+        $config['upload_path'] = './assets/image/akb/';
+        $config['allowed_types'] = 'jpg|png|jpeg|gif|mp4|pdf|doc|docx|xls|xlsx|zip';
+        $config['max_size'] = 20240; // 20 MB
+        $this->load->library('upload', $config);
+
+        $detail = $this->akbmodel->getdatabyid($id);
+        $old_files = !empty($detail['file']) ? json_decode($detail['file'], true) : [];
+        $old_file_paths = !empty($detail['path_file']) ? json_decode($detail['path_file'], true) : [];
+        $old_file_types = !empty($detail['file_type']) ? json_decode($detail['file_type'], true) : [];
+
+        $hapus_file = $this->input->post('hapus_file') ?? [];
+
+        $filtered_old_files = [];
+        $filtered_file_paths = [];
+        $filtered_file_types = [];
+
+        foreach ($old_files as $i => $filename) {
+            if (!in_array($filename, $hapus_file)) {
+                $filtered_old_files[] = $filename;
+                if (isset($old_file_paths[$i])) $filtered_file_paths[] = $old_file_paths[$i];
+                if (isset($old_file_types[$i])) $filtered_file_types[] = $old_file_types[$i];
+            }
+        }
+
+        foreach ($hapus_file as $file) {
+            $path = 'assets/image/akb/' . $file;
+            if (file_exists($path)) {
+                unlink($path);
+            }
+        }
+
+        $rename_files = $this->input->post('rename_file');
+        $nama_file_asli = $this->input->post('nama_file_asli');
+
+        if ($rename_files && $nama_file_asli) {
+            foreach ($rename_files as $i => $rename) {
+                $old_name = $nama_file_asli[$i];
+                if (!empty($rename) && in_array($old_name, $filtered_old_files)) {
+                    $old_path = 'assets/image/akb/' . $old_name;
+
+                    $ext = pathinfo($old_name, PATHINFO_EXTENSION);
+                    $rename_clean = preg_replace('/[^a-zA-Z0-9_-]/', '_', pathinfo($rename, PATHINFO_FILENAME));
+                    $new_name = $rename_clean . '.' . $ext;
+                    $new_path = 'assets/image/akb/' . $new_name;
+
+                    if (file_exists($old_path)) {
+                        rename($old_path, $new_path);
+
+                        $key = array_search($old_name, $filtered_old_files);
+                        if ($key !== false) {
+                            $filtered_old_files[$key] = $new_name;
+                            $filtered_file_paths[$key] = $new_path;
+                        }
+                    }
+                }
+            }
+        }
+
+        $files = $_FILES['file_upload'];
+        $new_files = [];
+        $new_file_paths = [];
+        $new_file_types = [];
+
+        if (!empty($files['name'][0])) {
+            for ($i = 0; $i < count($files['name']); $i++) {
+                if (!empty($files['name'][$i])) {
+                    $_FILES['file_upload_temp']['name'] = $files['name'][$i];
+                    $_FILES['file_upload_temp']['type'] = $files['type'][$i];
+                    $_FILES['file_upload_temp']['tmp_name'] = $files['tmp_name'][$i];
+                    $_FILES['file_upload_temp']['error'] = $files['error'][$i];
+                    $_FILES['file_upload_temp']['size'] = $files['size'][$i];
+
+                    $this->upload->initialize($config);
+
+                    if ($this->upload->do_upload('file_upload_temp')) {
+                        $upload_data = $this->upload->data();
+                        $new_files[] = $upload_data['file_name'];
+                        $new_file_paths[] = $config['upload_path'] . $upload_data['file_name'];
+                        $new_file_types[] = $upload_data['file_type'];
+                    } else {
+                        $error = $this->upload->display_errors();
+                        $this->session->set_flashdata('message', '<div class="alert alert-danger">' . $error . '</div>');
+                        redirect('akb/isidokbc/' . $id . '/' . '1');
+                        return;
+                    }
+                }
+            }
+        }
+
+        $all_files = array_merge($filtered_old_files, $new_files);
+        $all_file_paths = array_merge($filtered_file_paths, $new_file_paths);
+        $all_file_types = array_merge($filtered_file_types, $new_file_types);
+
+        $data = [
+            'file' => !empty($all_files) ? json_encode(array_values($all_files)) : null,
+            'file_type' => !empty($all_file_types) ? json_encode(array_values($all_file_types)) : null,
+            'path_file' => !empty($all_file_paths) ? json_encode(array_values($all_file_paths)) : null,
+
+        ];
+
+        $query = $this->akbmodel->UpdateData_gambarkedua($id, $data);
+
+        if ($query) {
+            $this->session->set_flashdata('message', '
+        <div class="alert alert-success alert-dismissible fade show" role="alert">
+           File Berhasil Diupdate!
+            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+        </div>');
+        }
+
+        redirect('akb/isidokbc/' . $id . '/' . '1');
     }
 }
