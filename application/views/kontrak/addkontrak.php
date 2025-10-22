@@ -106,8 +106,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="col">
                   <select name="tipe" id="tipe" class="form-control btn-flat font-kecil font-bold form-select">
                     <option value="0">Pilih Tipe</option>
-                    <option value="1" <?php if($data['tipe']==1){ echo "selected"; } ?>>1 Tahap</option>
-                    <option value="2" <?php if($data['tipe']==2){ echo "selected"; } ?>>2 Tahap</option>
+                    <option value="1" <?php if($data['tipe']==1){ echo "selected"; } ?>>Tipe 1</option>
+                    <option value="2" <?php if($data['tipe']==2){ echo "selected"; } ?>>Tipe 2</option>
                   </select>
                 </div>
               </div>

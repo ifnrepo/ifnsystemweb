@@ -68,6 +68,7 @@
                             <?php } ?>
                             <button href="#" id="kirimkeceisa" data-href="<?= base_url() . 'ib/kirimdatakeceisa' . $datheader['jns_bc'] . '/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                         </div>
+                        <div style="margin: auto 0;" class="font-bold text-pink" id="cirimakloon"><?php if(substr($datheader['nomor_dok'],0,7)=='DLN-IFN'){ echo 'MAKLOON'; } ?></div>
                     </div>
                     <hr class="m-0">
                     <hr class="m-0">
@@ -509,7 +510,6 @@
                                                         <a href="<?= base_url().'ib/addkontrak/'.$datheader['id'].'/'.$datheader['dept_tuju']; ?>" class="btn btn-info font-kecil btn-flat <?= $hilangtomboladdkontrak; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Pilih Kontrak" >Pilih</a>
                                                         <a data-href="<?= base_url().'ib/hapuskontrak/'.$datheader['id']; ?>" class="btn btn-danger font-kecil btn-flat text-white <?= $hilangtombolhapuskontrak; ?>" style="color: white !important;" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus Kontrak ini" data-title="Hapus Kontrak" >Hapus</a>
                                                         <a class="btn btn-success font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" href="<?= base_url('kontrak/view/') . $datheader['idkontrak'].'/1'; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" >View</a>
-                                                        <a class="btn btn-primary font-kecil btn-flat <?= $hilangtombolhapuskontrak; ?>" id="addkontraktolampiran" href="#" data-title="Add To Lampiran" ><i class="fa fa-upload"></i></a>
                                                         <!-- <button class="btn font-kecil btn-flat" type="button">View</button> -->
                                                         <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tglkontrak" value="<?= tglmysql($datheader['tglkontrak']); ?>" placeholder="Nomor Kontrak Kosong" >
                                                         <input type="text" class="form-control font-bold font-kecil btn-flat hilang" id="tgl_kep" value="<?= tglmysql($datheader['tgl_kep']); ?>" placeholder="Nomor Kontrak Kosong" >
