@@ -1259,6 +1259,15 @@ class Ib_model extends CI_Model
         $this->db->where($arrkonds);
         return $this->db->get();
     }
+    public function hapuskontrak($id)
+    {
+        $this->db->trans_start();
+        $this->db->where('id', $id);
+        $this->db->update('tb_header',['id_kontrak' => NULL]);
+
+        return $this->db->trans_complete();
+        $this->helpermodel->isilog($this->db->last_query());
+    }
 
     public function UpdateData_gambar($id, $data)
     {

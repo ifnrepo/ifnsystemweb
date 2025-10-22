@@ -1128,6 +1128,7 @@ class Ib extends CI_Controller
     {
         $data = $this->ibmodel->getdatabyid($id);
         $noaju = isikurangnol($data['jns_bc']) . '010017' . str_replace('-', '', $data['tgl_aju']) . $data['nomor_aju'];
+        $isMakloon = substr($data['nomor_dok'],0,7)=='DLN-IFN' ? true : false;
         $arrayheader = [
             "asalData" => "S",
             "asuransi" => 0,
@@ -1161,14 +1162,20 @@ class Ib extends CI_Controller
         for ($ke = 1; $ke <= 3; $ke++) {
             $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : "9");
-            if ($ke == 3) {
+            if($ke == 2 && $isMakloon){
                 $nomoridentitas = $data['jns_pkp'] == 1 ? $data['nik'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['nik'])))))) : '0' . $data['npwp'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwp'])))) + 1));
                 $namaidentitas = $data['jns_pkp'] == 1 ? $data['namaceisa'] : $data['namasupplier'];
                 $alamat = $data['jns_pkp'] == 1 ? $data['alamatceisa'] : strtoupper($data['alamat']);
-            } else {
-                $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . $data['npwp'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwp'])))) + 1)));
-                $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
-                $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : $data['alamat']);
+            }else{
+                if ($ke == 3) {
+                    $nomoridentitas = $data['jns_pkp'] == 1 ? $data['nik'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['nik'])))))) : '0' . $data['npwp'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwp'])))) + 1));
+                    $namaidentitas = $data['jns_pkp'] == 1 ? $data['namaceisa'] : $data['namasupplier'];
+                    $alamat = $data['jns_pkp'] == 1 ? $data['alamatceisa'] : strtoupper($data['alamat']);
+                } else {
+                    $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . $data['npwp'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwp'])))) + 1)));
+                    $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasupplier']);
+                    $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : $data['alamat']);
+                }
             }
             $nibidentitas = $ke == 1 ? "9120011042693" : "";
             $arrayke = [
@@ -1952,17 +1959,26 @@ class Ib extends CI_Controller
     public function addkontrak($id, $dept){
         $data['idheader'] = $id;
         $kondisi = [
-            'dept_id' => $dept,
+            'dept_id' => 'DL',
             'status' => 1,
             'jnsbc' => 40,
             'thkontrak' => '',
             'datkecuali' => 1,
             'nomorbpj != ' => '',
             'nomor_ssb != ' => '',
-            'penjamin != ' => ''
+            'penjamin != ' => '',
+            'idheader' => $id
         ];
         $data['kontrak'] = $this->kontrakmodel->getdatakontrak40($kondisi);
         $this->load->view('akb/addkontrak', $data);
+    }
+    public function hapuskontrak($id)
+    {
+        $hasil = $this->ibmodel->hapuskontrak($id);
+        if ($hasil) {
+            $url = base_url() . 'ib/isidokbc/' . $id;
+            redirect($url);
+        }
     }
     //End IB Controller
 

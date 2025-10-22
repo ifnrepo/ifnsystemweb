@@ -57,7 +57,7 @@ class Kontrak_model extends CI_Model
     }
     public function getdatakontrak261($kode)
     {
-        $this->db->select('*');
+        $this->db->select('tb_kontrak.*,0 as saldo,0 as xnetto');
         $this->db->from('tb_kontrak');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
         if ($kode['dept_id'] != "") {
@@ -82,13 +82,18 @@ class Kontrak_model extends CI_Model
     }
     public function getdatakontrak40($kode)
     {
-        $this->db->select('*');
+        $header = $this->db->get_where('tb_header',['id' => $kode['idheader']])->row_array();
+        $this->db->select('tb_kontrak.*,tb_header.netto');
+        $this->db->select('SUM(round(tb_detail.kgs,2)) as kgsx,IFNULL(tb_kontrak.kgs-IFNULL(SUM(round(tb_detail.kgs,2)),0),0) as saldo');
+        $this->db->select((float)$header['netto']." as xnetto");
         $this->db->from('tb_kontrak');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
+        $this->db->join('tb_header','tb_header.id_kontrak = tb_kontrak.id','left');
+        $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
         if ($kode['dept_id'] != "") {
             $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
         }
-        $this->db->where('jns_bc', $kode['jnsbc']);
+        $this->db->where('tb_kontrak.jns_bc', $kode['jnsbc']);
         if ($kode['status'] == 1) {
             $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
         } else if ($kode['status'] == 2) {
@@ -97,11 +102,8 @@ class Kontrak_model extends CI_Model
         if ($kode['thkontrak'] != '') {
             $this->db->where("year(tgl_awal)", $kode['thkontrak']);
         }
-        if (isset($kode['datkecuali'])) {
-            $datkont = $this->db->query("Select id_kontrak from tb_header where id_kontrak is not null")->result_array();
-        }
-        // $this->db->where('nomor_bpj != "" ');
-        // $this->db->where('tgl_bpj is not null ');
+        // $this->db->where("tb_kontrak.kgs-SUM(round(tb_detail.kgs,2)) >= ",$header['netto']);
+        $this->db->group_by('tb_kontrak.id');
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }
