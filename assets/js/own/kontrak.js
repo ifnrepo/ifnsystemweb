@@ -50,6 +50,12 @@ $("#simpandata").click(function () {
 		pesan("Isi Nama Proses", "info");
 		return false;
 	}
+	if($("#tbjnsbc").val()=='40'){
+		if($("#tipe").val() =='0'){
+			pesan('Tipe Kontrak harus di pilih','info');
+			return false;
+		}
+	}
 	if (
 		($("#pcs").val() == "" ||
 			$("#pcs").val() == "0" ||
