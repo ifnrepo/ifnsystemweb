@@ -27,7 +27,7 @@
                     <option value="export" <?php if ($data['exdo'] == 'Export') {
                                                 echo "selected";
                                             }; ?>>Export</option>
-                    <option value="domestik" <?php if ($data['exdo'] == 'Domestic') {
+                    <option value="domestic" <?php if ($data['exdo'] == 'Domestic') {
                                                     echo "selected";
                                                 }; ?>>Domestic</option>
                 </select>
