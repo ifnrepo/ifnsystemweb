@@ -88,6 +88,8 @@ class Customer extends CI_Controller
     }
     public function updatecustomer()
     {
+
+
         $data = [
             'id' => $_POST['id'],
             'kode_customer' => $_POST['kode_customer'],

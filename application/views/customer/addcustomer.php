@@ -23,8 +23,8 @@
             <label class="col-3 col-form-label required">Exdo</label>
             <div class="col">
                 <select class="form-select font-kecil" name="exdo" id="exdo">
-                    <option value="export">Export</option>
-                    <option value="domestik">Domestik</option>
+                    <option value="Export">Export</option>
+                    <option value="Domestic">Domestic</option>
                 </select>
             </div>
         </div>
