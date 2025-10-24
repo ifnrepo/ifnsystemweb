@@ -23,13 +23,13 @@
         <div class="mb-1 row">
             <label class="col-3 col-form-label required">Exdo</label>
             <div class="col">
-                <select class="form-select font-kecil" name="exdo" id="exdo" disabled>
-                    <option value="export" <?php if ($data['exdo'] == 'export') {
+                <select class="form-select font-kecil" name="exdo" id="exdo">
+                    <option value="export" <?php if ($data['exdo'] == 'Export') {
                                                 echo "selected";
                                             }; ?>>Export</option>
-                    <option value="domestik" <?php if ($data['exdo'] == 'domestik') {
+                    <option value="domestic" <?php if ($data['exdo'] == 'Domestic') {
                                                     echo "selected";
-                                                }; ?>>Domestik</option>
+                                                }; ?>>Domestic</option>
                 </select>
             </div>
         </div>
@@ -270,6 +270,7 @@
 <script>
     $("#updatecustomer").click(function() {
         var pembeli = $("#pembeli").prop('checked') ? 1 : 0;
+        console.log("exdo:", $("#exdo").val());
         if ($("#kode_customer").val() == '') {
             pesan('Kode harus di isi !', 'error');
             return;
