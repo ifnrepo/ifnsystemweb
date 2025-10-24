@@ -202,7 +202,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <div class="d-flex justify-content-between">
                   <div class="subheader mb-2 text-white">Jumlah Dokumen BC</div>
                   <div class="row mb-1">
-                    <label class="subheader col-3 col-form-label text-white p-1">Periode</label>
+                    <label class="subheader col-3 col-form-label text-white p-1"></label>
                     <div class="col">
                       <input type="email" class="form-control form-sm font-kecil btn-flat p-1 tglpilih" id="tglmonbcawal" aria-describedby="emailHelp" placeholder="Tgl awal" value="<?= tglmysql($xdate) ?>">
                     </div>

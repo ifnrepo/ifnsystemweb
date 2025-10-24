@@ -1128,7 +1128,7 @@ class Ib extends CI_Controller
     {
         $data = $this->ibmodel->getdatabyid($id);
         $noaju = isikurangnol($data['jns_bc']) . '010017' . str_replace('-', '', $data['tgl_aju']) . $data['nomor_aju'];
-        $isMakloon = substr($data['nomor_dok'],0,7)=='DLN-IFN' ? true : false;
+        $isMakloon = $data['bc_makloon']==1;
         $arrayheader = [
             "asalData" => "S",
             "asuransi" => 0,
@@ -1959,7 +1959,7 @@ class Ib extends CI_Controller
     public function addkontrak($id, $dept){
         $data['idheader'] = $id;
         $kondisi = [
-            'dept_id' => 'DL',
+            // 'dept_id' => 'DL',
             'status' => 1,
             'jnsbc' => 40,
             'thkontrak' => '',

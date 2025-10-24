@@ -6,6 +6,7 @@
                 <thead style="background-color: blue !important">
                     <tr>
                         <th>No</th>
+                        <th>Dept</th>
                         <th>Nomor Kontrak</th>
                         <th>Tgl Awal</th>
                         <th>Tgl Akhir</th>
@@ -18,6 +19,7 @@
                     <?php $no=0; foreach ($kontrak->result_array() as $kontrak) { if($kontrak['xnetto'] <= $kontrak['saldo']): $no++; ?>
                         <tr>
                             <td><?= $no; ?></td>
+                            <td class="text-blue font-bold text-14"><?= $kontrak['dept_id']; ?></td>
                             <td class="font-bold line-12"><?= $kontrak['nomor']; ?><br><span class="text-pink font-10" style="font-style: normal !important"><?= $kontrak['proses'] ?></span></td>
                             <td><?= tglmysql($kontrak['tgl_awal']); ?></td>
                             <td><?= tglmysql($kontrak['tgl_akhir']); ?></td>
