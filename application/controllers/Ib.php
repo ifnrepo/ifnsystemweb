@@ -1142,7 +1142,7 @@ class Ib extends CI_Controller
             "jumlahKontainer" => 0,
             "kodeDokumen" => $data['jns_bc'],
             "kodeKantor" => "050500",
-            "kodeTujuanPengiriman" => "1",
+            "kodeTujuanPengiriman" => $isMakloon ? "5" : "1",
             "kotaTtd" => "BANDUNG",
             "namaTtd" => strtoupper($data['tg_jawab']),
             "netto" => (float) $data['netto'],

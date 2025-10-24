@@ -1077,6 +1077,35 @@ class Helper_model extends CI_Model
         $this->db->group_by("1");
         return $this->db->get();
     }
+    public function getdatabc2bulan($date='',$mode=0){
+        if ($date == '' || $date == NULL) {
+            $date = date('Y-m-d');
+        }
+        if($mode==1){
+            $new_date_timestamp = strtotime($date);
+            $new_date_timestamp2 = strtotime($date);
+        }else{
+            // $new_date_timestamp = strtotime('-2 month', strtotime($date));
+            // $new_date_timestamp2 = strtotime('0 day', strtotime($date));
+
+            $new_date_timestamp = $this->session->userdata('tglmonbcawal');
+            $new_date_timestamp2 = $this->session->userdata('tglmonbcakhir');
+        }
+        $xdate = date('Y-m-d', $new_date_timestamp);
+        $ydate = date('Y-m-d', $new_date_timestamp2);
+        $this->db->select('tgl,jns_bc,keterangan,bc_makloon,COUNT(*) AS jmlbc');
+        $this->db->from('tb_header');
+        $this->db->where("jns_bc != '' ");
+        $this->db->where("jns_bc != '0' ");
+        if($mode==1){
+            $this->db->where(' tgl = ', $xdate);
+        }else{
+            $this->db->where(' tgl >= ', $xdate);
+            $this->db->where(' tgl <= ', $ydate);
+        }
+        $this->db->group_by("tgl,jns_bc,bc_makloon");
+        return $this->db->get();
+    }
     public function getdetailbcasal($exbc, $data)
     {
         $this->db->select('tb_detail.*,tb_header.nomor_aju');

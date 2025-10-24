@@ -10,8 +10,8 @@ class Ib_model extends CI_Model
                 'dept_tuju' => $kode,
                 'month(tgl)' => $this->session->userdata('bl'),
                 'year(tgl)' => $this->session->userdata('th'),
-                'left(nomor_dok,3)' => 'IFN'
             ];
+            // (PERHATIAN ) Selain kondisi ini, Ada kondisi lain di bawah .. hati-hati #kodeib1
         } else {
             $arrkondisi = [
                 'id_perusahaan' => IDPERUSAHAAN,
@@ -24,6 +24,10 @@ class Ib_model extends CI_Model
         $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier');
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->where($arrkondisi);
+        // Lanjutan #kodeib1
+        if ($kode == 'FG') {
+            $this->db->where_in('left(nomor_dok,3)',['IFN','DLN','MDL']);
+        }
         $this->db->order_by('tgl', 'desc');
         $this->db->order_by('nomor_dok', 'desc');
         $hasil = $this->db->get('tb_header');
@@ -80,6 +84,7 @@ class Ib_model extends CI_Model
         $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
         if ($mode == 0) {
             $this->db->where('a.id_header', $data);
+            $this->db->order_by('a.seri_barang');
         } else {
             $this->db->where('a.id_akb', $data);
             $this->db->group_by('a.po,a.item,a.dis,a.id_barang,a.insno,a.nobontr');

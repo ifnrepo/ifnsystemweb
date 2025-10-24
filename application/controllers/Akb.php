@@ -1630,7 +1630,7 @@ class Akb extends CI_Controller
             $uraian = trim($detx['po']) != '' ? spekpo($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
             $hs = trim($detx['po']) == '' ? substr($detx['nohs'], 0, 8) : substr($detx['hsx'], 0, 8);
             $kodebc = str_contains($detx['nomor_dok'], 'NET/') ? 'KGM' : $detx['kodebc'];
-            if (str_contains($data['nomor_inv'], 'NET/') || str_contains($data['nomor_inv'], 'RSC/')) {
+            if (str_contains($data['nomor_inv'], 'NET/') || str_contains($data['nomor_inv'], 'RSC/') || str_contains($data['nomor_inv'], 'RSP/')) {
                 $kodebc = 'KGM';
             } else {
                 if (str_contains($detx['nomor_dok'], 'NET/')) {
@@ -1638,6 +1638,10 @@ class Akb extends CI_Controller
                 } else {
                     if (str_contains($detx['nomor_dok'], 'RSC/')) {
                         $kodebc = 'KGM';
+                    }else{
+                        if (str_contains($detx['nomor_dok'], 'RSP/')) {
+                            $kodebc = 'KGM';
+                        }
                     }
                 }
             }
@@ -3594,7 +3598,7 @@ class Akb extends CI_Controller
                 }
                 $numawal = $numrow;
                 $numakhir = $numrow - 1;
-                if (str_contains($header['nomor_inv'], 'NET/') || str_contains($header['nomor_inv'], 'RSC/')) {
+                if (str_contains($header['nomor_inv'], 'NET/') || str_contains($header['nomor_inv'], 'RSC/') || str_contains($header['nomor_inv'], 'RSP/')) {
                     $sat = 'KGM';
                 } else {
                     $sat = $data['kodebc'];
@@ -3936,7 +3940,7 @@ class Akb extends CI_Controller
             }
             $numawal = $numrow;
             $numakhir = $numrow - 1;
-            if (str_contains($header['nomor_inv'], 'NET/') || str_contains($header['nomor_inv'], 'RSC/')) {
+            if (str_contains($header['nomor_inv'], 'NET/') || str_contains($header['nomor_inv'], 'RSC/') || str_contains($header['nomor_inv'], 'RSP/')) {
                 $sat = 'KGM';
             } else {
                 $sat = $data['kodebc'];
