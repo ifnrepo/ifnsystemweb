@@ -84,7 +84,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div class="mt-1">
-          <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
+          <table id="pbtabel" class="table nowrap datatable11 order-column mt-1" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Tgl</th>

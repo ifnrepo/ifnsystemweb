@@ -257,6 +257,12 @@ $(document).ready(function () {
 		ordering: false,
 		pageLength: 50,
 	});
+	$(".datatable11").DataTable({
+		responsive: true,
+		pageLength: 50,
+		ordering: false,
+		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
+	});
 	$("#modal-danger").on("show.bs.modal", function (e) {
 		document.getElementById("message").innerHTML = $(e.relatedTarget).data(
 			"message",

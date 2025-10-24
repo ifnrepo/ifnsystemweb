@@ -68,7 +68,7 @@
                             <?php } ?>
                             <button href="#" id="kirimkeceisa" data-href="<?= base_url() . 'ib/kirimdatakeceisa' . $datheader['jns_bc'] . '/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                         </div>
-                        <div style="margin: auto 0;" class="font-bold text-pink" id="cirimakloon"><?php if(substr($datheader['nomor_dok'],0,7)=='DLN-IFN'){ echo 'MAKLOON'; } ?></div>
+                        <div style="margin: auto 0;" class="font-bold text-pink" id="cirimakloon"><?php if($datheader['bc_makloon']==1){ echo 'MAKLOON'; } ?></div>
                     </div>
                     <hr class="m-0">
                     <hr class="m-0">

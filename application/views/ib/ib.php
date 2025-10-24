@@ -79,8 +79,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
 
         </div>
-        <div>
-          <table id="pbtabel" class="table nowrap order-column" style="width: 100% !important;">
+        <div class="mt-1">
+          <table id="pbtabel" class="table nowrap datatable11 order-column mt-1" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Tgl</th>
@@ -116,8 +116,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $namasup ?></td>
                   <td><?= $jmlrek ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
-                  <?php if($datdet['tanpa_bc']==0){ ?>
-                    <td style="font-size: 17px" class="text-info line-12"><?= $datdet['jns_bc']; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                  <?php if($datdet['tanpa_bc']==0){ $ketmakloon = $datdet['bc_makloon']==1 ? 'MAKLOON' : $datdet['keterangan']; ?>
+                    <td style="font-size: 17px" class="text-info line-12"><?= $datdet['jns_bc']; ?><br><span class="text-teal" style='font-size: 11px;'><?= $ketmakloon; ?></span></td>
                       <?php if($datdet['send_ceisa']==1){ ?>
                         <td class="line-12"><a href="<?= base_url().'ib/isidokbc/'.$datdet['id'].$tmb; ?>"><?= $isibc; ?></a></td>
                         <?php }else{ ?>
