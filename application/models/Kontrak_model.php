@@ -79,13 +79,13 @@ class Kontrak_model extends CI_Model
         $this->db->where('tgl_bpj is not null ');
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
-    }
+    }   
     public function getdatakontrak40($kode)
     {
         $header = $this->db->get_where('tb_header',['id' => $kode['idheader']])->row_array();
         $this->db->select('tb_kontrak.*,tb_header.netto');
         $this->db->select('SUM(round(tb_detail.kgs,2)) as kgsx,IFNULL(tb_kontrak.kgs-IFNULL(SUM(round(tb_detail.kgs,2)),0),0) as saldo');
-        $this->db->select((float)$header['netto']." as xnetto");
+        $this->db->select((float)$header['netto']." as xnetto",false);
         $this->db->from('tb_kontrak');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
         $this->db->join('tb_header','tb_header.id_kontrak = tb_kontrak.id','left');

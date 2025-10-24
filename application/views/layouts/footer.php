@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1761126629'; ?>
+<?php $updatejs = '1761288191'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -146,7 +146,13 @@
 <?php if (isset($fungsi) && $fungsi == 'billmaterial_cost') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/billmaterial_cost.js?<?= $updatejs; ?>"></script>
 <?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'main') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/main.js?<?= $updatejs; ?>"></script>
+<?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
+	if($this->session->flashdata('errortanggalbcmon')!=''){
+		echo "<script>pesan('".$this->session->flashdata('errortanggalbcmon')."','error'); </script>";
+	}
 	// print_r(json_encode($dataproduksi['data_isi'])); 
 	// echo 'XXXX';
 	// echo json_encode($personlogin->result_array());
@@ -178,7 +184,139 @@
 		array_push($arraylogin,$personlog['personlog']);
 		array_push($arraylogindate,$personlog['tgllog']);
 	}
-	// print_r(json_encode($arrayusd));
+	$arraydatebc = [];
+	$bc23=[];
+	$bc40=[];$bc25=[];$bc30=[];$bc41=[];
+	$bc261=[];$bc262=[];
+	$bc40m=[];$bc41m=[];
+	$jumlahhari = jumlahhari(date('Y-m-d', $this->session->userdata('tglmonbcawal')), date('Y-m-d', $this->session->userdata('tglmonbcakhir')));
+	$datuk = date('Y-m-d', $this->session->userdata('tglmonbcakhir'));
+	for ($x = $jumlahhari; $x >= 0; $x--) {
+		$dateawal =  strtotime('-'.$x . ' day', strtotime($datuk));
+		$xdate = date('Y-m-d', $dateawal);
+		$getdata = $this->helpermodel->getdatabc2bulan($xdate,1);
+		for($y=1;$y<=9;$y++){
+			switch ($y) {
+				case 1:
+					$inx = '230';
+					$ar = $bc23;
+					break;
+				case 2:
+					$inx = '400';
+					$ar = $bc40;
+					break;
+				case 3:
+					$inx = '250';
+					$ar = $bc25;
+					break;
+				case 4:
+					$inx = '300';
+					$ar = $bc30;
+					break;
+				case 5:
+					$inx = '410';
+					$ar = $bc41;
+					break;
+				case 6:
+					$inx = '2610';
+					$ar = $bc261;
+					break;
+				case 7:
+					$inx = '2620';
+					$ar = $bc262;
+					break;
+				case 8:
+					$inx = '411';
+					$ar = $bc41m;
+					break;
+				case 9:
+					$inx = '401';
+					$ar = $bc40m;
+					break;
+				default:
+					# code...
+					break;
+			}
+			$cekada = 0;
+			if($getdata->num_rows() > 0){
+				foreach($getdata->result_array() as $datbc){
+					if($inx == trim($datbc['jns_bc']).$datbc['bc_makloon']){
+						switch ($y) {
+							case 1:
+								array_push($bc23,$datbc['jmlbc']);
+								break;
+							case 2:
+								array_push($bc40,$datbc['jmlbc']);
+								break;
+							case 3:
+								array_push($bc25,$datbc['jmlbc']);
+								break;
+							case 4:
+								array_push($bc30,$datbc['jmlbc']);
+								break;
+							case 5:
+								array_push($bc41,$datbc['jmlbc']);
+								break;
+							case 6:
+								array_push($bc261,$datbc['jmlbc']);
+								break;
+							case 7:
+								array_push($bc262,$datbc['jmlbc']);
+								break;
+							case 8:
+								array_push($bc41m,$datbc['jmlbc']);
+								break;
+							case 9:
+								array_push($bc40m,$datbc['jmlbc']);
+								break;
+							default:
+								# code...
+								break;
+						}
+						$cekada=1;
+						break;
+					}
+				}
+			}
+			if($cekada==0){
+				switch ($y) {
+					case 1:
+						array_push($bc23,0);
+						break;
+					case 2:
+						array_push($bc40,0);
+						break;
+					case 3:
+						array_push($bc25,0);
+						break;
+					case 4:
+						array_push($bc30,0);
+						break;
+					case 5:
+						array_push($bc41,0);
+						break;
+					case 6:
+						array_push($bc261,0);
+						break;
+					case 7:
+						array_push($bc262,0);
+						break;
+					case 8:
+						array_push($bc41m,0);
+						break;
+					case 9:
+						array_push($bc40m,0);
+						break;
+					default:
+						# code...
+						break;
+				}
+			}
+			// array_push($bc23,100);
+		}
+		array_push($arraydatebc,$xdate);
+	}
+	// print_r(json_encode($arraydate));
 ?>
 	<?php
 	// Untuk Warna Chart Produksi 
@@ -324,6 +462,270 @@
 				// ],
 				labels: <?= json_encode($arraydate) ?>,
 				colors: [tabler.getColor("blue"), tabler.getColor("gray-600")],
+				legend: {
+					show: false,
+				},
+			})).render();
+		});
+		// @formatter:on
+	</script>
+	<script>
+		// @formatter:off
+		document.addEventListener("DOMContentLoaded", function() {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-dokbcmasuk'), {
+				chart: {
+					type: "line",
+					fontFamily: 'inherit',
+					height: 60.0,
+					sparkline: {
+						enabled: true
+					},
+					animations: {
+						enabled: false
+					},
+				},
+				fill: {
+					opacity: 1,
+				},
+				stroke: {
+					width: [2, 1],
+					dashArray: [0, 3],
+					lineCap: "round",
+					curve: "smooth",
+				},
+				series: [{
+					name: "BC 23",
+					// data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67]
+					data: <?= json_encode($bc23) ?>
+				}, {
+					name: "BC 40",
+					// data: [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37]
+					data: <?= json_encode($bc40) ?>
+				}],
+				tooltip: {
+					theme: 'light'
+				},
+				grid: {
+					strokeDashArray: 4,
+				},
+				xaxis: {
+					labels: {
+						padding: 0,
+					},
+					tooltip: {
+						enabled: false
+					},
+					type: 'datetime',
+				},
+				yaxis: {
+					labels: {
+						padding: 4
+					},
+				},
+				// labels: [
+				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+				// ],
+				labels: <?= json_encode($arraydatebc) ?>,
+				colors: [tabler.getColor("pink"), tabler.getColor("gray-600")],
+				legend: {
+					show: false,
+				},
+			})).render();
+		});
+		// @formatter:on
+	</script>
+	<script>
+		// @formatter:off
+		document.addEventListener("DOMContentLoaded", function() {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-dokbckeluar'), {
+				chart: {
+					type: "line",
+					fontFamily: 'inherit',
+					height: 60.0,
+					sparkline: {
+						enabled: true
+					},
+					animations: {
+						enabled: false
+					},
+				},
+				fill: {
+					opacity: 1,
+				},
+				stroke: {
+					width: [2, 1],
+					dashArray: [0, 3],
+					lineCap: "round",
+					curve: "smooth",
+				},
+				series: [{
+					name: "BC 25",
+					// data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67]
+					data: <?= json_encode($bc25) ?>
+				}, {
+					name: "BC 30",
+					// data: [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37]
+					data: <?= json_encode($bc30) ?>
+				}, {
+					name: "BC 41",
+					// data: [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37]
+					data: <?= json_encode($bc41) ?>
+				}],
+				tooltip: {
+					theme: 'light'
+				},
+				grid: {
+					strokeDashArray: 4,
+				},
+				xaxis: {
+					labels: {
+						padding: 0,
+					},
+					tooltip: {
+						enabled: false
+					},
+					type: 'datetime',
+				},
+				yaxis: {
+					labels: {
+						padding: 4
+					},
+				},
+				// labels: [
+				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+				// ],
+				labels: <?= json_encode($arraydatebc) ?>,
+				colors: [tabler.getColor("green"), tabler.getColor("gray-600"),tabler.getColor("orange")],
+				legend: {
+					show: false,
+				},
+			})).render();
+		});
+		// @formatter:on
+	</script>
+	<script>
+		// @formatter:off
+		document.addEventListener("DOMContentLoaded", function() {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-dokbcsubkon'), {
+				chart: {
+					type: "line",
+					fontFamily: 'inherit',
+					height: 60.0,
+					sparkline: {
+						enabled: true
+					},
+					animations: {
+						enabled: false
+					},
+				},
+				fill: {
+					opacity: 1,
+				},
+				stroke: {
+					width: [2, 1],
+					dashArray: [0, 3],
+					lineCap: "round",
+					curve: "smooth",
+				},
+				series: [{
+					name: "BC 261",
+					// data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67]
+					data: <?= json_encode($bc261) ?>
+				}, {
+					name: "BC 26",
+					// data: [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37]
+					data: <?= json_encode($bc262) ?>
+				}],
+				tooltip: {
+					theme: 'light'
+				},
+				grid: {
+					strokeDashArray: 4,
+				},
+				xaxis: {
+					labels: {
+						padding: 0,
+					},
+					tooltip: {
+						enabled: false
+					},
+					type: 'datetime',
+				},
+				yaxis: {
+					labels: {
+						padding: 4
+					},
+				},
+				// labels: [
+				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+				// ],
+				labels: <?= json_encode($arraydatebc) ?>,
+				colors: [tabler.getColor("red"), tabler.getColor("pink-600")],
+				legend: {
+					show: false,
+				},
+			})).render();
+		});
+		// @formatter:on
+	</script>
+	<script>
+		// @formatter:off
+		document.addEventListener("DOMContentLoaded", function() {
+			window.ApexCharts && (new ApexCharts(document.getElementById('chart-dokbcmakloon'), {
+				chart: {
+					type: "line",
+					fontFamily: 'inherit',
+					height: 60.0,
+					sparkline: {
+						enabled: true
+					},
+					animations: {
+						enabled: false
+					},
+				},
+				fill: {
+					opacity: 1,
+				},
+				stroke: {
+					width: [2, 1],
+					dashArray: [0, 3],
+					lineCap: "round",
+					curve: "smooth",
+				},
+				series: [{
+					name: "BC 40",
+					// data: [37, 35, 44, 28, 36, 24, 65, 31, 37, 39, 62, 51, 35, 41, 35, 27, 93, 53, 61, 27, 54, 43, 4, 46, 39, 62, 51, 35, 41, 67]
+					data: <?= json_encode($bc40m) ?>
+				}, {
+					name: "BC 41",
+					// data: [93, 54, 51, 24, 35, 35, 31, 67, 19, 43, 28, 36, 62, 61, 27, 39, 35, 41, 27, 35, 51, 46, 62, 37, 44, 53, 41, 65, 39, 37]
+					data: <?= json_encode($bc41m) ?>
+				}],
+				tooltip: {
+					theme: 'light'
+				},
+				grid: {
+					strokeDashArray: 4,
+				},
+				xaxis: {
+					labels: {
+						padding: 0,
+					},
+					tooltip: {
+						enabled: false
+					},
+					type: 'datetime',
+				},
+				yaxis: {
+					labels: {
+						padding: 4
+					},
+				},
+				// labels: [
+				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+				// ],
+				labels: <?= json_encode($arraydatebc) ?>,
+				colors: [tabler.getColor("purple"), tabler.getColor("gray-600")],
 				legend: {
 					show: false,
 				},
@@ -693,289 +1095,289 @@
 	</script>
 	<script>
 		// @formatter:off
-		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-activity'), {
-				chart: {
-					type: "radialBar",
-					fontFamily: 'inherit',
-					height: 40,
-					width: 40,
-					animations: {
-						enabled: false
-					},
-					sparkline: {
-						enabled: true
-					},
-				},
-				tooltip: {
-					enabled: false,
-				},
-				plotOptions: {
-					radialBar: {
-						hollow: {
-							margin: 0,
-							size: '75%'
-						},
-						track: {
-							margin: 0
-						},
-						dataLabels: {
-							show: false
-						}
-					}
-				},
-				colors: [tabler.getColor("blue")],
-				series: [35],
-			})).render();
-		});
+		// document.addEventListener("DOMContentLoaded", function() {
+		// 	window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-activity'), {
+		// 		chart: {
+		// 			type: "radialBar",
+		// 			fontFamily: 'inherit',
+		// 			height: 40,
+		// 			width: 40,
+		// 			animations: {
+		// 				enabled: false
+		// 			},
+		// 			sparkline: {
+		// 				enabled: true
+		// 			},
+		// 		},
+		// 		tooltip: {
+		// 			enabled: false,
+		// 		},
+		// 		plotOptions: {
+		// 			radialBar: {
+		// 				hollow: {
+		// 					margin: 0,
+		// 					size: '75%'
+		// 				},
+		// 				track: {
+		// 					margin: 0
+		// 				},
+		// 				dataLabels: {
+		// 					show: false
+		// 				}
+		// 			}
+		// 		},
+		// 		colors: [tabler.getColor("blue")],
+		// 		series: [35],
+		// 	})).render();
+		// });
 		// @formatter:on
 	</script>
 	<script>
 		// @formatter:off
-		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('chart-development-activity'), {
-				chart: {
-					type: "area",
-					fontFamily: 'inherit',
-					height: 192,
-					sparkline: {
-						enabled: true
-					},
-					animations: {
-						enabled: false
-					},
-				},
-				dataLabels: {
-					enabled: false,
-				},
-				fill: {
-					opacity: .16,
-					type: 'solid'
-				},
-				stroke: {
-					width: 2,
-					lineCap: "round",
-					curve: "smooth",
-				},
-				series: [{
-					name: "Purchases",
-					data: [3, 5, 4, 6, 7, 5, 6, 8, 24, 7, 12, 5, 6, 3, 8, 4, 14, 30, 17, 19, 15, 14, 25, 32, 40, 55, 60, 48, 52, 70]
-				}],
-				tooltip: {
-					theme: 'dark'
-				},
-				grid: {
-					strokeDashArray: 4,
-				},
-				xaxis: {
-					labels: {
-						padding: 0,
-					},
-					tooltip: {
-						enabled: false
-					},
-					axisBorder: {
-						show: false,
-					},
-					type: 'datetime',
-				},
-				yaxis: {
-					labels: {
-						padding: 4
-					},
-				},
-				labels: [
-					'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
-				],
-				colors: [tabler.getColor("primary")],
-				legend: {
-					show: false,
-				},
-				point: {
-					show: false
-				},
-			})).render();
-		});
+		// document.addEventListener("DOMContentLoaded", function() {
+		// 	window.ApexCharts && (new ApexCharts(document.getElementById('chart-development-activity'), {
+		// 		chart: {
+		// 			type: "area",
+		// 			fontFamily: 'inherit',
+		// 			height: 192,
+		// 			sparkline: {
+		// 				enabled: true
+		// 			},
+		// 			animations: {
+		// 				enabled: false
+		// 			},
+		// 		},
+		// 		dataLabels: {
+		// 			enabled: false,
+		// 		},
+		// 		fill: {
+		// 			opacity: .16,
+		// 			type: 'solid'
+		// 		},
+		// 		stroke: {
+		// 			width: 2,
+		// 			lineCap: "round",
+		// 			curve: "smooth",
+		// 		},
+		// 		series: [{
+		// 			name: "Purchases",
+		// 			data: [3, 5, 4, 6, 7, 5, 6, 8, 24, 7, 12, 5, 6, 3, 8, 4, 14, 30, 17, 19, 15, 14, 25, 32, 40, 55, 60, 48, 52, 70]
+		// 		}],
+		// 		tooltip: {
+		// 			theme: 'dark'
+		// 		},
+		// 		grid: {
+		// 			strokeDashArray: 4,
+		// 		},
+		// 		xaxis: {
+		// 			labels: {
+		// 				padding: 0,
+		// 			},
+		// 			tooltip: {
+		// 				enabled: false
+		// 			},
+		// 			axisBorder: {
+		// 				show: false,
+		// 			},
+		// 			type: 'datetime',
+		// 		},
+		// 		yaxis: {
+		// 			labels: {
+		// 				padding: 4
+		// 			},
+		// 		},
+		// 		labels: [
+		// 			'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+		// 		],
+		// 		colors: [tabler.getColor("primary")],
+		// 		legend: {
+		// 			show: false,
+		// 		},
+		// 		point: {
+		// 			show: false
+		// 		},
+		// 	})).render();
+		// });
 		// @formatter:on
 	</script>
 	<script>
 		// @formatter:off
-		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-1'), {
-				chart: {
-					type: "line",
-					fontFamily: 'inherit',
-					height: 24,
-					animations: {
-						enabled: false
-					},
-					sparkline: {
-						enabled: true
-					},
-				},
-				tooltip: {
-					enabled: false,
-				},
-				stroke: {
-					width: 2,
-					lineCap: "round",
-				},
-				series: [{
-					color: tabler.getColor("primary"),
-					data: [17, 24, 20, 10, 5, 1, 4, 18, 13]
-				}],
-			})).render();
-		});
+		// document.addEventListener("DOMContentLoaded", function() {
+		// 	window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-1'), {
+		// 		chart: {
+		// 			type: "line",
+		// 			fontFamily: 'inherit',
+		// 			height: 24,
+		// 			animations: {
+		// 				enabled: false
+		// 			},
+		// 			sparkline: {
+		// 				enabled: true
+		// 			},
+		// 		},
+		// 		tooltip: {
+		// 			enabled: false,
+		// 		},
+		// 		stroke: {
+		// 			width: 2,
+		// 			lineCap: "round",
+		// 		},
+		// 		series: [{
+		// 			color: tabler.getColor("primary"),
+		// 			data: [17, 24, 20, 10, 5, 1, 4, 18, 13]
+		// 		}],
+		// 	})).render();
+		// });
 		// @formatter:on
 	</script>
 	<script>
 		// @formatter:off
-		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-2'), {
-				chart: {
-					type: "line",
-					fontFamily: 'inherit',
-					height: 24,
-					animations: {
-						enabled: false
-					},
-					sparkline: {
-						enabled: true
-					},
-				},
-				tooltip: {
-					enabled: false,
-				},
-				stroke: {
-					width: 2,
-					lineCap: "round",
-				},
-				series: [{
-					color: tabler.getColor("primary"),
-					data: [13, 11, 19, 22, 12, 7, 14, 3, 21]
-				}],
-			})).render();
-		});
+		// document.addEventListener("DOMContentLoaded", function() {
+		// 	window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-2'), {
+		// 		chart: {
+		// 			type: "line",
+		// 			fontFamily: 'inherit',
+		// 			height: 24,
+		// 			animations: {
+		// 				enabled: false
+		// 			},
+		// 			sparkline: {
+		// 				enabled: true
+		// 			},
+		// 		},
+		// 		tooltip: {
+		// 			enabled: false,
+		// 		},
+		// 		stroke: {
+		// 			width: 2,
+		// 			lineCap: "round",
+		// 		},
+		// 		series: [{
+		// 			color: tabler.getColor("primary"),
+		// 			data: [13, 11, 19, 22, 12, 7, 14, 3, 21]
+		// 		}],
+		// 	})).render();
+		// });
 		// @formatter:on
 	</script>
 	<script>
 		// @formatter:off
-		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-3'), {
-				chart: {
-					type: "line",
-					fontFamily: 'inherit',
-					height: 24,
-					animations: {
-						enabled: false
-					},
-					sparkline: {
-						enabled: true
-					},
-				},
-				tooltip: {
-					enabled: false,
-				},
-				stroke: {
-					width: 2,
-					lineCap: "round",
-				},
-				series: [{
-					color: tabler.getColor("primary"),
-					data: [10, 13, 10, 4, 17, 3, 23, 22, 19]
-				}],
-			})).render();
-		});
+		// document.addEventListener("DOMContentLoaded", function() {
+		// 	window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-3'), {
+		// 		chart: {
+		// 			type: "line",
+		// 			fontFamily: 'inherit',
+		// 			height: 24,
+		// 			animations: {
+		// 				enabled: false
+		// 			},
+		// 			sparkline: {
+		// 				enabled: true
+		// 			},
+		// 		},
+		// 		tooltip: {
+		// 			enabled: false,
+		// 		},
+		// 		stroke: {
+		// 			width: 2,
+		// 			lineCap: "round",
+		// 		},
+		// 		series: [{
+		// 			color: tabler.getColor("primary"),
+		// 			data: [10, 13, 10, 4, 17, 3, 23, 22, 19]
+		// 		}],
+		// 	})).render();
+		// });
 		// @formatter:on
 	</script>
 	<script>
 		// @formatter:off
-		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-4'), {
-				chart: {
-					type: "line",
-					fontFamily: 'inherit',
-					height: 24,
-					animations: {
-						enabled: false
-					},
-					sparkline: {
-						enabled: true
-					},
-				},
-				tooltip: {
-					enabled: false,
-				},
-				stroke: {
-					width: 2,
-					lineCap: "round",
-				},
-				series: [{
-					color: tabler.getColor("primary"),
-					data: [6, 15, 13, 13, 5, 7, 17, 20, 19]
-				}],
-			})).render();
-		});
+		// document.addEventListener("DOMContentLoaded", function() {
+		// 	window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-4'), {
+		// 		chart: {
+		// 			type: "line",
+		// 			fontFamily: 'inherit',
+		// 			height: 24,
+		// 			animations: {
+		// 				enabled: false
+		// 			},
+		// 			sparkline: {
+		// 				enabled: true
+		// 			},
+		// 		},
+		// 		tooltip: {
+		// 			enabled: false,
+		// 		},
+		// 		stroke: {
+		// 			width: 2,
+		// 			lineCap: "round",
+		// 		},
+		// 		series: [{
+		// 			color: tabler.getColor("primary"),
+		// 			data: [6, 15, 13, 13, 5, 7, 17, 20, 19]
+		// 		}],
+		// 	})).render();
+		// });
 		// @formatter:on
 	</script>
 	<script>
 		// @formatter:off
-		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-5'), {
-				chart: {
-					type: "line",
-					fontFamily: 'inherit',
-					height: 24,
-					animations: {
-						enabled: false
-					},
-					sparkline: {
-						enabled: true
-					},
-				},
-				tooltip: {
-					enabled: false,
-				},
-				stroke: {
-					width: 2,
-					lineCap: "round",
-				},
-				series: [{
-					color: tabler.getColor("primary"),
-					data: [2, 11, 15, 14, 21, 20, 8, 23, 18, 14]
-				}],
-			})).render();
-		});
+		// document.addEventListener("DOMContentLoaded", function() {
+		// 	window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-5'), {
+		// 		chart: {
+		// 			type: "line",
+		// 			fontFamily: 'inherit',
+		// 			height: 24,
+		// 			animations: {
+		// 				enabled: false
+		// 			},
+		// 			sparkline: {
+		// 				enabled: true
+		// 			},
+		// 		},
+		// 		tooltip: {
+		// 			enabled: false,
+		// 		},
+		// 		stroke: {
+		// 			width: 2,
+		// 			lineCap: "round",
+		// 		},
+		// 		series: [{
+		// 			color: tabler.getColor("primary"),
+		// 			data: [2, 11, 15, 14, 21, 20, 8, 23, 18, 14]
+		// 		}],
+		// 	})).render();
+		// });
 		// @formatter:on
 	</script>
 	<script>
 		// @formatter:off
-		document.addEventListener("DOMContentLoaded", function() {
-			window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-6'), {
-				chart: {
-					type: "line",
-					fontFamily: 'inherit',
-					height: 24,
-					animations: {
-						enabled: false
-					},
-					sparkline: {
-						enabled: true
-					},
-				},
-				tooltip: {
-					enabled: false,
-				},
-				stroke: {
-					width: 2,
-					lineCap: "round",
-				},
-				series: [{
-					color: tabler.getColor("primary"),
-					data: [22, 12, 7, 14, 3, 21, 8, 23, 18, 14]
-				}],
-			})).render();
-		});
+		// document.addEventListener("DOMContentLoaded", function() {
+		// 	window.ApexCharts && (new ApexCharts(document.getElementById('sparkline-bounce-rate-6'), {
+		// 		chart: {
+		// 			type: "line",
+		// 			fontFamily: 'inherit',
+		// 			height: 24,
+		// 			animations: {
+		// 				enabled: false
+		// 			},
+		// 			sparkline: {
+		// 				enabled: true
+		// 			},
+		// 		},
+		// 		tooltip: {
+		// 			enabled: false,
+		// 		},
+		// 		stroke: {
+		// 			width: 2,
+		// 			lineCap: "round",
+		// 		},
+		// 		series: [{
+		// 			color: tabler.getColor("primary"),
+		// 			data: [22, 12, 7, 14, 3, 21, 8, 23, 18, 14]
+		// 		}],
+		// 	})).render();
+		// });
 		// @formatter:on
 	</script>
 <?php } ?>

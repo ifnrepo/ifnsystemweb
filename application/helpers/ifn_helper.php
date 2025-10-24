@@ -966,3 +966,16 @@ function getjumlahbcmasuk($nobc)
     $get = $CI->helpermodel->getjumlahbcmasuk($nobc);
     return $get;
 }
+function jumlahhari($date1,$date2){
+    $dt1 = new DateTime($date1);
+    $dt2 = new DateTime($date2);
+    $hasil = 0;
+    if($dt1 > $dt2){
+        $hasil = 9999;
+    }else{
+        $interval = $dt1->diff($dt2);
+        $daysDifference = $interval->days;
+        $hasil = $daysDifference;
+    }
+    return $hasil;
+}
