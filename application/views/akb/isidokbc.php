@@ -497,7 +497,7 @@
                                                     <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'], 2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
-                                            <div class="mb-1 row">
+                                            <div class="mb-1 row <?= $hilangbc261 ?>">
                                                 <label class="col-3 col-form-label font-kecil mx-2">Nilai Penyerahan</label>
                                                 <div class="col">
                                                     <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_serah" name="nilai_serah" value="<?= rupiah($datheader['nilai_serah'], 2); ?>" aria-describedby="emailHelp" placeholder="Nilai Penyerahan">
@@ -684,7 +684,7 @@
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail, 2); ?></td>
                                 </tr>
-                                <?php if ($datheader['jns_bc'] == '25' || $datheader['jns_bc'] == '41') : ?>
+                                <?php if ($datheader['jns_bc'] == '25' || ($datheader['jns_bc'] == '41' && $datheader['dept_id']!='FG')) : ?>
                                     <tr class="bg-primary-lt">
                                         <td colspan="7" class="text-black text-right font-bold">Spesial Diskon</td>
                                         <td class="text-black text-right font-bold"><?= rupiah($jmspdiskon, 2); ?></td>
@@ -706,7 +706,7 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2 bg-red-lt" id="tabs-profile-8">
-                <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen <span><a href="<?= base_url() . 'ib/addlampiran/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary"><i class="fa fa-plus mr-1"></i> Tambah Data</a><span></div>
+                <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen <span><a href="<?= base_url() . 'ib/addlampiran/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary <?= $hilang2 ?>"><i class="fa fa-plus mr-1"></i> Tambah Data</a><span></div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
                         <table class="table w-100">
@@ -735,8 +735,8 @@
                     </span>
                     <span>
                         <?php $tmb = ($datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41) ? '' : '/1'; ?>
-                        <a href="<?= base_url() . 'akb/hitungbomjf/' . $datheader['id'] . $tmb; ?>" id="tombolhitung" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
-                        <a href="#" data-href="<?= base_url() . 'akb/tambahkelampiran/' . $datheader['id'] . '/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" class="btn btn-sm btn-success"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
+                        <a href="<?= base_url() . 'akb/hitungbomjf/' . $datheader['id'] . $tmb; ?>" id="tombolhitung" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary <?= $hilang2 ?>"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
+                        <a href="#" data-href="<?= base_url() . 'akb/tambahkelampiran/' . $datheader['id'] . '/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" class="btn btn-sm btn-success <?= $hilang2 ?>"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
                         <span class="dropdown">
                             <button class="btn btn-sm btn-info" style="height: 32px;" data-bs-boundary="viewport" data-bs-toggle="dropdown"><i class="fa fa-chevron-down"></i></button>
                             <div class="dropdown-menu dropdown-menu-end">
@@ -855,7 +855,7 @@
                                         <td class="text-right"><?= rupiah($hargaperkilo / $xdetbom, 2) ?></td>
                                         <td class="text-right"><?= rupiah($hargaperkilo, 2) ?></td>
                                         <td class="text-center">
-                                            <a href="<?= base_url() . 'akb/editbombc/' . $detbom['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data">EDIT</a>
+                                            <a href="<?= base_url() . 'akb/editbombc/' . $detbom['id']; ?>" class="btn btn-sm btn-success font-bold <?= $hilang2 ?>" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data">EDIT</a>
                                         </td>
                                     </tr>
                                 <?php } ?>

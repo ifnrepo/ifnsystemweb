@@ -105,7 +105,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php foreach ($data as $datdet) {
                 $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item';
                 $tmb = '';
-                if($this->session->userdata('deptdari')=='FG'){
+                if($this->session->userdata('deptdari')=='FG' && $datdet['jns_bc'] != '41'){
                   if($datdet['dept_tuju']!='SU'){
                     $namasup = datadepartemen($datdet['dept_tuju'],'nama_subkon');
                   }else{
@@ -113,7 +113,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   }
                   $tmb = '/1';
                 }else{
-                  $namasup = $datdet['namacustomer'] != null ? $datdet['namacustomer']  : 'Not Set'; 
+                  if($datdet['jns_bc'] == '41'){
+                    $namasup = datadepartemen($datdet['dept_tuju'],'nama_subkon');
+                  }else{
+                    $namasup = $datdet['namacustomer'] != null ? $datdet['namacustomer']  : 'Not Set'; 
+                  }
                 }
                 $nomorbc = $datdet['tanpa_bc']== 1 ? 'Tanpa BC' : 'XX';
                 $isibc = $nomorbc=='XX' ? 'AJU. '.$datdet['nomor_aju'].'<br>BC. '.$datdet['nomor_bc'] : $nomorbc;
@@ -128,7 +132,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td><?= $jmlrek ?></td>
                   <?php } ?>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
-                  <?php if($datdet['tanpa_bc']==0){ $service = $datdet['dept_tuju']=='SU' ? 'Service' : ''; ?>
+                  <?php if($datdet['tanpa_bc']==0){ $service = $datdet['dept_tuju']=='SU' ? 'Service' : ($datdet['bc_makloon']==1 ? 'MAKLOON' : ''); ?>
                     <td style="font-size: 17px" class="text-info line-11"><?= $datdet['jns_bc']; ?><br><span class="font-11 text-pink"><?= $service ?></span></td>
                       <?php if($datdet['send_ceisa']==1){ ?>
                         <td class="line-12"><a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb; ?>"><?= $isibc; ?></a></span></td>

@@ -235,7 +235,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                               <span class="badge bg-pink ms-auto"></span> BC 23 : <?= $bc23.' Dok' ?>
                             </div>
                             <div class="font-kecil">
-                              <span class="badge bg-gray-600 ms-auto"></span> BC 40 : <?= $bc40.' Dok' ?>
+                              <span class="badge bg-info ms-auto"></span> BC 40 : <?= $bc40.' Dok' ?>
                             </div>
                             <div class="font-kecil">
                               <span class="badge ms-auto"></span>
@@ -262,7 +262,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                               <span class="badge bg-green ms-auto"></span> BC 25 : <?= $bc25.' Dok' ?>
                             </div>
                             <div class="font-kecil">
-                              <span class="badge bg-gray-600 ms-auto"></span> BC 30 : <?= $bc30.' Dok' ?>
+                              <span class="badge bg-info ms-auto"></span> BC 30 : <?= $bc30.' Dok' ?>
                             </div>
                             <div class="font-kecil">
                               <span class="badge bg-orange ms-auto"></span> BC 41 : <?= $bc41.' Dok' ?>
@@ -289,7 +289,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                               <span class="badge bg-pink ms-auto"></span> BC 261 :  <?= $bc261.' Dok' ?>
                             </div>
                             <div class="font-kecil">
-                              <span class="badge bg-gray-600 ms-auto"></span> BC 262 : <?= $bc262.' Dok' ?>
+                              <span class="badge bg-info ms-auto"></span> BC 262 : <?= $bc262.' Dok' ?>
                             </div>
                             <div class="font-kecil">
                               <span class="badge ms-auto"></span>
@@ -316,7 +316,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                               <span class="badge bg-pink ms-auto"></span> BC 40 : <?= $bc40m.' Dok' ?>
                             </div>
                             <div class="font-kecil">
-                              <span class="badge bg-gray-600 ms-auto"></span> BC 41 : <?= $bc41m.' Dok' ?>
+                              <span class="badge bg-info ms-auto"></span> BC 41 : <?= $bc41m.' Dok' ?>
                             </div>
                             <div class="font-kecil">
                               <span class="badge ms-auto"></span>
