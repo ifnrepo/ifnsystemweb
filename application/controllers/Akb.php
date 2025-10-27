@@ -3150,6 +3150,11 @@ class Akb extends CI_Controller
             $nop++;
             $hs = trim($datbarangkirim['po']) != '' ? substr($datbarangkirim['hsx'], 0, 8) : substr($datbarangkirim['nohs'], 0, 8);
             $sku = trim($datbarangkirim['po']) == '' ? $datbarangkirim['kode'] : viewsku($datbarangkirim['po'], $datbarangkirim['item'], $datbarangkirim['dis'], $datbarangkirim['id_barang']);
+            if (str_contains($datbarangkirim['nomor_inv'], 'NET/') || str_contains($datbarangkirim['nomor_inv'], 'RSC/') || str_contains($datbarangkirim['nomor_inv'], 'RSP/')) {
+                $sat = 'KGM';
+            } else {
+                $sat = $datbarangkirim['kodebc'];
+            }
 
             $sheet->setCellValue('A' . $numrow, $nop);
             $sheet->setCellValue('B' . $numrow, $no);
@@ -3157,7 +3162,7 @@ class Akb extends CI_Controller
             $sheet->setCellValue('J' . $numrow, '-');
             $sheet->setCellValue('K' . $numrow, '-');
             $sheet->setCellValue('L' . $numrow, '-');
-            $sheet->setCellValue('R' . $numrow, 'KGM');
+            $sheet->setCellValue('R' . $numrow, $sat);
             // $sheet->setCellValue('AF'.$numrow, 1);
             // $sheet->setCellValue('AG'.$numrow, 'N');
             $inv2 = $this->akbmodel->detailexcellampiran261($id, $no);
@@ -3317,6 +3322,11 @@ class Akb extends CI_Controller
             if (trim($data['kodebc']) != 'KGM') {
                 $jumlahpcs += $data['pcs'];
             }
+            if (str_contains($datbarangkirim['nomor_inv'], 'NET/') || str_contains($datbarangkirim['nomor_inv'], 'RSC/') || str_contains($datbarangkirim['nomor_inv'], 'RSP/')) {
+                $sat = 'KGM';
+            } else {
+                $sat = $data['kodebc'];
+            }
             $numawal = $numrow;
             $numakhir = $numrow - 1;
             // Lakukan looping pada variabel      
@@ -3324,7 +3334,7 @@ class Akb extends CI_Controller
             $sheet->setCellValue('B' . $numrow, $hs);
             $sheet->setCellValue('F' . $numrow, htmlspecialchars_decode($spekbarang));
             $sheet->setCellValue('H' . $numrow, $pcs);
-            $sheet->setCellValue('I' . $numrow, $data['kodebc']);
+            $sheet->setCellValue('I' . $numrow, $sat);
             $sheet->setCellValue('J' . $numrow, round($data['kgs'], 2));
 
             $numrow++;

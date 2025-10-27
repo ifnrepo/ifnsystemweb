@@ -748,7 +748,8 @@
                                 </a>
                             </div>
                         </span>
-                        <span>
+                        <a href="#" data-href="<?= base_url() . 'akb/tambahkelampiran/' . $datheader['id'] . '/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" style="height: 32px;" class="btn btn-sm btn-success <?= $hilang2 ?>"><i class="fa fa-plus"></i></a>
+                    <span>
                 </div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
