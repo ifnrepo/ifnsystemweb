@@ -117,14 +117,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                   $exbcno = $detail['exnomor_bc'] == '' ? '' : '<span class="text-teal font-kecil">EX BC No. ' . $detail['exnomor_bc'] . '<br> Tgl ' . $detail['extgl_bc'] . '</span>';
 
-                  $kurs_data = getkurssekarang(date('Y-m-d'))->row();
+                  $kurs_data = getkurssekarang($detail['tgl_aju'])->row();
 
                   $kurs_usd = (empty($detail['kurs_usd']) || $detail['kurs_usd'] == 0)
-                    ? (($kurs_data && isset($kurs_data->kurs_usd)) ? $kurs_data->kurs_usd : 0)
+                    ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
                     : $detail['kurs_usd'];
 
                   $kurs_yen = (empty($detail['kurs_yen']) || $detail['kurs_yen'] == 0)
-                    ? (($kurs_data && isset($kurs_data->kurs_yen)) ? $kurs_data->kurs_yen : 0)
+                    ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
                     : $detail['kurs_yen'];
 
                   // $kurs_yen = $detail['kurs_yen'] ?? 0;
