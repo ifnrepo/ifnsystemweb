@@ -4561,7 +4561,6 @@ class Akb extends CI_Controller
         $this->load->view('akb/edit_file', $data);
     }
 
-
     public function simpan_upload($id)
     {
         $config['upload_path'] = './assets/image/akb/';
@@ -4737,5 +4736,50 @@ class Akb extends CI_Controller
         }
 
         redirect('akb/isidokbc/' . $id . '/' . '1');
+    }
+
+    public function tambahbarangversiceisa($id){
+        $data['bahan'] = $this->akbmodel->getdatadetailib($id);
+        $data['idheader'] = $id;
+        $this->load->view('akb/addbahanbaku',$data);
+    }
+
+    public function caribahanbaku(){
+        $kode = $_POST['kode'];
+        $hasil = $this->akbmodel->getbarangmaterial($kode);
+        $html = '';
+        $no=0;
+        foreach($hasil->result_array() as $bahan){ 
+            $no++;
+            $html .= '<tr>';
+            $html .= '<td>'.$no.'</td>';
+            $html .= '<td>'.$bahan['kode'].'</td>';
+            $html .= '<td>'.$bahan['nama_barang'].'</td>';
+            $html .= '<td>'.$bahan['nobontr'].'</td>';
+            $html .= '<td>';
+            $html .= '<a href="#" class="btn btn-sm btn-success" id="tombolpilih" rel="'.$bahan['id_barang'].'" rel2="'.$bahan['nobontr'].'" rel3 ="'.$bahan['nama_barang'].'">Pilih</a>';
+            $html .= '</td>';
+            $html .= '</tr>';
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function simpanbahanbaku(){
+        $data = [
+            'id_header' => $_POST['id'],
+            'id_barang' => $_POST['idbarang'],
+            'nobontr' => $_POST['bontr'],
+            'kgs' => toAngka($_POST['kgs']),
+            'seri_barang' => $_POST['seri']
+        ];
+        $hasil = $this->akbmodel->simpanbahanbaku($data);
+        echo $hasil;
+    }
+    public function hapusbombc($id,$idh){
+        $hasil = $this->akbmodel->hapusbombc($id);
+        if($hasil){
+            $url = base_url('akb/isidokbc/'.$idh);
+            redirect($url);
+        }
     }
 }

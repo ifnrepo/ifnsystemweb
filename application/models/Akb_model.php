@@ -1464,4 +1464,25 @@ class Akb_model extends CI_Model
         $this->db->where('id', $id);
         return $this->db->update('tb_header', $data);
     }
+    public function getbarangmaterial($kode){
+        $this->db->select('tb_detail.*,barang.nama_barang,barang.kode');
+        $this->db->from('tb_detail');
+        $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->where('left(tb_header.nomor_dok,7)','DLN-IFN');
+        $this->db->group_start();
+        $this->db->like('barang.nama_barang', $kode);
+        $this->db->or_like('tb_header.nomor_dok', $kode);
+        $this->db->group_end();
+        $this->db->order_by('tb_header.id DESC');
+        $this->db->limit(50);
+        return $this->db->get();
+    }
+    public function simpanbahanbaku($data){
+        return $this->db->insert('tb_bombc',$data);
+    }
+    public function hapusbombc($id){
+        $this->db->where('id',$id);
+        return $this->db->delete('tb_bombc');
+    }
 }

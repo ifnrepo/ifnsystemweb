@@ -50,6 +50,7 @@
                             <?php $hilangbc261 = $datheader['jns_bc'] == 261 ? "hilang" : ""; ?>
                             <?php $hilangbc25 = $datheader['jns_bc'] == 25 ? "hilang" : ""; ?>
                             <?php $hilangbc41 = $datheader['jns_bc'] == 41 ? "hilang" : ""; ?>
+                            <?php $hilangbcmakloon = $datheader['bc_makloon'] == 0 ? "hilang" : ""; ?>
                             <?php $selectnonaktif = $datheader['send_ceisa'] == 1 ? "disabled" : ""; ?>
                             <a href="<?= base_url() . 'akb/ceisa40excel/' . $datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url() . 'akb/getresponhost/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow text-black <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url() . 'akb/getresponpdf/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                             <!-- <a href="<?= base_url() . 'akb/hosttohost/' . $datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
@@ -748,7 +749,7 @@
                                 </a>
                             </div>
                         </span>
-                        <a href="#" data-href="<?= base_url() . 'akb/tambahkelampiran/' . $datheader['id'] . '/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" style="height: 32px;" class="btn btn-sm btn-success <?= $hilang2 ?>"><i class="fa fa-plus"></i></a>
+                        <a href="<?= base_url() . 'akb/tambahbarangversiceisa/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large-loading" title="Penambahan Bahan Baku" data-title="Bill Of Material" style="height: 32px;" class="btn btn-sm btn-warning text-hitam <?= $hilangbcmakloon ?>"><i class="fa fa-plus mr-1"></i> Bahan Baku</a>
                     <span>
                 </div>
                 <div class="card card-lg font-kecil">
@@ -857,6 +858,7 @@
                                         <td class="text-right"><?= rupiah($hargaperkilo, 2) ?></td>
                                         <td class="text-center">
                                             <a href="<?= base_url() . 'akb/editbombc/' . $detbom['id']; ?>" class="btn btn-sm btn-success font-bold <?= $hilang2 ?>" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data">EDIT</a>
+                                            <a href="#" data-href="<?= base_url() . 'akb/hapusbombc/' . $detbom['id'].'/'.$datheader['id']; ?>" class="btn btn-sm btn-danger font-bold <?= $hilang2.' '.$hilangbcmakloon ?>" style="padding: 0px 2px !important;" data-message="Akan menghapus data ini" data-bs-toggle="modal" data-bs-target="#modal-danger" data-title="Edit Data">HAPUS</a>
                                         </td>
                                     </tr>
                                 <?php } ?>
