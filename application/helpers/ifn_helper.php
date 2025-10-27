@@ -145,7 +145,7 @@ function nomorib()
     $bl = date('m', strtotime($tgl));
     $th = date('Y', strtotime($tgl));
     $thp = date('y', strtotime($tgl));
-    $deptr = $CI->session->userdata('depttuju');
+    $deptr = $CI->session->userdata('curdept');
     $kode = $CI->ibmodel->getnomorib($bl, $th);
     $urut = (int) $kode['maxkode'];
     $urut++;

@@ -653,7 +653,7 @@
                                         $nambar = $data['engklp'];
                                     } else {
                                         if ($datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41) {
-                                            $nambar = spekdom($data['po'], $data['item'], $data['dis']);
+                                            $nambar = trim($data['po']) == '' ? $data['nama_barang'] : spekdom($data['po'], $data['item'], $data['dis']);
                                         }
                                     }
                                     $hs = trim($data['po']) == '' ? substr($data['hsx'], 0, 8) : substr($data['nohs'], 0, 8);

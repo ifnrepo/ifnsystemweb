@@ -114,7 +114,7 @@ class In extends CI_Controller {
         if($hasil){
             // $url = base_url().'in';
             // redirect($url);
-            $simpankehamat = $simpankehargamaterial = $this->ibmodel->simpankehargamaterial($id);
+            $simpankehamat = $this->ibmodel->simpankehargamaterial($id);
             if($simpankehamat){
                 echo 1;
             }
