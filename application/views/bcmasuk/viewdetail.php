@@ -12,7 +12,7 @@
             <a href="#tabs-home-8" class="nav-link font-bold bg-warning-lt btn-flat" data-bs-toggle="tab">Riwayat Dokumen</a>
         </li>
         <li class="nav-item">
-            <a href="#tabs-activity-8" class="nav-link text-blue" data-bs-toggle="tab"></a>
+            <a href="#tabs-foto-8" class="nav-link bg-grey-lt btn-flat font-bold" data-bs-toggle="tab">Lampiran Foto & Video</a>
         </li>
     </ul>
     <!-- </div> -->
@@ -344,9 +344,87 @@
             </div>
 
         </div>
-        <div class="tab-pane fade" id="tabs-activity-8">
-            <h4>Activity tab</h4>
-            <div>Donec ac vitae diam amet vel leo egestas consequat rhoncus in luctus amet, facilisi sit mauris accumsan nibh habitant senectus</div>
+        <div class="tab-pane fade p-2 bg-grey-lt" id="tabs-foto-8">
+            <div class="row">
+                <div class="col-md-7">
+                    <div class="mt-2 font-bold d-flex justify-content-between">Lampiran Foto & Video Aju Masuk Barang <br>
+
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-8 mb-4">
+                <div class="text-muted fw-semibold mb-2"></div>
+
+                <?php
+                $path_files = json_decode($detail['path_file'], true);
+                $file_names = json_decode($detail['file'], true);
+
+
+                if (!empty($path_files)) {
+                ?>
+
+                    <div id="mediaCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
+
+                        <div class="carousel-indicators">
+                            <?php foreach ($path_files as $index => $path) { ?>
+                                <button type="button" data-bs-target="#mediaCarousel" data-bs-slide-to="<?php echo $index; ?>" class="<?php echo ($index == 0) ? 'active' : ''; ?>" aria-current="<?php echo ($index == 0) ? 'true' : 'false'; ?>" aria-label="Slide <?php echo $index + 1; ?>">
+                                </button>
+                            <?php } ?>
+                        </div>
+
+                        <div class="carousel-inner rounded shadow-sm">
+                            <?php foreach ($path_files as $index => $path) {
+                                $filename = isset($file_names[$index]) ? $file_names[$index] : basename($path);
+                                $is_image = preg_match('/\.(jpe?g|png|gif|webp)$/i', $path);
+                                $is_video = preg_match('/\.(mp4|webm|ogg)$/i', $path);
+                            ?>
+                                <div class="carousel-item <?php echo ($index == 0) ? 'active' : ''; ?>">
+
+                                    <?php
+                                    if ($is_image) { ?>
+                                        <a href="<?php echo base_url($path); ?>" target="_blank" title="Lihat: <?php echo htmlspecialchars($filename); ?>">
+                                            <img src="<?php echo base_url($path); ?>" class="d-block w-100" alt="<?php echo htmlspecialchars($filename); ?>" style="max-height: 400px; object-fit: contain; background-color: #f8f9fa;">
+                                        </a>
+                                    <?php } else if ($is_video) { ?>
+                                        <video class="d-block w-100" controls autoplay muted playsinline style="max-height: 400px; background-color: #000;">
+                                            <source src="<?php echo base_url($path); ?>" type="video/<?php echo pathinfo($path, PATHINFO_EXTENSION); ?>">
+                                            Browser Anda tidak mendukung tag video.
+                                        </video>
+                                    <?php } else { ?>
+                                        <a href="<?php echo base_url($path); ?>" target="_blank" title="Lihat: <?php echo htmlspecialchars($filename); ?>">
+                                            <div class="d-flex align-items-center justify-content-center w-100 bg-light text-secondary" style="height: 300px;">
+                                                <span class="fs-4">📎 File: <?php echo htmlspecialchars($filename); ?> (Klik untuk lihat)</span>
+                                            </div>
+                                        </a>
+                                    <?php } ?>
+
+                                    <div class="carousel-caption d-none d-md-block text-start bg-dark bg-opacity-75 p-2 rounded">
+                                        <p class="mb-0 text-white" style="font-size: 0.9em;">
+                                            <?php echo htmlspecialchars($filename); ?>
+                                        </p>
+                                    </div>
+                                </div>
+                            <?php } ?>
+                        </div>
+
+                        <?php if (count($path_files) > 1) { ?>
+                            <button class="carousel-control-prev" type="button" data-bs-target="#mediaCarousel" data-bs-slide="prev">
+                                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Previous</span>
+                            </button>
+                            <button class="carousel-control-next" type="button" data-bs-target="#mediaCarousel" data-bs-slide="next">
+                                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                                <span class="visually-hidden">Next</span>
+                            </button>
+                        <?php } ?>
+                    </div>
+
+                <?php
+                } else {
+                    echo '<span style="color: gray;">Tidak ada file foto/video yang dilampirkan.</span>';
+                }
+                ?>
+            </div>
         </div>
     </div>
     <!-- <div> -->
