@@ -109,8 +109,12 @@ class In extends CI_Controller {
     public function simpaningm(){
         $id = $_POST['id'];
         $mode = 0;
-        $nomor = trim(strtoupper($_POST['nomor']));
-        $hasil = $this->inmodel->simpanin($id,$mode,$nomor);
+        $databaru = [
+            'nomor_dok' => trim(strtoupper($_POST['nomor'])),
+            'tgl' => date('Y-m-d')
+        ];
+        // $nomor = trim(strtoupper($_POST['nomor']));
+        $hasil = $this->inmodel->simpanin($id,$mode,$databaru);
         if($hasil){
             // $url = base_url().'in';
             // redirect($url);

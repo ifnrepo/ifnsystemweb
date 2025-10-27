@@ -19,7 +19,7 @@ class Akb_model extends CI_Model
                 'id_perusahaan' => IDPERUSAHAAN,
                 'kode_dok' => 'T',
                 'tb_header.dept_id' => $kode,
-                'dept_tuju' => 'CU',
+                // 'dept_tuju' => 'CU',
                 'month(tb_header.tgl)' => $this->session->userdata('bl'),
                 'year(tb_header.tgl)' => $this->session->userdata('th'),
                 'tanpa_bc' => 0,
@@ -1082,7 +1082,7 @@ class Akb_model extends CI_Model
     public function excellampiran261($id, $qu = 0)
     {
         if ($qu == 0) {
-            $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx");
+            $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx,tb_header.nomor_inv");
             $this->db->from('tb_detail');
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
             $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
@@ -1092,7 +1092,7 @@ class Akb_model extends CI_Model
             // $this->db->limit(1,0);
             $this->db->order_by('urut_akb,seri_barang');
         } else {
-            $this->db->select("tb_detail.*,round(sum(pcs),2) as pcs,round(sum(kgs),2) as kgs,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx");
+            $this->db->select("tb_detail.*,round(sum(pcs),2) as pcs,round(sum(kgs),2) as kgs,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx,tb_header.nomor_inv");
             $this->db->from('tb_detail');
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
             $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');

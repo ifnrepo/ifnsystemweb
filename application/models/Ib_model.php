@@ -127,7 +127,7 @@ class Ib_model extends CI_Model
     public function getnomorib($bl, $th)
     {
         $hasil = $this->db->query("SELECT MAX(substr(nomor_dok,14,3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'IB' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_tuju = '" . $this->session->userdata('depttuju') . "' AND LEFT(nomor_dok,3) = 'SU-' ")->row_array();
+        WHERE kode_dok = 'IB' AND MONTH(tgl)='" . $bl . "' AND YEAR(tgl)='" . $th . "' AND dept_tuju = '" . $this->session->userdata('curdept') . "' AND LEFT(nomor_dok,3) = 'SU-' ")->row_array();
         return $hasil;
     }
     public function getnomorproforma($bl, $th)
