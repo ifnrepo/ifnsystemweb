@@ -116,11 +116,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   }
 
                   $exbcno = $detail['exnomor_bc'] == '' ? '' : '<span class="text-teal font-kecil">EX BC No. ' . $detail['exnomor_bc'] . '<br> Tgl ' . $detail['extgl_bc'] . '</span>';
-                  $pengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] * $detail['kurs_usd'] : ($detail['mtuang'] == 3 ? $detail['nilai_pab'] * $detail['kurs_yen'] : $detail['nilai_pab']);
-                  $usd = $detail['kurs_usd'] == 0 ? 1 : $detail['kurs_usd'];
-                  // $usd = $detail['kurs_usd'] == 0 ? getkurssekarang(date('Y-m-d')) : $detail['kurs_usd'];
 
-                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $detail['kurs_yen']) / $usd : $detail['nilai_pab'] / $usd);
+                  $kurs_data = getkurssekarang(date('Y-m-d'))->row();
+
+                  $kurs_usd = (empty($detail['kurs_usd']) || $detail['kurs_usd'] == 0)
+                    ? (($kurs_data && isset($kurs_data->kurs_usd)) ? $kurs_data->kurs_usd : 0)
+                    : $detail['kurs_usd'];
+
+                  $kurs_yen = (empty($detail['kurs_yen']) || $detail['kurs_yen'] == 0)
+                    ? (($kurs_data && isset($kurs_data->kurs_yen)) ? $kurs_data->kurs_yen : 0)
+                    : $detail['kurs_yen'];
+
+                  // $kurs_yen = $detail['kurs_yen'] ?? 0;
+
+                  $pengali = $detail['mtuang'] == 2
+                    ? $detail['nilai_pab'] * $kurs_usd
+                    : ($detail['mtuang'] == 3
+                      ? $detail['nilai_pab'] * $kurs_yen
+                      : $detail['nilai_pab']);
+
+                  $usd = $detail['kurs_usd'] == 0 ? 1 : $detail['kurs_usd'];
+                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $kurs_yen) / $usd : $detail['nilai_pab'] / $usd);
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
