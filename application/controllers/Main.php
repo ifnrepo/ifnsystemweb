@@ -41,8 +41,12 @@ class Main extends CI_Controller {
 		$this->load->view('layouts/footer',$footer);
 	}
     public function ceknotif(){
-        $jumlah = $this->taskmodel->getuntukvalidasi();
-        echo $jumlah;
+        if ($this->session->userdata('getinifn') == "") {
+            echo 99999;
+        }else{
+            $jumlah = $this->taskmodel->getuntukvalidasi();
+            echo $jumlah;
+        }
     }
     public function settglmonitoring(){
         $tglawal = tglmysql($_POST['tglawal']);

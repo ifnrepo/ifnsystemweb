@@ -8,7 +8,7 @@
     <link href="<?= base_url(); ?>assets/favicon.ico" rel="icon">
     <!-- CSS files -->
     <link href="<?= base_url(); ?>assets/css/tabler.min.css?1692870487" rel="stylesheet"/>
-    <link href="<?= base_url(); ?>assets/css/tabler-flags.min.css?1692870487" rel="stylesheet"/>
+    <link href="<?= base_url(); ?>assets/css/tabler-flags.css?1692870487" rel="stylesheet"/>
     <link href="<?= base_url(); ?>assets/css/tabler-payments.min.css?1692870487" rel="stylesheet"/>
     <link href="<?= base_url(); ?>assets/css/tabler-vendors.min.css?1692870487" rel="stylesheet"/>
     <link href="<?= base_url(); ?>assets/css/demo.min.css?1692870487" rel="stylesheet"/>
