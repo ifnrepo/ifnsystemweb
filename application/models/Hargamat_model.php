@@ -520,4 +520,32 @@ class Hargamat_model extends CI_Model
         }
         return (!empty($uploadData)) ? strtolower(nospasi($uploadData['file_name'])) : NULL;
     }
+
+    public function hapus($id)
+    {
+
+        $data = $this->db->select('*')
+            ->from('tb_hargamaterial')
+            ->where('id', $id)
+            ->get()
+            ->row_array();
+
+        if (!$data) {
+            return false;
+        }
+        $cek = $this->db->select('*')
+            ->from('tb_bombc')
+            ->where('id_barang', $data['id_barang'])
+            ->where('nobontr', $data['nobontr'])
+            ->get()
+            ->row_array();
+
+        if ($cek) {
+            return 'digunakan';
+        }
+
+
+        $this->db->where('id', $id);
+        return $this->db->delete('tb_hargamaterial');
+    }
 }

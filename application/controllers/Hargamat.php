@@ -193,22 +193,30 @@ class Hargamat extends CI_Controller
             // $data[] = $row;
             $buton = '
                 <a href="#"
-                class="btn btn-sm btn-info edit"
-                style="padding: 2px 5px !important;"
-                title="Edit Data"
-                data-id="' . $field->idx . '">
-                <i class="fa fa-pencil mr-1"></i>  Edit</i>
+                    class="btn btn-sm btn-info edit"
+                    style="padding: 2px 5px !important;"
+                    title="Edit Data"
+                    data-id="' . $field->idx . '">
+                    <i class="fa fa-pencil mr-1"></i> Edit
                 </a>
-
+            
                 <a href="' . base_url('hargamat/viewdok/' . $field->idx) . '"
-                class="btn btn-sm btn-danger ml-1"
-                style="padding: 5px !important;"
-                data-bs-toggle="offcanvas"
-                data-bs-target="#canvasdet"
-                data-title="View DOKUMEN">
-                <i class="fa fa-file-pdf-o"></i>
+                    class="btn btn-sm btn-danger ml-1"
+                    style="padding: 5px !important;"
+                    data-bs-toggle="offcanvas"
+                    data-bs-target="#canvasdet"
+                    data-title="View DOKUMEN">
+                    <i class="fa fa-file-pdf-o"></i>
                 </a>
+            
+                <a class="btn btn-sm btn-warning btn-icon text-white hapus" 
+                data-id="' . $field->idx . '" 
+                data-url="' . base_url() . 'hargamat/hapus/' . $field->idx . '" 
+                href="#">
+                <i class="fa fa-trash-o"></i>
+                 </a>
             ';
+
 
             $row[] = $buton;
             $data[] = $row;
@@ -450,6 +458,22 @@ class Hargamat extends CI_Controller
             redirect($url);
         }
     }
+
+    public function hapus($id)
+    {
+        $hasil = $this->hargamatmodel->hapus($id);
+
+        if ($hasil === 'digunakan') {
+            $this->session->set_flashdata('error', 'Data Tidak Dapat Di hapus Karena Masih Digunakan di BOM BC.');
+        } elseif ($hasil === false) {
+            $this->session->set_flashdata('error', 'Data tidak ditemukan.');
+        } else {
+            $this->session->set_flashdata('success', 'Data Berhasil Di Hapus.');
+        }
+
+        redirect(base_url('hargamat'));
+    }
+
     public function canceladj()
     {
         $data = [
