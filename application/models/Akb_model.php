@@ -126,6 +126,7 @@ class Akb_model extends CI_Model
             $this->db->join('tb_header j', 'j.id = a.id_header', 'left');
             if ($mode == 0) {
                 $this->db->where('a.id_header', $data);
+                $this->db->group_by('j.ketprc,a.po,a.item,a.dis,a.insno,c.kode');
                 $this->db->order_by('id_header,seri_barang');
             } else {
                 $this->db->where('a.id_akb', $data);
@@ -1057,7 +1058,7 @@ class Akb_model extends CI_Model
     }
     public function getbarangdetail($id)
     {
-        $this->db->select('tb_detail.*,satuan.kodebc,tb_bombc.ndpbm,barang.kode,tb_header.nilai_serah');
+        $this->db->select('tb_detail.*,satuan.kodebc,tb_bombc.ndpbm,barang.kode,tb_header.nilai_serah,barang.nohs');
         $this->db->select("(SELECT SUM(cif) FROM tb_bombc WHERE seri_barang = tb_detail.seri_barang AND id_header = tb_detail.id_header) AS cifnya");
         $this->db->from('tb_detail');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');

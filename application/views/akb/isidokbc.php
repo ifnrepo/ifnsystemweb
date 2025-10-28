@@ -67,9 +67,15 @@
                     <div class="d-flex justify-content-between">
                         <div class="p-2 font-kecil">
                             <?php if ($mode == 0) { ?>
-                                Nama Customer : <?= $datheader['namacustomer']; ?><br>
-                                Alamat : <?= $datheader['alamat']; ?></br>
-                                NPWP : <?= $datheader['npwp']; ?>
+                                <?php if($datheader['bc_makloon']==1){ ?>
+                                    Nama Customer : <?= datadepartemen($datheader['dept_tuju'], 'nama_subkon'); ?><br>
+                                    Alamat : <?= datadepartemen($datheader['dept_tuju'], 'alamat_subkon'); ?></br>
+                                    NPWP : <?= datadepartemen($datheader['dept_tuju'], 'npwp'); ?>
+                                <?php }else{ ?>
+                                    Nama Customer : <?= $datheader['namacustomer']; ?><br>
+                                    Alamat : <?= $datheader['alamat']; ?></br>
+                                    NPWP : <?= $datheader['npwp']; ?>
+                                <?php } ?>
                             <?php } else { ?>
                                 <?php if ($datheader['dept_tuju'] != 'SU') { ?>
                                     Nama Subkontrak : <?= datadepartemen($datheader['dept_tuju'], 'nama_subkon'); ?><br>
@@ -83,6 +89,7 @@
                             <?php } ?>
                             <button href="#" id="kirimkeceisa" data-href="<?= base_url() . 'akb/kirimdatakeceisa' . $datheader['jns_bc'] . '/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                         </div>
+                        <div style="margin: auto 0;" class="font-bold text-pink" id="cirimakloon"><?php if($datheader['bc_makloon']==1){ echo 'MAKLOON'; } ?></div>
                     </div>
                     <hr class="m-0">
                     <hr class="m-0">
@@ -785,7 +792,11 @@
                                 $totpajak = 0;
                                 $jumlahnobontrkosong = 0;
                                 $kurssekarang = getkurssekarang($datheader['tgl_aju'])->row_array();
-                                $kursusd = $kurssekarang['usd'];
+                                if(empty($kurssekarang)){
+                                    $kursusd = 1;
+                                }else{
+                                    $kursusd = $kurssekarang['usd'];
+                                }
                                 foreach ($detbombc->result_array() as $detbom) {
                                     if ($detbom['seri_barang'] != $serbar) {
                                         $no = 0;
@@ -857,8 +868,8 @@
                                         <td class="text-right"><?= rupiah($hargaperkilo / $xdetbom, 2) ?></td>
                                         <td class="text-right"><?= rupiah($hargaperkilo, 2) ?></td>
                                         <td class="text-center">
-                                            <a href="<?= base_url() . 'akb/editbombc/' . $detbom['id']; ?>" class="btn btn-sm btn-success font-bold <?= $hilang2 ?>" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data">EDIT</a>
-                                            <a href="#" data-href="<?= base_url() . 'akb/hapusbombc/' . $detbom['id'].'/'.$datheader['id']; ?>" class="btn btn-sm btn-danger font-bold <?= $hilang2.' '.$hilangbcmakloon ?>" style="padding: 0px 2px !important;" data-message="Akan menghapus data ini" data-bs-toggle="modal" data-bs-target="#modal-danger" data-title="Edit Data">HAPUS</a>
+                                            <a href="<?= base_url() . 'akb/editbombc/' . $detbom['id']; ?>" class="btn btn-sm btn-success <?= $hilang2 ?>" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data">EDIT</a>
+                                            <a href="#" data-href="<?= base_url() . 'akb/hapusbombc/' . $detbom['id'].'/'.$datheader['id']; ?>" class="btn btn-sm btn-danger <?= $hilang2.' '.$hilangbcmakloon ?>" style="padding: 0px 2px !important;" data-message="Akan menghapus data ini" data-bs-toggle="modal" data-bs-target="#modal-danger" data-title="Edit Data">HAPUS</a>
                                         </td>
                                     </tr>
                                 <?php } ?>

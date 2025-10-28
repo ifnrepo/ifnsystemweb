@@ -87,8 +87,9 @@ class In_model extends CI_Model{
         $dataheader = $this->db->get_where('tb_header',['id' => $id])->row_array();
         $arraynobontr = ['SP','GM'];
         if($cek==1){
-            $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id');
+            $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id,barang.id_kategori');
             $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
+            $this->db->join('barang','tb_detail.id_barang=barang.id','left');
             if($mode==0){
                 $this->db->where('id_header',$id);
             }else{
@@ -168,6 +169,42 @@ class In_model extends CI_Model{
             $this->db->where('id',$id);
             $this->db->update('tb_header',$dataubah);
             $this->helpermodel->isilog($this->db->last_query());
+
+
+            // Add Data to Harga Material 
+            if($dataheader['dept_id']=='SU' && $dataheader['dept_tuju']=='GS'){
+                foreach($detail as $dtl){
+                    $arraykateg = ['7470','7460'];
+                    if(in_array($dtl['id_kategori'],$arraykateg)){
+                        $datacekrekod = [
+                            'id_barang' => $dtl['id_barang'],
+                            'nobontr' => $dataheader['nomor_dok']
+                        ];
+                        $cekrekod = $this->db->get_where('tb_hargamaterial', $datacekrekod);
+                        if ($cekrekod->num_rows() == 0) {
+                            $datasimpan = [
+                                'id_barang' => $dtl['id_barang'],
+                                'nobontr' => $dataheader['nomor_dok'],
+                                'price' => $dtl['harga'],
+                                'qty' => $dtl['pcs'],
+                                'weight' => $dtl['kgs'],
+                                'id_satuan' => $dtl['id_satuan'],
+                                'id_supplier' => $dataheader['id_pemasok'],
+                                'mt_uang' => "IDR",
+                                'jns_bc' => $dataheader['jns_bc'],
+                                'nomor_bc' => $dataheader['nomor_bc'],
+                                'tgl_bc' => $dataheader['tgl_bc'],
+                                'tgl' => $dataheader['tgl'],
+                                'seri_barang' => $dtl['seri_barang'],
+                                'nomor_aju' => $this->getdatanomoraju($id),
+                                'tgl_aju' => $dataheader['tgl_aju'],
+                                'kode_negara' => "ID"
+                            ];
+                            $this->db->insert('tb_hargamaterial', $datasimpan);
+                        }
+                    }
+                }
+            }
         }
         $hasil = $this->db->trans_complete();
         return $hasil;

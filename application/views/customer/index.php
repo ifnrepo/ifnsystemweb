@@ -63,7 +63,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             foreach ($customer as $key) : $no++; ?>
                                 <tr>
                                     <td><?= $no; ?></td>
-                                    <td><?= $key['kode_customer']; ?></td>
+                                    <td class="line-12"><?= $key['kode_customer']; ?><br><span class="text-pink font-10"><?= $key['id'] ?></span></td>
                                     <td><?= $key['nama_customer']; ?></td>
                                     <td><?= $key['buyer']; ?></td>
                                     <td><?= $key['exdo']; ?></td>
