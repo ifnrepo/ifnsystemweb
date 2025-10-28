@@ -11,7 +11,7 @@
   <link href=<?= base_url() . "assets/css/bootstrap.min.css" ?> rel="stylesheet">
   <link href=<?= base_url() . "assets/css/font-awesome.min.css" ?> rel="stylesheet">
   <link href=<?= base_url() . "assets/css/tabler.min.css?1692870487" ?> rel="stylesheet" />
-  <link href=<?= base_url() . "assets/css/tabler-flags.css?1692870487" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/tabler-flags.css?1692870487" ?> type="text/css" rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/tabler-payments.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/tabler-vendors.min.css?1692870487" ?> rel="stylesheet" />
   <link href=<?= base_url() . "assets/css/demo.min.css?1692870487" ?> rel="stylesheet" />

@@ -714,20 +714,24 @@ async function getIP() {
 	cachedIP = data.ip;
 	return cachedIP;
 }
-// setInterval(() => {
-// 	cekNotif();
-// }, 20000);
+setInterval(() => {
+	cekNotif();
+}, 20000);
 function cekNotif() {
 	$.ajax({
 		url: base_url + "main/ceknotif",
 		type: "POST",
 		success: function (data, textStatus, jqXHR) {
 			if (data != 0) {
-				$("#notiftask").removeClass("hilang");
+				if(data.includes("<html")){
+					window.location.reload();
+				}else{
+					$("#notiftask").removeClass("hilang");
+					document.getElementById("notiftask").innerHTML = data;
+				}
 			} else {
 				$("#notiftask").addClass("hilang");
 			}
-			document.getElementById("notiftask").innerHTML = data;
 		},
 		error: function (jqXHR, textStatus, errorThrown) {
 			console.log(textStatus);
