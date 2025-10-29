@@ -181,6 +181,258 @@ class Kontrak extends CI_Controller
         $this->load->view('kontrak/viewdetail', $data);
     }
 
+    // public function excel()
+    // {
+    //     $this->load->model('kontrakmodel');
+    //     $sesi = $this->session->userdata('sesikontrak');
+    //     $header = $this->kontrakmodel->getHeader_kontrak($sesi);
+    //     $detail = $this->kontrakmodel->getDetail_kontrak_ex($sesi);
+    //     $terima = $this->kontrakmodel->getdatapengembalian($sesi);
+    //     $ttd = $this->kontrakmodel->get_Ttd($sesi);
+
+    //     $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+    //     $sheet = $spreadsheet->getActiveSheet();
+
+
+    //     $sheet->mergeCells('B2:R2');
+    //     $sheet->setCellValue('B2', 'REALISASI PENGELUARAN SEMENTARA DAN PEMASUKAN KEMBALI BARANG IMPOR ATAS KEGIATAN DARI/KE TLDPP');
+    //     $sheet->mergeCells('B3:R3');
+    //     $sheet->setCellValue('B3', 'UNTUK PENGEMBALIAN JAMINAN');
+    //     $sheet->getStyle('B2:R3')->getFont()->setBold(true);
+    //     $sheet->getStyle('B2:R3')->getAlignment()->setHorizontal('center');
+
+    //     $sheet->mergeCells('G6:I6');
+    //     $sheet->setCellValue('G6', 'Nama Perusahaan');
+    //     $sheet->setCellValue('J6', ': ');
+    //     $sheet->mergeCells('G7:I7');
+    //     $sheet->setCellValue('G7', 'Nomor Surat Persetujuan');
+    //     $sheet->setCellValue('J7', ':');
+    //     $sheet->mergeCells('G8:I8');
+    //     $sheet->setCellValue('G8', 'Tanggal Surat Persetujuan');
+    //     $sheet->setCellValue('J8', ': ');
+    //     $sheet->mergeCells('G9:I9');
+    //     $sheet->setCellValue('G9', 'Nomor BPJ');
+    //     $sheet->setCellValue('J9', ': ');
+    //     $sheet->mergeCells('G10:I10');
+    //     $sheet->setCellValue('G10', 'Jatuh Tempo Jaminan');
+    //     $sheet->setCellValue('J10', ': ');
+
+    //     $sheet->setCellValue('K6', 'PT. INDONEPTUNE NET MANUCTURING');
+    //     $sheet->setCellValue('K7', $header['nomor_kep']);
+    //     $sheet->setCellValue('K8', format_tanggal_indonesia($header['tgl_kep']));
+    //     $sheet->setCellValue('K9', $header['nomor_bpj']);
+    //     $sheet->setCellValue('K10', format_tanggal_indonesia($header['tgl_expired']));
+
+
+    //     $sheet->setCellValue('B12', 'PENGELUARAN SEMENTARA');
+    //     $sheet->getStyle('B12')->getFont()->setBold(true);
+
+    //     $sheet->mergeCells('B13:B14')->setCellValue('B13', 'No');
+    //     $sheet->mergeCells('C13:C14')->setCellValue('C13', 'Nomor Dokumen');
+    //     $sheet->mergeCells('D13:D14')->setCellValue('D13', 'Tanggal Dokumen');
+    //     $sheet->mergeCells('E13:E14')->setCellValue('E13', 'Tanggal SKU');
+    //     $sheet->mergeCells('F13:F14')->setCellValue('F13', 'Uraian Barang');
+    //     $sheet->mergeCells('G13:H13')->setCellValue('G13', 'Satuan');
+    //     $sheet->setCellValue('G14', 'PCE');
+    //     $sheet->setCellValue('H14', 'KGM');
+
+    //     $rowOut = 15;
+    //     $no = 1;
+    //     $totalKgsOut = 0;
+    //     $totalPcsOut = 0;
+
+    //     if (!empty($detail)) {
+    //         $grouped = [];
+    //         foreach ($detail as $key) {
+    //             $nomor_bc = $key['nomor_bc'];
+    //             $tgl_bc = $key['tgl_bc'];
+    //             $sku = trim($key['po']) == '' ? $key['kode'] : (function_exists('viewsku') ? viewsku($key['po'], $key['item'], $key['dis']) : $key['kode']);
+    //             $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
+    //             $satuan = $key['satuan'] ?? 'PCS';
+    //             $pcs = $key['pcs'] ?? '-';
+
+    //             $group_key = $nomor_bc . '|' . $sku;
+    //             if (!isset($grouped[$group_key])) {
+    //                 $grouped[$group_key] = [
+    //                     'nomor_bc' => $nomor_bc,
+    //                     'tgl_bc' => $tgl_bc,
+    //                     'sku' => $sku,
+    //                     'spekbarang' => $spekbarang,
+    //                     'satuan' => $satuan,
+    //                     'pcs' => 0,
+    //                     'total_kgs' => 0
+    //                 ];
+    //             }
+    //             $grouped[$group_key]['pcs'] += (float)$key['pcs'];
+    //             $grouped[$group_key]['total_kgs'] += (float)$key['kgs'];
+    //         }
+
+
+    //         $ceknomor_bc = '';
+    //         foreach ($grouped as $row) {
+    //             if ($row['nomor_bc'] == $ceknomor_bc) {
+    //                 $sheet->setCellValue("B{$rowOut}", '');
+    //                 $sheet->setCellValue("C{$rowOut}", '');
+    //                 $sheet->setCellValue("D{$rowOut}", '');
+    //             } else {
+    //                 $sheet->setCellValue("B{$rowOut}", $no++);
+    //                 $sheet->setCellValue("C{$rowOut}", $row['nomor_bc']);
+    //                 $sheet->setCellValue("D{$rowOut}", $row['tgl_bc']);
+    //             }
+    //             $sheet->setCellValue("E{$rowOut}", $row['sku']);
+    //             $sheet->setCellValue("F{$rowOut}", html_entity_decode($row['spekbarang']));
+    //             $sheet->setCellValue("G{$rowOut}", $row['pcs']);
+    //             $sheet->setCellValue("H{$rowOut}", $row['total_kgs']);
+
+    //             $totalKgsOut += $row['total_kgs'];
+    //             $totalPcsOut += $row['pcs'];
+    //             $ceknomor_bc = $row['nomor_bc'];
+    //             $rowOut++;
+    //         }
+    //     }
+
+    //     $sheet->mergeCells("B{$rowOut}:F{$rowOut}");
+    //     $sheet->setCellValue("B{$rowOut}", 'Total');
+    //     $sheet->setCellValue("G{$rowOut}", $totalPcsOut);
+    //     $sheet->setCellValue("H{$rowOut}", $totalKgsOut);
+    //     $sheet->getStyle("B{$rowOut}:I{$rowOut}")->getFont()->setBold(true);
+    //     $sheet->getStyle("I{$rowOut}")->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $sheet->getStyle("I14:I{$rowOut}")->getAlignment()->setHorizontal('right');
+    //     $sheet->getStyle("I14:I{$rowOut}")->getAlignment()->setHorizontal('right');
+    //     $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+
+    //     $sheet->getStyle("C6:G{$rowOut}")
+    //         ->getAlignment()
+    //         ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT)
+    //         ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+    //     $batasborderTable = $rowOut;
+
+
+    //     $rowOut += 2;
+    //     $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
+    //     $sheet->setCellValue("B{$rowOut}", 'PT. INDONEPTUNE NET MANUFACTURING');
+    //     $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+    //     $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+
+    //     $rowOut += 3;
+    //     $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
+    //     $sheet->setCellValue("B{$rowOut}", $ttd['tg_jawab']);
+    //     $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+    //     $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+
+    //     $rowOut++;
+    //     $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
+    //     $sheet->setCellValue("B{$rowOut}", $ttd['jabat_tg_jawab']);
+    //     $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+    //     $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+
+
+    //     //    PENGEMBALIAN
+    //     $sheet->setCellValue('K12', 'PEMASUKAN KEMBALI');
+    //     $sheet->getStyle('K12')->getFont()->setBold(true);
+
+    //     $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCE', 'KGM'], NULL, 'K13');
+    //     $sheet->getStyle('K13:R13')->getFont()->setBold(true);
+    //     $sheet->getStyle('K13:R13')->getAlignment()->setHorizontal('center');
+    //     $sheet->getStyle('K13:R13')->getFill()
+    //         ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
+    //         ->getStartColor()->setARGB('FFD9D9D9');
+
+    //     $rowIn = 14;
+    //     $no = 1;
+    //     $totalKgsIn = 0;
+
+    //     if (!empty($terima)) {
+    //         $groupedIn = [];
+    //         foreach ($terima->result_array() as $trm) {
+    //             $nomor_bc = $trm['nomor_bc'];
+    //             $tgl_bc = $trm['tgl_bc'];
+    //             $sku = trim($trm['po']) == '' ? $trm['kode'] : (function_exists('viewsku') ? viewsku($trm['po'], $trm['item'], $trm['dis']) : $trm['kode']);
+    //             $spekbarang = trim($trm['po']) == '' ? namaspekbarang($trm['id_barang']) : spekpo($trm['po'], $trm['item'], $trm['dis']);
+    //             $satuan = $trm['satuan'] ?? 'PCS';
+
+    //             $group_key = $nomor_bc . '|' . $sku;
+    //             if (!isset($groupedIn[$group_key])) {
+    //                 $groupedIn[$group_key] = [
+    //                     'nomor_bc' => $nomor_bc,
+    //                     'tgl_bc' => $tgl_bc,
+    //                     'sku' => $sku,
+    //                     'spekbarang' => $spekbarang,
+    //                     'satuan' => $satuan,
+    //                     'pcs' => 0,
+    //                     'total_kgs' => 0
+    //                 ];
+    //             }
+    //             $groupedIn[$group_key]['pcs'] += (float)$key['pcs'];
+    //             $groupedIn[$group_key]['total_kgs'] += (float)$trm['kgs'];
+    //         }
+
+    //         $ceknomor_bcmasuk = '';
+    //         foreach ($groupedIn as $row) {
+    //             if ($row['nomor_bc'] == $ceknomor_bcmasuk) {
+    //                 $sheet->setCellValue("K{$rowIn}", '');
+    //                 $sheet->setCellValue("L{$rowIn}", '');
+    //                 $sheet->setCellValue("M{$rowIn}", '');
+    //             } else {
+    //                 $sheet->setCellValue("K{$rowIn}", $no++);
+    //                 $sheet->setCellValue("L{$rowIn}", $row['nomor_bc']);
+    //                 $sheet->setCellValue("M{$rowIn}", $row['tgl_bc']);
+    //             }
+
+    //             $sheet->setCellValue("N{$rowIn}", $row['sku']);
+    //             $sheet->setCellValue("O{$rowIn}", html_entity_decode($row['spekbarang']));
+    //             $sheet->setCellValue("P{$rowIn}", $row['satuan']);
+    //             $sheet->setCellValue("Q{$rowIn}", $row['pcs']);
+    //             $sheet->setCellValue("R{$rowIn}", $row['total_kgs']);
+
+    //             $totalKgsIn += $row['total_kgs'];
+    //             $ceknomor_bcmasuk = $row['nomor_bc'];
+    //             $rowIn++;
+    //         }
+    //     }
+
+    //     $sheet->mergeCells("K{$rowIn}:Q{$rowIn}");
+    //     $sheet->setCellValue("K{$rowIn}", 'TOTAL');
+    //     $sheet->setCellValue("R{$rowIn}", $totalKgsIn);
+    //     $sheet->getStyle("K{$rowIn}:R{$rowIn}")->getFont()->setBold(true);
+    //     $sheet->getStyle("R{$rowIn}")->getNumberFormat()->setFormatCode('#,##0.00');
+    //     $sheet->getStyle("R14:R{$rowIn}")->getAlignment()->setHorizontal('right');
+    //     $sheet->getStyle("K{$rowIn}")->getAlignment()->setHorizontal('center');
+
+    //     $batasborderTable_in = $rowIn;
+
+    //     $rowIn += 2;
+    //     $sheet->mergeCells("K{$rowIn}:R{$rowIn}");
+    //     $sheet->setCellValue("K{$rowIn}", 'Mengetahui, Hanggar');
+    //     $sheet->getStyle("K{$rowIn}")->getFont()->setBold(true)->getColor()->setARGB('000000');
+    //     $sheet->getStyle("K{$rowIn}")->getAlignment()->setHorizontal('center');
+
+
+    //     $sheet->getStyle("B13:H{$batasborderTable}")
+    //         ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+    //     $sheet->getStyle("K13:R{$batasborderTable_in}")
+    //         ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
+    //     $columns = [
+    //         'B' => 6, 'C' => 12, 'D' => 17, 'E' => 15, 'F' => 70, 'G' => 8, 'H' => 8,  'J' => 2,
+    //         'K' => 6, 'L' => 12, 'M' => 17, 'N' => 15, 'O' => 70, 'P' => 8, 'Q' => 8, 'R' => 15
+    //     ];
+    //     foreach ($columns as $col => $width) {
+    //         $sheet->getColumnDimension($col)->setWidth($width);
+    //     }
+    //     $filename = 'Realisasi Pengeluaran & Pemasukan_' . date('Ymd') . '.xlsx';
+    //     ob_end_clean();
+    //     header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+    //     header("Content-Disposition: attachment; filename=\"$filename\"");
+    //     header('Cache-Control: max-age=0');
+
+    //     $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+    //     $writer->save('php://output');
+    //     exit;
+    // }
+
     public function excel()
     {
         $this->load->model('kontrakmodel');
@@ -201,42 +453,54 @@ class Kontrak extends CI_Controller
         $sheet->getStyle('B2:R3')->getFont()->setBold(true);
         $sheet->getStyle('B2:R3')->getAlignment()->setHorizontal('center');
 
-        $sheet->mergeCells('G6:I6');
-        $sheet->setCellValue('G6', 'Nama Perusahaan');
+
+        $sheet->mergeCells('G6:I6')->setCellValue('G6', 'Nama Perusahaan');
         $sheet->setCellValue('J6', ': ');
-        $sheet->mergeCells('G7:I7');
-        $sheet->setCellValue('G7', 'Nomor Surat Persetujuan');
+        $sheet->mergeCells('G7:I7')->setCellValue('G7', 'Nomor Surat Persetujuan');
         $sheet->setCellValue('J7', ':');
-        $sheet->mergeCells('G8:I8');
-        $sheet->setCellValue('G8', 'Tanggal Surat Persetujuan');
-        $sheet->setCellValue('J8', ': ');
-        $sheet->mergeCells('G9:I9');
-        $sheet->setCellValue('G9', 'Nomor BPJ');
-        $sheet->setCellValue('J9', ': ');
-        $sheet->mergeCells('G10:I10');
-        $sheet->setCellValue('G10', 'Jatuh Tempo Jaminan');
-        $sheet->setCellValue('J10', ': ');
+        $sheet->mergeCells('G8:I8')->setCellValue('G8', 'Tanggal Surat Persetujuan');
+        $sheet->setCellValue('J8', ':');
+        $sheet->mergeCells('G9:I9')->setCellValue('G9', 'Nomor BPJ');
+        $sheet->setCellValue('J9', ':');
+        $sheet->mergeCells('G10:I10')->setCellValue('G10', 'Jatuh Tempo Jaminan');
+        $sheet->setCellValue('J10', ':');
 
-        $sheet->setCellValue('K6', 'PT. INDONEPTUNE NET MANUCTURING');
-        $sheet->setCellValue('K7', $header['nomor_surat']);
-        $sheet->setCellValue('K8', $header['tgl_surat']);
+        $sheet->getStyle('G6:G10')->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT)
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
+        $sheet->setCellValue('K6', 'PT. INDONEPTUNE NET MANUFACTURING');
+        $sheet->setCellValue('K7', $header['nomor_kep']);
+        $sheet->setCellValue('K8', format_tanggal_indonesia($header['tgl_kep']));
         $sheet->setCellValue('K9', $header['nomor_bpj']);
-        $sheet->setCellValue('K10', $header['tgl_expired']);
+        $sheet->setCellValue('K10', format_tanggal_indonesia($header['tgl_expired']));
 
 
-        $sheet->setCellValue('B12', 'PENGELUARAN SEMENTARA');
-        $sheet->getStyle('B12')->getFont()->setBold(true);
+        $sheet->setCellValue('C12', 'PENGELUARAN SEMENTARA');
+        $sheet->getStyle('C12')->getFont()->setBold(true);
 
-        $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCE', 'KGM'], NULL, 'B13');
-        $sheet->getStyle('B13:I13')->getFont()->setBold(true);
-        $sheet->getStyle('B13:I13')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('B13:I13')->getFill()
+
+        $sheet->mergeCells('C13:C14')->setCellValue('C13', 'No');
+        $sheet->mergeCells('D13:D14')->setCellValue('D13', 'No Dokumen');
+        $sheet->mergeCells('E13:E14')->setCellValue('E13', 'Tanggal Dokumen');
+        $sheet->mergeCells('F13:F14')->setCellValue('F13', 'SKU');
+        $sheet->mergeCells('G13:G14')->setCellValue('G13', 'Uraian Barang');
+        $sheet->mergeCells('H13:I13')->setCellValue('H13', 'Satuan');
+        $sheet->setCellValue('H14', 'PCE');
+        $sheet->setCellValue('I14', 'KGM');
+
+        $sheet->getStyle('C13:I14')->getFont()->setBold(true);
+        $sheet->getStyle('C13:I14')->getAlignment()
+            ->setHorizontal('center')
+            ->setVertical('center');
+        $sheet->getStyle('C13:I14')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('FFD9D9D9');
 
-        $rowOut = 14;
+        $rowOut = 15;
         $no = 1;
         $totalKgsOut = 0;
+        $totalPcsOut = 0;
 
         if (!empty($detail)) {
             $grouped = [];
@@ -245,7 +509,8 @@ class Kontrak extends CI_Controller
                 $tgl_bc = $key['tgl_bc'];
                 $sku = trim($key['po']) == '' ? $key['kode'] : (function_exists('viewsku') ? viewsku($key['po'], $key['item'], $key['dis']) : $key['kode']);
                 $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
-                $satuan = $key['satuan'] ?? 'PCE';
+                $satuan = $key['satuan'] ?? 'PCS';
+                $pcs = $key['pcs'] ?? 0;
 
                 $group_key = $nomor_bc . '|' . $sku;
                 if (!isset($grouped[$group_key])) {
@@ -255,87 +520,102 @@ class Kontrak extends CI_Controller
                         'sku' => $sku,
                         'spekbarang' => $spekbarang,
                         'satuan' => $satuan,
+                        'pcs' => 0,
                         'total_kgs' => 0
                     ];
                 }
+                $grouped[$group_key]['pcs'] += (float)$pcs;
                 $grouped[$group_key]['total_kgs'] += (float)$key['kgs'];
             }
-
 
             $ceknomor_bc = '';
             foreach ($grouped as $row) {
                 if ($row['nomor_bc'] == $ceknomor_bc) {
-                    $sheet->setCellValue("B{$rowOut}", '');
                     $sheet->setCellValue("C{$rowOut}", '');
                     $sheet->setCellValue("D{$rowOut}", '');
+                    $sheet->setCellValue("E{$rowOut}", '');
                 } else {
-                    $sheet->setCellValue("B{$rowOut}", $no++);
-                    $sheet->setCellValue("C{$rowOut}", $row['nomor_bc']);
-                    $sheet->setCellValue("D{$rowOut}", $row['tgl_bc']);
+                    $sheet->setCellValue("C{$rowOut}", $no++);
+                    $sheet->setCellValue("D{$rowOut}", $row['nomor_bc']);
+                    $sheet->setCellValue("E{$rowOut}", $row['tgl_bc']);
                 }
 
-                $sheet->setCellValue("E{$rowOut}", $row['sku']);
-                $sheet->setCellValue("F{$rowOut}", html_entity_decode($row['spekbarang']));
-                $sheet->setCellValue("G{$rowOut}", $row['satuan']);
-                $sheet->setCellValue("H{$rowOut}", '-');
+                $sheet->setCellValue("F{$rowOut}", $row['sku']);
+                $sheet->setCellValue("G{$rowOut}", html_entity_decode($row['spekbarang']));
+                $sheet->setCellValue("H{$rowOut}", $row['pcs']);
                 $sheet->setCellValue("I{$rowOut}", $row['total_kgs']);
 
+                $totalPcsOut += $row['pcs'];
                 $totalKgsOut += $row['total_kgs'];
                 $ceknomor_bc = $row['nomor_bc'];
                 $rowOut++;
             }
         }
 
-        $sheet->mergeCells("B{$rowOut}:H{$rowOut}");
-        $sheet->setCellValue("B{$rowOut}", 'Total');
-        $sheet->setCellValue("I{$rowOut}", $totalKgsOut);
-        $sheet->getStyle("B{$rowOut}:I{$rowOut}")->getFont()->setBold(true);
-        $sheet->getStyle("I{$rowOut}")->getNumberFormat()->setFormatCode('#,##0.00');
-        $sheet->getStyle("I14:I{$rowOut}")->getAlignment()->setHorizontal('right');
-        $sheet->getStyle("I14:I{$rowOut}")->getAlignment()->setHorizontal('right');
-        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
 
-        $sheet->getStyle("C6:G{$rowOut}")
+        $sheet->mergeCells("C{$rowOut}:G{$rowOut}");
+        $sheet->setCellValue("C{$rowOut}", 'TOTAL');
+        $sheet->setCellValue("H{$rowOut}", $totalPcsOut);
+        $sheet->setCellValue("I{$rowOut}", $totalKgsOut);
+
+        $sheet->getStyle("C{$rowOut}:I{$rowOut}")->getFont()->setBold(true);
+
+        $sheet->getStyle("C{$rowOut}")
             ->getAlignment()
-            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT)
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER)
             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
+
         $batasborderTable = $rowOut;
+        $sheet->getStyle("C13:I{$batasborderTable}")
+            ->getBorders()->getAllBorders()
+            ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+
 
 
         $rowOut += 2;
-        $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
-        $sheet->setCellValue("B{$rowOut}", 'PT. INDONEPTUNE NET MANUFACTURING');
-        $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
-        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells("C{$rowOut}:I{$rowOut}");
+        $sheet->setCellValue("C{$rowOut}", 'PT. INDONEPTUNE NET MANUFACTURING');
+        $sheet->getStyle("C{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+        $sheet->getStyle("C{$rowOut}")->getAlignment()->setHorizontal('center');
 
         $rowOut += 3;
-        $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
-        $sheet->setCellValue("B{$rowOut}", $ttd['tg_jawab']);
-        $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
-        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells("C{$rowOut}:I{$rowOut}");
+        $sheet->setCellValue("C{$rowOut}", $ttd['tg_jawab']);
+        $sheet->getStyle("C{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+        $sheet->getStyle("C{$rowOut}")->getAlignment()->setHorizontal('center');
 
         $rowOut++;
-        $sheet->mergeCells("B{$rowOut}:I{$rowOut}");
-        $sheet->setCellValue("B{$rowOut}", $ttd['jabat_tg_jawab']);
-        $sheet->getStyle("B{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
-        $sheet->getStyle("B{$rowOut}")->getAlignment()->setHorizontal('center');
+        $sheet->mergeCells("C{$rowOut}:I{$rowOut}");
+        $sheet->setCellValue("C{$rowOut}", $ttd['jabat_tg_jawab']);
+        $sheet->getStyle("C{$rowOut}")->getFont()->setBold(true)->getColor()->setARGB('0000FF');
+        $sheet->getStyle("C{$rowOut}")->getAlignment()->setHorizontal('center');
 
 
-        //    PENGEMVALIAN
         $sheet->setCellValue('K12', 'PEMASUKAN KEMBALI');
         $sheet->getStyle('K12')->getFont()->setBold(true);
 
-        $sheet->fromArray(['No', 'No Dokumen', 'Tanggal Dokumen', 'SKU', 'Uraian Barang', 'Satuan', 'PCE', 'KGM'], NULL, 'K13');
-        $sheet->getStyle('K13:R13')->getFont()->setBold(true);
-        $sheet->getStyle('K13:R13')->getAlignment()->setHorizontal('center');
-        $sheet->getStyle('K13:R13')->getFill()
+        $sheet->mergeCells('K13:K14')->setCellValue('K13', 'No');
+        $sheet->mergeCells('L13:L14')->setCellValue('L13', 'No Dokumen');
+        $sheet->mergeCells('M13:M14')->setCellValue('M13', 'Tanggal Dokumen');
+        $sheet->mergeCells('N13:N14')->setCellValue('N13', 'SKU');
+        $sheet->mergeCells('O13:O14')->setCellValue('O13', 'Uraian Barang');
+        $sheet->mergeCells('P13:Q13')->setCellValue('P13', 'Satuan');
+        $sheet->setCellValue('P14', 'PCE');
+        $sheet->setCellValue('Q14', 'KGM');
+
+        $sheet->getStyle('K13:Q14')->getFont()->setBold(true);
+        $sheet->getStyle('K13:Q14')->getAlignment()
+            ->setHorizontal('center')
+            ->setVertical('center');
+        $sheet->getStyle('K13:Q14')->getFill()
             ->setFillType(\PhpOffice\PhpSpreadsheet\Style\Fill::FILL_SOLID)
             ->getStartColor()->setARGB('FFD9D9D9');
 
-        $rowIn = 14;
+        $rowIn = 15;
         $no = 1;
         $totalKgsIn = 0;
+        $totalPcsIn = 0;
 
         if (!empty($terima)) {
             $groupedIn = [];
@@ -344,7 +624,7 @@ class Kontrak extends CI_Controller
                 $tgl_bc = $trm['tgl_bc'];
                 $sku = trim($trm['po']) == '' ? $trm['kode'] : (function_exists('viewsku') ? viewsku($trm['po'], $trm['item'], $trm['dis']) : $trm['kode']);
                 $spekbarang = trim($trm['po']) == '' ? namaspekbarang($trm['id_barang']) : spekpo($trm['po'], $trm['item'], $trm['dis']);
-                $satuan = $trm['satuan'] ?? 'PCE';
+                $pcs = $trm['pcs'] ?? 0;
 
                 $group_key = $nomor_bc . '|' . $sku;
                 if (!isset($groupedIn[$group_key])) {
@@ -353,10 +633,11 @@ class Kontrak extends CI_Controller
                         'tgl_bc' => $tgl_bc,
                         'sku' => $sku,
                         'spekbarang' => $spekbarang,
-                        'satuan' => $satuan,
+                        'pcs' => 0,
                         'total_kgs' => 0
                     ];
                 }
+                $groupedIn[$group_key]['pcs'] += (float)$pcs;
                 $groupedIn[$group_key]['total_kgs'] += (float)$trm['kgs'];
             }
 
@@ -374,25 +655,33 @@ class Kontrak extends CI_Controller
 
                 $sheet->setCellValue("N{$rowIn}", $row['sku']);
                 $sheet->setCellValue("O{$rowIn}", html_entity_decode($row['spekbarang']));
-                $sheet->setCellValue("P{$rowIn}", $row['satuan']);
-                $sheet->setCellValue("Q{$rowIn}", '-');
-                $sheet->setCellValue("R{$rowIn}", $row['total_kgs']);
+                $sheet->setCellValue("P{$rowIn}", $row['pcs']);
+                $sheet->setCellValue("Q{$rowIn}", $row['total_kgs']);
 
+                $totalPcsIn += $row['pcs'];
                 $totalKgsIn += $row['total_kgs'];
                 $ceknomor_bcmasuk = $row['nomor_bc'];
                 $rowIn++;
             }
         }
 
-        $sheet->mergeCells("K{$rowIn}:Q{$rowIn}");
+
+        $sheet->mergeCells("K{$rowIn}:O{$rowIn}");
         $sheet->setCellValue("K{$rowIn}", 'TOTAL');
-        $sheet->setCellValue("R{$rowIn}", $totalKgsIn);
-        $sheet->getStyle("K{$rowIn}:R{$rowIn}")->getFont()->setBold(true);
-        $sheet->getStyle("R{$rowIn}")->getNumberFormat()->setFormatCode('#,##0.00');
-        $sheet->getStyle("R14:R{$rowIn}")->getAlignment()->setHorizontal('right');
-        $sheet->getStyle("K{$rowIn}")->getAlignment()->setHorizontal('center');
+        $sheet->setCellValue("P{$rowIn}", $totalPcsIn);
+        $sheet->setCellValue("Q{$rowIn}", $totalKgsIn);
+        $sheet->getStyle("K{$rowIn}:Q{$rowIn}")->getFont()->setBold(true);
 
         $batasborderTable_in = $rowIn;
+        $sheet->getStyle("K{$rowIn}")->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("K13:Q{$batasborderTable_in}")
+            ->getBorders()->getAllBorders()
+            ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
+        $sheet->getStyle("K{$rowOut}:O{$rowOut}")
+            ->getAlignment()
+            ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_LEFT)
+            ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
+
 
         $rowIn += 2;
         $sheet->mergeCells("K{$rowIn}:R{$rowIn}");
@@ -401,29 +690,24 @@ class Kontrak extends CI_Controller
         $sheet->getStyle("K{$rowIn}")->getAlignment()->setHorizontal('center');
 
 
-        $sheet->getStyle("B13:I{$batasborderTable}")
-            ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
-        $sheet->getStyle("K13:R{$batasborderTable_in}")
-            ->getBorders()->getAllBorders()->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
-
         $columns = [
-            'B' => 6, 'C' => 12, 'D' => 17, 'E' => 15, 'F' => 70, 'G' => 8, 'H' => 8, 'I' => 15, 'J' => 2,
-            'K' => 6, 'L' => 12, 'M' => 17, 'N' => 15, 'O' => 70, 'P' => 8, 'Q' => 8, 'R' => 15
+            'C' => 6, 'D' => 12, 'E' => 17, 'F' => 18, 'G' => 70, 'H' => 8, 'I' => 8, 'J' => 2,
+            'K' => 6, 'L' => 12, 'M' => 17, 'N' => 18, 'O' => 70, 'P' => 8, 'Q' => 8
         ];
         foreach ($columns as $col => $width) {
             $sheet->getColumnDimension($col)->setWidth($width);
         }
-        $filename = 'Realisasi Pengeluaran & Pemasukan_' . date('Ymd') . '.xlsx';
+
+        $filename = 'Realisasi_Pengeluaran_Pemasukan_' . date('Ymd') . '.xlsx';
         ob_end_clean();
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header("Content-Disposition: attachment; filename=\"$filename\"");
         header('Cache-Control: max-age=0');
-
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $writer->save('php://output');
         exit;
     }
+
     public function excel_detail()
     {
         $this->load->model('kontrakmodel');

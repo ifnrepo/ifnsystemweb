@@ -22,8 +22,8 @@ class Ib extends CI_Controller
         $this->load->model('supplier_model', 'suppliermodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('mtuangmodel');
-        $this->load->model('helper_model','helpermodel');
-        $this->load->model('kontrak_model','kontrakmodel');
+        $this->load->model('helper_model', 'helpermodel');
+        $this->load->model('kontrak_model', 'kontrakmodel');
 
         $this->load->library('Pdf');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
@@ -36,8 +36,12 @@ class Ib extends CI_Controller
         $data['hakdep'] = $this->deptmodel->getdeptmasuk();
         $data['dephak'] = $this->deptmodel->getdata();
         $data['depbbl'] = $this->deptmodel->getdata_dept_bbl(1);
+        $data['databc'] = $this->ibmodel->getBc();
+
         $kode = $this->session->userdata('depttuju');
-        $data['data'] = $this->ibmodel->getdata($kode);
+        $bc = $this->session->userdata('jbc');
+
+        $data['data'] = $this->ibmodel->getdata($kode, $bc);
         $data['datatoken'] = $this->ibmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ib';
@@ -62,6 +66,7 @@ class Ib extends CI_Controller
     public function getdataib()
     {
         $this->session->set_userdata('depttuju', $_POST['dept']);
+        $this->session->set_userdata('jbc', $_POST['bc']);
         echo 1;
     }
     public function tambahdataib($stat = 0)
@@ -683,7 +688,7 @@ class Ib extends CI_Controller
                     $this->session->set_flashdata('errorsimpan', 2);
                     $this->session->set_flashdata('pesanerror', 'Respon sudah berhasil di Tarik');
                 }
-                if($headerib['jns_bc']=='40'){
+                if ($headerib['jns_bc'] == '40') {
                     $simpankehargamaterial = $this->ibmodel->simpankehargamaterial($id);
                 }
             } else {
@@ -1128,7 +1133,7 @@ class Ib extends CI_Controller
     {
         $data = $this->ibmodel->getdatabyid($id);
         $noaju = isikurangnol($data['jns_bc']) . '010017' . str_replace('-', '', $data['tgl_aju']) . $data['nomor_aju'];
-        $isMakloon = $data['bc_makloon']==1;
+        $isMakloon = $data['bc_makloon'] == 1;
         $arrayheader = [
             "asalData" => "S",
             "asuransi" => 0,
@@ -1162,11 +1167,11 @@ class Ib extends CI_Controller
         for ($ke = 1; $ke <= 3; $ke++) {
             $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : "9");
-            if($ke == 2 && $isMakloon){
+            if ($ke == 2 && $isMakloon) {
                 $nomoridentitas = $data['jns_pkp'] == 1 ? $data['nik'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['nik'])))))) : '0' . $data['npwp'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwp'])))) + 1));
                 $namaidentitas = $data['jns_pkp'] == 1 ? $data['namaceisa'] : $data['namasupplier'];
                 $alamat = $data['jns_pkp'] == 1 ? $data['alamatceisa'] : strtoupper($data['alamat']);
-            }else{
+            } else {
                 if ($ke == 3) {
                     $nomoridentitas = $data['jns_pkp'] == 1 ? $data['nik'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['nik'])))))) : '0' . $data['npwp'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwp'])))) + 1));
                     $namaidentitas = $data['jns_pkp'] == 1 ? $data['namaceisa'] : $data['namasupplier'];
@@ -1948,15 +1953,16 @@ class Ib extends CI_Controller
         }
         echo $hasil;
     }
-    public function hapusaju($id,$mode=0)
+    public function hapusaju($id, $mode = 0)
     {
-        $hasil = $this->ibmodel->hapusaju($id,$mode);
+        $hasil = $this->ibmodel->hapusaju($id, $mode);
         if ($hasil) {
             $url = base_url() . 'ib';
             redirect($url);
         }
     }
-    public function addkontrak($id, $dept){
+    public function addkontrak($id, $dept)
+    {
         $data['idheader'] = $id;
         $kode = 0;
         $kondisi = [
