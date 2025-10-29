@@ -100,6 +100,7 @@ $("#th").change(function () {
 	$("#bl").change();
 });
 $("#butgo").click(function () {
+
 	// $("#dept_tuju").change();
 	getdataib();
 });
@@ -377,6 +378,7 @@ function getdataib() {
 		url: base_url + "ib/getdataib",
 		data: {
 			dept: $("#dept_tuju").val(),
+			bc: $("#jns_bc").val()
 		},
 		success: function (data) {
 			// alert(data.datagroup);

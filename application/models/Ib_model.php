@@ -1,15 +1,15 @@
 <?php
 class Ib_model extends CI_Model
 {
-    public function getdata($kode)
+    public function getdata($kode, $bc)
     {
         if ($kode == 'FG') {
             $arrkondisi = [
                 'id_perusahaan' => IDPERUSAHAAN,
                 'kode_dok' => 'T',
                 'dept_tuju' => $kode,
-                'month(tgl)' => $this->session->userdata('bl'),
-                'year(tgl)' => $this->session->userdata('th'),
+                // 'month(tgl)' => $this->session->userdata('bl'),
+                // 'year(tgl)' => $this->session->userdata('th'),
             ];
             // (PERHATIAN ) Selain kondisi ini, Ada kondisi lain di bawah .. hati-hati #kodeib1
         } else {
@@ -17,8 +17,8 @@ class Ib_model extends CI_Model
                 'id_perusahaan' => IDPERUSAHAAN,
                 'kode_dok' => 'IB',
                 'dept_tuju' => $kode,
-                'month(tgl)' => $this->session->userdata('bl'),
-                'year(tgl)' => $this->session->userdata('th')
+                // 'month(tgl)' => $this->session->userdata('bl'),
+                // 'year(tgl)' => $this->session->userdata('th')
             ];
         }
         $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier');
@@ -26,12 +26,29 @@ class Ib_model extends CI_Model
         $this->db->where($arrkondisi);
         // Lanjutan #kodeib1
         if ($kode == 'FG') {
-            $this->db->where_in('left(nomor_dok,3)',['IFN','DLN','MDL']);
+            $this->db->where_in('left(nomor_dok,3)', ['IFN', 'DLN', 'MDL']);
         }
+
+        if ($bc != 'Y') {
+            $this->db->where("tb_header.jns_bc", (int)$bc);
+        } else {
+            $this->db->where_in("tb_header.jns_bc", [23, 262, 40]);
+        }
+
+        $this->db->where('MONTH(tb_header.tgl)', $this->session->userdata('bl'), FALSE);
+        $this->db->where('YEAR(tb_header.tgl)', $this->session->userdata('th'), FALSE);
+
         $this->db->order_by('tgl', 'desc');
         $this->db->order_by('nomor_dok', 'desc');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
+    }
+    public function getBc()
+    {
+        $this->db->select("ref_dok_bc.*");
+        $this->db->from('ref_dok_bc');
+        $this->db->where('masuk', 1);
+        return $this->db->get()->result_array();
     }
     public function getdatabyid($kode)
     {
@@ -912,35 +929,36 @@ class Ib_model extends CI_Model
         }
         return $hasil;
     }
-    public function hapusaju($id,$mode=0){
+    public function hapusaju($id, $mode = 0)
+    {
         $this->db->trans_start();
 
-        if($mode==1){
+        if ($mode == 1) {
             $this->db->select("*");
             $this->db->from('tb_detail');
-            $this->db->where('id_akb',$id);
+            $this->db->where('id_akb', $id);
             $this->db->group_by('po,item,dis,id_barang,insno,nobontr');
             $hasil = $this->db->get();
-            foreach($hasil->result_array() as $has){
-                $iddet = explode(',',$has['arr_seri_exbc']);
-                $idjumdet = explode(',',$has['in_pcs_exbc']);
+            foreach ($hasil->result_array() as $has) {
+                $iddet = explode(',', $has['arr_seri_exbc']);
+                $idjumdet = explode(',', $has['in_pcs_exbc']);
 
-                $ke=0;
-                foreach($iddet as $iddet){
+                $ke = 0;
+                foreach ($iddet as $iddet) {
                     $ke++;
-                    $this->db->where('id',$iddet);
-                    $this->db->update('tb_detail',['in_exbc' => 'in_exbc - '.$idjumdet[$ke-1]]);
+                    $this->db->where('id', $iddet);
+                    $this->db->update('tb_detail', ['in_exbc' => 'in_exbc - ' . $idjumdet[$ke - 1]]);
                 }
             }
 
-            $this->db->where('id_akb',$id);
-            $this->db->update('tb_detail',['id_akb'=>NULL,'id_seri_exbc'=>NULL,'arr_seri_exbc'=>NULL,'exbc_cif'=>NULL,'exbc_ndpbm'=>NULL]);
+            $this->db->where('id_akb', $id);
+            $this->db->update('tb_detail', ['id_akb' => NULL, 'id_seri_exbc' => NULL, 'arr_seri_exbc' => NULL, 'exbc_cif' => NULL, 'exbc_ndpbm' => NULL]);
             $this->helpermodel->isilog($this->db->last_query());
-        }else{
-            $this->db->where('id_header',$id);
+        } else {
+            $this->db->where('id_header', $id);
             $this->db->delete('tb_detail');
         }
-        $this->db->where('id',$id);
+        $this->db->where('id', $id);
         $this->db->delete('tb_header');
         $this->helpermodel->isilog($this->db->last_query());
         return $this->db->trans_complete();
@@ -1268,7 +1286,7 @@ class Ib_model extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('id', $id);
-        $this->db->update('tb_header',['id_kontrak' => NULL]);
+        $this->db->update('tb_header', ['id_kontrak' => NULL]);
 
         return $this->db->trans_complete();
         $this->helpermodel->isilog($this->db->last_query());

@@ -40,9 +40,17 @@ class Akb extends CI_Controller
         $data['hakdep'] = $this->deptmodel->getdeptkirim();
         $data['dephak'] = $this->deptmodel->getdata();
         $data['depbbl'] = $this->deptmodel->getdata_dept_bbl(1);
+        $data['databc'] = $this->akbmodel->getBc();
+
         $kode = $this->session->userdata('deptdari');
-        $data['data'] = $this->akbmodel->getdata($kode);
-        $data['jumlahrek'] = $this->akbmodel->getjumlahdata($kode);
+        $bc = $this->session->userdata('jbc');
+
+        // var_dump($bc);
+        // die();
+
+
+        $data['data'] = $this->akbmodel->getdata($kode, $bc);
+        $data['jumlahrek'] = $this->akbmodel->getjumlahdata($kode, $bc);
         $data['datatoken'] = $this->akbmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'akb';
@@ -67,6 +75,7 @@ class Akb extends CI_Controller
     public function getdataakb()
     {
         $this->session->set_userdata('deptdari', $_POST['dept']);
+        $this->session->set_userdata('jbc', $_POST['bc']);
         echo 1;
     }
     public function tambahdataib()
@@ -1638,7 +1647,7 @@ class Akb extends CI_Controller
                 } else {
                     if (str_contains($detx['nomor_dok'], 'RSC/')) {
                         $kodebc = 'KGM';
-                    }else{
+                    } else {
                         if (str_contains($detx['nomor_dok'], 'RSP/')) {
                             $kodebc = 'KGM';
                         }
@@ -1871,8 +1880,8 @@ class Akb extends CI_Controller
             $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6";
-            if(datacustomer($data['id_buyer'],'jns_pkp')!=1 && $ke==3 && trim(datacustomer($data['id_buyer'],'nik'))!=''){
-                $nomiden = datacustomer($data['id_buyer'],'nik');
+            if (datacustomer($data['id_buyer'], 'jns_pkp') != 1 && $ke == 3 && trim(datacustomer($data['id_buyer'], 'nik')) != '') {
+                $nomiden = datacustomer($data['id_buyer'], 'nik');
                 $kodejnent = "3";
             } else {
                 $nomiden = datacustomer($data['id_buyer'], 'npwp');
@@ -1967,7 +1976,7 @@ class Akb extends CI_Controller
                     $jumlah = $detx['kgs'];
                 }
             }
-            
+
             $uraian = trim($detx['po']) != '' ? spekdom($detx['po'], $detx['item'], $detx['dis']) : namaspekbarang($detx['id_barang']);
             // $hs = trim($detx['po']) == '' ? substr($detx['nohs'], 0, 8) : substr($detx['hsx'], 0, 8);
             // $kodebc = str_contains($detx['nomor_dok'], 'NET/') ? 'KGM' : $detx['kodebc'];
@@ -2211,12 +2220,12 @@ class Akb extends CI_Controller
             $serient = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "13"));
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6";
-            if($data['jns_bc']==41 && $data['bc_makloon']==1 && $ke==3){
-                $nomiden = '0'.trim(datadepartemen($data['dept_tuju'],'npwp')).str_repeat('0',22-strlen(trim(datadepartemen($data['dept_tuju'],'npwp')))); //0018909523444000
+            if ($data['jns_bc'] == 41 && $data['bc_makloon'] == 1 && $ke == 3) {
+                $nomiden = '0' . trim(datadepartemen($data['dept_tuju'], 'npwp')) . str_repeat('0', 22 - strlen(trim(datadepartemen($data['dept_tuju'], 'npwp')))); //0018909523444000
                 $kodejnent = "6";
-            }else{
-                if(datacustomer($data['id_buyer'],'jns_pkp')!=1 && $ke==3 && trim(datacustomer($data['id_buyer'],'nik'))!=''){
-                    $nomiden = datacustomer($data['id_buyer'],'nik');
+            } else {
+                if (datacustomer($data['id_buyer'], 'jns_pkp') != 1 && $ke == 3 && trim(datacustomer($data['id_buyer'], 'nik')) != '') {
+                    $nomiden = datacustomer($data['id_buyer'], 'nik');
                     $kodejnent = "3";
                 } else {
                     $nomiden = datacustomer($data['id_buyer'], 'npwp');
@@ -2225,12 +2234,12 @@ class Akb extends CI_Controller
             $status = $ke == 3 ? "10" : "5";
             $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
             $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : trim($nomiden));
-            if($data['jns_bc']==41 && $data['bc_makloon']==1){
-                $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datadepartemen($data['dept_tuju'],'alamat_subkon'));
-                $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datadepartemen($data['dept_tuju'],'nama_subkon'));
-            }else{
-                $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'],'alamat'));
-                $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'],'nama_customer'));
+            if ($data['jns_bc'] == 41 && $data['bc_makloon'] == 1) {
+                $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datadepartemen($data['dept_tuju'], 'alamat_subkon'));
+                $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datadepartemen($data['dept_tuju'], 'nama_subkon'));
+            } else {
+                $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datacustomer($data['id_buyer'], 'alamat'));
+                $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datacustomer($data['id_buyer'], 'nama_customer'));
             }
             $kodejenisapi = $ke == 2 ? "02" : "";
             $arrayke = [
@@ -4748,33 +4757,36 @@ class Akb extends CI_Controller
         redirect('akb/isidokbc/' . $id . '/' . '1');
     }
 
-    public function tambahbarangversiceisa($id){
+    public function tambahbarangversiceisa($id)
+    {
         $data['bahan'] = $this->akbmodel->getdatadetailib($id);
         $data['idheader'] = $id;
-        $this->load->view('akb/addbahanbaku',$data);
+        $this->load->view('akb/addbahanbaku', $data);
     }
 
-    public function caribahanbaku(){
+    public function caribahanbaku()
+    {
         $kode = $_POST['kode'];
         $hasil = $this->akbmodel->getbarangmaterial($kode);
         $html = '';
-        $no=0;
-        foreach($hasil->result_array() as $bahan){ 
+        $no = 0;
+        foreach ($hasil->result_array() as $bahan) {
             $no++;
             $html .= '<tr>';
-            $html .= '<td>'.$no.'</td>';
-            $html .= '<td>'.$bahan['kode'].'</td>';
-            $html .= '<td>'.$bahan['nama_barang'].'</td>';
-            $html .= '<td>'.$bahan['nobontr'].'</td>';
+            $html .= '<td>' . $no . '</td>';
+            $html .= '<td>' . $bahan['kode'] . '</td>';
+            $html .= '<td>' . $bahan['nama_barang'] . '</td>';
+            $html .= '<td>' . $bahan['nobontr'] . '</td>';
             $html .= '<td>';
-            $html .= '<a href="#" class="btn btn-sm btn-success" id="tombolpilih" rel="'.$bahan['id_barang'].'" rel2="'.$bahan['nobontr'].'" rel3 ="'.$bahan['nama_barang'].'">Pilih</a>';
+            $html .= '<a href="#" class="btn btn-sm btn-success" id="tombolpilih" rel="' . $bahan['id_barang'] . '" rel2="' . $bahan['nobontr'] . '" rel3 ="' . $bahan['nama_barang'] . '">Pilih</a>';
             $html .= '</td>';
             $html .= '</tr>';
         }
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function simpanbahanbaku(){
+    public function simpanbahanbaku()
+    {
         $data = [
             'id_header' => $_POST['id'],
             'id_barang' => $_POST['idbarang'],
@@ -4785,10 +4797,11 @@ class Akb extends CI_Controller
         $hasil = $this->akbmodel->simpanbahanbaku($data);
         echo $hasil;
     }
-    public function hapusbombc($id,$idh){
+    public function hapusbombc($id, $idh)
+    {
         $hasil = $this->akbmodel->hapusbombc($id);
-        if($hasil){
-            $url = base_url('akb/isidokbc/'.$idh);
+        if ($hasil) {
+            $url = base_url('akb/isidokbc/' . $idh);
             redirect($url);
         }
     }

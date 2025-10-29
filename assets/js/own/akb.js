@@ -299,6 +299,10 @@ $("#dept_id").change(function () {
 	// alert("XXX");
 	$("#butgo").click();
 });
+$("#jns_bc").change(function () {
+	// alert("XXX");
+	$("#butgo").click();
+});
 function getdatadetailib() {
 	$.ajax({
 		dataType: "json",
@@ -371,12 +375,14 @@ $("#xsimpanib").click(function () {
 });
 function getdataakb() {
 	// alert($("#dept_id").val());
+
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
 		url: base_url + "akb/getdataakb",
 		data: {
 			dept: $("#dept_id").val(),
+			bc: $("#jns_bc").val()
 		},
 		success: function (data) {
 			// alert(data.datagroup);

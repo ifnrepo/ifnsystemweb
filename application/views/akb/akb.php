@@ -24,11 +24,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div id="sisipkan" class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
-              <?php $disab=''; if($this->session->userdata('deptdari')=='' || $this->session->userdata('deptdari')==null){ $disab = 'disabled';} ?>
-              <?php $cekpakaibc = datauser($this->session->userdata('id'),'cekpakaibc')==1 ? '' : 'hilang'; ?>
+              <?php $disab = '';
+              if ($this->session->userdata('deptdari') == '' || $this->session->userdata('deptdari') == null) {
+                $disab = 'disabled';
+              } ?>
+              <?php $cekpakaibc = datauser($this->session->userdata('id'), 'cekpakaibc') == 1 ? '' : 'hilang'; ?>
               <a href="<?= base_url() . 'akb/cekbc'; ?>" class="btn btn-cyan btn-sm hilang <?= cekclosebook(); ?><?= $disab; ?><?= $cekpakaibc; ?>" id="adddataib"><i class="fa fa-h-square"></i><span class="ml-1">Cek BC</span></a>
               <a href="<?= base_url() . 'akb/hosttohost/99'; ?>" class="btn btn-yellow btn-sm text-black <?= cekclosebook(); ?><?= $disab; ?>" id="addtoken"><i class="fa fa-cloud"></i><span class="ml-1">H2H Token</span></a>
-              <?php $date = date("Y-m-d H:i:s",strtotime("+2 hours",strtotime($datatoken['update_at']))); ?>
+              <?php $date = date("Y-m-d H:i:s", strtotime("+2 hours", strtotime($datatoken['update_at']))); ?>
               <span class="font-kecil text-teal" id="timetoexpired"><?= $date ?></span>
               <input type="hidden" id="updateon" value="<?= $date; ?>">
             </div>
@@ -38,7 +41,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
                 <?php endfor; ?>
-              </select> 
+              </select>
             </div>
           </div>
           <div class="card card-active" style="clear:both;">
@@ -49,33 +52,78 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="dept_id" name="dept_id">
-                        <?php foreach ($hakdep->result_array() as $dep) {?>
-                          <option value="<?= $dep['dept_id']; ?>" <?php if($this->session->userdata('deptdari')==$dep['dept_id']){ echo "selected"; } ?>><?= $dep['departemen']; ?></option>
+                        <?php foreach ($hakdep->result_array() as $dep) { ?>
+                          <option value="<?= $dep['dept_id']; ?>" <?php if ($this->session->userdata('deptdari') == $dep['dept_id']) {
+                                                                    echo "selected";
+                                                                  } ?>><?= $dep['departemen']; ?></option>
                         <?php } ?>
                       </select>
                     </div>
                   </span>
                 </div>
+                <div class="col-2">
+                  <h4 class="mb-1 font-kecil">BC</h4>
+                  <span class="font-kecil">
+                    <div class="font-kecil">
+                      <!-- <select class="form-control form-sm font-kecil font-bold mr-1 bg-primary text-white form-select" id="jns_bc" name="jns_bc">
+                        <option value="Y" <?php if ($this->session->userdata('jbc') == 'Y') {
+                                            echo "selected";
+                                          } ?>>All</option>
+                        <option value="25" <?php if ($this->session->userdata('jbc') == '25') {
+                                              echo "selected";
+                                            } ?>>BC 2.5</option>
+                        <option value="261" <?php if ($this->session->userdata('jbc') == '261') {
+                                              echo "selected";
+                                            } ?>>BC 2.6.1</option>
+                        <option value="30" <?php if ($this->session->userdata('jbc') == '30') {
+                                              echo "selected";
+                                            } ?>>BC 3.0</option>
+                        <option value="41" <?php if ($this->session->userdata('jbc') == '41') {
+                                              echo "selected";
+                                            } ?>>BC 4.1</option>
+                      </select> -->
+                      <select class="form-select form-control form-sm font-kecil bg-white text-primary font-bold" id="jns_bc" name="jns_bc">
+                        <option value="Y" <?php if ($this->session->userdata('jbc') == 'Y') echo "selected"; ?>>
+                          All
+                        </option>
+                        <?php foreach ($databc as $bc) { ?>
+                          <option value="<?= $bc['jns_bc']; ?>" <?php if ($this->session->userdata('jbc') == $bc['jns_bc']) echo "selected"; ?>>
+                            <?= $bc['ket_bc']; ?>
+                          </option>
+                        <?php } ?>
+
+                      </select>
+
+                    </div>
+                  </span>
+                </div>
+
                 <div class="col-3">
-                 <h4 class="mb-1 font-kecil">.</h4>
+                  <h4 class="mb-1 font-kecil">.</h4>
                   <span class="font-kecil">
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
                 </div>
-                <div class="col-5">
-                  <span class="mb-1 font-kecil text-primary font-bold">Jumlah Record : <?= $jumlahrek->num_rows(); ?></span><br>
-                  <?php $jmlrek = $jumlahrek->row_array(); $jumlahpce = 0; if(isset($jmlrek['jumlahitemnya'])){ $jumlahpce = $jmlrek['jumlahitemnya']; } ?>
-                  <span class="mb-1 font-kecil text-primary font-bold">Jumlah Detail : <?= rupiah($jumlahpce,0).' Item' ?></span>
-                </div>
                 <div class="col-2">
+                  <span class="mb-1 font-kecil text-primary font-bold">Jumlah Record : <?= $jumlahrek->num_rows(); ?></span><br>
+                  <?php $jmlrek = $jumlahrek->row_array();
+                  $jumlahpce = 0;
+                  if (isset($jmlrek['jumlahitemnya'])) {
+                    $jumlahpce = $jmlrek['jumlahitemnya'];
+                  } ?>
+                  <span class="mb-1 font-kecil text-primary font-bold">Jumlah Detail : <?= rupiah($jumlahpce, 0) . ' Item' ?></span>
+                </div>
+                <div class="col-3">
                   <h4 class="mb-1">
-                    <?php if($disab!=''){ ?>
-                    <small class="text-pink text-center">Tekan <u><b>GO</b></u> untuk mengaktifkan Tombol Tambah Data dan Load Data</small>
-                    <?php }else{ if($this->session->userdata('deptdari')=='FG'){ ?>
-                      <div style="position:absolute;bottom:0px;right:10px;">
-                        <a data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Pilih SUBKON" href="<?= base_url() . 'akb/getnamasubkon' ?>" class="btn btn-sm btn-primary">Tambah Data Pengajuan</a>
-                      </div>
-                    <?php } } ?>
+                    <?php if ($disab != '') { ?>
+                      <small class="text-pink text-center">Tekan <u><b>GO</b></u> untuk mengaktifkan Tombol Tambah Data dan Load Data</small>
+                      <?php } else {
+                      if ($this->session->userdata('deptdari') == 'FG') { ?>
+                        <div style="position:absolute;bottom:0px;right:10px;">
+                          <a data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Pilih SUBKON" href="<?= base_url() . 'akb/getnamasubkon' ?>" class="btn btn-sm btn-primary">Tambah Data Pengajuan</a>
+                        </div>
+                    <?php }
+                    } ?>
                   </h4>
                 </div>
               </div>
@@ -90,9 +138,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Tgl</th>
                 <th>Nomor</th>
                 <th>Subkon/Rekanan</th>
-                <?php if($this->session->userdata('deptdari')=='FG'){ ?>
+                <?php if ($this->session->userdata('deptdari') == 'FG') { ?>
                   <th>Dok</th>
-                <?php }else{ ?>
+                <?php } else { ?>
                   <th>Jumlah Item</th>
                 <?php } ?>
                 <th>Diajukan Oleh</th>
@@ -105,64 +153,69 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php foreach ($data as $datdet) {
                 $jmlrek = $datdet['jumlah_barang'] != null ? $datdet['jumlah_barang'] . ' Item' : '0 Item';
                 $tmb = '';
-                if($this->session->userdata('deptdari')=='FG' && $datdet['jns_bc'] != '41'){
-                  if($datdet['dept_tuju']!='SU'){
-                    $namasup = datadepartemen($datdet['dept_tuju'],'nama_subkon');
-                  }else{
-                    $namasup = datasupplier($datdet['id_rekanan'],'nama_supplier');
+                if ($this->session->userdata('deptdari') == 'FG' && $datdet['jns_bc'] != '41') {
+                  if ($datdet['dept_tuju'] != 'SU') {
+                    $namasup = datadepartemen($datdet['dept_tuju'], 'nama_subkon');
+                  } else {
+                    $namasup = datasupplier($datdet['id_rekanan'], 'nama_supplier');
                   }
                   $tmb = '/1';
-                }else{
-                  if($datdet['jns_bc'] == '41'){
-                    $namasup = datadepartemen($datdet['dept_tuju'],'nama_subkon');
-                  }else{
-                    $namasup = $datdet['namacustomer'] != null ? $datdet['namacustomer']  : 'Not Set'; 
+                } else {
+                  if ($datdet['jns_bc'] == '41') {
+                    $namasup = datadepartemen($datdet['dept_tuju'], 'nama_subkon');
+                  } else {
+                    $namasup = $datdet['namacustomer'] != null ? $datdet['namacustomer']  : 'Not Set';
                   }
                 }
-                $nomorbc = $datdet['tanpa_bc']== 1 ? 'Tanpa BC' : 'XX';
-                $isibc = $nomorbc=='XX' ? 'AJU. '.$datdet['nomor_aju'].'<br>BC. '.$datdet['nomor_bc'] : $nomorbc;
-                ?>
+                $nomorbc = $datdet['tanpa_bc'] == 1 ? 'Tanpa BC' : 'XX';
+                $isibc = $nomorbc == 'XX' ? 'AJU. ' . $datdet['nomor_aju'] . '<br>BC. ' . $datdet['nomor_bc'] : $nomorbc;
+              ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
-                  <td class='font-bold'><a href="<?= base_url().'akb/viewdetail/'.$datdet['id'].$tmb; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail OUT (AJU Keluar Barang)"><?= $datdet['nomor_dok'] ?></a></td>
+                  <td class='font-bold'><a href="<?= base_url() . 'akb/viewdetail/' . $datdet['id'] . $tmb; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail OUT (AJU Keluar Barang)"><?= $datdet['nomor_dok'] ?></a></td>
                   <td><?= $namasup ?></td>
-                  <?php if($this->session->userdata('deptdari')=='FG'){ ?>
+                  <?php if ($this->session->userdata('deptdari') == 'FG') { ?>
                     <td class="text-teal"><?= $datdet['keterangan'] ?></td>
-                  <?php }else{ ?>
+                  <?php } else { ?>
                     <td><?= $jmlrek ?></td>
                   <?php } ?>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
-                  <?php if($datdet['tanpa_bc']==0){ $service = $datdet['dept_tuju']=='SU' ? 'Service' : ($datdet['bc_makloon']==1 ? 'MAKLOON' : ''); ?>
+                  <?php if ($datdet['tanpa_bc'] == 0) {
+                    $service = $datdet['dept_tuju'] == 'SU' ? 'Service' : ($datdet['bc_makloon'] == 1 ? 'MAKLOON' : ''); ?>
                     <td style="font-size: 17px" class="text-info line-11"><?= $datdet['jns_bc']; ?><br><span class="font-11 text-pink"><?= $service ?></span></td>
-                      <?php if($datdet['send_ceisa']==1){ ?>
-                        <td class="line-12"><a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb; ?>"><?= $isibc; ?></a></span></td>
-                        <?php }else{ ?>
-                          <td class="line-12"><?= $isibc; ?></span></td>
-                      <?php } ?>
-                    <?php }else{ ?>
-                      <td style="font-size: 17px" class="text-info">-</td>
-                      <td class="line-12" style='font-size: 11px;'><?= $nomorbc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
+                    <?php if ($datdet['send_ceisa'] == 1) { ?>
+                      <td class="line-12"><a href="<?= base_url() . 'akb/isidokbc/' . $datdet['id'] . $tmb; ?>"><?= $isibc; ?></a></span></td>
+                    <?php } else { ?>
+                      <td class="line-12"><?= $isibc; ?></span></td>
+                    <?php } ?>
+                  <?php } else { ?>
+                    <td style="font-size: 17px" class="text-info">-</td>
+                    <td class="line-12" style='font-size: 11px;'><?= $nomorbc; ?><br><span class="text-teal" style='font-size: 11px;'><?= $datdet['keterangan']; ?></span></td>
                   <?php } ?>
                   <td class="text-right line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'akb/dataib/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'>Lanjutkan Transaksi</a>
                       <a href="#" data-href="<?= base_url() . 'akb/hapusib/' . $datdet['id'] ?>" class='btn btn-sm btn-danger' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus IB <br><?= $datdet['nomor_dok']; ?>" style='padding: 3px 5px !important;' title='Hapus data Transaksi'>Hapus</a>
-                    <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==0 && $datdet['tanpa_bc']==0) { ?>
+                    <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0 && $datdet['ok_tuju'] == 0 && $datdet['tanpa_bc'] == 0) { ?>
                       Sedang Dicek Oleh BC /<a href="#" class="text-danger" data-href="<?= base_url() . 'ib/editib/' . $datdet['id'] ?>" style='padding: 3px 8px !important;' data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Edit IB <br><?= $datdet['nomor_dok']; ?>" title='Edit Data'>Edit</a>
-                    <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && $datdet['tanpa_bc']==0 && $datdet['nomor_bc']=='') { 
-                      $sudahkirim = $datdet['send_ceisa']==0 ? 'btn-danger' : 'btn-info';
-                      $textsudahkirim = $datdet['send_ceisa']==0 ? 'Isi Dok BC' : 'Tunggu Respon';
-                      $butsudahkirim = $datdet['send_ceisa']==0 ? '' : 'hilang';
-                       ?>
-                      <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
-                      <a href="<?= base_url().'akb/isidokbc/'.$datdet['id'].$tmb ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
-                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" href="<?= base_url().'akb/getbongaichu/'.$datdet['id'].$tmb ?>" class='btn btn-sm btn-success <?= $butsudahkirim; ?> <?php if($tmb!='/1'){ echo "hilang";} ?>' data-title="Add Bon Gaichu" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>GET BON/PO</a>
-                      <a href="#" data-href="<?= base_url() . 'akb/hapusaju/' . $datdet['id'].$tmb ?>" class='btn btn-sm btn-danger <?= $butsudahkirim ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus AJU <br><?= $datdet['nomor_dok']; ?>" title='Hapus data Transaksi'><i class="fa fa-trash"></i></a>
-                    <?php }else if ($datdet['data_ok'] == 1 && $datdet['ok_valid']==0 && $datdet['ok_tuju']==1 && ($datdet['tanpa_bc']==1 || $datdet['nomor_bc']!='')) { $inoleh = $datdet['dept_tuju']=='CU' ? 'Marketing' : 'Departemen'; ?>
+                    <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0 && $datdet['ok_tuju'] == 1 && $datdet['tanpa_bc'] == 0 && $datdet['nomor_bc'] == '') {
+                      $sudahkirim = $datdet['send_ceisa'] == 0 ? 'btn-danger' : 'btn-info';
+                      $textsudahkirim = $datdet['send_ceisa'] == 0 ? 'Isi Dok BC' : 'Tunggu Respon';
+                      $butsudahkirim = $datdet['send_ceisa'] == 0 ? '' : 'hilang';
+                    ?>
+                      <a href="<?= base_url() . 'akb/isidokbc/' . $datdet['id'] . $tmb ?>" class='btn btn-sm btn-danger hilang' data-bs-toggle="modal" data-bs-target="#modal-full" data-message="Hapus IB" data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
+                      <a href="<?= base_url() . 'akb/isidokbc/' . $datdet['id'] . $tmb ?>" class='btn btn-sm <?= $sudahkirim; ?>' data-title="Isi Data AJU + Nomor BC" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>Isi Dok BC</a>
+                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" href="<?= base_url() . 'akb/getbongaichu/' . $datdet['id'] . $tmb ?>" class='btn btn-sm btn-success <?= $butsudahkirim; ?> <?php if ($tmb != '/1') {
+                                                                                                                                                                                                                  echo "hilang";
+                                                                                                                                                                                                                } ?>' data-title="Add Bon Gaichu" style='padding: 3px 5px !important;' title='Isi Dokumen BC'>GET BON/PO</a>
+                      <a href="#" data-href="<?= base_url() . 'akb/hapusaju/' . $datdet['id'] . $tmb ?>" class='btn btn-sm btn-danger <?= $butsudahkirim ?>' data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus AJU <br><?= $datdet['nomor_dok']; ?>" title='Hapus data Transaksi'><i class="fa fa-trash"></i></a>
+                    <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_valid'] == 0 && $datdet['ok_tuju'] == 1 && ($datdet['tanpa_bc'] == 1 || $datdet['nomor_bc'] != '')) {
+                      $inoleh = $datdet['dept_tuju'] == 'CU' ? 'Marketing' : 'Departemen'; ?>
                       <span class="text-teal">DOKUMEN SELESAI <br>Tunggu Verifikasi <b>Out</b> <?= $inoleh; ?></span>
-                    <?php }else{ $katakata = $datdet['ok_valid']==2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>
-                      <?= $katakata.datauser($datdet['user_valid'], 'name') ?><br>
-                      <span style='font-size: 11px;'><?= ' on '.tglmysql2($datdet['tgl_valid']) ?></span>
+                    <?php } else {
+                      $katakata = $datdet['ok_valid'] == 2 ? 'Dicancel : ' : 'Diverifikasi :'; ?>
+                      <?= $katakata . datauser($datdet['user_valid'], 'name') ?><br>
+                      <span style='font-size: 11px;'><?= ' on ' . tglmysql2($datdet['tgl_valid']) ?></span>
                     <?php } ?>
                   </td>
                 </tr>
