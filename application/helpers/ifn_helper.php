@@ -851,6 +851,30 @@ function format_tanggal_indonesia($tanggal)
 
     return "$hari, $tanggal $bulan $tahun";
 }
+function tanggal_indonesia($tanggal)
+{
+    $bulan_indonesia = [
+        'January' => 'Januari',
+        'February' => 'Februari',
+        'March' => 'Maret',
+        'April' => 'April',
+        'May' => 'Mei',
+        'June' => 'Juni',
+        'July' => 'Juli',
+        'August' => 'Agustus',
+        'September' => 'September',
+        'October' => 'Oktober',
+        'November' => 'November',
+        'December' => 'Desember'
+    ];
+
+    $date = new DateTime($tanggal);
+    $tanggal = $date->format('d');
+    $bulan = $bulan_indonesia[$date->format('F')];
+    $tahun = $date->format('Y');
+
+    return "$tanggal $bulan $tahun";
+}
 
 
 
@@ -966,13 +990,14 @@ function getjumlahbcmasuk($nobc)
     $get = $CI->helpermodel->getjumlahbcmasuk($nobc);
     return $get;
 }
-function jumlahhari($date1,$date2){
+function jumlahhari($date1, $date2)
+{
     $dt1 = new DateTime($date1);
     $dt2 = new DateTime($date2);
     $hasil = 0;
-    if($dt1 > $dt2){
+    if ($dt1 > $dt2) {
         $hasil = 9999;
-    }else{
+    } else {
         $interval = $dt1->diff($dt2);
         $daysDifference = $interval->days;
         $hasil = $daysDifference;

@@ -471,9 +471,9 @@ class Kontrak extends CI_Controller
 
         $sheet->setCellValue('K6', 'PT. INDONEPTUNE NET MANUFACTURING');
         $sheet->setCellValue('K7', $header['nomor_kep']);
-        $sheet->setCellValue('K8', format_tanggal_indonesia($header['tgl_kep']));
+        $sheet->setCellValue('K8', tanggal_indonesia($header['tgl_kep']));
         $sheet->setCellValue('K9', $header['nomor_bpj']);
-        $sheet->setCellValue('K10', format_tanggal_indonesia($header['tgl_expired']));
+        $sheet->setCellValue('K10', tanggal_indonesia($header['tgl_expired']));
 
 
         $sheet->setCellValue('C12', 'PENGELUARAN SEMENTARA');
