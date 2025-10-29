@@ -286,7 +286,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                           <div class="card-title text-black font-bold">Dok BC 261 & 262 </div>
                           <p class="text-secondary mt-0">
                             <div class="font-kecil">
-                              <span class="badge bg-pink ms-auto"></span> BC 261 :  <?= $bc261.' Dok' ?>
+                              <span class="badge bg-orange ms-auto"></span> BC 261 :  <?= $bc261.' Dok' ?>
                             </div>
                             <div class="font-kecil">
                               <span class="badge bg-info ms-auto"></span> BC 262 : <?= $bc262.' Dok' ?>
@@ -313,7 +313,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                           <div class="card-title text-black font-bold">Makloon BC 40 & 41 </div>
                           <p class="text-secondary mt-0">
                             <div class="font-kecil">
-                              <span class="badge bg-pink ms-auto"></span> BC 40 : <?= $bc40m.' Dok' ?>
+                              <span class="badge bg-purple ms-auto"></span> BC 40 : <?= $bc40m.' Dok' ?>
                             </div>
                             <div class="font-kecil">
                               <span class="badge bg-info ms-auto"></span> BC 41 : <?= $bc41m.' Dok' ?>
