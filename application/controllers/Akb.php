@@ -884,7 +884,7 @@ class Akb extends CI_Controller
         $lokfile = $dataaju;
         header('Cache-Control: public');
         header('Content-type: application/pdf');
-        header('Content-Disposition: attachment; filename="' . $lokfile . '"');
+        header('Content-Disposition: attachment; filename="' . $lokfile . '.pdf"');
         header('Content-Length: ' . strlen($databalik));
         echo $databalik;
         if ($mode = 0) {
@@ -2005,7 +2005,7 @@ class Akb extends CI_Controller
                 "ndpbm" => (float) $detx['ndpbm'],
                 "netto" => (float) round($detx['kgs'], 2),
                 "nilaiBarang" => 0,
-                "posTarif" => $detx['nohs'],
+                "posTarif" => trim($detx['po']) != '' ? trim($detx['hs']) : trim($detx['nohs']),
                 "seriBarang" => (int) $detx['seri_barang'],
                 "spesifikasiLain" => "-",
                 "tipe" => "-",
@@ -2890,10 +2890,18 @@ class Akb extends CI_Controller
     }
     public function simpanaddkontrak()
     {
-        $data = [
-            'id' => $_POST['id'],
-            'id_kontrak' => $_POST['kontrak']
-        ];
+        $kode = $_POST['kode'];
+        // if($kode==1){
+        //     $data = [
+        //         'id' => $_POST['id'],
+        //         'exid_kontrak' => $_POST['kontrak']
+        //     ];
+        // }else{
+            $data = [
+                'id' => $_POST['id'],
+                'id_kontrak' => $_POST['kontrak']
+            ];
+        // }
         return $this->akbmodel->simpanaddkontrak($data);
     }
     public function hapuskontrak($id)
@@ -2901,6 +2909,14 @@ class Akb extends CI_Controller
         $hasil = $this->akbmodel->hapuskontrak($id);
         if ($hasil) {
             $url = base_url() . 'akb/isidokbc/' . $id . '/1';
+            redirect($url);
+        }
+    }
+    public function autolampiran($id,$jnsbc,$mode=0){
+        $hasil = $this->akbmodel->autolampiran($id,$jnsbc);
+        if ($hasil) {
+            $tmb = $mode==1 ? '/1' : '';
+            $url = base_url() . 'akb/isidokbc/' . $id.$tmb;
             redirect($url);
         }
     }
@@ -4757,8 +4773,8 @@ class Akb extends CI_Controller
         redirect('akb/isidokbc/' . $id . '/' . '1');
     }
 
-    public function tambahbarangversiceisa($id)
-    {
+    public function tambahbarangversiceisa($id){
+        $data['header'] = $this->akbmodel->getdatabyid($id);
         $data['bahan'] = $this->akbmodel->getdatadetailib($id);
         $data['idheader'] = $id;
         $this->load->view('akb/addbahanbaku', $data);
@@ -4773,10 +4789,11 @@ class Akb extends CI_Controller
         foreach ($hasil->result_array() as $bahan) {
             $no++;
             $html .= '<tr>';
-            $html .= '<td>' . $no . '</td>';
-            $html .= '<td>' . $bahan['kode'] . '</td>';
-            $html .= '<td>' . $bahan['nama_barang'] . '</td>';
-            $html .= '<td>' . $bahan['nobontr'] . '</td>';
+            $html .= '<td>'.$no.'</td>';
+            $html .= '<td>'.$bahan['kode'].'</td>';
+            $html .= '<td>'.$bahan['nama_barang'].'</td>';
+            $html .= '<td class="line-12">'.$bahan['nobontr'].'<br><span class="font-10 text-pink">'.$bahan['nomor_bc'].'</span></td>';
+            $html .= '<td class="text-right">'.rupiah($bahan['kgs']-$bahan['in_exbc'],2).'</td>';
             $html .= '<td>';
             $html .= '<a href="#" class="btn btn-sm btn-success" id="tombolpilih" rel="' . $bahan['id_barang'] . '" rel2="' . $bahan['nobontr'] . '" rel3 ="' . $bahan['nama_barang'] . '">Pilih</a>';
             $html .= '</td>';
