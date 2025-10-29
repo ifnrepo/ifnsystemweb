@@ -90,9 +90,9 @@ class Kontrak_model extends CI_Model
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
         $this->db->join('tb_header','tb_header.id_kontrak = tb_kontrak.id','left');
         $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
-        if ($kode['dept_id'] != "") {
-            $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
-        }
+        // if ($kode['dept_id'] != "") {
+        //     $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
+        // }
         $this->db->where('tb_kontrak.jns_bc', $kode['jnsbc']);
         if ($kode['status'] == 1) {
             $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");

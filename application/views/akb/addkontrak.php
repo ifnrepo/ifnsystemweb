@@ -1,6 +1,7 @@
 <div class="container-xl">
     <div class="row font-kecil">
         <input type="text" class="hilang" name="idheader" id="idheader" value="<?= $idheader; ?>">
+        <input type="text" name="kode" id="kode" value="<?= $kode ?>">
         <div class="col-12 mb-1">
             <table class="table w-100 mb-1">
                 <thead style="background-color: blue !important">
@@ -53,6 +54,7 @@
             url: base_url+'akb/simpanaddkontrak',
             data: {
                 id: $("#idheader").val(),
+                kode: $("#kode").val(),
                 kontrak: x
             },
             success: function(data){
