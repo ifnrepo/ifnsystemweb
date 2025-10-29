@@ -1,6 +1,18 @@
 <div class="container-xl">
     <div class="row font-kecil">
+        <?php $oke = trim($header['exnomor_bc'])!='' ? 'hilang' : ''; $disab = trim($header['exnomor_bc'])=='' ? 'disabled' : ''; ?>
         <div class="col-12">
+            <div class="alert alert-danger mb-2 hilang" role="alert">
+                <div class="d-flex">
+                    <div>
+                        <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 8v4" /><path d="M12 16h.01" /></svg>
+                    </div>
+                    <div>
+                        <h4 class="alert-title">Perhatian!</h4>
+                        <div class="text-secondary">Isi dulu Nomor BC Asal (ex BC)</div>
+                    </div>
+                </div>
+            </div>
             <input type="text" class="hilang" name="idheader" id="idheader" value="<?= $idheader; ?>">
             <div class="mb-1 row">
                 <label class="col-3 col-form-label">Spek Barang</label>
@@ -31,6 +43,7 @@
                             <th>SKU</th>
                             <th>Nama Barang</th>
                             <th>Nomor IB</th>
+                            <th>Sisa (Kgs)</th>
                             <th>Pilih</th>
                         </tr>
                     </thead>
@@ -126,7 +139,7 @@
     $("#simpanbahanbaku").click(function(){
         var barang = $("#seribarangheader").val();
         if(barang.trim() == ""){
-            pesan('Barang harus di isi terlebih dahulu','error');
+            pesan('Spek Barang harus di Pilih terlebih dahulu','error');
             return false;
         }
         $.ajax({

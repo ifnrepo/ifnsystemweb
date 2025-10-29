@@ -18,7 +18,7 @@
         </div>
         <div class="col-12">
             <div id="table-default" class="table-responsive mb-1">
-                <table class="table datatable6" id="cobasisip">
+                <table class="table datatable" id="cobasisip">
                     <thead style="background-color: blue !important">
                         <tr>
                             <th>No PO</th>

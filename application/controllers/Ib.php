@@ -1958,6 +1958,7 @@ class Ib extends CI_Controller
     }
     public function addkontrak($id, $dept){
         $data['idheader'] = $id;
+        $kode = 0;
         $kondisi = [
             // 'dept_id' => 'DL',
             'status' => 1,
@@ -1968,6 +1969,23 @@ class Ib extends CI_Controller
             'nomor_ssb != ' => '',
             'penjamin != ' => '',
             'idheader' => $id
+        ];
+        $data['kontrak'] = $this->kontrakmodel->getdatakontrak40($kondisi);
+        $this->load->view('akb/addkontrak', $data);
+    }
+    public function addkontrak40($id,$dept){
+        $data['idheader'] = $id;
+        $data['kode'] = 1;
+        $kondisi = [
+            // 'dept_id' => 'DL',
+            'status' => 1,
+            'jnsbc' => 40,
+            'thkontrak' => '',
+            'datkecuali' => 1,
+            'nomorbpj != ' => '',
+            'nomor_ssb != ' => '',
+            'penjamin != ' => '',
+            'idheader' => $id,
         ];
         $data['kontrak'] = $this->kontrakmodel->getdatakontrak40($kondisi);
         $this->load->view('akb/addkontrak', $data);

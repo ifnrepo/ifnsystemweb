@@ -52,6 +52,7 @@
                             <?php $hilangbc41 = $datheader['jns_bc'] == 41 ? "hilang" : ""; ?>
                             <?php $hilangbcmakloon = $datheader['bc_makloon'] == 0 ? "hilang" : ""; ?>
                             <?php $selectnonaktif = $datheader['send_ceisa'] == 1 ? "disabled" : ""; ?>
+                            <?php $tmb = ($datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41) ? '' : '/1'; ?>
                             <a href="<?= base_url() . 'akb/ceisa40excel/' . $datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url() . 'akb/getresponhost/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow text-black <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url() . 'akb/getresponpdf/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                             <!-- <a href="<?= base_url() . 'akb/hosttohost/' . $datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
                             <?php if ($datheader['send_ceisa'] == 0 || $datheader['nomor_sppb'] == '') { ?>
@@ -261,6 +262,23 @@
                                                     <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                     <div class="col">
                                                         <input type="text" class="form-control font-kecil btn-flat tgl" id="extgl_bc" name="extgl_bc" value="<?= tglmysql($datheader['extgl_bc']); ?>" aria-describedby="emailHelp" placeholder="Tgl Ex BC" <?= $nonaktif; ?>>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <!-- Pilih Nomor KONTRAK PENGEMBALIAN  -->
+                                    <div class="<?= $hilangbc30; ?><?= $hilangbc40; ?><?= $hilangbc261; ?><?= $hilangbcmakloon; ?><?= $hilangbc25; ?>">
+                                        <div class="text-center bg-danger-lt mb-1 font-bold">Kontrak BC 40</div>
+                                        <div class="mb-1 row">
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil mx-2">No Kontrak</label>
+                                                    <div class="col">
+                                                        <div class="input-group mb-2">
+                                                            <input type="text" class="form-control font-kecil btn-flat" placeholder="Kontrak" value="<?= $datheader['nomorkontrak']; ?>" disabled>
+                                                            <a href="<?= base_url().'ib/addkontrak40/'.$datheader['id'].'/'.$datheader['dept_id'] ?>" class="btn btn-primary font-kecil btn-flat" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Pilih Kontrak" title="Get Kontrak Ex BC 40">Get</a>
+                                                        </div>
                                                     </div>
                                                 </div>
                                             </div>
@@ -692,7 +710,7 @@
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail, 2); ?></td>
                                 </tr>
-                                <?php if ($datheader['jns_bc'] == '25' || ($datheader['jns_bc'] == '41' && $datheader['dept_id']!='FG')) : ?>
+                                <?php if ($datheader['jns_bc'] == '25' || ($datheader['jns_bc'] == '41' && $datheader['dept_id']!='FG') && $datheader['bc_makloon']==0) : ?>
                                     <tr class="bg-primary-lt">
                                         <td colspan="7" class="text-black text-right font-bold">Spesial Diskon</td>
                                         <td class="text-black text-right font-bold"><?= rupiah($jmspdiskon, 2); ?></td>
@@ -714,7 +732,12 @@
                 </div>
             </div>
             <div class="tab-pane fade p-2 bg-red-lt" id="tabs-profile-8">
-                <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen <span><a href="<?= base_url() . 'ib/addlampiran/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary <?= $hilang2 ?>"><i class="fa fa-plus mr-1"></i> Tambah Data</a><span></div>
+                <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen 
+                    <span>
+                        <a href="#" data-href="<?= base_url() . 'akb/autolampiran/' . $datheader['id'].'/'.$datheader['jns_bc'].$tmb; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengisi data lampiran secara otomatis" title="Isi Data Lampiran" id="autolampiran" class="btn btn-sm btn-warning <?= $hilang2 ?>"><i class="fa fa-plus mr-1"></i> Auto</a>
+                        <a href="<?= base_url() . 'ib/addlampiran/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary <?= $hilang2 ?>"><i class="fa fa-plus mr-1"></i> Tambah Data</a>
+                    <span>
+                </div>
                 <div class="card card-lg font-kecil">
                     <div class="card-body p-2">
                         <table class="table w-100">
@@ -742,7 +765,6 @@
                         Jumlah Kgs : <span id="jumlahkgsdetailbarang2"></span>
                     </span>
                     <span>
-                        <?php $tmb = ($datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41) ? '' : '/1'; ?>
                         <a href="<?= base_url() . 'akb/hitungbomjf/' . $datheader['id'] . $tmb; ?>" id="tombolhitung" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-message="Akan menghitung nilai BOM " data-title="Bill Of Material" class="btn btn-sm btn-primary <?= $hilang2 ?>"><i class="fa fa-calculator mr-1"></i> HITUNG</a>
                         <a href="#" data-href="<?= base_url() . 'akb/tambahkelampiran/' . $datheader['id'] . '/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengekspor BC Asal ke Lampiran " data-title="Bill Of Material" class="btn btn-sm btn-success <?= $hilang2 ?>"><i class="fa fa-upload   mr-1"></i> Copy Ke Lampiran</a>
                         <span class="dropdown">

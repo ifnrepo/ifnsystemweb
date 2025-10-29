@@ -91,6 +91,7 @@ class Akb_model extends CI_Model
     {
         if ($qu == 0) {
             $this->db->select("a.*,b.namasatuan,g.spek,b.kodesatuan,b.kodebc as satbc,c.kode,c.nama_barang,c.nohs as hsx,c.kode as brg_id,e.keterangan as keter,d.pcs as pcsmintaa,d.kgs as kgsmintaa,f.nama_kategori,f.kategori_id,g.klppo,h.engklp,h.hs as nohs,i.kdkem,j.nomor_dok as dokgaichu");
+            $this->db->select("j.exnomor_bc");
             $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
             $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
             $this->db->from('tb_detail a');
@@ -1058,12 +1059,14 @@ class Akb_model extends CI_Model
     }
     public function getbarangdetail($id)
     {
-        $this->db->select('tb_detail.*,satuan.kodebc,tb_bombc.ndpbm,barang.kode,tb_header.nilai_serah,barang.nohs');
+        $this->db->select('tb_detail.*,satuan.kodebc,tb_bombc.ndpbm,barang.kode,tb_header.nilai_serah,barang.nohs,tb_klppo.hs');
         $this->db->select("(SELECT SUM(cif) FROM tb_bombc WHERE seri_barang = tb_detail.seri_barang AND id_header = tb_detail.id_header) AS cifnya");
         $this->db->from('tb_detail');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+        $this->db->join('tb_po g', 'g.po = tb_detail.po AND g.item = tb_detail.item AND g.dis = tb_detail.dis', 'left');
+        $this->db->join('tb_klppo', 'g.klppo = tb_klppo.id', 'left');
         $this->db->join('tb_bombc', 'tb_bombc.id_header = tb_detail.id_header AND tb_bombc.seri_barang = tb_detail.seri_barang', 'left');
         $this->db->where('tb_detail.id_header', $id);
         $this->db->group_by('tb_detail.id');
@@ -1466,7 +1469,7 @@ class Akb_model extends CI_Model
         return $this->db->update('tb_header', $data);
     }
     public function getbarangmaterial($kode){
-        $this->db->select('tb_detail.*,barang.nama_barang,barang.kode');
+        $this->db->select('tb_detail.*,barang.nama_barang,barang.kode,tb_header.nomor_bc');
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
@@ -1485,5 +1488,41 @@ class Akb_model extends CI_Model
     public function hapusbombc($id){
         $this->db->where('id',$id);
         return $this->db->delete('tb_bombc');
+    }
+    public function autolampiran($id,$jnsbc){
+        $this->db->trans_start();
+        $this->db->select("tb_header.*,tb_kontrak.nomor_kep,tb_kontrak.tgl_kep,tb_kontrak.tgl_kep,tb_kontrak.tgl as tglkontrak,tb_kontrak.nomor as nomorkontrak");
+        $this->db->from("tb_header");
+        $this->db->join('tb_kontrak','tb_kontrak.id = tb_header.id_kontrak','left');
+        $this->db->where('tb_header.id',$id);
+        $header = $this->db->get()->row_array();
+
+        if(($jnsbc==41 && $header['bc_makloon']==1) || $jnsbc==261){
+            $jnsdok = ['630','203','315'];
+            for($x=1;$x<=3;$x++){
+                $kodlam = $x==1 ? $header['nomor_sj'] : ($x==2 ? $header['nomor_kep'] : $header['nomorkontrak']);
+                $tgllam = $x==1 ? $header['tgl_sj'] : ($x==2 ? $header['tgl_kep'] : $header['tglkontrak']);
+                $simpan = [
+                    'id_header' => $id,
+                    'kode_dokumen' => $jnsdok[$x-1],
+                    'nomor_dokumen' => $kodlam,
+                    'tgl_dokumen' => $tgllam,
+                ];
+
+                $this->db->insert('lampiran',$simpan);
+            }
+            $inv =  $this->exceljaminan261($id);
+            foreach ($inv->result_array() as $lampiran) {
+                $data = [
+                    'kode_dokumen' => $lampiran['jns_bc'],
+                    'nomor_dokumen' => $lampiran['nomor_bc'],
+                    'tgl_dokumen' => $lampiran['tgl_bc'],
+                    'id_header' => $id
+                ];
+                $this->db->insert('lampiran', $data);
+            }
+        }
+
+        return $this->db->trans_complete();
     }
 }
