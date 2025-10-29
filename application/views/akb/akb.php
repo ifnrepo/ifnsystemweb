@@ -162,7 +162,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $tmb = '/1';
                 } else {
                   if ($datdet['jns_bc'] == '41') {
-                    $namasup = datadepartemen($datdet['dept_tuju'], 'nama_subkon');
+                    if($datdet['dept_tuju']=='CU'){
+                      $namasup = datacustomer($datdet['id_buyer'], 'nama_customer');
+                    }else{
+                      $namasup = datadepartemen($datdet['dept_tuju'], 'nama_subkon');
+                    }
                   } else {
                     $namasup = $datdet['namacustomer'] != null ? $datdet['namacustomer']  : 'Not Set';
                   }
