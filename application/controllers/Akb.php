@@ -2221,7 +2221,7 @@ class Akb extends CI_Controller
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : (($ke == 3) ? "8" : "6"));
             $kodejnent = "6";
             if ($data['jns_bc'] == 41 && $data['bc_makloon'] == 1 && $ke == 3) {
-                $nomiden = '0' . trim(datadepartemen($data['dept_tuju'], 'npwp')) . str_repeat('0', 22 - strlen(trim(datadepartemen($data['dept_tuju'], 'npwp')))); //0018909523444000
+                $nomiden = '0' . trim(datadepartemen($data['dept_tuju'], 'npwp')) . str_repeat('0', 21 - strlen(trim(datadepartemen($data['dept_tuju'], 'npwp')))); //0018909523444000
                 $kodejnent = "6";
             } else {
                 if (datacustomer($data['id_buyer'], 'jns_pkp') != 1 && $ke == 3 && trim(datacustomer($data['id_buyer'], 'nik')) != '') {
@@ -2512,8 +2512,8 @@ class Akb extends CI_Controller
         $arrayheader['pungutan'] = $arraypungutan;
         $arrayheader['kontainer'] = $arraykontainer;
         // $arrayheader['jaminan'] = $arrayjaminan;
-        // echo '<pre>'.json_encode($arrayheader)."</pre>";
-        $this->kirim30($arrayheader, $id);
+        echo '<pre>'.json_encode($arrayheader)."</pre>";
+        // $this->kirim30($arrayheader, $id);
     }
     public function kirim30($data, $id)
     {
