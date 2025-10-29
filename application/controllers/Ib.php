@@ -42,6 +42,7 @@ class Ib extends CI_Controller
         $bc = $this->session->userdata('jbc');
 
         $data['data'] = $this->ibmodel->getdata($kode, $bc);
+        $data['jumlahrek'] = $this->ibmodel->getjumlahdata($kode, $bc);
         $data['datatoken'] = $this->ibmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ib';
