@@ -506,7 +506,7 @@ class Kontrak extends CI_Controller
             $grouped = [];
             foreach ($detail as $key) {
                 $nomor_bc = $key['nomor_bc'];
-                $tgl_bc = tanggal_indonesia($key['tgl_bc']);
+                $tgl_bc = $key['tgl_bc'];
                 $sku = trim($key['po']) == '' ? $key['kode'] : (function_exists('viewsku') ? viewsku($key['po'], $key['item'], $key['dis']) : $key['kode']);
                 $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
                 $satuan = $key['satuan'] ?? 'PCS';
@@ -537,7 +537,7 @@ class Kontrak extends CI_Controller
                 } else {
                     $sheet->setCellValue("C{$rowOut}", $no++);
                     $sheet->setCellValue("D{$rowOut}", $row['nomor_bc']);
-                    $sheet->setCellValue("E{$rowOut}", $row['tgl_bc']);
+                    $sheet->setCellValue("E{$rowOut}", tglmysql($row['tgl_bc']));
                 }
 
                 $sheet->setCellValue("F{$rowOut}", $row['sku']);
@@ -621,7 +621,7 @@ class Kontrak extends CI_Controller
             $groupedIn = [];
             foreach ($terima->result_array() as $trm) {
                 $nomor_bc = $trm['nomor_bc'];
-                $tgl_bc = tanggal_indonesia($trm['tgl_bc']) ;
+                $tgl_bc = $trm['tgl_bc'];
                 $sku = trim($trm['po']) == '' ? $trm['kode'] : (function_exists('viewsku') ? viewsku($trm['po'], $trm['item'], $trm['dis']) : $trm['kode']);
                 $spekbarang = trim($trm['po']) == '' ? namaspekbarang($trm['id_barang']) : spekpo($trm['po'], $trm['item'], $trm['dis']);
                 $pcs = $trm['pcs'] ?? 0;
@@ -650,7 +650,7 @@ class Kontrak extends CI_Controller
                 } else {
                     $sheet->setCellValue("K{$rowIn}", $no++);
                     $sheet->setCellValue("L{$rowIn}", $row['nomor_bc']);
-                    $sheet->setCellValue("M{$rowIn}", $row['tgl_bc']);
+                    $sheet->setCellValue("M{$rowIn}", tglmysql($row['tgl_bc']));
                 }
 
                 $sheet->setCellValue("N{$rowIn}", $row['sku']);

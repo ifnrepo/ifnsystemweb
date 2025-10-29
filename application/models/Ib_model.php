@@ -43,6 +43,52 @@ class Ib_model extends CI_Model
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
+
+    public function getjumlahdata($kode, $bc)
+    {
+        if ($kode == 'FG') {
+            $arrkondisi = [
+                'id_perusahaan' => IDPERUSAHAAN,
+                'kode_dok' => 'T',
+                'dept_tuju' => $kode,
+                // 'month(tgl)' => $this->session->userdata('bl'),
+                // 'year(tgl)' => $this->session->userdata('th'),
+            ];
+            // (PERHATIAN ) Selain kondisi ini, Ada kondisi lain di bawah .. hati-hati #kodeib1
+        } else {
+            $arrkondisi = [
+                'id_perusahaan' => IDPERUSAHAAN,
+                'kode_dok' => 'IB',
+                'dept_tuju' => $kode,
+                // 'month(tgl)' => $this->session->userdata('bl'),
+                // 'year(tgl)' => $this->session->userdata('th')
+            ];
+        }
+
+
+        $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier, tb_kontrak.nomor as nomorkontrak,sum(jumlah_barang) over() as jumlahitemnya');
+        $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
+        $this->db->join('tb_kontrak', 'tb_kontrak.id = tb_header.id_kontrak', 'left');
+        $this->db->where($arrkondisi);
+        // Lanjutan #kodeib1
+        if ($kode == 'FG') {
+            $this->db->where_in('left(nomor_dok,3)', ['IFN', 'DLN', 'MDL']);
+        }
+
+        if ($bc != 'Y') {
+            $this->db->where("tb_header.jns_bc", (int)$bc);
+        } else {
+            $this->db->where_in("tb_header.jns_bc", [23, 262, 40]);
+        }
+
+        $this->db->where('MONTH(tb_header.tgl)', $this->session->userdata('bl'), FALSE);
+        $this->db->where('YEAR(tb_header.tgl)', $this->session->userdata('th'), FALSE);
+
+        $this->db->order_by('tgl', 'desc');
+        $this->db->order_by('nomor_dok', 'desc');
+        $hasil = $this->db->get('tb_header');
+        return $hasil;
+    }
     public function getBc()
     {
         $this->db->select("ref_dok_bc.*");

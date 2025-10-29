@@ -88,7 +88,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-2">
-                  <h4 class="mb-1"></h4>
+                  <span class="mb-1 font-kecil text-primary font-bold">Jumlah Record : <?= $jumlahrek->num_rows(); ?></span><br>
+                  <?php $jmlrek = $jumlahrek->row_array();
+                  $jumlahpce = 0;
+                  if (isset($jmlrek['jumlahitemnya'])) {
+                    $jumlahpce = $jmlrek['jumlahitemnya'];
+                  } ?>
+                  <span class="mb-1 font-kecil text-primary font-bold">Jumlah Detail : <?= rupiah($jumlahpce, 0) . ' Item' ?></span>
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1">
