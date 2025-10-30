@@ -40,18 +40,18 @@
 
                         </span>
                         <span>
-                            <?php $hilang = ($datheader['send_ceisa'] == 0  || $datheader['nomor_sppb'] != '') ? "hilang" : ""; ?>
-                            <?php $hilang2 = $datheader['send_ceisa'] == 1 ? "hilang" : ""; ?>
-                            <?php $hilang3 = $datheader['nomor_sppb'] == '' ? "hilang" : ""; ?>
-                            <?php $nonaktif = $datheader['send_ceisa'] == 1 ? "readonly" : ""; ?>
-                            <?php $hilangbc30 = $datheader['jns_bc'] == 30 ? "hilang" : ""; ?>
-                            <?php $hilangbc40 = $datheader['jns_bc'] == 40 ? "hilang" : ""; ?>
-                            <?php $hilangbc262 = $datheader['jns_bc'] == 262 ? "hilang" : ""; ?>
-                            <?php $hilangbc261 = $datheader['jns_bc'] == 261 ? "hilang" : ""; ?>
-                            <?php $hilangbc25 = $datheader['jns_bc'] == 25 ? "hilang" : ""; ?>
-                            <?php $hilangbc41 = $datheader['jns_bc'] == 41 ? "hilang" : ""; ?>
-                            <?php $hilangbcmakloon = $datheader['bc_makloon'] == 0 ? "hilang" : ""; ?>
-                            <?php $selectnonaktif = $datheader['send_ceisa'] == 1 ? "disabled" : ""; ?>
+                            <?php $hilang = ($datheader['send_ceisa'] == 0  || $datheader['nomor_sppb'] != '') ? "hilang " : ""; ?>
+                            <?php $hilang2 = $datheader['send_ceisa'] == 1 ? "hilang " : ""; ?>
+                            <?php $hilang3 = $datheader['nomor_sppb'] == '' ? "hilang " : ""; ?>
+                            <?php $nonaktif = $datheader['send_ceisa'] == 1 ? "readonly " : ""; ?>
+                            <?php $hilangbc30 = $datheader['jns_bc'] == 30 ? "hilang " : ""; ?>
+                            <?php $hilangbc40 = $datheader['jns_bc'] == 40 ? "hilang " : ""; ?>
+                            <?php $hilangbc262 = $datheader['jns_bc'] == 262 ? "hilang " : ""; ?>
+                            <?php $hilangbc261 = $datheader['jns_bc'] == 261 ? "hilang " : ""; ?>
+                            <?php $hilangbc25 = $datheader['jns_bc'] == 25 ? "hilang " : ""; ?>
+                            <?php $hilangbc41 = $datheader['jns_bc'] == 41 ? "hilang " : ""; ?>
+                            <?php $hilangbcmakloon = $datheader['bc_makloon'] == 0 ? "hilang " : ""; ?>
+                            <?php $selectnonaktif = $datheader['send_ceisa'] == 1 ? "disabled " : ""; ?>
                             <?php $tmb = ($datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41) ? '' : '/1'; ?>
                             <a href="<?= base_url() . 'akb/ceisa40excel/' . $datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url() . 'akb/getresponhost/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow text-black <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url() . 'akb/getresponpdf/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                             <!-- <a href="<?= base_url() . 'akb/hosttohost/' . $datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
