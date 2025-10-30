@@ -209,7 +209,8 @@
                         </ul>
                     </div>
                     <div class="col-md-6" style="text-align: right;">
-                        <a href="<?= base_url() . 'kontrak/excel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
+                        <a href="<?= base_url() . 'kontrak/excel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-excel-o"></i></i><span class="ml-1">Export Excel</span></a>
+                        <!-- <a href="<?= base_url() . 'kontrak/pdf'; ?>" class="btn btn-danger btn-sm font-bold mr-1" target="_blank" id="topdf"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export PDF</span></a> -->
                     </div>
                 </div>
                 <hr class='m-1'>
