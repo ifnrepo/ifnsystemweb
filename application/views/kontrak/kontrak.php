@@ -32,6 +32,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $disabe = 'disabled';
               }
               ?>
+              <!-- <a href="<?= base_url() . 'kontrak/adddata'; ?>" class="btn btn-primary btn-sm <?= $disabe; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get Rekanan Kontrak" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
               <a href="<?= base_url() . 'kontrak/adddata'; ?>" class="btn btn-primary btn-sm <?= $disabe; ?>" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>

@@ -103,7 +103,7 @@ class Kontrak_model extends CI_Model
             $this->db->where("year(tgl_awal)", $kode['thkontrak']);
         }
         // $this->db->where("tb_kontrak.kgs-SUM(round(tb_detail.kgs,2)) >= ",$header['netto']);
-        $this->db->where_in('tb_kontrak.dept_id', ['DL', 'MD']);
+        $this->db->where_in('tb_kontrak.dept_id', ['DL', 'MD','AR']);
         $this->db->group_by('tb_kontrak.id');
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
@@ -533,5 +533,10 @@ class Kontrak_model extends CI_Model
             $que = $this->db->get('tb_header')->row_array();
         }
         return $que;
+    }
+    public function carirekanan($id){
+        $this->db->like('nama_supplier',$id);
+        $this->db->limit(25);
+        return $this->db->get('supplier');
     }
 }

@@ -73,6 +73,7 @@ class Kontrak extends CI_Controller
         $this->load->view('layouts/header', $header);
         $this->load->view('kontrak/addkontrak', $data);
         $this->load->view('layouts/footer', $footer);
+        // $this->load->view('kontrak/addrekanan');
     }
     public function editdata($sesi)
     {
@@ -1207,5 +1208,27 @@ class Kontrak extends CI_Controller
         $pdf->Cell(15, 5, 'Catatan : ', 0);
         $pdf->Cell(19, 5, 'Dokumen ini sudah ditanda tangani secara digital', 0);
         $pdf->Output('I', 'FM-GD-03.pdf');
+    }
+    public function carisupplier(){
+        $cari = $_POST['kode'];
+        $getdata = $this->kontrakmodel->carirekanan($cari);
+        $html = '';
+        if($getdata->num_rows() > 0){
+            $no=0;
+            foreach($getdata->result_array() as $data){
+                $cek = trim($data['alamat'])=='' || trim($data['npwp'])=='' ? 'NPWP / ALamat Kosong' : '';
+                $no++;
+                $html .= '<tr>';
+                $html .= '<td>'.$no.'</td>';
+                $html .= '<td>'.$data['nama_supplier'].'</td>';
+                $html .= '<td>'.$data['kode'].'</td>';
+                $html .= '<td>';
+                $html .= '<a href="#" class="btn btn-sm btn-success" id="tombolpilih" rel="' . $data['id'] . '" rel2="' . $data['id'] . '" rel3 ="' . $data['id'] . '">Pilih</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
     }
 }
