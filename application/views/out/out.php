@@ -155,7 +155,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <?php if($datdet['nomor_bc']==''){  ?>
                         <span class="text-teal font-kecil">Tunggu Persetujuan Keluar Barang </span>
                         <?php }else{ ?>
-                        <span class="text-teal font-kecil line-12"><a href='#' title="Klik untuk menyetujui" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Validasi OUT <br><?= $datdet['nomor_dok']; ?>" data-href="<?= base_url() . 'out/validasimarketing/' . $datdet['id'] ?>">Barang Sudah Setuju Keluar</a><br><span class="text-black"><?= $datdet['nomor_sppb']; ?></span></span>
+                        <span class="text-teal font-kecil line-12"><a data-href='#' title="Klik untuk menyetujui" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Validasi OUT <br><?= $datdet['nomor_dok']; ?>" data-title="Konfirmasi Pengeluaran" href="<?= base_url() . 'out/validasimarketing2/' . $datdet['id'] ?>">Barang Sudah Setuju Keluar</a><br><span class="text-black"><?= $datdet['nomor_sppb']; ?></span></span>
                       <?php } ?>
                     <?php }else{ ?>
                       <?php if(in_array($datdet['dept_tuju'],daftardeptsubkon())){ ?>
