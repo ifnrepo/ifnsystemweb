@@ -471,6 +471,18 @@ class Out extends CI_Controller {
             redirect($url);
         }
     }
+    public function validasimarketing2($id){
+        $data['header'] = $this->out_model->getdatabyid($id)->row_array();
+        $this->load->view('out/konfirmasinomor',$data);
+    }
+    public function simpanout2(){
+        $data = [
+            'id' => $_POST['id'],
+            'tgl_sj' => tglmysql($_POST['tglib'])
+        ];
+        $hasil = $this->out_model->simpanout2($data);
+        echo $hasil;
+    }
     public function editcustomer()
     {
         $this->load->view('out/editcustomer');

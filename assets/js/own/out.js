@@ -1,4 +1,13 @@
 $(document).ready(function () {
+	$(".tgl").datepicker({
+		showButtonPanel: true,
+		autoclose: true,
+		format: "dd-mm-yyyy",
+		todayHighlight: true,
+		todayBtn: "linked",
+  		// clearBtn: true,
+	});
+	
 	var url = window.location.href;
 	var pisah = url.split("/");
 	// alert(pisah[5]);

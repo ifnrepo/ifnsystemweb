@@ -71,7 +71,7 @@ class Out_model extends CI_Model{
         return $hasil->row_array();
     }
     public function getdatabyid($kode){
-        $this->db->select('tb_header.*,dept.*,customer.nama_customer,customer.alamat,customer.kontak');
+        $this->db->select('tb_header.*,dept.*,customer.nama_customer,customer.alamat,customer.kontak,tb_header.id as idx');
         $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
         $this->db->join('customer','customer.id=tb_header.id_buyer','left');
         $query = $this->db->get_where('tb_header',['tb_header.id'=>$kode]);
@@ -894,5 +894,17 @@ class Out_model extends CI_Model{
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln,nobale,exnet,stok');
         $this->db->order_by('po,item,dis,nama_barang,id_barang');
         return $this->db->get();
+    }
+    public function simpanout2($arr){
+        $data = [
+            'ok_valid' => 1,
+            'user_valid' => $this->session->userdata('id'),
+            'tgl_valid' => date('Y-m-d H:i:s'),
+            'tgl_sj' => $arr['tgl_sj'], 
+            'id' => $arr['id'],
+        ];
+        $this->db->where('id',$arr['id']);
+        $hasil = $this->db->update('tb_header',$data);
+        return $hasil;
     }
 }
