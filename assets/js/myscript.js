@@ -615,6 +615,31 @@ function ceklamahari(tglawal, tglakhir, angka, elm1, elm2) {
 	return hasilnya;
 }
 
+function selisihhari(tglawal, tglakhir) {
+	var jmhari = 0;
+	var hasilnya = "";
+	if (tglawal == "" || tglakhir == "") {
+		var hasilnya = -999;
+	} else {
+		var satuhari = 24 * 60 * 60 * 1000; // hours*minutes*seconds*milliseconds
+		var pisah1 = tglawal.split("-");
+		var pisah2 = tglakhir.split("-");
+		var tgl1 = new Date(pisah1[2], pisah1[1], pisah1[0]);
+		var tgl2 = new Date(pisah2[2], pisah2[1], pisah2[0]);
+		var diffDays = Math.round(
+			Math.round((tgl1.getTime() - tgl2.getTime()) / satuhari) - 1,
+		);
+		if (diffDays >= 0 ) {
+			// alert("Tgl dari harus lebih kecil dari tgl sampai");
+			var hasilnya = -999;
+		} else {
+			var hasil = diffDays * -1;
+			var hasilnya = hasil;
+		}
+	}
+	return hasilnya;
+}
+
 function validasitgl(tgl, elm, ket) {
 	var pattern = /^([0-9]{2})\-([0-9]{2})\-([0-9]{4})$/;
 	if (pattern.test(tgl)) {
