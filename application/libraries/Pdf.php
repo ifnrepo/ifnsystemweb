@@ -303,3 +303,81 @@ class PDF_Bckeluar extends FPDF
         return $nl;
     }
 }
+
+class PDF_Kontrak extends FPDF
+{
+    protected $headerData;
+    public $showHeader = true;
+
+    public function setHeaderData($data)
+    {
+        $this->headerData = $data;
+    }
+
+
+    function Header()
+    {
+
+        if (!$this->showHeader) return;
+
+        $header = $this->headerData;
+
+
+        if ($this->PageNo() == 1) {
+            $this->SetFont('Arial', 'B', 10);
+            $this->Cell(0, 6, 'REALISASI PENGELUARAN SEMENTARA DAN PEMASUKAN KEMBALI BARANG IMPOR ATAS KEGIATAN DARI/KE TLDPP', 0, 1, 'C');
+            $this->Cell(0, 6, 'UNTUK PENGEMBALIAN JAMINAN', 0, 1, 'C');
+            $this->Ln(4);
+
+            $this->SetFont('Arial', '', 8);
+            $this->Cell(90, 5, '', 0, 0);
+            $this->Cell(40, 5, 'Nama Perusahaan', 0, 0, 'R');
+            $this->Cell(5, 5, ':', 0, 0, 'C');
+            $this->Cell(60, 5, 'PT. INDONEPTUNE NET MANUFACTURING', 0, 1, 'L');
+
+            $this->Cell(90, 5, '', 0, 0);
+            $this->Cell(40, 5, 'Nomor Surat Persetujuan', 0, 0, 'R');
+            $this->Cell(5, 5, ':', 0, 0, 'C');
+            $this->Cell(60, 5, $header['nomor_kep'], 0, 1, 'L');
+
+            $this->Cell(90, 5, '', 0, 0);
+            $this->Cell(40, 5, 'Tanggal Surat Persetujuan', 0, 0, 'R');
+            $this->Cell(5, 5, ':', 0, 0, 'C');
+            $this->Cell(60, 5, tanggal_indonesia($header['tgl_kep']), 0, 1, 'L');
+
+            $this->Cell(90, 5, '', 0, 0);
+            $this->Cell(40, 5, 'Nomor BPJ', 0, 0, 'R');
+            $this->Cell(5, 5, ':', 0, 0, 'C');
+            $this->Cell(60, 5, $header['nomor_bpj'], 0, 1, 'L');
+
+            $this->Cell(90, 5, '', 0, 0);
+            $this->Cell(40, 5, 'Jatuh Tempo Jaminan', 0, 0, 'R');
+            $this->Cell(5, 5, ':', 0, 0, 'C');
+            $this->Cell(60, 5, tanggal_indonesia($header['tgl_expired']), 0, 1, 'L');
+            $this->Ln(5);
+        }
+
+
+        $this->SetFont('Arial', 'B', 8);
+        $this->Cell(130, 5, 'PENGELUARAN SEMENTARA', 0, 0, 'L');
+        $this->Cell(11, 5, '', 0, 0);
+        $this->Cell(130, 5, 'PEMASUKAN KEMBALI', 0, 1, 'L');
+
+        $headerCols = ['No', 'No Dok', 'Tgl Dok', 'SKU', 'Uraian Barang', 'PCS', 'KGS'];
+        $widths = [5, 12, 15, 20, 60, 12, 13];
+
+        $this->SetFont('Arial', 'B', 7);
+        foreach ($headerCols as $i => $col) $this->Cell($widths[$i], 6, $col, 1, 0, 'C');
+        $this->Cell(5, 6, '', 0, 0);
+        foreach ($headerCols as $i => $col) $this->Cell($widths[$i], 6, $col, 1, 0, 'C');
+        $this->Ln();
+    }
+
+    function Footer()
+    {
+
+        $this->SetY(-15);
+        $this->SetFont('Arial', 'I', 7);
+        $this->Cell(0, 10, 'Halaman ' . $this->PageNo(), 0, 0, 'C');
+    }
+}
