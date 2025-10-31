@@ -181,200 +181,139 @@ class Kontrak extends CI_Controller
         $this->load->view('kontrak/viewdetail', $data);
     }
 
-    // public function pdf()
-    // {
-    //     $this->load->model('kontrakmodel');
-    //     $sesi = $this->session->userdata('sesikontrak');
-    //     $header = $this->kontrakmodel->getHeader_kontrak($sesi);
-    //     $detail = $this->kontrakmodel->getDetail_kontrak_ex($sesi);
-    //     $terima = $this->kontrakmodel->getdatapengembalian($sesi);
-    //     $ttd = $this->kontrakmodel->get_Ttd($sesi);
-
-    //     $pdf = new PDF('L', 'mm', 'A4');
-    //     $pdf->AddPage();
-    //     $pdf->SetFont('Arial', 'B', 10);
 
 
-    //     $pdf->Cell(0, 6, 'REALISASI PENGELUARAN SEMENTARA DAN PEMASUKAN KEMBALI BARANG IMPOR ATAS KEGIATAN DARI/KE TLDPP', 0, 1, 'C');
-    //     $pdf->Cell(0, 6, 'UNTUK PENGEMBALIAN JAMINAN', 0, 1, 'C');
-    //     $pdf->Ln(4);
+    private function groupData($data)
+    {
+        $grouped = [];
+        foreach ((array)$data as $row) {
+            $nomor_bc = $row['nomor_bc'];
+            $tgl_bc = $row['tgl_bc'];
+            $sku = trim($row['po']) == '' ? $row['kode'] : (function_exists('viewsku') ? viewsku($row['po'], $row['item'], $row['dis']) : $row['kode']);
+            $spekbarang = trim($row['po']) == '' ? namaspekbarang($row['id_barang']) : spekpo($row['po'], $row['item'], $row['dis']);
+            $pcs = $row['pcs'] ?? 0;
+            $key = $nomor_bc . '|' . $sku;
+
+            if (!isset($grouped[$key])) {
+                $grouped[$key] = [
+                    'nomor_bc' => $nomor_bc,
+                    'tgl_bc' => $tgl_bc,
+                    'sku' => $sku,
+                    'spekbarang' => $spekbarang,
+                    'pcs' => 0,
+                    'total_kgs' => 0
+                ];
+            }
+            $grouped[$key]['pcs'] += (float)$pcs;
+            $grouped[$key]['total_kgs'] += (float)$row['kgs'];
+        }
+        return array_values($grouped);
+    }
 
 
-    //     $pdf->SetFont('Arial', '', 8);
-    //     $pdf->Cell(90, 5, '', 0, 0);
-    //     $pdf->Cell(40, 5, 'Nama Perusahaan', 0, 0, 'R');
-    //     $pdf->Cell(5, 5, ':', 0, 0, 'C');
-    //     $pdf->Cell(60, 5, 'PT. INDONEPTUNE NET MANUFACTURING', 0, 1, 'L');
+    public function pdf()
+    {
+        $this->load->model('kontrakmodel');
+        $sesi = $this->session->userdata('sesikontrak');
+        $header = $this->kontrakmodel->getHeader_kontrak($sesi);
+        $detail = $this->kontrakmodel->getDetail_kontrak_ex($sesi);
+        $terima = $this->kontrakmodel->getdatapengembalian($sesi);
+        $ttd = $this->kontrakmodel->get_Ttd($sesi);
 
-    //     $pdf->Cell(90, 5, '', 0, 0);
-    //     $pdf->Cell(40, 5, 'Nomor Surat Persetujuan', 0, 0, 'R');
-    //     $pdf->Cell(5, 5, ':', 0, 0, 'C');
-    //     $pdf->Cell(60, 5, $header['nomor_kep'], 0, 1, 'L');
+        $pdf = new PDF_Kontrak('L', 'mm', 'A4');
+        $pdf->setHeaderData($header);
+        $pdf->AddPage();
+        $pdf->SetFont('Arial', '', 7);
 
-    //     $pdf->Cell(90, 5, '', 0, 0);
-    //     $pdf->Cell(40, 5, 'Tanggal Surat Persetujuan', 0, 0, 'R');
-    //     $pdf->Cell(5, 5, ':', 0, 0, 'C');
-    //     $pdf->Cell(60, 5, tanggal_indonesia($header['tgl_kep']), 0, 1, 'L');
+        $widths = [5, 12, 15, 20, 60, 12, 13];
+        $startXLeft = 10;
+        $startXRight = $startXLeft + array_sum($widths) + 5;
 
-    //     $pdf->Cell(90, 5, '', 0, 0);
-    //     $pdf->Cell(40, 5, 'Nomor BPJ', 0, 0, 'R');
-    //     $pdf->Cell(5, 5, ':', 0, 0, 'C');
-    //     $pdf->Cell(60, 5, $header['nomor_bpj'], 0, 1, 'L');
+        $leftRows = $this->groupData($detail);
+        $rightRows = $this->groupData($terima->result_array());
+        $maxRows = max(count($leftRows), count($rightRows));
 
-    //     $pdf->Cell(90, 5, '', 0, 0);
-    //     $pdf->Cell(40, 5, 'Jatuh Tempo Jaminan', 0, 0, 'R');
-    //     $pdf->Cell(5, 5, ':', 0, 0, 'C');
-    //     $pdf->Cell(60, 5, tanggal_indonesia($header['tgl_expired']), 0, 1, 'L');
-    //     $pdf->Ln(5);
+        $totalPcsOut = $totalKgsOut = $totalPcsIn = $totalKgsIn = 0;
 
+        for ($i = 0; $i < $maxRows; $i++) {
 
-    //     $pdf->SetFont('Arial', 'B', 8);
-    //     $pdf->Cell(130, 5, 'PENGELUARAN SEMENTARA', 0, 0, 'L');
-    //     $pdf->Cell(11, 5, '', 0, 0);
-    //     $pdf->Cell(130, 5, 'PEMASUKAN KEMBALI', 0, 1, 'L');
+            if ($pdf->GetY() > 180) $pdf->AddPage();
 
+            // KIRI
+            $pdf->SetX($startXLeft);
+            if (isset($leftRows[$i])) {
+                $left = $leftRows[$i];
+                $pdf->Cell($widths[0], 5, $i + 1, 1, 0, 'C');
+                $pdf->Cell($widths[1], 5, $left['nomor_bc'], 1, 0);
+                $pdf->Cell($widths[2], 5, tglmysql($left['tgl_bc']), 1, 0);
+                $pdf->Cell($widths[3], 5, $left['sku'], 1, 0);
+                $pdf->Cell($widths[4], 5, substr($left['spekbarang'], 0, 30), 1, 0);
+                $pdf->Cell($widths[5], 5, number_format($left['pcs'], 2), 1, 0, 'R');
+                $pdf->Cell($widths[6], 5, number_format($left['total_kgs'], 2), 1, 0, 'R');
+                $totalPcsOut += $left['pcs'];
+                $totalKgsOut += $left['total_kgs'];
+            } else {
+                foreach ($widths as $w) $pdf->Cell($w, 5, '', 1, 0);
+            }
 
-    //     $pdf->SetFont('Arial', 'B', 7);
-    //     $headerCols = ['No', 'No Dok', 'Tgl Dok', 'SKU', 'Uraian Barang', 'PCS', 'KGS'];
-    //     $widths = [5, 12, 15, 20, 60, 12, 13];
+            $pdf->Cell(8, 5, '', 0, 0);
 
+            // KANAN
+            $pdf->SetX($startXRight);
+            if (isset($rightRows[$i])) {
+                $right = $rightRows[$i];
+                $pdf->Cell($widths[0], 5, $i + 1, 1, 0, 'C');
+                $pdf->Cell($widths[1], 5, $right['nomor_bc'], 1, 0);
+                $pdf->Cell($widths[2], 5, tglmysql($right['tgl_bc']), 1, 0);
+                $pdf->Cell($widths[3], 5, $right['sku'], 1, 0);
+                $pdf->Cell($widths[4], 5, substr($right['spekbarang'], 0, 30), 1, 0);
+                $pdf->Cell($widths[5], 5, number_format($right['pcs'], 2), 1, 0, 'R');
+                $pdf->Cell($widths[6], 5, number_format($right['total_kgs'], 2), 1, 0, 'R');
+                $totalPcsIn += $right['pcs'];
+                $totalKgsIn += $right['total_kgs'];
+            } else {
+                foreach ($widths as $w) $pdf->Cell($w, 5, '', 1, 0);
+            }
 
-    //     foreach ($headerCols as $i => $col) $pdf->Cell($widths[$i], 6, $col, 1, 0, 'C');
-    //     $pdf->Cell(5, 5, '', 0, 0);
-    //     // Header kanan
-    //     foreach ($headerCols as $i => $col) $pdf->Cell($widths[$i], 6, $col, 1, 0, 'C');
-    //     $pdf->Ln();
-
-    //     $pdf->SetFont('Arial', '', 7);
-    //     $totalPcsOut = $totalKgsOut = $totalPcsIn = $totalKgsIn = 0;
-
-    //     // Group data kiri
-    //     $grouped = [];
-    //     foreach ((array)$detail as $key) {
-    //         $nomor_bc = $key['nomor_bc'];
-    //         $tgl_bc = $key['tgl_bc'];
-    //         $sku = trim($key['po']) == '' ? $key['kode'] : (function_exists('viewsku') ? viewsku($key['po'], $key['item'], $key['dis']) : $key['kode']);
-    //         $spekbarang = trim($key['po']) == '' ? namaspekbarang($key['id_barang']) : spekpo($key['po'], $key['item'], $key['dis']);
-    //         $pcs = $key['pcs'] ?? 0;
-    //         $group_key = $nomor_bc . '|' . $sku;
-    //         if (!isset($grouped[$group_key])) {
-    //             $grouped[$group_key] = [
-    //                 'nomor_bc' => $nomor_bc,
-    //                 'tgl_bc' => $tgl_bc,
-    //                 'sku' => $sku,
-    //                 'spekbarang' => $spekbarang,
-    //                 'pcs' => 0,
-    //                 'total_kgs' => 0
-    //             ];
-    //         }
-    //         $grouped[$group_key]['pcs'] += (float)$pcs;
-    //         $grouped[$group_key]['total_kgs'] += (float)$key['kgs'];
-    //     }
-
-    //     // Group data kanan
-    //     $groupedIn = [];
-    //     foreach ((array)$terima->result_array() as $trm) {
-    //         $nomor_bc = $trm['nomor_bc'];
-    //         $tgl_bc = $trm['tgl_bc'];
-    //         $sku = trim($trm['po']) == '' ? $trm['kode'] : (function_exists('viewsku') ? viewsku($trm['po'], $trm['item'], $trm['dis']) : $trm['kode']);
-    //         $spekbarang = trim($trm['po']) == '' ? namaspekbarang($trm['id_barang']) : spekpo($trm['po'], $trm['item'], $trm['dis']);
-    //         $pcs = $trm['pcs'] ?? 0;
-    //         $group_key = $nomor_bc . '|' . $sku;
-    //         if (!isset($groupedIn[$group_key])) {
-    //             $groupedIn[$group_key] = [
-    //                 'nomor_bc' => $nomor_bc,
-    //                 'tgl_bc' => $tgl_bc,
-    //                 'sku' => $sku,
-    //                 'spekbarang' => $spekbarang,
-    //                 'pcs' => 0,
-    //                 'total_kgs' => 0
-    //             ];
-    //         }
-    //         $groupedIn[$group_key]['pcs'] += (float)$pcs;
-    //         $groupedIn[$group_key]['total_kgs'] += (float)$trm['kgs'];
-    //     }
-
-    //     $leftRows = array_values($grouped);
-    //     $rightRows = array_values($groupedIn);
+            $pdf->Ln();
+        }
 
 
-    //     $startY = $pdf->GetY();
-    //     $startXRight = 5 + 12 + 15 + 20 + 60 + 12 + 13 + 10;
-
-
-    //     // --- Cetak tabel kiri ---
-    //     foreach ($leftRows as $i => $left) {
-    //         $pdf->SetX(10);
-
-    //         $pdf->Cell($widths[0], 5, $i + 1, 1, 0, 'C');
-    //         $pdf->Cell($widths[1], 5, $left['nomor_bc'], 1, 0);
-    //         $pdf->Cell($widths[2], 5, tglmysql($left['tgl_bc']), 1, 0);
-    //         $pdf->Cell($widths[3], 5, $left['sku'], 1, 0);
-    //         $pdf->Cell($widths[4], 5, substr($left['spekbarang'], 0, 30), 1, 0);
-    //         $pdf->Cell($widths[5], 5, number_format($left['pcs'], 2), 1, 0, 'R');
-    //         $pdf->Cell($widths[6], 5, number_format($left['total_kgs'], 2), 1, 1, 'R');
-
-    //         $totalPcsOut += $left['pcs'];
-    //         $totalKgsOut += $left['total_kgs'];
-    //     }
-
-    //     // Total kiri
-    //     $pdf->SetFont('Arial', 'B', 8);
-    //     $pdf->Cell(array_sum(array_slice($widths, 0, 5)), 6, 'TOTAL', 1, 0, 'C');
-    //     $pdf->Cell($widths[5], 6, number_format($totalPcsOut, 2), 1, 0, 'R');
-    //     $pdf->Cell($widths[6], 6, number_format($totalKgsOut, 2), 1, 1, 'R');
-
-    //     //  Cetak tabel kanan
-    //     $pdf->SetY($startY);
-    //     $pdf->SetX($startXRight + 5);
-
-    //     $pdf->SetFont('Arial', '', 7);
-    //     foreach ($rightRows as $i => $right) {
-    //         $pdf->SetX($startXRight + 5);
-    //         $pdf->Cell($widths[0], 5, $i + 1, 1, 0, 'C');
-    //         $pdf->Cell($widths[1], 5, $right['nomor_bc'], 1, 0);
-    //         $pdf->Cell($widths[2], 5, tglmysql($right['tgl_bc']), 1, 0);
-    //         $pdf->Cell($widths[3], 5, $right['sku'], 1, 0);
-    //         $pdf->Cell($widths[4], 5, substr($right['spekbarang'], 0, 30), 1, 0);
-    //         $pdf->Cell($widths[5], 5, number_format($right['pcs'], 2), 1, 0, 'R');
-    //         $pdf->Cell($widths[6], 5, number_format($right['total_kgs'], 2), 1, 1, 'R');
-
-    //         $totalPcsIn += $right['pcs'];
-    //         $totalKgsIn += $right['total_kgs'];
-    //     }
-
-    //     // Total kanan
-    //     $pdf->SetX($startXRight + 5);
-    //     $pdf->SetFont('Arial', 'B', 8);
-    //     $pdf->Cell(array_sum(array_slice($widths, 0, 5)), 6, 'TOTAL', 1, 0, 'C');
-    //     $pdf->Cell($widths[5], 6, number_format($totalPcsIn, 2), 1, 0, 'R');
-    //     $pdf->Cell($widths[6], 6, number_format($totalKgsIn, 2), 1, 1, 'R');
-
-    //     $y_total = $pdf->GetY();
-
-    //     $pdf->Ln(10);
+        $pdf->SetFont('Arial', 'B', 8);
+        $pdf->SetX($startXLeft);
+        $pdf->Cell(array_sum(array_slice($widths, 0, 5)), 6, 'TOTAL', 1, 0, 'C');
+        $pdf->Cell($widths[5], 6, number_format($totalPcsOut, 2), 1, 0, 'R');
+        $pdf->Cell($widths[6], 6, number_format($totalKgsOut, 2), 1, 0, 'R');
+        $pdf->Cell(8, 6, '', 0, 0);
+        $pdf->SetX($startXRight);
+        $pdf->Cell(array_sum(array_slice($widths, 0, 5)), 6, 'TOTAL', 1, 0, 'C');
+        $pdf->Cell($widths[5], 6, number_format($totalPcsIn, 2), 1, 0, 'R');
+        $pdf->Cell($widths[6], 6, number_format($totalKgsIn, 2), 1, 1, 'R');
 
 
 
 
-    //     $pdf->SetXY(45, $y_total + 10);
-    //     $pdf->Cell(100, 5, 'PT. INDONEPTUNE NET MANUFACTURING', 0, 0, 'L');
+
+        $pdf->showHeader = false;
+        // $pdf->AddPage();
+
+        $pdf->Ln(5);
+        $pdf->SetFont('Arial', '', 8);
+        $pdf->Cell(100, 5, 'PT. INDONEPTUNE NET MANUFACTURING', 0, 0, 'C');
+        $pdf->Cell(80, 5, '', 0, 0);
+        $pdf->Cell(100, 5, 'Mengetahui, Hanggar', 0, 1, 'L');
+
+        $pdf->Ln(5);
+        $pdf->SetX(10);
+        $pdf->Cell(100, 5, $ttd['tg_jawab'], 0, 0, 'C');
+        $pdf->Ln(3);
+        $pdf->Cell(100, 5, $ttd['jabat_tg_jawab'], 0, 1, 'C');
+
+        $pdf->Output('I', 'Realisasi_Pengeluaran_Pemasukan.pdf');
+    }
 
 
-    //     $pdf->SetXY(195, $y_total + 6);
-    //     $pdf->Cell(100, 5, 'Mengetahui, Hanggar', 0, 1, 'L');
 
-    //     $pdf->Ln(15);
-
-    //     $pdf->SetXY(60, $y_total + 25);
-    //     $pdf->Cell(100, 5, $ttd['tg_jawab'], 0, 1, 'L');
-    //     $pdf->Ln(3);
-    //     $pdf->SetXY(50, $y_total + 30);
-    //     $pdf->Cell(100, 5, $ttd['jabat_tg_jawab'], 0, 0, 'L');
-
-
-    //     $pdf->Output('I', 'Realisasi_Pengeluaran_Pemasukan.pdf');
-    // }
 
     public function excel()
     {
