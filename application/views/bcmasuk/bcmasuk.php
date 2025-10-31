@@ -141,7 +141,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bcmasuk/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
-                    <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl']; ?></td>
+                    <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl_sj']; ?></td>
                     <td class="text-left line-12"><?= ucwords(strtolower($suppl)); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
