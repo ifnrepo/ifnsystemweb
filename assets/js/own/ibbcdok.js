@@ -431,8 +431,11 @@ function cekkolom(mode) {
 	}
 	if ($("#jns_bc").val() == "261") {
 		if ($("#sumdetailbc").val() != $("#nilai_pab").val()) {
-			// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
 			pesan("Cek Nilai Pabean (CIF) dengan Detail Harga BC !", "error");
+			return false;
+		}
+		if(selisihhari($("#tgl_aju").val(),$("#tgl_sj").val()) < 0){
+			pesan("Tanggal surat jalan Harus lebih besar atau sama dengan tgl Pengajuan","error");
 			return false;
 		}
 	} else {
