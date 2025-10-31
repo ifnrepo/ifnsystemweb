@@ -439,4 +439,12 @@ class Bbl extends CI_Controller
         $hasil['data'] = $this->bbl_model->hargaterakhir($id);
         $this->load->view('bbl/hargaterakhir', $hasil);
     }
+    public function cekurgent(){
+        $data = [
+            'id' => $_POST['id'],
+            'urgent' => $_POST['urgent']
+        ];
+        $hasil = $this->bbl_model->simpanurgent($data);
+        echo $hasil;
+    }
 }

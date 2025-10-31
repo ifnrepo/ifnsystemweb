@@ -26,16 +26,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="card-body p-2 font-kecil">
                             <div class="row">
                                 <div class="col-2 ">
-                                    <h4 class="mb-0 font-kecil">Tgl</h4>
-                                    <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($header['tgl']); ?>">
-                                    <input type="text" id="id_header" class="hilang" value="<?= $header['id']; ?>">
-                                    <input type="text" id="numdetail" class="hilang" value="<?= $numdetail; ?>">
-                                    <span class="font-bold" style="font-size:15px;">
-                                        <?= tglmysql($header['tgl']); ?>
-                                        <a href="<?= base_url() . 'bbl/edittgl'; ?>" title="Edit tanggal" id="tglbbl" name="tglbbl" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
-                                            <i class="fa fa-edit"></i>
-                                        </a>
-                                    </span>
+                                    <div>
+                                        <h4 class="mb-0 font-kecil">Tgl</h4>
+                                        <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($header['tgl']); ?>">
+                                        <input type="text" id="id_header" class="hilang" value="<?= $header['id']; ?>">
+                                        <input type="text" id="numdetail" class="hilang" value="<?= $numdetail; ?>">
+                                        <span class="font-bold" style="font-size:15px;">
+                                            <?= tglmysql($header['tgl']); ?>
+                                            <a href="<?= base_url() . 'bbl/edittgl'; ?>" title="Edit tanggal" id="tglbbl" name="tglbbl" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                                                <i class="fa fa-edit"></i>
+                                            </a>
+                                        </span>
+                                    </div>
+                                    <hr class="m-0">
+                                    <div class="mb-0 mt-1 text-center">
+                                        <h4 class="mb-0 font-kecil bg-blue-lt mb-1">Prioritas BBL</h4>
+                                        <span class="font-bold text-left" style="font-size:15px;">
+                                        <div class="mb-0">
+                                            <label class="form-check">
+                                            <input class="form-check-input" type="checkbox" id="cekurgent" <?php if($header['urgent']==1){ echo "checked"; } ?> >
+                                            <span class="form-check-label text-danger">URGENT</span>
+                                            </label>
+                                        </div>
+                                        </span>
+                                    </div>
                                 </div>  
                                 <div class="col-4">
                                     <h4 class="mb-0 font-kecil">Catatan</h4>

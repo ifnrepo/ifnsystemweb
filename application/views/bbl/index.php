@@ -100,7 +100,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                 </div>
                 <div class="mt-2">
-                    <table id="pbtabel" class="table nowrap order-column datatable" style="width: 100% !important;">
+                    <table id="pbtabel" class="table nowrap order-column datatable11" style="width: 100% !important;">
                         <thead>
                             <tr>
                                 <th>Tgl</th>
@@ -108,6 +108,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Jumlah Item</th>
                                 <th>P</th> 
                                 <th>Sv</th> 
+                                <th class="text-center">Urgent</th> 
                                 <th>Dept</th> 
                                 <th>Dibuat Oleh</th>
                                 <th>Keterangan</th>
@@ -126,7 +127,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= $jmlrec; ?></td>
                                     <td class="font-bold text-success"><?php if($datdet['bbl_pp']==1){ echo "P"; }  ?> <?php if($datdet['bbl_pp']==2){ echo "Ut"; }  ?></td>
                                     <td class="font-bold text-danger"><?php if($datdet['bbl_sv']==1){ echo "Sv"; }  ?></td>
-                                    <td class="font-bold font-kecil"><?= $datdet['dept_bbl']  ?></td>
+                                    <td class="font-bold text-success text-center"><?php if($datdet['urgent']==1){ echo "<i class='fa fa-check'></i>"; }  ?></td>
+                                    <td class="font-bold font-kecil text-center"><?= $datdet['dept_bbl']  ?></td>
                                     <?php if($datdet['data_ok']==1){ ?>
                                     <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
                                     <?php }else{ ?>

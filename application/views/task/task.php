@@ -95,6 +95,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php foreach ($data->result_array() as $datpb) {
+                $ciriurgent = '';$keteurgent='';
                 if($this->session->userdata('modetask') == 'adj'){
                   $viewdetail = base_url() . 'adj/viewdetailadj/' . $datpb['id'].'/1';
                   $btnok = base_url() . 'task/validasiadj/' . $datpb['id'];
@@ -118,15 +119,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $ttdke;
                       // $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $ttdke;
                       $btnno = base_url() . 'task/canceltask/' . $datpb['id'] . '/' . $ttdke;
+                      $ciriurgent = $datpb['urgent']==1 ? 'bg-red-lt' : '';
+                      $keteurgent = $datpb['urgent']==1 ? 'URGENT !' : '';
                     }
                     $btnedit = base_url() . 'task/editbbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
                     $btneditapprover = base_url() . 'task/editapprovebbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd');
                   }
                 }
               ?>
-                <tr>
+                <tr class="<?= $ciriurgent ?>">
                   <td><?= tglmysql($datpb['tgl']); ?></td>
-                  <td><a href="<?= $viewdetail ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail"><?= $datpb['nomor_dok']; ?></a></td>
+                  <td class="line-12"><a href="<?= $viewdetail ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail"><?= $datpb['nomor_dok']; ?><br><span><?= $keteurgent ?></span></a></td>
                   <td class="font-bold font-kecil"><?php if ($datpb['bbl_pp'] == 1) {
                                                       echo "<span class='text-success'>P</span>";
                                                     } ?><?php if ($datpb['bbl_pp'] == 2) {

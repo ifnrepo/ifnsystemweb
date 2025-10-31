@@ -1526,9 +1526,16 @@ class Akb extends CI_Controller
             $kodejnent = "6"; //$ke==1 ? "6" : (($ke==4) ? "" : (($ke==2) ? "6" : ""));
             $status = $ke == 2 ? "10" : "";
             $nibidentitas = $ke == 1 ? "9120011042693" : (($ke == 2) ? "" : "");
-            $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . $data['npwpsubkon'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwpsubkon'])))) + 1)));
-            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : $data['alamatsubkon']);
-            $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasubkon']);
+            if($data['jns_bc']==261 && $data['dept_tuju']=='SU' && $ke==3){
+                // datasupplier($data['id_rekanan'],'npwp')
+                $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . datasupplier($data['id_rekanan'],'npwp') . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', datasupplier($data['id_rekanan'],'npwp'))))) + 1)));
+                $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datasupplier($data['id_rekanan'],'alamat'));
+                $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : datasupplier($data['id_rekanan'],'nama_supplier'));
+            }else{
+                $nomoridentitas = $ke == 1 ? "0010017176057000000000" : (($ke == 2) ? "0010017176057000000000" : '0' . $data['npwpsubkon'] . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', $data['npwpsubkon'])))) + 1)));
+                $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datasupplier($data['id_rekanan'],'alamat'));
+                $namaidentitas = $ke == 1 ? "INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "INDONEPTUNE NET MANUFACTURING" : $data['namasubkon']);
+            }
             $kodejenisapi = $ke == 2 ? "02" : "";
             $arrayke = [
                 "seriEntitas" => (int) $serient,
@@ -2173,8 +2180,8 @@ class Akb extends CI_Controller
         $arrayheader['pungutan'] = $arraypungutan;
         $arrayheader['kontainer'] = $arraykontainer;
         // $arrayheader['jaminan'] = $arrayjaminan;
-        // echo '<pre>'.json_encode($arrayheader)."</pre>";
-        $this->kirim30($arrayheader, $id);
+        echo '<pre>'.json_encode($arrayheader)."</pre>";
+        // $this->kirim30($arrayheader, $id);
     }
     function kirimdatakeceisa41($id)
     {
@@ -2875,13 +2882,13 @@ class Akb extends CI_Controller
     public function addkontrak($id, $dept)
     {
         $data['idheader'] = $id;
+        $data['kode'] = 0;
         $kondisi = [
             'dept_id' => $dept,
             'status' => 1,
             'jnsbc' => 261,
             'thkontrak' => '',
             'datkecuali' => 1,
-            'nomorbpj != ' => '',
             'nomor_ssb != ' => '',
             'penjamin != ' => ''
         ];
@@ -4792,7 +4799,7 @@ class Akb extends CI_Controller
             $html .= '<td>'.$no.'</td>';
             $html .= '<td>'.$bahan['kode'].'</td>';
             $html .= '<td>'.$bahan['nama_barang'].'</td>';
-            $html .= '<td class="line-12">'.$bahan['nobontr'].'<br><span class="font-10 text-pink">'.$bahan['nomor_bc'].'</span></td>';
+            $html .= '<td class="line-12">'.$bahan['nobontr'].'<br><span class="font-11 text-pink">'.$bahan['nomor_bc'].' tgl.'.$bahan['tgl_bc'].'</span></td>';
             $html .= '<td class="text-right">'.rupiah($bahan['kgs']-$bahan['in_exbc'],2).'</td>';
             $html .= '<td>';
             $html .= '<a href="#" class="btn btn-sm btn-success" id="tombolpilih" rel="' . $bahan['id_barang'] . '" rel2="' . $bahan['nobontr'] . '" rel3 ="' . $bahan['nama_barang'] . '">Pilih</a>';

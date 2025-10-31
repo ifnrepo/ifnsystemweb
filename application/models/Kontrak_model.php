@@ -60,7 +60,7 @@ class Kontrak_model extends CI_Model
         $this->db->select('tb_kontrak.*,0 as saldo,0 as xnetto');
         $this->db->from('tb_kontrak');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
-        if ($kode['dept_id'] != "") {
+        if ($kode['dept_id'] != "" && $kode['dept_id'] != 'SU') {
             $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
         }
         $this->db->where('jns_bc', $kode['jnsbc']);
@@ -75,8 +75,8 @@ class Kontrak_model extends CI_Model
         if (isset($kode['datkecuali'])) {
             $datkont = $this->db->query("Select id_kontrak from tb_header where id_kontrak is not null")->result_array();
         }
-        $this->db->where('nomor_bpj != "" ');
-        $this->db->where('tgl_bpj is not null ');
+        // $this->db->where('nomor_bpj != "" ');
+        // $this->db->where('tgl_bpj is not null ');
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }

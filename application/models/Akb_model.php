@@ -1538,11 +1538,11 @@ class Akb_model extends CI_Model
         return $this->db->update('tb_header', $data);
     }
     public function getbarangmaterial($kode){
-        $this->db->select('tb_detail.*,barang.nama_barang,barang.kode,tb_header.nomor_bc');
+        $this->db->select('tb_detail.*,barang.nama_barang,barang.kode,tb_header.nomor_bc,tb_header.tgl_bc');
         $this->db->from('tb_detail');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
-        $this->db->where('left(tb_header.nomor_dok,7)', 'DLN-IFN');
+        $this->db->where_in('left(tb_header.nomor_dok,7)', ['DLN-IFN','MDL-IFN']);
         $this->db->group_start();
         $this->db->like('barang.nama_barang', $kode);
         $this->db->or_like('tb_header.nomor_dok', $kode);

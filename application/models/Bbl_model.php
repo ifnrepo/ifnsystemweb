@@ -331,4 +331,8 @@ class Bbl_model extends CI_Model
         $hasil = $this->db->order_by('tgl','DESC')->get();
         return $hasil;
     }
+    public function simpanurgent($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_header',['urgent' => $data['urgent']]);
+    }
 }

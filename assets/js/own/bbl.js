@@ -188,6 +188,34 @@ $("#simpanbblu").click(function () {
 	}
 	$("#simpanbbl").click();
 });
+$("#cekurgent").click(function(){
+	var isCheck = $(this).is(":checked");
+	var isinya =
+		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
+	$("#loadview").html(isinya);
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "bbl/cekurgent",
+		data: {
+			id: $("#id_header").val(),
+			urgent: isCheck ? 1 : 0,
+		},
+		success: function (data) {
+			$("#loadview").html("<span class='text-primary font-11'>Saved</span>");
+			setTimeout(() => {
+				$("#loadview").html("");
+			}, 1000);
+			// alert(data.datagroup);
+			// window.location.reload();
+			// $("#body-table").html(data.datagroup).show();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+})
 function getdatabbl() {
 	// alert($("#level").val());
 	$.ajax({
@@ -230,3 +258,4 @@ function getdatadetail_bbl() {
 		},
 	});
 }
+
