@@ -1965,7 +1965,7 @@ class Ib extends CI_Controller
     public function addkontrak($id, $dept)
     {
         $data['idheader'] = $id;
-        $kode = 0;
+        $data['kode'] = 0;
         $kondisi = [
             // 'dept_id' => 'DL',
             'status' => 1,

@@ -1,7 +1,7 @@
 <div class="container-xl">
     <div class="row font-kecil">
         <input type="text" class="hilang" name="idheader" id="idheader" value="<?= $idheader; ?>">
-        <input type="text" name="kode" id="kode" value="<?= $kode ?>">
+        <input type="text" name="kode" id="kode" class="hilang" value="<?= $kode ?>">
         <div class="col-12 mb-1">
             <table class="table w-100 mb-1">
                 <thead style="background-color: blue !important">

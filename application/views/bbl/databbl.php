@@ -27,15 +27,29 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-2">
-                  <h4 class="mb-0 font-kecil">Tgl</h4>
-                  <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
-                  <input type="text" id="id_header" class="hilang" value="<?= $data['id']; ?>">
-                  <span class="font-bold" style="font-size:15px;">
-                    <?= tglmysql($data['tgl']); ?>
-                    <a href="<?= base_url() . 'bbl/edittgl'; ?>" title="Edit tanggal" id="tglbbl" name="tglbbl" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                  </span>
+                  <div>
+                    <h4 class="mb-0 font-kecil">Tgl</h4>
+                    <input type="text" id="tgldok" class="hilang" value="<?= tglmysql($data['tgl']); ?>">
+                    <input type="text" id="id_header" class="hilang" value="<?= $data['id']; ?>">
+                    <span class="font-bold" style="font-size:15px;">
+                      <?= tglmysql($data['tgl']); ?>
+                      <a href="<?= base_url() . 'bbl/edittgl'; ?>" title="Edit tanggal" id="tglbbl" name="tglbbl" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                        <i class="fa fa-edit"></i>
+                      </a>
+                    </span>
+                  </div>
+                  <hr class="m-0">
+                  <div class="mb-0 mt-1 text-center">
+                    <h4 class="mb-0 font-kecil bg-blue-lt mb-1">Prioritas BBL</h4>
+                    <span class="font-bold text-left" style="font-size:15px;">
+                      <div class="mb-0">
+                        <label class="form-check">
+                          <input class="form-check-input" type="checkbox" id="cekurgent" <?php if($data['urgent']==1){ echo "checked"; } ?>>
+                          <span class="form-check-label text-danger">URGENT</span>
+                        </label>
+                      </div>
+                    </span>
+                  </div>
                 </div>
                 <div class="col-4">
                   <h4 class="mb-0 font-kecil">Catatan</h4>
@@ -61,12 +75,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </div>
                     </div>
                   </div>
-                  <!-- <label class="form-check mb-0 <?php if($data['jn_bbl']==1){ echo "hilang"; } ?>">
-                    <input class="form-check-input" id="bbl_pp" type="checkbox" <?php if($data['bbl_pp']==1){echo "checked";} ?> <?php if($data['dept_id']=='GM'){echo "disabled"; } ?>>
-                    <span class="form-check-label">
-                      BBL Produksi (Persetujuan PPIC)
-                    </span>
-                  </label> -->
                   <div class="mb-1 <?php if($data['jn_bbl']==1){ echo "hilang"; } ?>">
                       <div class="row">
                       <div class="col-3 pt-2">Jenis BBL</div>
