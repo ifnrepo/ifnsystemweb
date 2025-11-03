@@ -32,8 +32,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $disabe = 'disabled';
               }
               ?>
-              <!-- <a href="<?= base_url() . 'kontrak/adddata'; ?>" class="btn btn-primary btn-sm <?= $disabe; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get Rekanan Kontrak" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
-              <a href="<?= base_url() . 'kontrak/adddata'; ?>" class="btn btn-primary btn-sm <?= $disabe; ?>" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <a href="<?= base_url() . 'kontrak/adddata'; ?>" class="btn btn-primary btn-sm <?= $disabe; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get Rekanan Kontrak" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <!-- <a href="<?= base_url() . 'kontrak/adddat a'; ?>" class="btn btn-primary btn-sm <?= $disabe; ?>" id="adddatakontrak"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
@@ -63,8 +63,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <select class="form-select form-control form-sm font-kecil font-bold" id="deptkontrak" name="deptkontrak">
                         <option value="">Semua Rekanan</option>
                         <?php foreach ($deprekanan as $deptrekanan) {
-                          $selek = $this->session->userdata('deptkontrak') == $deptrekanan['dept_id'] ? 'selected' : ''; ?>
-                          <option value="<?= $deptrekanan['dept_id']; ?>" <?= $selek; ?>><?= $deptrekanan['departemen']; ?></option>
+                          $selek = $this->session->userdata('deptkontrak') == $deptrekanan['id_supplier'] ? 'selected' : ''; ?>
+                          <option value="<?= $deptrekanan['id_supplier']; ?>" <?= $selek; ?>><?= $deptrekanan['nama_supplier']; ?></option>
                         <?php } ?>
                       </select>
                     </div>
@@ -159,7 +159,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               $tahap = $datdet['tipe']==0 ? '' : ($datdet['tipe']==1 ? 'TIPE 1' : 'TIPE 2');
               ?>
                 <tr>
-                  <td class="line-12"><?= $datdet['nomor']; ?><br><span class="text-pink" style="font-size: 11px"><?= $datdet['departemen']; ?></span></td>
+                  <td class="line-12"><?= $datdet['nomor']; ?><br><span class="text-pink" style="font-size: 11px"><?= $datdet['nama_supplier']; ?></span></td>
                   <td class="line-12"><?= $datdet['proses']; ?><br><span class="text-primary" style="font-size: 11px"><?= $tahap ?></span></td>
                   <td><?= tglmysql($datdet['tgl_awal']); ?></td>
                   <td><?= tglmysql($datdet['tgl_akhir']); ?></td>

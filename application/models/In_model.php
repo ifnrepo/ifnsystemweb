@@ -196,7 +196,7 @@ class In_model extends CI_Model{
                                 'tgl_bc' => $dataheader['tgl_bc'],
                                 'tgl' => $dataheader['tgl'],
                                 'seri_barang' => $dtl['seri_barang'],
-                                'nomor_aju' => $this->getdatanomoraju($id),
+                                'nomor_aju' => $this->ibmodel->getdatanomoraju($id),
                                 'tgl_aju' => $dataheader['tgl_aju'],
                                 'kode_negara' => "ID"
                             ];

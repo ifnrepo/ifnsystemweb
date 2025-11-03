@@ -1125,4 +1125,15 @@ class Helper_model extends CI_Model
         $this->db->where('tb_header.send_ceisa = 1 and trim(tb_header.exnomor_bc) != "" ');
         return $this->db->get();
     }
+    public function jmlkgs261($id){
+        $dataheader = $this->db->get_where('tb_header',['id_kontrak' => $id]);
+        $idheader = ['!@##'];
+        foreach($dataheader->result_array() as $dathed){
+            array_push($idheader,$dathed['id']);
+        }
+        $this->db->select('tb_detail.id,SUM(ROUND(kgs,2)) OVER() AS jmlkgs');
+        $this->db->from('tb_detail');
+        $this->db->where_in('tb_detail.id_akb',$idheader);
+        return $this->db->get();
+    }
 }
