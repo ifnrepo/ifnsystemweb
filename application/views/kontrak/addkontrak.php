@@ -28,21 +28,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <h4 class="m-0">
                     <label for="" class="m-0" style="width: 75px;">Rekanan</label>
                     <label for="" class="m-0">:</label>
-                    <label for="" class="m-0"><?= $data['nama_subkon']; ?></label>
+                    <label for="" class="m-0"><?= datasupplier($data['id_supplier'],'nama_supplier'); ?></label>
                   </h4>
                 </div>
                 <div class="p-0">
                   <h4 class="m-0">
                     <label for="" class="m-0" style="width: 75px;">Alamat</label>
                     <label for="" class="m-0">:</label>
-                    <label for="" class="m-0"><?= $data['alamat_subkon']; ?></label>
+                    <label for="" class="m-0"><?= datasupplier($data['id_supplier'],'alamat'); ?></label>
                   </h4>
                 </div>
                 <div class="p-0">
                   <h4 class="m-0">
                     <label for="" class="m-0" style="width: 75px;">NPWP</label>
                     <label for="" class="m-0">:</label>
-                    <label for="" class="m-0"><?= formatnpwp($data['npwp']); ?></label>
+                    <label for="" class="m-0"><?= datasupplier($data['id_supplier'],'npwp'); ?></label>
                   </h4>
                 </div>
 

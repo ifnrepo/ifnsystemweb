@@ -64,7 +64,7 @@
                                         <?php } ?>
                                         <td><?= $val['brg_id']; ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
-                                        <td><?= rupiah($val['pcs'], 0); ?></td>
+                                        <td><?= rupiah($val['pcs'], 2); ?></td>
                                         <td><?= rupiah($val['kgs'], 2); ?></td>
                                         <?php if($this->session->userdata('viewharga')==1): ?>
                                             <td class="text-danger text-right"><?= rupiah(gethrg($val['id_barang'], $val['nobontr']),2); ?></td>

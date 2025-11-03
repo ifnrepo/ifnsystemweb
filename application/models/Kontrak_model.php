@@ -11,7 +11,7 @@ class Kontrak_model extends CI_Model
 
     public function getdatakontrak($kode)
     {
-        $this->db->select("tb_kontrak.*,dept.departemen,sum(round(tb_detail.kgs,2)) AS total_kgs,tb_header.nomor_bc");
+        $this->db->select("tb_kontrak.*,dept.departemen,sum(round(tb_detail.kgs,2)) AS total_kgs,tb_header.nomor_bc,supplier.nama_supplier");
         // $this->db->select("(SELECT SUM(round(det.kgs,2)) AS tot_kgs 
         //                     FROM tb_detail det 
         //                     LEFT JOIN tb_header head ON head.id = det.id_akb 
@@ -19,10 +19,11 @@ class Kontrak_model extends CI_Model
         $this->db->from('tb_kontrak');
         $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id', 'left');
         $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
+        $this->db->join('supplier','supplier.id = tb_kontrak.id_supplier','left');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
 
-        if (!empty($kode['dept_id'])) {
-            $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
+        if (!empty($kode['id_supplier'])) {
+            $this->db->where('tb_kontrak.id_supplier', $kode['id_supplier']);
         }
 
         $this->db->where('tb_kontrak.jns_bc', $kode['jnsbc']);
@@ -113,8 +114,8 @@ class Kontrak_model extends CI_Model
         $this->db->select('count(*) as jmlrek,sum(pcs) as pcs,sum(kgs) as kgs');
         $this->db->from('tb_kontrak');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
-        if ($kode['dept_id'] != "") {
-            $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
+        if ($kode['id_supplier'] != "") {
+            $this->db->where('tb_kontrak.id_supplier', $kode['id_supplier']);
         }
         $this->db->where('jns_bc', $kode['jnsbc']);
         if ($kode['status'] == 1) {
@@ -536,7 +537,38 @@ class Kontrak_model extends CI_Model
     }
     public function carirekanan($id){
         $this->db->like('nama_supplier',$id);
+        $this->db->where('aktif',1);
         $this->db->limit(25);
         return $this->db->get('supplier');
+    }
+    public function simpankontrakbaru($id){
+        $arrinput = [
+            'tgl' => date('Y-m-d'),
+            'tgl_awal' => date('Y-m-d'),
+            'tgl_akhir' => date('Y-m-d', strtotime("+60 day")),
+            'dept_id' => $id['dept_id'],
+            'jns_bc' => $this->session->userdata('jnsbckontrak'),
+            'id_supplier' => $id['id_supplier'],
+            'nomor' => nomorkontrak()
+        ];
+        $this->db->insert('tb_kontrak', $arrinput);
+        $hasil = $this->db->insert_id();
+        // $this->helpermodel->isilog($this->db->last_query());
+        // $this->session->set_userdata('sesikontrak', $hasil);
+
+        // $this->db->select("*");
+        // $this->db->from('tb_kontrak');
+        // $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
+        // $this->db->where('tb_kontrak.id', $hasil);
+        // return $this->db->get();
+        return $hasil;
+    }
+    public function getkontrakrekanan(){
+        $this->db->select('tb_kontrak.dept_id,tb_kontrak.id_supplier,supplier.nama_supplier');
+        $this->db->from('tb_kontrak');
+        $this->db->join('supplier','supplier.id = tb_kontrak.id_supplier','left');
+        $this->db->where('tb_kontrak.id_supplier != ',null);
+        $this->db->group_by('tb_kontrak.id_supplier');
+        return $this->db->get();
     }
 }

@@ -1004,3 +1004,15 @@ function jumlahhari($date1, $date2)
     }
     return $hasil;
 }
+function jmlkgs261($id){
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->jmlkgs261($id);
+    if(count($hasil->result())==0){
+        // $hasil['jmlkgs'] = 0;
+        $datahasil = 0;
+    }else{
+        $hasil = $hasil->row_array();
+        $datahasil = $hasil['jmlkgs'];
+    }
+    return $datahasil;
+}

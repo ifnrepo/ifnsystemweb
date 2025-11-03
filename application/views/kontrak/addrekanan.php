@@ -28,6 +28,7 @@
                     </tbody>
                 </table>
             </div>
+            <input type="text" name="idrekan" id="idrekan" class="hilang">
             <hr class="small m-0">
             <div class="text-center mt-2 px-4 mb-2">
                 <a href="#" class="btn btn-sm btn-primary btn-flat" id="simpanbahanbaku">Tambah Data Kontrak</a>
@@ -65,42 +66,42 @@
                 }           
             });
         }else{
-            pesan('Minimal 3 Huruf untuk pencarian','info');
+            pesan('Minimal 3 (Tiga) Huruf untuk pencarian','info');
         }
     });
     $(document).on('click','#tombolpilih',function(){
+        $(this).removeClass('bg-success');
+        $(this).addClass('bg-danger');
         var x = $(this).attr('rel');
-        var y = $(this).attr('rel2');
-        var z = $(this).attr('rel3');
+        // var y = $(this).attr('rel2');
+        // var z = $(this).attr('rel3');
 
-        $("#idbarang").val(x);
-        $("#nobontr").val(y);
-        $("#namabarang").val(z);
+        $("#idrekan").val(x);
+        // $("#nobontr").val(y);
+        // $("#namabarang").val(z);
 
-        $("#body-table").html('<td colspan="5" class="text-center text-teal">Siap Simpan</td>').show();
+        // $("#body-table").html('<td colspan="4" class="text-center text-teal">Siap Simpan</td>').show();
 
     })
     $("#simpanbahanbaku").click(function(){
-        var barang = $("#seribarangheader").val();
+        var barang = $("#idrekan").val();
         if(barang.trim() == ""){
-            pesan('Spek Barang harus di Pilih terlebih dahulu','error');
+            pesan('Rekanan harus di Pilih terlebih dahulu','error');
             return false;
         }
         $.ajax({
             dataType: "json",
             type: "POST",
-            url: base_url+'akb/simpanbahanbaku',
+            url: base_url+'kontrak/simpankontrakbaru',
             data: {
-                id: $("#idheader").val(),
-                idbarang : $("#idbarang").val(),
-                seri : $("#seribarangheader").val(),
-                bontr : $("#nobontr").val(), 
-                pcs : $("#jmpcs").val(), 
-                kgs : $("#jmkgs").val(), 
+                idrekan : $("#idrekan").val(),
             },
             success: function(data){
-                $('#modal-large-loading').modal('hide');
-                pesan('Barang berhasil disimpan, refresh halaman untuk melihat hasil','success');
+                $('#modal-large').modal('hide');
+                pesan('Barang berhasil disimpan','success');
+                setTimeout(() => {
+                    window.location.href = base_url+'kontrak/editdata/'+data;
+                }, 1500);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

@@ -128,7 +128,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <td class="text-left"><?= $no; ?></td>
                                             <td class="text-left" style="line-height:12px;"><?= $key['nama_barang']; ?><br><span style="font-size: 10px" class="text-primary"><?= $key['id_pb']; ?></span></td>
                                             <td class="text-left"><?= $key['namasatuan']; ?></td>
-                                            <td class="text-right"><?= rupiah($key['pcs'], 0); ?></td>
+                                            <td class="text-right"><?= rupiah($key['pcs'], 2); ?></td>
                                             <td class="text-right"><?= rupiah($key['kgs'], 2); ?></td>
                                             <td class="text-center">
                                                 <a href="<?= base_url() . 'bbl/editone_detail/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="Edit detail Bbl" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Edit detail Bbl" rel="<?= $key['id']; ?>" title="Edit data">

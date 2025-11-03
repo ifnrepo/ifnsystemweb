@@ -29,12 +29,13 @@ class Kontrak extends CI_Controller
     public function index()
     {
         $header['header'] = 'transaksi';
-        $data['deprekanan'] = $this->helpermodel->getkontrakrekanan();
+        $data['deprekanan'] = $this->kontrakmodel->getkontrakrekanan()->result_array();
+        // $data['deprekanan'] = $this->helpermodel->getkontrakrekanan();
         if ($this->session->userdata('statuskontrak') == "") {
             $this->session->set_userdata('statuskontrak', 1);
         }
         $kode = [
-            'dept_id' => $this->session->userdata('deptkontrak') == null ? '' : $this->session->userdata('deptkontrak'),
+            'id_supplier' => $this->session->userdata('deptkontrak') == null ? '' : $this->session->userdata('deptkontrak'),
             'jnsbc' => $this->session->userdata('jnsbckontrak') == null ? '' : $this->session->userdata('jnsbckontrak'),
             'status' => $this->session->userdata('statuskontrak'),
             'thkontrak' => $this->session->userdata('thkontrak') == null ? '' : $this->session->userdata('thkontrak'),
@@ -61,19 +62,19 @@ class Kontrak extends CI_Controller
     }
     public function adddata()
     {
-        $header['header'] = 'transaksi';
-        $data['mode'] = 'INPUT';
-        if ($this->session->userdata('sesikontrak') == '') {
-            $data['data'] = $this->kontrakmodel->adddata()->row_array();
-        } else {
-            $data['data'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
-        }
-        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
-        $footer['fungsi'] = 'kontrak';
-        $this->load->view('layouts/header', $header);
-        $this->load->view('kontrak/addkontrak', $data);
-        $this->load->view('layouts/footer', $footer);
-        // $this->load->view('kontrak/addrekanan');
+        // $header['header'] = 'transaksi';
+        // $data['mode'] = 'INPUT';
+        // if ($this->session->userdata('sesikontrak') == '') {
+        //     $data['data'] = $this->kontrakmodel->adddata()->row_array();
+        // } else {
+        //     $data['data'] = $this->kontrakmodel->getdata($this->session->userdata('sesikontrak'))->row_array();
+        // }
+        // $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        // $footer['fungsi'] = 'kontrak';
+        // $this->load->view('layouts/header', $header);
+        // $this->load->view('kontrak/addkontrak', $data);
+        // $this->load->view('layouts/footer', $footer);
+        $this->load->view('kontrak/addrekanan');
     }
     public function editdata($sesi)
     {
@@ -181,9 +182,6 @@ class Kontrak extends CI_Controller
         $data['terima'] = $this->kontrakmodel->getdatajaminkiriman($data['header']['nomor_bc']);
         $this->load->view('kontrak/viewdetail', $data);
     }
-
-
-
     private function groupData($data)
     {
         $grouped = [];
@@ -1216,11 +1214,11 @@ class Kontrak extends CI_Controller
         if($getdata->num_rows() > 0){
             $no=0;
             foreach($getdata->result_array() as $data){
-                $cek = trim($data['alamat'])=='' || trim($data['npwp'])=='' ? 'NPWP / ALamat Kosong' : '';
+                $cek = trim($data['alamat'])=='' || (trim($data['npwp'])=='' && trim($data['nik'])=='') ? 'NPWP / NIK / ALAMAT KOSONG' : '';
                 $no++;
                 $html .= '<tr>';
                 $html .= '<td>'.$no.'</td>';
-                $html .= '<td>'.$data['nama_supplier'].'</td>';
+                $html .= '<td class="line-12">'.$data['nama_supplier'].'<br><span class="text-pink font-10">'.$cek.'</span></td>';
                 $html .= '<td>'.$data['kode'].'</td>';
                 $html .= '<td>';
                 $html .= '<a href="#" class="btn btn-sm btn-success" id="tombolpilih" rel="' . $data['id'] . '" rel2="' . $data['id'] . '" rel3 ="' . $data['id'] . '">Pilih</a>';
@@ -1230,5 +1228,31 @@ class Kontrak extends CI_Controller
         }
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
+    }
+    public function simpankontrakbaru(){
+        $idrekan = $_POST['idrekan'];
+        switch ($idrekan) {
+            case '392':
+                $dept = 'AR';
+                break;
+            case '1117':
+                $dept = 'NU';
+                break;
+            case '125': 
+                $dept = 'AN';
+                break;
+            case '63':
+                $dept = 'AM';
+                break;
+            default:
+                # code...
+                break;
+        }
+        $data = [
+            'id_supplier' => $idrekan,
+            'dept_id' => $dept
+        ];
+        $hasil = $this->kontrakmodel->simpankontrakbaru($data);
+        echo $hasil;
     }
 }
