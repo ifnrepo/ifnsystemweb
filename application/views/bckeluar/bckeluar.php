@@ -111,7 +111,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
               $jmusd = 0;
               $no = 0;
               if ($data != null) : foreach ($data->result_array() as $detail) {
-
                   $kurs_data = getkurssekarang($detail['tgl_aju'])->row();
                   $kurs_usd = (empty($detail['kurs_usd']) || $detail['kurs_usd'] == 0)
                     ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
@@ -134,10 +133,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                   $xpengali = ($detail['mtuang'] == 2)
                     ? $nilai
-                    : (($detail['mtuang'] == 3)
+                    : ($detail['mtuang'] == 3
                       ? ($nilai * $kurs_yen) / $kurs_usd
-                      : ($nilai / 1))
+                      : 1);
 
+                  $kondisi_usd = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
+                    ? $detail['nilai_serah'] / $kurs_usd
+                    : $detail['nilai_pab'] / $kurs_usd;
+
+                  // $kondisi_usd = $xpengali;
               ?>
 
 
