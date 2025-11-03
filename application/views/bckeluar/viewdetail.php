@@ -9,6 +9,9 @@
             <a href="#tabs-header-8" class="nav-link font-bold bg-success-lt btn-flat" data-bs-toggle="tab">Detail Barang</a>
         </li>
         <li class="nav-item">
+            <a href="#tabs-detail-8" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Detail Dokumen</a>
+        </li>
+        <li class="nav-item">
             <a href="#tabs-home-8" class="nav-link font-bold bg-warning-lt btn-flat" data-bs-toggle="tab">Riwayat Dokumen</a>
         </li>
         <li class="nav-item">
@@ -318,6 +321,26 @@
                             </div>
                         </div>
                     </div>
+                </div>
+            </div>
+        </div>
+        <div class="tab-pane fade p-2" id="tabs-detail-8">
+            <div class="card">
+                <div class="col-md-3">
+                </div>
+                <!-- <hr class="p-1 m-1"> -->
+                <div class="card-body pt-1 pb-1" style="overflow: auto;">
+                    <?php if (!empty(trim($detail['filepdf']))) { ?>
+                        <iframe src="<?= LOK_UPLOAD_DOK_BC . trim($header['filepdf']); ?>" style="width:100%;height:700px;" alt="Tidak ditemukan"></iframe>
+                    <?php } else { ?>
+                        <div style="width:100%;height:700px;" class="text-center font-bold m-0">
+                            <h3>BELUM ADA DOKUMEN</h3>
+                        </div>
+                        <?= LOK_UPLOAD_DOK_BC . trim($detail['filepdf']); ?>
+                    <?php } ?>
+                    <!-- <object data="test.pdf" type="application/pdf" width="100%" height="700">
+                            alt : <a href="test.pdf">test.pdf</a>
+                        </object> -->
                 </div>
             </div>
         </div>

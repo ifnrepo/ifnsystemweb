@@ -111,34 +111,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
               $jmusd = 0;
               $no = 0;
               if ($data != null) : foreach ($data->result_array() as $detail) {
-                  $pengali = $detail['mtuang'] == 2 ? $detail['kurs_usd'] : ($detail['mtuang'] == 3 ? $detail['kurs_yen'] : 1);
-                  // $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $detail['kurs_yen']) / $detail['kurs_usd'] : 1);
 
+                  $kurs_data = getkurssekarang($detail['tgl_aju'])->row();
+                  $kurs_usd = (empty($detail['kurs_usd']) || $detail['kurs_usd'] == 0)
+                    ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
+                    : $detail['kurs_usd'];
+
+                  $kurs_yen = (empty($detail['kurs_yen']) || $detail['kurs_yen'] == 0)
+                    ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
+                    : $detail['kurs_yen'];
+
+
+                  $pengali = $detail['mtuang'] == 2 ? $kurs_usd : ($detail['mtuang'] == 3 ? $kurs_yen : 1);
                   $kondisi_idr = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
-                    ? $pengali * (!empty($detail['nilai_serah']) ? $detail['nilai_serah'] : $detail['nilai_pab'])
+                    ? $pengali * $detail['nilai_serah']
                     : $pengali * $detail['nilai_pab'];
 
 
                   $nilai = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
-                    ? (!empty($detail['nilai_serah']) ? $detail['nilai_serah'] : $detail['nilai_pab'])
+                    ? $detail['nilai_serah']
                     : $detail['nilai_pab'];
 
-                  $xpengali = $detail['mtuang'] == 2
+                  $xpengali = ($detail['mtuang'] == 2)
                     ? $nilai
-                    : ($detail['mtuang'] == 3
-                      ? ($nilai * $detail['kurs_yen']) / $detail['kurs_usd']
-                      : 1);
+                    : (($detail['mtuang'] == 3)
+                      ? ($nilai * $kurs_yen) / $kurs_usd
+                      : ($nilai / 1))
 
-                  // $kondisi_usd = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
-                  //   ? $xpengali * (!empty($detail['nilai_serah']) ? $detail['nilai_serah'] : $detail['nilai_pab'])
-                  //   : $xpengali * $detail['nilai_pab'];
-                  $kondisi_usd = $xpengali;
               ?>
-                  <!-- <?php
-                        echo "kurs_usd: {$detail['kurs_usd']}<br>";
-                        echo "nilai_serah: {$detail['nilai_serah']}<br>";
-                        echo "hasil hitung: " . ($detail['kurs_usd'] * $detail['nilai_serah']);
-                        ?> -->
 
 
                   <tr>
@@ -161,14 +161,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
                     <td class="text-right font-kecil"><?= rupiah($kondisi_idr, 2); ?></td>
-                    <td class="text-right font-kecil"><?= rupiah($kondisi_usd, 2); ?></td>
+                    <td class="text-right font-kecil"><?= rupiah($xpengali, 2); ?></td>
                     <!-- <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab'] * $pengali, 2); ?></td>
                     <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab'] * $xpengali, 2); ?></td> -->
                   </tr>
               <?php $cntbrg++;
                   $jmpcs += $detail['pcs'];
                   $jmkgs += $detail['kgs'];
-                  $jmidr += $detail['nilai_pab'] * $pengali;
+                  $jmidr += $kondisi_idr;
                   $jmusd += $xpengali;
                 }
               endif; ?>
