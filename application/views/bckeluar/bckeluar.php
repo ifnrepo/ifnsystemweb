@@ -129,10 +129,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       ? ($nilai * $detail['kurs_yen']) / $detail['kurs_usd']
                       : 1);
 
-                  // $kondisi_usd = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
-                  //   ? $xpengali * (!empty($detail['nilai_serah']) ? $detail['nilai_serah'] : $detail['nilai_pab'])
-                  //   : $xpengali * $detail['nilai_pab'];
-                  $kondisi_usd = $xpengali;
+                  $kondisi_usd = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
+                    ? $xpengali * (!empty($detail['nilai_serah']) ? $detail['nilai_serah'] : $detail['nilai_pab'])
+                    : $xpengali * $detail['nilai_pab'];
+                  // $kondisi_usd = $xpengali;
               ?>
                   <!-- <?php
                         echo "kurs_usd: {$detail['kurs_usd']}<br>";
