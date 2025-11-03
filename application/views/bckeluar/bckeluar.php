@@ -111,8 +111,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
               $jmusd = 0;
               $no = 0;
               if ($data != null) : foreach ($data->result_array() as $detail) {
-
-
                   $kurs_data = getkurssekarang($detail['tgl_aju'])->row();
                   $kurs_usd = (empty($detail['kurs_usd']) || $detail['kurs_usd'] == 0)
                     ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
@@ -133,7 +131,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     ? $detail['nilai_serah']
                     : $detail['nilai_pab'];
 
-                  $xpengali = $detail['mtuang'] == 2
+                  $xpengali = ($detail['mtuang'] == 2)
                     ? $nilai
                     : ($detail['mtuang'] == 3
                       ? ($nilai * $kurs_yen) / $kurs_usd
@@ -145,11 +143,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                   // $kondisi_usd = $xpengali;
               ?>
-                  <!-- <?php
-                        echo "kurs_usd: {$detail['kurs_usd']}<br>";
-                        echo "nilai_serah: {$detail['nilai_serah']}<br>";
-                        echo "hasil hitung: " . ($detail['kurs_usd'] * $detail['nilai_serah']);
-                        ?> -->
 
 
                   <tr>
@@ -172,14 +165,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
                     <td class="text-right font-kecil"><?= rupiah($kondisi_idr, 2); ?></td>
-                    <td class="text-right font-kecil"><?= rupiah($kondisi_usd, 2); ?></td>
+                    <td class="text-right font-kecil"><?= rupiah($xpengali, 2); ?></td>
                     <!-- <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab'] * $pengali, 2); ?></td>
                     <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab'] * $xpengali, 2); ?></td> -->
                   </tr>
               <?php $cntbrg++;
                   $jmpcs += $detail['pcs'];
                   $jmkgs += $detail['kgs'];
-                  $jmidr += $detail['nilai_pab'] * $pengali;
+                  $jmidr += $kondisi_idr;
                   $jmusd += $xpengali;
                 }
               endif; ?>
