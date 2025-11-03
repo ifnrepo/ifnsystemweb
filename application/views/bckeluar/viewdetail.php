@@ -331,7 +331,7 @@
                 <!-- <hr class="p-1 m-1"> -->
                 <div class="card-body pt-1 pb-1" style="overflow: auto;">
                     <?php if (!empty(trim($detail['filepdf']))) { ?>
-                        <iframe src="<?= LOK_UPLOAD_DOK_BC . trim($header['filepdf']); ?>" style="width:100%;height:700px;" alt="Tidak ditemukan"></iframe>
+                        <iframe src="<?= LOK_UPLOAD_DOK_BC . trim($detail['filepdf']); ?>" style="width:100%;height:700px;" alt="Tidak ditemukan"></iframe>
                     <?php } else { ?>
                         <div style="width:100%;height:700px;" class="text-center font-bold m-0">
                             <h3>BELUM ADA DOKUMEN</h3>
