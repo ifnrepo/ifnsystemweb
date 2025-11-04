@@ -210,7 +210,7 @@
                                                     <span class="input-icon-addon" style="border-right: 2px solid gray;">
                                                         <div class="text-black font-kecil" role="status">Usd</div>
                                                     </span>
-                                                    <?php $nilaiusd = ($detail['nilai_pab'] * $dx) / $detail['kurs_usd']; ?>
+                                                    <?php $kursusd = $detail['kurs_usd']==0 ? 1 : $detail['kurs_usd']; $nilaiusd = ($detail['nilai_pab'] * $dx) / $kursusd; ?>
                                                     <input type="text" value="<?= rupiah($nilaiusd, 2); ?>" class="form-control font-kecil btn-sm btn-flat text-right" placeholder="Loading…" style="padding-left: 45px !important;">
                                                 </div>
                                             </div>
