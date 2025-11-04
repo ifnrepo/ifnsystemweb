@@ -1136,4 +1136,7 @@ class Helper_model extends CI_Model
         $this->db->where_in('tb_detail.id_akb',$idheader);
         return $this->db->get();
     }
+    public function getnomorbcbykontrak($id){
+        return $this->db->get_where('tb_header',['trim(keterangan)' => $id, 'jns_bc'=>261]);
+    }
 }

@@ -1557,7 +1557,7 @@ class Ib extends CI_Controller
             "tanggalAju" => $data['tgl_aju'],
             "seri" => 1,
             "disclaimer" => "0",
-            "tanggalTtd" => $dataexbc['tgl_aju'],
+            "tanggalTtd" => $data['tgl_aju'],
             "uangMuka" => 0,
             "vd" => 0
         ];
@@ -1567,13 +1567,21 @@ class Ib extends CI_Controller
             $alamatifn = "JL RAYA BANDUNG-GARUT KM. 25, CANGKUANG, RANCAEKEK, KAB. BANDUNG, JAWA BARAT, 40394";
             $kodeentitas = $ke == 1 ? "3" : (($ke == 2) ? "7" : "9");
             if ($ke == 3) {
-                $nomoridentitas = '0' . trim(datadepartemen($data['dept_id'], 'npwp')) . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', trim(datadepartemen($data['dept_id'], 'npwp')))))) + 1));
+                if($data['dept_id']=='SU'){
+                    $nomoridentitas = '0' . trim(datasupplier($data['id_pemasok'], 'npwp')) . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', trim(datasupplier($data['id_supplier'], 'npwp')))))) + 1));
+                }else{
+                    $nomoridentitas = '0' . trim(datadepartemen($data['dept_id'], 'npwp')) . str_repeat('0', 22 - (strlen(trim(str_replace('-', '', str_replace('.', '', trim(datadepartemen($data['dept_id'], 'npwp')))))) + 1));
+                }
             } else {
                 $nomoridentitas = "0010017176057000000000";
             }
-
-            $namaidentitas = $ke == 1 ? "PT. INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "PT. INDONEPTUNE NET MANUFACTURING" : datadepartemen($data['dept_id'], 'nama_subkon'));
-            $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datadepartemen($data['dept_id'], 'alamat_subkon'));
+            if($ke==3 && $data['dept_id']=='SU'){
+                $namaidentitas = datasupplier($data['id_pemasok'], 'nama_supplier');
+                $alamat = datasupplier($data['id_pemasok'], 'alamat');
+            }else{
+                $namaidentitas = $ke == 1 ? "PT. INDONEPTUNE NET MANUFACTURING" : (($ke == 2) ? "PT. INDONEPTUNE NET MANUFACTURING" : datadepartemen($data['dept_id'], 'nama_subkon'));
+                $alamat = $ke == 1 ? $alamatifn : (($ke == 2) ? $alamatifn : datadepartemen($data['dept_id'], 'alamat_subkon'));
+            }
             $nibidentitas = $ke == 1 ? "9120011042693" : "";
             $kodejeniden = "6";
             $kodestatus = $ke == 3 ? "10" : "5";

@@ -90,7 +90,7 @@ class inv_model extends CI_Model
                         SUM(kgsin) AS kgsin,SUM(pcsout) AS pcsout,SUM(kgsout) AS kgsout,idu,user_verif,tgl_verif,
                         SUM(SUM(kgs)+SUM(kgsin)-SUM(kgsout)) OVER (PARTITION BY id_barang) AS totkgs,SUM(SUM(pcs)+SUM(pcsin)-SUM(pcsout)) OVER (PARTITION BY id_barang) AS totpcs,safety_stock,nobale,nomor_bc,id_bom,nomor_kont,exnet
                         FROM (";
-            $tambah2 = ") pt GROUP BY po,item,dis,id_barang,nobontr,insno,exnet" . $nobalefiel . " ORDER BY nama_barang";
+            $tambah2 = ") pt GROUP BY po,item,dis,id_barang,nobontr,insno,exnet" . $nobalefiel . ",nomor_bc ORDER BY nama_barang";
             $tambah2 .= $dpt == 'GS' ? '' : ",spek desc,nobontr,insno";
             $hasil = $this->db->query($tambah1 . "SELECT 'SALDO' AS mode,'SA' AS kode_dok,stokdept.id,NULL AS id_header,stokdept.id_barang,stokdept.po,stokdept.item,
                                         stokdept.dis, stokdept.insno," . $noeb1 . ",stokdept.harga,'SALDO' AS nomor_dok,'" . $tglx . "' AS tgl,

@@ -1245,7 +1245,7 @@ class Kontrak extends CI_Controller
                 $dept = 'AM';
                 break;
             default:
-                # code...
+                $dept = '';
                 break;
         }
         $data = [
