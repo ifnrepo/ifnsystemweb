@@ -61,11 +61,15 @@
                                 Nama Pengirim : <?= $datheader['namasupplier']; ?><br>
                                 Alamat Pengirim : <?= $datheader['alamat']; ?></br>
                                 NPWP : <?= $datheader['npwp']; ?>
-                            <?php } else { ?>
+                            <?php } else { if($datheader['id_pemasok']!=null){ ?>
+                                Nama Rekanan : <?= datasupplier($datheader['id_pemasok'], 'nama_supplier'); ?><br>
+                                Alamat : <?= datasupplier($datheader['id_pemasok'], 'alamat'); ?></br>
+                                NPWP : <?= datasupplier($datheader['id_pemasok'], 'npwp'); ?>
+                            <?php }else{ ?>
                                 Nama Subkontrak : <?= datadepartemen($datheader['dept_id'], 'nama_subkon'); ?><br>
                                 Alamat : <?= datadepartemen($datheader['dept_id'], 'alamat_subkon'); ?></br>
                                 NPWP : <?= datadepartemen($datheader['dept_id'], 'npwp'); ?>
-                            <?php } ?>
+                            <?php } } ?>
                             <button href="#" id="kirimkeceisa" data-href="<?= base_url() . 'ib/kirimdatakeceisa' . $datheader['jns_bc'] . '/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengirim data ini ke CIESA 40" style="border-right: 1px solid white;" class="btn btn-sm btn-yellow hilang"><i class="fa fa-cloud mr-1"></i>Kirim H2H</button>
                         </div>
                         <div style="margin: auto 0;" class="font-bold text-pink" id="cirimakloon"><?php if($datheader['bc_makloon']==1){ echo 'MAKLOON'; } ?></div>

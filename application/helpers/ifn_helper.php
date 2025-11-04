@@ -1016,3 +1016,15 @@ function jmlkgs261($id){
     }
     return $datahasil;
 }
+function getnomorbcbykontrak($kontrak){
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->getnomorbcbykontrak($kontrak);
+    if(count($hasil->result())==0){
+        // $hasil['jmlkgs'] = 0;
+        $datahasil = 'Tidak ditemukan';
+    }else{
+        $hasil = $hasil->row_array();
+        $datahasil = $hasil['nomor_bc'];
+    }
+    return $datahasil;
+}
