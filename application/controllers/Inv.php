@@ -578,7 +578,8 @@ class Inv extends CI_Controller
             'id_barang' => $split[4],
             'nobontr' => decrypto($split[5]),
             'insno' => decrypto($split[6]),
-            'nobale' => decrypto($split[7])
+            'nobale' => decrypto($split[7]),
+            'nomor_bc' => decrypto($split[8])
         ];
         $array2 = [
             'id_barang' => $split[4],
