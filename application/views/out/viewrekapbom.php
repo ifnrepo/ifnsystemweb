@@ -36,7 +36,7 @@
                     ?>
                         <tr class="font-kecil">
                             <td class="line-12 <?= $cekkurang; ?><?= $cekkurangpcs; ?>"><?= $namabarang.'<br><span class="text-success">'.$detail['insno'].$detail['nobontr'].'</span>' ?></td>
-                            <td><?= $sku ?></td>
+                            <td class="line-12"><?= $sku ?><br><span class="text-pink"><?= $detail['nomor_bc'] ?></span></td>
                             <td><?= $detail['kode']; ?></td>
                             <td class='text-center'><?= $detail['nobale']; ?></td>
                             <td class='text-center text-success font-bold'><?= $xnet; ?></td>

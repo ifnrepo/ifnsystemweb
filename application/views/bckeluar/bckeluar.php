@@ -133,11 +133,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     ? $detail['nilai_serah']
                     : $detail['nilai_pab'];
 
-                  $xpengali = ($detail['mtuang'] == 2)
+                  
+                  $xpengali = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
+                  ? $nilai/$kurs_usd
+                  : (($detail['mtuang'] == 2)
                     ? $nilai
                     : (($detail['mtuang'] == 3)
                       ? ($nilai * $kurs_yen) / $kurs_usd
-                      : ($nilai / $kurs_usd))
+                      : ($nilai / $kurs_usd)))
 
               ?>
 

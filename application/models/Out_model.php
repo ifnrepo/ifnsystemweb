@@ -553,7 +553,7 @@ class Out_model extends CI_Model{
                     // Untuk pengeluaran selain dari departemen GS
                     // if ($datdet['id_barang'] == 40396) continue; // Spek KARUNG di skip
                     $cekbckeluar = $this->db->get_where('tb_header',['id' => $id])->row_array();
-                    $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => $cekbckeluar['keterangan'],'jns_bc' => '261'])->row_array();
+                    $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($cekbckeluar['keterangan']),'jns_bc' => '261'])->row_array();
                     $kondisistok = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
@@ -595,6 +595,8 @@ class Out_model extends CI_Model{
                             $this->db->set('kgs_akhir','(kgs_awal + kgs_masuk + kgs_adj - kgs_keluar)',false);
                             $this->db->where('id',$detil['id']);
                             $this->db->update('stokdept');
+
+                            // $this-
                         }else{
                             $iniquery = true;
                             $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
@@ -675,15 +677,31 @@ class Out_model extends CI_Model{
                     'jumlah_barang' => $jumlah
                 ];
             }else{
-                $data = [
-                    'ok_tuju' => 1,
-                    'user_tuju' => $this->session->userdata('id'),
-                    'tgl_tuju' => date('Y-m-d H:i:s'),
-                    'data_ok' => 1,
-                    'user_ok' => $this->session->userdata('id'),
-                    'tgl_ok' => date('Y-m-d H:i:s'),
-                    'jumlah_barang' => $jumlah
-                ];
+                // Jika dari Subkontrak
+                if(in_array($this->session->userdata('deptsekarang'),daftardeptsubkon())){
+                    $nomorbcc = trim($nomorbc['nomor_bc']);
+                    $data = [
+                        'ok_tuju' => 1,
+                        'user_tuju' => $this->session->userdata('id'),
+                        'tgl_tuju' => date('Y-m-d H:i:s'),
+                        'data_ok' => 1,
+                        'user_ok' => $this->session->userdata('id'),
+                        'tgl_ok' => date('Y-m-d H:i:s'),
+                        'jumlah_barang' => $jumlah,
+                        'exnomor_bc' => $nomorbc['nomor_bc'],
+                        'extgl_bc' => $nomorbc['tgl_bc']
+                    ];
+                }else{
+                    $data = [
+                        'ok_tuju' => 1,
+                        'user_tuju' => $this->session->userdata('id'),
+                        'tgl_tuju' => date('Y-m-d H:i:s'),
+                        'data_ok' => 1,
+                        'user_ok' => $this->session->userdata('id'),
+                        'tgl_ok' => date('Y-m-d H:i:s'),
+                        'jumlah_barang' => $jumlah
+                    ];
+                }
             }
             $this->db->where('id',$id);
             $this->db->update('tb_header',$data);
@@ -883,15 +901,15 @@ class Out_model extends CI_Model{
     }
     public function viewrekapbom($id){
         $periode = tambahnol($this->session->userdata('bl')).$this->session->userdata('th');
-        $this->db->select('tb_detailgen.*,sum(pcs) as totpcs,sum(kgs) as totkgs,barang.nama_barang,satuan.kodesatuan as kode');
-        $this->db->select('(SELECT sum(kgs_akhir) as kgs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as kgsstok');
-        $this->db->select('(SELECT sum(pcs_akhir) as pcs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as pcsstok');
+        $this->db->select('tb_detailgen.*,sum(pcs) as totpcs,sum(kgs) as totkgs,barang.nama_barang,satuan.kodesatuan as kode,tb_header.exnomor_bc as nomor_bc');
+        $this->db->select('(SELECT sum(kgs_akhir) as kgs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND trim(nomor_bc) = trim(tb_header.exnomor_bc) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as kgsstok');
+        $this->db->select('(SELECT sum(pcs_akhir) as pcs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND trim(nomor_bc) = trim(tb_header.exnomor_bc) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as pcsstok');
         $this->db->from('tb_detailgen');
         $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
         $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
         $this->db->where('tb_detailgen.id_header',$id);
-        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln,nobale,exnet,stok');
+        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln,nobale,exnet,stok,nomor_bc');
         $this->db->order_by('po,item,dis,nama_barang,id_barang');
         return $this->db->get();
     }

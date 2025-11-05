@@ -227,7 +227,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $cntbrg += 1;
                   $jmkgs += $sakkg;
                   $jmpcs += $sak;
-                  $isi = 'OME-' . trim(encrypto($det['po'])) . '-' . trim(encrypto($det['item'])) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-' . trim(encrypto($det['nobale'])) . '-';
+                  $isi = 'OME-' . trim(encrypto($det['po'])) . '-' . trim(encrypto($det['item'])) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-' . trim(encrypto($det['nobale'])) . '-'. trim(encrypto($det['nombc'])) . '-';
                   // $isi = 'XXX';
                   $insno = $this->session->userdata('currdept') == 'GS' ? $det['insno'] : $det['insno'];
                   $nobontr = $this->session->userdata('currdept') == 'GS' ? $det['nobontr'] : $det['nobontr'];
@@ -255,7 +255,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td style="border-bottom: red;"><?= $nobontr; ?></td>
                     <td style="border-bottom: red;"><?= $insno; ?></td>
                     <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
-                    <td style="border-bottom: red;"><?= $det['nomor_bc']; ?></td>
+                    <td style="border-bottom: red;"><?= $det['nombc']; ?></td>
                     <?php if ($this->session->userdata('currdept') == 'GF') : ?>
                       <td style="border-bottom: red;"><?= $det['nobale']; ?></td>
                     <?php endif; ?>
