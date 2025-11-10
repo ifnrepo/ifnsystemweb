@@ -43,7 +43,7 @@
                             <?php $hilang = ($datheader['send_ceisa'] == 0  || $datheader['nomor_sppb'] != '') ? "hilang " : ""; ?>
                             <?php $hilang2 = $datheader['send_ceisa'] == 1 ? "hilang " : ""; ?>
                             <?php $hilang3 = $datheader['nomor_sppb'] == '' ? "hilang " : ""; ?>
-                            <?php $nonaktif = $datheader['send_ceisa'] == 1 ? "readonly " : ""; ?>
+                            <?php $nonaktif = $datheader['send_ceisa'] == 1 ? "disabled " : ""; ?>
                             <?php $hilangbc30 = $datheader['jns_bc'] == 30 ? "hilang " : ""; ?>
                             <?php $hilangbc40 = $datheader['jns_bc'] == 40 ? "hilang " : ""; ?>
                             <?php $hilangbc262 = $datheader['jns_bc'] == 262 ? "hilang " : ""; ?>
@@ -164,6 +164,28 @@
                                                 </div>
                                             </div>
                                         </div>
+                                    </div>
+                                    <!-- Surat Pengantar  -->
+                                    <div class="<?= $hilangbc261 ?> <?= $hilangbc262 ?> <?= $hilangbc40 ?>">
+                                    <div class="text-center bg-primary-lt mb-1 font-bold">Surat Pengantar</div>
+                                    <div class="mb-1 row">
+                                        <div class="col">
+                                            <div class="row">
+                                                <label class="col-3 col-form-label font-kecil mx-2">No</label>
+                                                <div class="col">
+                                                    <input type="text" class="form-control font-kecil btn-flat" id="nomor_sp" name="nomor_sp" value="<?= $datheader['nomor_sp']; ?>" aria-describedby="emailHelp" placeholder="Nomor Surat Pengantar" <?= $nonaktif; ?>>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col">
+                                            <div class="row">
+                                                <label class="col-3 col-form-label font-kecil">Tgl</label>
+                                                <div class="col">
+                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_sp" name="tgl_sp" value="<?= tglmysql($datheader['tgl_sp']); ?>" aria-describedby="emailHelp" placeholder="Tgl Surat Pengantar" <?= $nonaktif; ?>>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     </div>
                                     <!-- Dok Lainnya  -->
                                     <div class="text-center bg-primary-lt mb-1 font-bold">Dokumen Lainnya</div>
@@ -629,7 +651,8 @@
                         Jumlah Kgs : <span id="jumlahkgsdetailbarang"></span>
                     </span>
                     <span>
-                        <a id="lampirandankonversi" href="<?= base_url() . 'akb/excellampiran261/' . $datheader['id'] . '/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Lampiran dan Konversi</a>
+                        <?php $tujuanlampiran = $datheader['jns_bc']==261 ? 'excellampiran261' : 'excellampiran25'; ?>
+                        <a id="lampirandankonversi" href="<?= base_url() . 'akb/'.$tujuanlampiran.'/' . $datheader['id'] . '/1'; ?>" class="btn btn-sm btn-success"><i class="fa fa-file-excel-o mr-1"></i> Lampiran dan Konversi</a>
                         <a id="perhitunganjaminan" href="<?= base_url() . 'akb/exceljaminan261/' . $datheader['id'] . '/1'; ?>" class="btn btn-sm btn-warning text-black"><i class="fa fa-file-excel-o mr-1"></i> Perhitungan Jaminan</a>
                         <a id="lembarperijinan" href="<?= base_url() . 'akb/uploadijin/' . $datheader['id'] . '/1'; ?>" class="btn btn-sm btn-teal"><i class="fa fa-file-excel-o mr-1"></i> Perijinan</a>
                         <a href="<?= base_url() . 'akb/rekapnobontr/' . $datheader['id'] . '/1'; ?>" class="btn btn-sm btn-info"><i class="fa fa-file-excel-o mr-1"></i> Rekap IB</a>
@@ -713,15 +736,15 @@
                                 <?php if ($datheader['jns_bc'] == '25' || ($datheader['jns_bc'] == '41' && $datheader['dept_id']!='FG') && $datheader['bc_makloon']==0) : ?>
                                     <tr class="bg-primary-lt">
                                         <td colspan="7" class="text-black text-right font-bold">Spesial Diskon</td>
-                                        <td class="text-black text-right font-bold"><?= rupiah($jmspdiskon, 2); ?></td>
+                                        <td class="text-black text-right font-bold"><?= rupiah(floor($jmspdiskon), 2); ?></td>
                                     </tr>
                                     <tr class="bg-primary-lt">
                                         <td colspan="7" class="text-black text-right font-bold">Cash Diskon</td>
-                                        <td class="text-black text-right font-bold"><?= rupiah(round($jmcashdiskon, 0), 2); ?></td>
+                                        <td class="text-black text-right font-bold"><?= rupiah(floor($jmcashdiskon), 2); ?></td>
                                     </tr>
                                     <tr class="bg-primary-lt">
                                         <td colspan="7" class="text-black text-right font-bold">Nilai Penyerahan</td>
-                                        <td class="text-black text-right font-bold"><?= rupiah($sumdetail2, 2); ?></td>
+                                        <td class="text-black text-right font-bold"><?= rupiah(ceil($sumdetail2), 2); ?></td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>

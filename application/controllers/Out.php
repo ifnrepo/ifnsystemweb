@@ -478,7 +478,10 @@ class Out extends CI_Controller {
     public function simpanout2(){
         $data = [
             'id' => $_POST['id'],
-            'tgl_sj' => tglmysql($_POST['tglib'])
+            'tgl_sj' => tglmysql($_POST['tglib']),
+            'nomor_sj' => trim($_POST['nomsj']),
+            'tgl_sp' => tglmysql($_POST['tglsp']),
+            'nomor_sp' => trim($_POST['nomsp'])
         ];
         $hasil = $this->out_model->simpanout2($data);
         echo $hasil;

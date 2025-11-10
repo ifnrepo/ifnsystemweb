@@ -1215,6 +1215,18 @@ class Akb_model extends CI_Model
         $this->db->order_by('nama_barang,id_barang,nobontr');
         return $this->db->get();
     }
+    public function excellampiran25($id){
+        $this->db->select("tb_detail.*,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx,tb_header.nomor_inv");
+        $this->db->from('tb_detail');
+        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
+        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+        $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+        $this->db->join('tb_po g', 'g.po = tb_detail.po AND g.item = tb_detail.item AND g.dis = tb_detail.dis', 'left');
+        $this->db->where('tb_detail.id_header', $id);
+        // $this->db->limit(1,0);
+        $this->db->order_by('urut_akb,seri_barang');
+        return $this->db->get();
+    }
     public function simpanbom($data, $id)
     {
         $header = $this->db->get_where('tb_header', ['id' => $id])->row_array();

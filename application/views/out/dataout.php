@@ -51,7 +51,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <h4 class="mb-0 font-kecil">Catatan</h4>
                   <input type="text" id="catat" class="hilang" value="<?= $data['keterangan']; ?>">
                   <span class="font-bold" style="font-size:15px;">
-                    <?= $data['keterangan']; ?> - BC ASAL <?= getnomorbcbykontrak($data['keterangan']) ?>
+                    <?php if(in_array($data['dept_id'],daftardeptsubkon())){ ?>
+                      <?= $data['keterangan']; ?> - BC ASAL <?= getnomorbcbykontrak($data['keterangan']) ?>
+                    <?php }else{ ?>
+                      <?= $data['keterangan']; ?>
+                    <?php } ?>
                     <a href="<?= base_url() . 'out/edit_tgl'; ?>" title="Edit tanggal" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
                       <i class="fa fa-edit"></i>
                     </a>

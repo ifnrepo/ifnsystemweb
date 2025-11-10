@@ -114,10 +114,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $usersetuju = substr(datauser($datdet['user_valid'], 'name'), 0, 35);
                   $tglsetuju = tglmysql2($datdet['tgl_valid']);
                 }
+                $nomorbce = $datdet['nomor_bc'] != '' ? '<span class="badge badge-outline text-pink"> BC '.$datdet['nomor_bc'] .'</span>' : '';
               ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
-                  <td><a href='<?= base_url() . 'pb/viewdetailpb/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a></td>
+                  <td class="line-12"><a href='<?= base_url() . 'pb/viewdetailpb/' . $datdet['id'] ?>' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'> <?= $datdet['nomor_dok'] ?></a><br><?= $nomorbce ?></td>
                   <td><?= $jmlrec; ?></td>
                   <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span class='text-teal' style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
                   <td style="line-height: 14px;"><?= $usersetuju . "<br><span class='text-teal' style='font-size: 10px;'>" . $tglsetuju . "</span>" ?></td>

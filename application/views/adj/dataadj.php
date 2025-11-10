@@ -41,15 +41,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" id="catat" class="hilang" value="<?= $data['keterangan']; ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <?= $data['keterangan']; ?>
-                    <a href="<?= base_url() . 'adj/edittgl'; ?>" title="Edit tanggal" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                    <a href="<?= base_url() . 'adj/edittgl'; ?>" title="Edit Catatan" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
                       <i class="fa fa-edit"></i>
                     </a>
                     <input type="hidden" id="ketbon" value="<?= $data['keterangan']; ?>">
                   </span>
                 </div>
                 <div class="col-3">
-
+                  <?php if(in_array($data['dept_id'],daftardeptsubkon())){ ?>
+                  <h4 class="mb-0 font-kecil">Nomor BC</h4>
+                  <span class="font-bold" style="font-size:15px;">
+                    <input type="text" id="nomorbcnya" value="<?= $data['nomor_bc']; ?>" readonly>
+                    <a href="<?= base_url() . 'adj/edittgl'; ?>" title="Edit Nomor BC" id="nomorbc" name="nomorbc" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                      <i class="fa fa-edit"></i>
+                    </a>
+                  </span>
                 </div>
+                <?php } ?>
               </div>
               <!-- <div class="hr m-1"></div> -->
             </div>

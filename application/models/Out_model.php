@@ -9,7 +9,7 @@ class Out_model extends CI_Model{
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
         ];
-        if($kode['dept_id']!='GF' && $kode['dept_tuju']!='CU'){
+        if(($kode['dept_id']!='GF' && $kode['dept_tuju']!='CU') && ($kode['dept_id']!='FG' && $kode['dept_tuju']!='DL')){
             $arrkondisi['left(nomor_dok,3) != '] = 'IFN';
         }
         if($kode['filterbon']==1){
@@ -900,10 +900,16 @@ class Out_model extends CI_Model{
         return $hasil;
     }
     public function viewrekapbom($id){
+        $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
+        $exnombc = "";
+        if(in_array($header['dept_id'],daftardeptsubkon())){
+            $exnomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($header['keterangan']),'jns_bc' => 261,'trim(keterangan) != ' => ''])->row_array();
+            $exnombc = trim($exnomorbc['nomor_bc']);
+        }
         $periode = tambahnol($this->session->userdata('bl')).$this->session->userdata('th');
-        $this->db->select('tb_detailgen.*,sum(pcs) as totpcs,sum(kgs) as totkgs,barang.nama_barang,satuan.kodesatuan as kode,tb_header.exnomor_bc as nomor_bc');
-        $this->db->select('(SELECT sum(kgs_akhir) as kgs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND trim(nomor_bc) = trim(tb_header.exnomor_bc) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as kgsstok');
-        $this->db->select('(SELECT sum(pcs_akhir) as pcs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND trim(nomor_bc) = trim(tb_header.exnomor_bc) AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as pcsstok');
+        $this->db->select('tb_detailgen.*,sum(pcs) as totpcs,sum(kgs) as totkgs,barang.nama_barang,satuan.kodesatuan as kode,"'.$exnombc.'" as nomor_bc,0 as kgsstok,0 as pcsstok,tb_header.dept_id,tb_header.dept_tuju,tb_header.nomor_bc as nomor_bcx');
+        // $this->db->select('(SELECT sum(kgs_akhir) as kgs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND trim(nomor_bc) = "'.$exnombc.'" AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as kgsstok');
+        // $this->db->select('(SELECT sum(pcs_akhir) as pcs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND trim(nomor_bc) = "'.$exnombc.'" AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as pcsstok');
         $this->db->from('tb_detailgen');
         $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
@@ -919,6 +925,9 @@ class Out_model extends CI_Model{
             'user_valid' => $this->session->userdata('id'),
             'tgl_valid' => date('Y-m-d H:i:s'),
             'tgl_sj' => $arr['tgl_sj'], 
+            'nomor_sj' => $arr['nomor_sj'], 
+            'tgl_sp' => $arr['tgl_sp'], 
+            'nomor_sp' => $arr['nomor_sp'], 
             'id' => $arr['id'],
         ];
         $this->db->where('id',$arr['id']);

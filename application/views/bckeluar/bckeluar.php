@@ -143,13 +143,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       : ($nilai / $kurs_usd)))
 
               ?>
-
-
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bckeluar/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
-                    <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_sj']; ?><br><?= $detail['tgl_sj']; ?></td>
-                    <td class="text-left line-12">
+                    <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_sp']; ?><br><?= $detail['tgl_sp']; ?></td>
+                    <td class="text-left line-13">
                       <?php
                       if (!empty($detail['nama_customer'])) {
                         echo ucwords(strtolower(trim($detail['nama_customer'])));
@@ -157,12 +155,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           echo ' - ' . ucwords(strtolower($detail['port']));
                         }
                       } else {
-                        echo ucwords(strtolower(trim($detail['departemen'])));
+                        echo ucwords(strtolower(trim($detail['departemen'])));                  
                       }
                       ?>
                     </td>
-
-                    <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
+                    <?php $spanmakloon = $detail['bc_makloon']==1 ? '<span title="Makloon" class="badge badge-outline text-teal ml-1">M</span>' : '' ?>
+                    <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span><?= $spanmakloon ?></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
                     <td class="text-right font-kecil"><?= rupiah($kondisi_idr, 2); ?></td>
                     <td class="text-right font-kecil"><?= rupiah($xpengali, 2); ?></td>
