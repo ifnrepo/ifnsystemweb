@@ -25,14 +25,18 @@
                         $namabarang = trim($detail['po'])=='' ? $detail['nama_barang'] : spekpo($detail['po'],$detail['item'],$detail['dis']);
                         $totpcs += $detail['totpcs'];
                         $totkgs += $detail['totkgs'];
+                        $xnet = $detail['exnet']==0 ? '' : 'Y';
+                        $periode = tambahnol($this->session->userdata('bl')).$this->session->userdata('th');
+                        $stokdept = getstokdeptbaru(dept: $detail['dept_id'],po: $detail['po'],item: $detail['item'],dis: $detail['dis'],insno: $detail['insno'],nobontr: $detail['nobontr'],nomor_bc: $detail['nomor_bc'],dln: $detail['dln'],id_barang: $detail['id_barang'],nobale: $detail['nobale'],exnet: $detail['exnet'],periode: $periode)->row_array();
+                        $kgsstok = $stokdept['kgsstok'];
+                        $pcsstok = $stokdept['pcsstok'];
                         if($sku=='P6974831'){
                             $cekkurang =  '';
                             $cekkurangpcs =  '';
                         }else{
-                            $cekkurang = $detail['totkgs'] > $detail['kgsstok'] ? ' text-danger' : '';
-                            $cekkurangpcs = $detail['totpcs'] > $detail['pcsstok'] ? ' text-danger' : '';
+                            $cekkurang = $detail['totkgs'] > $kgsstok ? ' text-danger' : '';
+                            $cekkurangpcs = $detail['totpcs'] > $pcsstok ? ' text-danger' : '';
                         }
-                        $xnet = $detail['exnet']==0 ? '' : 'Y';
                     ?>
                         <tr class="font-kecil">
                             <td class="line-12 <?= $cekkurang; ?><?= $cekkurangpcs; ?>"><?= $namabarang.'<br><span class="text-success">'.$detail['insno'].$detail['nobontr'].'</span>' ?></td>
@@ -42,8 +46,8 @@
                             <td class='text-center text-success font-bold'><?= $xnet; ?></td>
                             <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($detail['totpcs'],0); ?></td>
                             <td class="text-right <?= $cekkurang; ?>"><?= rupiah($detail['totkgs'],4); ?></td>
-                            <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($detail['pcsstok'],0); ?></td>
-                            <td class="text-right <?= $cekkurang; ?>"><?= rupiah($detail['kgsstok'],4); ?></td>
+                            <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($pcsstok,0); ?></td>
+                            <td class="text-right <?= $cekkurang; ?>"><?= rupiah($kgsstok,4); ?></td>
                         </tr>
                     <?php endforeach; ?>
                     <tr class="bg-info-lt">

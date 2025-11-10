@@ -2005,6 +2005,24 @@ class Ib extends CI_Controller
         $data['kontrak'] = $this->kontrakmodel->getdatakontrak40($kondisi);
         $this->load->view('akb/addkontrak', $data);
     }
+    public function addkontrak261($id, $dept)
+    {
+        $data['idheader'] = $id;
+        $data['kode'] = 0;
+        $kondisi = [
+            // 'dept_id' => 'DL',
+            'status' => 1,
+            'jnsbc' => 261,
+            'thkontrak' => '',
+            'datkecuali' => 1,
+            'nomorbpj != ' => '',
+            'nomor_ssb != ' => '',
+            'penjamin != ' => '',
+            'idheader' => $id
+        ];
+        $data['kontrak'] = $this->kontrakmodel->getdatakontrak40($kondisi);
+        $this->load->view('akb/addkontrak', $data);
+    }
     public function hapuskontrak($id)
     {
         $hasil = $this->ibmodel->hapuskontrak($id);

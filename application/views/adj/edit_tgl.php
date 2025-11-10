@@ -13,6 +13,12 @@
                     <textarea class="form-control font-kecil" id="catatan" name="catatan"></textarea>
                 </div>
             </div>
+            <div class="mb-1 row">
+                <label class="col-3 col-form-label">Nomor BC</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" name="nomor_bece" id="nomor_bece" placeholder="Nomor BC" value="">
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -41,7 +47,8 @@
             data: {
                 id: $("#id_header").val(),
                 tgl: $("#tgl").val(), 
-                ket: $("#catatan").val()
+                ket: $("#catatan").val(),
+                nombc: $("#nomor_bece").val()
             },
             success: function(data){
                 // alert('berhasil');

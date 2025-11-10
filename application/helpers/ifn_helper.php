@@ -787,6 +787,39 @@ function getstokbarangsaatini($data, $dept)
     $getkode = $CI->helpermodel->stoksaatini($data, $dept);
     return $getkode;
 }
+function getstokdeptbaru(
+    string $dept = '',
+    string $po = '',
+    string $item = '',
+    int $dis = 0,
+    string $insno = '',
+    string $nobontr='',
+    string $nomor_bc = '',
+    int $dln = 0,
+    int $id_barang = 0,
+    string $nobale = '',
+    int $exnet = 0,
+    string $periode = ''
+){
+    echo "<script>console.log('Masuk');</script>";
+    $data = [
+        'dept_id' => $dept,
+        'po' => trim($po),
+        'item' => trim($item),
+        'dis' => $dis,
+        'insno' => trim($insno),
+        'nobontr' => trim($nobontr),
+        'nomor_bc' => trim($nomor_bc),
+        'dln' => $dln,
+        'id_barang' => $id_barang,
+        'nobale' => trim($nobale),
+        'exnet' => $exnet,
+        'periode' => $periode
+    ];
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->getstokdept($data);
+    return $getkode;
+}
 function daftardeptsubkon()
 {
     // $xkode = trim($kode);

@@ -444,6 +444,9 @@ class Taskmodel extends CI_Model
                 'trim(nobale)' => trim($datdet['nobale']),
                 // 'exnet' => $datdet['exnet'],
             ];
+            if(in_array($header['dept_id'],daftardeptsubkon())){
+                $kondisi['trim(nomor_bc)'] = trim($header['nomor_bc']);
+            }
             $cekdetail = $this->db->get_where('stokdept',$kondisi);
             if($cekdetail->num_rows() > 0){
                 $datadetail = $cekdetail->row_array();
@@ -477,6 +480,9 @@ class Taskmodel extends CI_Model
                     'nobale' => trim($datdet['nobale']),
                     'exnet' => $datdet['exnet'],
                 ];
+                if(in_array($header['dept_id'],daftardeptsubkon())){
+                    $isi['nomor_bc'] = trim($header['nomor_bc']);
+                }
                 $this->db->insert('stokdept',$isi);
                 $cekid = $this->db->insert_id();
                 $this->helpermodel->isilog($this->db->last_query());

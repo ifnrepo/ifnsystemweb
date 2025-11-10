@@ -23,7 +23,6 @@ class bckeluarmodel extends CI_Model
             $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         }
 
-
         $this->db->join('ref_kemas', 'ref_kemas.kdkem = tb_header.kd_kemasan', 'left');
 
         $this->db->where("tgl_bc BETWEEN '" . tglmysql($tglawal) . "' AND '" . tglmysql($tglakhir) . "'");

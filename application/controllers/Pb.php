@@ -122,7 +122,8 @@ class Pb extends CI_Controller
         $data = [
             'tgl' => tglmysql($_POST['tgl']),
             'keterangan' => $_POST['ket'],
-            'id' => $_POST['id']
+            'id' => $_POST['id'],
+            'nomor_bc' => $_POST['nombc']
         ];
         $simpan = $this->pb_model->updatepb($data);
         echo $simpan;

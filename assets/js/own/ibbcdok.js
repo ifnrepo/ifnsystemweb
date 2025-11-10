@@ -164,9 +164,21 @@ $("#jns_bc").change(function () {
 });
 $("#nomor_sj").change(function () {
 	savedata("nomor_sj", $(this).val());
+	if ($("#jns_bc").val() == "261" || $("#jns_bc").val() == "262") {
+		savedata("nomor_sp", $(this).val());
+	}
 });
 $("#tgl_sj").change(function () {
 	savedata("tgl_sj", tglmysql($(this).val()));
+	if ($("#jns_bc").val() == "261" || $("#jns_bc").val() == "262") {
+		savedata("tgl_sp", tglmysql($(this).val()));
+	}
+});
+$("#nomor_sp").change(function () {
+	savedata("nomor_sp", $(this).val());
+});
+$("#tgl_sp").change(function () {
+	savedata("tgl_sp", tglmysql($(this).val()));
 });
 $("#mtuang").change(function () {
 	savedata("mtuang", $(this).val());
