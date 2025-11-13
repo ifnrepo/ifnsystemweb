@@ -57,6 +57,7 @@ class Barang extends CI_Controller
             'id_kategori' => $_POST['kat'],
             'safety_stock' => $_POST['safety'],
             'nohs' => $_POST['nohs'],
+            'imdo' => $_POST['imdo'],
             'dln' => $_POST['dln'],
             'noinv' => $_POST['noinv'],
             'act' => $_POST['act'],
@@ -131,6 +132,7 @@ class Barang extends CI_Controller
             'id_satuan' => $_POST['id_satuan'],
             'safety_stock' => $_POST['safety_stock'],
             'nohs' => $_POST['nohs'],
+            'imdo' => $_POST['imdo'],
             'dln' => $this->input->post('dln') ? 1 : 0,
             'noinv' => $this->input->post('noinv') ? 1 : 0,
             'act' => $this->input->post('act') ? 1 : 0,
@@ -219,6 +221,11 @@ class Barang extends CI_Controller
         echo 1;
     }
 
+    public function getdatabarangbaru(){
+        header('Content-Type: application/json');
+        echo $this->barangmodel->getdatabarangbaru();
+    }
+
     public function get_data_barang()
     {
         ob_start(); // buffer output
@@ -241,6 +248,12 @@ class Barang extends CI_Controller
             if ($this->session->userdata('viewalias') == 1) {
                 $row[] = $field->nama_alias;
             }
+            // if($field->imdo == 1){
+            //     $row[] = '<span class="badge badge-outline text-pink">IM</span>';
+            // }else{
+            //     $row[] = '<span class="badge badge-outline text-cyan">LO</span>';
+            // }
+            $row[] = $field->imdo;
             $row[] = $field->nama_kategori;
             $row[] = $field->kodesatuan;
             if ($field->dln == 1) {

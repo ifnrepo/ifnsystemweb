@@ -16,11 +16,11 @@
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;" >
-                    <?php $no=0; foreach ($kontrak->result_array() as $kontrak) { if($kontrak['xnetto'] <= $kontrak['saldo']): ?>
+                    <?php $no=0; foreach ($kontrak->result_array() as $kontrak) { ?>
                     <?php $jmlkgsreal = jmlkgs261($kontrak['id']); if($kontrak['kgs'] > $jmlkgsreal) : $no++;?>
                         <tr>
                             <td><?= $no; ?></td>
-                            <td class="font-bold line-12"><?= $kontrak['nomor']; ?><br><span class="text-pink font-10" style="font-style: normal !important"><?= $kontrak['proses'] ?></span><br><span class="text-teal font-10" style="font-style: normal !important"><?= $kontrak['dept_id'] ?></span></td>
+                            <td class="font-bold line-12"><?= $kontrak['nomor']; ?><br><span class="text-pink font-10" style="font-style: normal !important"><?= $kontrak['proses'] ?></span><br><span class="text-teal font-10" style="font-style: normal !important"><?= datasupplier($kontrak['id_supplier'],'nama_supplier') ?></span></td>
                             <td class="line-12 text-center"><?= tglmysql($kontrak['tgl_awal']); ?><br><?= tglmysql($kontrak['tgl_akhir']); ?></td>
                             <td class="text-right"><?= rupiah($kontrak['pcs'],0); ?></td>
                             <td class="text-right"><?= rupiah($kontrak['kgs'],2); ?></td>
@@ -29,7 +29,7 @@
                                 <a href="#" class="btn btn-sm btn-success font-kecil btn-flat m-0 p-0" style="padding: 3px 5px !important;" rel="<?= $kontrak['id']; ?>" id="tombolpilih">Pilih</a>
                             </td>
                         </tr>
-                    <?php endif; endif; } ?>
+                    <?php endif; } ?>
                 </tbody>
             </table>
             <hr class="small m-0">

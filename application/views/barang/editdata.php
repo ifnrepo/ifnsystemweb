@@ -123,6 +123,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     </select>
                                 </div>
                             </div>
+                            <div class=" mb-1 row">
+                                <label class="col-3 col-form-label required">Lokal / Impor</label>
+                                <div class="col">
+                                    <select class="form-select font-kecil" id="imdo" name="imdo">
+                                        <option value="0" <?php if($data['imdo']==0){ echo "selected"; } ?>>Lokal</option>
+                                        <option value="1" <?php if($data['imdo']==1){ echo "selected"; } ?>>Impor</option>
+                                    </select>
+                                </div>
+                            </div>
                             <div class="mb-1 row">
                                 <label class="col-3 col-form-label required">No Hs</label>
                                 <div class="col">

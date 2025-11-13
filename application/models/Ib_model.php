@@ -31,9 +31,10 @@ class Ib_model extends CI_Model
 
         if ($bc != 'Y') {
             $this->db->where("tb_header.jns_bc", (int)$bc);
-        } else {
-            $this->db->where_in("tb_header.jns_bc", [23, 262, 40]);
-        }
+        } 
+        // else {
+        //     $this->db->where_in("tb_header.jns_bc", [23, 262, 40]);
+        // }
 
         $this->db->where('MONTH(tb_header.tgl)', $this->session->userdata('bl'), FALSE);
         $this->db->where('YEAR(tb_header.tgl)', $this->session->userdata('th'), FALSE);
@@ -161,6 +162,7 @@ class Ib_model extends CI_Model
         $this->db->from('tb_header');
         $this->db->join('tb_bombc', 'tb_bombc.id_header = tb_header.id', 'left');
         $this->db->where('trim(tb_header.nomor_bc)', $kode);
+        $this->db->where('tb_header.kode_dok != ','ADJ');
         return $this->db->get()->row_array();
         // return $this->db->get_where('tb_header',['trim(nomor_bc)' => $kode])->row_array();
     }

@@ -12,6 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="col-md-6" style="text-align: right;">
         <a href="<?= base_url() . 'barang/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Barang"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
       </div>
+      <input type="text" class="" name="isisafety" id="isisafety" value="<?= cekmenudetail($this->session->userdata('master'), 13) ?>">
     </div>
   </div>
 </div>
@@ -68,17 +69,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
     <hr class="p-1 m-1">
     <div class="card-body pt-1">
-      <div id="table-default" class="table-responsive font-kecil">
+      <div id="table-default" class="font-kecil">
         <input type="hidden" id="currentrow">
-        <table class="table" id="tabelnya">
+        <table class="table no-wrap" id="tabelnya">
           <thead>
             <tr>
               <th>No</th>
               <th>Kode</th>
               <th>Nama Barang</th>
-              <?php if ($this->session->userdata('viewalias') == 1) { ?>
-                <th>Alias</th>
-              <?php } ?>
+              <th>LO/IM</th>
               <th>Kategori</th>
               <th>Satuan</th>
               <th>DLN</th>
@@ -88,7 +87,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <th>Aksi</th>
             </tr>
           </thead>
-          <tbody class="table-tbody" style="font-size: 13px !important;">
+          <tbody class="table-tbody" style="font-size: 12px !important;">
 
           </tbody>
         </table>

@@ -682,13 +682,13 @@ function formatsku($po, $item, $dis, $brg)
     }
     return $isi;
 }
-function namaspekbarang($brg)
+function namaspekbarang($brg,$kolom = 'nama_barang')
 {
     $x = "";
     if ($brg > 0) {
         $CI = &get_instance();
         $hasil = $CI->barangmodel->getdatabyid($brg)->row_array();
-        $x = $hasil['nama_barang'];
+        $x = $hasil[$kolom];
     }
     return $x;
 }

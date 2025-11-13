@@ -56,19 +56,21 @@ class Kontrak_model extends CI_Model
         $this->db->where('tb_detail.id_akb = tb_header.id AND tb_header.send_ceisa = 1 and trim(tb_header.exnomor_bc) != "" ');
         return $this->db->get()->row_array();
     }
-    public function getdatakontrak261($kode)
+    public function getdatakontrak261($kode,$id)
     {
+        $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
+
         $this->db->select('tb_kontrak.*,0 as saldo,0 as xnetto');
         $this->db->from('tb_kontrak');
-        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
-        if ($kode['dept_id'] != "" && $kode['dept_id'] != 'SU') {
-            $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
-        }
+        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id','left');
+        // if ($kode['dept_id'] != "" && $kode['dept_id'] != 'SU') {
+        //     $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
+        // }
         $this->db->where('jns_bc', $kode['jnsbc']);
         if ($kode['status'] == 1) {
-            $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
+            $this->db->where("tgl_akhir >= '" . $header['tgl'] . "'");
         } else if ($kode['status'] == 2) {
-            $this->db->where("tgl_akhir < '" . date('Y-m-d') . "'");
+            $this->db->where("tgl_akhir <= '" . date('Y-m-d') . "'");
         }
         if ($kode['thkontrak'] != '') {
             $this->db->where("year(tgl_awal)", $kode['thkontrak']);
@@ -78,6 +80,7 @@ class Kontrak_model extends CI_Model
         }
         // $this->db->where('nomor_bpj != "" ');
         // $this->db->where('tgl_bpj is not null ');
+        $this->db->where('id_supplier',$header['id_rekanan']);
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }
@@ -88,7 +91,7 @@ class Kontrak_model extends CI_Model
         $this->db->select('SUM(round(tb_detail.kgs,2)) as kgsx,IFNULL(tb_kontrak.kgs-IFNULL(SUM(round(tb_detail.kgs,2)),0),0) as saldo');
         $this->db->select((float)$header['netto'] . " as xnetto", false);
         $this->db->from('tb_kontrak');
-        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
+        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id','left');
         $this->db->join('tb_header','tb_header.id_kontrak = tb_kontrak.id','left');
         $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
         // if ($kode['dept_id'] != "") {
@@ -98,7 +101,7 @@ class Kontrak_model extends CI_Model
         if ($kode['status'] == 1) {
             $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
         } else if ($kode['status'] == 2) {
-            $this->db->where("tgl_akhir < '" . date('Y-m-d') . "'");
+            $this->db->where("tgl_akhir <= '" . date('Y-m-d') . "'");
         }
         if ($kode['thkontrak'] != '') {
             $this->db->where("year(tgl_awal)", $kode['thkontrak']);
