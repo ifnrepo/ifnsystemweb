@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1762766901'; ?>
+<?php $updatejs = '1763099688'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -133,6 +133,12 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'bckeluar') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/bckeluar.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'bcmaterial') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/bcmaterial.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'bcwip') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/bcwip.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'kontrak') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/kontrak.js?<?= $updatejs; ?>"></script>

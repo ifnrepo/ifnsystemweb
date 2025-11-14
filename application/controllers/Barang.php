@@ -57,6 +57,7 @@ class Barang extends CI_Controller
             'id_kategori' => $_POST['kat'],
             'safety_stock' => $_POST['safety'],
             'nohs' => $_POST['nohs'],
+            'imdo' => $_POST['imdo'],
             'dln' => $_POST['dln'],
             'noinv' => $_POST['noinv'],
             'act' => $_POST['act'],
@@ -131,6 +132,7 @@ class Barang extends CI_Controller
             'id_satuan' => $_POST['id_satuan'],
             'safety_stock' => $_POST['safety_stock'],
             'nohs' => $_POST['nohs'],
+            'imdo' => $_POST['imdo'],
             'dln' => $this->input->post('dln') ? 1 : 0,
             'noinv' => $this->input->post('noinv') ? 1 : 0,
             'act' => $this->input->post('act') ? 1 : 0,
@@ -219,6 +221,25 @@ class Barang extends CI_Controller
         echo 1;
     }
 
+    public function getdatabarangbaru(){
+        // $filter_kategori = $this->input->post('filter');
+        $arrayu = [];
+        $filter_kategori = $_POST['filt'];
+        $filter_inv = $_POST['filtinv'];
+        $filter_act = $_POST['filtact'];
+        if($filter_kategori!='all'){
+            $arrayu['id_kategori'] = $filter_kategori;
+        }
+        if($filter_inv!='all'){
+            $arrayu['noinv'] = $filter_inv;
+        }
+        if($filter_act!='all'){
+            $arrayu['act'] = $filter_act;
+        }
+        header('Content-Type: application/json');
+        echo $this->barangmodel->getdatabarangbaru($arrayu);
+    }
+
     public function get_data_barang()
     {
         ob_start(); // buffer output
@@ -241,6 +262,12 @@ class Barang extends CI_Controller
             if ($this->session->userdata('viewalias') == 1) {
                 $row[] = $field->nama_alias;
             }
+            // if($field->imdo == 1){
+            //     $row[] = '<span class="badge badge-outline text-pink">IM</span>';
+            // }else{
+            //     $row[] = '<span class="badge badge-outline text-cyan">LO</span>';
+            // }
+            $row[] = $field->imdo;
             $row[] = $field->nama_kategori;
             $row[] = $field->kodesatuan;
             if ($field->dln == 1) {
@@ -355,12 +382,11 @@ class Barang extends CI_Controller
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $data['kode']);
             $sheet->setCellValue('C' . $numrow, $data['nama_barang']);
-            $sheet->setCellValue('D' . $numrow, $data['nama_alias']);
-            $sheet->setCellValue('E' . $numrow, $data['nama_kategori']);
-            $sheet->setCellValue('F' . $numrow, $data['namasatuan']);
-            $sheet->setCellValue('G' . $numrow, $data['dln']);
-            $sheet->setCellValue('H' . $numrow, $data['noinv']);
-            $sheet->setCellValue('I' . $numrow, $data['act']);
+            $sheet->setCellValue('D' . $numrow, $data['nama_kategori']);
+            $sheet->setCellValue('E' . $numrow, $data['namasatuan']);
+            $sheet->setCellValue('F' . $numrow, $data['dln']);
+            $sheet->setCellValue('G' . $numrow, $data['noinv']);
+            $sheet->setCellValue('H' . $numrow, $data['act']);
             $sheet->setCellValue('I' . $numrow, $data['safety_stock']);
             $no++;
             $numrow++;

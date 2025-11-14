@@ -1124,6 +1124,8 @@ class Helper_model extends CI_Model
             $this->db->where(' tgl >= ', $xdate);
             $this->db->where(' tgl <= ', $ydate);
         }
+        $this->db->where('tb_header.send_ceisa',1);
+        $this->db->where('trim(tb_header.nomor_bc) != ', "");
         $this->db->group_by("tgl,jns_bc,bc_makloon");
         return $this->db->get();
     }

@@ -41,12 +41,14 @@ $(document).ready(function () {
 	$(".tglpilih").datepicker({
 		autoclose: true,
 		format: "dd-mm-yyyy",
+		todayHighlight: true,
 	});
 
 	$(".tglpilih2").datepicker({
 		autoclose: true,
 		format: "dd-mm-yyyy",
 		endDate: "+1d",
+		todayHighlight: true,
 	});
 	// $(".tglpilih3").datepicker({
 	// 	autoclose: true,

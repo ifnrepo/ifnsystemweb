@@ -12,6 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="col-md-6" style="text-align: right;">
         <a href="<?= base_url() . 'barang/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Barang"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
       </div>
+      <input type="text" class="hilang" name="isisafety" id="isisafety" value="<?= cekmenudetail($this->session->userdata('master'), 13) ?>">
     </div>
   </div>
 </div>
@@ -37,7 +38,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <select name="filter" id="filter" class="form-select font-kecil mt-0">
           <option value="all">Semua Kategori</option>
           <?php foreach ($kategori_options as $option) : ?>
-            <option value="<?= $option['id']; ?>"><?= $option['nama_kategori']; ?></option>
+            <option value="<?= $option['kategori_id']; ?>"><?= $option['nama_kategori'].$option['kategori_id']; ?></option>
           <?php endforeach; ?>
         </select>
       </div>
@@ -45,16 +46,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <label class="mb-0 font-kecil font-bold text-azure">Barang Inv</label>
         <select name="filterinv" id="filterinv" class="form-select font-kecil mt-0">
           <option value="all">Semua</option>
-          <option value="x">Barang INV</option>
-          <option value="y">Barang NO INV</option>
+          <option value="1">Barang INV</option>
+          <option value="0">Barang NO INV</option>
         </select>
       </div>
       <div class="col-md-2" style="border-left: 1px solid !important;">
         <label class="mb-0 font-kecil font-bold text-azure">Aktif</label>
         <select name="filteract" id="filteract" class="form-select font-kecil mt-0">
           <option value="all">Semua</option>
-          <option value="y">Aktif</option>
-          <option value="x">Tidak Aktif</option>
+          <option value="1">Aktif</option>
+          <option value="0">Tidak Aktif</option>
         </select>
       </div>
       <div class="col-md-2 font-kecil">
@@ -68,17 +69,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
     <hr class="p-1 m-1">
     <div class="card-body pt-1">
-      <div id="table-default" class="table-responsive font-kecil">
+      <div id="table-default" class="font-kecil">
         <input type="hidden" id="currentrow">
-        <table class="table" id="tabelnya">
+        <table class="table no-wrap" id="tabelnya">
           <thead>
             <tr>
               <th>No</th>
               <th>Kode</th>
               <th>Nama Barang</th>
-              <?php if ($this->session->userdata('viewalias') == 1) { ?>
-                <th>Alias</th>
-              <?php } ?>
+              <th>LO/IM</th>
               <th>Kategori</th>
               <th>Satuan</th>
               <th>DLN</th>
@@ -88,7 +87,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <th>Aksi</th>
             </tr>
           </thead>
-          <tbody class="table-tbody" style="font-size: 13px !important;">
+          <tbody class="table-tbody" style="font-size: 12px !important;">
 
           </tbody>
         </table>

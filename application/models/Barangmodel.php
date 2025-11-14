@@ -54,6 +54,130 @@ class Barangmodel extends CI_Model
         }
     }
 
+    public function getdatabarangbaru($filtkat){
+        $query = "SELECT barang.*,kategori.nama_kategori,satuan.kodesatuan,(select count(*) from bom_barang where id_barang = barang.id) as jmbom 
+        FROM barang 
+        LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori 
+        LEFT JOIN satuan ON satuan.id = barang.id_satuan";
+        // $cari = array('barang.kode','nama_barang','nama_kategori');
+        $cari = array('nama_barang');
+        $where = $filtkat;
+        $isWhere = null;
+        // Ambil data yang di ketik user pada textbox pencarian
+        $search = htmlspecialchars($_POST['search']['value']);
+        // Ambil data limit per page
+        $limit = preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST['length']}");
+        // Ambil data start
+        $start =preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST['start']}"); 
+
+        if($where != null)
+        {
+            $setWhere = array();
+            foreach ($where as $key => $value)
+            {
+                $setWhere[] = $key."='".$value."'";
+            }
+            $fwhere = implode(' AND ', $setWhere);
+
+            if(!empty($iswhere))
+            {
+                $sql = $this->db->query($query." WHERE  $iswhere AND ".$fwhere);
+                
+            }else{
+                $sql = $this->db->query($query." WHERE ".$fwhere);
+            }
+            $sql_count = $sql->num_rows();
+
+            $cari = implode(" LIKE '%".$search."%' OR ", $cari)." LIKE '%".$search."%'";
+            
+            // Untuk mengambil nama field yg menjadi acuan untuk sorting
+            $order_field = $_POST['order'][0]['column']; 
+
+            // Untuk menentukan order by "ASC" atau "DESC"
+            $order_ascdesc = $_POST['order'][0]['dir']; 
+            $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+
+            if(!empty($iswhere))
+            {
+                $sql_data = $this->db->query($query." WHERE $iswhere AND ".$fwhere." AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+            }else{
+                $sql_data = $this->db->query($query." WHERE ".$fwhere." AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+            }
+            
+            if(isset($search))
+            {
+                if(!empty($iswhere))
+                {
+                    $sql_cari =  $this->db->query($query." WHERE $iswhere AND ".$fwhere." AND (".$cari.")");
+                }else{
+                    $sql_cari =  $this->db->query($query." WHERE ".$fwhere." AND (".$cari.")");
+                }
+                $sql_filter_count = $sql_cari->num_rows();
+            }else{
+                if(!empty($iswhere))
+                {
+                    $sql_filter = $this->db->query($query." WHERE $iswhere AND ".$fwhere);
+                }else{
+                    $sql_filter = $this->db->query($query." WHERE ".$fwhere);
+                }
+                $sql_filter_count = $sql_filter->num_rows();
+            }
+            $data = $sql_data->result_array();
+
+        }else{
+            if(!empty($iswhere))
+            {
+                $sql = $this->db->query($query." WHERE  $iswhere ");
+            }else{
+                $sql = $this->db->query($query);
+            }
+            $sql_count = $sql->num_rows();
+
+            $cari = implode(" LIKE '%".$search."%' OR ", $cari)." LIKE '%".$search."%'";
+            
+            // Untuk mengambil nama field yg menjadi acuan untuk sorting
+            $order_field = $_POST['order'][0]['column']; 
+
+            // Untuk menentukan order by "ASC" atau "DESC"
+            $order_ascdesc = $_POST['order'][0]['dir']; 
+            $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+
+            if(!empty($iswhere))
+            {                
+                $sql_data = $this->db->query($query." WHERE $iswhere AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+            }else{
+                $sql_data = $this->db->query($query." WHERE (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+            }
+
+            if(isset($search))
+            {
+                if(!empty($iswhere))
+                {     
+                    $sql_cari =  $this->db->query($query." WHERE $iswhere AND (".$cari.")");
+                }else{
+                    $sql_cari =  $this->db->query($query." WHERE (".$cari.")");
+                }
+                $sql_filter_count = $sql_cari->num_rows();
+            }else{
+                if(!empty($iswhere))
+                {
+                    $sql_filter = $this->db->query($query." WHERE $iswhere");
+                }else{
+                    $sql_filter = $this->db->query($query);
+                }
+                $sql_filter_count = $sql_filter->num_rows();
+            }
+            $data = $sql_data->result_array();
+        }
+        $callback = array(    
+            'draw' => $_POST['draw'], // Ini dari datatablenya    
+            'recordsTotal' => $sql_count,    
+            'recordsFiltered'=>$sql_filter_count,    
+            'data'=>$data
+        );
+        return json_encode($callback); // Convert array $callback ke json
+        // return $query." WHERE ".$fwhere;
+    }
 
 
     public function get_datatables($filter_kategori, $filter_inv, $filter_act)
@@ -158,9 +282,10 @@ class Barangmodel extends CI_Model
     public function getFilter()
     {
         $this->db->distinct();
-        $this->db->select('kategori.nama_kategori, kategori.id');
+        $this->db->select('kategori.nama_kategori, kategori.id, kategori.kategori_id');
         $this->db->from('kategori');
         $this->db->join('barang', 'barang.id_kategori = kategori.id', 'left');
+        $this->db->where('net',0);
         $query = $this->db->get()->result_array();
 
         return $query;
@@ -169,12 +294,12 @@ class Barangmodel extends CI_Model
     public function getdata_export($filter_kategori, $filter_inv, $filter_act)
     {
         $this->db->select('barang.*,satuan.namasatuan,satuan.kodesatuan,kategori.nama_kategori,(select count(*) from bom_barang where id_barang = barang.id) as jmbom', FALSE);
-        $this->db->from($this->table);
+        $this->db->from('barang');
         $this->db->join('kategori', 'kategori.kategori_id = barang.id_kategori', 'left');
         $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
 
         if ($filter_kategori && $filter_kategori != 'all') {
-            $this->db->where('kategori.id', $filter_kategori);
+            $this->db->where('kategori.kategori_id', $filter_kategori);
         }
         if ($filter_inv && $filter_inv != 'all') {
             $isi = $filter_inv == 'x' ? 0 : 1;

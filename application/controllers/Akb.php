@@ -2892,7 +2892,7 @@ class Akb extends CI_Controller
             'nomor_ssb != ' => '',
             'penjamin != ' => ''
         ];
-        $data['kontrak'] = $this->kontrakmodel->getdatakontrak261($kondisi);
+        $data['kontrak'] = $this->kontrakmodel->getdatakontrak261($kondisi,$id);
         $this->load->view('akb/addkontrak', $data);
     }
     public function simpanaddkontrak()
