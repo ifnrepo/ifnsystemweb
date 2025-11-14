@@ -25,38 +25,41 @@ $(document).ready(function () {
 	// 	pageLength: 50,
 	// 	dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 
-	// $("#filter, #filterinv, #filteract").on("change", function () {
-	// 	table.ajax.reload();
-	// });
+	$("#filter, #filterinv, #filteract").on("change", function () {
+		table.ajax.reload();
+
+		var filter_kategori = $("#filter").val();
+		var filter_inv = $("#filterinv").val();
+		var filter_act = $("#filteract").val();
+
+		var exportUrlExcel =
+			base_url +
+			"barang/excel?filter=" +
+			filter_kategori +
+			"&filterinv=" +
+			filter_inv +
+			"&filteract=" +
+			filter_act;
+		$(".btn-export-excel").attr("href", exportUrlExcel);
+
+		var exportUrlPdf =
+			base_url +
+			"barang/pdf?filter=" +
+			filter_kategori +
+			"&filterinv=" +
+			filter_inv +
+			"&filteract=" +
+			filter_act;
+		$(".btn-export-pdf").attr("href", exportUrlPdf);
+	});
 
 	// $("#filter, #filterinv, #filteract").on("change", function () {
-	// 	var filter_kategori = $("#filter").val();
-	// 	var filter_inv = $("#filterinv").val();
-	// 	var filter_act = $("#filteract").val();
-
-	// 	var exportUrlExcel =
-	// 		base_url +
-	// 		"barang/excel?filter=" +
-	// 		filter_kategori +
-	// 		"&filterinv=" +
-	// 		filter_inv +
-	// 		"&filteract=" +
-	// 		filter_act;
-	// 	$(".btn-export-excel").attr("href", exportUrlExcel);
-
-	// 	var exportUrlPdf =
-	// 		base_url +
-	// 		"barang/pdf?filter=" +
-	// 		filter_kategori +
-	// 		"&filterinv=" +
-	// 		filter_inv +
-	// 		"&filteract=" +
-	// 		filter_act;
-	// 	$(".btn-export-pdf").attr("href", exportUrlPdf);
+	
 
 	// 	console.log("Export Excel URL:", exportUrlExcel);
 	// 	console.log("Export PDF URL:", exportUrlPdf);
 	// });
+	DataTable.defaults.column.orderSequence = ['desc', 'asc'];
 	table = $('#tabelnya').DataTable({
 		"processing": true,
 		// "responsive":true,
@@ -66,11 +69,17 @@ $(document).ready(function () {
 		"ajax":
 		{
 			"url": base_url +"barang/getdatabarangbaru", // URL file untuk proses select datanya
-			"type": "POST"
+			"type": "POST",
+			"data": function(d){
+				d.filt = $('#filter').val();
+				d.filtinv = $('#filterinv').val();
+				d.filtact = $('#filteract').val();
+            }
 		},
 		"deferRender": true,
 		"aLengthMenu": [[5, 10, 50, 100],[ 5, 10, 50, 100]], // Combobox Limit
 		"pageLength": 50,
+		"dom": '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 		"columns": [
 			{"data": 'id_kategori',"sortable": false, 
 				render: function (data, type, row, meta) {
@@ -151,7 +160,7 @@ $(document).ready(function () {
 					buton2 += '<i class="fa fa-edit pr-1"></i> Edit Data';
 					buton2 += '</a>';
 					buton2 += '</label>';
-					if ($("#isisafety") != 'hilang') {
+					if ($("#isisafety").val() != 'hilang') {
 						buton2 += '</label>';
 						buton2 += '<label class="dropdown-item p-1">';
 						buton2 += '<a href='+base_url+'barang/isistock/'+data+'/'+nok+' class="btn btn-sm btn-info btn-icon w-100" id="edituser" rel="'+data+'" title="View data" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Isi Safety Stock">';

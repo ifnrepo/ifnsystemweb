@@ -22,6 +22,7 @@ $("#updatebcwip").click(function () {
 	var tglakhir = $("#tglakhir").val();
 	var milik = $("#kepemilikan").val();
 	var kat = $("#katbarang").val();
+	var depe = $("#currdept").val();
 
 	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
 		pesan("Tanggal awal lebih besar dari tanggal akhir", "error");
@@ -36,7 +37,8 @@ $("#updatebcwip").click(function () {
 			tga: tglawal,
 			tgk: tglakhir,
 			punya: milik,
-			katbar: kat
+			katbar: kat,
+			curr: depe
 		},
 		success: function (data) {
 			// alert(data);

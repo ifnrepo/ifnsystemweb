@@ -20,14 +20,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
-        <div class="sticky-top bg-white">
+        <div class="sticky-top bg-white mb-2">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 d-flex">
               <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept" name="currdept">
                 <option value="X">Semua</option>
                 <?php
                 // Mendapatkan nilai 'deptsekarang', jika null nilai default jadi it
-                $selek = $this->session->userdata('currdept') ?? 'IT';
+                $selek = $this->session->userdata('currdeptbcwip') ?? 'IT';
                 foreach ($hakdep as $hak) :
                   $selected = ($selek == $hak['dept_id']) ? "selected" : "";
                 ?>
@@ -43,7 +43,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
               <!-- <a href="#" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a> -->
-              <a href="<?= base_url().'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
+              <a href="<?= base_url().'bcwip/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
             </div>
           </div>
           <div class="card card-active" style="clear:both;">
@@ -55,8 +55,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="col mb-1">
                       <select name="kepemilikan" id="kepemilikan" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1">
                         <option value="">All</option>
-                        <option value="0" <?php if($this->session->userdata('kepemilikan')=='0'){ echo "selected"; } ?>>IFN</option>
-                        <option value="1" <?php if($this->session->userdata('kepemilikan')=='1'){ echo "selected"; } ?>>DLN</option>
+                        <option value="0" <?php if($this->session->userdata('kepemilikanbcwip')=='0'){ echo "selected"; } ?>>IFN</option>
+                        <option value="1" <?php if($this->session->userdata('kepemilikanbcwip')=='1'){ echo "selected"; } ?>>DLN</option>
                       </select>
                     </div>
                   </div>
@@ -65,6 +65,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="col">
                       <select name="katbarang" id="katbarang" class="form-control form-select form-sm font-kecil">
                         <option value="">Semua</option>
+                        <?php foreach($kategori->result_array() as $kateg): ?>
+                        <?php $selek = $kateg['id_kategori']==$this->session->userdata('katebarbcwip') ? 'selected' : ''; ?>
+                          <option value="<?= $kateg['kategori_id'] ?>" <?= $selek ?>><?= $kateg['nama_kategori'] ?></option>
+                        <?php endforeach; ?>
                       </select>
                     </div>
                   </div>
@@ -78,27 +82,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
                 </div>
                 <div class="col-3">
-                  <div class="">
-                    <label class="form-check form-check-inline mb-1">
-                      <input class="form-check-input" type="radio" name="radios-inline" value="Cari Barang" <?php if ($kategoricari == 'Cari Barang') {
-                                                                                                              echo "checked";
-                                                                                                            } ?>>
-                      <span class="form-check-label font-kecil">Barang</span>
-                    </label>
-                    <label class="form-check form-check-inline mb-1">
-                      <input class="form-check-input" type="radio" name="radios-inline" value="Cari SKU" <?php if ($kategoricari == 'Cari SKU') {
-                                                                                                            echo "checked";
-                                                                                                          } ?>>
-                      <span class="form-check-label font-kecil">SKU</span>
-                    </label>
-                  </div>
-                  <div class="input-group mb-0">
-                    <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
-                    <input type="text" class="form-control form-sm font-kecil" placeholder="Cari…" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
-                    <button class="btn text-center font-kecil" type="button" id="buttoncari" style="height: 38px;">
-                      Cari
-                    </button>
-                  </div>
+
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1"></h4>
@@ -124,18 +108,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
             <?php 
+              $jmlpcs=0;$jmlkgs=0;
               if($data != null): $no=0; foreach($data->result_array() as $data): $no++; 
-              $pcs = $data['saldopcs'] + $data['inpcs'] - $data['outpcs'];
-              $kgs = $data['saldokgs'] + $data['inkgs'] - $data['outkgs'];
-              $sku = trim($data['po'])=='' ? $data['id_barang']  : viewsku($data['po'],$data['item'],$data['dis']);
+              $pcs = $data['saldopcs'] + $data['inpcs'] - $data['outpcs'] + $data['adjpcs'];
+              $kgs = $data['saldokgs'] + $data['inkgs'] - $data['outkgs'] + $data['adjkgs']; 
+              $sku = trim($data['po'])=='' ? namaspekbarang($data['id_barang'],'kode')  : viewsku($data['po'],$data['item'],$data['dis']);
               $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang'])  : spekpo($data['po'],$data['item'],$data['dis']);
+              $sat = trim($data['po'])=='' ? $data['kodesatuan']  : 'KGS';
+              $kondisi = 'OME-'.$data['id_barang'].'-'.encrypto(trim($data['po'])).'-'.encrypto(trim($data['item'])).'-'.$data['dis'].'-'.$data['dept_id'];
+              $jmlpcs += $pcs;
+              $jmlkgs += $kgs;
             ?>
               <tr>
                 <td><?= $no ?></td>
                 <td><?= $sku ?></td>
-                <td><?= $spekbarang ?></td>
-                <td><?= $no ?></td>
-                <td><?= $data['dept_id'] ?></td>
+                <td><a href="<?= base_url().'bcwip/getdatabyid/'.$kondisi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'><?= $spekbarang ?></a></td>
+                <td><?= $sat ?></td>
+                <td class="font-11"><?= datadepartemen($data['dept_id'],'departemen') ?></td>
                 <td class="text-right"><?= rupiah($pcs,2) ?></td>
                 <td class="text-right"><?= rupiah($kgs,2) ?></td>
                 <td></td>
@@ -144,9 +133,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </tbody>
           </table>
         </div>
-        <div id="jumlahrek" class="hilang"><?= $this->session->userdata('jmlrec'); ?></div>
-        <div id="jumlahpc" class="hilang"><?= $this->session->userdata('jmlpcs'); ?></div>
-        <div id="jumlahkg" class="hilang"><?= $this->session->userdata('jmlkgs'); ?></div>
+        <div id="jumlahrek" class="hilang"><?= $no ?></div>
+        <div id="jumlahpc" class="hilang"><?= $jmlpcs ?></div>
+        <div id="jumlahkg" class="hilang"><?= $jmlkgs ?></div>
         <div class="card card-active hilang" style="clear:both;">
           <div class="card-body p-2 font-kecil">
             <div class="row">

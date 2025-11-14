@@ -222,8 +222,22 @@ class Barang extends CI_Controller
     }
 
     public function getdatabarangbaru(){
+        // $filter_kategori = $this->input->post('filter');
+        $arrayu = [];
+        $filter_kategori = $_POST['filt'];
+        $filter_inv = $_POST['filtinv'];
+        $filter_act = $_POST['filtact'];
+        if($filter_kategori!='all'){
+            $arrayu['id_kategori'] = $filter_kategori;
+        }
+        if($filter_inv!='all'){
+            $arrayu['noinv'] = $filter_inv;
+        }
+        if($filter_act!='all'){
+            $arrayu['act'] = $filter_act;
+        }
         header('Content-Type: application/json');
-        echo $this->barangmodel->getdatabarangbaru();
+        echo $this->barangmodel->getdatabarangbaru($arrayu);
     }
 
     public function get_data_barang()
@@ -368,12 +382,11 @@ class Barang extends CI_Controller
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $data['kode']);
             $sheet->setCellValue('C' . $numrow, $data['nama_barang']);
-            $sheet->setCellValue('D' . $numrow, $data['nama_alias']);
-            $sheet->setCellValue('E' . $numrow, $data['nama_kategori']);
-            $sheet->setCellValue('F' . $numrow, $data['namasatuan']);
-            $sheet->setCellValue('G' . $numrow, $data['dln']);
-            $sheet->setCellValue('H' . $numrow, $data['noinv']);
-            $sheet->setCellValue('I' . $numrow, $data['act']);
+            $sheet->setCellValue('D' . $numrow, $data['nama_kategori']);
+            $sheet->setCellValue('E' . $numrow, $data['namasatuan']);
+            $sheet->setCellValue('F' . $numrow, $data['dln']);
+            $sheet->setCellValue('G' . $numrow, $data['noinv']);
+            $sheet->setCellValue('H' . $numrow, $data['act']);
             $sheet->setCellValue('I' . $numrow, $data['safety_stock']);
             $no++;
             $numrow++;
