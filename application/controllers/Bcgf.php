@@ -21,6 +21,7 @@ class Bcgf extends CI_Controller
         $this->load->model('satuanmodel');
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('inv_model', 'invmodel');
+        $this->load->model('bcgfmodel');
 
         $this->load->library('Pdf');
         // $this->load->library('Codeqr');
@@ -32,46 +33,69 @@ class Bcgf extends CI_Controller
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
-        $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
-        $this->session->set_userdata('currdept','GF');
-        $data['repbeac'] = 1;
-        if($this->session->userdata('viewinv')==null){
-            $this->session->set_userdata('viewinv',1);
-        }
-        if ($this->session->userdata('tglawal') == null) {
-            $data['tglawal'] = tglmysql(date('Y-m-d'));
+        if ($this->session->userdata('tglawalbcgf') == null) {
+            $data['tglawal'] = tglmysql(date('Y-m-01'));
             $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
-            $data['data'] = null;
-            $data['kat'] = null;
-            $data['katbece'] = null;
-            $data['ifndln'] = null;
-            $data['gbg'] = '';
-            $data['kategoricari'] = 'Cari Barang';
-        } else {
-            $data['tglawal'] = $this->session->userdata('tglawal');
-            $data['tglakhir'] = $this->session->userdata('tglakhir');
-            // $data['data'] = $this->invmodel->getdata();
-            $data['kat'] = $this->invmodel->getdatakategori();
-            $data['katbece'] = $this->invmodel->getdatabc();
-            $data['ifndln'] = $this->session->userdata('ifndln');
-            $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
-            $data['kategoricari'] = $this->session->userdata('kategoricari');
+        }else{
+            $data['tglawal'] = tglmysql($this->session->userdata('tglawalbcgf'));
+            $data['tglakhir'] = tglmysql($this->session->userdata('tglakhirbcgf'));
         }
+        // $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
+        // $this->session->set_userdata('currdept','GF');
+        // $data['repbeac'] = 1;
+        // if($this->session->userdata('viewinv')==null){
+        //     $this->session->set_userdata('viewinv',1);
+        // }
+        // if ($this->session->userdata('tglawal') == null) {
+        //     $data['tglawal'] = tglmysql(date('Y-m-d'));
+        //     $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
+        //     $data['data'] = null;
+        //     $data['kat'] = null;
+        //     $data['katbece'] = null;
+        //     $data['ifndln'] = null;
+        //     $data['gbg'] = '';
+        //     $data['kategoricari'] = 'Cari Barang';
+        // } else {
+        //     $data['tglawal'] = $this->session->userdata('tglawal');
+        //     $data['tglakhir'] = $this->session->userdata('tglakhir');
+        //     // $data['data'] = $this->invmodel->getdata();
+        //     $data['kat'] = $this->invmodel->getdatakategori();
+        //     $data['katbece'] = $this->invmodel->getdatabc();
+        //     $data['ifndln'] = $this->session->userdata('ifndln');
+        //     $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
+        //     $data['kategoricari'] = $this->session->userdata('kategoricari');
+        // }
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
-        $footer['fungsi'] = 'inv';
+        $footer['fungsi'] = 'bcgf';
         $this->load->view('layouts/header', $header);
-        $this->load->view('inv/invgf', $data);
+        $this->load->view('bcgf/bcgf', $data);
         $this->load->view('layouts/footer', $footer);
     }
         public function clear(){
-        $this->session->unset_userdata('tglawal');
-        $this->session->unset_userdata('tglakhir');
-        $this->session->unset_userdata('currdept');
+        $awal = date('Y-m-01');
+        $ahir = lastday(date('Y') . '-' . date('m') . '-01');
+        $this->session->set_userdata('tglawalbcgf',$awal);
+        $this->session->set_userdata('tglakhirbcgf',$ahir);
+        $this->session->unset_userdata('currdeptbcgf');
         $this->session->set_userdata('jmlrec',0);
         $this->session->set_userdata('jmlkgs',0);
         $this->session->set_userdata('jmlpcs',0);
         $url = base_url() . 'bcgf';
         redirect($url);
+    }
+    public function getdata(){
+        $monthawal = date('m',strtotime(tglmysql($_POST['tga'])));
+        $tahunawal = date('Y',strtotime(tglmysql($_POST['tga'])));
+        $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
+        $this->session->set_userdata('tglawalbcgf',tglmysql($jaditahun));
+        $this->session->set_userdata('tglakhirbcgf',tglmysql($_POST['tgk']));
+        // $this->session->set_userdata('kepemilikanbcgf',$_POST['punya']);
+        // $this->session->set_userdata('katebarbcwip',$_POST['katbar']);
+        // $this->session->set_userdata('currdeptbcwip',$_POST['curr']);
+        echo 1;
+    }
+    public function getdatabaru(){
+        echo $this->bcgfmodel->getdatabaru();
     }
     public function get_data_gf()
     {

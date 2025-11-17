@@ -38,7 +38,8 @@ $("#updatebcwip").click(function () {
 			tgk: tglakhir,
 			punya: milik,
 			katbar: kat,
-			curr: depe
+			curr: depe,
+			pcskgs: $("#pcskgsbcwip").val()
 		},
 		success: function (data) {
 			// alert(data);

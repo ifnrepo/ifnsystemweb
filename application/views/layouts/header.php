@@ -762,7 +762,7 @@
                       Finished Goods
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 3); ?>" href="<?= base_url('invmesin/clear'); ?>">
-                      Barang Modal
+                      Barang Modal & Sparepart
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 13); ?>" href="<?= base_url('bcwaste'); ?>">
                       Scrap / Waste

@@ -690,7 +690,12 @@ function namaspekbarang($brg,$kolom = 'nama_barang')
         $hasil = $CI->barangmodel->getdatabyid($brg);
         if($hasil->num_rows() > 0){
             $data = $hasil->row_array();
-            $x = $data[$kolom];
+            if($kolom=='kode'){
+                $kode = $data['imdo']==0 ? 'LO' : 'IM';
+                $x = $kode.'-'.$data[$kolom];
+            }else{
+                $x = $data[$kolom];
+            }
         }else{
             $x = 'NOT FOUND ('.$brg.')';
         }

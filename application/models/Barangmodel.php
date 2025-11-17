@@ -60,7 +60,7 @@ class Barangmodel extends CI_Model
         LEFT JOIN kategori ON kategori.kategori_id = barang.id_kategori 
         LEFT JOIN satuan ON satuan.id = barang.id_satuan";
         // $cari = array('barang.kode','nama_barang','nama_kategori');
-        $cari = array('nama_barang');
+        $cari = array('nama_barang','barang.kode');
         $where = $filtkat;
         $isWhere = null;
         // Ambil data yang di ketik user pada textbox pencarian

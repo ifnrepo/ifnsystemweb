@@ -23,7 +23,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white mb-2">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 d-flex">
-              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="currdept" name="currdept">
+              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="pcskgsbcwip" name="pcskgsbcwip" title="Jumlah yang ditambpilkan" style="width: 15% !important">
+                <option value="kgs" <?php if($this->session->userdata('pcskgsbcwip')=='kgs'){ echo "selected"; } ?>>KGS</option>
+                <option value="pcs" <?php if($this->session->userdata('pcskgsbcwip')=='pcs'){ echo "selected"; } ?>>PCS</option>
+              </select>
+              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" title="Departemen" id="currdept" name="currdept">
                 <option value="X">Semua</option>
                 <?php
                 // Mendapatkan nilai 'deptsekarang', jika null nilai default jadi it
@@ -32,7 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $selected = ($selek == $hak['dept_id']) ? "selected" : "";
                 ?>
                   <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?= $selected ?>>
-                    <?= $hak['departemen']; ?>
+                    <?= $hak['dept_id'].' - '.$hak['departemen']; ?>
                   </option>
                 <?php endforeach; ?>
               </select>
@@ -97,19 +101,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <thead>
               <tr>
                 <th>No</th>
-                <th>SKU</th>
-                <th>Spesifikasi</th>
-                <th>Sat</th>
-                <th>Lok</th>
-                <th>Pcs</th>
-                <th>Kgs</th>
-                <th>Keterangan</th>
+                <th>SKU/Spesifikasi</th>
+                <th>Satuan</th>
+                <th>S. Awal</th>
+                <th>Pemasukan</th>
+                <th>Pengeluaran</th>
+                <th>Adjustment</th>
+                <th>S. Akhir</th>
+                <th>Opname</th>
+                <th>Ket</th>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
             <?php 
               $jmlpcs=0;$jmlkgs=0;
-              if($data != null): $no=0; foreach($data->result_array() as $data): $no++; 
+              $no=0; 
+              if($data != null): foreach($data->result_array() as $data): $no++; 
               $pcs = $data['saldopcs'] + $data['inpcs'] - $data['outpcs'] + $data['adjpcs'];
               $kgs = $data['saldokgs'] + $data['inkgs'] - $data['outkgs'] + $data['adjkgs']; 
               $sku = trim($data['po'])=='' ? namaspekbarang($data['id_barang'],'kode')  : viewsku($data['po'],$data['item'],$data['dis']);
@@ -118,15 +125,42 @@ defined('BASEPATH') or exit('No direct script access allowed');
               $kondisi = 'OME-'.$data['id_barang'].'-'.encrypto(trim($data['po'])).'-'.encrypto(trim($data['item'])).'-'.$data['dis'].'-'.$data['dept_id'];
               $jmlpcs += $pcs;
               $jmlkgs += $kgs;
+              $adjpcsplus = 0;$adjpcsmin =0;
+              $adjkgsplus = 0;$adjkgsmin =0;
+              // if($data['kodeinv']=='3'){
+                if($data['adjpcs'] > 0){
+                  $adjpcsplus = $data['adjpcs'];
+                }else{
+                  $adjpcsmin = $data['adjpcs']*-1;
+                }
+                if($data['adjkgs'] > 0){
+                  $adjkgsplus = $data['adjkgs'];
+                }else{
+                  $adjkgsmin = $data['adjkgs']*-1;
+                }
+              // }
+              if($this->session->userdata('pcskgsbcwip')=='kgs'){
+                $saldo = $data['saldokgs'];
+                $in = $data['inkgs']+$adjkgsplus;
+                $out = $data['outkgs']+$adjkgsmin;
+                $akhir = $kgs;
+              }else{
+                $saldo = $data['saldopcs'];
+                $in = $data['inpcs']+$adjpcsplus;
+                $out = $data['outpcs']+$adjpcsmin;
+                $akhir = $pcs;
+              }
             ?>
               <tr>
                 <td><?= $no ?></td>
-                <td><?= $sku ?></td>
-                <td><a href="<?= base_url().'bcwip/getdatabyid/'.$kondisi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'><?= $spekbarang ?></a></td>
+                <td class="line-12"><span class="text-pink font-11"><?= $sku.' ('.$data['dept_id'].')' ?></span><br><a href="<?= base_url().'bcwip/getdatabyid/'.$kondisi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'><?= $spekbarang ?></a></td>
                 <td><?= $sat ?></td>
-                <td class="font-11"><?= datadepartemen($data['dept_id'],'departemen') ?></td>
-                <td class="text-right"><?= rupiah($pcs,2) ?></td>
-                <td class="text-right"><?= rupiah($kgs,2) ?></td>
+                <td class="text-right"><?= rupiah($saldo,2) ?></td>
+                <td class="text-right"><?= rupiah($in,2) ?></td>
+                <td class="text-right"><?= rupiah($out,2) ?></td>
+                <td  class="text-right"><?= rupiah(0,2) ?></td>
+                <td  class="text-right"><?= rupiah($akhir,2) ?></td>
+                <td  class="text-right"><?= rupiah(0,2) ?></td>
                 <td></td>
               </tr>
             <?php endforeach; endif; ?>

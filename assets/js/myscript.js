@@ -678,7 +678,7 @@ function ponodis(po, item, dis, brg) {
 
 function rupiah(amount, decimalSeparator, thousandsSeparator, nDecimalDigits) {
 	if (amount == 0) {
-		return "0";
+		return "-";
 	} else {
 		var num = parseFloat(amount); //convert to float
 		//default values
@@ -741,9 +741,9 @@ async function getIP() {
 	cachedIP = data.ip;
 	return cachedIP;
 }
-setInterval(() => {
-	cekNotif();
-}, 20000);
+// setInterval(() => {
+// 	cekNotif();
+// }, 60000);
 function cekNotif() {
 	$.ajax({
 		url: base_url + "main/ceknotif",
@@ -810,4 +810,9 @@ function createNotification(title, icon, body, url) {
 		window.open(url);
 	};
 	return notification;
+}
+
+function viewsku(po='',item='',dis=0){
+	var dise = dis==0 ? '' : ' dis '+dis;
+	return po.trim()+'#'+item.trim()+dise;
 }
