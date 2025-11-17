@@ -31,7 +31,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </button>
                   <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                   <a class="dropdown-item font-kecil text-primary font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/1'; ?>" title="Dari BON Permintaan">Dari BON Permintaan</a>
-                  <a class="dropdown-item font-kecil text-primary font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/0'; ?>" title="Tanpa BON Permintaan">Tanpa BON Permintaan</a>
+                  <a class="dropdown-item font-kecil font-bold disabled" data-title="Add Data" href="<?= base_url() . 'out/adddata/0'; ?>" title="Tanpa BON Permintaan">Tanpa BON Permintaan</a>
                   </div>
               </div>
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">

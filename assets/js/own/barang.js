@@ -59,11 +59,11 @@ $(document).ready(function () {
 	// 	console.log("Export Excel URL:", exportUrlExcel);
 	// 	console.log("Export PDF URL:", exportUrlPdf);
 	// });
-	DataTable.defaults.column.orderSequence = ['desc', 'asc'];
 	table = $('#tabelnya').DataTable({
 		"processing": true,
 		// "responsive":true,
 		"serverSide": true,
+		"orderSequence": ['desc', 'asc'],
 		"ordering": true, // Set true agar bisa di sorting
 		"order": [[ 0, 'asc' ]], // Default sortingnya berdasarkan kolom / field ke 0 (paling pertama)
 		"ajax":
@@ -81,7 +81,7 @@ $(document).ready(function () {
 		"pageLength": 50,
 		"dom": '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 		"columns": [
-			{"data": 'id_kategori',"sortable": false, 
+			{"data": 'kode',"sortable": false, 
 				render: function (data, type, row, meta) {
 					return meta.row + meta.settings._iDisplayStart + 1;
 				}  
@@ -180,6 +180,7 @@ $(document).ready(function () {
 			},
 		],
 	});
+	// DataTable.defaults.column.orderSequence = ['desc', 'asc'];
 });
 // });
 

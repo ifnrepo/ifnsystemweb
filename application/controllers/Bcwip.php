@@ -60,6 +60,7 @@ class Bcwip extends CI_Controller
         $this->session->set_userdata('kepemilikanbcwip',$_POST['punya']);
         $this->session->set_userdata('katebarbcwip',$_POST['katbar']);
         $this->session->set_userdata('currdeptbcwip',$_POST['curr']);
+        $this->session->set_userdata('pcskgsbcwip',$_POST['pcskgs']);
         echo 1;
     }
     public function clear(){
@@ -68,6 +69,7 @@ class Bcwip extends CI_Controller
         $this->session->unset_userdata('currdeptbcwip');
         $this->session->unset_userdata('kepemilikanbcwip');
         $this->session->unset_userdata('katebarbcwip');
+        $this->session->unset_userdata('pcskgsbcwip');
         $this->session->set_userdata('jmlrec',0);
         $this->session->set_userdata('jmlkgs',0);
         $this->session->set_userdata('jmlpcs',0);
