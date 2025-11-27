@@ -12,16 +12,20 @@ class In_model extends CI_Model{
             'ok_tuju' => 1
             // 'ok_valid' => 0,
         ];
-        $kondisi = " (kode_dok='T' OR (kode_dok = 'IB' AND (nomor_bc != '' OR tanpa_bc = 1)))";
+        // $kondisi = " (kode_dok='T' OR (kode_dok = 'IB' AND (nomor_bc != '' OR tanpa_bc = 1)))";
+        $kondisi = " (kode_dok='T' OR kode_dok = 'IB')";
         $kondisisubkon = " kode_dok='T' AND (nomor_bc != '' OR tanpa_bc = 1)";
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->where($arrkondisi);
         $this->db->where('left(nomor_dok,3) !=','IFN');
-        if($kode['katedept']==3){
-            $this->db->where($kondisisubkon);
-        }else{
+        // if($kode['katedept']==3){
+        //     $this->db->where($kondisisubkon);
+        // }else{
             $this->db->where($kondisi);
+        // }
+        if($this->session->userdata('filterbon')==1){
+            $this->db->where('ok_valid',0);
         }
         $this->db->order_by('tgl');
         $this->db->order_by('nomor_dok');
@@ -29,12 +33,17 @@ class In_model extends CI_Model{
         return $hasil;
     }
     public function getdatabyid($kode){
-        $this->db->select('*,tb_header.id as xid,b.nama_subkon as namasubkon,b.alamat_subkon as alamatsubkon');
+        $this->db->select('tb_header.*,tb_header.id as xid,b.nama_subkon as namasubkon,b.alamat_subkon as alamatsubkon,d.nomor_bc as nomor_bcmasuk,d.tgl_bc as tgl_bcmasuk');
+        $this->db->select('d.nomor_sj as nomor_sjmasuk,d.tgl_sj as tgl_sjmasuk,d.jns_bc as jns_bcmasuk');
+        $this->db->select('c.nama_supplier,c.alamat,c.kontak');
         $this->db->from('tb_header');
         $this->db->join('dept a','a.dept_id=tb_header.dept_id','left');
         $this->db->join('dept b','b.dept_id=tb_header.dept_tuju','left');
         $this->db->join('supplier c','c.id=tb_header.id_pemasok','left');
+        $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
+        $this->db->join('tb_header d','d.id = tb_detail.id_akb','left');
         $this->db->where('tb_header.id',$kode);
+        $this->db->limit(1);
         $query = $this->db->get()->row_array();
         return $query;
     }
@@ -46,11 +55,11 @@ class In_model extends CI_Model{
         $this->db->join('satuan b','b.id = a.id_satuan','left');
         $this->db->join('barang c','c.id = a.id_barang','left');
         $this->db->join('tb_po d','d.po = a.po and d.item = a.item and d.dis = a.dis','left');
-        if($mode==0){
+        // if($mode==0){
             $this->db->where('a.id_header',$data);
-        }else{
-            $this->db->where('a.id_akb',$data);
-        }
+        // }else{
+        //     $this->db->where('a.id_akb',$data);
+        // }
         return $this->db->get()->result_array();
     }
     public function resetin($id){
@@ -84,17 +93,18 @@ class In_model extends CI_Model{
     public function simpanin($id,$mode=0,$ibnya=[]){
         $this->db->trans_start();
         $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
-        $dataheader = $this->db->get_where('tb_header',['id' => $id])->row_array();
+        // $dataheader = $this->db->get_where('tb_header',['id' => $id])->row_array();
+        $dataheader = $this->getdatabyid($id);
         $arraynobontr = ['SP','GM'];
         if($cek==1){
             $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id,barang.id_kategori');
             $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
             $this->db->join('barang','tb_detail.id_barang=barang.id','left');
-            if($mode==0){
+            // if($mode==0){
                 $this->db->where('id_header',$id);
-            }else{
-                $this->db->where('id_akb',$id);
-            }
+            // }else{
+            //     $this->db->where('id_akb',$id);
+            // }
             $detail = $this->db->get('tb_detail')->result_array();
             foreach($detail as $det){
                 $kondisistok = [
@@ -109,7 +119,7 @@ class In_model extends CI_Model{
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
                     'trim(nobale)' => ($det['dept_id']=='FN' && $det['dept_tuju']=='GF') ? trim($datdet['nobale']) : '',
-                    'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bc']) : '',
+                    'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : '',
                     // 'trim(nobale)' => trim($det['nobale']),
                     // 'harga' => $det['harga'],
                     'stok' => $det['stok'],
@@ -130,8 +140,8 @@ class In_model extends CI_Model{
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
                     'nobale' => $det['dept_tuju']=='GF' ? trim($det['nobale']) : '',
-                    'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bc']) : '',
-                    'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bc']) : '',
+                    'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : '',
+                    'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bcmasuk']) : '',
                     // 'harga' => $det['harga'],
                     // 'exnet' => $det['exnet'],
                     'pcs_masuk' => $det['pcs'],
@@ -164,7 +174,9 @@ class In_model extends CI_Model{
                 'user_valid' => $this->session->userdata('id'),
                 'tgl_valid' => date('Y-m-d H:i:s'),
                 'nomor_dok' => count($ibnya)==0 ? $dataheader['nomor_dok'] : $ibnya['nomor_dok'],
-                'tgl' => count($ibnya)==0 ? $dataheader['tgl'] : $ibnya['tgl']
+                'tgl' => count($ibnya)==0 ? $dataheader['tgl'] : $ibnya['tgl'],
+                'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : '',
+                'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bcmasuk']) : '',
             ];
             $this->db->where('id',$id);
             $this->db->update('tb_header',$dataubah);

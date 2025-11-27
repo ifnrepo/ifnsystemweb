@@ -33,7 +33,16 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               <div class="row">
                 <div class="col-3 bg-cyan-lt">
                  <span>Nomor Dokumen : <strong class="font-bold"><?= $header['nomor_dok']; ?></strong></span><br>
-                 <span>Tgl Dokumen : <strong class="font-bold"><?= tgl_indo($header['tgl']); ?></strong></span>
+                 <span>Tgl Dokumen : <strong class="font-bold"><?= tgl_indo($header['tgl']); ?></strong></span><br>
+                 <?php 
+                    if(in_array($header['dept_tuju'],daftardeptsubkon()) && $header['dept_id']=='FG'){ 
+                      $suratjalan = $header['nomor_sjmasuk'].' Tgl '.tglmysql($header['tgl_sjmasuk']);
+                  ?>
+                  <span class="text-pink">Nomor BC : <strong class="font-bold"><?= $header['nomor_bcmasuk']; ?></strong></span><br>
+                  <span class="text-pink">Tgl BC : <strong class="font-bold"><?= tgl_indo($header['tgl_bcmasuk']); ?></strong></span>
+                 <?php }else{ 
+                    $suratjalan = $header['nomor_sj'].'/'.tglmysql($header['tgl_sj']);
+                  } ?>
                 </div>
                 <div class="col-4">
                   <?php if($mode==0){ ?>
@@ -46,8 +55,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                  <?php } ?>
                 </div>
                 <div class="col-5 <?php if($header['tanpa_bc']==1){ echo "hilang"; } ?>">
-                  <span>Nomor SJ/Tgl : <strong class="font-bold"><?= $header['nomor_sj'].'/'.tglmysql($header['tgl_sj']); ?></strong></span><br>
-                  <span>Nomor AJU/Tgl : <a href="#"><strong class="font-bold"><?= $header['nomor_aju'].'/'.tglmysql($header['tgl_aju']); ?></strong></a></span><br>
+                  <span>Nomor SJ/Tgl : <strong class="font-bold"><?= $suratjalan ?></strong></span><br>
+                  <span>Nomor AJU/Tgl : <strong class="font-bold"><?= $header['nomor_aju'].'/'.tglmysql($header['tgl_aju']); ?></strong></span><br>
                   <span>Di Input : <strong class="font-bold"><?= datauser($header['user_ok'],'name').' on '.tglmysql2($header['tgl_ok']); ?></strong></span><br>
                 </div>
                 <div class="col-2">
@@ -81,7 +90,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               ?>
               <tr>
                 <td><?= $no++; ?></td>
-                <td><?= $namabar; ?></td>
+                <td class="line-11"><?= $namabar.'<br><span class="text-pink font-11">'.$datdet['insno'].'</span>' ?></td>
                 <td><?= $sku; ?></td>
                 <td><?= $satuan; ?></td>
                 <td><?=rupiah($datdet['pcs'],0) ?></td>

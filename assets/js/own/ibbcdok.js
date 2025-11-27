@@ -36,16 +36,16 @@ $(document).ready(function () {
 	loadkontainer();
 	loadentitas();
 
-	var errosimpan = $("#errorsimpan").val();
-	var pesan = $("#pesanerror").val();
-	if (errosimpan == 1) {
-		// pesan("PESAN :", "error");
-		alert("PESAN : " + pesan);
-	}
-	if (errosimpan == 2) {
-		// pesan("PESAN :", "error");
-		alert("PESAN : " + pesan);
-	}
+	// var errosimpan = $("#errorsimpan").val();
+	// var pesan = $("#pesanerror").val();
+	// if (errosimpan == 1) {
+	// 	// pesan("PESAN :", "error");
+	// 	alert("PESAN : " + pesan);
+	// }
+	// if (errosimpan == 2) {
+	// 	// pesan("PESAN :", "error");
+	// 	alert("PESAN : " + pesan);
+	// }
 
 	// Set the date we're counting down to
 	var countDownDate = new Date($("#updateon").val()).getTime();

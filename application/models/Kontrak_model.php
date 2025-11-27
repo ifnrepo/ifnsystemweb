@@ -89,6 +89,7 @@ class Kontrak_model extends CI_Model
         $header = $this->db->get_where('tb_header', ['id' => $kode['idheader']])->row_array();
         $this->db->select('tb_kontrak.*,tb_header.netto');
         $this->db->select('SUM(round(tb_detail.kgs,2)) as kgsx,IFNULL(tb_kontrak.kgs-IFNULL(SUM(round(tb_detail.kgs,2)),0),0) as saldo');
+        // $this->db->select('(SELECT SUM(netto) AS xsaldox FROM tb_header a WHERE a.id_kontrak = tb_kontrak.id AND a.jns_bc = "41") AS xsaldox');
         $this->db->select((float)$header['netto'] . " as xnetto", false);
         $this->db->from('tb_kontrak');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id','left');

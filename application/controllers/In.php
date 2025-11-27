@@ -66,9 +66,11 @@ class In extends CI_Controller {
         $kode = [
             'dept_id' => $_POST['dept_id'],
             'dept_tuju' => $_POST['dept_tuju'],
+            'filterbon' => $_POST['filterbon'],
             'katedept' => $katedept
         ];
         $this->session->set_userdata('todept',$_POST['dept_tuju']);
+        $this->session->set_userdata('filterbon',$_POST['filterbon']);
         echo 1;
     }
     public function cekkonfirmasi($id,$mode=0){
@@ -116,8 +118,6 @@ class In extends CI_Controller {
         // $nomor = trim(strtoupper($_POST['nomor']));
         $hasil = $this->inmodel->simpanin($id,$mode,$databaru);
         if($hasil){
-            // $url = base_url().'in';
-            // redirect($url);
             $simpankehamat = $this->ibmodel->simpankehargamaterial($id);
             if($simpankehamat){
                 echo 1;
@@ -131,7 +131,11 @@ class In extends CI_Controller {
     }
     public function konfirmasinobon($id){
         $data['header'] = $this->inmodel->getdatabyid($id);
-        $data['nomorib'] = nomorib();
+        if(str_contains($data['header']['nomor_dok'],'PROFORMA')){
+            $data['nomorib'] = nomorib();
+        }else{
+            $data['nomorib'] = $data['header']['nomor_dok'];
+        }
         $this->load->view('in/konfirmasinomor',$data);
     }
     // End In Controller

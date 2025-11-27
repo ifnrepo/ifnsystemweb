@@ -3,8 +3,13 @@ class bcgfmodel extends CI_Model
 {
     public function getdata()
     {
-        $tglawal = $this->session->userdata('tglawalbcgf');
-        $tglakhir = $this->session->userdata('tglakhirbcgf');
+        if($this->session->userdata('tglawalbcgf')==null){
+            $tglawal = '1970-01-01';
+            $tglakhir = '1970-01-01';
+        }else{
+            $tglawal = $this->session->userdata('tglawalbcgf');
+            $tglakhir = $this->session->userdata('tglakhirbcgf');
+        }
         $periode = cekperiodedaritgl($tglawal);
         $arrdeptkat = ['7460','7470','3265','7471'];
         $arrdept = ['SP','NT','RR','GP','FG','FN','AR','AN','NU','AM'];
@@ -15,10 +20,15 @@ class bcgfmodel extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
+        $this->db->select('tb_po.spek as spek');
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->join('tb_po','tb_po.po = stokdept.po AND tb_po.item = stokdept.item','left');
         $this->db->where('dept_id','GF');
         $this->db->where('periode',$periode);
+        if($this->session->userdata('kepemilikanbcgf')!='all'){
+            $this->db->where('stokdept.dln',$this->session->userdata('kepemilikanbcgf'));
+        }
         $this->db->group_by('po,item,dis,id_barang,nobale');
         $query1 = $this->db->get_compiled_select();
 
@@ -28,9 +38,11 @@ class bcgfmodel extends CI_Model
         $this->db->select('sum(pcs) as inpcs,sum(kgs) as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
+        $this->db->select('tb_po.spek as spek');
         $this->db->from('tb_detail');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
         $this->db->where_in('tb_header.dept_tuju','GF');
         $this->db->where('tb_header.dept_id !=','GS');
         $this->db->where('tb_header.kode_dok !=','BBL');
@@ -39,6 +51,9 @@ class bcgfmodel extends CI_Model
         $this->db->where('tb_header.data_ok',1);
         $this->db->where('tb_header.ok_tuju',1);
         $this->db->where('tb_header.ok_valid',1);
+        if($this->session->userdata('kepemilikanbcgf')!='all'){
+            $this->db->where('tb_detail.dln',$this->session->userdata('kepemilikanbcgf'));
+        }
         // $this->db->where_not_in('barang.id_kategori',$arrdeptkat);
         $this->db->group_by('po,item,dis,id_barang,nobale');
         $query2 = $this->db->get_compiled_select();
@@ -49,9 +64,11 @@ class bcgfmodel extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('sum(pcs) as outpcs,sum(kgs) as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
+        $this->db->select('tb_po.spek as spek');
         $this->db->from('tb_detailgen');
         $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
         $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
+        $this->db->join('tb_po','tb_po.po = tb_detailgen.po AND tb_po.item = tb_detailgen.item','left');
         $this->db->where_in('tb_header.dept_id','GF');
         $this->db->where('tb_header.dept_tuju !=','GS');
         $this->db->where('tb_header.kode_dok !=','BBL');
@@ -59,6 +76,9 @@ class bcgfmodel extends CI_Model
         $this->db->where('tb_header.tgl <=',$tglakhir);
         $this->db->where('tb_header.data_ok',1);
         $this->db->where('tb_header.ok_tuju',1);
+        if($this->session->userdata('kepemilikanbcgf')!='all'){
+            $this->db->where('tb_detailgen.dln',$this->session->userdata('kepemilikanbcgf'));
+        }
         // $this->db->where('tb_header.ok_valid',0);
         // $this->db->where_not_in('barang.id_kategori',$arrdeptkat);
         $this->db->group_by('po,item,dis,id_barang,nobale');
@@ -70,9 +90,11 @@ class bcgfmodel extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('sum(pcs) as adjpcs,sum(kgs) as adjkgs');
+        $this->db->select('tb_po.spek as spek');
         $this->db->from('tb_detail');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
+        $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
         $this->db->where_in('tb_header.dept_id','GF');
         $this->db->where('tb_header.dept_tuju !=','GS');
         $this->db->where('tb_header.kode_dok','ADJ');
@@ -80,26 +102,34 @@ class bcgfmodel extends CI_Model
         $this->db->where('tb_header.tgl <=',$tglakhir);
         $this->db->where('tb_header.data_ok',1);
         $this->db->where('tb_header.ok_valid',1);
+        if($this->session->userdata('kepemilikanbcgf')!='all'){
+            $this->db->where('tb_detail.dln',$this->session->userdata('kepemilikanbcgf'));
+        }
         // $this->db->where('tb_header.ok_valid',0);
         // $this->db->where_not_in('barang.id_kategori',$arrdeptkat);
         $this->db->group_by('po,item,dis,id_barang,nobale');
         $query4 = $this->db->get_compiled_select();
         //,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs
-        $kolom = "Select kodesatuan,nama_barang,kode,xpo,xitem,xdis,id_barang,nobale,saldopcs,saldokgs,inpcs,inkgs,outpcs,outkgs,adjpcs,adjkgs,tb_po.spek from (Select satuan.kodesatuan,barang.nama_barang,barang.kode,po as xpo,item as xitem,dis as xdis,id_barang,nobale,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
+        $kolom = "Select kodesatuan,nama_barang,kode,xpo,xitem,xdis,id_barang,nobale,saldopcs,saldokgs,inpcs,inkgs,outpcs,outkgs,adjpcs,adjkgs,xdln,spek,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs from (Select satuan.kodesatuan,barang.nama_barang,barang.kode,po as xpo,item as xitem,dis as xdis,id_barang,xdln,nobale,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,spek from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
-        $kolom .= " group by po,item,dis,id_barang,nobale) r2";
-        $kolom .= " LEFT JOIN tb_po ON CONCAT(tb_po.po,tb_po.item,tb_po.dis) = concat(xpo,xitem,xdis)";
+        $kolom .= " group by po,item,dis,nobale) r2";
+        // $kolom .= " LEFT JOIN tb_po ON CONCAT(tb_po.po,tb_po.item,tb_po.dis) = concat(xpo,xitem,xdis)";
         // $kolom .= " order by barang.nama_barang";
         $hasil = $this->db->query($kolom);
 
         return $kolom;
     }
 
+    public function getdatahasil(){
+        $query = $this->getdata();
+        return $this->db->query($query);
+    }
+
     public function getdatabaru(){
         $query = $this->getdata();
         // $cari = array('barang.kode','nama_barang','nama_kategori');
-        $cari = array('po');
+        $cari = array('xpo','nobale','xitem','spek');
         $where = null;
         $isWhere = null;
         // Ambil data yang di ketik user pada textbox pencarian
@@ -141,7 +171,6 @@ class bcgfmodel extends CI_Model
             }else{
                 $sql_data = $this->db->query($query." WHERE ".$fwhere." AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
             }
-            
             if(isset($search))
             {
                 if(!empty($iswhere))
@@ -211,116 +240,122 @@ class bcgfmodel extends CI_Model
             'draw' => $_POST['draw'], // Ini dari datatablenya    
             'recordsTotal' => $sql_count,    
             'recordsFiltered'=>$sql_filter_count,    
-            'data'=>$data
+            'data'=>$data,
+            'totalkgs' => 100
         );
         return json_encode($callback); // Convert array $callback ke json
-        // return $query." WHERE (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start;
     }
 
     public function getdatabyid($id)
     {
-        $tglawal = $this->session->userdata('tglawalbcwip');
-        $tglakhir = $this->session->userdata('tglakhirbcwip');
+        $tglawal = $this->session->userdata('tglawalbcgf');
+        $tglakhir = $this->session->userdata('tglakhirbcgf');
         $periode = cekperiodedaritgl($tglawal);
 
-        $filter = explode('-',$id);
-        $id_barang = $filter[1];
-        $po = decrypto($filter[2]);
-        $item = decrypto($filter[3]);
-        $dis = $filter[4];
-        $dept = $filter[5];
+        $filter = explode('+',$id);
+        $po = $filter[1];
+        $item = $filter[2];
+        $dis = $filter[3];
+        $nobale = $filter[4];
+        $dept = 'GF';
+        $id_barang = 0;
 
         // Query untuk CekSaldobarang
-        $this->db->select("'".$tglawal. "' as tgl,0 as kodeinv,stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,'SALDO' as nomor_dok,dept_id");
+        $this->db->select("'".$tglawal. "' as tgl,0 as kodeinv,stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,'SALDO' as nomor_dok,nobale");
         $this->db->select('sum(pcs_awal) as saldopcs,sum(kgs_awal) as saldokgs');
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
         $this->db->from('stokdept');
-        $this->db->where('dept_id',$dept);
+        $this->db->where('dept_id','GF');
         $this->db->where('periode',$periode);
-        $this->db->where('id_barang',$id_barang);
         $this->db->where('trim(po)',trim($po));
         $this->db->where('trim(item)',trim($item));
         $this->db->where('dis',$dis);
-        $this->db->group_by('po,item,dis,id_barang,dept_id');
+        $this->db->where('nobale',$nobale);
+        $this->db->group_by('po,item,dis,nobale');
         $query1 = $this->db->get_compiled_select();
 
         // Query untuk barang masuk 
-        $this->db->select("tb_header.tgl,1 as kodeinv,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_header.nomor_dok,tb_header.dept_tuju as dept_id");
+        $this->db->select("tb_header.tgl,1 as kodeinv,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_header.nomor_dok,tb_detail.nobale");
         $this->db->select('0 as saldopcs,0 as saldokgs');
         $this->db->select('pcs as inpcs,kgs as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
         $this->db->from('tb_detail');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
-        $this->db->where('tb_header.dept_tuju',$dept);
+        $this->db->where('tb_header.dept_tuju','GF');
         $this->db->where('tb_header.kode_dok !=','BBL');
         $this->db->where('tb_header.tgl >=',$tglawal);
         $this->db->where('tb_header.tgl <=',$tglakhir);
         $this->db->where('tb_header.data_ok',1);
         $this->db->where('tb_header.ok_tuju',1);
         $this->db->where('tb_header.ok_valid',1);
-        $this->db->where('tb_detail.id_barang',$id_barang);
-        $this->db->where('trim(tb_detail.po)',trim($po));
-        $this->db->where('trim(tb_detail.item)',trim($item));
-        $this->db->where('tb_detail.dis',$dis);
+        $this->db->where('trim(po)',trim($po));
+        $this->db->where('trim(item)',trim($item));
+        $this->db->where('dis',$dis);
+        $this->db->where('nobale',$nobale);
         // $this->db->group_by('po,item,dis,id_barang');
         $query2 = $this->db->get_compiled_select();
 
         // Query untuk barang keluar
-        $this->db->select("tb_header.tgl,2 as kodeinv,tb_detailgen.po,tb_detailgen.item,tb_detailgen.dis,tb_detailgen.id_barang,tb_header.nomor_dok,tb_header.dept_id");
+        $this->db->select("tb_header.tgl,2 as kodeinv,tb_detailgen.po,tb_detailgen.item,tb_detailgen.dis,tb_detailgen.id_barang,tb_header.nomor_dok,tb_detailgen.nobale");
         $this->db->select('0 as saldopcs,0 as saldokgs');
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('pcs as outpcs,kgs as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
         $this->db->from('tb_detailgen');
         $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
-        $this->db->where('tb_header.dept_id',$dept);
+        $this->db->where('tb_header.dept_id','GF');
         $this->db->where('tb_header.kode_dok !=','BBL');
         $this->db->where('tb_header.tgl >=',$tglawal);
         $this->db->where('tb_header.tgl <=',$tglakhir);
         $this->db->where('tb_header.data_ok',1);
         $this->db->where('tb_header.ok_tuju',1);
         // $this->db->where('tb_header.ok_valid',0);
-        $this->db->where('tb_detailgen.id_barang',$id_barang);
-        $this->db->where('trim(tb_detailgen.po)',trim($po));
-        $this->db->where('trim(tb_detailgen.item)',trim($item));
-        $this->db->where('tb_detailgen.dis',$dis);
+        $this->db->where('trim(po)',trim($po));
+        $this->db->where('trim(item)',trim($item));
+        $this->db->where('dis',$dis);
+        $this->db->where('nobale',$nobale);
         // $this->db->group_by('po,item,dis,id_barang');
         // $this->db->order_by('tgl');
         $query3 = $this->db->get_compiled_select();
 
         // Query untuk barang ADJ
-        $this->db->select("tb_header.tgl,3 as kodeinv,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_header.nomor_dok,tb_header.dept_id");
+        $this->db->select("tb_header.tgl,3 as kodeinv,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_header.nomor_dok,tb_detail.nobale");
         $this->db->select('0 as saldopcs,0 as saldokgs');
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('pcs as adjpcs,kgs as adjkgs');
         $this->db->from('tb_detail');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
-        $this->db->where('tb_header.dept_id',$dept);
+        $this->db->where('tb_header.dept_id','GF');
         $this->db->where('tb_header.kode_dok =','ADJ');
         $this->db->where('tb_header.tgl >=',$tglawal);
         $this->db->where('tb_header.tgl <=',$tglakhir);
         $this->db->where('tb_header.data_ok',1);
         $this->db->where('tb_header.ok_valid',1);
         // $this->db->where('tb_header.ok_valid',0);
-        $this->db->where('tb_detail.id_barang',$id_barang);
-        $this->db->where('trim(tb_detail.po)',trim($po));
-        $this->db->where('trim(tb_detail.item)',trim($item));
-        $this->db->where('tb_detail.dis',$dis);
+        $this->db->where('trim(po)',trim($po));
+        $this->db->where('trim(item)',trim($item));
+        $this->db->where('dis',$dis);
+        $this->db->where('nobale',$nobale);
         // $this->db->group_by('po,item,dis,id_barang');
         // $this->db->order_by('tgl');
         $query4 = $this->db->get_compiled_select();
 
-        $kolom = "Select * from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
+        $kolom = "Select * from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4." ) r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id ";
         $kolom .= " order by tgl,kodeinv";
         $hasil = $this->db->query($kolom);
 
         return $hasil;
+    }
+
+    public function getdataspekpo($po,$item,$dis){
+        $hasil = $this->db->get_where('tb_po',['po' => $po,'item' => $item,'dis' => $dis])->row_array();
+        return $hasil['spek'];
     }
 
     public function getdatakategori()

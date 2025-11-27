@@ -17,7 +17,7 @@
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;" >
                     <?php $no=0; foreach ($kontrak->result_array() as $kontrak) { ?>
-                    <?php $jmlkgsreal = jmlkgs261($kontrak['id']); if($kontrak['kgs'] > $jmlkgsreal) : $no++;?>
+                    <?php $jmlkgsreal = jmlkgs261($kontrak['id'],'41'); if($kontrak['kgs'] > $jmlkgsreal) : $no++;?>
                         <tr>
                             <td><?= $no; ?></td>
                             <td class="font-bold line-12"><?= $kontrak['nomor']; ?><br><span class="text-pink font-10" style="font-style: normal !important"><?= $kontrak['proses'] ?></span><br><span class="text-teal font-10" style="font-style: normal !important"><?= datasupplier($kontrak['id_supplier'],'nama_supplier') ?></span></td>

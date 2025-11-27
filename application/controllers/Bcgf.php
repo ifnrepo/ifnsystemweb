@@ -40,42 +40,18 @@ class Bcgf extends CI_Controller
             $data['tglawal'] = tglmysql($this->session->userdata('tglawalbcgf'));
             $data['tglakhir'] = tglmysql($this->session->userdata('tglakhirbcgf'));
         }
-        // $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
-        // $this->session->set_userdata('currdept','GF');
-        // $data['repbeac'] = 1;
-        // if($this->session->userdata('viewinv')==null){
-        //     $this->session->set_userdata('viewinv',1);
-        // }
-        // if ($this->session->userdata('tglawal') == null) {
-        //     $data['tglawal'] = tglmysql(date('Y-m-d'));
-        //     $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
-        //     $data['data'] = null;
-        //     $data['kat'] = null;
-        //     $data['katbece'] = null;
-        //     $data['ifndln'] = null;
-        //     $data['gbg'] = '';
-        //     $data['kategoricari'] = 'Cari Barang';
-        // } else {
-        //     $data['tglawal'] = $this->session->userdata('tglawal');
-        //     $data['tglakhir'] = $this->session->userdata('tglakhir');
-        //     // $data['data'] = $this->invmodel->getdata();
-        //     $data['kat'] = $this->invmodel->getdatakategori();
-        //     $data['katbece'] = $this->invmodel->getdatabc();
-        //     $data['ifndln'] = $this->session->userdata('ifndln');
-        //     $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
-        //     $data['kategoricari'] = $this->session->userdata('kategoricari');
-        // }
+
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'bcgf';
         $this->load->view('layouts/header', $header);
         $this->load->view('bcgf/bcgf', $data);
         $this->load->view('layouts/footer', $footer);
     }
-        public function clear(){
+    public function clear(){
         $awal = date('Y-m-01');
         $ahir = lastday(date('Y') . '-' . date('m') . '-01');
-        $this->session->set_userdata('tglawalbcgf',$awal);
-        $this->session->set_userdata('tglakhirbcgf',$ahir);
+        $this->session->unset_userdata('tglawalbcgf');
+        $this->session->unset_userdata('tglakhirbcgf');
         $this->session->unset_userdata('currdeptbcgf');
         $this->session->set_userdata('jmlrec',0);
         $this->session->set_userdata('jmlkgs',0);
@@ -89,13 +65,29 @@ class Bcgf extends CI_Controller
         $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
         $this->session->set_userdata('tglawalbcgf',tglmysql($jaditahun));
         $this->session->set_userdata('tglakhirbcgf',tglmysql($_POST['tgk']));
-        // $this->session->set_userdata('kepemilikanbcgf',$_POST['punya']);
+        $this->session->set_userdata('kepemilikanbcgf',$_POST['punya']);
         // $this->session->set_userdata('katebarbcwip',$_POST['katbar']);
         // $this->session->set_userdata('currdeptbcwip',$_POST['curr']);
         echo 1;
     }
     public function getdatabaru(){
-        echo $this->bcgfmodel->getdatabaru();
+        // if ($this->session->userdata('tglawalbcgf') != null){
+            echo $this->bcgfmodel->getdatabaru();
+        // }
+    }
+    public function getdatabyid($id){
+        $kodata = $this->bcgfmodel->getdatabyid($id);
+        $data['header'] = $kodata->row_array();
+        $data['detail'] = $kodata;
+        $this->load->view('bcgf/viewdetail', $data);
+    }
+    public function getdataspekpo(){
+        $po = $_POST['po'];
+        $item = $_POST['item'];
+        $dis = $_POST['dis'];
+
+        $spek = $this->bcgfmodel->getdataspekpo($po,$item,$dis);
+        echo $spek;
     }
     public function get_data_gf()
     {
@@ -220,33 +212,70 @@ class Bcgf extends CI_Controller
             redirect($url);
         }
     }
-    public function excel()
+    public function toexcel()
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
-        $sheet->setCellValue('A1', "DATA SATUAN"); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->setCellValue('A1', "DATA INVENTORY ".$this->session->userdata('currdeptbcwip')); 
         $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
 
+        $sheet->setCellValue('A2', "Periode : ".$this->session->userdata('tglawalbcgf')." s/d ".$this->session->userdata('tglakhirbcgf')); 
         // Buat header tabel nya pada baris ke 3    
-        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
-        $sheet->setCellValue('B2', "KODE"); // Set kolom B3 dengan tulisan "KODE"    
-        $sheet->setCellValue('C2', "KODE BC"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('D2', "NAMA SATUAN");
+        $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B3', "KODE BARANG"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C3', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D3', "SATUAN");
+        $sheet->setCellValue('E3', "BALE NO");
+        $sheet->setCellValue('F3', "S.Awal (Pcs)");
+        $sheet->setCellValue('G3', "S.Awal (Kgs)");
+        $sheet->setCellValue('H3', "IN (Pcs)");
+        $sheet->setCellValue('I3', "IN (Kgs)");
+        $sheet->setCellValue('J3', "OUT (Pcs)");
+        $sheet->setCellValue('K3', "OUT (Kgs)");
+        $sheet->setCellValue('L3', "S.Akhir (Pcs)");
+        $sheet->setCellValue('M3', "S.Akhir (Kgs)");
         // Panggil model Get Data   
-        $satuan = $this->satuanmodel->getdata();
+        $data = $this->bcgfmodel->getdatahasil();
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
-        $numrow = 3;
+        $numrow = 4;
 
         // Set baris pertama untuk isi tabel adalah baris ke 3    
-        foreach ($satuan->result_array() as $data) {
+        foreach ($data->result_array() as $data) {
             // Lakukan looping pada variabel      
+            $sku = trim($data['xpo'])=='' ? namaspekbarang($data['id_barang'],'kode') : viewsku($data['xpo'],$data['xitem'],$data['xdis']);
+            $saldo = $data['saldokgs']+$data['inkgs']-$data['outkgs']+$data['adjkgs'];
+            $saldopcs = $data['saldopcs']+$data['inpcs']-$data['outpcs']+$data['adjpcs'];
+
+            $adjpcsplus = 0;$adjkgsplus = 0;
+            $adjpcsmin = 0;$adjkgsmin = 0;
+            if($data['adjpcs']!=0 || $data['adjkgs']!=0){
+                if($data['adjpcs'] > 0){
+                    $adjpcsplus = $data['adjpcs'];
+                }else{
+                    $adjpcsmin = $data['adjpcs']*-1;
+                }
+                if($data['adjkgs'] > 0){
+                    $adjkgsplus = $data['adjkgs'];
+                }else{
+                    $adjkgsmin = $data['adjkgs']*-1;
+                }
+            }
             $sheet->setCellValue('A' . $numrow, $no);
-            $sheet->setCellValue('B' . $numrow, $data['kodesatuan']);
-            $sheet->setCellValue('C' . $numrow, $data['kodebc']);
-            $sheet->setCellValue('E' . $numrow, $data['namasatuan']);
+            $sheet->setCellValue('B' . $numrow, $sku);
+            $sheet->setCellValue('C' . $numrow, $data['spek']);
+            $sheet->setCellValue('D' . $numrow, 'KGS');
+            $sheet->setCellValue('E' . $numrow, $data['nobale']);
+            $sheet->setCellValue('F' . $numrow, rupiah($data['saldopcs'],0));
+            $sheet->setCellValue('G' . $numrow, rupiah($data['saldokgs'],2));
+            $sheet->setCellValue('H' . $numrow, rupiah($data['inpcs']+$adjpcsplus,2));
+            $sheet->setCellValue('I' . $numrow, rupiah($data['inkgs']+$adjkgsplus,2));
+            $sheet->setCellValue('J' . $numrow, rupiah($data['outpcs']+$adjpcsmin,2));
+            $sheet->setCellValue('K' . $numrow, rupiah($data['outkgs']+$adjkgsmin,2));
+            $sheet->setCellValue('L' . $numrow, rupiah($saldopcs,2));
+            $sheet->setCellValue('M' . $numrow, rupiah($saldo,2));
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    
@@ -262,7 +291,7 @@ class Bcgf extends CI_Controller
 
         // Proses file excel    
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data Satuan.xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="Data Inv GF.xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');

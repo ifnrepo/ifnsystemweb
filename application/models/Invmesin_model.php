@@ -1,7 +1,7 @@
 <?php
 class Invmesin_model extends CI_Model
 {
-    public function getdata()
+    public function getdatabaru()
     {
         $tahun = $this->session->userdata('th');
         $bulan = $this->session->userdata('bl');
@@ -50,6 +50,65 @@ class Invmesin_model extends CI_Model
             WHERE month(tglmasuk) = '" . $this->session->userdata('bl') . "' AND year(tglmasuk) = '" . $this->session->userdata('th') . "' " . $loka . "
             ) pt GROUP BY id_barang ORDER BY kode_fix");
         }
+        return $hasil;
+    }
+    public function getdata(){
+        if($this->session->userdata('tglawalmesin')==null){
+            $tglawal = '1970-01-01';
+            $tglakhir = '1970-01-01';
+        }else{
+            $tglawal = $this->session->userdata('tglawalmesin');
+            $tglakhir = $this->session->userdata('tglakhirmesin');
+        }
+
+        // Query untuk CekSaldobarang
+        $this->db->select("0 as kodeinv,tb_mesin.*,barang.nama_barang");
+        $this->db->select('1 as saldomesin');
+        $this->db->select('0 as inmesin');
+        $this->db->select('0 as outmesin');
+        $this->db->select('0 as adjmesin');
+        $this->db->from('tb_mesin');
+        $this->db->join('barang','barang.id = tb_mesin.id_barang','left');
+        $this->db->where('tglmasuk <=',$tglawal);
+        $this->db->group_start();
+        $this->db->where('tgl_disp >=',$tglawal);
+        $this->db->or_where('tgl_disp is null');
+        $this->db->group_end();
+        $query1 = $this->db->get_compiled_select();
+
+        // Query untuk In Mesin
+        $this->db->select("1 as kodeinv,tb_mesin.*,barang.nama_barang");
+        $this->db->select('0 as saldomesin');
+        $this->db->select('1 as inmesin');
+        $this->db->select('0 as outmesin');
+        $this->db->select('0 as adjmesin');
+        $this->db->from('tb_mesin');
+        $this->db->join('barang','barang.id = tb_mesin.id_barang','left');
+        $this->db->where('tglmasuk >=',$tglawal);
+        $this->db->where('tglmasuk <=',$tglakhir);
+        $this->db->where('tgl_disp is null');
+        $query2 = $this->db->get_compiled_select();
+
+        // Query untuk Out Mesin
+        $this->db->select("2 as kodeinv,tb_mesin.*,barang.nama_barang");
+        $this->db->select('0 as saldomesin');
+        $this->db->select('0 as inmesin');
+        $this->db->select('1 as outmesin');
+        $this->db->select('0 as adjmesin');
+        $this->db->from('tb_mesin');
+        $this->db->join('barang','barang.id = tb_mesin.id_barang','left');
+        $this->db->where('tgl_disp >=',$tglawal);
+        $this->db->where('tgl_disp <=',$tglakhir);
+        $this->db->where('tgl_disp is not null');
+        $query3 = $this->db->get_compiled_select();
+
+        $kolom = "Select *,SUM(saldomesin) AS xsaldomesin,SUM(inmesin) AS xinmesin,SUM(outmesin) AS xoutmesin from (".$query1." union all ".$query2." union all ".$query3." ) r1";
+        if($this->session->userdata('lokasimesin')!= null && $this->session->userdata('lokasimesin')!='all'){
+            $kolom .= " Where lokasi = '".$this->session->userdata('lokasimesin')."' ";
+        }
+        $kolom .= " group by kode_fix";
+        $hasil = $this->db->query($kolom);
+
         return $hasil;
     }
     public function getdatadetail($id)
