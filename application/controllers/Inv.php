@@ -32,30 +32,26 @@ class Inv extends CI_Controller
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
-        if ($this->session->userdata('viewinv') == null) {
-            $this->session->set_userdata('viewinv', 1);
-        }
+        $data['kat'] = $this->invmodel->getdatakategori();
+        $data['buyer'] = $this->invmodel->getbuyer();
         if ($this->session->userdata('tglawal') == null) {
-            $data['tglawal'] = tglmysql(date('Y-m-d'));
-            $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
-            $data['data'] = null;
-            $data['kat'] = null;
-            $data['katbece'] = null;
-            $data['kontbece'] = null;
-            $data['ifndln'] = null;
-            $data['gbg'] = '';
-            $data['kategoricari'] = 'Cari Barang';
-        } else {
+            $data['tglawal'] = tglmysql(date('Y-m-01'));
+            $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
+            $data['currdept'] = "$%";
+            $data['ifndln'] = 'X';
+            // $data['buyer'] = []; 
+        }else{
             $data['tglawal'] = $this->session->userdata('tglawal');
             $data['tglakhir'] = $this->session->userdata('tglakhir');
-            $data['data'] = $this->invmodel->getdata();
-            $data['kat'] = $this->invmodel->getdatakategori();
-            $data['katbece'] = $this->invmodel->getdatabc();
-            $data['kontbece'] = $this->invmodel->getdatakontbc();
+            $data['currdept'] = $this->session->userdata('currdept');
             $data['ifndln'] = $this->session->userdata('ifndln');
-            $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
-            $data['kategoricari'] = $this->session->userdata('kategoricari');
+            // if($this->session->userdata('currdept')=='GF'){
+            // }else{
+            //     $data['buyer'] = [];
+            // }
         }
+        // $data['data'] = $this->invmodel->getdatabaru();
+        $data['kategoricari'] = 'Cari Barang';
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'inv';
         $this->load->view('layouts/header', $header);
@@ -64,11 +60,12 @@ class Inv extends CI_Controller
     }
     public function clear()
     {
-        $this->session->unset_userdata('tglawal', date('Y'));
-        $this->session->unset_userdata('tglakhir', date('Y'));
+        $this->session->unset_userdata('tglawal');
+        $this->session->unset_userdata('tglakhir');
+        $this->session->unset_userdata('currdept');
         // $this->session->unset_userdata('gbg');
-        $this->session->set_userdata('bl', date('m'));
-        $this->session->set_userdata('th', date('Y'));
+        // $this->session->set_userdata('bl', date('m'));
+        // $this->session->set_userdata('th', date('Y'));
         $this->session->set_userdata('gbg', 1);
         $this->session->set_userdata('invharga', 0);
         $this->session->unset_userdata('katcari');
@@ -79,28 +76,45 @@ class Inv extends CI_Controller
     }
     public function getdata()
     {
-        $this->session->set_userdata('tglawal', $_POST['tga']);
+        $monthawal = date('m',strtotime(tglmysql($_POST['tga'])));
+        $tahunawal = date('Y',strtotime(tglmysql($_POST['tga'])));
+        $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
+        $this->session->set_userdata('tglawal', $jaditahun);
         $this->session->set_userdata('tglakhir', $_POST['tgk']);
         $this->session->set_userdata('currdept', $_POST['dpt']);
-        $this->session->set_userdata('gbg', $_POST['gbn']);
-        $this->session->set_userdata('filterkat', $_POST['kat']);
-        $this->session->set_userdata('kategoricari', $_POST['kcari']);
-        $this->session->set_userdata('nomorbcnya', $_POST['nobcnya']);
-        $this->session->set_userdata('kontrakbcnya', $_POST['kontbc']);
-        $this->session->set_userdata('ifndln', $_POST['ifndln']);
-        if(isset($_POST['exdo'])){
-            $this->session->set_userdata('exdonya', $_POST['exdo']);
-        }
-        if (isset($_POST['cari'])) {
-            if ($_POST['cari'] == '') {
-                $this->session->unset_userdata('katcari');
-            } else {
-                $this->session->set_userdata('katcari', $_POST['cari']);
-            }
-        } else {
-            $this->session->unset_userdata('katcari');
-        }
+        $this->session->set_userdata('ifndln', $_POST['idln']);
         echo 1;
+    }
+    public function getdatabaru(){
+        $arrayu = [];
+        $filter_kategori = $_POST['filt'];
+        $filter_exdo = $_POST['exdo'];
+        $filter_stok = $_POST['stok'];
+        $filter_buyer = $_POST['buyer'];
+        $filter_exnet = $_POST['exnet'];
+        if($filter_kategori!='all'){
+            $arrayu['id_kategori'] = $filter_kategori;
+        }
+        if($filter_exdo!="all"){
+            $arrayu['exdo'] = $filter_exdo;
+        }
+        if($filter_stok!="all"){
+            $arrayu['stok'] = $filter_stok;
+        }
+        if($filter_buyer!='all'){
+            $arrayu['id_buyer'] = $filter_buyer;
+        }
+        if($filter_exnet!='all'){
+            $arrayu['exnet'] = $filter_exnet;
+        }
+        echo $this->invmodel->getdatabaru($arrayu);
+    }
+    public function simpandatainv(){
+        $hasil = $this->invmodel->simpandatainv();
+        if($hasil){
+            $url = base_url('Inv');
+        redirect($url);
+        }
     }
     public function getdatawip()
     {
@@ -211,40 +225,42 @@ class Inv extends CI_Controller
 
         $sheet->setCellValue('A1', "INVENTORY " . $this->session->userdata('currdept')); // Set kolom A1 dengan tulisan "DATA SISWA"    
         $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+        $sheet->setCellValue('A2', "Periode " . tgl_indo(tglmysql($this->session->userdata('tglawal')))." s/d ".tgl_indo(tglmysql($this->session->userdata('tglakhir')))); // Set kolom A1 dengan tulisan "DATA SISWA"    
 
         // Buat header tabel nya pada baris ke 3    
-        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
-        $sheet->setCellValue('B2', "KODE BARANG"); // Set kolom B3 dengan tulisan "KODE"    
-        $sheet->setCellValue('C2', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('D2', "SATUAN");
-        $sheet->setCellValue('E2', "SALDO AWAL QTY");
-        $sheet->setCellValue('F2', "SALDO AWAL KGS");
-        $sheet->setCellValue('G2', "IN QTY");
-        $sheet->setCellValue('H2', "IN KGS");
-        $sheet->setCellValue('I2', "OUT QTY");
-        $sheet->setCellValue('J2', "OUT KGS");
-        $sheet->setCellValue('K2', "ADJ QTY");
-        $sheet->setCellValue('L2', "ADJ PCS");
-        $sheet->setCellValue('M2', "SALDO AKHIR QTY");
-        $sheet->setCellValue('N2', "SALDO AKHIR KGS");
-        $sheet->setCellValue('O2', "SO QTY");
-        $sheet->setCellValue('P2', "SO KGS");
-        $sheet->setCellValue('Q2', "SELISIH QTY");
-        $sheet->setCellValue('R2', "SELISIH KGS");
-        $sheet->setCellValue('S2', "KETERANGAN");
+        $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B3', "KODE BARANG"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C3', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D3', "SATUAN");
+        $sheet->setCellValue('E3', "SALDO AWAL QTY");
+        $sheet->setCellValue('F3', "SALDO AWAL KGS");
+        $sheet->setCellValue('G3', "IN QTY");
+        $sheet->setCellValue('H3', "IN KGS");
+        $sheet->setCellValue('I3', "OUT QTY");
+        $sheet->setCellValue('J3', "OUT KGS");
+        $sheet->setCellValue('K3', "ADJ QTY");
+        $sheet->setCellValue('L3', "ADJ PCS");
+        $sheet->setCellValue('M3', "SALDO AKHIR QTY");
+        $sheet->setCellValue('N3', "SALDO AKHIR KGS");
+        $sheet->setCellValue('O3', "SO QTY");
+        $sheet->setCellValue('P3', "SO KGS");
+        $sheet->setCellValue('Q3', "SELISIH QTY");
+        $sheet->setCellValue('R3', "SELISIH KGS");
+        $sheet->setCellValue('S3', "KETERANGAN");
         // Panggil model Get Data   
-        $inv = $this->invmodel->getdata();
+        $arrayu = [];
+        $inv = $this->invmodel->toexcel();
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
-        $numrow = 3;
+        $numrow = 4;
 
         // Set baris pertama untuk isi tabel adalah baris ke 3    
         foreach ($inv->result_array() as $data) {
             $spekbarang = $data['nama_barang'] == null ? $data['spek'] : substr($data['nama_barang'], 0, 75);
-            $saldo_awal = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : ($data['pcs'] ?? 0);
-            $pemasukan = $data['kodesatuan'] == 'KGS' ? $data['kgsin'] : ($data['pcsin'] ?? 0);
-            $pengeluaran = $data['kodesatuan'] == 'KGS' ? $data['kgsout'] : ($data['pcsout'] ?? 0);
+            $saldo_awal = $data['kodesatuan'] == 'KGS' ? $data['saldokgs'] : ($data['saldopcs'] ?? 0);
+            $pemasukan = $data['kodesatuan'] == 'KGS' ? $data['inkgs'] : ($data['inpcs'] ?? 0);
+            $pengeluaran = $data['kodesatuan'] == 'KGS' ? $data['outkgs'] : ($data['outpcs'] ?? 0);
             $saldo_akhir = $saldo_awal + $pemasukan - $pengeluaran;
             $sku = viewsku(id: $data['kode'], po: $data['po'], no: $data['item'], dis: $data['dis']);
             // Lakukan looping pada variabel      
@@ -252,16 +268,16 @@ class Inv extends CI_Controller
             $sheet->setCellValue('B' . $numrow, $sku);
             $sheet->setCellValue('C' . $numrow, $spekbarang);
             $sheet->setCellValue('D' . $numrow, $data['kodesatuan']);
-            $sheet->setCellValue('E' . $numrow, $data['pcs']);
-            $sheet->setCellValue('F' . $numrow, $data['kgs']);
-            $sheet->setCellValue('G' . $numrow, $data['pcsin']);
-            $sheet->setCellValue('H' . $numrow, $data['kgsin']);
-            $sheet->setCellValue('I' . $numrow, $data['pcsout']);
-            $sheet->setCellValue('J' . $numrow, $data['kgsout']);
-            $sheet->setCellValue('K' . $numrow, '-');
-            $sheet->setCellValue('L' . $numrow, '-');
-            $sheet->setCellValue('M' . $numrow, $data['pcs']+$data['pcsin']-$data['pcsout']);
-            $sheet->setCellValue('N' . $numrow, $data['kgs']+$data['kgsin']-$data['kgsout']);
+            $sheet->setCellValue('E' . $numrow, $data['saldopcs']);
+            $sheet->setCellValue('F' . $numrow, $data['saldokgs']);
+            $sheet->setCellValue('G' . $numrow, $data['inpcs']);
+            $sheet->setCellValue('H' . $numrow, $data['inkgs']);
+            $sheet->setCellValue('I' . $numrow, $data['outpcs']);
+            $sheet->setCellValue('J' . $numrow, $data['outkgs']);
+            $sheet->setCellValue('K' . $numrow, $data['adjpcs']);
+            $sheet->setCellValue('L' . $numrow, $data['adjkgs']);
+            $sheet->setCellValue('M' . $numrow, $data['saldopcs']+$data['inpcs']-$data['outpcs']);
+            $sheet->setCellValue('N' . $numrow, $data['saldokgs']+$data['inkgs']-$data['outkgs']);
             $sheet->setCellValue('O' . $numrow, '-');
             $sheet->setCellValue('P' . $numrow, '-');
             $sheet->setCellValue('Q' . $numrow, '-');
@@ -571,27 +587,45 @@ class Inv extends CI_Controller
     public function viewdetail($isi = '',$mode=0)
     {
         $split = explode('-', $isi);
+        // $array = [
+        //     'po' => decrypto($split[1]),
+        //     'item' => decrypto($split[2]),
+        //     'dis' => $split[3],
+        //     'id_barang' => $split[4],
+        //     'nobontr' => decrypto($split[5]),
+        //     'insno' => decrypto($split[6]),
+        //     // 'insno' => $split[6],
+        //     'nobale' => decrypto($split[7]),
+        //     'nomor_bc' => decrypto($split[8])
+        // ];
+        // $array2 = [
+        //     'id_barang' => $split[4],
+        //     'nobontr' => decrypto($split[5]),
+        // ];
         $array = [
-            'po' => decrypto($split[1]),
-            'item' => decrypto($split[2]),
+            'po' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[1])))),
+            'item' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[2])))),
             'dis' => $split[3],
             'id_barang' => $split[4],
-            'nobontr' => decrypto($split[5]),
-            'insno' => decrypto($split[6]),
-            'nobale' => decrypto($split[7]),
-            'nomor_bc' => decrypto($split[8])
+            'nobontr' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[5])))),
+            'insno' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[6])))),
+            // 'insno' => $split[6],
+            'nobale' => $split[7],
+            'nomor_bc' => $split[8]
         ];
         $array2 = [
             'id_barang' => $split[4],
-            'nobontr' => decrypto($split[5]),
+            'nobontr' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[5])))),
         ];
-        $data['header'] = $this->invmodel->getdatadetail($array)->row_array();
-        $data['detail'] = $this->invmodel->getdatadetail($array);
+       
+        $data['header'] = $this->invmodel->getdatadetailbaru($array)->row_array();
+        $data['detail'] = $this->invmodel->getdatadetailbaru($array);
         $data['dok'] = $this->invmodel->getdatadok($array2)->row_array();
-        $data['detailbom'] = $this->invmodel->getdatadetailbom($data['header']['id_bom']);
+        // $data['detailbom'] = $this->invmodel->getdatadetailbom($data['header']['id_bom']);
+        $data['detailbom'] = $this->invmodel->getdatadetailbom(0);
         $data['isi'] = $array;
         $data['dok2'] = NULL;
-        $this->load->view('inv/viewdetail', $data);
+        $this->load->view('inv/viewdetail',$data);
     }
     public function viewdetailwip($isi = '')
     {

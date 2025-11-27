@@ -118,6 +118,7 @@ function getdatain() {
 		data: {
 			dept_id: $("#dept_kirim").val(),
 			dept_tuju: $("#dept_tuju").val(),
+			filterbon: $("#filterbon").val(),
 		},
 		success: function (data) {
 			// alert(data.datagroup);

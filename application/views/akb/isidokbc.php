@@ -29,8 +29,6 @@
         <div class="tab-content">
             <div class="tab-pane fade active show p-2" id="tabs-home-8">
                 <div class="row">
-                    <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
-                    <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
                     <input type="hidden" id="namahalaman" value="akb">
                     <input type="hidden" id="modehalaman" value="<?= $mode; ?>">
                     <?php $date = date("Y-m-d H:i:s", strtotime("+2 hours", strtotime($datatoken['update_at']))); ?>

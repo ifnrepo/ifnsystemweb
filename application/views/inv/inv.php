@@ -26,13 +26,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="card-body">
         <div class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
-            <div class="col-sm-6 d-flex">
+            <div class="col-sm-7 d-flex">
               <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="ifndln" name="ifndln" style="width: 15% !important">
-                <option value="X">All</option>
-                <option value="dln" <?php if ($ifndln == 'dln') {
+                <option value="all">All</option>
+                <option value="1" <?php if ($ifndln == '1') {
                                       echo "selected";
                                     } ?>>DLN</option>
-                <option value="ifn" <?php if ($ifndln == 'ifn') {
+                <option value="0" <?php if ($ifndln == '0') {
                                       echo "selected";
                                     } ?>>IFN</option>
               </select>
@@ -50,119 +50,153 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </option>
                 <?php endforeach; ?>
               </select>
-              <input type="text" class="form-control form-sm font-kecil font-bold mr-1" id="tglawal" name="tglawal" style="width: 95px;" value="<?= $tglawal ?>">
-              <input type="text" class="form-control form-sm font-kecil font-bold mr-2 hilang" id="tglakhir" name="tglakhir" style="width: 95px;" value="<?= $tglakhir ?>">
+              <input type="text" class="form-control form-sm font-kecil font-bold mr-1 text-blue" id="tglawal" name="tglawal" style="width: 95px;" value="<?= $tglawal ?>">
+              <input type="text" class="form-control form-sm font-kecil font-bold mr-2 tglpilih" id="tglakhir" name="tglakhir" style="width: 95px;" value="<?= $tglakhir ?>">
               <a href="#" class="btn btn-success btn-sm font-bold" id="updateinv"><i class="fa fa-refresh"></i><span class="ml-1 font-kecil">UPDATE</span></a>
             </div>
-            <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-              <a href="<?= base_url('inv/cetakpdf'); ?>" target="_blank" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a>
+            <div class="col-sm-5 d-flex flex-row-reverse" style="text-align: right;">
+              <!-- <a href="<?= base_url('inv/cetakpdf'); ?>" target="_blank" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a> -->
               <a href="<?= base_url() . 'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
+              <a href="#" data-href="<?= base_url().'inv/simpandatainv'; ?>" class="btn btn-info btn-sm btn-flat mr-1 disabled" id="simpaninv" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data ke Pricing Inventory'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save Pricing <br>Inventory</span></a>
             </div>
           </div>
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-3">
-                  <div class="mb-1 row" id="div-exdo">
-                    <label class="col-3 col-form-label font-kecil font-bold required">EXDO</label>
+                  <div class="row <?php if($this->session->userdata('currdept')!='GF'){ echo "hilang"; } ?>" id="div-exdo">
+                    <label class="col-3 col-form-label font-kecil font-bold required" style="height: 28px !important; padding-top:2px;color: black !important;">EXDO</label>
                     <div class="col mb-1">
-                      <select name="exdonya" id="exdonya" class="form-control form-select form-sm font-kecil">
+                      <select name="exdonya" id="exdonya" class="form-control form-select form-sm font-kecil" style="height: 28px !important; padding-top:2px;color: black !important;">
+                        <option value="all">All</option>
                         <option value="EXPORT" <?php if($this->session->userdata('exdonya')=='EXPORT'){ echo "selected"; } ?>>EXPORT</option>
                         <option value="DOMESTIC" <?php if($this->session->userdata('exdonya')=='DOMESTIC'){ echo "selected"; } ?>>DOMESTIC</option>
                       </select>
                       <!-- <input type="email" class="form-control form-sm font-kecil" aria-describedby="emailHelp" placeholder="Enter email"> -->
                       <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
                     </div>
-                    <hr class="my-0 mx-1">
                   </div>
+                  <div class="row <?php if($this->session->userdata('currdept')!='GF'){ echo "hilang"; } ?>" id="div-exdo">
+                    <label class="col-3 col-form-label font-kecil font-bold required" style="height: 28px !important; padding-top:2px;color: black !important;">Buyer</label>
+                    <div class="col mb-1">
+                      <select name="idbuyer" id="idbuyer" class="form-control form-select form-sm font-kecil" style="height: 28px !important; padding-top:2px;color: black !important;">
+                        <option value="all">All</option>
+                        <?php foreach($buyer->result_array() as $buy): $danger = $buy['id_buyer']==0 ? "text-danger font-bold" : ""; $port = strtoupper($buy['exdo'])=='EXPORT' ? ' - '.$buy['port'] : ''; ?>
+                          <option value="<?= $buy['id_buyer'] ?>" class="<?= $danger ?>"><?= $buy['nama'].$port ?></option>
+                        <?php endforeach;  ?>
+                      </select>
+                      <!-- <input type="email" class="form-control form-sm font-kecil" aria-describedby="emailHelp" placeholder="Enter email"> -->
+                      <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
+                    </div>
+                  </div>
+                  <div class="row <?php if($this->session->userdata('currdept')!='GP'){ echo "hilang"; } ?>" id="div-exnet">
+                    <label class="col-3 col-form-label font-kecil font-bold required" style="height: 28px !important; padding-top:2px;color: black !important;">Exnet</label>
+                    <div class="col mb-1">
+                      <select name="idexnet" id="idexnet" class="form-control form-select form-sm font-kecil" style="height: 28px !important; padding-top:2px;color: black !important;">
+                        <option value="all">All</option>
+                        <option value="1">Ya</option>
+                        <option value="0">Tidak</option>
+                      </select>
+                      <!-- <input type="email" class="form-control form-sm font-kecil" aria-describedby="emailHelp" placeholder="Enter email"> -->
+                      <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
+                    </div>
+                  </div>
+                  <div class="row <?php if($this->session->userdata('currdept')!='GF'){ echo "hilang"; } ?>" id="div-exdo">
+                    <label class="col-3 col-form-label font-kecil font-bold required" style="height: 28px !important; padding-top:2px;color: black !important;">Stok GD</label>
+                    <div class="col mb-1">
+                      <select name="idstok" id="idstok" class="form-control form-select form-sm font-kecil" style="height: 28px !important; padding-top:2px;color: black !important;">
+                        <option value="all">All</option>
+                        <option value="0">Non Grade</option>
+                        <option value="1">Grade A</option>
+                        <option value="2">Grade B</option>
+                      </select>
+                      <!-- <input type="email" class="form-control form-sm font-kecil" aria-describedby="emailHelp" placeholder="Enter email"> -->
+                      <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
+                    </div>
+                  </div>
+                  <hr class="my-0 mx-1">
                   <h4 class="mb-1 font-kecil">Kategori Barang</h4>
                   <span class="font-kecil">
                     <div class="font-kecil" style="margin-bottom: 2px !important;">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="katbar" name="katbar">
-                        <option value="X">Semua Kategori</option>
+                        <option value="all">Semua Kategori</option>
                         <?php if ($kat != null) : foreach ($kat->result_array() as $kate) {
-                            $pakai = $kate['id_kategori'] != null ? $kate['id_kategori'] : $kate['name_kategori'];
+                            $pakai = $kate['id_kategori'] != null ? $kate['id_kategori'] : $kate['nama_kategori'];
                             $selek = $this->session->userdata('filterkat') == $pakai ? 'selected' : '';
                         ?>
-                            <option value="<?= $pakai; ?>" <?= $selek; ?>><?= $kate['name_kategori'].$kate['id_kategori']; ?></option>
+                            <option value="<?= $pakai; ?>" <?= $selek; ?>><?= $kate['nama_kategori']; ?></option>
                         <?php }
                         endif ?>
                       </select>
                     </div>
-                  <?php $deptampil = ['GM', 'SP']; ?>
-                  <select class="form-control form-select font-kecil font-bold bg-cyan-lt <?php if (!in_array($this->session->userdata('currdept'), $deptampil)) {
-                                                                                            echo "hilang";
-                                                                                          } ?>" id="nomorbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
+                    <label class="form-check mt-1 mb-1 bg-danger-lt hilang">
+                      <input class="form-check-input" type="checkbox" id="dataneh">
+                      <span class="form-check-label font-bold">View Data Aneh</span>
+                    </label>
+                  <select class="form-control form-select font-kecil font-bold bg-cyan-lt hilang" id="nomorbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
                     <option value="X">Pilih BC</option>
-                    <?php if ($kat != null) : foreach ($katbece->result_array() as $bece) { ?>
-                        <?php
-                        $isi = $bece['nomor_bc'] != null ? 'BC. ' . trim($bece['jns_bc']) . '- ' . $bece['nomor_bc'] . '(' . $bece['tgl_bc'] . ')' : 'Semua';
-                        $selek = $this->session->userdata('nomorbcnya') == $bece['nomor_bc'] ? 'selected' : '';
-                        ?>
-                        <option value="<?= $bece['nomor_bc']; ?>" <?= $selek; ?>><?= $isi; ?></option>
-                    <?php }
-                    endif; ?>
-                  </select>       
-                </div>
-                <div class="col-3 ">
-                  <label class="form-check mt-1 mb-1 bg-teal-lt <?php if ($this->session->userdata('viewharga') != 1) {
-                                                                  echo "hilang";
-                                                                } ?>">
-                    <input class="form-check-input" type="checkbox" id="viewharga" <?php if ($this->session->userdata('invharga') == 1) {
-                                                                                      echo "checked";
-                                                                                    } ?>>
-                    <span class="form-check-label font-bold">Tampilkan Harga</span>
-                  </label>
-                  <label class="form-check mt-1 mb-3 bg-red-lt">
-                    <input class="form-check-input" type="checkbox" id="viewinv" <?php if ($this->session->userdata('viewinv') == 1) {
-                                                                                    echo "checked";
-                                                                                  } ?>>
+                  </select>   
+                  <!-- Start      -->
+                  
+                  <label class="form-check mt-1 mb-3 bg-red-lt hilang">
+                    <input class="form-check-input" type="checkbox" id="viewinv">
                     <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
                   </label>
-                  <?php $deptampil = ['GM']; ?>
-                  <select class="form-control form-select font-kecil font-bold bg-yellow-lt <?php if (!in_array($this->session->userdata('currdept'), $deptampil)) {
-                                                                                            echo "hilang";
-                                                                                          } ?>" id="kontrakbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
+                  <select class="form-control form-select font-kecil font-bold bg-yellow-lt hilang" id="kontrakbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
                     <option value="X">Semua - Kontrak BC</option>
-                    <?php if ($kat != null && isset($kontbece)) : foreach ($kontbece->result_array() as $bece) { ?>
-                        <?php
-                        $isi = trim($bece['nomor_kont']) != '' ? $bece['nomor_kont'] . '(' . $bece['tgl_kont'] . ')' : 'Semua';
-                        $value = trim($bece['nomor_kont']) != '' ? $bece['nomor_kont'] : 'X';
-                        $selek = $this->session->userdata('kontrakbcnya') == $bece['nomor_kont'] ? 'selected' : '';
-                        if($value != 'X'):
-                        ?>
-                        <option value="<?= $value; ?>" <?= $selek; ?>><?= $isi; ?></option>
-                    <?php endif; }
-                    endif; ?>
                   </select>
+                   <!-- End  -->
+                    <hr class="small m-1">
+                    <input type="text" id="paramload" class="hilang" value="">
+                    <div class="text-black font-bold">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
                 </div>
-                <div class="col-3 font-kecil">
-                  <input type="text" id="paramload" class="hilang" value="">
-                  <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
-                  <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs" style="font-weight: normal;">Loading ..</span></div>
-                  <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
+                <div class="col-6 ">
+                  <label class="bg-red-lt my-0 py-1 px-2 font-bold w-100"><span class="text-black">Rekap Data</span></label>
+                  <table class="table table-bordered m-0">
+                    <thead class="bg-primary-lt">
+                      <tr>
+                        <th class="text-center text-black">Unit</th>
+                        <th class="text-center text-black">S.Awal</th>
+                        <th class="text-center text-black">Pemasukan</th>
+                        <th class="text-center text-black">Pengeluaran</th>
+                        <th class="text-center text-black">Adjustment</th>
+                        <th class="text-center text-black">S.Akhir</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-tbody">
+                      <tr class="p-0">
+                        <td class="font-bold">PCS</td>
+                        <td class="text-right" id="sawalpcs">Loading..</td>
+                        <td class="text-right" id="inpcs">Loading..</td>
+                        <td class="text-right" id="outpcs">Loading..</td>
+                        <td class="text-right" id="adjpcs">Loading..</td>
+                        <td class="text-right" id="jumlahpcs">Loading..</td>
+                      </tr>
+                      <tr>
+                        <td class="font-bold">KGS</td>
+                        <td class="text-right" id="sawalkgs">Loading..</td>
+                        <td class="text-right" id="inkgs">Loading..</td>
+                        <td class="text-right" id="outkgs">Loading..</td>
+                        <td class="text-right" id="adjkgs">Loading..</td>
+                        <td class="text-right" id="jumlahkgs">Loading..</td>
+                      </tr>
+                    </tbody>
+                  </table>
                 </div>
                 <div class="col-3">
-                  <div class="">
-                    <label class="form-check form-check-inline mb-1">
-                      <input class="form-check-input" type="radio" name="radios-inline" value="Cari Barang" <?php if ($kategoricari == 'Cari Barang') {
-                                                                                                              echo "checked";
-                                                                                                            } ?>>
-                      <span class="form-check-label font-kecil">Barang</span>
-                    </label>
-                    <label class="form-check form-check-inline mb-1">
-                      <input class="form-check-input" type="radio" name="radios-inline" value="Cari SKU" <?php if ($kategoricari == 'Cari SKU') {
-                                                                                                            echo "checked";
-                                                                                                          } ?>>
-                      <span class="form-check-label font-kecil">SKU</span>
+                  <div class="mb-0">
+                    <label class="font-bold">
+                      Cari Barang / SKU :
                     </label>
                   </div>
-                  <div class="input-group mb-0">
-                    <?php $textcari = $this->session->userdata('katcari') != null ? $this->session->userdata('katcari') : ''; ?>
-                    <input type="text" class="form-control form-sm font-kecil" placeholder="Cari…" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
-                    <button class="btn text-center font-kecil" type="button" id="buttoncari" style="height: 38px;">
-                      Cari
-                    </button>
+                  <div class="">
+                    <div class="" >
+                    <textarea class="form form-control p-2 m-0 font-kecil" id='textcari' style="text-transform: uppercase;"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button type="button" id="buttoncari" class="btn btn-sm btn-success btn-flat w-100 mt-1">Cari</button>
+                      <button type="button" id="buttonreset" class="btn btn-sm btn-danger btn-flat w-25 mt-1">Reset</button>
+                    </div>
                   </div>
                 </div>
                 <div class="col-2">
@@ -174,149 +208,57 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div>
-          <table id="tabel" class="table order-column table-hover datatable6" style="width: 100% !important;">
+          <table id="tabelnya" class="table table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;"> <!-- table order-column table-hover table-bordered cell-border -->
             <thead>
               <tr>
                 <!-- <th>Tgl</th> -->
-                <th>Spesifikasi</th>
-                <th>SKU</th>
-                <th>Nomor IB</th>
-                <th>Insno</th>
+                <th>SKU/Spesifikasi</th>
+                <th>Nomor IB<br>Insno</th>
                 <th>Satuan</th>
                 <th>BC</th>
-                <!-- <th>Output</th> -->
-                <?php if ($this->session->userdata('currdept') == 'GF') : ?>
-                  <th>Nobale</th>
-                <?php endif; ?>
+                <th>Nobale</th>
+                <th>Stok GD</th>
+                <th>Exnet</th>
                 <th>Qty</th>
                 <th>Kgs</th>
-                <?php if ($this->session->userdata('invharga') == 1) : ?>
-                  <th>Harga</th>
-                  <th>Total</th>
-                <?php endif; ?>
                 <th>Opname</th>
                 <th>Verified</th>
               </tr>
             </thead>
-            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-              <?php $hasilsak = 0;
-              $cntbrg = 0;
-              $jmpcs = 0;
-              $jmkgs = 0;
-              $grandtotal = 0;
-              if ($data != null) : $brg = '';
-                $sak = 0;
-                $sakkg = 0;
-                foreach ($data->result_array() as $det) {
-                  $saldo = $det['pcs'];
-                  $in = $det['pcsin'];
-                  $out = $det['pcsout'];
-                  $saldokg = $det['kgs'];
-                  $inkg = $det['kgsin'];
-                  $outkg = $det['kgsout'];
-                  // if ($brg != $det['id_barang']) {
-                  $brg = $det['id_barang'];
-                  $sak = $saldo + $in - $out;
-                  $sakkg = $saldokg + $inkg - $outkg;
-                  // } else {
-                  //   $sak += $saldo + $in - $out;
-                  //   $sakkg = $saldokg + $inkg - $outkg;
-                  // }
-                  $bg = $sak >= 0 ? 'text-teal-green' : 'text-danger';
-                  $hasilsak += $det['pcs'];
-                  $cntbrg += 1;
-                  $jmkgs += $sakkg;
-                  $jmpcs += $sak;
-                  $isi = 'OME-' . trim(encrypto($det['po'])) . '-' . trim(encrypto($det['item'])) . '-' . trim($det['dis']) . '-' . trim($det['id_barang']) . '-' . trim(encrypto($det['nobontr'])) . '-' . trim(encrypto($det['insno'])) . '-' . trim(encrypto($det['nobale'])) . '-'. trim(encrypto($det['nombc'])) . '-';
-                  // $isi = 'XXX';
-                  $insno = $this->session->userdata('currdept') == 'GS' ? $det['insno'] : $det['insno'];
-                  $nobontr = $this->session->userdata('currdept') == 'GS' ? $det['nobontr'] : $det['nobontr'];
-                  // $spekbarang = trim($det['po']) != '' ? $det['spek'] : substr($det['nama_barang'], 0, 75);
-                  $spekbarang = trim($det['po']) != '' ? spekpo($det['po'],$det['item'],$det['dis']) : substr($det['nama_barang'], 0, 75);
-                  $pilihtampil = $sak == 0 ? $sakkg : $sak;
-                  $totalharga = $pilihtampil * $det['harga'];
-                  $grandtotal += $totalharga;
-                  $cx = '';
-                  if ($this->session->userdata('currdept') == 'GM' || $this->session->userdata('currdept') == 'GS') {
-                    if ($det['kodesatuan'] == 'KGS') {
-                      if ((float) $det['totkgs'] < (float) $det['safety_stock']) {
-                        $cx = 'text-red';
-                      }
-                    } else {
-                      if ((float) $det['totpcs'] < (float) $det['safety_stock']) {
-                        $cx = 'text-red';
-                      }
-                    }
-                  }
-              ?>
-                  <tr class="<?= $bg; ?><?= $cx; ?>">
-                    <td style="border-bottom: red;"><a href="<?= base_url() . 'inv/viewdetail/' . $isi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail' id="namabarang" rel="<?= $det['id_barang']; ?>" rel2="<?= $det['nama_barang']; ?>" rel3="<?= $isi; ?>" style="text-decoration: none;" class="<?= $cx; ?>"><?= $spekbarang; ?></a></td>
-                    <td style="border-bottom: red;"><?= viewsku(id: $det['kode'], po: $det['po'], no: $det['item'], dis: $det['dis']) ?></td>
-                    <td style="border-bottom: red;"><?= $nobontr; ?></td>
-                    <td style="border-bottom: red;"><?= $insno; ?></td>
-                    <td style="border-bottom: red;"><?= $det['kodesatuan']; ?></td>
-                    <td style="border-bottom: red;"><?= $det['nombc']; ?></td>
-                    <?php if ($this->session->userdata('currdept') == 'GF') : ?>
-                      <td style="border-bottom: red;"><?= $det['nobale']; ?></td>
-                    <?php endif; ?>
-                    <!-- <td style="border-bottom: red;"></td> -->
-                    <td style="border-bottom: red;" class="text-right"><?= rupiah($sak, 2); ?></td>
-                    <td style="border-bottom: red;" class="text-right"><?= rupiah($sakkg, 4); ?></td>
-                    <?php if ($this->session->userdata('invharga') == 1) : ?>
-                      <td style="border-bottom: red;" class="text-right"><?= rupiah($det['harga'], 2); ?></td>
-                      <td style="border-bottom: red;" class="text-right"><?= rupiah($totalharga, 2); ?></td>
-                    <?php endif; ?>
-                    <td style="border-bottom: red;" class="text-right"></td>
-                    <td style="border-bottom: red;" class="text-center line-12" id="row<?= $det['idu'] ?>">
-                      <?php if ($det['user_verif'] == 0) { ?>
-                        <a href="<?= base_url() . 'inv/confirmverifikasidata/' . $det['idu']; ?>" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>"><span>Verify</span></a>
-                        <?php } else {
-                        if (datauser($this->session->userdata('id'), 'cekbatalstok') == 1) {  ?>
-                          <a href="<?= base_url() . 'inv/batalverifikasidata/' . $det['idu']; ?>" data-bs-toggle="modal" data-bs-target="#canceltask" data-tombol="Ya" data-message="Akan membatalkan verifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>">
-                            verified : <?= substr(datauser($det['user_verif'], 'username'), 0, 9); ?><br>
-                            <span class="font-10"><?= $det['tgl_verif']; ?></span>
-                          </a>
-                        <?php } else {  ?>
-                          verified : <?= substr(datauser($det['user_verif'], 'username'), 0, 9); ?><br>
-                          <span class="font-10"><?= $det['tgl_verif']; ?></span>
-                      <?php }
-                      } ?>
-                    </td>
-                  </tr>
-              <?php }
-              endif; ?>
+            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important; width: 100% !important;">
+            
             </tbody>
           </table>
         </div>
-        <input type="text" id="jumlahrek" class="hilang" value="<?= $cntbrg; ?>">
-        <input type="text" id="jumlahpc" class="hilang" value="<?= $jmpcs; ?>">
-        <input type="text" id="jumlahkg" class="hilang" value="<?= $jmkgs; ?>">
+        <input type="text" id="jumlahrek" class="hilang" value="0">
+        <input type="text" id="jumlahpc" class="hilang" value="0">
+        <input type="text" id="jumlahkg" class="hilang" value="0">
         <div class="card card-active hilang" style="clear:both;">
           <div class="card-body p-2 font-kecil">
             <div class="row">
               <div class="col-3">
                 <h4 class="mb-0 font-kecil font-bold">Jumlah Rec</h4>
                 <span class="font-kecil">
-                  <?= rupiah($cntbrg, 0); ?>
+                  <?= rupiah(0, 0); ?>
                 </span>
               </div>
               <div class="col-3 ">
                 <h4 class="mb-0 font-kecil font-bold">Pcs</h4>
                 <span class="font-kecil">
-                  <?= rupiah($jmpcs, 2); ?>
+                  <?= rupiah(0, 2); ?>
                 </span>
               </div>
               <div class="col-3">
                 <h4 class="mb-0 font-kecil font-bold">Kgs</h4>
                 <span class="font-kecil">
-                  <?= rupiah($jmkgs, 2); ?>
+                  <?= rupiah(0, 2); ?>
                 </span>
               </div>
               <div class="col-3" style="line-height: 5px !important;">
                 <?php if ($this->session->userdata('invharga')) : ?>
                   <h4 class="mb-0 font-kecil font-bold">Grand Total</h4>
                   <span class="font-kecil text-green font-bold">
-                    Rp. <?= rupiah($grandtotal, 2); ?>
+                    Rp. <?= rupiah(0, 2); ?>
                   </span>
                 <?php endif; ?>
               </div>

@@ -29,7 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <a href="#" class="btn btn-success btn-sm font-bold" id="updatebcgf"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
             </div>
             <div class="col-sm-7 d-flex flex-row-reverse" style="text-align: right;">
-              <a href="<?= base_url() . 'bcmaterial/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
+              <a href="<?= base_url() . 'bcgf/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
             </div>
           </div>
           <div class="card card-active mb-1" style="clear:both;">
@@ -40,29 +40,29 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <label class="col-3 col-form-label font-kecil font-bold">IFN/DLN</label>
                     <div class="col mb-1">
                       <select name="kepemilikan" id="kepemilikan" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1">
-                        <option value="">All</option>
+                        <option value="all">All</option>
                         <option value="0" <?php if($this->session->userdata('kepemilikanbcgf')=='0'){ echo "selected"; } ?>>IFN</option>
                         <option value="1" <?php if($this->session->userdata('kepemilikanbcgf')=='1'){ echo "selected"; } ?>>DLN</option>
                       </select>
                     </div>
                   </div>
-                  <div class="row">
-                    <label class="col-3 col-form-label font-kecil font-bold">KATEGORI</label>
+                  <!-- <div class="row">
+                    <label class="col-3 col-form-label font-kecil font-bold">Kategori</label>
                     <div class="col">
                       <select name="katbarang" id="katbarang" class="form-control form-select form-sm font-kecil">
                         <option value="">Semua</option>
                        
                       </select>
                     </div>
-                  </div>
+                  </div> -->
                 </div>
                 <div class="col-3 font-kecil">
                   <!-- <div class="text-blue font-bold mt-2">Jumlah IDR : <span id="jumlahidr" style="font-weight: normal;">Loading ..</span></div> -->
                   <!-- <div class="text-blue font-bold">Jumlah USD : <span id="jumlahusd" style="font-weight: normal;">Loading ..</span></div> -->
                 </div>
                 <div class="col-3 ml-2">
-                  <div class="text-blue font-bold mt-2 ">Jumlah Dok : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
-                  <div class="text-blue font-bold">Jumlah Qty : <span id="jumlahpcs" style="font-weight: normal;">Loading ..</span></div>
+                  <!-- <div class="text-blue font-bold mt-2 ">Jumlah Dok : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div> -->
+                  <div class="text-blue font-bold">Jumlah Bale : <span id="jumlahpcs" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
                 </div>
                 

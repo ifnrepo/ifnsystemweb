@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 
-  <link href=<?= base_url() . "assets/css/own-style.css?1748502555" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/own-style.css?1764237018" ?> rel="stylesheet" />
   <style>
     .ui-autocomplete {
       z-index: 99999 !important;
@@ -743,7 +743,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 8); ?>" href="<?= base_url('hargamat/clear'); ?>">
                       Harga Material
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 9); ?>" href="<?= base_url('pricinginv'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 9); ?>" href="<?= base_url('pricinginv/clear'); ?>">
                       Pricing Inventory
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 4); ?>" href="<?= base_url('bcmasuk/clear'); ?>">
@@ -767,8 +767,8 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 13); ?>" href="<?= base_url('bcwaste'); ?>">
                       Scrap / Waste
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 14); ?>" href="<?= base_url('bcsparepart'); ?>">
-                      Sparepart
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 14); ?>" href="<?= base_url('priceinv'); ?>">
+                      Pricing Inventory
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 7); ?>" href="<?= base_url('cctv'); ?>">
                       Tutorial Akses CCTV
@@ -942,8 +942,12 @@
         <div class="collapse navbar-collapse" id="navbar-menu">
           <div id="loadview">
             <!-- <div class="spinner-border spinner-border-sm text-secondary" role="status"></div> -->
+            <!-- <span class="loadered"></span> -->
           </div>
+          <span class="loadered hilang"></span>
         </div>
       </div>
     </header>
     <div class="page-wrapper">
+    <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
+    <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">

@@ -2544,6 +2544,7 @@ class Akb extends CI_Controller
 
         $databalik = json_decode($result, true);
         // print_r($databalik);
+        // print_r($databalik['message']);
         if ($databalik['status'] == 'OK') {
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL" . $data['nomorAju']);
             $this->session->set_flashdata('errorsimpan', 2);
@@ -2554,7 +2555,7 @@ class Akb extends CI_Controller
         } else {
             // print_r($databalik);
             $this->session->set_flashdata('errorsimpan', 1);
-            $this->session->set_flashdata('pesanerror', $databalik['message'][0] . '[EXCEPTION]' . $databalik['exception']);
+            $this->session->set_flashdata('pesanerror', $databalik['message'][0] . '[EXCEPTION]' . $databalik['message'][1]);
             $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
         }

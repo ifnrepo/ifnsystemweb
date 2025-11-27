@@ -163,6 +163,7 @@ class Ib_model extends CI_Model
         $this->db->join('tb_bombc', 'tb_bombc.id_header = tb_header.id', 'left');
         $this->db->where('trim(tb_header.nomor_bc)', $kode);
         $this->db->where('tb_header.kode_dok != ','ADJ');
+        $this->db->where('tb_header.kode_dok != ','IB');
         return $this->db->get()->row_array();
         // return $this->db->get_where('tb_header',['trim(nomor_bc)' => $kode])->row_array();
     }

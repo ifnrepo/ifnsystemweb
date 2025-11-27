@@ -350,6 +350,17 @@ $(document).ready(function () {
 	// 		scrollY: 500,
 	// 		ordering: false,
 	// 	});
+
+	var errosimpan = $("#errorsimpan").val();
+	var pesan = $("#pesanerror").val();
+	if (errosimpan == 1) {
+		// pesan("PESAN :", "error");
+		alert("PESAN : " + pesan);
+	}
+	if (errosimpan == 2) {
+		// pesan("PESAN :", "error");
+		alert("PESAN : " + pesan);
+	}
 	cekNotif();
 });
 var preloader = $("#preloader");
@@ -815,4 +826,31 @@ function createNotification(title, icon, body, url) {
 function viewsku(po='',item='',dis=0){
 	var dise = dis==0 ? '' : ' dis '+dis;
 	return po.trim()+'#'+item.trim()+dise;
+}
+function getspekpo(xpo='',xitem='',xdis=0){
+	var kode = 'XXX';
+	try {
+		$.ajax({
+			dataType: "json",
+			type: "POST",
+			url: base_url + "bcgf/getdataspekpo",
+			data: {
+				po: xpo,
+				item: xitem,
+				dis: xdis
+			},
+			success: function (data) {
+				kode = data;
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(thrownError);
+				kode = thrownError;
+			},
+		});
+		return kode;
+	} catch (error) {
+		return 'ERROR';
+	}
+	
 }

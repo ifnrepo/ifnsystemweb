@@ -1148,8 +1148,8 @@ class Helper_model extends CI_Model
         $this->db->where('tb_header.send_ceisa = 1 and trim(tb_header.exnomor_bc) != "" ');
         return $this->db->get();
     }
-    public function jmlkgs261($id){
-        $dataheader = $this->db->get_where('tb_header',['id_kontrak' => $id]);
+    public function jmlkgs261($id,$jnsbc=''){
+        $dataheader = $this->db->get_where('tb_header',['id_kontrak' => $id,'jns_bc' => $jnsbc]);
         $idheader = ['!@##'];
         foreach($dataheader->result_array() as $dathed){
             array_push($idheader,$dathed['id']);

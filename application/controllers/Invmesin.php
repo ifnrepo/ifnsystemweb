@@ -15,6 +15,7 @@ class Invmesin extends CI_Controller
         }
         $this->load->model('invmesin_model', 'invmesinmodel');
         $this->load->model('userappsmodel', 'usermodel');
+        $this->load->model('barangmodel');
         $this->load->model('helper_model', 'helpermodel');
 
         $this->load->library('Pdf');
@@ -27,25 +28,34 @@ class Invmesin extends CI_Controller
         $header['header'] = 'other';
         $data['data'] = $this->invmesinmodel->getdata()->result_array();
         $data['lokasi'] = $this->invmesinmodel->getdatalokasi();
+        if($this->session->userdata('tglawalmesin')==null){
+            $data['tglawal'] = tglmysql(date('Y-m-01'));
+            $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
+        }else{
+            $data['tglawal'] = tglmysql($this->session->userdata('tglawalmesin'));
+            $data['tglakhir'] = tglmysql($this->session->userdata('tglakhirmesin'));
+        }
+        $data['data'] = $this->invmesinmodel->getdata();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'invmesin';
         $this->load->view('layouts/header', $header);
-        $this->load->view('invmesin/index', $data);
+        $this->load->view('invmesin/invmesin',$data);
         $this->load->view('layouts/footer', $footer);
     }
     public function clear()
     {
-        $this->session->set_userdata('th', date('Y'));
-        $this->session->set_userdata('bl', date('m'));
-        $this->session->unset_userdata('lokasimesin', date('Y'));
+        $this->session->unset_userdata('tglawalmesin');
+        $this->session->unset_userdata('tglakhirmesin');
         $url = base_url() . 'invmesin';
         redirect($url);
     }
-    public function ubahperiode()
-    {
-        $this->session->set_userdata('th', $_POST['th']);
-        $this->session->set_userdata('bl', $_POST['bl']);
-        $this->session->set_userdata('lokasimesin', $_POST['lok']);
+    public function getdata(){
+        $monthawal = date('m',strtotime(tglmysql($_POST['tga'])));
+        $tahunawal = date('Y',strtotime(tglmysql($_POST['tga'])));
+        $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
+        $this->session->set_userdata('tglawalmesin', tglmysql($jaditahun));
+        $this->session->set_userdata('tglakhirmesin', tglmysql($_POST['tgk']));
+        $this->session->set_userdata('lokasimesin', $_POST['msn']);
         echo 1;
     }
     public function getdetail($id)
@@ -55,7 +65,7 @@ class Invmesin extends CI_Controller
         $this->load->view('invmesin/viewdetail', $data);
     }
 
-    public function excel()
+    public function toexcel()
     {
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
@@ -63,19 +73,21 @@ class Invmesin extends CI_Controller
         $sheet->setCellValue('A1', "MUTASI MESIN/ASSET"); // Set kolom A1 dengan tulisan "DATA SISWA"    
         $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
 
+        $sheet->setCellValue('A2', "Periode : ".$this->session->userdata('tglawalmesin')." s/d ".$this->session->userdata('tglakhirmesin')); 
+
         // Buat header tabel nya pada baris ke 3    
-        $sheet->setCellValue('A2', "NO"); // Set kolom A3 dengan tulisan "NO"    
-        $sheet->setCellValue('B2', "KODE"); // Set kolom B3 dengan tulisan "KODE"    
-        $sheet->setCellValue('C2', "NAMA MESIN/ASSET"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('D2', "UNIT");
-        $sheet->setCellValue('E2', "LOKASI");
-        $sheet->setCellValue('F2', "SAW");
-        $sheet->setCellValue('G2', "IN");
-        $sheet->setCellValue('H2', "OUT");
-        $sheet->setCellValue('I2', "ADJ");
-        $sheet->setCellValue('J2', "SALDO");
-        $sheet->setCellValue('K2', "OPNAME");
-        $sheet->setCellValue('L2', "KETERANGAN");
+        $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B3', "KODE"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C3', "NAMA MESIN/SPAREPART"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D3', "UNIT");
+        $sheet->setCellValue('E3', "LOKASI");
+        $sheet->setCellValue('F3', "SAW");
+        $sheet->setCellValue('G3', "IN");
+        $sheet->setCellValue('H3', "OUT");
+        $sheet->setCellValue('I3', "ADJ");
+        $sheet->setCellValue('J3', "SALDO");
+        $sheet->setCellValue('K3', "OPNAME");
+        $sheet->setCellValue('L3', "KETERANGAN");
         // Panggil model Get Data   
 
         $bl = $this->input->get('blperiode');
@@ -87,28 +99,28 @@ class Invmesin extends CI_Controller
         if (!is_numeric($th) || $th < 2020 || $th > date('Y')) {
             $th = null;
         }
-        $master = $this->invmesinmodel->getdata_export($bl, $th, $lokasi);
+        $master = $this->invmesinmodel->getdata();
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
-        $numrow = 3;
+        $numrow = 4;
 
         // Set baris pertama untuk isi tabel adalah baris ke 3    
-        foreach ($master as $data) {
+        foreach ($master->result_array() as $data) {
             // $oth = cekoth($data['pb'], $data['bbl'], $data['adj']);
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $data['kode_fix']);
             $sheet->setCellValue('C' . $numrow, $data['nama_barang']);
-            $sheet->setCellValue('D' . $numrow, $data['kodesatuan']);
+            $sheet->setCellValue('D' . $numrow, 'UNIT');
             $sheet->setCellValue('E' . $numrow, $data['lokasi']);
-            $sheet->setCellValue('F' . $numrow, $data['sawi']);
-            $sheet->setCellValue('G' . $numrow, $data['ini']);
-            $sheet->setCellValue('H' . $numrow, $data['outi']);
-            $sheet->setCellValue('I' . $numrow, $data['adji']);
-            $sheet->setCellValue('J' . $numrow, $data['sawi'] + $data['ini'] - $data['outi']);
+            $sheet->setCellValue('F' . $numrow, $data['xsaldomesin']);
+            $sheet->setCellValue('G' . $numrow, $data['xinmesin']);
+            $sheet->setCellValue('H' . $numrow, $data['xoutmesin']);
+            $sheet->setCellValue('I' . $numrow, 0);
+            $sheet->setCellValue('J' . $numrow, $data['xsaldomesin'] + $data['xinmesin'] - $data['xoutmesin']);
             $sheet->setCellValue('K' . $numrow, 0);
-            $sheet->setCellValue('L' . $numrow, 'Sesuai');
+            $sheet->setCellValue('L' . $numrow, '');
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

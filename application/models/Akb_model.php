@@ -643,8 +643,23 @@ class Akb_model extends CI_Model
     }
     public function simpanresponbc($data)
     {
+        $this->db->trans_start();
         $this->db->where('id', $data['id']);
-        $hasil = $this->db->update('tb_header', $data);
+        $this->db->update('tb_header', $data);
+
+        $jnsbc = $this->db->get_where('tb_header',['id' => $data['id']])->row_array();
+        if($jnsbc == '261'){    
+            $this->db->select('id_header,id_akb');
+            $this->db->from('tb_detail');
+            $this->db->where('id_akb',$data['id']);
+            $this->db->group_by('id_header');
+            $isi = $this->db->get();
+            foreach($isi->result_array() as $isi){
+                $this->db->where('id',$isi['id_header']);
+                $this->db->update('tb_header',['nomor_bc' => $data['nomor_bc'],'ok_tuju' => 1,'user_tuju' => $this->session->userdata('id'),'tgl_tuju' => date('Y-m-d H:i:s')]);
+            }
+        }
+        $hasil = $this->db->trans_complete();
         return $hasil;
     }
     public function gettoken()
@@ -1168,12 +1183,13 @@ class Akb_model extends CI_Model
             $this->db->select("tb_detail.*,round(sum(pcs),2) as pcs,round(sum(kgs),2) as kgs,tb_header.nomor_dok,satuan.kodebc,barang.kode,barang.nohs,'56081100' as hsx,tb_header.nomor_inv");
             $this->db->from('tb_detail');
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
+            $this->db->join('tb_header c', 'c.id = tb_detail.id_header', 'left');
             $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
             $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
             $this->db->join('tb_po g', 'g.po = tb_detail.po AND g.item = tb_detail.item AND g.dis = tb_detail.dis', 'left');
             $this->db->where('id_akb', $id);
             // $this->db->limit(1,0);
-            $this->db->group_by('tb_header.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
+            $this->db->group_by('c.ketprc,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
             $this->db->order_by('tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.insno,barang.kode');
             // $this->db->order_by('urut_akb,seri_barang');
         }

@@ -161,3 +161,37 @@
 	color: #182433 !important;
 	/* background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23929dab' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='m2 5 6 6 6-6'/%3e%3c/svg%3e"); */
 }
+
+.loadered{
+    display: block;
+    position: relative;
+    height: 32px;
+    width: 100%;
+    box-sizing: border-box;
+    overflow: hidden;
+  }
+  .loadered:before{
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: 4px;
+    width: 24px;
+    height: 24px;
+    animation: ballbns 5s ease-in infinite;
+  }
+  
+  @keyframes ballbns {
+    0% {  
+      left: 0; 
+      transform: translateX(-100%) rotate(0deg);
+      border-radius: 0; 
+      background: #fbc783;
+    }
+    100% {  
+      left: 100%; 
+      transform: translateX(0%) rotate(360deg); 
+      border-radius: 50%;
+      background:  #fbc783; 
+    }
+  } 
+  

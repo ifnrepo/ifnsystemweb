@@ -9,7 +9,7 @@ class Out_model extends CI_Model{
             'month(tgl)' => $this->session->userdata('bl'),
             'year(tgl)' => $this->session->userdata('th'),
         ];
-        if(($kode['dept_id']!='GF' && $kode['dept_tuju']!='CU') && ($kode['dept_id']!='FG' && $kode['dept_tuju']!='DL')){
+        if(($kode['dept_id']!='GF' && $kode['dept_tuju']!='CU') || ($kode['dept_id']=='FG')){ // && $kode['dept_tuju']!='DL'
             $arrkondisi['left(nomor_dok,3) != '] = 'IFN';
         }
         if($kode['filterbon']==1){

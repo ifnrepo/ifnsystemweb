@@ -85,7 +85,20 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php } ?>
                 </div>
               </div>
-              <!-- <div class="hr m-1"></div> -->
+              <div class="hr m-1"></div>
+              <div class="row mt-0">
+                <div class="col-2">
+                  <h5 class="m-0">Filter</h5>
+                    <div class="font-kecil">
+                      <select class="form-select form-control form-sm font-kecil font-bold" style="height: 30px; padding-top: 4.5px;" id="filterbon" name="filterbon">
+                        <option value="0" <?php if($this->session->userdata('filterbon')==0) { echo "selected"; } ?>>Semua Bon</option>
+                        <option value="1" <?php if($this->session->userdata('filterbon')==1) { echo "selected"; } ?>>Bon Belum Konfirmasi</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="col-2"></div>
+                <div class="col-8"></div>
+              </div>
             </div>
           </div>
         </div>

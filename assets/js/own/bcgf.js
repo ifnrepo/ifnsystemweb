@@ -1,65 +1,5 @@
 var table = null;
 $(document).ready(function () {
-	// var table = $("#tabelnya").DataTable({
-	// 	processing: true,
-	// 	serverSide: true,
-	// 	order: [],
-	// 	ajax: {
-	// 		url: base_url + "barang/get_data_barang",
-	// 		type: "POST",
-	// 		data: function (d) {
-	// 			d.filter_kategori = $("#filter").val();
-	// 			d.filter_inv = $("#filterinv").val();
-	// 			d.filter_act = $("#filteract").val();
-	// 			console.log("Filter kategori:", d.filter_kategori);
-	// 			console.log("Filter INV:", d.filter_inv);
-	// 			console.log("Filter aktif:", d.filter_act);
-	// 		},
-	// 	},
-	// 	columnDefs: [
-	// 		{
-	// 			targets: [0],
-	// 			orderable: false,
-	// 		},
-	// 	],
-	// 	pageLength: 50,
-	// 	dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
-
-	// $("#filter, #filterinv, #filteract").on("change", function () {
-	// 	table.ajax.reload();
-
-	// 	var filter_kategori = $("#filter").val();
-	// 	var filter_inv = $("#filterinv").val();
-	// 	var filter_act = $("#filteract").val();
-
-	// 	var exportUrlExcel =
-	// 		base_url +
-	// 		"barang/excel?filter=" +
-	// 		filter_kategori +
-	// 		"&filterinv=" +
-	// 		filter_inv +
-	// 		"&filteract=" +
-	// 		filter_act;
-	// 	$(".btn-export-excel").attr("href", exportUrlExcel);
-
-	// 	var exportUrlPdf =
-	// 		base_url +
-	// 		"barang/pdf?filter=" +
-	// 		filter_kategori +
-	// 		"&filterinv=" +
-	// 		filter_inv +
-	// 		"&filteract=" +
-	// 		filter_act;
-	// 	$(".btn-export-pdf").attr("href", exportUrlPdf);
-	// });
-
-	// $("#filter, #filterinv, #filteract").on("change", function () {
-	
-
-	// 	console.log("Export Excel URL:", exportUrlExcel);
-	// 	console.log("Export PDF URL:", exportUrlPdf);
-	// });
-	// DataTable.defaults.column.orderSequence = ['desc', 'asc'];
 	table = $('#tabelnya').DataTable({
 		"processing": true,
 		// "responsive":true,
@@ -67,6 +7,26 @@ $(document).ready(function () {
 		"orderSequence": ['desc', 'asc'],
 		"ordering": true, // Set true agar bisa di sorting
 		"order": [[ 0, 'asc' ]], // Default sortingnya berdasarkan kolom / field ke 0 (paling pertama)
+		"initComplete": function(set, json){
+			// alert('Data is Loaded');
+			var json = table.ajax.json();
+		},
+		"fnDrawCallback": function(oSettings) {
+			// alert('The table has been redrawn.');
+			var api = this.api();
+			var api2 = api.ajax.json();
+            var data = api.rows({ page: 'current' }).data().toArray();
+			var panjang = api.rows({ page: 'current' }).data().length;
+			// alert(api2.recordsFiltered);
+			// alert(api2.recordsFiltered);
+            if(api2.recordsFiltered > 0){
+				$("#jumlahkgs").text(rupiah(data[0]['totalkgs'],'.',',',2));
+				$("#jumlahpcs").text(rupiah(api2.recordsFiltered,'.',',',0));
+			}else{
+				$("#jumlahkgs").text('0');
+				$("#jumlahpcs").text('0');
+			}
+		},
 		"ajax":
 		{
 			"url": base_url +"bcgf/getdatabaru", // URL file untuk proses select datanya
@@ -79,10 +39,10 @@ $(document).ready(function () {
 		},
 		"deferRender": true,
 		"aLengthMenu": [[5, 10, 25, 50, 100],[ 5, 10, 25, 50, 100]], // Combobox Limit
-		"pageLength": 25,
+		"pageLength": 50,
 		"dom": '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 		"columns": [
-			{"data": 'id_kategori',"sortable": false, 
+			{"data": 'kode',"sortable": false, 
 				render: function (data, type, row, meta) {
 					return meta.row + meta.settings._iDisplayStart + 1;
 				}  
@@ -92,8 +52,8 @@ $(document).ready(function () {
 				"render" :
 				function(data, type,row,meta){
 					var nok = meta.row + meta.settings._iDisplayStart + 1;
-					var id = row.po.trim()+'/'+row.item.trim()+'/'+row.dis+'/'+row.nobale.trim();
-					return '<span class="text-pink font-11">'+viewsku(row.xpo,row.xitem,row.xdis)+'</span><br><a href="'+base_url+'bcgf/viewdata/'+id+'/'+nok+ '" rel="'+id+'" data-bs-toggle="modal" data-bs-target="#modal-scroll" data-title="View data" title="view data Barang">'+row.spek+'</a>';
+					var id = 'OME+'+row.xpo.trim()+'+'+row.xitem.trim()+'+'+row.xdis+'+'+row.nobale.trim();
+					return '<span class="text-pink font-11">'+viewsku(row.xpo,row.xitem,row.xdis)+'</span><br><a href="'+base_url+'bcgf/getdatabyid/'+id+ '" rel="'+id+'" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View data" title="view data Barang">'+row.spek+'</a>';
 				}
 			 },
 			{ "data": "nobale" },
@@ -152,6 +112,7 @@ $(document).ready(function () {
 });
 // });
 
+
 $("#updatebcgf").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();
@@ -170,12 +131,13 @@ $("#updatebcgf").click(function () {
 		data: {
 			tga: tglawal,
 			tgk: tglakhir,
-			// punya: milik,
+			punya: milik,
 			// katbar: kat
 		},
 		success: function (data) {
 			// alert(data);
 			window.location.reload();
+			// submitdata();
 			// $("#body-table").html(data.datagroup).show();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
