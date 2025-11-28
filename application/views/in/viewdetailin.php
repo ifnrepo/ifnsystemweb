@@ -45,13 +45,20 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                                <?php 
-                                    foreach ($detail as $val) { 
-                                    $namabar = trim($val['po'])=='' ? $val['nama_barang'] : $val['spek'];
-                                    $sku = trim($val['po'])=='' ? $val['brg_id'] : formatsku($val['po'],$val['item'],$val['dis'],$val['brg_id']);
+                                <?php
+                                $totalkgs = 0;
+                                $totalpcs = 0;
+                                foreach ($detail as $val) {
+                                    $namabar = trim($val['po']) == '' ? $val['nama_barang'] : $val['spek'];
+                                    $sku = trim($val['po']) == '' ? $val['brg_id'] : formatsku($val['po'], $val['item'], $val['dis'], $val['brg_id']);
+                                    $totalpcs += $val['pcs'];
+                                    $totalkgs += $val['kgs'];
                                 ?>
                                     <tr>
-                                        <td class="line-12"><?= $val['seri_barang'].'. '.$namabar; ?><br><span class="font-kecil text-success"><?= $val['insno'] ?></span></td>
+                                        <td class="line-12">
+                                            <?= $val['seri_barang'] . '. ' . $namabar; ?>
+                                            <br><span class="font-kecil text-success"><?= $val['insno'] ?></span>
+                                        </td>
                                         <td><?= $sku ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= rupiah($val['pcs'], 0); ?></td>
@@ -64,7 +71,17 @@
                                         </td>
                                     </tr>
                                 <?php } ?>
+
+
+                                <tr style="font-weight: bold; background: #f2f2f2;">
+                                    <td colspan="3" class="text-center">TOTAL</td>
+                                    <td><?= rupiah($totalpcs, 0); ?></td>
+                                    <td><?= rupiah($totalkgs, 2); ?></td>
+                                    <td></td>
+                                </tr>
+
                             </tbody>
+
                         </table>
                         <div class="row">
                             <div class="col-sm-6 font-bold bg-warning p-1">
