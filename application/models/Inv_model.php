@@ -1447,14 +1447,27 @@ class inv_model extends CI_Model
             return $hasil;
         }
     }
-    public function getdatadetailbom($id)
+    public function getdatadetailbom($data)
     {
-        $this->db->select('det_bommaterial.*,barang.nama_barang,satuan.namasatuan,barang.kode,tb_hargamaterial.nomor_bc,tb_hargamaterial.tgl_bc,tb_hargamaterial.jns_bc');
-        $this->db->join('barang', 'barang.id = det_bommaterial.id_barang', 'left');
-        $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
-        $this->db->join('tb_hargamaterial', 'tb_hargamaterial.id_barang = det_bommaterial.id_barang AND tb_hargamaterial.nobontr = det_bommaterial.nobontr', 'left');
-        $this->db->where('id_bommaterial', $id);
-        return $this->db->get('det_bommaterial');
+        
+        $this->db->select('ref_bom_detail_cost.*,barang.nama_barang,barang.kode,satuan.kodesatuan,barang.imdo');
+        $this->db->select('tb_hargamaterial.jns_bc as xjns_bc,tb_hargamaterial.nomor_bc as xnomor_bc,tb_hargamaterial.tgl_bc as xtgl_bc');
+        $this->db->from('ref_bom_detail_cost');
+        $this->db->join('ref_bom_cost','ref_bom_cost.id = ref_bom_detail_cost.id_bom','left');
+        $this->db->join('barang','barang.id = ref_bom_detail_cost.id_barang','left');
+        $this->db->join('satuan','satuan.id = barang.id_satuan','left');
+        $this->db->join('tb_hargamaterial','tb_hargamaterial.id_barang = ref_bom_detail_cost.id_barang and trim(tb_hargamaterial.nobontr) = trim(ref_bom_detail_cost.nobontr)','left');
+        $this->db->where('trim(ref_bom_cost.po)',trim($data['po']));
+        $this->db->where('trim(ref_bom_cost.item)',trim($data['item']));
+        $this->db->where('ref_bom_cost.dis',$data['dis']);
+        $this->db->where('ref_bom_cost.id_barang',$data['id_barang']);
+        if($this->session->userdata('currdept')!= 'GF'){
+            $this->db->where('trim(ref_bom_cost.insno)',trim($data['insno']));
+            $this->db->where('trim(ref_bom_cost.nobontr)',trim($data['nobontr']));
+        }else{
+            $this->db->where('trim(ref_bom_cost.nobale)',trim($data['nobale']));
+        }
+        return $this->db->get();
     }
     public function getdatawipbaru($filter_kategori, $filt_ifndln)
     {

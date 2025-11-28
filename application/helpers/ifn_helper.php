@@ -1071,3 +1071,17 @@ function getnomorbcbykontrak($kontrak){
     }
     return $datahasil;
 }
+
+function kodeimdo($id){
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->kodeimdo($id);
+    if(count($hasil->result())==0){
+        // $hasil['jmlkgs'] = 0;
+        $datahasil = 'Tidak ditemukan';
+    }else{
+        $hasil = $hasil->row_array();
+        $kodeimdo = $hasil['imdo']==1 ? 'IM' : 'LO';
+        $datahasil = $kodeimdo.'-'.$hasil['kode'];
+    }
+    return $datahasil;
+}

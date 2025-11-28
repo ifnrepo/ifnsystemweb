@@ -23,7 +23,7 @@
             <?php endif; ?>
             <br>
         </div>
-        <div class="col-2 <?php if($this->session->userdata('currdept')=='GM' || $this->session->userdata('currdept')=='SP'){ echo "hilang"; } ?>">
+        <div class="col-2 m-auto">
             <a href="#kolap" class="btn btn-sm btn-info" id="cekkolap" data-toggle="collapse" aria-expanded="false">View BOM</a>
         </div>
         <!-- <div class="col-4 text-primary font-bold">
@@ -173,7 +173,7 @@
         </div>
     </div>
     <div class="collapse" id="kolap">
-        <span class="text-orange font-bold mb-1">DETAIL BOM</span>
+        <div class="text-cyan font-bold mb-1 w-100 bg-cyan-lt text-center">DETAIL BOM</div>
         <table class="table datatable6 table-hover" id="cobasisip">
             <thead style="background-color: blue !important">
                 <tr>
@@ -181,26 +181,44 @@
                 <th>Specific</th>
                 <th>SKU</th>
                 <th>Satuan</th>
-                <th>Qty</th>
+                <th>Persen</th>
                 <th>Kgs</th>
                 <th>Info BC</th>
+                <th>Ket</th>
                 </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                <?php if(isset($detailbom) && $detailbom->num_rows() > 0): ?>
+                <?php $saldobom=0; if(isset($detailbom) && $detailbom->num_rows() > 0){ ?>
                 <?php foreach($detailbom->result_array() as $detbom): ?>
                 <?php 
-                    $sku = $detbom['kode'];
+                    $sku = kodeimdo($detbom['id_barang']);
+                    $bomsm = $detbom['persen_sm'] > 0 ? 'text-orange' : '';
+                    $saldobom += round($saldokgs*($detbom['persen']/100),3);
+                    $persen = $detbom['persen']+$detbom['persen_sm'];
                 ?>
                     <tr>
-                        <td><?= $detbom['nama_barang']; ?></td>
-                        <td><?= $sku; ?></td>
-                        <td><?= $detbom['namasatuan']; ?></td>
-                        <td class="text-right"></td>
-                        <td class="text-right"><?= rupiah($saldokgs*($detbom['persen']/100),2); ?></td>
-                        <td style="line-height: 14px;"><?= 'BC .'.$detbom['jns_bc'] ?><br><span class="text-teal"><?= $detbom['nomor_bc'].'('.$detbom['tgl_bc'].')'; ?></span></td>
+                        <td class="<?= $bomsm ?>"><?= $detbom['seri_barang'].'. '.$detbom['nama_barang']; ?></td>
+                        <td class="<?= $bomsm ?>"><?= $sku; ?></td>
+                        <td class="<?= $bomsm ?>"><?= $detbom['kodesatuan']; ?></td>
+                        <td class="text-right <?= $bomsm ?>"><?= rupiah($persen,6) ?></td>
+                        <td class="text-right <?= $bomsm ?>"><?= rupiah($saldokgs*($detbom['persen']/100),3); ?></td>
+                        <?php $nomorbc = trim($detbom['xnomor_bc'])=='' ? '-' : 'BC. '.$detbom['xnomor_bc']; $tglbc = trim($detbom['xnomor_bc'])=='' ? '-' : '('.$detbom['xtgl_bc'].')';  ?>
+                        <td style="line-height: 11px;" class="font-12"><?= $nomorbc ?><br><span class="text-teal"><?= $tglbc; ?></span></td>
+                        <td class="line-11 font-11 text-muted"><span><?= $detbom['nobontr'] ?></span><br><span><?= 'ID Bom. '.$detbom['id_bom'] ?></span></td>
                     </tr>
-                <?php endforeach; endif; ?>
+                <?php endforeach; ?>
+                    <tr class="bg-dark-lt">
+                        <td colspan="4" class="text-center font-bold">Total BOM</td>
+                        <td class="text-right font-bold"><?= rupiah($saldobom,2) ?></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                    </tr>
+                <?php } else { ?>
+                    <tr class="bg-dark-lt">
+                        <td colspan="9" class="text-center">Data BOM tidak ditemukan</td>
+                    </tr>
+                    <?php } ?>
             </tbody>
         </table>
     <div>
