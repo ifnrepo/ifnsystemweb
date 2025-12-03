@@ -3,33 +3,41 @@
         <div class="col-12 font-kecil">
             <form method="POST" action="<?= base_url() . 'hargamat/simpandata'; ?>" id="formhamat" name="formhamat" enctype="multipart/form-data">
                 <div class="row">
-                    <div class="col-9">
+                    <div class="col-4">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Nama Barang</label>
-                            <input type="text" class="form-control font-kecil" placeholder="Nama Barang " name="nama_barang" id="nama_barang">
+                            <input type="text" class="form-control font-kecil" placeholder="Ketik Barang.." name="nama_barang" id="nama_barang">
                             <input type="hidden" name="id_barang" id="id_barang">
                         </div>
                     </div>
-
-                </div>
-                <div class="row">
                     <div class="col-4">
-                        <div class="mb-1">
-                            <label class="form-label font-kecil mb-0 font-bold text-primary">Tgl IB</label>
-                            <input type="date" class="form-control font-kecil" placeholder="Tanggal IB" name="tgl" id="tgl">
-                        </div>
-                    </div>
-                    <div class="col-8">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor IB</label>
                             <input type="text" class="form-control font-kecil" placeholder="Nomor IB" name="nobontr" id="nobontr">
                         </div>
                     </div>
+                    <div class="col-4">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Tgl IB</label>
+                            <input type="text" class="form-control font-kecil tgl" placeholder="Tanggal IB" name="tgl" id="tgl">
+                        </div>
+                    </div>
                 </div>
-                <div class="mb-1">
-                    <label class="form-label font-kecil mb-0 font-bold text-primary">Supplier</label>
-                    <input type="text" class="form-control font-kecil" name="nama_supplier" id="nama_supplier" placeholder="Supplier">
-                    <input type="hidden" id="id_supplier" name="id_supplier">
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Satuan</label>
+                            <input type="text" class="form-control font-kecil" name="nama_satuan" id="nama_satuan" placeholder="ketik satuan">
+                            <input type="hidden" id="id_satuan" name="id_satuan">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Supplier</label>
+                            <input type="text" class="form-control font-kecil" name="nama_supplier" id="nama_supplier" placeholder="Ketik Supplier">
+                            <input type="hidden" id="id_supplier" name="id_supplier">
+                        </div>
+                    </div>
                 </div>
                 <div class="row">
                     <div class="col-2">
@@ -167,7 +175,7 @@
                                     <input type="text" class="form-control font-kecil" id="nomor_bc" name="nomor_bc" placeholder="Nomor BC">
                                 </div>
                                 <div class="col-6">
-                                    <input type="date" class="form-control font-kecil " id="tgl_bc" name="tgl_bc" placeholder="Tgl BC">
+                                    <input type="text" class="form-control font-kecil tgl" id="tgl_bc" name="tgl_bc" placeholder="Tgl BC">
                                 </div>
                             </div>
                         </div>
@@ -189,7 +197,7 @@
                         <div class=" col-3">
                             <div class="mb-1">
                                 <label class="form-label font-kecil mb-0 font-bold text-primary">Tanggal Aju</label>
-                                <input type="date" class="form-control font-kecil" name="tgl_aju" id="tgl_aju">
+                                <input type="text" class="form-control font-kecil tgl" name="tgl_aju" id="tgl_aju">
                             </div>
                         </div>
                     </div>
