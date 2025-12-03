@@ -6,9 +6,9 @@
         <path d="M12 16h.01" />
     </svg>
     <h3>Anda Yakin ?</h3>
-    <div class="text-secondary" id="message">Akan memverifikasi data <br><?= $data['nama_barang']; ?><br><span class="font-bold">Saldo Saat ini : <?= rupiah($data['pcs_akhir'],0); ?> Pcs & <?= rupiah($data['kgs_akhir'],2); ?> Kgs</span></div>
+    <div class="text-secondary" id="message">Akan memverifikasi data <br><span class="font-bold">Saldo Saat ini : </span></div>
 </div>
-<input type="hidden" value="<?= $data['idu']; ?>" id="idrek">
+<input type="text" value="" id="idrek">
 <div class="modal-footer mt-1">
     <div class="w-100">
         <div class="row">

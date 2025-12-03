@@ -39,12 +39,14 @@ class Inv extends CI_Controller
             $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
             $data['currdept'] = "$%";
             $data['ifndln'] = 'X';
+            $data['req_inv'] = 0;
             // $data['buyer'] = []; 
         }else{
             $data['tglawal'] = $this->session->userdata('tglawal');
             $data['tglakhir'] = $this->session->userdata('tglakhir');
             $data['currdept'] = $this->session->userdata('currdept');
             $data['ifndln'] = $this->session->userdata('ifndln');
+            $data['req_inv'] = $this->invmodel->getreqinv();
             // if($this->session->userdata('currdept')=='GF'){
             // }else{
             //     $data['buyer'] = [];
@@ -92,6 +94,7 @@ class Inv extends CI_Controller
         $filter_stok = $_POST['stok'];
         $filter_buyer = $_POST['buyer'];
         $filter_exnet = $_POST['exnet'];
+        $filter_aneh = $_POST['dataneh'];
         if($filter_kategori!='all'){
             $arrayu['id_kategori'] = $filter_kategori;
         }
@@ -106,6 +109,9 @@ class Inv extends CI_Controller
         }
         if($filter_exnet!='all'){
             $arrayu['exnet'] = $filter_exnet;
+        }
+        if($filter_aneh=='true'){
+            $arrayu['minus'] = 1;
         }
         echo $this->invmodel->getdatabaru($arrayu);
     }

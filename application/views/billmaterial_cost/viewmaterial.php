@@ -1,21 +1,33 @@
 <div class="container-xl">
     <div class="row">
         <div class="col-12">
-            <div class="mb-1 row">
-                <label class="col-3 col-form-label">SKU</label>
-                <div class="col">
-                    <input type="text" name="id" id="id" class="hilang" value="<?= $data['id']; ?>">
-                    <?php 
-                        $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis']); 
-                        $namabarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']); 
-                    ?>
-                    <input type="text" class="form-control font-kecil text-black" name="kategori_id" id="kategori_id" value="<?= $sku; ?>" disabled>
+            <div class="row">
+                <div class="col-2 text-center my-auto bg-cyan-lt p-2 ">
+                    <h5 class="text-black">No Bale</h5>
+                    <?php if(trim($data['nobale'])!=''){ ?>
+                        <label for="" style="font-size: 16px !important;" class="font-bold text-black"><?= $data['nobale'] ?></label>
+                    <?php }else{ ?>
+                        <label for="" style="font-size: 16px !important; color: #E8F6F8 !important;" class="font-bold">.</label>
+                    <?php } ?>
                 </div>
-            </div>
-            <div class="mb-1 row">
-                <label class="col-3 col-form-label">Spesifikasi</label>
-                <div class="col">
-                    <input type="text" class="form-control font-kecil text-black" name="nama_kategori" id="nama_kategori" value="<?= $namabarang; ?>" disabled>
+                <div class="col-10">
+                    <div class="mb-1 row font-kecil text-right">
+                        <label class="col-3 col-form-label">SKU</label>
+                        <div class="col">
+                            <input type="text" name="id" id="id" class="hilang" value="<?= $data['id']; ?>">
+                            <?php 
+                                $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis']); 
+                                $namabarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']); 
+                            ?>
+                            <input type="text" class="form-control font-kecil text-black" name="kategori_id" id="kategori_id" value="<?= $sku; ?>" disabled>
+                        </div>
+                    </div>
+                    <div class="mb-1 row font-kecil text-right">
+                        <label class="col-3 col-form-label">Spesifikasi</label>
+                        <div class="col">
+                            <input type="text" class="form-control font-kecil text-black" name="nama_kategori" id="nama_kategori" value="<?= $namabarang; ?>" disabled>
+                        </div>
+                    </div>
                 </div>
             </div>
             <div class="col-12">

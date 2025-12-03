@@ -27,7 +27,8 @@
                     <th>Specific</th>
                     <th>SKU</th>
                     <th>Satuan</th>
-                    <th>Kgs</th>
+                    <th>No Bale</th>
+                    <th>Pcs</th>
                     <th>Kgs</th>
                     <th>Keterangan</th>
                     </tr>
@@ -43,13 +44,14 @@
                         <td style="line-height: 12px;"><?= $namabarang.' <span class="text-danger">('.$val['jmlrekstok'].')</span><br><span class="text-teal" style="font-style: italic; font-size: 12px;">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
                         <td><?= $sku ?></td>
                         <td><?= $nmsatuan; ?></td>
+                        <td><?= $val['nobale'] ?></td>
                         <td class="text-end"><?= rupiah($val['pcs'],0); ?></td>
                         <td class="text-end"><?= rupiah($val['kgs'],4); ?></td>
                         <td><?= $val['nodok']; ?></td>
                     </tr>
                 <?php } ?>
                 <tr class="bg-info-lt">
-                    <td colspan="3" class="font-bold text-right">TOTAL</td>
+                    <td colspan="4" class="font-bold text-right">TOTAL</td>
                     <td class="font-bold text-right"><?= rupiah($pcs,0); ?></td>
                     <td class="font-bold text-right"><?= rupiah($kgs,2); ?></td>
                     <td></td>

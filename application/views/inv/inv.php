@@ -57,7 +57,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="col-sm-5 d-flex flex-row-reverse" style="text-align: right;">
               <!-- <a href="<?= base_url('inv/cetakpdf'); ?>" target="_blank" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a> -->
               <a href="<?= base_url() . 'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
-              <a href="#" data-href="<?= base_url().'inv/simpandatainv'; ?>" class="btn btn-info btn-sm btn-flat mr-1 disabled" id="simpaninv" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data ke Pricing Inventory'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save Pricing <br>Inventory</span></a>
+              <?php $aktiv = (int) $req_inv > 0 ? '' : 'disabled'; ?>
+              <a href="#" data-href="<?= base_url().'inv/simpandatainv'; ?>" class="btn btn-info btn-sm btn-flat mr-1 <?= $aktiv ?>" id="simpaninv" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data ke Pricing Inventory'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save Pricing <br>Inventory</span></a>
             </div>
           </div>
           <div class="card card-active" style="clear:both;">
@@ -129,7 +130,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         endif ?>
                       </select>
                     </div>
-                    <label class="form-check mt-1 mb-1 bg-danger-lt hilang">
+                    <label class="form-check mt-1 mb-1 bg-danger-lt">
                       <input class="form-check-input" type="checkbox" id="dataneh">
                       <span class="form-check-label font-bold">View Data Aneh</span>
                     </label>
@@ -214,9 +215,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <!-- <th>Tgl</th> -->
                 <th>SKU/Spesifikasi</th>
                 <th>Nomor IB<br>Insno</th>
+                <th>Nobale</th>
                 <th>Satuan</th>
                 <th>BC</th>
-                <th>Nobale</th>
                 <th>Stok GD</th>
                 <th>Exnet</th>
                 <th>Qty</th>

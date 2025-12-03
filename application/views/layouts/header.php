@@ -81,11 +81,16 @@
       </div>
     </div>
   </div>
+  <!-- <div class="loaderis">
+    <div class="text-center">
+      <div class="loadering"></div>
+    </div>
+  </div> -->
   <!-- Kummpulan Modal -->
   <div class="modal modal-blur fade" id="modal-simple" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered" role="document">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
-        <div class="modal-header">
+        <div class="modal-header bg-info">
           <h5 class="modal-title">Modal title</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
@@ -942,7 +947,6 @@
         <div class="collapse navbar-collapse" id="navbar-menu">
           <div id="loadview">
             <!-- <div class="spinner-border spinner-border-sm text-secondary" role="status"></div> -->
-            <!-- <span class="loadered"></span> -->
           </div>
           <span class="loadered hilang"></span>
         </div>

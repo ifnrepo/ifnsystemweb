@@ -3,9 +3,10 @@
         <div class="col-3 font-bold">
             <span class="text-primary">Inventory per Tanggal</span>
             <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal'))); ?> s/d <?= tgl_indo(tglmysql($this->session->userdata('tglakhir'))); ?></h4>
-            <?php if($this->session->userdata('currdept')=='GF'): ?>
+            <?php if($this->session->userdata('currdept')=='GF' || $this->session->userdata('currdept')=='GW'): ?>
+            <?php if(trim($header['nobale']) != ''){ ?>
             <h3><?= 'Bale No #'.$header['nobale']; ?></h3>
-            <?php endif; ?>
+            <?php } endif; ?>
         </div>
         <div class="col-7 text-primary font-bold">
             <span>SKU/Spesifikasi Barang</span>

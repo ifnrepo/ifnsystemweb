@@ -24,10 +24,11 @@ class Pricinginv extends CI_Controller
     }
     public function index()
     {
-        $header['header'] = 'transaksi';
+        $header['header'] = 'other';
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdept_pb($this->session->userdata('arrdep'));
-        $data['depe'] = $this->pricingmodel->getdeptperiode();
+        $data['depe'] = $this->pricingmodel->getdepe();
+        $data['tglreq'] = $this->pricingmodel->gettglreq();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         $kode = [
             'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
@@ -46,6 +47,8 @@ class Pricinginv extends CI_Controller
         $this->session->unset_userdata('deptsekarang');
         $this->session->unset_userdata('tujusekarang');
         $this->session->unset_userdata('levelsekarang');
+        $this->session->unset_userdata('tglpricinginv');
+        $this->session->unset_userdata('deptpricinginv');
         $this->session->set_userdata('blpricing', date('m'));
         $this->session->set_userdata('thpricing', date('Y'));
         $this->session->set_userdata('levelsekarang', 1);
@@ -57,6 +60,13 @@ class Pricinginv extends CI_Controller
         $this->session->set_userdata('blpricing', $_POST['bl']);
         $this->session->set_userdata('thpricing', $_POST['th']);
         $this->session->set_userdata('levelsekarang', $_POST['levelsekarang']);
+        $this->session->unset_userdata('tglpricinginv');
+        $this->session->unset_userdata('deptpricinginv');
+        echo 1;
+    }
+    public function getdatacutoff(){
+        $this->session->set_userdata('tglpricinginv',$_POST['tglcutoff']);
+        $this->session->set_userdata('deptpricinginv',$_POST['deptcutoff']);
         echo 1;
     }
     public function gettglcutoff(){
@@ -76,12 +86,14 @@ class Pricinginv extends CI_Controller
         $filter_periode = $_POST['periode'];
         // $filter_buyer = $_POST['buyer'];
         // $filter_exnet = $_POST['exnet'];
-        if($filter_dept!='all'){
-            $arrayu['dept_id'] = $filter_dept;
-        }
-        if($filter_tgl!="all"){
-            $arrayu['stokinv.tgl'] = $filter_tgl;
-        }
+        // if($filter_dept!=''){
+        //     $arrayu['dept_id'] = $filter_dept;
+        // }
+        // if($filter_tgl!=""){
+        //     $arrayu['tgl'] = $filter_tgl;
+        // }else{
+        //     $arrayu['tgl'] = '1970-01-01';
+        // }
         if($filter_periode!="all"){
             $arrayu['periode'] = $filter_periode;
         }
@@ -92,6 +104,65 @@ class Pricinginv extends CI_Controller
         //     $arrayu['exnet'] = $filter_exnet;
         // }
         echo $this->pricingmodel->getdatainv($arrayu);
+    }
+    public function getdatainvdet(){
+        $arrayu = [];
+        $filter_dept = $_POST['dept'];
+        $filter_tgl = $_POST['tgl'];
+        $filter_periode = $_POST['periode'];
+        // $filter_buyer = $_POST['buyer'];
+        // $filter_exnet = $_POST['exnet'];
+        // if($filter_dept!=''){
+        //     $arrayu['dept_id'] = $filter_dept;
+        // }
+        // if($filter_tgl!=""){
+        //     $arrayu['tgl'] = $filter_tgl;
+        // }else{
+        //     $arrayu['tgl'] = '1970-01-01';
+        // }
+        if($filter_periode!="all"){
+            $arrayu['periode'] = $filter_periode;
+        }
+        // if($filter_buyer!='all'){
+        //     $arrayu['id_buyer'] = $filter_buyer;
+        // }
+        // if($filter_exnet!='all'){
+        //     $arrayu['exnet'] = $filter_exnet;
+        // }
+        echo $this->pricingmodel->getdatainvdet($arrayu);
+    }
+    public function addcutoff(){
+        $this->load->view('pricinginv/addcutoff');
+    }
+    public function simpancutoff(){
+        $data = [
+            'tgl' => tglmysql($_POST['tgl']),
+            'catatan' => $_POST['cttn'],
+            'user_add' => $this->session->userdata('id'),
+            'tgl_add' => date('Y-m-d H:i:s')
+        ];
+        $send = $this->pricingmodel->simpancutoff($data);
+        echo $send;
+    }
+    public function getdeptoncutoff(){
+        $this->session->unset_userdata('deptpricinginv');
+        $tgl = tglmysql($_POST['tgl']);
+        $data = $this->pricingmodel->getdepe();
+        $html = '<option value="">Semua</option>';
+        foreach($data->result_array() as $data){
+            $selek = $this->session->userdata('deptpricinginv')==$data['dept_id'] ? 'selected' : '';
+            $ada = $this->pricingmodel->getdeptoncutoff($data['dept_id'],tglmysql($tgl));
+            $html .= '<option value="'.$data['dept_id'].'" '.$ada.' '.$selek.'>'.$data['departemen'].'</option>';
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function breakdownbom(){
+        $this->load->view('pricinginv/konfirmasibom');
+    }
+    public function breakdowninv(){
+        $hasil = $this->pricingmodel->breakdowninv();
+        echo $hasil;
     }
 
     // End Pricing Inv
