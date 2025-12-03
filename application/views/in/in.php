@@ -123,7 +123,13 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               if($katedept==3){
                   $insubkn = '/1';
               }
-              $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi '.$this->session->userdata('curdept') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
+              $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi Dept '.$this->session->userdata('curdept') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
+              $bisakonfirmasi = 1;
+              if($que['dept_id']=='SU'){
+                if($que['tanpa_bc']==0){
+                  $bisakonfirmasi = $que['nomor_bc']!='';
+                }
+              }
               if($que['ok_valid']==1){
                   $cekpcskgs = $this->inmodel->cekpcskgs($que['id'])->row_array();
                   $jmlpcs += $cekpcskgs['pcs'];
@@ -142,7 +148,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   <td style="line-height: 12px"><?= datauser($que['user_ok'],'name'); ?><br><span style='font-size: 11px;' class='text-secondary'><?= tglmysql2($que['tgl_ok']) ?></span></td>
                   <td class="font-kecil line-12"><?= $kete; ?></td>
                   <td>
-                    <?php if($que['ok_valid']==0){ ?>
+                    <?php if($que['ok_valid']==0 && $bisakonfirmasi){ ?>
                       <a href="#" data-href="<?= base_url().'in/cekkonfirmasi/'.$que['id'].$insubkn ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Konfirmasi Penerimaan Barang,<br> data tidak dapat dirubah kembali" class="btn btn-sm btn-success <?= cekclosebook() ?>" style="padding: 3px 5px !important;" title="Konfirmasi Data"><i class="fa fa-check mr-1"></i> Konfirmasi</a>
                     <?php }else if($que['ok_valid']==1){ ?>
                       <a href="<?= base_url().'in/cetakbon/'.$que['id'] ?>" target="_blank" class="btn btn-sm btn-danger" title="Cetak Data"><i class="fa fa-file-pdf-o"></i></a>

@@ -84,7 +84,7 @@
                     <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Harga</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" id="price" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'], 8); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" id="price" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'], 4); ?>">
                         </div>
                     </div>
                     <div class="col-6">
@@ -92,6 +92,17 @@
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Harga Lainnya (<?= $data['mt_uang']  ?>)</label>
                             <input type="text" class="form-control font-kecil text-end inputangka" name="oth_amount" placeholder="Input Amount" value="<?= rupiah($data['oth_amount'], 2); ?>">
                         </div>
+                    </div>
+                </div>
+                <div class="row">
+                     <div class="col-6">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-danger bg-danger-lt pl-2">Harga Akunting</label>
+                            <input type="text" class="form-control font-kecil text-end inputangka" id="harga_akt" name="harga_akt" placeholder="Input Harga Akunting" value="<?= rupiah($data['harga_akt'], 2); ?>">
+                        </div>
+                    </div>
+                    <div class="col-6">
+
                     </div>
                 </div>
                 <div class="row">

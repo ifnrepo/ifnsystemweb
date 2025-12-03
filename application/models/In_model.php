@@ -118,12 +118,12 @@ class In_model extends CI_Model{
                     'trim(item)' => trim($det['item']),
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
-                    'trim(nobale)' => ($det['dept_id']=='FN' && $det['dept_tuju']=='GF') ? trim($datdet['nobale']) : '',
+                    'trim(nobale)' => (($det['dept_id']=='FN' && $det['dept_tuju']=='GF') || ($det['dept_id']=='GW' && $det['dept_tuju']=='GF') || ($det['dept_id']=='GW' && $det['dept_tuju']=='FG')) ? trim($det['nobale']) : '',
                     'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : '',
                     // 'trim(nobale)' => trim($det['nobale']),
                     // 'harga' => $det['harga'],
                     'stok' => $det['stok'],
-                    // 'exnet' => $det['exnet']
+                    'exnet' => $det['exnet']
                 ];
                 $this->db->where($kondisistok);
                 $adaisi = $this->db->get('stokdept');
@@ -139,11 +139,11 @@ class In_model extends CI_Model{
                     'item' => $det['item'],
                     'dis' => $det['dis'],
                     'dln' => $det['dln'],
-                    'nobale' => $det['dept_tuju']=='GF' ? trim($det['nobale']) : '',
+                    'nobale' => (($det['dept_id']=='FN' && $det['dept_tuju']=='GF') || ($det['dept_id']=='GW' && $det['dept_tuju']=='GF') || ($det['dept_id']=='GW' && $det['dept_tuju']=='FG')) ? trim($det['nobale']) : '',
                     'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : '',
                     'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bcmasuk']) : '',
                     // 'harga' => $det['harga'],
-                    // 'exnet' => $det['exnet'],
+                    'exnet' => $det['exnet'],
                     'pcs_masuk' => $det['pcs'],
                     'pcs_akhir' => $det['pcs'],
                     'kgs_masuk' => $det['kgs'],
@@ -181,7 +181,6 @@ class In_model extends CI_Model{
             $this->db->where('id',$id);
             $this->db->update('tb_header',$dataubah);
             $this->helpermodel->isilog($this->db->last_query());
-
 
             // Add Data to Harga Material 
             if($dataheader['dept_id']=='SU' && $dataheader['dept_tuju']=='GS'){

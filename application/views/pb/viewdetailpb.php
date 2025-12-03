@@ -32,7 +32,7 @@
                 <hr class='m-1'>
                 <div class="card card-lg">
                     <div class="card-body p-2">
-                        <table class="table datatable6 table-hover" id="cobasisip">
+                        <table class="table datatable6 table-hover mb-1" id="cobasisip">
                             <thead style="background-color: blue !important">
                                 <tr>
                                 <!-- <th>No</th> -->
@@ -46,9 +46,10 @@
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                            <?php $no=0; foreach ($detail as $val) { $no++; 
+                            <?php $no=0; $jmlpcs=0; $jmlkgs=0; foreach ($detail as $val) { $no++; 
                                 $kode = formatsku($val['po'],$val['item'],$val['dis'],$val['id_barang']);
-                                $spek = $val['po'] == '' ? $val['nama_barang'] : spekpo($val['po'],$val['item'],$val['dis']);
+                                $spek = trim($val['po']) == '' ? namaspekbarang($val['id_barang']) : spekpo($val['po'],$val['item'],$val['dis']);
+                                $jmlpcs += $val['pcs'];$jmlkgs += $val['kgs'];
                                  ?>
                                 <tr>
                                     <td class="line-12"><?= $no.'. '.$spek.'<br><span class="font-kecil text-teal">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
@@ -62,7 +63,7 @@
                             <?php } ?>
                             </tbody>
                         </table>
-                        <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
+                        <div class="font-bold mt-1" style="text-align: right;"><span>Jumlah Pcs : <?= rupiah($jmlpcs,0) ?></span><br><span>Jumlah Kgs : <?= rupiah($jmlkgs,2) ?></span><br><span>Jumlah Item Barang : <?= rupiah($header['jumlah_barang'],0); ?></span></div>
                     </div>
                 </div>
                 <hr class="m-1">

@@ -113,7 +113,7 @@ class In extends CI_Controller {
         $mode = 0;
         $databaru = [
             'nomor_dok' => trim(strtoupper($_POST['nomor'])),
-            'tgl' => date('Y-m-d')
+            'tgl' => tglmysql($_POST['tgl'])
         ];
         // $nomor = trim(strtoupper($_POST['nomor']));
         $hasil = $this->inmodel->simpanin($id,$mode,$databaru);
@@ -131,6 +131,7 @@ class In extends CI_Controller {
     }
     public function konfirmasinobon($id){
         $data['header'] = $this->inmodel->getdatabyid($id);
+        $data['tglib'] = $data['header']['tgl'];
         if(str_contains($data['header']['nomor_dok'],'PROFORMA')){
             $data['nomorib'] = nomorib();
         }else{

@@ -32,20 +32,28 @@ class Pricinginv_model extends CI_Model
     public function getdata(){
         $tglawal = '01-'.$this->session->userdata('blpricing').'-'.$this->session->userdata('thpricing');
         $periode = cekperiodedaritgl($tglawal);
+        $tgl = $this->session->userdata('tglpricinginv');
 
-        $this->db->select("stokinv.*,barang.nama_barang,tb_po.spek,barang.kode");
+        $this->db->select("stokinv.*,barang.nama_barang,tb_po.spek,barang.kode,sum(pcs_akhir) over() as totalpcs,sum(kgs_akhir) over() as totalkgs,barang.id_kategori as yidkategori,tb_po.id_kategori as xidkategori,IFNULL(barang.id_satuan,22) as id_satuan");
         $this->db->from('stokinv');
         $this->db->join('barang','barang.id = stokinv.id_barang','left');
-        $this->db->join('tb_po','tb_po.po = stokinv.po and tb_po.item = stokinv.item','left');
-        // $this->db->where('periode',$periode);
-        // $this->db->where('dept_id',);
-        // $this->db->where('tgl',);
-        return $this->db->get_compiled_select();
+        $this->db->join('tb_po','tb_po.ind_po = concat(trim(stokinv.po),trim(stokinv.item),stokinv.dis)','left');
+        $this->db->where('stokinv.tgl',$tgl);
+        if($this->session->userdata('deptpricinginv')!=''){
+            $this->db->where('dept_id',$this->session->userdata('deptpricinginv'));
+        }
+        // $this->db->order_by('stokinv.dept_id','stokinv.urut');
+        $query1 = $this->db->get_compiled_select();
+
+        $kolom = "Select r1.*,CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
+        $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) ";
+        $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan";
+        return $kolom;
     }
     public function getdatainv($filtkat){
         $query = $this->getdata();
         // $cari = array('barang.kode','nama_barang','nama_kategori');
-        $cari = array('stokinv.po','stokinv.nobontr','stokinv.insno');
+        $cari = array('po','nobontr','insno','spek','nama_barang','r1.kode');
         $where = $filtkat;
         $isWhere = null;
         // Ambil data yang di ketik user pada textbox pencarian
@@ -161,7 +169,200 @@ class Pricinginv_model extends CI_Model
         );
         return json_encode($callback); // Convert array $callback ke json
     }
+    public function getdatadet(){
+        $tglawal = '01-'.$this->session->userdata('blpricing').'-'.$this->session->userdata('thpricing');
+        $periode = cekperiodedaritgl($tglawal);
+        $tgl = $this->session->userdata('tglpricinginv');
 
+        $this->db->select("stokinv_detail.*,stokinv.dept_id,stokinv.tgl,stokinv.po,stokinv.item,stokinv.dis,barang.kode,barang.nama_barang,stokinv.periode");
+        $this->db->select("(SELECT harga_akt FROM tb_hargamaterial WHERE tb_hargamaterial.id_barang = stokinv_detail.id_barang AND tb_hargamaterial.nobontr = stokinv_detail.nobontr LIMIT 1) AS harga_akt");
+        $this->db->select("SUM(kgs) OVER() as totalkgs");
+        $this->db->from('stokinv_detail');
+        $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
+        $this->db->join('stokinv','stokinv ON stokinv.id = stokinv_detail.id_stok ','left');
+        $this->db->where('stokinv.tgl',$tgl);
+        if($this->session->userdata('deptpricinginv')!=''){
+            $this->db->where('stokinv.dept_id',$this->session->userdata('deptpricinginv'));
+        }
+        $this->db->order_by('stokinv.dept_id','stokinv.urut');
+        $query1 = $this->db->get_compiled_select();
+
+        $kolom = "Select * from (".$query1.") r1 ";
+        // $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) ";
+        // $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan";
+        return $kolom;
+    }
+    public function getdatainvdet($filtkat){
+        $query = $this->getdatadet();
+        // $cari = array('barang.kode','nama_barang','nama_kategori');
+        $cari = array('po','nobontr','nama_barang','r1.kode');
+        $where = $filtkat;
+        $isWhere = null;
+        // Ambil data yang di ketik user pada textbox pencarian
+        $search = htmlspecialchars($_POST['search']['value']);
+        // Ambil data limit per page
+        $limit = preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST['length']}");
+        // Ambil data start
+        $start =preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST['start']}"); 
+
+        if($where != null)
+        {
+            $setWhere = array();
+            foreach ($where as $key => $value)
+            {
+                $setWhere[] = $key."='".$value."'";
+            }
+            $fwhere = implode(' AND ', $setWhere);
+
+            if(!empty($iswhere))
+            {
+                $sql = $this->db->query($query." WHERE  $iswhere AND ".$fwhere);
+            }else{
+                $sql = $this->db->query($query." WHERE ".$fwhere);
+            }
+            $sql_count = $sql->num_rows();
+
+            $cari = implode(" LIKE '%".$search."%' OR ", $cari)." LIKE '%".$search."%'";
+            
+            // Untuk mengambil nama field yg menjadi acuan untuk sorting
+            $order_field = $_POST['order'][0]['column']; 
+
+            // Untuk menentukan order by "ASC" atau "DESC"
+            $order_ascdesc = $_POST['order'][0]['dir']; 
+            $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+
+            if(!empty($iswhere))
+            {
+                $sql_data = $this->db->query($query." WHERE $iswhere AND ".$fwhere." AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+            }else{
+                $sql_data = $this->db->query($query." WHERE ".$fwhere." AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+            }
+            if(isset($search))
+            {
+                if(!empty($iswhere))
+                {
+                    $sql_cari =  $this->db->query($query." WHERE $iswhere AND ".$fwhere." AND (".$cari.")");
+                }else{
+                    $sql_cari =  $this->db->query($query." WHERE ".$fwhere." AND (".$cari.")");
+                }
+                $sql_filter_count = $sql_cari->num_rows();
+            }else{
+                if(!empty($iswhere))
+                {
+                    $sql_filter = $this->db->query($query." WHERE $iswhere AND ".$fwhere);
+                }else{
+                    $sql_filter = $this->db->query($query." WHERE ".$fwhere);
+                }
+                $sql_filter_count = $sql_filter->num_rows();
+            }
+            $data = $sql_data->result_array();
+
+        }else{
+            if(!empty($iswhere))
+            {
+                $sql = $this->db->query($query." WHERE  $iswhere ");
+            }else{
+                $sql = $this->db->query($query);
+            }
+            $sql_count = $sql->num_rows();
+
+            $cari = implode(" LIKE '%".$search."%' OR ", $cari)." LIKE '%".$search."%'";
+            
+            // Untuk mengambil nama field yg menjadi acuan untuk sorting
+            $order_field = $_POST['order'][0]['column']; 
+
+            // Untuk menentukan order by "ASC" atau "DESC"
+            $order_ascdesc = $_POST['order'][0]['dir']; 
+            $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+
+            if(!empty($iswhere))
+            {                
+                $sql_data = $this->db->query($query." WHERE $iswhere AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+            }else{
+                $sql_data = $this->db->query($query." WHERE (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+            }
+
+            if(isset($search))
+            {
+                if(!empty($iswhere))
+                {     
+                    $sql_cari =  $this->db->query($query." WHERE $iswhere AND (".$cari.")");
+                }else{
+                    $sql_cari =  $this->db->query($query." WHERE (".$cari.")");
+                }
+                $sql_filter_count = $sql_cari->num_rows();
+            }else{
+                if(!empty($iswhere))
+                {
+                    $sql_filter = $this->db->query($query." WHERE $iswhere");
+                }else{
+                    $sql_filter = $this->db->query($query);
+                }
+                $sql_filter_count = $sql_filter->num_rows();
+            }
+            $data = $sql_data->result_array();
+        }
+        $callback = array(    
+            'draw' => $_POST['draw'], // Ini dari datatablenya    
+            'recordsTotal' => $sql_count,    
+            'recordsFiltered'=>$sql_filter_count,    
+            'data'=>$data,
+            'totalkgs' => 100
+        );
+        return json_encode($callback); // Convert array $callback ke json
+    }
+    public function simpancutoff($data){
+        $cek = $this->db->get_where('tb_req_inventory',['tgl' => $data['tgl']]);
+        if($cek->num_rows() > 0){
+            $isi = $cek->row_array();
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',"Data sudah ada,  tidak bisa dibuat Ulang\r\nDibuat oleh ".datauser($isi['user_add'],'name')." pada ".$isi['tgl_add']);
+            return 1;
+        }else{
+            return $this->db->insert('tb_req_inventory',$data);
+        }
+    }
+    public function getdepe(){
+        return $this->db->get_where('dept',['katedept_id < ' => 4]);
+    }
+    public function getdeptoncutoff($depe,$tgl){
+        $cek = $this->db->get_where('stokinv',['dept_id' => $depe,'tgl'=>$tgl]);
+        if($cek->num_rows() > 0){
+            return '';
+        }else{
+            return 'disabled';
+        }
+    }
+    public function gettglreq(){
+        return $this->db->get_where('tb_req_inventory',['month(tgl)' => $this->session->userdata('blpricing'),'year(tgl)' => $this->session->userdata('thpricing')]);
+    }
+    public function breakdowninv(){
+        $this->db->trans_start();
+        $query = $this->db->query($this->getdata());
+        foreach($query->result_array() as $que){
+            $this->db->where('id_stok',$que['id']);
+            $this->db->delete('stokinv_detail');
+
+            $databom = getdatabomcost($que);
+            if(count($databom) > 0){
+                foreach($databom as $dbom){
+                    $this->db->insert('stokinv_detail',$dbom);
+                }
+            }else{
+                $dbom = [
+                    'id_stok' => $que['id'],
+                    'urut' => $que['urut'],
+                    'id_barang' => $que['id_barang'],
+                    'kgs' => 0,
+                ];
+
+                $this->db->insert('stokinv_detail',$dbom);
+            }
+        }       
+        return $this->db->trans_complete();
+    }
+
+    // End Pricing
     public function getdatabyid($id)
     {
         $this->db->select('tb_header.*,dept.departemen');

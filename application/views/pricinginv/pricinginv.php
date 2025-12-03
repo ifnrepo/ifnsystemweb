@@ -26,8 +26,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-              <a href="#" class="btn btn-sm btn-warning" style="height: 40px;min-width:45px;" id="butref"><i class="fa fa-refresh"></i></a>
-              <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="thpricing" name="th" style="width: 75px;" value="<?= $this->session->userdata('thpricing') ?>">
+              <a href="<?= base_url().'pricinginv/addcutoff' ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Tambah data Cut Off" data-tombol="Ya" class="btn btn-sm btn-primary" style="height: 40px;min-width:45px;" id="butcutoff"><i class="fa fa-plus mr-1"></i> Tambah Cut Off</a>
+              <a href="#" class="btn btn-sm btn-warning mr-1" style="height: 40px;min-width:45px;" id="butref"><i class="fa fa-refresh"></i></a>
+              <input type="text" class="form-control form-sm font-kecil font-bold mr-1" id="thpricing" name="th" style="width: 75px;" value="<?= $this->session->userdata('thpricing') ?>">
               <select class="form-control form-sm font-kecil font-bold mr-1 form-select" id="blpricing" name="bl" style="width: 120px;">
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('blpricing') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
@@ -38,45 +39,83 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $tglawal = '01-'.$this->session->userdata('blpricing').'-'.$this->session->userdata('thpricing');
                 $periode = cekperiodedaritgl($tglawal) ?> 
                 <input type="text" class="hilang" name="periode" id="periode" value="<?= $periode ?>">
+                <input type="text" class="hilang" id="blperiode" name="blperiode" value="<?= $this->session->userdata('blpricing') ?>">
+                <input type="text" class="hilang" id="thperiode" name="thperiode" value="<?= $this->session->userdata('thpricing') ?>">
             </div>
           </div>
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-2">
-                  <h4 class="mb-1 font-kecil">Dept</h4>
-                  <span class="font-kecil">
-                    <div class="font-kecil">
-                      <select class="form-select form-control form-sm font-kecil font-bold" id="deptpricing" name="deptpricing">
-                        <option value="all">Semua</option>
-                        <?php
-                        // Mendapatkan nilai 'deptsekarang', jikla null nilai default jadi it
-                        $selek = $this->session->userdata('cutoffinv') ?? 'IT';
-                        foreach($depe->result_array() as $dpt){ ?>
-                          <option value="<?= $dpt['dept_id'] ?>"><?= $dpt['departemen'] ?></option>
-                        <?php } ?>
-                      </select>
-                    </div>
-                  </span>
-                </div>
-                <div class="col-2">
                   <h4 class="mb-1 font-kecil">Tgl Cut Off</h4>
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="tglcutoff" name="tglcutoff">
-                        <option value="all">-- Pilih Tgl Cut Off --</option>
+                        <option value="">-- Pilih Tgl Cut Off --</option>
+                        <?php foreach($tglreq->result_array() as $dpu){ $selek = $this->session->userdata('tglpricinginv')==$dpu['tgl'] ? 'selected' : ''; ?>
+                          <option value="<?= $dpu['tgl'] ?>" title="Dibuat oleh :<?= datauser($dpu['user_add'],'name') ?>, Pada <?= $dpu['tgl_add'] ?>" <?= $selek ?>><?= tglmysql($dpu['tgl']) ?></option>
+                        <?php } ?> ?>
                       </select>
+                      <input type="text" name="tglcut" id="tglcut" class="hilang" value="<?= $this->session->userdata('tglpricinginv') ?>">
                     </div>
                   </span>
                 </div>
-                <div class="col-3">
+                <div class="col-2">
+                  <h4 class="mb-1 font-kecil">Dept</h4>
+                  <span class="font-kecil">
+                    <div class="font-kecil">
+                      <select class="form-select form-control form-sm font-kecil font-bold" id="deptpricing" name="deptpricing">
+                        <option value="">Semua</option>
+                        <?php foreach($depe->result_array() as $depe){ $aktiv = cekdeptinv($depe['dept_id'],$this->session->userdata('tglpricinginv')) ? '' : 'disabled'; ?>
+                        <?php $selek = $this->session->userdata('deptpricinginv')==$depe['dept_id'] ? 'selected' : ''; ?>
+                            <option value="<?= $depe['dept_id'] ?>" title="" <?= $aktiv.' '.$selek ?>><?= $depe['departemen'] ?></option>
+                        <?php } ?>
+                      </select>
+                      <input type="text" name="deptcut" id="deptcut" class="hilang" value="<?= $this->session->userdata('deptpricinginv') ?>">
+                    </div>
+                  </span>
+                </div>
+                <div class="col-2">
                   <h4 class="mb-1 font-kecil"><span style="color: #F5F8FC">.</span></h4>
                   <span class="font-kecil">
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
                 </div>
-                <div class="col-3">
-                  <h4 class="mb-1"></h4>
+                <div class="col-4">
+                  <!-- <label class="bg-red-lt my-0 py-1 px-2 font-bold w-100"><span class="text-black">Rekap Data</span></label> -->
+                  <table class="table table-bordered m-0">
+                    <thead class="bg-primary-lt">
+                      <tr>
+                        <th class="text-center text-black">Unit</th>
+                        <th class="text-center text-black">Inventory</th>
+                        <th class="text-center text-black">BOM Inventory</th>
+                        <th class="text-center text-black">Selisih Jumlah</th>
+                      </tr>
+                    </thead>
+                    <tbody class="table-tbody">
+                      <tr class="p-0">
+                        <td class="font-bold">Rekord</td>
+                        <td class="text-right" id="jumlahrek">Loading..</td>
+                        <td class="text-right" id="jumlahrekdet">Loading..</td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <td class="font-bold">PCS</td>
+                        <td class="text-right" id="jumlahpcs">Loading..</td>
+                        <td class="text-right" id="jumlahpcsdet">Loading..</td>
+                        <td></td>
+                      </tr>
+                      <tr>
+                        <td class="font-bold">KGS</td>
+                        <td class="text-right" id="jumlahkgs">Loading..</td>
+                        <td class="text-right" id="jumlahkgsdet">Loading..</td>
+                        <td></td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                  <!-- <div>Jumlah Pcs : <span id="jumlahpcs">0</span></div>
+                  <div>Jumlah Kgs : <span id="jumlahkgs">0</span></div> -->
                 </div>
                 <div class="col-2">
                   <h4 class="mb-1">
@@ -100,28 +139,37 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <li class="nav-item">
                   <a href="#tabs-profile-1" class="nav-link bg-teal-lt btn-flat font-13 font-bold" data-bs-toggle="tab">BOM Inventory</a>
                 </li>
-                <li class="nav-item ms-auto">
-                  <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab"><!-- Download SVG icon from http://tabler-icons.io/i/settings -->
+                <!-- <li class="nav-item ms-auto">
+                  <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab">
                     <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
                   </a>
-                </li>
+                </li> -->
               </ul>
             </div>
             <div class="card-body mt-0 p-1">
               <div class="tab-content p-1 m-1">
                 <div class="tab-pane p-0 active show m-1" id="tabs-home-1">
-                  <h4 class="mb-1">Inventory</h4>
+                  <div class="row d-flex align-item-between mb-1">
+                    <div class="col-6 mx-auto">
+                      <h4 class="mb-1">Inventory</h4>
+                    </div>
+                    <div class="col-6 text-right">
+                      <div class="font-bold font-kecil">
+                        <!-- <div>Jumlah Record : <span id="jumlahrek">0</span></div> -->
+                      </div>
+                    </div>
+                  </div>
                   <hr class="m-0">
                   <div class="mt-2">
-                    <table id="tabelnya" class="table nowrap order-column mt-1" style="width: 100% !important;">
+                    <table id="tabelnya" class="table nowrap order-column mt-1 table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;">
                       <thead>
                         <tr>
-                          <!-- <th>Tgl</th> -->
+                          <th>Dept</th>
                           <th>SKU/Spesifikasi</th>
                           <th>Nomor IB<br>Insno</th>
+                          <th>Nobale</th>
                           <th>Satuan</th>
                           <th>BC</th>
-                          <th>Nobale</th>
                           <th>Stok GD</th>
                           <th>Exnet</th>
                           <th>Qty</th>
@@ -136,8 +184,34 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
                 <div class="tab-pane" id="tabs-profile-1">
-                  <h4>Profile tab</h4>
-                  <div>Fringilla egestas nunc quis tellus diam rhoncus ultricies tristique enim at diam, sem nunc amet, pellentesque id egestas velit sed</div>
+                  <div class="row d-flex align-item-between mb-1">
+                    <div class="col-6 mx-auto">
+                      <h4>BOM Inventory</h4>
+                    </div>
+                    <div class="col-6 text-right">
+                      <a href="<?= base_url().'pricinginv/breakdownbom' ?>" data-bs-toggle="modal" data-bs-target="#veriftask" data-message="Break down Data ke Bill Of Material" data-title="Breakdown BOM" class="btn btn-sm btn-primary" id="buthitungbom"><i class="fa fa-calculator mr-1"></i> Hitung BOM</a>
+                    </div>
+                  </div>
+                  <hr class="m-0">
+                  <div class="mt-2">
+                    <table id="tabeldetailnya" class="table nowrap order-column mt-1 table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;">
+                      <thead>
+                        <tr>
+                          <th>Dept/No Seri</th>
+                          <th>SKU/Spesifikasi</th>
+                          <th>Nobontr</th>
+                          <th>Kgs</th>
+                          <th>BC No / Tgl</th>
+                          <th>Harga (Kgs)</th>
+                          <th>Total</th>
+                          <th>Verified</th>
+                        </tr>
+                      </thead>
+                      <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
+                     
+                      </tbody>
+                    </table>
+                  </div>
                 </div>
                 <div class="tab-pane" id="tabs-settings-1">
                   <h4>Settings tab</h4>

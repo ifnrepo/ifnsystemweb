@@ -1,5 +1,6 @@
 var table = null;
 $(document).ready(function () {
+	$(".loadered").removeClass('hilang');
 	table = $('#tabelnya').DataTable({
 		"processing": true,
 		// "responsive":true,
@@ -57,7 +58,7 @@ $(document).ready(function () {
 				d.stok = $('#idstok').val();
 				d.buyer = $('#idbuyer').val();
 				d.exnet = $('#idexnet').val();
-				// d.dataneh = $('#dataneh').is(':checked');
+				d.dataneh = $('#dataneh').is(':checked');
 			// 	d.filtinv = $('#filterinv').val();
 			// 	d.filtact = $('#filteract').val();
             }
@@ -83,6 +84,7 @@ $(document).ready(function () {
 					return "<span>"+row.nobontr+"</span><br><span>"+row.insno+"</span>"
 				}
 			 },
+			{ "data": "nobale" },
 			{ "data": "kodesatuan",
 				"className": "text-center"
 			 },
@@ -91,7 +93,6 @@ $(document).ready(function () {
 					return "<span class='font-kecil'>"+data+"</span>";
 				}
 			 },
-			{ "data": "nobale" },
 			{ "data": "stok" ,
 				"className": "text-center",
 				"render": function(data, type, row, meta){
@@ -146,6 +147,7 @@ $(document).ready(function () {
 
 	$("#dataneh").on("change", function () {
 		table.ajax.reload();
+		$(".loadered").removeClass('hilang');
 	});
 	$("#exdonya").on('change',function(){
 		table.ajax.reload();
@@ -178,9 +180,9 @@ $(document).ready(function () {
 		table.search('').draw();
 		return false;
 	})
-	if($("#ifndln").val()=='all'){
-		$("#simpaninv").removeClass('disabled');
-	}
+	// if($("#ifndln").val()=='all'){
+	// 	$("#simpaninv").removeClass('disabled');
+	// }
 });
 function gantislash(stri){
 	let cek = stri.trim();

@@ -1071,3 +1071,97 @@ function getnomorbcbykontrak($kontrak){
     }
     return $datahasil;
 }
+
+function kodeimdo($id){
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->kodeimdo($id);
+    if(count($hasil->result())==0){
+        // $hasil['jmlkgs'] = 0;
+        $datahasil = 'Tidak ditemukan';
+    }else{
+        $hasil = $hasil->row_array();
+        $kodeimdo = $hasil['imdo']==1 ? 'IM' : 'LO';
+        $datahasil = $kodeimdo.'-'.$hasil['kode'];
+    }
+    return $datahasil;
+}
+
+function cekdeptinv($dept,$tgl){
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->cekdeptinv($dept,$tgl);
+    if(count($hasil->result())==0){
+        $datahasil = 0;
+    }else{
+        $datahasil = 1;
+    }
+    return $datahasil;
+}
+function getdatabomcost($que){
+    $CI = &get_instance();
+    $kondisi = [
+        'trim(po)' => trim($que['po']),
+        'trim(item)' => trim($que['item']),
+        'dis' => $que['dis'],
+        'id_barang' => $que['id_barang'],
+        'trim(insno)' => trim($que['insno']),
+        'trim(nobontr)' => trim($que['nobontr']),
+        'trim(nobale)' => trim($que['nobale']),
+    ];
+    $hass = [];
+    $rawsub = ['8189','6319'];
+    if(in_array($que['id_kategori'],$rawsub)){
+        $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $que['id_barang'],'trim(nobontr)' => trim($que['nobontr']),'nobontr is not null']);
+        if($datahamat->num_rows() > 0){
+            $hamat = $datahamat->row_array();
+        }else{
+            $hamat = [
+                'jns_bc' => NULL,
+                'nomor_bc' => NULL,
+                'tgl_bc' => NULL,
+            ];
+        }
+        $hasil = [
+            'id_stok' => $que['id'],
+            'urut' => $que['urut'],
+            'id_barang' => $que['id_barang'],
+            'nobontr' => $que['nobontr'],
+            'kgs' => $que['kgs_akhir'],
+            'jns_bc' => $hamat['jns_bc'],
+            'nomor_bc' => $hamat['nomor_bc'],
+            'tgl_bc' => $hamat['tgl_bc'],
+        ];
+        array_push($hass,$hasil);
+    }else{
+        $cekdatabom = $CI->db->get_where('ref_bom_cost',$kondisi);
+        if($cekdatabom->num_rows() == 0){
+            $hasil = [];
+        }else{
+            $databom = $cekdatabom->row_array();
+            $datadetbom = $CI->db->get_where('ref_bom_detail_cost',['id_bom' => $databom['id']]);
+            foreach($datadetbom->result_array() as $datadetbom){
+                $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $datadetbom['id_barang'],'trim(nobontr)' => trim($datadetbom['nobontr']),'nobontr is not null']);
+                if($datahamat->num_rows() > 0){
+                    $hamat = $datahamat->row_array();
+                }else{
+                    $hamat = [
+                        'jns_bc' => NULL,
+                        'nomor_bc' => NULL,
+                        'tgl_bc' => NULL,
+                    ];
+                }
+                $hasil = [
+                    'id_stok' => $que['id'],
+                    'urut' => $que['urut'],
+                    'id_barang' => $datadetbom['id_barang'],
+                    'nobontr' => $datadetbom['nobontr'],
+                    'kgs' => $que['kgs_akhir']*($datadetbom['persen']/100),
+                    'jns_bc' => $hamat['jns_bc'],
+                    'nomor_bc' => $hamat['nomor_bc'],
+                    'tgl_bc' => $hamat['tgl_bc'],
+                ];
+                array_push($hass,$hasil);
+            }
+        }
+    }
+    return $hass;
+}

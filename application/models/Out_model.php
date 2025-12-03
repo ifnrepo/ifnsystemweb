@@ -564,8 +564,8 @@ class Out_model extends CI_Model{
                         'trim(item)' => trim($datdet['item']),
                         'dis' => $datdet['dis'],
                         'dln' => $datdet['dln'],
-                        'trim(nobale)' => ($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='FN') ? trim($datdet['nobale']) : '',
-                        // 'exnet' => $datdet['exnet'],
+                        'trim(nobale)' => (($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='FN') || ($this->session->userdata('deptsekarang')=='GW' && $this->session->userdata('tujusekarang')=='FG') || ($this->session->userdata('deptsekarang')=='GW' && $this->session->userdata('tujusekarang')=='GF')) ? trim($datdet['nobale']) : '',
+                        'exnet' => $datdet['exnet'],
                         'stok' => $datdet['stok'],
                     ];
                     if(in_array($this->session->userdata('deptsekarang'),daftardeptsubkon())){
@@ -595,8 +595,6 @@ class Out_model extends CI_Model{
                             $this->db->set('kgs_akhir','(kgs_awal + kgs_masuk + kgs_adj - kgs_keluar)',false);
                             $this->db->where('id',$detil['id']);
                             $this->db->update('stokdept');
-
-                            // $this-
                         }else{
                             $iniquery = true;
                             $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
@@ -632,7 +630,7 @@ class Out_model extends CI_Model{
                     $hasilheader = $this->db->insert_batch('tb_header',$isiheader->result_array());
                     $idheader = $this->db->insert_id();
                     $this->db->where('id',$idheader);
-                    $this->db->update('tb_header',['nomor_dok' => $xisiheader['nomor_dok'].'-A']);
+                    $this->db->update('tb_header',['nomor_dok' => trim($xisiheader['nomor_dok']).'-A']);
                     $ceknomordok = $xisiheader['nomor_dok'];
                 }else{
                     $idheader = $xisiheader['id'];

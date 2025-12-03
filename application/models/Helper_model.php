@@ -1162,4 +1162,10 @@ class Helper_model extends CI_Model
     public function getnomorbcbykontrak($id){
         return $this->db->get_where('tb_header',['trim(keterangan)' => $id, 'jns_bc'=>261, 'trim(keterangan) != ' => '']);
     }
+    public function kodeimdo($id){
+        return $this->db->get_where('barang',['id' => $id]);
+    }
+    public function cekdeptinv($dept,$tgl){
+        return $this->db->get_where('stokinv',['dept_id' => $dept,'tgl' => $tgl]);
+    }
 }
