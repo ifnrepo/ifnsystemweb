@@ -38,7 +38,8 @@
 
                         </span>
                         <span>
-                            <?php $hilang = ($datheader['send_ceisa'] == 0  || $datheader['nomor_sppb'] != '') ? "hilang " : ""; ?>
+                             <!-- || $datheader['nomor_sppb'] != '' -->
+                            <?php $hilang = ($datheader['send_ceisa'] == 0 || $datheader['nomor_sppb'] != '') ? "hilang " : ""; ?>
                             <?php $hilang2 = $datheader['send_ceisa'] == 1 ? "hilang " : ""; ?>
                             <?php $hilang3 = $datheader['nomor_sppb'] == '' ? "hilang " : ""; ?>
                             <?php $nonaktif = $datheader['send_ceisa'] == 1 ? "disabled " : ""; ?>

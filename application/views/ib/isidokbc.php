@@ -35,7 +35,7 @@
 
                         </span>
                         <span>
-                            <?php $hilang = ($datheader['send_ceisa'] == 0 || $datheader['nomor_sppb'] != '') ? "hilang" : ""; ?>
+                            <?php $hilang = ($datheader['send_ceisa'] == 0 || trim($datheader['nomor_bc']) != '') ? "hilang" : ""; ?>
                             <?php $hilang2 = $datheader['send_ceisa'] == 1 ? "hilang" : ""; ?>
                             <?php $hilang3 = $datheader['nomor_sppb'] == '' ? "hilang" : ""; ?>
                             <?php $nonaktif = $datheader['send_ceisa'] == 1 ? "readonly" : ""; ?>
