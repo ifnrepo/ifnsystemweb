@@ -688,7 +688,7 @@ function ponodis(po, item, dis, brg) {
 }
 
 function rupiah(amount, decimalSeparator, thousandsSeparator, nDecimalDigits) {
-	if (amount == 0) {
+	if (amount == 0 || amount == 0.00) {
 		return "-";
 	} else {
 		var num = parseFloat(amount); //convert to float

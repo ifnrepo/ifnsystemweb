@@ -1110,7 +1110,7 @@ function getdatabomcost($que){
     $hass = [];
     $rawsub = ['8189','6319'];
     if(in_array($que['id_kategori'],$rawsub)){
-        $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $que['id_barang'],'trim(nobontr)' => trim($que['nobontr']),'nobontr is not null']);
+        $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $que['id_barang'],'trim(nobontr)' => trim($que['nobontr']),'trim(nobontr) != ' => ""]);
         if($datahamat->num_rows() > 0){
             $hamat = $datahamat->row_array();
         }else{
@@ -1126,6 +1126,7 @@ function getdatabomcost($que){
             'id_barang' => $que['id_barang'],
             'nobontr' => $que['nobontr'],
             'kgs' => $que['kgs_akhir'],
+            'kgs_sm' => 0,
             'jns_bc' => $hamat['jns_bc'],
             'nomor_bc' => $hamat['nomor_bc'],
             'tgl_bc' => $hamat['tgl_bc'],
@@ -1137,9 +1138,16 @@ function getdatabomcost($que){
             $hasil = [];
         }else{
             $databom = $cekdatabom->row_array();
-            $datadetbom = $CI->db->get_where('ref_bom_detail_cost',['id_bom' => $databom['id']]);
+            // $datadetbom = $CI->db->get_where('ref_bom_detail_cost',['id_bom' => $databom['id']]);
+            $CI->db->select("*");
+            $CI->db->from('ref_bom_detail_cost');
+            $CI->db->where('id_bom',$databom['id']);
+            if($que['dept_id']!='GF'){
+                $CI->db->where('persen > ',0);
+            }
+            $datadetbom = $CI->db->get();
             foreach($datadetbom->result_array() as $datadetbom){
-                $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $datadetbom['id_barang'],'trim(nobontr)' => trim($datadetbom['nobontr']),'nobontr is not null']);
+                $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $datadetbom['id_barang'],'trim(nobontr)' => trim($datadetbom['nobontr']),'trim(nobontr) != ' => ""]);
                 if($datahamat->num_rows() > 0){
                     $hamat = $datahamat->row_array();
                 }else{
@@ -1155,6 +1163,7 @@ function getdatabomcost($que){
                     'id_barang' => $datadetbom['id_barang'],
                     'nobontr' => $datadetbom['nobontr'],
                     'kgs' => $que['kgs_akhir']*($datadetbom['persen']/100),
+                    'kgs_sm' => $que['kgs_akhir']*($datadetbom['persen_sm']/100),
                     'jns_bc' => $hamat['jns_bc'],
                     'nomor_bc' => $hamat['nomor_bc'],
                     'tgl_bc' => $hamat['tgl_bc'],

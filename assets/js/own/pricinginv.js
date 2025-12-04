@@ -1,11 +1,13 @@
 var table = null;
 var tabledet = null;
+var jadi = 0;
 $(document).ready(function(){
     if($("#tglcutoff").val()==''){
         $("#butgo").addClass('disabled');
     }
 	$("#buthitungbom").addClass('disabled');
 	$(".loadered").removeClass('hilang');
+	$(".loaderedblue").removeClass('hilang');
     table = $('#tabelnya').DataTable({
         "destroy": true,
 		"processing": true,
@@ -25,25 +27,22 @@ $(document).ready(function(){
             var data = api.rows({ page: 'current' }).data().toArray();
 			var panjang = api.rows({ page: 'current' }).data().length;
 			// $("#loadview").html('');
-			$(".loadered").addClass('hilang');
+			// $(".loadered").addClass('hilang');
+			jadi++;
 			// // alert(api2.recordsFiltered);
 			// // alert(api2.recordsFiltered);
             if(api2.recordsFiltered > 0){
 				$("#jumlahkgs").text(rupiah(data[0]['totalkgs'],'.',',',2));
 				$("#jumlahpcs").text(rupiah(data[0]['totalpcs'],'.',',',0));
 				$("#jumlahrek").text(rupiah(api2.recordsFiltered,'.',',',0));
-				$("#jumlahkgsdet").text('0');
-				$("#jumlahpcsdet").text('0');
-				$("#jumlahrekdet").text('0');
 				$("#buthitungbom").removeClass('disabled');
 			}else{
 				$("#jumlahkgs").text('0');
 				$("#jumlahpcs").text('0');
 				$("#jumlahrek").text('0');
-				$("#jumlahkgsdet").text('0');
-				$("#jumlahpcsdet").text('0');
-				$("#jumlahrekdet").text('0');
 			}
+			var jmlkgs = toAngka($("#jumlahkgsdet").text());
+			$("#selisihkgs").text(rupiah(parseFloat(jmlkgs) - parseFloat(data[0]['totalkgs']).toFixed(2),'.',',',2));
 		},
 		"ajax":
 		{
@@ -64,8 +63,8 @@ $(document).ready(function(){
 		"deferRender": true,
 		"aLengthMenu": [[5, 10, 25, 50, 100],[ 5, 10, 25, 50, 100]], // Combobox Limit
 		"pageLength": 25,
-		// "dom": '<"pull-left"l>t<"bottom-left"i><"bottom-right"p>',
-		"dom": '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
+		"dom": '<"pull-left"l>t<"bottom-left"i><"bottom-right"p>',
+		// "dom": '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 		"columns": [
 			{ "data": "dept_id",
 				"className": "line-11",
@@ -145,30 +144,26 @@ $(document).ready(function(){
 		},
 		"fnDrawCallback": function(oSettings) {
 			// alert('The table has been redrawn.');
-			var api = this.api();
-			var api2 = api.ajax.json();
-            var data = api.rows({ page: 'current' }).data().toArray();
-			var panjang = api.rows({ page: 'current' }).data().length;
+			var api2x = this.api();
+			var api2det = api2x.ajax.json();
+            var data = api2x.rows({ page: 'current' }).data().toArray();
+			var panjang = api2x.rows({ page: 'current' }).data().length;
 			// $("#loadview").html('');
-			$(".loadered").addClass('hilang');
+			// $(".loaderedblue").addClass('hilang');
+			jadi++;
 			// // alert(api2.recordsFiltered);
 			// // alert(api2.recordsFiltered);
-            if(api2.recordsFiltered > 0){
-				$("#jumlahkgsdet").text(rupiah(data[0]['totalkgs'],'.',',',2));
-				// $("#jumlahpcs").text(rupiah(data[0]['totalpcs'],'.',',',0));
-				// $("#jumlahrek").text(rupiah(api2.recordsFiltered,'.',',',0));
-				// $("#jumlahkgsdet").text('0');
-				// $("#jumlahpcsdet").text('0');
-				// $("#jumlahrekdet").text('0');
-				// $("#buthitungbom").removeClass('disabled');
+            if(api2det.recordsFiltered > 0){
+				$("#jumlahkgsdet").text(rupiah(data[0]['totalkgsdet'],'.',',',2));
+				$("#jumlahrekdet").text(rupiah(api2det.recordsFiltered,'.',',',0));
 			}else{
 				$("#jumlahkgsdet").text('0');
-				// $("#jumlahpcs").text('0');
-				// $("#jumlahrek").text('0');
-				// $("#jumlahkgsdet").text('0');
-				// $("#jumlahpcsdet").text('0');
-				// $("#jumlahrekdet").text('0');
+				$("#jumlahrekdet").text('0');
+				$("#jumlahpcsdet").text('0');
 			}
+			var jmlkgs = toAngka($("#jumlahkgs").text());
+			$("#selisihkgs").text(rupiah(parseFloat(data[0]['totalkgsdet']).toFixed(2) - parseFloat(jmlkgs),'.',',',2));
+			$("#jumlahpcsdet").text('-');
 		},
 		"ajax":
 		{
@@ -189,13 +184,14 @@ $(document).ready(function(){
 		"deferRender": true,
 		"aLengthMenu": [[5, 10, 25, 50, 100],[ 5, 10, 25, 50, 100]], // Combobox Limit
 		"pageLength": 25,
-		// "dom": '<"pull-left"l>t<"bottom-left"i><"bottom-right"p>',
-		"dom": '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
+		"dom": '<"pull-left"l>t<"bottom-left"i><"bottom-right"p>',
+		// "dom": '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 		"columns": [
 			{ "data": "dept_id",
 				"className": "line-11",
 				"render": function(data, type, row, meta){
-					return "<span class='text-primary'>"+row.dept_id+"/</span><span class='text-cyan'>"+row.urut+"</span>";
+					// return "<span class='text-primary'>"+row.dept_id+"/</span><span class='text-cyan'>"+row.urut+"</span>";
+					return "<span class='text-primary'>"+row.dept_id+"</span>";
 				}
 			 },
 			{ "data": "nama_barang",
@@ -210,10 +206,19 @@ $(document).ready(function(){
 			{ "data": "kgs",
 				"className": "font-kecil text-right",
 				"render" : function(data, type, row, meta){
-					return rupiah(row.kgs,'.',',',2);
+					return rupiah(row.kgs,'.',',',4);
 				}
 			 },
-			{ "data": "jns_bc" },
+			{ "data": "jns_bc",
+				"className" : "line-11",
+				"render" : function(data, type, row, meta){
+					if(row.jns_bc == null || row.jns_bc.trim() == ''){
+						return "<span class='text-pink'>BC Not Found</span>";
+					}else{
+						return "BC. "+data+"<br><span class='text-cyan font-11'>"+row.nomor_bc+" Tgl."+row.tgl_bc+"</span>";
+					}
+				}
+			},
 			{ "data": "harga_akt",
 				"className": "font-kecil text-right",
 				"render" : function(data, type, row, meta){
@@ -237,7 +242,25 @@ $(document).ready(function(){
 			},
 		],
     });
+
+	$("#buttoncari").click(function(){
+		var isi = $("#textcari").val();
+		table.search(isi).draw();
+		tabledet.search(isi).draw();
+		return false;
+	})
+	$("#buttonreset").click(function(){
+		$("#textcari").val('');
+		table.search('').draw();
+		tabledet.search('').draw();
+		return false;
+	})
 })
+setInterval(() => {
+	if(jadi == 2){
+		$(".loadered").addClass('hilang');
+	}
+}, 500);
 
 $("#blpricing").on('change',function(){
     updatedata();

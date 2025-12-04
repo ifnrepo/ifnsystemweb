@@ -26,7 +26,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-              <a href="<?= base_url().'pricinginv/addcutoff' ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Tambah data Cut Off" data-tombol="Ya" class="btn btn-sm btn-primary" style="height: 40px;min-width:45px;" id="butcutoff"><i class="fa fa-plus mr-1"></i> Tambah Cut Off</a>
+              <?php $distombollock = $this->session->userdata('tglpricinginv')!='' ? '' : 'hilang '; ?>
+              <?php $diskuncitgl = $tglkunci==1 ? 'hilang' : ''; ?>
+              <?php $diskuncitgl2 = $tglkunci==0 ? 'hilang' : ''; ?>
+              <a href="#" data-href="<?= base_url().'pricinginv/unlockinv' ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-title="Unlock INV" data-message="Akan Membuka data Inventory" class="btn btn-sm btn-primary <?= $distombollock ?><?= $diskuncitgl2 ?>" title="<?= $userlockinv ?>" style="height: 40px; min-width: 40px;" id="butunlock"><i class="fa fa-lock fa-2x"></i></a>
+              <a href="#" data-href="<?= base_url().'pricinginv/lockinv' ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-title="Lock INV" data-message="Akan mengunci data Inventory" class="btn btn-sm btn-success <?= $distombollock ?><?= $diskuncitgl ?>" title="<?= $userlockinv ?>" style="height: 40px; min-width: 40px;" id="butlock"><i class="fa fa-unlock fa-2x"></i></a>
+              <a href="<?= base_url().'pricinginv/addcutoff' ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Tambah data Cut Off" data-tombol="Ya" class="btn btn-sm btn-primary mr-1" style="height: 40px;min-width:45px;" id="butcutoff"><i class="fa fa-plus mr-1"></i> Tambah Cut Off</a>
               <a href="#" class="btn btn-sm btn-warning mr-1" style="height: 40px;min-width:45px;" id="butref"><i class="fa fa-refresh"></i></a>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-1" id="thpricing" name="th" style="width: 75px;" value="<?= $this->session->userdata('thpricing') ?>">
               <select class="form-control form-sm font-kecil font-bold mr-1 form-select" id="blpricing" name="bl" style="width: 120px;">
@@ -46,40 +51,45 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
               <div class="row">
-                <div class="col-2">
-                  <h4 class="mb-1 font-kecil">Tgl Cut Off</h4>
-                  <span class="font-kecil">
-                    <div class="font-kecil">
-                      <select class="form-select form-control form-sm font-kecil font-bold" id="tglcutoff" name="tglcutoff">
-                        <option value="">-- Pilih Tgl Cut Off --</option>
-                        <?php foreach($tglreq->result_array() as $dpu){ $selek = $this->session->userdata('tglpricinginv')==$dpu['tgl'] ? 'selected' : ''; ?>
-                          <option value="<?= $dpu['tgl'] ?>" title="Dibuat oleh :<?= datauser($dpu['user_add'],'name') ?>, Pada <?= $dpu['tgl_add'] ?>" <?= $selek ?>><?= tglmysql($dpu['tgl']) ?></option>
-                        <?php } ?> ?>
-                      </select>
-                      <input type="text" name="tglcut" id="tglcut" class="hilang" value="<?= $this->session->userdata('tglpricinginv') ?>">
-                    </div>
-                  </span>
-                </div>
-                <div class="col-2">
-                  <h4 class="mb-1 font-kecil">Dept</h4>
-                  <span class="font-kecil">
-                    <div class="font-kecil">
-                      <select class="form-select form-control form-sm font-kecil font-bold" id="deptpricing" name="deptpricing">
-                        <option value="">Semua</option>
-                        <?php foreach($depe->result_array() as $depe){ $aktiv = cekdeptinv($depe['dept_id'],$this->session->userdata('tglpricinginv')) ? '' : 'disabled'; ?>
-                        <?php $selek = $this->session->userdata('deptpricinginv')==$depe['dept_id'] ? 'selected' : ''; ?>
-                            <option value="<?= $depe['dept_id'] ?>" title="" <?= $aktiv.' '.$selek ?>><?= $depe['departemen'] ?></option>
-                        <?php } ?>
-                      </select>
-                      <input type="text" name="deptcut" id="deptcut" class="hilang" value="<?= $this->session->userdata('deptpricinginv') ?>">
-                    </div>
-                  </span>
-                </div>
-                <div class="col-2">
-                  <h4 class="mb-1 font-kecil"><span style="color: #F5F8FC">.</span></h4>
-                  <span class="font-kecil">
-                    <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
-                  </span>
+                <div class="col-5">
+                  <div class="d-flex">
+                    <span class="px-1">
+                      <label class="form-label font-kecil">Tgl Cut Off</label>
+                      <div>
+                        <select class="form-select form-control form-sm font-kecil font-bold" id="tglcutoff" name="tglcutoff">
+                          <option value="">-- Pilih Tgl Cut Off --</option>
+                          <?php foreach($tglreq->result_array() as $dpu){ $selek = $this->session->userdata('tglpricinginv')==$dpu['tgl'] ? 'selected' : ''; ?>
+                            <option value="<?= $dpu['tgl'] ?>" title="Dibuat oleh :<?= datauser($dpu['user_add'],'name') ?>, Pada <?= $dpu['tgl_add'] ?>" <?= $selek ?>><?= tglmysql($dpu['tgl']) ?></option>
+                          <?php } ?> ?>
+                        </select>
+                        <input type="text" name="tglcut" id="tglcut" class="hilang" value="<?= $this->session->userdata('tglpricinginv') ?>">
+                      </div>
+                    </span>
+                    <span class="px-1">
+                      <label class="form-label font-kecil">Dept</label>
+                      <div>
+                         <select class="form-select form-control form-sm font-kecil font-bold" id="deptpricing" name="deptpricing">
+                          <option value="">Semua</option>
+                          <?php foreach($depe->result_array() as $depe){ $aktiv = cekdeptinv($depe['dept_id'],$this->session->userdata('tglpricinginv')) ? '' : 'disabled'; ?>
+                          <?php $selek = $this->session->userdata('deptpricinginv')==$depe['dept_id'] ? 'selected' : ''; ?>
+                              <option value="<?= $depe['dept_id'] ?>" title="" <?= $aktiv.' '.$selek ?>><?= $depe['departemen'] ?></option>
+                          <?php } ?>
+                        </select>
+                        <input type="text" name="deptcut" id="deptcut" class="hilang" value="<?= $this->session->userdata('deptpricinginv') ?>">
+                      </div>
+                    </span>
+                    <span class="px-1">
+                      <label class="form-label font-kecil"><span style="color: #F5F8FC">.</span></label>
+                      <div class="font-kecil">
+                        <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
+                      </div>
+                    </span>
+                  </div>
+                  <div class="p-1 font-kecil">
+                    <?php if($this->session->userdata('deptpricinginv')!=''){ ?>
+                      <span class="text-cyan font-bold">Diupload Oleh : </span><span><?= $usersaveinv ?></span>
+                    <?php } ?>
+                  </div>
                 </div>
                 <div class="col-4">
                   <!-- <label class="bg-red-lt my-0 py-1 px-2 font-bold w-100"><span class="text-black">Rekap Data</span></label> -->
@@ -97,32 +107,38 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <td class="font-bold">Rekord</td>
                         <td class="text-right" id="jumlahrek">Loading..</td>
                         <td class="text-right" id="jumlahrekdet">Loading..</td>
-                        <td></td>
+                        <td class="text-right">-</td>
                       </tr>
                       <tr>
                         <td class="font-bold">PCS</td>
                         <td class="text-right" id="jumlahpcs">Loading..</td>
                         <td class="text-right" id="jumlahpcsdet">Loading..</td>
-                        <td></td>
+                        <td class="text-right">-</td>
                       </tr>
                       <tr>
                         <td class="font-bold">KGS</td>
                         <td class="text-right" id="jumlahkgs">Loading..</td>
                         <td class="text-right" id="jumlahkgsdet">Loading..</td>
-                        <td></td>
+                        <td class="text-right" id="selisihkgs"></td>
                       </tr>
                     </tbody>
                   </table>
                 </div>
-                  <!-- <div>Jumlah Pcs : <span id="jumlahpcs">0</span></div>
-                  <div>Jumlah Kgs : <span id="jumlahkgs">0</span></div> -->
-                </div>
-                <div class="col-2">
-                  <h4 class="mb-1">
-                    <?php if($disab!=''){ ?>
-                    <!-- <small class="text-pink text-center">Tekan <b>GO</b> untuk mengaktifkan Tombol Tambah Data dan Load Data</small> -->
-                    <?php } ?>
-                  </h4>
+                <div class="col-3">
+                  <div class="mb-0">
+                    <label class="font-bold">
+                      Cari Barang / SKU :
+                    </label>
+                  </div>
+                  <div class="">
+                    <div class="" >
+                    <textarea class="form form-control p-2 m-0 font-kecil" id='textcari' style="text-transform: uppercase;"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button type="button" id="buttoncari" class="btn btn-sm btn-success btn-flat w-100 mt-1">Cari</button>
+                      <button type="button" id="buttonreset" class="btn btn-sm btn-danger btn-flat w-25 mt-1">Reset</button>
+                    </div>
+                  </div>
                 </div>
               </div>
               <!-- <div class="hr m-1"></div> -->
@@ -134,10 +150,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-header font-kecil">
               <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" style="background-color: #F6F8F8"> <!-- #F6F8FB -->
                 <li class="nav-item">
-                  <a href="#tabs-home-1" class="nav-link active bg-cyan-lt btn-flat font-13 font-bold" data-bs-toggle="tab">Inventory</a>
+                  <a href="#tabs-home-1" class="nav-link active bg-cyan btn-flat font-13 font-bold text-black" data-bs-toggle="tab">Inventory</a>
                 </li>
                 <li class="nav-item">
-                  <a href="#tabs-profile-1" class="nav-link bg-teal-lt btn-flat font-13 font-bold" data-bs-toggle="tab">BOM Inventory</a>
+                  <a href="#tabs-profile-1" class="nav-link bg-orange btn-flat font-13 font-bold text-black" data-bs-toggle="tab">BOM Inventory</a>
                 </li>
                 <!-- <li class="nav-item ms-auto">
                   <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab">
@@ -197,7 +213,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <table id="tabeldetailnya" class="table nowrap order-column mt-1 table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;">
                       <thead>
                         <tr>
-                          <th>Dept/No Seri</th>
+                          <th>Dept</th>
                           <th>SKU/Spesifikasi</th>
                           <th>Nobontr</th>
                           <th>Kgs</th>

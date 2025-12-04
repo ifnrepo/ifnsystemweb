@@ -29,6 +29,9 @@ class Pricinginv extends CI_Controller
         $data['hakdep'] = $this->deptmodel->gethakdept_pb($this->session->userdata('arrdep'));
         $data['depe'] = $this->pricingmodel->getdepe();
         $data['tglreq'] = $this->pricingmodel->gettglreq();
+        $data['usersaveinv'] = $this->pricingmodel->usersaveinv();
+        $data['userlockinv'] = $this->pricingmodel->userlockinv();
+        $data['tglkunci'] = $this->pricingmodel->tglkunci();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         $kode = [
             'dept_id' => $this->session->userdata('deptsekarang') == null ? '' : $this->session->userdata('deptsekarang'),
@@ -163,6 +166,20 @@ class Pricinginv extends CI_Controller
     public function breakdowninv(){
         $hasil = $this->pricingmodel->breakdowninv();
         echo $hasil;
+    }
+    public function lockinv(){
+        $hasil = $this->pricingmodel->lockinv();
+        if($hasil){
+            $url = base_url().'pricinginv';
+            redirect($url);
+        }
+    }
+    public function unlockinv(){
+        $hasil = $this->pricingmodel->unlockinv();
+        if($hasil){
+            $url = base_url().'pricinginv';
+            redirect($url);
+        }
     }
 
     // End Pricing Inv

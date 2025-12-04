@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 
-  <link href=<?= base_url() . "assets/css/own-style.css?1764237019" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/own-style.css?1764748054" ?> rel="stylesheet" />
   <style>
     .ui-autocomplete {
       z-index: 99999 !important;
@@ -396,7 +396,7 @@
       </div>
     </div>
   </div>
-  <div class="modal modal-blur fade" id="canceltask" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal modal-blur fade" id="canceltask" tabindex="-1" role="dialog" aria-hidden="true" data-backdrop="static" data-keyboard="false">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -406,7 +406,7 @@
       </div>
     </div>
   </div>
-  <div class="modal modal-blur fade" id="veriftask" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal modal-blur fade" id="veriftask" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
@@ -949,6 +949,7 @@
             <!-- <div class="spinner-border spinner-border-sm text-secondary" role="status"></div> -->
           </div>
           <span class="loadered hilang"></span>
+          <!-- <span class="loaderedblue hilang"></span> -->
         </div>
       </div>
     </header>
