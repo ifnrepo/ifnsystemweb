@@ -117,6 +117,11 @@ class Hargamat extends CI_Controller
         } else {
             $query = $this->hargamatmodel->SimpanData();
             if ($query) {
+                $this->session->set_flashdata('message', '
+                <div class="alert alert-success alert-dismissible fade show" role="alert">
+                  Data Berhasil Di Simpan !
+                    <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                </div>');
                 $url = base_url() . 'hargamat';
                 redirect($url);
             }
