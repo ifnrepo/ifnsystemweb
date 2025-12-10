@@ -174,7 +174,7 @@ class inv_model extends CI_Model
 
         // Query untuk CekSaldobarang
         $this->db->select("0 as kodeinv,stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,stokdept.dln as xdln,barang.id_kategori,stokdept.insno,stokdept.nobontr,barang.kode,stokdept.id as idu");
-        $this->db->select('pcs_awal as saldopcs,kgs_awal as saldokgs');
+        $this->db->select('sum(pcs_awal) as saldopcs,sum(kgs_awal) as saldokgs');
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
@@ -182,6 +182,10 @@ class inv_model extends CI_Model
         $this->db->select('barang.nama_barang as nama_barang');
         $this->db->select('stokdept.stok,stokdept.exnet');
         $this->db->select('tb_po.id_kategori as id_kategori_po');
+        $this->db->select('SUM(sum(pcs_awal)) over() as totalpcssaldo,SUM(sum(kgs_awal)) over() as totalkgssaldo');
+        $this->db->select('0 as totalpcsin,0 as totalkgsin');
+        $this->db->select('0 as totalpcsout,0 as totalkgsout');
+        $this->db->select('0 as totalpcsadj,0 as totalkgsadj');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('stokdept.nobale');
         }else{
@@ -194,8 +198,7 @@ class inv_model extends CI_Model
         }
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
-        // $this->db->join('tb_po','tb_po.po = stokdept.po AND tb_po.item = stokdept.item','left');
-        $this->db->join('tb_po','tb_po.ind_po = CONCAT(trim(stokdept.po),trim(stokdept.item),stokdept.dis)','left');
+        $this->db->join('tb_po','tb_po.ind_po = CONCAT(stokdept.po,stokdept.item,stokdept.dis)','left');
         $this->db->where('dept_id',$dept);
         $this->db->where('periode',$periode);
         // $this->db->where('stokdept.po','KI-6391');
@@ -213,6 +216,10 @@ class inv_model extends CI_Model
         $this->db->select('barang.nama_barang as nama_barang');
         $this->db->select('tb_detail.stok,tb_detail.exnet');
         $this->db->select('tb_po.id_kategori as id_kategori_po');
+        $this->db->select('0 as totalpcssaldo, 0 as totalkgssaldo');
+        $this->db->select('SUM(sum(pcs)) over() as totalpcsin,SUM(sum(kgs)) over() as totalkgsin');
+        $this->db->select('0 as totalpcsout,0 as totalkgsout');
+        $this->db->select('0 as totalpcsadj,0 as totalkgsadj');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
         }else{
@@ -226,7 +233,7 @@ class inv_model extends CI_Model
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
         // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
-        $this->db->join('tb_po','tb_po.ind_po = CONCAT(trim(tb_detail.po),trim(tb_detail.item),tb_detail.dis)','left');
+        $this->db->join('tb_po','tb_po.ind_po = CONCAT(tb_detail.po,tb_detail.item,tb_detail.dis)','left');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->where('dept_tuju',$dept);
         $this->db->where('month(tb_header.tgl)',$bl);
@@ -252,6 +259,10 @@ class inv_model extends CI_Model
         $this->db->select('barang.nama_barang as nama_barang');
         $this->db->select('tb_detailgen.stok,tb_detailgen.exnet');
         $this->db->select('tb_po.id_kategori as id_kategori_po');
+        $this->db->select('0 as totalpcssaldo,0 as totalkgssaldo');
+        $this->db->select('0 as totalpcsin,0 as totalkgsin');
+        $this->db->select('SUM(sum(pcs)) over() as totalpcsout,SUM(sum(kgs)) over() as totalkgsout');
+        $this->db->select('0 as totalpcsadj,0 as totalkgsadj');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detailgen.nobale');
         }else{
@@ -265,7 +276,7 @@ class inv_model extends CI_Model
         $this->db->from('tb_detailgen');
         $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
         // $this->db->join('tb_po','tb_po.po = tb_detailgen.po AND tb_po.item = tb_detailgen.item','left');
-        $this->db->join('tb_po','tb_po.ind_po = CONCAT(trim(tb_detailgen.po),trim(tb_detailgen.item),tb_detailgen.dis)','left');
+        $this->db->join('tb_po','tb_po.ind_po = CONCAT(tb_detailgen.po,tb_detailgen.item,tb_detailgen.dis)','left');
         $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
         $this->db->where('dept_id',$dept);
         $this->db->where('month(tb_header.tgl)',$bl);
@@ -288,6 +299,10 @@ class inv_model extends CI_Model
         $this->db->select('barang.nama_barang as nama_barang');
         $this->db->select('tb_detail.stok,tb_detail.exnet');
         $this->db->select('tb_po.id_kategori as id_kategori_po');
+        $this->db->select('0 as totalpcssaldo,0 as totalkgssaldo');
+        $this->db->select('0 as totalpcsin,0 as totalkgsin');
+        $this->db->select('0 as totalpcsout,0 as totalkgsout');
+        $this->db->select('SUM(sum(pcs)) over() as totalpcsadj,SUM(sum(kgs)) over() as totalkgsadj');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
         }else{
@@ -301,7 +316,7 @@ class inv_model extends CI_Model
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
         // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
-        $this->db->join('tb_po','tb_po.ind_po = CONCAT(trim(tb_detail.po),trim(tb_detail.item),tb_detail.dis)','left');
+        $this->db->join('tb_po','tb_po.ind_po = CONCAT(tb_detail.po,tb_detail.item,tb_detail.dis)','left');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->where('dept_id',$dept);
         $this->db->where('month(tb_header.tgl)',$bl);
@@ -314,10 +329,10 @@ class inv_model extends CI_Model
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,stok,exnet');
         $query4 = $this->db->get_compiled_select();
 
-        $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs from (Select kategori.jns,kodeinv,nobale,po,item,dis,id_barang,xdln,IF(trim(po)='',barang.id_kategori,id_kategori_po) as id_kategori,nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
+        $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs from (Select kategori.jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
-        $kolom .= " left join kategori on kategori.kategori_id = IF(trim(po)='',barang.id_kategori,id_kategori_po)";
+        $kolom .= " left join kategori on kategori.kategori_id = left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4)";
         if($this->session->userdata('currdept') != 'GS'){
         $kolom .= " where (jns <= 2)";
         }
@@ -684,60 +699,229 @@ class inv_model extends CI_Model
             $this->session->set_flashdata('pesanerror', "Data sudah dikunci, tidak bisa simpan ulang  \r\n(terakhir Update oleh ".datauser($datacek['user_verif'],'name').", pada ".$datacek['tgl_verif'].") \r\nDilock Oleh ".datauser($datacek['user_lock'],'name').", pada ".$datacek['tgl_lock'].")");
             $hasil = 1;
         }else{
-            if($this->session->userdata('tglawal')==null){
-                $tglawal = '01-01-1970';
-            }else{
-                $tglawal = $this->session->userdata('tglawal');
-            }
-            $periode = cekperiodedaritgl($tglawal);
-            $this->db->trans_start();
-            // Hapus dulu data
-            $this->db->where('dept_id',$this->session->userdata('currdept'));
-            $this->db->where('tgl',tglmysql($this->session->userdata('tglakhir')));
-            $this->db->where('periode',$periode);
-            $this->db->delete('stokinv');
-            // Insert data
-            $data = $this->getdata();
-            $query = $this->db->query($data);
-            if(count($query->result_array()) > 0){
-                $tglnya = date('Y-m-d H:i:s');
-                $no=0;
-                foreach($query->result_array() as $det){
-                    if(($det['sumpcs']+$det['sumkgs']) != 0){
-                        $no++;
-                        $data = [
-                            'urut' => $no,
-                            'dept_id' => $this->session->userdata('currdept'),
-                            'tgl' => tglmysql($this->session->userdata('tglakhir')),
-                            'periode' => $periode,
-                            'po' => $det['po'],
-                            'item' => $det['item'], 
-                            'dis' => $det['dis'],
-                            'id_barang' => $det['id_barang'],
-                            'insno' => $det['insno'],
-                            'nobontr' => $det['nobontr'],
-                            'dln' => $det['xdln'],
-                            'nobale' => $det['nobale'],
-                            'nomor_bc' => $det['nomor_bc'],
-                            'exnet' => $det['exnet'],
-                            'pcs_awal' => $det['saldopcs'],
-                            'kgs_awal' => $det['saldokgs'],
-                            'pcs_masuk' => $det['inpcs'],
-                            'kgs_masuk' => $det['inkgs'],
-                            'pcs_keluar' => $det['outpcs'],
-                            'kgs_keluar' => $det['outkgs'],
-                            'pcs_adj' => $det['adjpcs'],
-                            'kgs_adj' => $det['adjkgs'],
-                            'pcs_akhir' => $det['saldopcs']+$det['inpcs']-$det['outpcs']+$det['adjpcs'],
-                            'kgs_akhir' => $det['saldokgs']+$det['inkgs']-$det['outkgs']+$det['adjkgs'],
-                            'user_verif' => $this->session->userdata('id'),
-                            'tgl_verif' => $tglnya
-                        ];
-                        $this->db->insert('stokinv',$data);
+            $cekdatfin = $this->db->get_where('tb_datfin',['tgl' => tglmysql($this->session->userdata('tglakhir'))]);
+            if(count($cekdatfin->result_array()) <= 0 && $this->session->userdata('currdept')=='FN'){
+                $datacek = $cekdatfin->row_array();
+                $this->session->set_flashdata('errorsimpan', 1);
+                $this->session->set_flashdata('pesanerror', "[ERROR] Data Sublok FN periode tgl ".$this->session->userdata('tglakhir')." belum ada, Upload data pada IFN-SYSTEM");
+                $hasil = 1;
+            }else{ 
+                if($this->session->userdata('tglawal')==null){
+                    $tglawal = '01-01-1970';
+                }else{
+                    $tglawal = $this->session->userdata('tglawal');
+                }
+                $periode = cekperiodedaritgl($tglawal);
+                $this->db->trans_start();
+                // Hapus dulu data
+                $this->db->where('dept_id',$this->session->userdata('currdept'));
+                $this->db->where('tgl',tglmysql($this->session->userdata('tglakhir')));
+                $this->db->where('periode',$periode);
+                $this->db->delete('stokinv');
+                // Insert data
+                $data = $this->getdata();
+                $query = $this->db->query($data);
+                if(count($query->result_array()) > 0){
+                    $tglnya = date('Y-m-d H:i:s');
+                    $no=0;
+                    foreach($query->result_array() as $det){
+                        if(($det['sumpcs']+$det['sumkgs']) != 0){
+                            $no++;
+                            if($this->session->userdata('currdept')=='FN' && trim($det['po'])!=''){
+                                $kgsnya = $det['saldokgs']+$det['inkgs']-$det['outkgs']+$det['adjkgs'];
+                                $pcsnya = $det['saldopcs']+$det['inpcs']-$det['outpcs']+$det['adjpcs'];
+                                $kondisidatfin = [
+                                    'trim(po)' => trim($det['po']),
+                                    'trim(item)' => trim($det['item']),
+                                    'dis' => $det['dis'],
+                                    'trim(insno)' => trim($det['insno']),
+                                    'tgl' => tglmysql($this->session->userdata('tglakhir'))
+                                ];
+                                $datafin = $this->db->get_where('tb_datfin',$kondisidatfin);
+                                if(count($datafin->result_array()) > 0){
+                                    $datafinrow = $datafin->row_array();
+                                    $ke = 0;
+                                    $loop = 1;
+                                    while ($kgsnya > 0) {
+                                        $ke++;
+                                        $sbl = '';
+                                        switch ($ke) {
+                                            case 1:
+                                                if($datafinrow['kgs_packing'] > 0){
+                                                    if($kgsnya > $datafinrow['kgs_packing']){
+                                                        $sbl = 'PA';
+                                                        $kgsnya -= $datafinrow['kgs_packing'];
+                                                        $pcsnya -= round($datafinrow['kgs_packing']/$datafinrow['kgs_po'],2);
+                                                        $jadikgs = $datafinrow['kgs_packing'];
+                                                        $jadipcs = round($datafinrow['kgs_packing']/$datafinrow['kgs_po'],2);
+                                                    }else{
+                                                        $sbl = 'PA';
+                                                        $jadikgs = $kgsnya;
+                                                        $jadipcs = $pcsnya;
+                                                        $kgsnya = 0;
+                                                    }
+                                                }
+                                                break;
+                                            case 2:
+                                                if($datafinrow['kgs_hoshu2'] > 0){
+                                                    if($kgsnya > $datafinrow['kgs_hoshu2']){
+                                                        $sbl = 'H2';
+                                                        $kgsnya -= $datafinrow['kgs_hoshu2'];
+                                                        $pcsnya -= round($datafinrow['kgs_hoshu2']/$datafinrow['kgs_po'],2);
+                                                        $jadikgs = $datafinrow['kgs_hoshu2'];
+                                                        $jadipcs = round($datafinrow['kgs_hoshu2']/$datafinrow['kgs_po'],2);
+                                                    }else{
+                                                        $sbl = 'H2';
+                                                        $jadikgs = $kgsnya;
+                                                        $jadipcs = $pcsnya;
+                                                        $kgsnya = 0;
+                                                    }
+                                                }
+                                                break;
+                                            case 3:
+                                                if($datafinrow['kgs_koatsu'] > 0){
+                                                    if($kgsnya > $datafinrow['kgs_koatsu']){
+                                                        $sbl = 'KO';
+                                                        $kgsnya -= $datafinrow['kgs_koatsu'];
+                                                        $pcsnya -= round($datafinrow['kgs_koatsu']/$datafinrow['kgs_po'],2);
+                                                        $jadikgs = $datafinrow['kgs_koatsu'];
+                                                        $jadipcs = round($datafinrow['kgs_koatsu']/$datafinrow['kgs_po'],2);
+                                                    }else{
+                                                        $sbl = 'KO';
+                                                        $jadikgs = $kgsnya;
+                                                        $jadipcs = $pcsnya;
+                                                        $kgsnya = 0;
+                                                    }
+                                                }
+                                                break;
+                                            case 4:
+                                                if($datafinrow['kgs_hoshu1'] > 0){
+                                                    if($kgsnya > $datafinrow['kgs_hoshu1'] && $datafinrow['kgs_hoshu1'] > 0){
+                                                        $sbl = 'H1';
+                                                        $kgsnya -= $datafinrow['kgs_hoshu1'];
+                                                        $pcsnya -= round($datafinrow['kgs_hoshu1']/$datafinrow['kgs_po'],2);
+                                                        $jadikgs = $datafinrow['kgs_hoshu1'];
+                                                        $jadipcs = round($datafinrow['kgs_hoshu1']/$datafinrow['kgs_po'],2);
+                                                    }else{
+                                                        $sbl = 'H1';
+                                                        $jadikgs = $kgsnya;
+                                                        $jadipcs = $pcsnya;
+                                                        $kgsnya = 0;
+                                                    }
+                                                }
+                                                break;
+                                            default:
+                                                $sbl = 'SN';
+                                                $jadikgs = $kgsnya;
+                                                $jadipcs = $pcsnya;
+                                                $kgsnya = 0;
+                                                break;
+                                        }
+                                        $loop = $sbl != '' ? 1 : 0;
+                                        $data = [
+                                            'urut' => $no,
+                                            'dept_id' => $this->session->userdata('currdept'),
+                                            'tgl' => tglmysql($this->session->userdata('tglakhir')),
+                                            'periode' => $periode,
+                                            'po' => $det['po'],
+                                            'item' => $det['item'], 
+                                            'dis' => $det['dis'],
+                                            'id_barang' => $det['id_barang'],
+                                            'insno' => $det['insno'],
+                                            'nobontr' => $det['nobontr'],
+                                            'dln' => $det['xdln'],
+                                            'nobale' => $det['nobale'],
+                                            'nomor_bc' => $det['nomor_bc'],
+                                            'exnet' => $det['exnet'],
+                                            // 'kgs_awal' => $det['saldokgs'],
+                                            // 'pcs_masuk' => $det['inpcs'],
+                                            // 'kgs_masuk' => $det['inkgs'],
+                                            // 'pcs_keluar' => $det['outpcs'],
+                                            // 'kgs_keluar' => $det['outkgs'],
+                                            // 'pcs_adj' => $det['adjpcs'],
+                                            // 'kgs_adj' => $det['adjkgs'],
+                                            // 'pcs_awal' => $jadipcs,
+                                            'kgs_awal' => $jadikgs,
+                                            // 'pcs_akhir' => $jadipcs,
+                                            'kgs_akhir' => $jadikgs,
+                                            'sublok' => $sbl,
+                                            'user_verif' => $this->session->userdata('id'),
+                                            'tgl_verif' => $tglnya
+                                        ];
+                                        if($loop){
+                                            $this->db->insert('stokinv',$data);
+                                            if($kgsnya > 0){
+                                                $no++;
+                                            }
+                                        }
+                                    }
+                                }else{
+                                    $data = [
+                                        'urut' => $no,
+                                        'dept_id' => $this->session->userdata('currdept'),
+                                        'tgl' => tglmysql($this->session->userdata('tglakhir')),
+                                        'periode' => $periode,
+                                        'po' => $det['po'],
+                                        'item' => $det['item'], 
+                                        'dis' => $det['dis'],
+                                        'id_barang' => $det['id_barang'],
+                                        'insno' => $det['insno'],
+                                        'nobontr' => $det['nobontr'],
+                                        'dln' => $det['xdln'],
+                                        'nobale' => $det['nobale'],
+                                        'nomor_bc' => $det['nomor_bc'],
+                                        'exnet' => $det['exnet'],
+                                        'pcs_awal' => $det['saldopcs'],
+                                        'kgs_awal' => $det['saldokgs'],
+                                        'pcs_masuk' => $det['inpcs'],
+                                        'kgs_masuk' => $det['inkgs'],
+                                        'pcs_keluar' => $det['outpcs'],
+                                        'kgs_keluar' => $det['outkgs'],
+                                        'pcs_adj' => $det['adjpcs'],
+                                        'kgs_adj' => $det['adjkgs'],
+                                        // 'pcs_akhir' => $det['saldopcs']+$det['inpcs']-$det['outpcs']+$det['adjpcs'],
+                                        'kgs_akhir' => $det['saldokgs']+$det['inkgs']-$det['outkgs']+$det['adjkgs'],
+                                        'user_verif' => $this->session->userdata('id'),
+                                        'tgl_verif' => $tglnya
+                                    ];
+                                    $this->db->insert('stokinv',$data);
+                                }
+                            }else{
+                                $data = [
+                                    'urut' => $no,
+                                    'dept_id' => $this->session->userdata('currdept'),
+                                    'tgl' => tglmysql($this->session->userdata('tglakhir')),
+                                    'periode' => $periode,
+                                    'po' => $det['po'],
+                                    'item' => $det['item'], 
+                                    'dis' => $det['dis'],
+                                    'id_barang' => $det['id_barang'],
+                                    'insno' => $det['insno'],
+                                    'nobontr' => $det['nobontr'],
+                                    'dln' => $det['xdln'],
+                                    'nobale' => $det['nobale'],
+                                    'nomor_bc' => $det['nomor_bc'],
+                                    'exnet' => $det['exnet'],
+                                    'pcs_awal' => $det['saldopcs'],
+                                    'kgs_awal' => $det['saldokgs'],
+                                    'pcs_masuk' => $det['inpcs'],
+                                    'kgs_masuk' => $det['inkgs'],
+                                    'pcs_keluar' => $det['outpcs'],
+                                    'kgs_keluar' => $det['outkgs'],
+                                    'pcs_adj' => $det['adjpcs'],
+                                    'kgs_adj' => $det['adjkgs'],
+                                    'pcs_akhir' => $det['saldopcs']+$det['inpcs']-$det['outpcs']+$det['adjpcs'],
+                                    'kgs_akhir' => $det['saldokgs']+$det['inkgs']-$det['outkgs']+$det['adjkgs'],
+                                    'user_verif' => $this->session->userdata('id'),
+                                    'tgl_verif' => $tglnya
+                                ];
+                                $this->db->insert('stokinv',$data);
+                            }
+                        }
                     }
                 }
+                $hasil = $this->db->trans_complete();
             }
-            $hasil = $this->db->trans_complete();
         }
         return $hasil;
     }
@@ -984,7 +1168,7 @@ class inv_model extends CI_Model
     public function getdatakategori(){
        $get = $this->getdata();
 
-       $query = "Select id_kategori,kategori.nama_kategori from (".$get.") r3 left join kategori on id_kategori = kategori.kategori_id group by id_kategori";
+       $query = "Select id_kategori,kategori.nama_kategori from (".$get.") r3 left join kategori on id_kategori = kategori.kategori_id group by id_kategori order by nama_kategori";
        return $this->db->query($query);
     }
     public function getreqinv(){
@@ -1476,12 +1660,11 @@ class inv_model extends CI_Model
         $this->db->where('trim(ref_bom_cost.po)',trim($data['po']));
         $this->db->where('trim(ref_bom_cost.item)',trim($data['item']));
         $this->db->where('ref_bom_cost.dis',$data['dis']);
+        $this->db->where('trim(ref_bom_cost.nobale)',trim($data['nobale']));
         $this->db->where('ref_bom_cost.id_barang',$data['id_barang']);
         if($this->session->userdata('currdept')!= 'GF'){
             $this->db->where('trim(ref_bom_cost.insno)',trim($data['insno']));
             $this->db->where('trim(ref_bom_cost.nobontr)',trim($data['nobontr']));
-        }else{
-            $this->db->where('trim(ref_bom_cost.nobale)',trim($data['nobale']));
         }
         return $this->db->get();
     }

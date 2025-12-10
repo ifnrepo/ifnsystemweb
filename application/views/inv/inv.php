@@ -73,8 +73,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <option value="EXPORT" <?php if($this->session->userdata('exdonya')=='EXPORT'){ echo "selected"; } ?>>EXPORT</option>
                         <option value="DOMESTIC" <?php if($this->session->userdata('exdonya')=='DOMESTIC'){ echo "selected"; } ?>>DOMESTIC</option>
                       </select>
-                      <!-- <input type="email" class="form-control form-sm font-kecil" aria-describedby="emailHelp" placeholder="Enter email"> -->
-                      <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
                     </div>
                   </div>
                   <div class="row <?php if($this->session->userdata('currdept')!='GF'){ echo "hilang"; } ?>" id="div-exdo">
@@ -86,8 +84,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <option value="<?= $buy['id_buyer'] ?>" class="<?= $danger ?>"><?= $buy['nama'].$port ?></option>
                         <?php endforeach;  ?>
                       </select>
-                      <!-- <input type="email" class="form-control form-sm font-kecil" aria-describedby="emailHelp" placeholder="Enter email"> -->
-                      <!-- <small class="form-hint">We'll never share your email with anyone else.</small> -->
                     </div>
                   </div>
                   <div class="row <?php if($this->session->userdata('currdept')!='GP'){ echo "hilang"; } ?>" id="div-exnet">

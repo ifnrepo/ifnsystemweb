@@ -34,10 +34,10 @@ class Pricinginv_model extends CI_Model
         $periode = cekperiodedaritgl($tglawal);
         $tgl = $this->session->userdata('tglpricinginv');
 
-        $this->db->select("stokinv.*,barang.nama_barang,tb_po.spek,barang.kode,barang.id_kategori as yidkategori,tb_po.id_kategori as xidkategori,IFNULL(barang.id_satuan,22) as id_satuan,CONCAT(trim(stokinv.po),'#',trim(stokinv.item),stokinv.dis) as sku");
+        $this->db->select("stokinv.*,barang.nama_barang,tb_po.spek,barang.kode,barang.id_kategori as yidkategori,tb_po.id_kategori as xidkategori,IFNULL(barang.id_satuan,22) as id_satuan,barang.dln as xdln,tb_po.dln as ydln,CONCAT(trim(stokinv.po),'#',trim(stokinv.item),stokinv.dis) as sku");
         $this->db->from('stokinv');
         $this->db->join('barang','barang.id = stokinv.id_barang','left');
-        $this->db->join('tb_po','tb_po.ind_po = concat(trim(stokinv.po),trim(stokinv.item),stokinv.dis)','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(stokinv.po,stokinv.item,stokinv.dis)','left');
         $this->db->where('stokinv.tgl',$tgl);
         if($this->session->userdata('deptpricinginv')!=''){
             $this->db->where('dept_id',$this->session->userdata('deptpricinginv'));
@@ -45,15 +45,19 @@ class Pricinginv_model extends CI_Model
         // $this->db->order_by('stokinv.dept_id','stokinv.urut');
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select r1.*,sum(pcs_akhir) over() as totalpcs,sum(kgs_akhir) over() as totalkgs,CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
-        $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) ";
-        $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan";
+        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(kgs_akhir) over() as totalkgs from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
+        $kolom .= "LEFT JOIN kategori on kategori.kategori_id = LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) ";
+        $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan ";
+        if($this->session->userdata('milik')!=''){
+            $kolom .= "where LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) = '".$this->session->userdata('milik')."'";
+        }
+        $kolom .= ") r2";
         return $kolom;
     }
     public function getdatainv($filtkat){
         $query = $this->getdata();
         // $cari = array('barang.kode','nama_barang','nama_kategori');
-        $cari = array('po','nobontr','insno','spek','nama_barang','r1.kode','r1.sku');
+        $cari = array('po','nobontr','insno','spek','nama_barang','kode','sku');
         $where = $filtkat;
         $isWhere = null;
         // Ambil data yang di ketik user pada textbox pencarian
@@ -176,13 +180,14 @@ class Pricinginv_model extends CI_Model
 
         $this->db->select("stokinv_detail.*,stokinv.dept_id,stokinv.tgl,stokinv.po,stokinv.item,stokinv.dis,barang.kode,barang.nama_barang,stokinv.periode");
         $this->db->select("stokinv.po as xpo,stokinv.nobontr as xnobontr,stokinv.insno as xinsno,headbarang.nama_barang as xnama_barang,tb_po.spek as xspek,headbarang.kode as xkode,CONCAT(trim(stokinv.po),'#',trim(stokinv.item),stokinv.dis) as sku");
-        $this->db->select("(SELECT harga_akt FROM tb_hargamaterial WHERE tb_hargamaterial.id_barang = stokinv_detail.id_barang AND tb_hargamaterial.nobontr = stokinv_detail.nobontr LIMIT 1) AS harga_akt");
-        // $this->db->select("SUM(kgs) OVER() as totalkgsdet");
+        $this->db->select("(SELECT harga_akt FROM tb_hargamaterial WHERE tb_hargamaterial.id_barang = stokinv_detail.id_barang AND tb_hargamaterial.nobontr = stokinv_detail.nobontr AND (stokinv_detail.nomor_bc != '' OR stokinv_detail.nomor_bc is not null) LIMIT 1) AS harga_akt");
+        $this->db->select("barang.id_kategori as xid_kategori,tb_po.id_kategori as yid_kategori");
+        $this->db->select("LEFT(CONCAT(IFNULL(headbarang.dln,''),IFNULL(tb_po.dln,'')),1) as mdln");
         $this->db->from('stokinv_detail');
         $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
         $this->db->join('stokinv','stokinv ON stokinv.id = stokinv_detail.id_stok ','left');
         $this->db->join('barang headbarang','headbarang.id = stokinv.id_barang','left');
-        $this->db->join('tb_po','tb_po.ind_po = concat(trim(stokinv.po),trim(stokinv.item),stokinv.dis)','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(stokinv.po,stokinv.item,stokinv.dis)','left');
         $this->db->where('stokinv.tgl',$tgl);
         if($this->session->userdata('deptpricinginv')!=''){
             $this->db->where('stokinv.dept_id',$this->session->userdata('deptpricinginv'));
@@ -190,15 +195,19 @@ class Pricinginv_model extends CI_Model
         $this->db->order_by('stokinv.dept_id','stokinv.urut');
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select *,SUM(kgs) OVER() as totalkgsdet from (".$query1.") r1 ";
+        $kolom = "Select *,SUM(kgs) OVER() as totalkgsdet,SUM(harga_akt*kgs) OVER() AS tothargadet from (Select *,LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4) AS id_kategori from (".$query1.") r1 ";
         // $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) ";
         // $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan";
+        if($this->session->userdata('milik')!=''){
+            $kolom .= "where mdln = '".$this->session->userdata('milik')."'";
+        }
+        $kolom .= " ) r2";
         return $kolom;
     }
     public function getdatainvdet($filtkat){
         $query = $this->getdatadet();
         // $cari = array('barang.kode','nama_barang','nama_kategori');
-        $cari = array('xpo','xnobontr','xinsno','xnama_barang','xkode','r1.sku');
+        $cari = array('xpo','xnobontr','xinsno','xnama_barang','xkode','sku');
         $where = $filtkat;
         $isWhere = null;
         // Ambil data yang di ketik user pada textbox pencarian
@@ -346,6 +355,7 @@ class Pricinginv_model extends CI_Model
         $this->db->trans_start();
         $query = $this->db->query($this->getdata());
         foreach($query->result_array() as $que){
+            // if($que['id_barang']==119){
             $this->db->where('id_stok',$que['id']);
             $this->db->delete('stokinv_detail');
 
@@ -364,6 +374,7 @@ class Pricinginv_model extends CI_Model
 
                 $this->db->insert('stokinv_detail',$dbom);
             }
+            // }
         }       
         return $this->db->trans_complete();
     }
@@ -426,6 +437,10 @@ class Pricinginv_model extends CI_Model
             $hasil = 1;
         }
         return $hasil;
+    }
+    public function getdatkategori(){
+        $kolom = "Select id_kategori,nama_kategori from (".$this->getdata().") r3 group by 1,2 order by 2";
+        return $this->db->query($kolom);
     }
 
     // End Pricing

@@ -52,7 +52,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" id="catat" class="hilang" value="<?= $data['keterangan']; ?>">
                   <span class="font-bold" style="font-size:15px;">
                     <?php if(in_array($data['dept_id'],daftardeptsubkon())){ ?>
-                      <?= $data['keterangan']; ?> - BC ASAL <?= getnomorbcbykontrak($data['keterangan']) ?>
+                      <?= $data['keterangan']; ?> - BC ASAL <?= getnomorbcbykontrak($data['keterangan'],$data['dept_id'],$data['dept_tuju']) ?>
                     <?php }else{ ?>
                       <?= $data['keterangan']; ?>
                     <?php } ?>
@@ -110,6 +110,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Specific</th>
                     <th>SKU</th>
                     <th>Satuan</th>
+                    <th>Nobale</th>
                     <?php if($data['jn_bbl']==1): ?>
                     <th>Qty MINTA</th>
                     <th>Kgs MINTA</th>

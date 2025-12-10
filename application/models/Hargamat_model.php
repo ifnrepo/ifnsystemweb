@@ -300,6 +300,7 @@ class Hargamat_model extends CI_Model
         $data['ppn'] = toAngka($data['ppn']);
         $data['pph'] = toAngka($data['pph']);
         $data['oth_amount'] = toAngka($data['oth_amount']);
+        $data['harga_akt'] = toAngka($data['harga_akt']);
         $data['tgl'] = tglmysql($data['tgl']);
         $data['tgl_bc'] = tglmysql($data['tgl_bc']);
         $data['tgl_aju'] = tglmysql($data['tgl_aju']);
@@ -368,6 +369,7 @@ class Hargamat_model extends CI_Model
         $data['ppn'] = toAngka($data['ppn']);
         $data['pph'] = toAngka($data['pph']);
         $data['oth_amount'] = toAngka($data['oth_amount']);
+        $data['harga_akt'] = toAngka($data['harga_akt']);
         $data['tgl_bc'] = tglmysql($data['tgl_bc']);
         $data['tgl_aju'] = tglmysql($data['tgl_aju']);
         $data['co'] = isset($data['co']) ? 1 : 0;

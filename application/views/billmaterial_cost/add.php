@@ -84,6 +84,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         </select>
                                     </div>
                                 </div>
+                                <div class="mb-1 row">
+                                    <label class="col-3 col-form-label font-kecil font-bold text-right">Tgl Produksi</label>
+                                    <div class="col-4">
+                                        <input type="email" id="prod_date" class="form-control input-sm font-kecil tglpilih" aria-describedby="emailHelp" value="">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

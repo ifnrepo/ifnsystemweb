@@ -85,6 +85,17 @@
                     </div>
                 </div>
                 <div class="row">
+                     <div class="col-6">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-danger bg-danger-lt pl-2">Harga Akunting</label>
+                            <input type="text" class="form-control font-kecil text-end inputangka" id="harga_akt" name="harga_akt" placeholder="Input Harga Akunting">
+                        </div>
+                    </div>
+                    <div class="col-6">
+
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-6">
                         <div class="mb-3">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Nomor Invoice</label>

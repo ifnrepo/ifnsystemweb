@@ -222,7 +222,7 @@ class Out_model extends CI_Model{
     public function getdatadetail($data){
         $periode = getcurrentperiode();
         $dept = $this->session->userdata('deptsekarang');
-        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.nomor_bc as bcnomor,f.tgl_bc as bctgl,f.jns_bc");
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.nomor_bc as bcnomor,f.tgl_bc as bctgl,f.jns_bc,g.nobale as nobale2");
         $this->db->select("(Select count(*) as stokrek from stokdept where TRIM(po) = TRIM(a.po) AND TRIM(item) = TRIM(a.item) AND dis = a.dis AND id_barang = a.id_barang AND TRIM(insno) = TRIM(a.insno) AND TRIM(nobontr) = TRIM(a.nobontr) AND dln = a.dln and periode = '".$periode."' AND dept_id = '".$dept."') as jmlrekstok ");
         $this->db->from('tb_detailgen a');
         $this->db->join('satuan b','b.id = a.id_satuan','left');
@@ -230,6 +230,7 @@ class Out_model extends CI_Model{
         $this->db->join('tb_detail d','a.id = d.id_out','left');
         $this->db->join('tb_header e','e.id = d.id_header','left');
         $this->db->join('tb_hargamaterial f','f.id_barang = c.id and f.nobontr = a.nobontr','left');
+        $this->db->join('tb_detail g','g.id = a.id_detail','left');
         $this->db->where('a.id_detail',$data);
         // $this->db->group_by('c.nama_barang,e.nomor_dok');
         $this->db->group_by('a.id');
@@ -553,7 +554,7 @@ class Out_model extends CI_Model{
                     // Untuk pengeluaran selain dari departemen GS
                     // if ($datdet['id_barang'] == 40396) continue; // Spek KARUNG di skip
                     $cekbckeluar = $this->db->get_where('tb_header',['id' => $id])->row_array();
-                    $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($cekbckeluar['keterangan']),'jns_bc' => '261'])->row_array();
+                    $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($cekbckeluar['keterangan']),'jns_bc' => '261','dept_id' => $cekbckeluar['dept_tuju'],'dept_tuju' => $cekbckeluar['dept_id']])->row_array();
                     $kondisistok = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
@@ -901,7 +902,7 @@ class Out_model extends CI_Model{
         $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
         $exnombc = "";
         if(in_array($header['dept_id'],daftardeptsubkon())){
-            $exnomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($header['keterangan']),'jns_bc' => 261,'trim(keterangan) != ' => ''])->row_array();
+            $exnomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($header['keterangan']),'jns_bc' => 261,'trim(keterangan) != ' => '','dept_id' => $header['dept_tuju'],'dept_tuju' => $header['dept_id']])->row_array();
             $exnombc = trim($exnomorbc['nomor_bc']);
         }
         $periode = tambahnol($this->session->userdata('bl')).$this->session->userdata('th');

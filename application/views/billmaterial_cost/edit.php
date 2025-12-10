@@ -65,6 +65,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <input type="email" class="form-control input-sm font-kecil" aria-describedby="emailHelp" value="<?= $dl ?>">
                                     </div>
                                 </div>
+                                <div class="mb-1 row">
+                                    <label class="col-3 col-form-label font-kecil font-bold text-right">Tgl Produksi</label>
+                                    <div class="col-4">
+                                        <input type="email" class="form-control input-sm font-kecil tglpilih" aria-describedby="emailHelp" id="prod_dateedit" value="<?= tglmysql($material['prod_date']) ?>">
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

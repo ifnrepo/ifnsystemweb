@@ -25,17 +25,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 
             </div>
             <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-              <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
+              <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('thin') ?>">
               <select class="form-control form-sm font-kecil font-bold mr-1" id="bl" name="bl" style="width: 100px;" <?= $levnow; ?>>
                 <?php for($x=1;$x<=12;$x++): ?>
-                    <option value="<?= $x; ?>" <?php if($this->session->userdata('bl')==$x) echo "selected"; ?>><?= namabulan($x); ?></option>
+                    <option value="<?= $x; ?>" <?php if($this->session->userdata('blin')==$x) echo "selected"; ?>><?= namabulan($x); ?></option>
                 <?php endfor; ?>
               </select>
               <div class="font-kecil font-bold mr-2 align-middle" style="padding-top: 11px;">Periode</div>
             </div>
             
-            <input type="text" class="hilang" value="<?= $this->session->userdata('curdept'); ?>">
-            <input type="text" class="hilang" value="<?= $this->session->userdata('todept'); ?>">
+            <input type="text" class="hilang" value="<?= $this->session->userdata('curdeptin'); ?>">
+            <input type="text" class="hilang" value="<?= $this->session->userdata('todeptin'); ?>">
           </div>
           <div class="card card-active" style="clear:both;" >
             <div class="card-body p-2">
@@ -49,8 +49,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                           //$arrjanganada = ['IT','PP','AK','MK','PG','BC','UT','RD','PC','EI']; 
                           $arrjanganada = [];
                         ?>
-                        <?php $disab=''; if($this->session->userdata('curdept')=='' || $this->session->userdata('curdept')==null || $this->session->userdata('todept')=='' || $this->session->userdata('todept')==null){ $disab = 'disabled';} ?>
-                        <?php foreach ($hakdep as $hak): if(!in_array($hak['dept_id'],$arrjanganada)): $selek = $this->session->userdata('curdept')== null ? '' : $this->session->userdata('curdept'); ?>
+                        <?php $disab=''; if($this->session->userdata('curdeptin')=='' || $this->session->userdata('curdeptin')==null || $this->session->userdata('todeptin')=='' || $this->session->userdata('todeptin')==null){ $disab = 'disabled';} ?>
+                        <?php foreach ($hakdep as $hak): if(!in_array($hak['dept_id'],$arrjanganada)): $selek = $this->session->userdata('curdeptin')== null ? '' : $this->session->userdata('curdeptin'); ?>
                           <option value="<?= $hak['dept_id']; ?>" rel="<?= $hak['departemen']; ?>" <?php if($selek==$hak['dept_id']) echo "selected"; ?>><?= $hak['departemen']; ?></option>
                         <?php endif; endforeach; ?>
                       </select>
@@ -115,7 +115,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-            <?php $katedept = datadepartemen($this->session->userdata('curdept'),'katedept_id'); 
+            <?php $katedept = datadepartemen($this->session->userdata('curdeptin'),'katedept_id'); 
               $norek=0;$jmlpcs=0;$jmlkgs=0;$noreke=0;
               foreach ($data->result_array() as $que) {
               $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
@@ -123,9 +123,9 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               if($katedept==3){
                   $insubkn = '/1';
               }
-              $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi Dept '.$this->session->userdata('curdept') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
+              $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi Dept '.$this->session->userdata('curdeptin') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
               $bisakonfirmasi = 1;
-              if($que['dept_id']=='SU'){
+              if($que['dept_id']=='SU' || $que['dept_id']=='CU'){
                 if($que['tanpa_bc']==0){
                   $bisakonfirmasi = $que['nomor_bc']!='';
                 }

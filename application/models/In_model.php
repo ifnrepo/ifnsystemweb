@@ -6,8 +6,8 @@ class In_model extends CI_Model{
             'dept_tuju' => $kode['dept_id'],
             'dept_id' => $kode['dept_tuju'],
             // 'kode_dok' => 'T',
-            'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th'),
+            'month(tgl)' => $this->session->userdata('blin'),
+            'year(tgl)' => $this->session->userdata('thin'),
             'data_ok' => 1,
             'ok_tuju' => 1
             // 'ok_valid' => 0,
@@ -110,7 +110,7 @@ class In_model extends CI_Model{
                 $kondisistok = [
                     // 'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
-                    'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
+                    'periode' => tambahnol($this->session->userdata('blin')).$this->session->userdata('thin'),
                     'trim(nobontr)' => trim($det['nobontr']),
                     'trim(insno)' => trim($det['insno']),
                     'id_barang' => $det['id_barang'],
@@ -131,7 +131,7 @@ class In_model extends CI_Model{
                     $kondisi = [
                     'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
-                    'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
+                    'periode' => tambahnol($this->session->userdata('blin')).$this->session->userdata('thin'),
                     'nobontr' => $det['nobontr'],
                     'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],
@@ -168,6 +168,11 @@ class In_model extends CI_Model{
                     $this->helpermodel->isilog($this->db->last_query());
                 }
                 $this->helpermodel->cekstokdeptraw($det['dept_tuju'],$det['nobontr'],$det['id_barang'],$det['kgs'],$det['pcs'],0);
+                $nomtr = count($ibnya)==0 ? $dataheader['nomor_dok'] : $ibnya['nomor_dok'];
+                if($dataheader['dept_id']=='SU' && ($dataheader['dept_tuju']=='GM' || $dataheader['dept_tuju']=='GS')){
+                    $this->db->where('id',$det['id']);
+                    $this->db->update('tb_detail',['nobontr' => $nomtr]);
+                }
             }
             $dataubah = [
                 'ok_valid' => 1,

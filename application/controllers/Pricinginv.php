@@ -31,6 +31,7 @@ class Pricinginv extends CI_Controller
         $data['tglreq'] = $this->pricingmodel->gettglreq();
         $data['usersaveinv'] = $this->pricingmodel->usersaveinv();
         $data['userlockinv'] = $this->pricingmodel->userlockinv();
+        $data['datkategori'] = $this->pricingmodel->getdatkategori();
         $data['tglkunci'] = $this->pricingmodel->tglkunci();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         $kode = [
@@ -52,6 +53,7 @@ class Pricinginv extends CI_Controller
         $this->session->unset_userdata('levelsekarang');
         $this->session->unset_userdata('tglpricinginv');
         $this->session->unset_userdata('deptpricinginv');
+        $this->session->unset_userdata('milik');
         $this->session->set_userdata('blpricing', date('m'));
         $this->session->set_userdata('thpricing', date('Y'));
         $this->session->set_userdata('levelsekarang', 1);
@@ -65,11 +67,13 @@ class Pricinginv extends CI_Controller
         $this->session->set_userdata('levelsekarang', $_POST['levelsekarang']);
         $this->session->unset_userdata('tglpricinginv');
         $this->session->unset_userdata('deptpricinginv');
+        $this->session->unset_userdata('milik');
         echo 1;
     }
     public function getdatacutoff(){
         $this->session->set_userdata('tglpricinginv',$_POST['tglcutoff']);
         $this->session->set_userdata('deptpricinginv',$_POST['deptcutoff']);
+        $this->session->set_userdata('milik',$_POST['milik']);
         echo 1;
     }
     public function gettglcutoff(){
@@ -87,6 +91,7 @@ class Pricinginv extends CI_Controller
         $filter_dept = $_POST['dept'];
         $filter_tgl = $_POST['tgl'];
         $filter_periode = $_POST['periode'];
+        $filter_ctgr = $_POST['ctgr'];
         // $filter_buyer = $_POST['buyer'];
         // $filter_exnet = $_POST['exnet'];
         // if($filter_dept!=''){
@@ -100,9 +105,9 @@ class Pricinginv extends CI_Controller
         if($filter_periode!="all"){
             $arrayu['periode'] = $filter_periode;
         }
-        // if($filter_buyer!='all'){
-        //     $arrayu['id_buyer'] = $filter_buyer;
-        // }
+        if($filter_ctgr!=''){
+            $arrayu["LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4)"] = $filter_ctgr;
+        }
         // if($filter_exnet!='all'){
         //     $arrayu['exnet'] = $filter_exnet;
         // }
@@ -113,6 +118,7 @@ class Pricinginv extends CI_Controller
         $filter_dept = $_POST['dept'];
         $filter_tgl = $_POST['tgl'];
         $filter_periode = $_POST['periode'];
+        $filter_ctgr = $_POST['ctgr'];
         // $filter_buyer = $_POST['buyer'];
         // $filter_exnet = $_POST['exnet'];
         // if($filter_dept!=''){
@@ -125,6 +131,9 @@ class Pricinginv extends CI_Controller
         // }
         if($filter_periode!="all"){
             $arrayu['periode'] = $filter_periode;
+        }
+         if($filter_ctgr!=''){
+            $arrayu["LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4)"] = $filter_ctgr;
         }
         // if($filter_buyer!='all'){
         //     $arrayu['id_buyer'] = $filter_buyer;
