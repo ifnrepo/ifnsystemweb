@@ -8,9 +8,8 @@
         <span>Tanggal</span>
         <h4 class="mb-1"><?= tglmysql($header['tgl']); ?></h4>
         </div>
-        <div class="col-4 text-primary font-bold">
-        <!-- <span>Dibuat Oleh</span>
-        <h4 class="mb-1"><?= datauser($header['user_ok'],'name').' ('.$header['tgl_ok'].')' ?></h4> -->
+        <div class="col-4 font-bold">
+            <div id="databale"></div>
         </div>
     </div>
     <hr class="m-0">
@@ -46,7 +45,7 @@
                         <td><?= $nmsatuan; ?></td>
                         <td><?= $val['nobale'] ?></td>
                         <td class="text-end"><?= rupiah($val['pcs'],0); ?></td>
-                        <td class="text-end"><?= rupiah($val['kgs'],4); ?></td>
+                        <td class="text-end"><?= rupiah($val['kgs'],2); ?></td>
                         <td><?= $val['nodok']; ?></td>
                     </tr>
                 <?php } ?>
@@ -59,6 +58,7 @@
                 </tbody>
             </table>
             <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $jmlbarang; ?></div>
+            <div id="databale2" class="hilang"><?= $val['nobale2'] ?></div>
         </div>
     </div>
     <hr class="m-1">
@@ -70,6 +70,11 @@
         // if($("#keyw").val() != ''){
         //     $("#getbarang").click();
         // }
+        var nobon = $("#databale2").text();
+        if(nobon.trim()!=''){
+            $("#databale").text('Bale '+nobon);
+        }
+        // alert($("td#515963").text());
     })
     // $("#keyw").on('keyup',function(e){
     //     if(e.key == 'Enter' || e.keycode === 13){

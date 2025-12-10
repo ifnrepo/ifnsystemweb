@@ -126,6 +126,7 @@ class Billmaterial_cost extends CI_Controller
             'nobale' => $_POST['nobale'],
             'nobontr' => strtoupper($_POST['nobontr']),
             'dl' => $_POST['dl'],
+            'prod_date' => tglmysql($_POST['tgl']),
         ];
         $hasil = $this->billmaterial_cost_model->simpandata($data);
         echo $hasil;
@@ -138,6 +139,14 @@ class Billmaterial_cost extends CI_Controller
             $url = base_url() . 'billmaterial_cost';
             redirect($url);
         }
+    }
+    public function updatetglprod(){
+        $data = [
+            'prod_date' => tglmysql($_POST['tgl']),
+            'id' => $_POST['id']
+        ];
+        $hasil = $this->billmaterial_cost_model->simpantglprod($data);
+        echo $hasil;
     }
 
     public function excel()

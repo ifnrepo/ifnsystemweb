@@ -98,7 +98,7 @@
                      <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-danger bg-danger-lt pl-2">Harga Akunting</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" id="harga_akt" name="harga_akt" placeholder="Input Harga Akunting" value="<?= rupiah($data['harga_akt'], 2); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" id="harga_akt" name="harga_akt" placeholder="Input Harga Akunting" value="<?= rupiah($data['harga_akt'], 8); ?>">
                         </div>
                     </div>
                     <div class="col-6">

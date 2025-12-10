@@ -27,7 +27,7 @@ class In extends CI_Controller {
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdept($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
-        $data['data'] = $this->inmodel->getdata(['dept_id'=>$this->session->userdata('curdept'),'dept_tuju'=>$this->session->userdata('todept'),'katedept' => datadepartemen($this->session->userdata('curdept'),'katedept_id')]);
+        $data['data'] = $this->inmodel->getdata(['dept_id'=>$this->session->userdata('curdeptin'),'dept_tuju'=>$this->session->userdata('todeptin'),'katedept' => datadepartemen($this->session->userdata('curdeptin'),'katedept_id')]);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'in';
 		$this->load->view('layouts/header',$header);
@@ -35,20 +35,20 @@ class In extends CI_Controller {
 		$this->load->view('layouts/footer',$footer);
     }
     public function clear(){
-        $this->session->set_userdata('bl',date('m'));
-        $this->session->set_userdata('th',date('Y'));
-        $this->session->unset_userdata('curdept');
-        $this->session->unset_userdata('todept');
+        $this->session->set_userdata('blin',date('m'));
+        $this->session->set_userdata('thin',date('Y'));
+        $this->session->unset_userdata('curdeptin');
+        $this->session->unset_userdata('todeptin');
         $url = base_url().'in';
         redirect($url);
     }
     public function depttuju(){
         $kode = $_POST['kode'];
-        $this->session->set_userdata('curdept',$kode);
+        $this->session->set_userdata('curdeptin',$kode);
         $query = $this->inmodel->getdepttuju($kode);
         $hasil = '';
         foreach ($query->result_array() as $que) {
-            $selek = $this->session->userdata('todept')==$que['dept_id'] ? 'selected' : '';
+            $selek = $this->session->userdata('todeptin')==$que['dept_id'] ? 'selected' : '';
             $hasil .= "<option value='".$que['dept_id']."' rel='".$que['departemen']."' ".$selek.">".$que['departemen']."</option>";
         }
         echo $hasil;
@@ -56,8 +56,8 @@ class In extends CI_Controller {
     public function ubahperiode(){
         // $this->session->unset_userdata('curdept');
         // $this->session->unset_userdata('todept');
-        $this->session->set_userdata('bl',$_POST['bl']);
-        $this->session->set_userdata('th',$_POST['th']);
+        $this->session->set_userdata('blin',$_POST['bl']);
+        $this->session->set_userdata('thin',$_POST['th']);
         echo 1;
     }
     public function getdata(){
@@ -69,7 +69,7 @@ class In extends CI_Controller {
             'filterbon' => $_POST['filterbon'],
             'katedept' => $katedept
         ];
-        $this->session->set_userdata('todept',$_POST['dept_tuju']);
+        $this->session->set_userdata('todeptin',$_POST['dept_tuju']);
         $this->session->set_userdata('filterbon',$_POST['filterbon']);
         echo 1;
     }

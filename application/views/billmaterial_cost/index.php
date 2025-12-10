@@ -56,6 +56,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Insno</th>
                                 <th>Nobontr</th>
                                 <th>Bale</th>
+                                <th>Tgl Prod</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -76,6 +77,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <td><?= $key['insno']; ?></td>
                                     <td><?= $key['nobontr']; ?></td>
                                     <td><?= $key['nobale']; ?></td>
+                                    <td><?= tglmysql($key['prod_date']); ?></td>
                                     <td class="text-center">
                                         <a href="<?= base_url() . 'billmaterial_cost/edit/' . $key['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white m-0 mr-0" id="editkategori" title="Edit data">
                                             <i class="fa fa-edit"></i>

@@ -146,4 +146,8 @@ class Billmaterial_cost_model extends CI_Model
         $this->db->delete('ref_bom_cost');
         return $this->db->trans_complete();
     }
+    public function simpantglprod($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('ref_bom_cost',['prod_date' => $data['prod_date']]);
+    }
 }

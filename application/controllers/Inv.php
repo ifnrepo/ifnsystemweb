@@ -616,7 +616,7 @@ class Inv extends CI_Controller
             'nobontr' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[5])))),
             'insno' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[6])))),
             // 'insno' => $split[6],
-            'nobale' => $split[7],
+            'nobale' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[7])))),
             'nomor_bc' => $split[8]
         ];
         $array2 = [

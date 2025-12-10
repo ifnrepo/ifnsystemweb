@@ -52,42 +52,63 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-5">
-                  <div class="d-flex">
-                    <span class="px-1">
-                      <label class="form-label font-kecil">Tgl Cut Off</label>
-                      <div>
-                        <select class="form-select form-control form-sm font-kecil font-bold" id="tglcutoff" name="tglcutoff">
-                          <option value="">-- Pilih Tgl Cut Off --</option>
-                          <?php foreach($tglreq->result_array() as $dpu){ $selek = $this->session->userdata('tglpricinginv')==$dpu['tgl'] ? 'selected' : ''; ?>
-                            <option value="<?= $dpu['tgl'] ?>" title="Dibuat oleh :<?= datauser($dpu['user_add'],'name') ?>, Pada <?= $dpu['tgl_add'] ?>" <?= $selek ?>><?= tglmysql($dpu['tgl']) ?></option>
-                          <?php } ?> ?>
-                        </select>
-                        <input type="text" name="tglcut" id="tglcut" class="hilang" value="<?= $this->session->userdata('tglpricinginv') ?>">
+                  <div class="row">
+                    <div class="col-12">
+                      <div class="d-flex">
+                        <span class="px-1">
+                          <label class="form-label font-kecil">Tgl Cut Off</label>
+                          <div>
+                            <select class="form-select form-control form-sm font-kecil font-bold" id="tglcutoff" name="tglcutoff">
+                              <option value="">-- Pilih Tgl Cut Off --</option>
+                              <?php foreach($tglreq->result_array() as $dpu){ $selek = $this->session->userdata('tglpricinginv')==$dpu['tgl'] ? 'selected' : ''; ?>
+                                <option value="<?= $dpu['tgl'] ?>" title="Dibuat oleh :<?= datauser($dpu['user_add'],'name') ?>, Pada <?= $dpu['tgl_add'] ?>" <?= $selek ?>><?= tglmysql($dpu['tgl']) ?></option>
+                              <?php } ?> ?>
+                            </select>
+                            <input type="text" name="tglcut" id="tglcut" class="hilang" value="<?= $this->session->userdata('tglpricinginv') ?>">
+                          </div>
+                        </span>
+                        <span class="px-1">
+                          <label class="form-label font-kecil">Dept</label>
+                          <div>
+                            <select class="form-select form-control form-sm font-kecil font-bold" id="deptpricing" name="deptpricing">
+                              <option value="">Semua</option>
+                              <?php foreach($depe->result_array() as $depe){ $aktiv = cekdeptinv($depe['dept_id'],$this->session->userdata('tglpricinginv')) ? '' : 'disabled'; ?>
+                              <?php $selek = $this->session->userdata('deptpricinginv')==$depe['dept_id'] ? 'selected' : ''; ?>
+                                  <option value="<?= $depe['dept_id'] ?>" title="" <?= $aktiv.' '.$selek ?>><?= $depe['departemen'] ?></option>
+                              <?php } ?>
+                            </select>
+                            <input type="text" name="deptcut" id="deptcut" class="hilang" value="<?= $this->session->userdata('deptpricinginv') ?>">
+                          </div>
+                        </span>
+                        <span class="px-1">
+                          <label class="form-label font-kecil"><span style="color: #F5F8FC">.</span></label>
+                          <div class="font-kecil">
+                            <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
+                          </div>
+                        </span>
                       </div>
-                    </span>
-                    <span class="px-1">
-                      <label class="form-label font-kecil">Dept</label>
-                      <div>
-                         <select class="form-select form-control form-sm font-kecil font-bold" id="deptpricing" name="deptpricing">
-                          <option value="">Semua</option>
-                          <?php foreach($depe->result_array() as $depe){ $aktiv = cekdeptinv($depe['dept_id'],$this->session->userdata('tglpricinginv')) ? '' : 'disabled'; ?>
-                          <?php $selek = $this->session->userdata('deptpricinginv')==$depe['dept_id'] ? 'selected' : ''; ?>
-                              <option value="<?= $depe['dept_id'] ?>" title="" <?= $aktiv.' '.$selek ?>><?= $depe['departemen'] ?></option>
-                          <?php } ?>
-                        </select>
-                        <input type="text" name="deptcut" id="deptcut" class="hilang" value="<?= $this->session->userdata('deptpricinginv') ?>">
+                    </div>
+                    <div class="col-12">
+                      <div class="d-flex">
+                        <span class="px-1 mt-1">
+                          <label class="form-label font-kecil mb-0">Kepemilikan</label>
+                          <div>
+                            <select class="form-select form-control form-sm font-kecil font-bold mt-1" id="filterdln" name="filterdln">
+                              <option value="">Semua</option>
+                              <option value="1" <?php if($this->session->userdata('milik')==1 && $this->session->userdata('milik')!=''){ echo "selected"; } ?>>DLN</option>
+                              <option value="0" <?php if($this->session->userdata('milik')==0 && $this->session->userdata('milik')!=''){ echo "selected"; } ?>>IFN</option>
+                            </select>
+                          </div>
+                        </span>
                       </div>
-                    </span>
-                    <span class="px-1">
-                      <label class="form-label font-kecil"><span style="color: #F5F8FC">.</span></label>
-                      <div class="font-kecil">
-                        <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
-                      </div>
-                    </span>
+                    </div>
                   </div>
                   <div class="p-1 font-kecil">
                     <?php if($this->session->userdata('deptpricinginv')!=''){ ?>
-                      <span class="text-cyan font-bold">Diupload Oleh : </span><span><?= $usersaveinv ?></span>
+                      <span class="text-cyan font-bold">Diupload Oleh : </span><span><?= $usersaveinv ?></span><br>
+                    <?php } ?>
+                    <?php if($diskuncitgl=='hilang'){ ?>
+                    <span class="text-danger"><?= $userlockinv ?></span>
                     <?php } ?>
                   </div>
                 </div>
@@ -119,7 +140,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <td class="font-bold">KGS</td>
                         <td class="text-right" id="jumlahkgs">Loading..</td>
                         <td class="text-right" id="jumlahkgsdet">Loading..</td>
-                        <td class="text-right" id="selisihkgs"></td>
+                        <td class="text-right font-bold" id="selisihkgs"></td>
+                      </tr>
+                      <tr>
+                        <td class="font-bold" colspan="2">Pricing (Rp)</td>
+                        <td class="text-right font-bold" colspan="2" id="totalhargadet">Loading..</td>
                       </tr>
                     </tbody>
                   </table>
@@ -155,11 +180,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <li class="nav-item">
                   <a href="#tabs-profile-1" class="nav-link bg-orange btn-flat font-13 font-bold text-black" data-bs-toggle="tab">BOM Inventory</a>
                 </li>
-                <!-- <li class="nav-item ms-auto">
-                  <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" /><path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" /></svg>
-                  </a>
-                </li> -->
+                <li class="nav-item hilang">
+                  <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab">BOM Inventory Job</a>
+                </li>
               </ul>
             </div>
             <div class="card-body mt-0 p-1">
@@ -169,15 +192,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="col-6 mx-auto">
                       <h4 class="mb-1">Inventory</h4>
                     </div>
-                    <div class="col-6 text-right">
-                      <div class="font-bold font-kecil">
-                        <!-- <div>Jumlah Record : <span id="jumlahrek">0</span></div> -->
+                    <div class="col-6 text-right d-flex justify-content-end">
+                      <div class="font-bold font-kecil m-0 d-inline">
+                         <select class="form-select form-control form-sm font-kecil font-bold ml-auto btn-flat" id="filterctgr" name="filterctgr" style="max-width: 200px;" title="Filter Kategori">
+                          <option value="">Semua</option>
+                          <?php foreach($datkategori->result_array() as $datkategori){ ?>
+                            <option value="<?= $datkategori['id_kategori'] ?>"><?= $datkategori['nama_kategori'] ?></option>
+                          <?php } ?>
+                        </select>
                       </div>
                     </div>
                   </div>
                   <hr class="m-0">
                   <div class="mt-2">
-                    <table id="tabelnya" class="table nowrap order-column mt-1 table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;">
+                    <table id="tabelnya" class="table order-column mt-1 table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;">
                       <thead>
                         <tr>
                           <th>Dept</th>
@@ -205,12 +233,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <h4>BOM Inventory</h4>
                     </div>
                     <div class="col-6 text-right">
-                      <a href="<?= base_url().'pricinginv/breakdownbom' ?>" data-bs-toggle="modal" data-bs-target="#veriftask" data-message="Break down Data ke Bill Of Material" data-title="Breakdown BOM" class="btn btn-sm btn-primary" id="buthitungbom"><i class="fa fa-calculator mr-1"></i> Hitung BOM</a>
+                      <a href="<?= base_url().'pricinginv/breakdownbom' ?>" data-bs-toggle="modal" data-bs-target="#veriftask" data-message="Break down Data ke Bill Of Material" data-title="Breakdown BOM" class="btn btn-sm btn-primary <?= $diskuncitgl ?>" id="buthitungbom"><i class="fa fa-calculator mr-1"></i> Hitung BOM</a>
                     </div>
                   </div>
                   <hr class="m-0">
                   <div class="mt-2">
-                    <table id="tabeldetailnya" class="table nowrap order-column mt-1 table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;">
+                    <table id="tabeldetailnya" class="table order-column mt-1 table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;">
                       <thead>
                         <tr>
                           <th>Dept</th>

@@ -29,9 +29,11 @@
                     </tr>
                 </thead>
                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
-                <?php foreach ($detail as $val) { 
+                <?php $jmlpcs=0; $jmlkgs=0; foreach ($detail as $val) { 
                      $kode = formatsku($val['po'],$val['item'],$val['dis'],$val['id_barang']);
                      $spek = $val['po'] == '' ? $val['nama_barang'] : spekpo($val['po'],$val['item'],$val['dis']);
+                     $jmlpcs += $val['pcs'];
+                     $jmlkgs += $val['kgs'];
                     ?>
                     <tr>
                         <td class="line-12"><?= $spek.'<br><span class="font-kecil text-teal">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
@@ -44,6 +46,8 @@
                 <?php } ?>
                 </tbody>
             </table>
+            <div class="font-bold font-italic" style="text-align: right;">Jumlah Pcs : <?= rupiah($jmlpcs,0); ?></div>
+            <div class="font-bold font-italic" style="text-align: right;">Jumlah Kgs : <?= rupiah($jmlkgs,2); ?></div>
             <div class="font-bold font-italic" style="text-align: right;">Jumlah Item Barang : <?= $header['jumlah_barang']; ?></div>
         </div>
     </div>

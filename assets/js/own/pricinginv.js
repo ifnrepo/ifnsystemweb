@@ -10,7 +10,7 @@ $(document).ready(function(){
 	$(".loaderedblue").removeClass('hilang');
     table = $('#tabelnya').DataTable({
         "destroy": true,
-		"processing": true,
+		// "processing": true,
 		// "responsive":true,
 		"serverSide": true,
 		"orderSequence": ['desc', 'asc'],
@@ -43,6 +43,9 @@ $(document).ready(function(){
 			}
 			var jmlkgs = toAngka($("#jumlahkgsdet").text());
 			$("#selisihkgs").text(rupiah(parseFloat(jmlkgs) - parseFloat(data[0]['totalkgs']).toFixed(2),'.',',',2));
+			if(parseFloat($("#selisihkgs").text()) < 0){
+				$("#selisihkgs").addClass('bg-red-lt');
+			}
 		},
 		"ajax":
 		{
@@ -52,7 +55,7 @@ $(document).ready(function(){
 				d.dept = $('#deptcut').val();
 				d.tgl = $('#tglcut').val();
                 d.periode = $("#periode").val();
-				// d.stok = $('#idstok').val();
+				d.ctgr = $('#filterctgr').val();
 				// d.buyer = $('#idbuyer').val();
 				// d.exnet = $('#idexnet').val();
 				// d.dataneh = $('#dataneh').is(':checked');
@@ -69,10 +72,9 @@ $(document).ready(function(){
 			{ "data": "dept_id",
 				"className": "line-11",
 				"render": function(data, type, row, meta){
-					return "<span class='text-pink'>"+data+"</span>"+"<br><span class='text-primary font-11'>"+row.nama_kategori+"</span>";
+					return "<span class='text-primary'>"+data+"</span><br><span class='text-pink font-11'>"+row.sublok.trim()+"</span>";
 				}
 			},
-
 			{ "data": "id",
                 "className": "line-11",
 				"render": function(data, type, row, meta){
@@ -111,14 +113,14 @@ $(document).ready(function(){
 				"render": function(data, type, row, meta){
 					var saldo = parseFloat(row.pcs_awal)+parseFloat(row.pcs_masuk)-parseFloat(row.pcs_keluar)+parseFloat(row.pcs_adj);
 					var saldokgs = row.saldopcs+row.inpcs-row.outpcs+row.adjpcs;
-					return rupiah(saldo,'.',',',0);
+					return rupiah(row.pcs_akhir,'.',',',0);
 				}
             },
 			{ "data": "id",
                 "className": "text-right",
 				"render": function(data, type, row, meta){
-					var saldo = parseFloat(parseFloat(row.kgs_awal).toFixed(2))+parseFloat(parseFloat(row.kgs_masuk).toFixed(2))-parseFloat(parseFloat(row.kgs_keluar).toFixed(2))+parseFloat(parseFloat(row.kgs_adj).toFixed(2));
-					return rupiah(saldo.toFixed(2),'.',',',2);
+					var saldokg = parseFloat(parseFloat(row.kgs_awal).toFixed(2))+parseFloat(parseFloat(row.kgs_masuk).toFixed(2))-parseFloat(parseFloat(row.kgs_keluar).toFixed(2))+parseFloat(parseFloat(row.kgs_adj).toFixed(2));
+					return rupiah(row.kgs_akhir,'.',',',2);
 				}
             },
 			{ "data": "urut",
@@ -132,7 +134,7 @@ $(document).ready(function(){
 
 	tabledet = $('#tabeldetailnya').DataTable({
         "destroy": true,
-		"processing": true,
+		// "processing": true,
 		// "responsive":true,
 		"serverSide": true,
 		"orderSequence": ['desc', 'asc'],
@@ -156,14 +158,22 @@ $(document).ready(function(){
             if(api2det.recordsFiltered > 0){
 				$("#jumlahkgsdet").text(rupiah(data[0]['totalkgsdet'],'.',',',2));
 				$("#jumlahrekdet").text(rupiah(api2det.recordsFiltered,'.',',',0));
+				var jmlharga = data[0]['tothargadet']==null ? 0 : data[0]['tothargadet'];
+				$("#totalhargadet").text(rupiah(jmlharga,'.',',',8));
 			}else{
 				$("#jumlahkgsdet").text('0');
 				$("#jumlahrekdet").text('0');
 				$("#jumlahpcsdet").text('0');
+				$("#totalhargadet").text('0');
 			}
 			var jmlkgs = toAngka($("#jumlahkgs").text());
 			$("#selisihkgs").text(rupiah(parseFloat(data[0]['totalkgsdet']).toFixed(2) - parseFloat(jmlkgs),'.',',',2));
 			$("#jumlahpcsdet").text('-');
+			if(parseFloat($("#selisihkgs").text()) < 0){
+				$("#selisihkgs").addClass('bg-red-lt');
+			}
+			//data[0]['totalhargadet']
+			
 		},
 		"ajax":
 		{
@@ -173,6 +183,7 @@ $(document).ready(function(){
 				d.dept = $('#deptcut').val();
 				d.tgl = $('#tglcut').val();
                 d.periode = $("#periode").val();
+				d.ctgr = $('#filterctgr').val();
 				// d.stok = $('#idstok').val();
 				// d.buyer = $('#idbuyer').val();
 				// d.exnet = $('#idexnet').val();
@@ -212,7 +223,7 @@ $(document).ready(function(){
 			{ "data": "jns_bc",
 				"className" : "line-11",
 				"render" : function(data, type, row, meta){
-					if(row.jns_bc == null || row.jns_bc.trim() == ''){
+					if(row.nomor_bc == null || row.nomor_bc.trim() == ''){
 						return "<span class='text-pink'>BC Not Found</span>";
 					}else{
 						return "BC. "+data+"<br><span class='text-cyan font-11'>"+row.nomor_bc+" Tgl."+row.tgl_bc+"</span>";
@@ -223,7 +234,7 @@ $(document).ready(function(){
 				"className": "font-kecil text-right",
 				"render" : function(data, type, row, meta){
 					var j = (data === null) ? 0 : data;
-					return rupiah(j,'.',',',2);
+					return rupiah(j,'.',',',8);
 				}
 			 },
 			{ "data": "id",
@@ -231,7 +242,7 @@ $(document).ready(function(){
 				"render" : function(data, type, row, meta){
 					var j = (row.harga_akt === null) ? 0 : row.harga_akt;
 					var k = (row.kgs === null) ? 0 : row.kgs;
-					return rupiah(j*k,'.',',',2);
+					return rupiah(j*k,'.',',',8);
 				}
 			 },
 			{ "data": "urut",
@@ -254,6 +265,12 @@ $(document).ready(function(){
 		table.search('').draw();
 		tabledet.search('').draw();
 		return false;
+	})
+	$("#filterctgr").on('change',function(){
+		jadi = 0;
+		table.ajax.reload();
+		tabledet.ajax.reload();
+		$(".loadered").removeClass('hilang');
 	})
 })
 setInterval(() => {
@@ -307,6 +324,7 @@ $("#butgo").click(function(){
 		data: {
 			tglcutoff: $("#tglcutoff").val(),
 			deptcutoff: $("#deptpricing").val(),
+			milik: $("#filterdln").val(),
 		},
 		success: function (data) {
 			window.location.reload();

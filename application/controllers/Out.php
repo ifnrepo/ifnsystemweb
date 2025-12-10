@@ -112,14 +112,16 @@ class Out extends CI_Controller {
             $modecari = trim($que['po'])=='' ? 0 : 1; // Jika 0 pencarian ID Barang, jika 1 pencarian PO
             $kodecari = trim($que['po'])=='' ? $que['id_barang'] : trim($que['po']).'_'.trim($que['item']).'_'.$que['dis'];
             $nmbarang = trim($que['po'])==''? $que['nama_barang'] : spekpo($que['po'],$que['item'],$que['dis']);
+            $nobale = trim($que['nobale'])=='' ? '' : ' Bale Nomor : '.$que['nobale']; 
             // $infoinsno = '';
             // if($this->session->userdata('deptsekarang')=='NT'){
                 $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
             // }
             $hasil .= "<tr>";
-            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large-loading' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek']."'>".$que['seri_barang'].'. '.$nmbarang.$infoinsno."</a></td>";
+            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large-loading' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek'].$nobale."'>".$que['seri_barang'].'. '.$nmbarang.$infoinsno."</a></td>";
             $hasil .= "<td>".$sku."</td>";
             $hasil .= "<td>".$que['kodesatuan']."</td>";
+            $hasil .= "<td id='".$que['id']."'>".trim($que['nobale'])."</td>";
                 $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
                 $hasil .= "<td>".rupiah($que['kgsminta'],2)."</td>";
             $hasil .= "<td class='text-primary'>".rupiah($que['pcs'],0)."</td>";
@@ -401,7 +403,7 @@ class Out extends CI_Controller {
         $html .= "<td>".$sku."</td>";
         $html .= "<td>".$val['namasatuan']."</td>";
         $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
-        $html .= "<td class='text-right'>".rupiah($val['kgs'],4)."</td>";
+        $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";
 
@@ -411,7 +413,7 @@ class Out extends CI_Controller {
         $html .= "<tr>";
         $html .= "<td colspan='3' class='text-end'>TOTAL</td>";
         $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
-        $html .= "<td class='text-right font-bold'>".rupiah($kgs,4)."</td>";
+        $html .= "<td class='text-right font-bold'>".rupiah($kgs,2)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";
         $cocok = array('datagroup' => $html);

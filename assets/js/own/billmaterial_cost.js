@@ -17,6 +17,29 @@ $(document).ready(function () {
 	// $("#dept_kirim").change();
 	// alert('OKEE');
 });
+$("#prod_dateedit").change(function(){
+	alert('xx');
+	$(".loadered").removeClass('hilang');
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "billmaterial_cost/updatetglprod",
+		data: {
+			id: $("#id_header").val(),
+			tgl: $(this).val(),
+		},
+		success: function (data) {
+			$(".loadered").addClass('hilang');
+			// window.location.reload();
+			// $("#dept_tuju").html(data);
+			// $("#dept_tuju").change();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+})
 $("#buttoncari").click(function(){
 	var inputcari = $("#textcari").val();
 	$.ajax({
@@ -180,6 +203,7 @@ $("#simpanmaterial").click(function(){
 			insno: $("#insno").val(),
 			nobontr: $("#nobontr").val(),
 			dl: $("#dl").val(),
+			tgl: $("#prod_date").val()
 		},
 		success: function (data) {
 			if(data==0){
