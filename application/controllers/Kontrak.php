@@ -697,9 +697,7 @@ class Kontrak extends CI_Controller
         $sheet->mergeCells('B3:G3')->setCellValue('B3', 'NOMOR KONTRAK : ' . $header['nomor']);
         $sheet->getStyle('B3')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('B3')->getAlignment()->setHorizontal('left');
-        // $sheet->mergeCells('B4:G4')->setCellValue('B4', 'Tanggal Berlaku : ' . tglmysql($header['tgl_awal']) . ' s/d ' . tglmysql($header['tgl_akhir']));
-        // $sheet->getStyle('B4')->getFont()->setBold(true)->setSize(12);
-        // $sheet->getStyle('B4')->getAlignment()->setHorizontal('left');
+
 
 
         $headers = ["X", "SKU", "NAMA BARANG", "SATUAN", "PCS OUT", "KGS OUT", "PCS IN", "KGS IN", "SALDO PCS", "SALDO KGS"];
