@@ -684,6 +684,7 @@ class Kontrak extends CI_Controller
     {
         $this->load->model('kontrakmodel');
         $datanya = $this->session->userdata('sesikontrak_detail');
+        $header = $this->kontrakmodel->getdata($datanya)->row_array();
         $transaksi = $this->kontrakmodel->gettransaksikontrak($datanya);
 
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
@@ -693,6 +694,12 @@ class Kontrak extends CI_Controller
         $sheet->mergeCells('B2:G2')->setCellValue('B2', 'REKAP MONITORING');
         $sheet->getStyle('B2')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('B2')->getAlignment()->setHorizontal('left');
+        $sheet->mergeCells('B3:G3')->setCellValue('B3', 'NOMOR KONTRAK : ' . $header['nomor']);
+        $sheet->getStyle('B3')->getFont()->setBold(true)->setSize(12);
+        $sheet->getStyle('B3')->getAlignment()->setHorizontal('left');
+        // $sheet->mergeCells('B4:G4')->setCellValue('B4', 'Tanggal Berlaku : ' . tglmysql($header['tgl_awal']) . ' s/d ' . tglmysql($header['tgl_akhir']));
+        // $sheet->getStyle('B4')->getFont()->setBold(true)->setSize(12);
+        // $sheet->getStyle('B4')->getAlignment()->setHorizontal('left');
 
 
         $headers = ["X", "SKU", "NAMA BARANG", "SATUAN", "PCS OUT", "KGS OUT", "PCS IN", "KGS IN", "SALDO PCS", "SALDO KGS"];
@@ -1207,19 +1214,20 @@ class Kontrak extends CI_Controller
         $pdf->Cell(19, 5, 'Dokumen ini sudah ditanda tangani secara digital', 0);
         $pdf->Output('I', 'FM-GD-03.pdf');
     }
-    public function carisupplier(){
+    public function carisupplier()
+    {
         $cari = $_POST['kode'];
         $getdata = $this->kontrakmodel->carirekanan($cari);
         $html = '';
-        if($getdata->num_rows() > 0){
-            $no=0;
-            foreach($getdata->result_array() as $data){
-                $cek = trim($data['alamat'])=='' || (trim($data['npwp'])=='' && trim($data['nik'])=='') ? 'NPWP / NIK / ALAMAT KOSONG' : '';
+        if ($getdata->num_rows() > 0) {
+            $no = 0;
+            foreach ($getdata->result_array() as $data) {
+                $cek = trim($data['alamat']) == '' || (trim($data['npwp']) == '' && trim($data['nik']) == '') ? 'NPWP / NIK / ALAMAT KOSONG' : '';
                 $no++;
                 $html .= '<tr>';
-                $html .= '<td>'.$no.'</td>';
-                $html .= '<td class="line-12">'.$data['nama_supplier'].'<br><span class="text-pink font-10">'.$cek.'</span></td>';
-                $html .= '<td>'.$data['kode'].'</td>';
+                $html .= '<td>' . $no . '</td>';
+                $html .= '<td class="line-12">' . $data['nama_supplier'] . '<br><span class="text-pink font-10">' . $cek . '</span></td>';
+                $html .= '<td>' . $data['kode'] . '</td>';
                 $html .= '<td>';
                 $html .= '<a href="#" class="btn btn-sm btn-success" id="tombolpilih" rel="' . $data['id'] . '" rel2="' . $data['id'] . '" rel3 ="' . $data['id'] . '">Pilih</a>';
                 $html .= '</td>';
@@ -1229,7 +1237,8 @@ class Kontrak extends CI_Controller
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function simpankontrakbaru(){
+    public function simpankontrakbaru()
+    {
         $idrekan = $_POST['idrekan'];
         switch ($idrekan) {
             case '392':
@@ -1238,7 +1247,7 @@ class Kontrak extends CI_Controller
             case '1117':
                 $dept = 'NU';
                 break;
-            case '125': 
+            case '125':
                 $dept = 'AN';
                 break;
             case '63':
