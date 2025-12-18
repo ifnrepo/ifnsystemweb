@@ -72,9 +72,16 @@
                                     Alamat : <?= datadepartemen($datheader['dept_tuju'], 'alamat_subkon'); ?></br>
                                     NPWP : <?= datadepartemen($datheader['dept_tuju'], 'npwp'); ?>
                                 <?php }else{ ?>
-                                    Nama Customer : <?= $datheader['namacustomer']; ?><br>
-                                    Alamat : <?= $datheader['alamat']; ?></br>
-                                    NPWP : <?= $datheader['npwp']; ?>
+                                    <?php if ($datheader['dept_tuju'] != 'SU') { ?>
+                                        ID : <span class="text-pink font-bold"><?= $datheader['id_buyer']; ?></span><br>
+                                        Nama Customer : <?= $datheader['namacustomer']; ?><br>
+                                        Alamat : <?= $datheader['alamat']; ?></br>
+                                        NPWP : <?= $datheader['npwp']; ?>
+                                    <?php } else { ?>
+                                        Nama Supplier : <?= datasupplier($datheader['id_rekanan'], 'nama_supplier'); ?><br>
+                                        Alamat : <?= datasupplier($datheader['id_rekanan'], 'alamat'); ?></br>
+                                        NPWP : <?= datasupplier($datheader['id_rekanan'], 'npwp'); ?>
+                                    <?php } ?>
                                 <?php } ?>
                             <?php } else { ?>
                                 <?php if ($datheader['dept_tuju'] != 'SU') { ?>

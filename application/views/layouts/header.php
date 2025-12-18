@@ -626,8 +626,11 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 14); ?>" href="<?= base_url('hargacost'); ?>">
                       Cost division
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 15); ?>" href="<?= base_url('setcost'); ?>">
-                      Setting cost division
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 15); ?>" href="<?= base_url('setcost/clear'); ?>">
+                      Setting Division Cost
+                    </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 26); ?>" href="<?= base_url('jobcostdiv'); ?>">
+                      Referensi Division Price
                     </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 16); ?>" href="<?= base_url('prosbor'); ?>">
                       Proses Borongan

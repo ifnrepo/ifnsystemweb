@@ -7,7 +7,7 @@ class Hargamat_model extends CI_Model
     // var $table = 'barang';
     public function getdata($filter_kategori, $filter_inv,  $filter_bc)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang');
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang,tb_hargamaterial.id_satuan as idsat');
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->join('ref_dok_bc', 'ref_dok_bc.jns_bc = tb_hargamaterial.jns_bc', 'left');
@@ -58,7 +58,7 @@ class Hargamat_model extends CI_Model
     }
     public function getdatabyid($id)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode,ref_negara.uraian_negara');
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode,ref_negara.uraian_negara,tb_hargamaterial.id_satuan as idsat');
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->join('supplier', 'supplier.id = tb_hargamaterial.id_supplier', 'left');
@@ -468,6 +468,10 @@ class Hargamat_model extends CI_Model
     public function refmtuang()
     {
         return $this->db->get('ref_mt_uang');
+    }
+    public function getsatuan()
+    {
+        return $this->db->order_by('kodesatuan')->get('satuan');
     }
     public function getdata_export($filter_kategori, $filter_inv)
     {

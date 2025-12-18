@@ -718,7 +718,7 @@ class inv_model extends CI_Model
                 $this->db->where('tgl',tglmysql($this->session->userdata('tglakhir')));
                 $this->db->where('periode',$periode);
                 $this->db->delete('stokinv');
-                // Insert data
+                // Insert data ke tabel
                 $data = $this->getdata();
                 $query = $this->db->query($data);
                 if(count($query->result_array()) > 0){
@@ -727,6 +727,7 @@ class inv_model extends CI_Model
                     foreach($query->result_array() as $det){
                         if(($det['sumpcs']+$det['sumkgs']) != 0){
                             $no++;
+                            // Apabila departemen Finishing 
                             if($this->session->userdata('currdept')=='FN' && trim($det['po'])!=''){
                                 $kgsnya = $det['saldokgs']+$det['inkgs']-$det['outkgs']+$det['adjkgs'];
                                 $pcsnya = $det['saldopcs']+$det['inpcs']-$det['outpcs']+$det['adjpcs'];
@@ -887,6 +888,31 @@ class inv_model extends CI_Model
                                     $this->db->insert('stokinv',$data);
                                 }
                             }else{
+                                // Selain departemen Finishing
+                                $harga = 0;
+                                $prddate = NULL;
+                                if($det['id_kategori']=='8189' || $det['id_kategori']=='6319'){
+                                    $cekhamat = $this->db->get_where('tb_hargamaterial',['id_barang' => $det['id_barang'],'nobontr' => $det['nobontr']]);
+                                    if($cekhamat->num_rows() > 0){
+                                        $datahamat = $cekhamat->row_array();
+                                        $harga = $datahamat['harga_akt'];
+                                    }
+                                }
+                                //Pengecekan prod date
+                                // Pengecekan pertama ke tabel stokinv
+                                $cekprd = $this->db->order_by('prod_date','DESC')->get_where('stokinv',['trim(po)' => trim($det['po']),'trim(item)' => trim($det['item']),'dis' => $det['dis'],'id_barang' => $det['id_barang'],'trim(insno)' => trim($det['insno']),'trim(nobontr)' => trim($det['nobontr'])]);
+                                if($cekprd->num_rows() > 0){
+                                    $prdcek = $cekprd->row_array();
+                                    $prddate = $prdcek['prod_date'];
+                                }
+                                // Pengecekan kedua ke tabel tb_hargamaterial
+                                if($prddate == NULL){
+                                    $cekkehamat = $this->db->get_where('tb_hargamaterial',['id_barang' => $det['id_barang'],'trim(nobontr)' => trim($det['nobontr'])]);
+                                    if($cekkehamat->num_rows() > 0){
+                                        $prdcekk = $cekkehamat->row_array();
+                                        $prddate = $prdcekk['tgl'];
+                                    }
+                                }
                                 $data = [
                                     'urut' => $no,
                                     'dept_id' => $this->session->userdata('currdept'),
@@ -913,7 +939,9 @@ class inv_model extends CI_Model
                                     'pcs_akhir' => $det['saldopcs']+$det['inpcs']-$det['outpcs']+$det['adjpcs'],
                                     'kgs_akhir' => $det['saldokgs']+$det['inkgs']-$det['outkgs']+$det['adjkgs'],
                                     'user_verif' => $this->session->userdata('id'),
-                                    'tgl_verif' => $tglnya
+                                    'tgl_verif' => $tglnya,
+                                    'harga' => $harga,
+                                    'prod_date' => $prddate
                                 ];
                                 $this->db->insert('stokinv',$data);
                             }

@@ -118,7 +118,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <input type="text" id="jmlrek" value="<?= $no-1; ?>" class="hilang">
             <input type="text" id="jmlverif" value="<?= $noverif; ?>" class="hilang">
             <button class="btn btn-sm btn-primary" id="xsimpanin" ><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
-            <?php if($this->session->userdata('curdept')=='GM' && $this->session->userdata('todept')=='SU'){ ?>
+            <?php if($this->session->userdata('curdeptin')=='GM' && $this->session->userdata('todeptin')=='SU'){ ?>
               <button class="btn btn-sm btn-primary hilang" id="carisimpanin" data-title="Update Nomor Bon Penerimaan" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Akan menyimpan data <br><?= $header['nomor_dok']; ?>" href="<?= base_url() . 'in/konfirmasinobon/'.$header['xid'].$xmode; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>
             <?php }else{ ?>
               <button class="btn btn-sm btn-primary hilang" id="carisimpanin" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyimpan data <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'in/simpanin/'.$header['xid'].$xmode; ?>"><i class="fa fa-save mr-1"></i> Simpan Transaksi</button>

@@ -32,6 +32,19 @@
                     <input type="hidden" id="id_supplier" name="id_supplier">
                 </div>
                 <div class="row">
+                    <div class="col-4">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Satuan</label>
+                            <select class="form-select font-kecil font-bold btn-flat" name="id_satuan" id="id_satuan">
+                                <option value="">Pilih Satuan Barang</option>
+                                <?php foreach ($satuan->result_array() as $sat) { ?>
+                                    <option value="<?= $sat['id']; ?>"><?= $sat['kodesatuan'].'-'.$sat['namasatuan'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-2">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Currency</label>

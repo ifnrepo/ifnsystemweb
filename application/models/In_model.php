@@ -180,8 +180,8 @@ class In_model extends CI_Model{
                 'tgl_valid' => date('Y-m-d H:i:s'),
                 'nomor_dok' => count($ibnya)==0 ? $dataheader['nomor_dok'] : $ibnya['nomor_dok'],
                 'tgl' => count($ibnya)==0 ? $dataheader['tgl'] : $ibnya['tgl'],
-                'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : '',
-                'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bcmasuk']) : '',
+                'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : $dataheader['nomor_bc'],
+                'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bcmasuk']) : $dataheader['tgl_bc'],
             ];
             $this->db->where('id',$id);
             $this->db->update('tb_header',$dataubah);

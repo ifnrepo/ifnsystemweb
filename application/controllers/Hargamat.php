@@ -146,6 +146,7 @@ class Hargamat extends CI_Controller
         $data['dokbc'] = $this->hargamatmodel->getdokbc();
         $data['refbendera'] = $this->hargamatmodel->refbendera();
         $data['refmtuang'] = $this->hargamatmodel->refmtuang();
+        $data['satuan'] = $this->hargamatmodel->getsatuan();
         $this->load->view('hargamat/edithamat', $data);
     }
     public function updatehamat()
@@ -180,6 +181,7 @@ class Hargamat extends CI_Controller
             $no++;
             $row = array();
             $row[] = $barang;
+            $row[] = $field->kodesatuan;
             $row[] = tglmysql($field->tgl);
             $row[] = $field->nobontr;
             $row[] = $field->nomor_inv;

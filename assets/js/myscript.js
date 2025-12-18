@@ -562,6 +562,16 @@ $(".inputangka").on("change click keyup input paste", function (event) {
 	});
 });
 
+$(".inputangkad").on("change click keyup input paste", function (event) {
+	$(this).val(function (index, value) {
+		return value
+			.replace(/(?!\.)\D/g, "")
+			.replace(/(?<=\..*)\./g, "")
+			.replace(/(?<=\.\d\d\d\d\d\d\d).*/g, "")
+			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+	});
+});
+
 function pesan(pesan, jenis) {
 	if (jenis == "info") {
 		var head = "Information";
@@ -688,7 +698,7 @@ function ponodis(po, item, dis, brg) {
 }
 
 function rupiah(amount, decimalSeparator, thousandsSeparator, nDecimalDigits) {
-	if (amount == 0 || amount == 0.00) {
+	if (amount == 0 || amount == 0.00 || !amount) {
 		return "-";
 	} else {
 		var num = parseFloat(amount); //convert to float
@@ -739,8 +749,12 @@ function roundTo(n, place) {
 }
 
 function tglmysql(str) {
-	var c = str.split("-");
-	return c[2] + "-" + c[1] + "-" + c[0];
+	if(str==null){
+		return "";
+	}else{
+		var c = str.split("-");
+		return c[2] + "-" + c[1] + "-" + c[0];
+	}
 }
 let cachedIP = null;
 async function getIP() {
