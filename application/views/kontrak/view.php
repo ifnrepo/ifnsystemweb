@@ -285,50 +285,93 @@
                                             <th class="text-primary">Kgs</th>
                                         </tr>
                                     </thead>
-                                    <tbody class=" table-tbody" style="font-size: 13px !important;">
+                                    <tbody class="table-tbody" style="font-size: 13px !important;">
                                         <?php
-                                        $no = 0;
                                         $jumlahkgs = 0;
                                         $jumlahpcs = 0;
+
                                         if ($terima->num_rows() > 0) {
+
+
+                                            $data = $terima->result_array();
+
+
+                                            $total_per_tgl = [];
+                                            foreach ($data as $r) {
+                                                $tgl = $r['tgl_bc'];
+                                                if (!isset($total_per_tgl[$tgl])) {
+                                                    $total_per_tgl[$tgl] = ['kgs' => 0, 'pcs' => 0];
+                                                }
+                                                $total_per_tgl[$tgl]['kgs'] += $r['kgs'];
+                                                $total_per_tgl[$tgl]['pcs'] += $r['pcs'];
+                                            }
+
                                             $tglx = '';
-                                            $tglu = '';
-                                            foreach ($terima->result_array() as $terima) {
-                                                $sku = trim($terima['po']) == '' ? $terima['kode'] : viewsku($terima['po'], $terima['item'], $terima['dis']);
-                                                $spekbarang = trim($terima['po']) == '' ? namaspekbarang($terima['id_barang']) : spekpo($terima['po'], $terima['item'], $terima['dis']);
-                                                $jumlahkgs += $terima['kgs'];
-                                                $jumlahpcs += $terima['pcs'];
-                                                $tglu = $terima['tgl_bc'];
+
+                                            foreach ($data as $row) {
+
+                                                $sku = trim($row['po']) == ''
+                                                    ? $row['kode']
+                                                    : viewsku($row['po'], $row['item'], $row['dis']);
+
+                                                $spekbarang = trim($row['po']) == ''
+                                                    ? namaspekbarang($row['id_barang'])
+                                                    : spekpo($row['po'], $row['item'], $row['dis']);
+
+
+                                                $jumlahkgs += $row['kgs'];
+                                                $jumlahpcs += $row['pcs'];
+
+                                                $tglu = $row['tgl_bc'];
+
+
                                                 if ($tglx != $tglu) {
-                                                    $tg = $terima['tgl_bc'];
-                                                    $nombc = $terima['nomor_bc'];
+                                                    $tg = $row['tgl_bc'];
+                                                    $nombc = $row['nomor_bc'];
+
+
+                                                    $subtotal_text =
+                                                        number_format($total_per_tgl[$tglu]['kgs'], 2) .
+                                                        ' KGS / ' .
+                                                        number_format($total_per_tgl[$tglu]['pcs'], 0) .
+                                                        ' PCS';
                                                 } else {
                                                     $tg = '';
                                                     $nombc = '';
+                                                    $subtotal_text = '';
                                                 }
+
                                                 $tglx = $tglu;
                                         ?>
                                                 <tr>
                                                     <td class="text-primary"><?= $tg ?></td>
-                                                    <td class="text-primary"><?= $nombc ?></td>
-                                                    <td class="text-primary line-12"><?= $sku ?><br><span class="font-11 text-teal"><?= $terima['insno'] ?></span></td>
+                                                    <td class="text-primary line-12">
+                                                        <?= $nombc ?><br>
+                                                        <span class="font-10 text-warning"><?= $subtotal_text ?></span>
+                                                    </td>
+                                                    <td class="text-primary line-12">
+                                                        <?= $sku ?><br>
+                                                        <span class="font-11 text-teal"><?= $row['insno'] ?></span>
+                                                    </td>
                                                     <td class="text-primary"><?= $spekbarang ?></td>
-                                                    <td class="text-primary"><?= $terima['kodesatuan'] ?></td>
-                                                    <td class="text-primary text-right"><?= $terima['pcs'] ?></td>
-                                                    <td class="text-primary text-right"><?= $terima['kgs'] ?></td>
+                                                    <td class="text-primary"><?= $row['kodesatuan'] ?></td>
+                                                    <td class="text-primary text-right"><?= number_format($row['pcs']) ?></td>
+                                                    <td class="text-primary text-right"><?= number_format($row['kgs'], 2) ?></td>
                                                 </tr>
                                             <?php } ?>
                                             <tr class="font-bold">
                                                 <td colspan="5" class="text-center text-red">TOTAL</td>
-                                                <td class="text-right text-red"><?= $jumlahpcs ?></td>
-                                                <td class="text-right text-red"><?= $jumlahkgs ?></td>
+                                                <td class="text-right text-red"><?= number_format($jumlahpcs) ?></td>
+                                                <td class="text-right text-red"><?= number_format($jumlahkgs, 2) ?></td>
                                             </tr>
                                         <?php } else { ?>
                                             <tr>
-                                                <td colspan="7" class="text-center">--- Belum ada Pengembalian Barang --</td>
+                                                <td colspan="7" class="text-center">--- Belum ada Pengembalian Barang ---</td>
                                             </tr>
                                         <?php } ?>
                                     </tbody>
+
+
                                 </table>
                             </div>
                         </div>
