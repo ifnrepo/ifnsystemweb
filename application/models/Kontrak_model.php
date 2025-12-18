@@ -19,7 +19,7 @@ class Kontrak_model extends CI_Model
         $this->db->from('tb_kontrak');
         $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id', 'left');
         $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
-        $this->db->join('supplier','supplier.id = tb_kontrak.id_supplier','left');
+        $this->db->join('supplier', 'supplier.id = tb_kontrak.id_supplier', 'left');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
 
         if (!empty($kode['id_supplier'])) {
@@ -56,13 +56,13 @@ class Kontrak_model extends CI_Model
         $this->db->where('tb_detail.id_akb = tb_header.id AND tb_header.send_ceisa = 1 and trim(tb_header.exnomor_bc) != "" ');
         return $this->db->get()->row_array();
     }
-    public function getdatakontrak261($kode,$id)
+    public function getdatakontrak261($kode, $id)
     {
-        $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
+        $header = $this->db->get_where('tb_header', ['id' => $id])->row_array();
 
         $this->db->select('tb_kontrak.*,0 as saldo,0 as xnetto');
         $this->db->from('tb_kontrak');
-        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id','left');
+        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
         // if ($kode['dept_id'] != "" && $kode['dept_id'] != 'SU') {
         //     $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
         // }
@@ -80,7 +80,7 @@ class Kontrak_model extends CI_Model
         }
         // $this->db->where('nomor_bpj != "" ');
         // $this->db->where('tgl_bpj is not null ');
-        $this->db->where('id_supplier',$header['id_rekanan']);
+        $this->db->where('id_supplier', $header['id_rekanan']);
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }
@@ -92,9 +92,9 @@ class Kontrak_model extends CI_Model
         // $this->db->select('(SELECT SUM(netto) AS xsaldox FROM tb_header a WHERE a.id_kontrak = tb_kontrak.id AND a.jns_bc = "41") AS xsaldox');
         $this->db->select((float)$header['netto'] . " as xnetto", false);
         $this->db->from('tb_kontrak');
-        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id','left');
-        $this->db->join('tb_header','tb_header.id_kontrak = tb_kontrak.id','left');
-        $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
+        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
+        $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id', 'left');
+        $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
         // if ($kode['dept_id'] != "") {
         //     $this->db->where('tb_kontrak.dept_id', $kode['dept_id']);
         // }
@@ -109,7 +109,7 @@ class Kontrak_model extends CI_Model
         }
         // $this->db->where("tb_kontrak.kgs-SUM(round(tb_detail.kgs,2)) >= ",$header['netto']);
         $this->db->group_start();
-        $this->db->where_in('tb_kontrak.dept_id', ['DL', 'MD','AR']);
+        $this->db->where_in('tb_kontrak.dept_id', ['DL', 'MD', 'AR']);
         $this->db->or_where_in('tb_kontrak.id_supplier', [441, 994, 392]);
         $this->db->group_end();
         $this->db->group_by('tb_kontrak.id');
@@ -221,20 +221,81 @@ class Kontrak_model extends CI_Model
     }
 
 
+    // public function getdatapengembalian($id)
+    // {
+    //     $header = $this->db->get_where('tb_header', ['id_kontrak' => $id])->row_array();
+    //     $this->db->select('tb_detail.*,sum(round(tb_detail.kgs,2)) as kgs,sum(round(tb_detail.pcs,2)) as pcs,tb_header.tgl,tb_header.nomor_dok,tb_header.nomor_bc,tb_header.tgl_bc,tb_header.jns_bc,barang.kode,satuan.kodesatuan');
+    //     $this->db->from('tb_detail');
+    //     $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
+    //     $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+    //     $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+    //     $this->db->where('tb_header.exnomor_bc', $header['nomor_bc']);
+    //     $this->db->where('tb_header.send_ceisa', 1);
+    //     $this->db->where('tb_header.nomor_bc != ""');
+    //     $this->db->group_by('tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_detail.insno');
+    //     return $this->db->get();
+    // }
+
     public function getdatapengembalian($id)
     {
+
         $header = $this->db->get_where('tb_header', ['id_kontrak' => $id])->row_array();
-        $this->db->select('tb_detail.*,sum(round(tb_detail.kgs,2)) as kgs,sum(round(tb_detail.pcs,2)) as pcs,tb_header.tgl,tb_header.nomor_dok,tb_header.nomor_bc,tb_header.tgl_bc,tb_header.jns_bc,barang.kode,satuan.kodesatuan');
+
+        $this->db->select('
+            tb_detail.po,
+            tb_detail.item,
+            tb_detail.dis,
+            tb_detail.insno,
+            tb_detail.id_barang,
+            tb_detail.id_satuan,
+
+            SUM(ROUND(tb_detail.kgs,2)) AS kgs,
+            SUM(ROUND(tb_detail.pcs,2)) AS pcs,
+
+            tb_header.tgl,
+            tb_header.nomor_dok,
+            tb_header.nomor_bc,
+            tb_header.tgl_bc,
+            tb_header.jns_bc,
+
+            barang.kode,
+            satuan.kodesatuan
+         ');
+
         $this->db->from('tb_detail');
+
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
+
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+
         $this->db->where('tb_header.exnomor_bc', $header['nomor_bc']);
         $this->db->where('tb_header.send_ceisa', 1);
-        $this->db->where('tb_header.nomor_bc != ""');
-        $this->db->group_by('tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_detail.insno');
+        $this->db->where('tb_header.nomor_bc !=', '');
+
+        $this->db->group_by([
+            'tb_detail.po',
+            'tb_detail.item',
+            'tb_detail.dis',
+            'tb_detail.insno',
+            'tb_detail.id_barang',
+            'tb_detail.id_satuan',
+            'tb_header.tgl',
+            'tb_header.nomor_dok',
+            'tb_header.nomor_bc',
+            'tb_header.tgl_bc',
+            'tb_header.jns_bc',
+            'barang.kode',
+            'satuan.kodesatuan'
+        ]);
+
         return $this->db->get();
     }
+
+
+
+
     public function getdatapengembalian_ex($id)
     {
         $header = $this->db->get_where('tb_header', ['id_kontrak' => $id])->row_array();
@@ -542,13 +603,15 @@ class Kontrak_model extends CI_Model
         }
         return $que;
     }
-    public function carirekanan($id){
-        $this->db->like('nama_supplier',$id);
-        $this->db->where('aktif',1);
+    public function carirekanan($id)
+    {
+        $this->db->like('nama_supplier', $id);
+        $this->db->where('aktif', 1);
         $this->db->limit(25);
         return $this->db->get('supplier');
     }
-    public function simpankontrakbaru($id){
+    public function simpankontrakbaru($id)
+    {
         $arrinput = [
             'tgl' => date('Y-m-d'),
             'tgl_awal' => date('Y-m-d'),
@@ -570,11 +633,12 @@ class Kontrak_model extends CI_Model
         // return $this->db->get();
         return $hasil;
     }
-    public function getkontrakrekanan(){
+    public function getkontrakrekanan()
+    {
         $this->db->select('tb_kontrak.dept_id,tb_kontrak.id_supplier,supplier.nama_supplier');
         $this->db->from('tb_kontrak');
-        $this->db->join('supplier','supplier.id = tb_kontrak.id_supplier','left');
-        $this->db->where('tb_kontrak.id_supplier != ',null);
+        $this->db->join('supplier', 'supplier.id = tb_kontrak.id_supplier', 'left');
+        $this->db->where('tb_kontrak.id_supplier != ', null);
         $this->db->group_by('tb_kontrak.id_supplier');
         return $this->db->get();
     }
