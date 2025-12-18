@@ -45,7 +45,7 @@ class Pricinginv_model extends CI_Model
         // $this->db->order_by('stokinv.dept_id','stokinv.urut');
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(kgs_akhir) over() as totalkgs from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
+        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(kgs_akhir) over() as totalkgs,sum(amount) over() as totalamount from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
         $kolom .= "LEFT JOIN kategori on kategori.kategori_id = LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) ";
         $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan ";
         if($this->session->userdata('milik')!=''){
@@ -182,14 +182,15 @@ class Pricinginv_model extends CI_Model
         $periode = cekperiodedaritgl($tglawal);
         $tgl = $this->session->userdata('tglpricinginv');
 
-        $this->db->select("stokinv_detail.*,stokinv.dept_id,stokinv.tgl,stokinv.po,stokinv.item,stokinv.dis,barang.kode,barang.nama_barang,stokinv.periode");
+        $this->db->select("stokinv_detail.*,stokinv.dept_id,stokinv.tgl,stokinv.po,stokinv.item,stokinv.dis,barang.kode,barang.nama_barang,stokinv.periode,stokinv.art_type");
         $this->db->select("stokinv.dln,stokinv.po as xpo,stokinv.nobontr as xnobontr,stokinv.insno as xinsno,headbarang.nama_barang as xnama_barang,tb_po.spek as xspek,headbarang.kode as xkode,CONCAT(trim(stokinv.po),'#',trim(stokinv.item),stokinv.dis) as sku");
         $this->db->select("(SELECT harga_akt FROM tb_hargamaterial WHERE tb_hargamaterial.id_barang = stokinv_detail.id_barang AND tb_hargamaterial.nobontr = stokinv_detail.nobontr AND (stokinv_detail.nomor_bc != '' OR stokinv_detail.nomor_bc is not null) LIMIT 1) AS harga_akt");
-        $this->db->select("barang.id_kategori as xid_kategori,tb_po.id_kategori as yid_kategori");
+        $this->db->select("ubrg.id_kategori as xid_kategori,tb_po.id_kategori as yid_kategori");
         $this->db->select("LEFT(CONCAT(IFNULL(headbarang.dln,''),IFNULL(tb_po.dln,'')),1) as mdln");
         $this->db->from('stokinv_detail');
         $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
         $this->db->join('stokinv','stokinv ON stokinv.id = stokinv_detail.id_stok ','left');
+        $this->db->join('barang ubrg','ubrg.id = stokinv.id_barang','left');
         $this->db->join('barang headbarang','headbarang.id = stokinv.id_barang','left');
         $this->db->join('tb_po','tb_po.ind_po = concat(stokinv.po,stokinv.item,stokinv.dis)','left');
         $this->db->where('stokinv.tgl',$tgl);
@@ -431,6 +432,20 @@ class Pricinginv_model extends CI_Model
                         $sh = $nilaicekcost['sh'];
                     }
                 }
+                $artipe = '';
+                if($que['id_kategori']=='8189'){
+                    $artipe = 'RM';
+                }else{
+                    if($que['id_kategori']=='6319'){
+                        $artipe = 'SM';
+                    }else{
+                        if($que['dept_id']=='GF' || $que['dept_id']=='GW'){
+                            $artipe = 'FG';
+                        }else{
+                            $artipe = 'GP';
+                        }
+                    }
+                }
                 $pengali = $que['kodesatuan']=='KGS' ? $que['kgs_akhir'] : (($que['pcs_akhir']==0) ? $que['kgs_akhir'] : $que['pcs_akhir']);
                 $mnt = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh)*$pengali;
                 $hrg = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh);
@@ -449,6 +464,7 @@ class Pricinginv_model extends CI_Model
                     'hoshu2' => $h2,
                     'packing' => $pa,
                     'shitate' => $sh,
+                    'art_type' => $artipe
                 ];
 
                 $this->db->where('id',$que['id']);

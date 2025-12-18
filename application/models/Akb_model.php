@@ -1079,11 +1079,11 @@ class Akb_model extends CI_Model
                 $kondisi = [
                     'id_header' => $id,
                     'tb_header.ketprc' => $hsl['ketprc'],
-                    'tb_detail.po' => $hsl['po'],
-                    'tb_detail.item' => $hsl['item'],
+                    'trim(tb_detail.po)' => trim($hsl['po']),
+                    'trim(tb_detail.item)' => trim($hsl['item']),
                     'tb_detail.dis' => $hsl['dis'],
-                    'tb_detail.insno' => $hsl['insno'],
-                    'barang.kode' => $hsl['kode']
+                    'trim(tb_detail.insno)' => trim($hsl['insno']),
+                    'trim(barang.kode)' => trim($hsl['kode'])
                 ];
             }
             $this->db->select("tb_detail.id");

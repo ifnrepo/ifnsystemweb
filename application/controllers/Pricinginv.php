@@ -96,6 +96,7 @@ class Pricinginv extends CI_Controller
         $filter_periode = $_POST['periode'];
         $filter_ctgr = $_POST['ctgr'];
         $filter_tgkosong = $_POST['tgkosong'];
+        $filter_art = $_POST['arty'];
         // $filter_exnet = $_POST['exnet'];
         // if($filter_dept!=''){
         //     $arrayu['dept_id'] = $filter_dept;
@@ -110,6 +111,9 @@ class Pricinginv extends CI_Controller
         }
         if($filter_ctgr!=''){
             $arrayu["LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4)"] = $filter_ctgr;
+        }
+        if($filter_art!=''){
+            $arrayu["art_type"] = $filter_art;
         }
         if($filter_tgkosong=='true'){
             $arrayu['tgkosong'] = 1;
@@ -126,6 +130,7 @@ class Pricinginv extends CI_Controller
         $filter_periode = $_POST['periode'];
         $filter_ctgr = $_POST['ctgr'];
         $filter_bcnotfound = $_POST['bcnotfound'];
+        $filter_art = $_POST['arty'];
         // $filter_exnet = $_POST['exnet'];
         // if($filter_dept!=''){
         //     $arrayu['dept_id'] = $filter_dept;
@@ -140,6 +145,10 @@ class Pricinginv extends CI_Controller
         }
          if($filter_ctgr!=''){
             $arrayu["LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4)"] = $filter_ctgr;
+            // $arrayu["id_kategori"] = $filter_ctgr;
+        }
+        if($filter_art!=''){
+            $arrayu["art_type"] = $filter_art;
         }
         if($filter_bcnotfound=='true'){
             $arrayu['bcaneh'] = 1;
@@ -223,17 +232,20 @@ class Pricinginv extends CI_Controller
         // Buat header tabel nya pada baris ke 3    
         $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"    
         $sheet->setCellValue('B3', "DEPT"); // Set kolom B3 dengan tulisan "KODE"    
-        $sheet->setCellValue('C3', "PROD_DATE"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('D3', "KATEGORI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('E3', "SKU");
-        $sheet->setCellValue('F3', "NAMA BARANG");
-        $sheet->setCellValue('G3', "SAT");
-        $sheet->setCellValue('H3', "PCS");
-        $sheet->setCellValue('I3', "KGS");
-        $sheet->setCellValue('J3', "HARGA");
-        $sheet->setCellValue('K3', "TOTAL");
-        $sheet->setCellValue('L3', "NOBONTR");
-        $sheet->setCellValue('M3', "DLN");
+        $sheet->setCellValue('C3', "ART TYPE");
+        $sheet->setCellValue('D3', "PROD_DATE"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('E3', "KATEGORI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('F3', "SKU");
+        $sheet->setCellValue('G3', "NAMA BARANG");
+        $sheet->setCellValue('H3', "SAT");
+        $sheet->setCellValue('I3', "PCS");
+        $sheet->setCellValue('J3', "KGS");
+        $sheet->setCellValue('K3', "MATERIAL COST");
+        $sheet->setCellValue('L3', "JOB COST");
+        $sheet->setCellValue('M3', "TOTAL");
+        $sheet->setCellValue('N3', "NOBONTR");
+        $sheet->setCellValue('O3', "DLN");
+        $sheet->setCellValue('P3', "ASAL WASTE");
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->pricingmodel->toexcel();
@@ -249,17 +261,20 @@ class Pricinginv extends CI_Controller
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $data['dept_id']);
-            $sheet->setCellValue('C' . $numrow, $data['prod_date']);
-            $sheet->setCellValue('D' . $numrow, $data['nama_kategori']);
-            $sheet->setCellValue('E' . $numrow, $sku);
-            $sheet->setCellValue('F' . $numrow, $spekbarang);
-            $sheet->setCellValue('G' . $numrow, $data['kodesatuan']);
-            $sheet->setCellValue('H' . $numrow, $data['pcs_akhir']);
-            $sheet->setCellValue('I' . $numrow, $data['kgs_akhir']);
-            $sheet->setCellValue('J' . $numrow, $data['harga']);
-            $sheet->setCellValue('K' . $numrow, $data['amount']);
-            $sheet->setCellValue('L' . $numrow, $data['nobontr']);
-            $sheet->setCellValue('M' . $numrow, $data['dln']);
+            $sheet->setCellValue('C' . $numrow, $data['art_type']);
+            $sheet->setCellValue('D' . $numrow, $data['prod_date']);
+            $sheet->setCellValue('E' . $numrow, $data['nama_kategori']);
+            $sheet->setCellValue('F' . $numrow, $sku);
+            $sheet->setCellValue('G' . $numrow, $spekbarang);
+            $sheet->setCellValue('H' . $numrow, $data['kodesatuan']);
+            $sheet->setCellValue('I' . $numrow, $data['pcs_akhir']);
+            $sheet->setCellValue('J' . $numrow, $data['kgs_akhir']);
+            $sheet->setCellValue('K' . $numrow, $data['rm']+$data['sm']);
+            $sheet->setCellValue('L' . $numrow, $data['spinning']+$data['netting']+$data['ringrope']+$data['senshoku']+$data['hoshu1']+$data['koatsu']+$data['hoshu2']+$data['packing']+$data['shitate']);
+            $sheet->setCellValue('M' . $numrow, $data['amount']);
+            $sheet->setCellValue('N' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('O' . $numrow, $data['dln']);
+            $sheet->setCellValue('P' . $numrow, $data['asal_waste']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

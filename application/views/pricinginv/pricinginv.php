@@ -100,6 +100,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </select>
                           </div>
                         </span>
+                         <span class="px-1 mt-1 hilang" id="datakategori">
+                          <label class="form-label font-kecil mb-0">Kategori Brg</label>
+                          <div>
+                            <select class="form-select form-control form-sm font-kecil font-bold mt-1" id="ktgrr" name="ktgrr">
+                              <option value="">Semua</option>
+                            </select>
+                          </div>
+                        </span>
                         <span class="px-1 mt-1" id="ceknotfound">
                           <!-- <label class="form-label font-kecil mb-0" style="color: #F5F8FC">.</label> -->
                           <div class="mx-auto mt-3">
@@ -113,14 +121,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </label>
                           </div>
                         </span>
-                        <!-- <span class="px-1 mt-1">
-                          <label class="form-label font-kecil mb-0">Kategori Brg</label>
-                          <div>
-                            <select class="form-select form-control form-sm font-kecil font-bold mt-1" id="ktgrr" name="ktgrr">
-                              <option value="">Semua</option>
-                            </select>
-                          </div>
-                        </span> -->
                       </div>
                     </div>
                   </div>
@@ -201,8 +201,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <li class="nav-item">
                   <a href="#tabs-profile-1" class="nav-link bg-orange btn-flat font-13 font-bold text-black tbl-bom" data-bs-toggle="tab">BOM Inventory</a>
                 </li>
-                <li class="nav-item hilang">
-                  <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab">BOM Inventory Job</a>
+                <li class="nav-item  ms-auto">
+                  <!-- <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab">BOM Inventory Job</a> -->
+                   <div class="d-flex">
+                    <div class="font-bold font-kecil m-0 d-inline">
+                      <select class="form-select form-control form-sm font-kecil font-bold ml-auto py-0 bg-cyan-lt font-hitam" id="filterctgr" name="filterctgr" style="height:30px;max-width: 200px;" title="Filter Kategori">
+                        <option value="">Semua</option>
+                        <?php foreach($datkategori->result_array() as $datkategori){ ?>
+                          <option value="<?= $datkategori['id_kategori'] ?>"><?= $datkategori['nama_kategori'] ?></option>
+                        <?php } ?>
+                      </select>
+                    </div>
+                    <div class="font-bold font-kecil m-0 d-inline">
+                      <select class="form-select form-control form-sm font-kecil font-bold ml-auto py-0 bg-teal-lt font-hitam" id="filterart" name="filterart" style="height:30px;max-width: 200px;" title="Filter Art Type">
+                        <option value="">Semua</option>
+                        <option value="RM" title="Raw Material">RM</option>
+                        <option value="SM" title="Sub Material">SM</option>
+                        <option value="FG" title="Finished Goods">FG</option>
+                        <option value="GP" title="Goods In Process">GP</option>
+                      </select>
+                    </div>
+                    <div class="d-inline ml-1">
+                      <a href="<?= base_url().'pricinginv/toexcel' ?>" class="btn btn-sm btn-success btn-flat" style="height: 30px" title="download EXCEL"><i class="fa fa-file-excel-o fa-lg"></i></a>
+                    </div>
+                  </div>
                 </li>
               </ul>
             </div>
@@ -214,17 +236,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <h3 class="mb-1">Inventory</h3>
                     </div>
                     <div class="col-6 text-right d-flex justify-content-end">
-                      <div class="font-bold font-kecil m-0 d-inline">
-                         <select class="form-select form-control form-sm font-kecil font-bold ml-auto py-0" id="filterctgr" name="filterctgr" style="height:30px;max-width: 200px;" title="Filter Kategori">
-                          <option value="">Semua</option>
-                          <?php foreach($datkategori->result_array() as $datkategori){ ?>
-                            <option value="<?= $datkategori['id_kategori'] ?>"><?= $datkategori['nama_kategori'] ?></option>
-                          <?php } ?>
-                        </select>
-                      </div>
-                      <div class="d-inline ml-1">
-                        <a href="<?= base_url().'pricinginv/toexcel' ?>" class="btn btn-sm btn-success btn-flat" style="height: 30px"><i class="fa fa-file-excel-o fa-lg"></i></a>
-                      </div>
+                     
                     </div>
                   </div>
                   <hr class="m-0">
