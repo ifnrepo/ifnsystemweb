@@ -398,12 +398,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="master11" name="master11" type="checkbox" <?= cekceklis($user['master'], 11); ?>>
                                 <span class="form-check-label">Data Jabatan</span>
                               </label>
-                            </div>
-                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master12" name="master12" type="checkbox" <?= cekceklis($user['master'], 12); ?>>
                                 <span class="form-check-label">Data Grup</span>
                               </label>
+                            </div>
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master14" name="master14" type="checkbox" <?= cekceklis($user['master'], 14); ?>>
                                 <span class="form-check-label">Harga cost division</span>
@@ -451,6 +451,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="master25" name="master25" type="checkbox" <?= cekceklis($user['master'], 25); ?>>
                                 <span class="form-check-label">Bill Of Material Cost</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="master26" name="master26" type="checkbox" <?= cekceklis($user['master'], 26); ?>>
+                                <span class="form-check-label">Referensi Division Price</span>
                               </label>
                               <!-- xx -->
                             </div>

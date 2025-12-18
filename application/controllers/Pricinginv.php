@@ -1,6 +1,9 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 
+use PhpOffice\PhpSpreadsheet\Spreadsheet;
+use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
+
 class Pricinginv extends CI_Controller
 {
     function __construct()
@@ -92,7 +95,7 @@ class Pricinginv extends CI_Controller
         $filter_tgl = $_POST['tgl'];
         $filter_periode = $_POST['periode'];
         $filter_ctgr = $_POST['ctgr'];
-        // $filter_buyer = $_POST['buyer'];
+        $filter_tgkosong = $_POST['tgkosong'];
         // $filter_exnet = $_POST['exnet'];
         // if($filter_dept!=''){
         //     $arrayu['dept_id'] = $filter_dept;
@@ -108,6 +111,9 @@ class Pricinginv extends CI_Controller
         if($filter_ctgr!=''){
             $arrayu["LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4)"] = $filter_ctgr;
         }
+        if($filter_tgkosong=='true'){
+            $arrayu['tgkosong'] = 1;
+        }
         // if($filter_exnet!='all'){
         //     $arrayu['exnet'] = $filter_exnet;
         // }
@@ -119,7 +125,7 @@ class Pricinginv extends CI_Controller
         $filter_tgl = $_POST['tgl'];
         $filter_periode = $_POST['periode'];
         $filter_ctgr = $_POST['ctgr'];
-        // $filter_buyer = $_POST['buyer'];
+        $filter_bcnotfound = $_POST['bcnotfound'];
         // $filter_exnet = $_POST['exnet'];
         // if($filter_dept!=''){
         //     $arrayu['dept_id'] = $filter_dept;
@@ -135,9 +141,9 @@ class Pricinginv extends CI_Controller
          if($filter_ctgr!=''){
             $arrayu["LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4)"] = $filter_ctgr;
         }
-        // if($filter_buyer!='all'){
-        //     $arrayu['id_buyer'] = $filter_buyer;
-        // }
+        if($filter_bcnotfound=='true'){
+            $arrayu['bcaneh'] = 1;
+        }
         // if($filter_exnet!='all'){
         //     $arrayu['exnet'] = $filter_exnet;
         // }
@@ -189,6 +195,91 @@ class Pricinginv extends CI_Controller
             $url = base_url().'pricinginv';
             redirect($url);
         }
+    }
+    public function edittglprod($id){
+        $data['data'] = $this->pricingmodel->getdatabyid($id)->row_array();
+        $this->load->view('pricinginv/edittglprod',$data);
+    }
+    public function updatetglprod(){
+        $data = [
+            'id' => $_POST['id'],
+            'tglprod' => tglmysql($_POST['tglprod'])
+        ];
+        $hasil = $this->pricingmodel->updatetglprod($data);
+        echo $hasil;
+    }
+    public function viewdetail($id){
+        $data['data'] = $this->pricingmodel->getdatabyid($id)->row_array();
+        $this->load->view('pricinginv/viewdetail',$data);
+    }
+    public function toexcel(){
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+        $sheet->setCellValue('A1', "PRICING INVENTORY " . $this->session->userdata('deptpricinginv')); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('A2', "Periode " . tgl_indo(tglmysql($this->session->userdata('tglawal')))." s/d ".tgl_indo(tglmysql($this->session->userdata('tglakhir')))); // Set kolom A1 dengan tulisan "DATA SISWA"    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B3', "DEPT"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C3', "PROD_DATE"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D3', "KATEGORI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('E3', "SKU");
+        $sheet->setCellValue('F3', "NAMA BARANG");
+        $sheet->setCellValue('G3', "SAT");
+        $sheet->setCellValue('H3', "PCS");
+        $sheet->setCellValue('I3', "KGS");
+        $sheet->setCellValue('J3', "HARGA");
+        $sheet->setCellValue('K3', "TOTAL");
+        $sheet->setCellValue('L3', "NOBONTR");
+        $sheet->setCellValue('M3', "DLN");
+        // Panggil model Get Data   
+        $arrayu = [];
+        $inv = $this->pricingmodel->toexcel();
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 4;
+
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($inv->result_array() as $data) {
+            $sku = trim($data['po'])!='' ? viewsku($data['po'], $data['item'], $data['dis']) : namaspekbarang($data['id_barang'],'kode');
+            $spekbarang = trim($data['po'])!='' ? spekpo($data['po'], $data['item'], $data['dis']) : namaspekbarang($data['id_barang']);
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $data['dept_id']);
+            $sheet->setCellValue('C' . $numrow, $data['prod_date']);
+            $sheet->setCellValue('D' . $numrow, $data['nama_kategori']);
+            $sheet->setCellValue('E' . $numrow, $sku);
+            $sheet->setCellValue('F' . $numrow, $spekbarang);
+            $sheet->setCellValue('G' . $numrow, $data['kodesatuan']);
+            $sheet->setCellValue('H' . $numrow, $data['pcs_akhir']);
+            $sheet->setCellValue('I' . $numrow, $data['kgs_akhir']);
+            $sheet->setCellValue('J' . $numrow, $data['harga']);
+            $sheet->setCellValue('K' . $numrow, $data['amount']);
+            $sheet->setCellValue('L' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('M' . $numrow, $data['dln']);
+            $no++;
+            // Tambah 1 setiap kali looping      
+            $numrow++; // Tambah 1 setiap kali looping    
+        }
+
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle(" DATA INV");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="RM-Pricing.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel Pricing');
     }
 
     // End Pricing Inv

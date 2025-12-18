@@ -40,6 +40,21 @@
                     <input type="text" class="form-control font-kecil" value="<?= $data['nama_supplier']; ?>" disabled>
                 </div>
                 <div class="row">
+                    <div class="col-4">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Satuan</label>
+                            <select class="form-select font-kecil font-bold btn-flat" name="id_satuan" id="id_satuan">
+                                <option value="">Pilih Satuan Barang</option>
+                                <?php foreach ($satuan->result_array() as $sat) { ?>
+                                    <option value="<?= $sat['id']; ?>" <?php if ($data['idsat'] == $sat['id']) {
+                                                                                    echo "selected";
+                                                                                } ?>><?= $sat['kodesatuan'].'-'.$sat['namasatuan'] ?></option>
+                                <?php } ?>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col-2">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Currency</label>
@@ -98,7 +113,7 @@
                      <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-danger bg-danger-lt pl-2">Harga Akunting</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" id="harga_akt" name="harga_akt" placeholder="Input Harga Akunting" value="<?= rupiah($data['harga_akt'], 8); ?>">
+                            <input type="text" class="form-control font-kecil text-end" id="harga_akt" name="harga_akt" placeholder="Input Harga Akunting" value="<?= rupiah($data['harga_akt'], 8); ?>">
                         </div>
                     </div>
                     <div class="col-6">
@@ -261,18 +276,15 @@
         var name = document.getElementById('dok');
         $("#namedok").val(name.files.item(0).name);
     })
-    $(".inputangka").on("change click keyup input paste", function(event) {
+    $(".inputangkad").on("change click keyup input paste", function(event) {
         $(this).val(function(index, value) {
             return value
                 .replace(/(?!\.)\D/g, "")
                 .replace(/(?<=\..*)\./g, "")
-                .replace(/(?<=\.\d\d).*/g, "")
+                .replace(/(?<=\.\d\d\d\d\d\d\d\d).*/g, "")
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
-
-
-
     $("#nomor_bc").blur(function() {
         var nobc = $("#nomor_bc").val();
         $(this).val(isikurangnol(nobc));

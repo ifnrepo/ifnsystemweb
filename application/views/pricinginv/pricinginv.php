@@ -19,7 +19,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
-        <div class="sticky-top bg-white">
+        <div class="sticky-top bg-white pt-1">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
               <?php $disab=''; if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null){ $disab = 'disabled';} ?>
@@ -100,6 +100,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </select>
                           </div>
                         </span>
+                        <span class="px-1 mt-1" id="ceknotfound">
+                          <!-- <label class="form-label font-kecil mb-0" style="color: #F5F8FC">.</label> -->
+                          <div class="mx-auto mt-3">
+                            <label class="form-check mt-1 mb-1 bg-danger-lt"  id="bcnotfoundcek">
+                              <input class="form-check-input" type="checkbox" id="ceklisbcnotfoundcek">
+                              <span class="form-check-label font-bold">View BC Not Found</span>
+                            </label>
+                            <label class="form-check mb-1 bg-teal-lt"  id="tgprodkosong">
+                              <input class="form-check-input" type="checkbox" id="ceklistgprodkosong">
+                              <span class="form-check-label font-bold">Tgl Prod Kosong</span>
+                            </label>
+                          </div>
+                        </span>
+                        <!-- <span class="px-1 mt-1">
+                          <label class="form-label font-kecil mb-0">Kategori Brg</label>
+                          <div>
+                            <select class="form-select form-control form-sm font-kecil font-bold mt-1" id="ktgrr" name="ktgrr">
+                              <option value="">Semua</option>
+                            </select>
+                          </div>
+                        </span> -->
                       </div>
                     </div>
                   </div>
@@ -175,10 +196,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-header font-kecil">
               <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" style="background-color: #F6F8F8"> <!-- #F6F8FB -->
                 <li class="nav-item">
-                  <a href="#tabs-home-1" class="nav-link active bg-cyan btn-flat font-13 font-bold text-black" data-bs-toggle="tab">Inventory</a>
+                  <a href="#tabs-home-1" class="nav-link active bg-cyan btn-flat font-13 font-bold text-black tbl-inv" data-bs-toggle="tab">Inventory</a>
                 </li>
                 <li class="nav-item">
-                  <a href="#tabs-profile-1" class="nav-link bg-orange btn-flat font-13 font-bold text-black" data-bs-toggle="tab">BOM Inventory</a>
+                  <a href="#tabs-profile-1" class="nav-link bg-orange btn-flat font-13 font-bold text-black tbl-bom" data-bs-toggle="tab">BOM Inventory</a>
                 </li>
                 <li class="nav-item hilang">
                   <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab">BOM Inventory Job</a>
@@ -190,16 +211,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="tab-pane p-0 active show m-1" id="tabs-home-1">
                   <div class="row d-flex align-item-between mb-1">
                     <div class="col-6 mx-auto">
-                      <h4 class="mb-1">Inventory</h4>
+                      <h3 class="mb-1">Inventory</h3>
                     </div>
                     <div class="col-6 text-right d-flex justify-content-end">
                       <div class="font-bold font-kecil m-0 d-inline">
-                         <select class="form-select form-control form-sm font-kecil font-bold ml-auto btn-flat" id="filterctgr" name="filterctgr" style="max-width: 200px;" title="Filter Kategori">
+                         <select class="form-select form-control form-sm font-kecil font-bold ml-auto py-0" id="filterctgr" name="filterctgr" style="height:30px;max-width: 200px;" title="Filter Kategori">
                           <option value="">Semua</option>
                           <?php foreach($datkategori->result_array() as $datkategori){ ?>
                             <option value="<?= $datkategori['id_kategori'] ?>"><?= $datkategori['nama_kategori'] ?></option>
                           <?php } ?>
                         </select>
+                      </div>
+                      <div class="d-inline ml-1">
+                        <a href="<?= base_url().'pricinginv/toexcel' ?>" class="btn btn-sm btn-success btn-flat" style="height: 30px"><i class="fa fa-file-excel-o fa-lg"></i></a>
                       </div>
                     </div>
                   </div>
@@ -210,15 +234,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <tr>
                           <th>Dept</th>
                           <th>SKU/Spesifikasi</th>
+                          <th>Tg Prod</th>
                           <th>Nomor IB<br>Insno</th>
                           <th>Nobale</th>
-                          <th>Satuan</th>
+                          <th>Sat</th>
                           <th>BC</th>
                           <th>Stok GD</th>
                           <th>Exnet</th>
                           <th>Qty</th>
                           <th>Kgs</th>
                           <th>Verified</th>
+                          <th>Act</th>
                         </tr>
                       </thead>
                       <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
@@ -227,10 +253,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </table>
                   </div>
                 </div>
-                <div class="tab-pane" id="tabs-profile-1">
+                <div class="tab-pane p-0 m-1" id="tabs-profile-1">
                   <div class="row d-flex align-item-between mb-1">
                     <div class="col-6 mx-auto">
-                      <h4>BOM Inventory</h4>
+                      <h3>BOM Inventory</h3>
                     </div>
                     <div class="col-6 text-right">
                       <a href="<?= base_url().'pricinginv/breakdownbom' ?>" data-bs-toggle="modal" data-bs-target="#veriftask" data-message="Break down Data ke Bill Of Material" data-title="Breakdown BOM" class="btn btn-sm btn-primary <?= $diskuncitgl ?>" id="buthitungbom"><i class="fa fa-calculator mr-1"></i> Hitung BOM</a>
@@ -244,6 +270,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <th>Dept</th>
                           <th>SKU/Spesifikasi</th>
                           <th>Nobontr</th>
+                          <th>Qty</th>
                           <th>Kgs</th>
                           <th>BC No / Tgl</th>
                           <th>Harga (Kgs)</th>

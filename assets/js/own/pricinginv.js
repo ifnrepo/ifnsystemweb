@@ -12,6 +12,11 @@ $(document).ready(function(){
         "destroy": true,
 		// "processing": true,
 		// "responsive":true,
+		// "scrollX": true,
+		// "fixedColumns": {
+        //     "start": 1, // Fixes one column at the start
+        //     "end": 1    // Optionally, fixes one column at the end
+        // },
 		"serverSide": true,
 		"orderSequence": ['desc', 'asc'],
 		"ordering": true, // Set true agar bisa di sorting
@@ -56,7 +61,7 @@ $(document).ready(function(){
 				d.tgl = $('#tglcut').val();
                 d.periode = $("#periode").val();
 				d.ctgr = $('#filterctgr').val();
-				// d.buyer = $('#idbuyer').val();
+				d.tgkosong = $('#ceklistgprodkosong').is(':checked');
 				// d.exnet = $('#idexnet').val();
 				// d.dataneh = $('#dataneh').is(':checked');
 			// 	d.filtinv = $('#filterinv').val();
@@ -85,10 +90,20 @@ $(document).ready(function(){
 					return "<span class='hilang'>"+spek+"</span><span class='text-pink font-11'>"+sku+"</span>"+"<br><span class='text-primary'>"+spek+"</span>";
 				}
             },
+			{ "data": "id",
+				"className": "line-11 font-11",
+				"createdCell" : function(td, cellData, rowData, row, col){
+					$(td).attr('id', cellData);
+					$(td).attr('title', cellData);
+				},
+                "render": function(data, type, row, meta){
+					return tglmysql(row.prod_date);
+				}
+			},
 			{ "data": "insno",
 				"className": "line-11 font-11",
                 "render": function(data, type, row, meta){
-					return "<span>"+row.nobontr+"</span><br><span>"+row.insno+"</span>"
+					return "<span>"+row.nobontr+"</span><br><span class='text-pink'>"+row.insno+"</span>"
 				}
             },
 			{ "data": "nobale"},
@@ -126,7 +141,23 @@ $(document).ready(function(){
 			{ "data": "urut",
 				"className": "text-center line-11 font-11 text-muted",
 				"render": function(data, type, row, meta){
-					return "<span>"+row.urut+"</span><br><span>ID Pricing : "+row.id+"</span>";
+					return "<span>"+row.urut+"</span><br><span>ID : "+row.id+"</span>";
+				}
+			},
+			{ "data": "nomor_bc",
+				"render" : function(data, type, row, meta){
+					var but = '';
+					but += '<div class="dropdown">';
+                	but += '<a href="#" class="btn-action btn-pills text-red" title="More" data-bs-toggle="dropdown" aria-expanded="false">';
+                    but += '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="blue" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>';
+                    but += '</a>';
+                    but += '<div class="dropdown-menu dropdown-menu-end line-11 font-kecil">';
+                    but += '<a href="'+base_url+'pricinginv/viewdetail/'+row.id+'" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="View Detail" class="dropdown-item py-1">View Detail</a>';
+                    but += '<a href="'+base_url+'pricinginv/edittglprod/'+row.id+'" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl" class="dropdown-item py-1">Edit Tgl Produksi</a>';
+                    but += '</div>';
+                    but += '</div>';
+
+					return but;
 				}
 			},
 		],
@@ -136,6 +167,7 @@ $(document).ready(function(){
         "destroy": true,
 		// "processing": true,
 		// "responsive":true,
+		// "scrollX": true,
 		"serverSide": true,
 		"orderSequence": ['desc', 'asc'],
 		"ordering": true, // Set true agar bisa di sorting
@@ -154,9 +186,10 @@ $(document).ready(function(){
 			// $(".loaderedblue").addClass('hilang');
 			jadi++;
 			// // alert(api2.recordsFiltered);
-			// // alert(api2.recordsFiltered);
+			// // alert(api2'.recordsFiltered);
             if(api2det.recordsFiltered > 0){
 				$("#jumlahkgsdet").text(rupiah(data[0]['totalkgsdet'],'.',',',2));
+				$("#jumlahpcsdet").text(rupiah(data[0]['totalpcsdet'],'.',',',0));
 				$("#jumlahrekdet").text(rupiah(api2det.recordsFiltered,'.',',',0));
 				var jmlharga = data[0]['tothargadet']==null ? 0 : data[0]['tothargadet'];
 				$("#totalhargadet").text(rupiah(jmlharga,'.',',',8));
@@ -168,7 +201,7 @@ $(document).ready(function(){
 			}
 			var jmlkgs = toAngka($("#jumlahkgs").text());
 			$("#selisihkgs").text(rupiah(parseFloat(data[0]['totalkgsdet']).toFixed(2) - parseFloat(jmlkgs),'.',',',2));
-			$("#jumlahpcsdet").text('-');
+			// $("#jumlahpcsdet").text('-');
 			if(parseFloat($("#selisihkgs").text()) < 0){
 				$("#selisihkgs").addClass('bg-red-lt');
 			}
@@ -184,7 +217,7 @@ $(document).ready(function(){
 				d.tgl = $('#tglcut').val();
                 d.periode = $("#periode").val();
 				d.ctgr = $('#filterctgr').val();
-				// d.stok = $('#idstok').val();
+				d.bcnotfound = $('#ceklisbcnotfoundcek').is(':checked');
 				// d.buyer = $('#idbuyer').val();
 				// d.exnet = $('#idexnet').val();
 				// d.dataneh = $('#dataneh').is(':checked');
@@ -214,6 +247,12 @@ $(document).ready(function(){
 			{ "data": "nobontr",
 				"className": "font-kecil"
 			 },
+			{ "data": "pcs",
+				"className": "font-kecil text-right",
+				"render" : function(data, type, row, meta){
+					return rupiah(row.pcs,'.',',',0);
+				}
+			 },
 			{ "data": "kgs",
 				"className": "font-kecil text-right",
 				"render" : function(data, type, row, meta){
@@ -240,9 +279,9 @@ $(document).ready(function(){
 			{ "data": "id",
 				"className": "font-kecil text-right",
 				"render" : function(data, type, row, meta){
-					var j = (row.harga_akt === null) ? 0 : row.harga_akt;
-					var k = (row.kgs === null) ? 0 : row.kgs;
-					return rupiah(j*k,'.',',',8);
+					var s = (row.harga_akt === null) ? 0 : row.harga_akt;
+					var k = (row.id_satuan == 22) ? row.kgs : row.pcs;
+					return rupiah(s*(parseFloat(k)),'.',',',8);
 				}
 			 },
 			{ "data": "urut",
@@ -261,15 +300,28 @@ $(document).ready(function(){
 		return false;
 	})
 	$("#buttonreset").click(function(){
-		$("#textcari").val('');
-		table.search('').draw();
-		tabledet.search('').draw();
-		return false;
+		// $("#textcari").val('');
+		// table.search('').draw();
+		// tabledet.search('').draw();
+		// table.ajax.reload();
+		// tabledet.ajax.reload();
+		// return false;
+		$("#butgo").click();
 	})
 	$("#filterctgr").on('change',function(){
 		jadi = 0;
 		table.ajax.reload();
 		tabledet.ajax.reload();
+		$(".loadered").removeClass('hilang');
+	})
+	$("#ceklisbcnotfoundcek").on('change',function(){
+		jadi = 1;
+		tabledet.ajax.reload();
+		$(".loadered").removeClass('hilang');
+	})
+	$("#ceklistgprodkosong").on('change',function(){
+		jadi = 1;
+		table.ajax.reload();
 		$(".loadered").removeClass('hilang');
 	})
 })
@@ -339,6 +391,16 @@ $("#butgo").click(function(){
 	});
     // table.destroy();
 })
+// $(".tbl-bom").on('click',function(){
+// 	$("#bcnotfoundcek").removeClass('hilang');
+// 	var cek = $("#ceklisbcnotfoundcek").prop('checked');
+// 	alert(cek);
+// })
+// $(".tbl-inv").on('click',function(){
+// 	$("#bcnotfoundcek").addClass('hilang');
+// 	var cek = $("#ceklisbcnotfoundcek").prop('checked');
+// 	alert(cek);
+// })
 function updatedata(){
     $.ajax({
 		// dataType: "json",

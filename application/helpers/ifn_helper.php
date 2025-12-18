@@ -141,11 +141,11 @@ function nomorpo()
 function nomorib()
 {
     $CI = &get_instance();
-    $tgl = $CI->session->userdata('th') . '-' . kodebulan($CI->session->userdata('bl')) . '-01';
+    $tgl = $CI->session->userdata('thin') . '-' . kodebulan($CI->session->userdata('blin')) . '-01';
     $bl = date('m', strtotime($tgl));
     $th = date('Y', strtotime($tgl));
     $thp = date('y', strtotime($tgl));
-    $deptr = $CI->session->userdata('curdept');
+    $deptr = $CI->session->userdata('curdeptin');
     $kode = $CI->ibmodel->getnomorib($bl, $th);
     $urut = (int) $kode['maxkode'];
     $urut++;
@@ -154,7 +154,7 @@ function nomorib()
 function nomorproforma()
 {
     $CI = &get_instance();
-    $tgl = $CI->session->userdata('th') . '-' . kodebulan($CI->session->userdata('bl')) . '-01';
+    $tgl = $CI->session->userdata('thin') . '-' . kodebulan($CI->session->userdata('blin')) . '-01';
     $bl = date('m', strtotime($tgl));
     $th = date('Y', strtotime($tgl));
     $thp = date('y', strtotime($tgl));
@@ -1113,11 +1113,20 @@ function getdatabomcost($que){
         $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $que['id_barang'],'trim(nobontr)' => trim($que['nobontr']),'trim(nobontr) != ' => "",'trim(nomor_bc) != ' => ""]);
         if($datahamat->num_rows() > 0){
             $hamat = $datahamat->row_array();
+            $hamat['hargarm'] = $que['id_kategori']=='8189' ? $hamat['harga_akt'] : 0;
+            $hamat['hargasm'] = $que['id_kategori']=='6319' ? $hamat['harga_akt'] : 0;
+            $hamat['price'] = $hamat['hargarm']+$hamat['hargasm'];
         }else{
             $hamat = [
                 'jns_bc' => NULL,
                 'nomor_bc' => NULL,
                 'tgl_bc' => NULL,
+                'id_satuan' => NULL,
+                'harga_akt' => 0,
+                'hargarm' => 0,
+                'hargasm' => 0,
+                'price' => 0,
+                'tgl' => NULL,
             ];
         }
         $hasil = [
@@ -1125,11 +1134,18 @@ function getdatabomcost($que){
             'urut' => $que['urut'],
             'id_barang' => $que['id_barang'],
             'nobontr' => $que['nobontr'],
+            'pcs' => $que['pcs_akhir'],
             'kgs' => $que['kgs_akhir'],
             'kgs_sm' => 0,
+            'id_satuan' => $hamat['id_satuan'],
             'jns_bc' => $hamat['jns_bc'],
             'nomor_bc' => $hamat['nomor_bc'],
             'tgl_bc' => $hamat['tgl_bc'],
+            'harga_rm' => $hamat['hargarm'],
+            'harga_sm' => $hamat['hargasm'],
+            'price' => $hamat['price'],
+            'harga_acct' => $hamat['harga_akt'],
+            'prod_date' => $hamat['tgl']
         ];
         array_push($hass,$hasil);
     }else{
@@ -1147,14 +1163,31 @@ function getdatabomcost($que){
             }
             $datadetbom = $CI->db->get();
             foreach($datadetbom->result_array() as $datadetbom){
-                $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $datadetbom['id_barang'],'trim(nobontr)' => trim($datadetbom['nobontr']),'trim(nobontr) != ' => "",'trim(nomor_bc) != ' => ""]);
+                $CI->db->select('tb_hargamaterial.*,barang.id_kategori');
+                $CI->db->from('tb_hargamaterial');
+                $CI->db->join('barang','barang.id = tb_hargamaterial.id_barang','left');
+                $CI->db->where('id_barang',$datadetbom['id_barang']);
+                $CI->db->where('trim(nobontr)',trim($datadetbom['nobontr']));
+                $CI->db->where('trim(nobontr) != ',"");
+                $CI->db->where('trim(nomor_bc) != ',"");
+                $datahamat = $CI->db->get();
+                // $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $datadetbom['id_barang'],'trim(nobontr)' => trim($datadetbom['nobontr']),'trim(nobontr) != ' => "",'trim(nomor_bc) != ' => ""]);
                 if($datahamat->num_rows() > 0){
                     $hamat = $datahamat->row_array();
+                    $hamat['hargarm'] = $hamat['id_kategori']=='8189' ? $hamat['harga_akt'] : 0;
+                    $hamat['hargasm'] = $hamat['id_kategori']=='6319' ? $hamat['harga_akt'] : 0;
+                    $hamat['price'] = $hamat['hargarm']+$hamat['hargasm'];
                 }else{
                     $hamat = [
                         'jns_bc' => NULL,
                         'nomor_bc' => NULL,
                         'tgl_bc' => NULL,
+                        'id_satuan' => NULL,
+                        'harga_akt' => 0,
+                        'hargarm' => 0,
+                        'hargasm' => 0,
+                        'price' => 0,
+                        'prod_date' => NULL,
                     ];
                 }
                 $hasil = [
@@ -1164,9 +1197,15 @@ function getdatabomcost($que){
                     'nobontr' => $datadetbom['nobontr'],
                     'kgs' => $que['kgs_akhir']*($datadetbom['persen']/100),
                     'kgs_sm' => $que['kgs_akhir']*($datadetbom['persen_sm']/100),
+                    'id_satuan' => $hamat['id_satuan'],
                     'jns_bc' => $hamat['jns_bc'],
                     'nomor_bc' => $hamat['nomor_bc'],
                     'tgl_bc' => $hamat['tgl_bc'],
+                    'harga_rm' => $hamat['hargarm']*($datadetbom['persen']/100),
+                    'harga_sm' => $hamat['hargasm']*($datadetbom['persen']/100),
+                    'price' => $hamat['price'],
+                    'harga_acct' => $hamat['harga_akt'],
+                    'prod_date' => $databom['prod_date']
                 ];
                 array_push($hass,$hasil);
             }

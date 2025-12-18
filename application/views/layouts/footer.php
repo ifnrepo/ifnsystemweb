@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1765329456'; ?>
+<?php $updatejs = '1765964904'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -157,6 +157,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pricinginv') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/pricinginv.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'setcost') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/setcost.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/main.js?<?= $updatejs; ?>"></script>
