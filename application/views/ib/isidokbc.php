@@ -628,9 +628,7 @@
                                     <th>Kgs</th>
                                     <th>Hrg/Satuan</th>
                                     <th>Total</th>
-                                    <?php if ($mode == 1) : ?>
-                                        <th>Aksi</th>
-                                    <?php endif; ?>
+                                    <th>Aksi</th>
                                 </tr>
                             </thead>
                             <tbody class="table-tbody" id="body-tablee" style="font-size: 13px !important;">
@@ -663,7 +661,7 @@
                                         <td><?= $data['kodesatuan']; ?></td>
                                         <?php if ($mode == 0) { ?>
                                             <td class="text-right"><?= rupiah($data['pcs'], 0); ?></td>
-                                            <td class="text-right"><?= rupiah($data['kgs'], 2); ?></td>
+                                            <td class="text-right" id="kgss<?= $data['id'] ?>"><?= rupiah($data['kgs'], 2); ?></td>
                                             <td class="text-right"><?= rupiah($data['harga'], 2); ?></td>
                                             <td class="text-right"><?= rupiah($data['harga'] * $jumlah, 2); ?></td>
                                         <?php } else { ?>
@@ -673,13 +671,17 @@
                                             <td id="jumlahcif<?= $data['id'] ?>" class="text-right line-12"><?= rupiah(($data['xcif'] / $datkgs) * $data['xndpbm'], 2); ?><br><span class="font-11 text-pink"><?= rupiah($data['xcif'], 2) ?></span></td>
                                             <td class="text-right"><?= rupiah($data['xcif'] * $data['xndpbm'], 2); ?></td>
                                         <?php } ?>
-                                        <?php if ($mode == 1) : ?>
+                                        <?php if ($mode == 1){ ?>
                                             <td class="text-center">
                                                 <a href="<?= base_url() . 'ib/editbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261">EDIT</a>
                                                 <a href="#" data-href="<?= base_url() . 'ib/resetbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-danger font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Me-reset BC ASAL 261">RESET</a>
                                                 <a href="<?= base_url() . 'ib/editkgsbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-info font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC KGS ASAL 261">EDIT KGS</a>
                                             </td>
-                                        <?php endif; ?>
+                                            <?php }else{ ?>
+                                            <td>
+                                                <a href="<?= base_url() . 'ib/editkgspo/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-info font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data KGS/PCS">EDIT KGS/PCS</a>
+                                            </td>
+                                        <?php } ?>
                                     </tr>
                                 <?php } ?>
                                 <tr class="bg-primary-lt">

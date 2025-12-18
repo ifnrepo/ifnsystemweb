@@ -2286,6 +2286,15 @@ class Ib extends CI_Controller
         $data['arrayhasil'] = $hasil;
         $this->load->view('ib/editkgsbcasal', $data);
     }
+    public function editkgspo($id, $iddetail)
+    {
+        $data['idheader'] = $id;
+        $data['iddetail'] = $iddetail;
+        $header = $this->ibmodel->getdatabyid($id);
+        $data['arrayhasil'] = $this->ibmodel->getdatadetailbyid($iddetail);
+        // $data['arrayhasil'] = $detail;
+        $this->load->view('ib/editkgspo', $data);
+    }
     public function simpaneditbcasal()
     {
         $id = $_POST['id'];
@@ -2322,6 +2331,14 @@ class Ib extends CI_Controller
         $kgsbaru = $_POST['jmlbaru'];
 
         $cek = $this->ibmodel->updatekgsbcasal($arrayid, $kgsbaru);
+        echo $cek;
+    }
+    public function simpaneditkgspo()
+    {
+        $kgs = $_POST['kgsbaru'];
+        $iddet = $_POST['id'];
+
+        $cek = $this->ibmodel->updatekgspo($iddet, $kgs);
         echo $cek;
     }
     public function resetbcasal($header, $id)

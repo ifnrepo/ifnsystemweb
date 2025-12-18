@@ -41,16 +41,23 @@ $(document).ready(function(){
 				$("#jumlahpcs").text(rupiah(data[0]['totalpcs'],'.',',',0));
 				$("#jumlahrek").text(rupiah(api2.recordsFiltered,'.',',',0));
 				$("#buthitungbom").removeClass('disabled');
+				var jmlharga = data[0]['totalamount']==null ? 0 : data[0]['totalamount'];
+				$("#totalhargadet").text(rupiah(jmlharga,'.',',',8));
+
+				var jmlkgs = toAngka($("#jumlahkgsdet").text());
+				$("#selisihkgs").text(rupiah(parseFloat(jmlkgs) - parseFloat(data[0]['totalkgs']).toFixed(2),'.',',',2));
+				if(parseFloat($("#selisihkgs").text()) < 0){
+					$("#selisihkgs").addClass('bg-red-lt');
+				}
 			}else{
 				$("#jumlahkgs").text('0');
 				$("#jumlahpcs").text('0');
 				$("#jumlahrek").text('0');
-			}
-			var jmlkgs = toAngka($("#jumlahkgsdet").text());
-			$("#selisihkgs").text(rupiah(parseFloat(jmlkgs) - parseFloat(data[0]['totalkgs']).toFixed(2),'.',',',2));
-			if(parseFloat($("#selisihkgs").text()) < 0){
+				$("#totalhargadet").text('0');
+				$("#selisihkgs").text('0');
 				$("#selisihkgs").addClass('bg-red-lt');
 			}
+			
 		},
 		"ajax":
 		{
@@ -61,6 +68,7 @@ $(document).ready(function(){
 				d.tgl = $('#tglcut').val();
                 d.periode = $("#periode").val();
 				d.ctgr = $('#filterctgr').val();
+				d.arty = $('#filterart').val();
 				d.tgkosong = $('#ceklistgprodkosong').is(':checked');
 				// d.exnet = $('#idexnet').val();
 				// d.dataneh = $('#dataneh').is(':checked');
@@ -191,20 +199,22 @@ $(document).ready(function(){
 				$("#jumlahkgsdet").text(rupiah(data[0]['totalkgsdet'],'.',',',2));
 				$("#jumlahpcsdet").text(rupiah(data[0]['totalpcsdet'],'.',',',0));
 				$("#jumlahrekdet").text(rupiah(api2det.recordsFiltered,'.',',',0));
-				var jmlharga = data[0]['tothargadet']==null ? 0 : data[0]['tothargadet'];
-				$("#totalhargadet").text(rupiah(jmlharga,'.',',',8));
+				// var jmlharga = data[0]['tothargadet']==null ? 0 : data[0]['tothargadet'];
+				// $("#totalhargadet").text(rupiah(jmlharga,'.',',',8));
+				var jmlkgs = toAngka($("#jumlahkgs").text());
+				$("#selisihkgs").text(rupiah(parseFloat(data[0]['totalkgsdet']).toFixed(2) - parseFloat(jmlkgs),'.',',',2));
+				// $("#jumlahpcsdet").text('-');
+				if(parseFloat($("#selisihkgs").text()) < 0){
+					$("#selisihkgs").addClass('bg-red-lt');
+				}
 			}else{
 				$("#jumlahkgsdet").text('0');
 				$("#jumlahrekdet").text('0');
 				$("#jumlahpcsdet").text('0');
-				$("#totalhargadet").text('0');
-			}
-			var jmlkgs = toAngka($("#jumlahkgs").text());
-			$("#selisihkgs").text(rupiah(parseFloat(data[0]['totalkgsdet']).toFixed(2) - parseFloat(jmlkgs),'.',',',2));
-			// $("#jumlahpcsdet").text('-');
-			if(parseFloat($("#selisihkgs").text()) < 0){
+				$("#selisihkgs").text('0');
 				$("#selisihkgs").addClass('bg-red-lt');
 			}
+			
 			//data[0]['totalhargadet']
 			
 		},
@@ -217,6 +227,7 @@ $(document).ready(function(){
 				d.tgl = $('#tglcut').val();
                 d.periode = $("#periode").val();
 				d.ctgr = $('#filterctgr').val();
+				d.arty = $('#filterart').val();
 				d.bcnotfound = $('#ceklisbcnotfoundcek').is(':checked');
 				// d.buyer = $('#idbuyer').val();
 				// d.exnet = $('#idexnet').val();
@@ -312,6 +323,14 @@ $(document).ready(function(){
 		jadi = 0;
 		table.ajax.reload();
 		tabledet.ajax.reload();
+		// $("#tabeldetailnya").DataTable().ajax.reload()
+		$(".loadered").removeClass('hilang');
+	})
+	$("#filterart").on('change',function(){
+		jadi = 0;
+		table.ajax.reload();
+		tabledet.ajax.reload();
+		// $("#tabeldetailnya").DataTable().ajax.reload()
 		$(".loadered").removeClass('hilang');
 	})
 	$("#ceklisbcnotfoundcek").on('change',function(){
@@ -349,6 +368,11 @@ $("#deptpricing").on('change',function(){
     }
 })
 $("#tglcutoff").on('change',function(){
+	if($(this).val()!=''){
+		$("#datakategori").removeClass('hilang');
+	}else{
+		$("#datakategori").addClass('hilang');
+	}
 	$.ajax({
 		dataType: "json",
 		type: "POST",

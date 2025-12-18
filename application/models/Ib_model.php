@@ -1223,6 +1223,10 @@ class Ib_model extends CI_Model
         }
         return $this->db->trans_complete();
     }
+    public function updatekgspo($id,$kgs){
+        $this->db->where('id',$id);
+        return $this->db->update('tb_detail',['kgs' => $kgs]);
+    }
     public function resetbcasal($idheader, $id)
     {
         $this->db->trans_start();
