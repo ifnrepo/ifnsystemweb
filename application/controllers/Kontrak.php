@@ -437,6 +437,160 @@ class Kontrak extends CI_Controller
         $pdf->Output('I', 'Realisasi_Pengeluaran_Pemasukan.pdf');
     }
 
+    public function excel_kontrak()
+    {
+
+        $kode = [
+            'id_supplier' => $this->session->userdata('deptkontrak') ?? '',
+            'jnsbc'       => $this->session->userdata('jnsbckontrak') ?? '',
+            'status'      => $this->session->userdata('statuskontrak') ?? 1,
+            'thkontrak'   => $this->session->userdata('thkontrak') ?? '',
+        ];
+
+        $data = $this->kontrakmodel->getdatakontrak($kode)->result_array();
+        $head = $this->kontrakmodel->getdatakontrak($kode)->row_array();
+
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
+
+
+        $sheet->mergeCells('B1:J1');
+        $sheet->setCellValue('B1', 'LAPORAN DATA KONTRAK');
+        $sheet->getStyle('B1')->applyFromArray([
+            'font' => ['bold' => true, 'size' => 14],
+            'alignment' => ['horizontal' => 'center'],
+        ]);
+        $sheet->mergeCells('B2:J2');
+        $sheet->setCellValue('B2', 'REKANAN : ' . $head['nama_supplier']);
+        $sheet->getStyle('B2')->applyFromArray([
+            'font' => ['bold' => true, 'size' => 14],
+            'alignment' => ['horizontal' => 'center'],
+        ]);
+
+
+        $header = [
+            'B4' => 'Nomor',
+            'C4' => 'Proses',
+            'D4' => "Tgl\nBerlaku",
+            'E4' => "Tgl\nBerakhir",
+            'F4' => 'Pcs',
+            'G4' => 'Kgs',
+            'H4' => 'Realisasi',
+            'I4' => 'Pengembalian',
+            'J4' => 'Saldo',
+        ];
+
+        foreach ($header as $cell => $text) {
+            $sheet->setCellValue($cell, $text);
+        }
+
+        $sheet->getStyle('B4:J4')->applyFromArray([
+            'font' => ['bold' => true],
+            'alignment' => [
+                'horizontal' => 'center',
+                'vertical'   => 'center',
+                'wrapText'   => true,
+            ],
+        ]);
+
+        $sheet->getStyle('B4:J4')->getBorders()
+            ->getAllBorders()->setBorderStyle(
+                \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
+            );
+
+        $row = 5;
+        foreach ($data as $dt) {
+
+            $tgl_sekarang = new DateTime();
+            $tgl_sekarang->setTime(0, 0, 0);
+
+            $warna_excel = null;
+
+            if (!empty($dt['tgl_akhir']) && $dt['tgl_akhir'] != '0000-00-00') {
+
+                $tgl_akhir = new DateTime($dt['tgl_akhir']);
+                $tgl_akhir->setTime(0, 0, 0);
+
+                $selisih_hari = $tgl_sekarang->diff($tgl_akhir)->days;
+
+                if ($tgl_akhir <= $tgl_sekarang || $selisih_hari <= 10) {
+                    $warna_excel = 'FFC107';
+                } elseif ($selisih_hari <= 20) {
+                    $warna_excel = 'E91E63';
+                }
+            }
+            if ($warna_excel) {
+                $sheet->getStyle("E$row")->applyFromArray([
+                    'font' => [
+                        'bold' => true,
+                        'color' => ['rgb' => $warna_excel],
+                    ]
+                ]);
+            }
+            $jumlahbcmasuk = 0;
+            if (getjumlahbcmasuk($dt['nomor_bc'])->num_rows() > 0) {
+                $jumlahbcmasuk = getjumlahbcmasuk($dt['nomor_bc'])->row()->tot_kgs;
+            }
+
+            $saldo = $dt['total_kgs'] - $jumlahbcmasuk;
+            $tahap = $dt['tipe'] == 0 ? '' : ($dt['tipe'] == 1 ? 'TIPE 1' : 'TIPE 2');
+
+            $sheet->setCellValue('B' . $row, $dt['nomor'] . "\n" . $dt['nama_supplier']);
+            $sheet->setCellValue('C' . $row, $dt['proses'] . "\n" . $tahap);
+            $sheet->setCellValue('D' . $row, $dt['tgl_awal']);
+            $sheet->setCellValue(
+                'E' . $row,
+                $dt['tgl_akhir'] ? tglmysql($dt['tgl_akhir']) : '-'
+            );
+
+            $sheet->setCellValue('F' . $row, $dt['pcs']);
+            $sheet->setCellValue('G' . $row, $dt['kgs']);
+            $sheet->setCellValue('H' . $row, $dt['total_kgs']);
+            $sheet->setCellValue('I' . $row, $jumlahbcmasuk);
+            $sheet->setCellValue('J' . $row, $saldo);
+
+
+            $sheet->getStyle("B$row:C$row")->getAlignment()->setWrapText(true);
+
+            $sheet->getStyle("F$row:J$row")->getAlignment()
+                ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
+
+            $sheet->getStyle("F$row:J$row")->getNumberFormat()
+                ->setFormatCode('#,##0.00');
+
+
+            if ($dt['kgs'] < $dt['total_kgs']) {
+                $sheet->getStyle("H$row:J$row")->applyFromArray([
+                    'font' => [
+                        'bold' => true,
+                        'color' => ['rgb' => 'E91E63'],
+                    ]
+                ]);
+            } else {
+
+                $sheet->getStyle("G$row:I$row")->getFont()
+                    ->getColor()->setRGB('0D6EFD');
+            }
+
+            $sheet->getStyle("B$row:J$row")->getBorders()
+                ->getAllBorders()->setBorderStyle('thin');
+
+            $row++;
+        }
+
+        foreach (range('B', 'J') as $col) {
+            $sheet->getColumnDimension($col)->setAutoSize(true);
+        }
+
+        $filename = 'Kontrak ' . $head['nama_supplier'] . '' . date('Y') . '.xlsx';
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="' . $filename . '"');
+
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $writer->save('php://output');
+        exit;
+    }
+
     public function excel()
     {
         $this->load->model('kontrakmodel');
