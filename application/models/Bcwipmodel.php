@@ -90,10 +90,12 @@ class bcwipmodel extends CI_Model
         $this->db->group_by('po,item,dis,id_barang,dept_id');
         $query4 = $this->db->get_compiled_select();
 
-        $kolom = "Select kodeinv,dept_id,satuan.kodesatuan,barang.nama_barang,barang.kode,po,item,dis,id_barang,barang.id_kategori,xdln,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
+        $kolom = "Select kodeinv,dept_id,satuan.kodesatuan,barang.nama_barang,barang.kode,r1.po,r1.item,r1.dis,id_barang,barang.id_kategori,xdln,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id ";
-        $kolom .= " where true";
+        $kolom .= " left join kategori on barang.id_kategori = kategori.kategori_id ";
+        $kolom .= " left join tb_po on tb_po.ind_po = concat(r1.po,r1.item,r1.dis) ";
+        $kolom .= " where kategori.jns <= 2 ";
         if($this->session->userdata('kepemilikanbcwip')!='' && $this->session->userdata('kepemilikanbcwip')!=null){
             $kolom .= " and xdln = ".$this->session->userdata('kepemilikanbcwip');
         }
@@ -224,6 +226,10 @@ class bcwipmodel extends CI_Model
             $tglakhir = $this->session->userdata('tglakhirbcwip');
             $periode = cekperiodedaritgl($tglawal);
         }
+        $arrdept = ['SP','NT','RR','GP','FG','FN','AR','AN','NU','AM'];
+        if($this->session->userdata('currdeptbcwip')!='X' && $this->session->userdata('currdeptbcwip')!=null){
+            $arrdept = $this->session->userdata('currdeptbcwip');
+        }
 
         // Query untuk CekSaldobarang
         $this->db->select("0 as kodeinv,stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang");
@@ -231,7 +237,7 @@ class bcwipmodel extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->from('stokdept');
-        $this->db->where('dept_id','GM');
+        $this->db->where_in('dept_id',$arrdept);
         $this->db->where('periode',$periode);
         $this->db->group_by('po,item,dis,id_barang');
         $query1 = $this->db->get_compiled_select();
@@ -243,7 +249,8 @@ class bcwipmodel extends CI_Model
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->from('tb_detail');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
-        $this->db->where('tb_header.dept_tuju','GM');
+        // $this->db->where('tb_header.dept_tuju','GM');
+        $this->db->where_in('tb_header.dept_tuju',$arrdept);
         $this->db->where('tb_header.kode_dok !=','BBL');
         $this->db->where('tb_header.tgl >=',$tglawal);
         $this->db->where('tb_header.tgl <=',$tglakhir);
@@ -260,8 +267,8 @@ class bcwipmodel extends CI_Model
         $this->db->select('sum(pcs) as outpcs,sum(kgs) as outkgs');
         $this->db->from('tb_detail');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
-        $this->db->where('tb_header.dept_id','GM');
-        $this->db->where('tb_header.kode_dok !=','BBL');
+        $this->db->where_in('tb_header.dept_id',$arrdept);
+        $this->db->where('tb_header.kode_dok','T');
         $this->db->where('tb_header.tgl >=',$tglawal);
         $this->db->where('tb_header.tgl <=',$tglakhir);
         $this->db->where('tb_header.data_ok',1);
@@ -274,6 +281,7 @@ class bcwipmodel extends CI_Model
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id ";
         $kolom .= " left join kategori on kategori.kategori_id = barang.id_kategori ";
+        $kolom .= " where kategori.jns <= 2 ";
         $kolom .= " group by kategori.nama_kategori";
         $kolom .= " order by barang.nama_barang";
         $hasil = $this->db->query($kolom);

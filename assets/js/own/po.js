@@ -490,7 +490,7 @@ function hitunggrandtotal() {
 	var isi = jumlah - diskon;
 	$("#total").val(rupiah(isi, ".", ",", 2));
 	$("#jumlah").val(
-		rupiah(isi + ongkir + parseFloat(ppn) - parseFloat(pph), ".", ",", 2),
+		rupiah(isi + parseFloat(ongkir) + parseFloat(ppn) - parseFloat(pph), ".", ",", 2),
 	);
 	// alert(jumlah - diskon);
 }

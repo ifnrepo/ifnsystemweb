@@ -311,13 +311,11 @@ $(document).ready(function(){
 		return false;
 	})
 	$("#buttonreset").click(function(){
-		// $("#textcari").val('');
-		// table.search('').draw();
-		// tabledet.search('').draw();
-		// table.ajax.reload();
-		// tabledet.ajax.reload();
-		// return false;
-		$("#butgo").click();
+		$("#textcari").val('');
+		table.search('').draw();
+		tabledet.search('').draw();
+		return false;
+		// $("#butgo").click();
 	})
 	$("#filterctgr").on('change',function(){
 		jadi = 0;

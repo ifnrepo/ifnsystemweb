@@ -31,13 +31,13 @@ class Bcmaterial extends CI_Controller
     {
         $header['header'] = 'other';
         $data['level'] = $this->usermodel->getdatalevel();
-        if ($this->session->userdata('tglawal') == null) {
+        if ($this->session->userdata('tglawalbcmaterial') == null) {
             $data['tglawal'] = tglmysql(date('Y-m-01'));
-            $data['tglakhir'] = tglmysql(lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01'));
+            $data['tglakhir'] = tglmysql(lastday($this->session->userdata('thbcmaterial') . '-' . $this->session->userdata('blbcmaterial') . '-01'));
             $data['data'] = null;
         }else{
-            $data['tglawal'] = tglmysql($this->session->userdata('tglawal'));
-            $data['tglakhir'] = tglmysql($this->session->userdata('tglakhir'));
+            $data['tglawal'] = tglmysql($this->session->userdata('tglawalbcmaterial'));
+            $data['tglakhir'] = tglmysql($this->session->userdata('tglakhirbcmaterial'));
             $data['data'] = $this->bcmaterialmodel->getdata();
         }
         $data['kategori'] = $this->bcmaterialmodel->getdatakategori();
@@ -49,12 +49,12 @@ class Bcmaterial extends CI_Controller
         $this->load->view('layouts/footer', $footer);
     }
     public function clear(){
-        $this->session->unset_userdata('tglawal');
-        $this->session->unset_userdata('tglakhir');
+        $this->session->unset_userdata('tglawalbcmaterial');
+        $this->session->unset_userdata('tglakhirbcmaterial');
         $this->session->unset_userdata('kepemilikan');
         $this->session->unset_userdata('katebar');
-        $this->session->set_userdata('th',date('Y'));
-        $this->session->set_userdata('bl',date('m'));
+        $this->session->set_userdata('thbcmaterial',date('Y'));
+        $this->session->set_userdata('blbcmaterial',date('m'));
         $url = base_url().'bcmaterial';
         redirect($url);
     }
@@ -62,8 +62,8 @@ class Bcmaterial extends CI_Controller
         $monthawal = date('m',strtotime(tglmysql($_POST['tga'])));
         $tahunawal = date('Y',strtotime(tglmysql($_POST['tga'])));
         $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
-        $this->session->set_userdata('tglawal',tglmysql($jaditahun));
-        $this->session->set_userdata('tglakhir',tglmysql($_POST['tgk']));
+        $this->session->set_userdata('tglawalbcmaterial',tglmysql($jaditahun));
+        $this->session->set_userdata('tglakhirbcmaterial',tglmysql($_POST['tgk']));
         $this->session->set_userdata('kepemilikan',$_POST['punya']);
         $this->session->set_userdata('katebar',$_POST['katbar']);
         echo 1;

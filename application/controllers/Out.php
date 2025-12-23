@@ -47,8 +47,8 @@ class Out extends CI_Controller {
         $this->session->unset_userdata('tujusekarang');
         $this->session->unset_userdata('filterbon');
         $this->session->unset_userdata('filterbon2');
-        $this->session->set_userdata('bl',(int)date('m'));
-        $this->session->set_userdata('th',date('Y'));
+        $this->session->set_userdata('blout',(int)date('m'));
+        $this->session->set_userdata('thout',date('Y'));
         $url = base_url().'out';
         redirect($url);
     }
@@ -84,8 +84,8 @@ class Out extends CI_Controller {
     public function ubahperiode(){
         // $this->session->unset_userdata('deptsekarang');
         // $this->session->unset_userdata('tujusekarang');
-        $this->session->set_userdata('bl',$_POST['bl']);
-        $this->session->set_userdata('th',$_POST['th']);
+        $this->session->set_userdata('blout',$_POST['bl']);
+        $this->session->set_userdata('thout',$_POST['th']);
         echo 1;
     }
     public function getdata(){

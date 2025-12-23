@@ -6,8 +6,8 @@ class Out_model extends CI_Model{
             'dept_id' => $kode['dept_id'],
             'dept_tuju' => $kode['dept_tuju'],
             'kode_dok' => 'T',
-            'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th'),
+            'month(tgl)' => $this->session->userdata('blout'),
+            'year(tgl)' => $this->session->userdata('thout'),
         ];
         if(($kode['dept_id']!='GF' && $kode['dept_tuju']!='CU') || ($kode['dept_id']=='FG')){ // && $kode['dept_tuju']!='DL'
             $arrkondisi['left(nomor_dok,3) != '] = 'IFN';
@@ -34,8 +34,8 @@ class Out_model extends CI_Model{
             'dept_id' => $kode['dept_id'],
             'dept_tuju' => $kode['dept_tuju'],
             'kode_dok' => 'T',
-            'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th'),
+            'month(tgl)' => $this->session->userdata('blout'),
+            'year(tgl)' => $this->session->userdata('thout'),
         ];
         $arrkondisi['data_ok'] = $kode['filterbon']==1 ? 0 : 1;
         if($this->session->userdata('filterbon2')!== "" && getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2')) != NULL){
@@ -56,8 +56,8 @@ class Out_model extends CI_Model{
             'dept_id' => $kode['dept_id'],
             'dept_tuju' => $kode['dept_tuju'],
             'kode_dok' => 'T',
-            'month(tgl)' => $this->session->userdata('bl'),
-            'year(tgl)' => $this->session->userdata('th'),
+            'month(tgl)' => $this->session->userdata('blout'),
+            'year(tgl)' => $this->session->userdata('thout'),
         ];
         if($this->session->userdata('filterbon2')!== "" && getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2')) != NULL){
             $kolom = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'));
@@ -102,8 +102,8 @@ class Out_model extends CI_Model{
             'b.data_ok' => 1,
             'b.ok_valid' => 1,
             'b.ok_tuju' => 0,
-            'month(b.tgl) <=' => $this->session->userdata('bl'),
-            'year(b.tgl) <=' => $this->session->userdata('th')
+            'month(b.tgl) <=' => $this->session->userdata('blout'),
+            'year(b.tgl) <=' => $this->session->userdata('thout')
         ];
         $this->db->select('*,a.keterangan as keteranganx,a.id as idx');
         $this->db->from('tb_detail a');
@@ -178,7 +178,7 @@ class Out_model extends CI_Model{
     }
     public function adddata($jn){
         $this->db->trans_start();
-        $date = $this->session->userdata('th').'-'.$this->session->userdata('bl').'-'.date('d');
+        $date = $this->session->userdata('th').'-'.$this->session->userdata('blout').'-'.date('d');
         $nomordok = nomorout($date,$this->session->userdata('deptsekarang'),$this->session->userdata('tujusekarang'));
         $tambah = [
             'id_perusahaan' => IDPERUSAHAAN,
@@ -425,12 +425,12 @@ class Out_model extends CI_Model{
                         'id_barang' => $datdet['id_barang'],
                         'dept_id' => $this->session->userdata('deptsekarang'),
                         'stokdept.dln' => $datdet['dln'],
-                        'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
+                        'periode' => tambahnol($this->session->userdata('blout')).$this->session->userdata('thout'),
                     ];
                 }else{
                     $kondisi = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
-                        'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
+                        'periode' => tambahnol($this->session->userdata('blout')).$this->session->userdata('thout'),
                         'trim(nobontr)' => trim($datdet['nobontr']),
                         'trim(insno)' => trim($datdet['insno']),
                         'id_barang' => $datdet['id_barang'],
@@ -557,7 +557,7 @@ class Out_model extends CI_Model{
                     $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($cekbckeluar['keterangan']),'jns_bc' => '261','dept_id' => $cekbckeluar['dept_tuju'],'dept_tuju' => $cekbckeluar['dept_id']])->row_array();
                     $kondisistok = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
-                        'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
+                        'periode' => tambahnol($this->session->userdata('blout')).$this->session->userdata('thout'),
                         'trim(nobontr)' => trim($datdet['nobontr']),
                         'trim(insno)' => trim($datdet['insno']),
                         'id_barang' => $datdet['id_barang'],
@@ -731,7 +731,7 @@ class Out_model extends CI_Model{
     }
     public function getdatagp($idbarang){
         $kondisi = [
-            'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
+            'periode' => tambahnol($this->session->userdata('blout')).$this->session->userdata('thout'),
             'dept_id' => 'GP',
             'id_barang' => $idbarang,
         ];
@@ -762,7 +762,7 @@ class Out_model extends CI_Model{
     }
     public function getdatapo($po,$item,$dis){
         $kondisi = [
-            'periode' => tambahnol($this->session->userdata('bl')).$this->session->userdata('th'),
+            'periode' => tambahnol($this->session->userdata('blout')).$this->session->userdata('thout'),
             'dept_id' => $this->session->userdata('deptsekarang'),
             'po' => $po,
             'trim(item)' => $item,
@@ -905,7 +905,7 @@ class Out_model extends CI_Model{
             $exnomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($header['keterangan']),'jns_bc' => 261,'trim(keterangan) != ' => '','dept_id' => $header['dept_tuju'],'dept_tuju' => $header['dept_id']])->row_array();
             $exnombc = trim($exnomorbc['nomor_bc']);
         }
-        $periode = tambahnol($this->session->userdata('bl')).$this->session->userdata('th');
+        $periode = tambahnol($this->session->userdata('blout')).$this->session->userdata('thout');
         $this->db->select('tb_detailgen.*,sum(pcs) as totpcs,sum(kgs) as totkgs,barang.nama_barang,satuan.kodesatuan as kode,"'.$exnombc.'" as nomor_bc,0 as kgsstok,0 as pcsstok,tb_header.dept_id,tb_header.dept_tuju,tb_header.nomor_bc as nomor_bcx');
         // $this->db->select('(SELECT sum(kgs_akhir) as kgs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND trim(nomor_bc) = "'.$exnombc.'" AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as kgsstok');
         // $this->db->select('(SELECT sum(pcs_akhir) as pcs_akhir FROM stokdept WHERE dept_id = tb_header.dept_id AND trim(po) = trim(tb_detailgen.po) AND trim(item) = trim(tb_detailgen.item) AND dis = tb_detailgen.dis AND trim(insno) = trim(tb_detailgen.insno) AND trim(nobontr) = trim(tb_detailgen.nobontr) AND trim(nomor_bc) = "'.$exnombc.'" AND dln = tb_detailgen.dln AND id_barang = tb_detailgen.id_barang AND trim(nobale) = trim(tb_detailgen.nobale) AND exnet = 0 AND periode = "'.$periode.'") as pcsstok');
