@@ -37,10 +37,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
             </div>
             <div class="col-sm-6 mb-0 d-flex flex-row-reverse" style="text-align: right;">
-              <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
+              <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('thout') ?>">
               <select class="form-select form-control form-sm font-kecil font-bold mr-1" id="bl" name="bl" style="width: 100px;" <?= $levnow; ?>>
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
-                  <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
+                  <option value="<?= $x; ?>" <?php if ($this->session->userdata('blout') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
                 <?php endfor; ?>
               </select>
             </div>

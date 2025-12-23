@@ -116,7 +116,7 @@
                         <?php if($header['ongkir_jasa'] > 0 ): ?>
                             <strong><?= rupiah($header['ongkir_jasa'],2); ?></strong><br>
                         <?php endif; ?>
-                        <strong><?= rupiah(($header['totalharga']-$header['diskon'])+$header['ppn']-$header['pph'],2); ?></strong>
+                        <strong><?= rupiah(($header['totalharga']-$header['diskon'])+$header['ongkir_jasa']+$header['ppn']-$header['pph'],2); ?></strong>
                     </div>
                 </div>
                 <hr class="m-1">

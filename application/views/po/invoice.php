@@ -138,7 +138,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <?php endif; ?>
             <tr>
               <td class="font-weight-bold text-uppercase text-end p-1" colspan="2" style="font-size: 16px !important;">Total</td>
-              <td class="font-weight-bold text-end p-1" style="font-size: 16px !important;"><?= rupiah(($header['totalharga'] - $header['diskon']) + $header['ppn'] - $header['pph'], 2); ?></td>
+              <td class="font-weight-bold text-end p-1" style="font-size: 16px !important;"><?= rupiah(($header['totalharga'] - $header['diskon']) + $header['ongkir_jasa'] + $header['ppn'] - $header['pph'], 2); ?></td>
             </tr>
             <tr>
               <td colspan="8" class="p-1">Catatan :</td>

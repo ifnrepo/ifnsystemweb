@@ -730,9 +730,16 @@ class Ib extends CI_Controller
         $databalik = json_decode($result, true);
         // print_r($databalik);
         if ($databalik['status'] == 'Success') {
-            if ($databalik['dataStatus'][0]['nomorDaftar'] != '' && $databalik['dataRespon'][0]['pdf'] != null) {
-                $this->tampilkanpdf($databalik['dataRespon'][0]['pdf'], $id, $mode);
-            } else {
+            $cekada = 0;
+            $sampai = count($databalik['dataRespon']);
+            for ($i=0; $i < $sampai; $i++) { 
+                if ($databalik['dataStatus'][0]['nomorDaftar'] != '' && $databalik['dataRespon'][$i]['pdf'] != null) {
+                    $this->tampilkanpdf($databalik['dataRespon'][$i]['pdf'], $id, $mode);
+                    $i = 1000;
+                    $cekada = 1;
+                }
+            }
+            if ($cekada==0) {
                 $this->session->set_flashdata('errorsimpan', 1);
                 $this->session->set_flashdata('pesanerror', 'PDF Belum ada');
             }
@@ -783,6 +790,44 @@ class Ib extends CI_Controller
             $url = base_url() . 'ib';
         }
         redirect($url);
+    }
+    public function getdokbc($id, $mode = 0)
+    {
+        $token = $this->ibmodel->gettoken();
+        $dataaju = $this->ibmodel->getdatanomoraju($id);
+        $curl = curl_init();
+        // $token = $consID;
+        $headers = array(
+            "Content-Type: application/pdf",
+            "Authorization: Bearer " . $token,
+        );
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, "https://apis-gw.beacukai.go.id/openapi/respon/cetak-formulir?nomorAju=" . $dataaju);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+        // echo $result;
+        // print_r($data);  
+        // $pisah = explode('/', $data);
+        $filename = 'XXXXX';
+        $databalik = $result;
+        $lokfile = $dataaju;
+        // header('Cache-Control: public');
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $lokfile . '"');
+        header('Content-Length: ' . strlen($databalik));
+        echo $databalik;
+        // if ($mode = 0) {
+        //     $url = base_url() . 'ib/isidokbc/' . $id;
+        // } else {
+        //     $url = base_url() . 'ib';
+        // }
+        // redirect($url);
     }
     public function addlampiran($id)
     {

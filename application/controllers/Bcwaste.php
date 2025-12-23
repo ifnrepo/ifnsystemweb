@@ -57,6 +57,10 @@ class Bcwaste extends CI_Controller
             $data['gbg'] = $this->session->userdata('gbg') == 1 ? 'checked' : '';
             $data['kategoricari'] = $this->session->userdata('kategoricari');
         }
+        $data['buyer'] = $this->invmodel->getbuyer();
+        $data['currdept'] = "$%";
+        $data['ifndln'] = 'X';
+        $data['req_inv'] = 0;
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'inv';
         $this->load->view('layouts/header', $header);

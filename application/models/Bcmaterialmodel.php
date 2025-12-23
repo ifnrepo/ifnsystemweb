@@ -3,8 +3,8 @@ class bcmaterialmodel extends CI_Model
 {
     public function getdata()
     {
-        $tglawal = $this->session->userdata('tglawal');
-        $tglakhir = $this->session->userdata('tglakhir');
+        $tglawal = $this->session->userdata('tglawalbcmaterial');
+        $tglakhir = $this->session->userdata('tglakhirbcmaterial');
         $periode = cekperiodedaritgl($tglawal);
 
         // Query untuk CekSaldobarang
@@ -55,14 +55,18 @@ class bcmaterialmodel extends CI_Model
         $kolom = "Select satuan.kodesatuan,barang.nama_barang,barang.kode,po,item,dis,id_barang,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs from (".$query1." union all ".$query2." union all ".$query3.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id ";
+        $kolom .= " left join kategori on barang.id_kategori = kategori.kategori_id ";
         if($this->session->userdata('kepemilikan') != '' && $this->session->userdata('katebar') != ''){
-            $kolom .= " where barang.dln = ".$this->session->userdata('kepemilikan')." and barang.id_kategori = ".$this->session->userdata('katebar');
+            $kolom .= " where kategori.jns <= 2 AND ";
+            $kolom .= " barang.dln = ".$this->session->userdata('kepemilikan')." and barang.id_kategori = ".$this->session->userdata('katebar');
         }
         if($this->session->userdata('kepemilikan') != '' && $this->session->userdata('katebar') == ''){
-            $kolom .= " where barang.dln = ".$this->session->userdata('kepemilikan');
+            $kolom .= " where kategori.jns <= 2 AND ";
+            $kolom .= " barang.dln = ".$this->session->userdata('kepemilikan');
         }
         if($this->session->userdata('kepemilikan') == '' && $this->session->userdata('katebar') != ''){
-            $kolom .= " where barang.id_kategori = ".$this->session->userdata('katebar');
+            $kolom .= " where kategori.jns <= 2 AND ";
+            $kolom .= " barang.id_kategori = ".$this->session->userdata('katebar');
         }
         $kolom .= " group by po,item,dis,id_barang";
         $kolom .= " order by barang.nama_barang";
@@ -73,8 +77,8 @@ class bcmaterialmodel extends CI_Model
 
     public function getdatabyid($id)
     {
-        $tglawal = $this->session->userdata('tglawal');
-        $tglakhir = $this->session->userdata('tglakhir');
+        $tglawal = $this->session->userdata('tglawalbcmaterial');
+        $tglakhir = $this->session->userdata('tglakhirbcmaterial');
         $periode = cekperiodedaritgl($tglawal);
 
         // Query untuk CekSaldobarang
@@ -137,13 +141,13 @@ class bcmaterialmodel extends CI_Model
 
     public function getdatakategori()
     {
-        if ($this->session->userdata('tglawal') == null) {
+        if ($this->session->userdata('tglawalbcmaterial') == null) {
             $tglawal = date('Y-m-01');
-            $tglakhir = lastday($this->session->userdata('th') . '-' . $this->session->userdata('bl') . '-01');
+            $tglakhir = lastday($this->session->userdata('thbcmaterial') . '-' . $this->session->userdata('blbcmaterial') . '-01');
             $periode = cekperiodedaritgl(tglmysql($tglawal));
         }else{
-            $tglawal = $this->session->userdata('tglawal');
-            $tglakhir = $this->session->userdata('tglakhir');
+            $tglawal = $this->session->userdata('tglawalbcmaterial');
+            $tglakhir = $this->session->userdata('tglakhirbcmaterial');
             $periode = cekperiodedaritgl($tglawal);
         }
 
@@ -196,6 +200,7 @@ class bcmaterialmodel extends CI_Model
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id ";
         $kolom .= " left join kategori on kategori.kategori_id = barang.id_kategori ";
+        $kolom .= " where kategori.jns <= 2 ";
         $kolom .= " group by kategori.nama_kategori";
         $kolom .= " order by barang.nama_barang";
         $hasil = $this->db->query($kolom);
@@ -227,8 +232,8 @@ class bcmaterialmodel extends CI_Model
 
     public function getdata_export()
     {
-        $tglawal = $this->session->userdata('tglawal');
-        $tglakhir = $this->session->userdata('tglakhir');
+        $tglawal = $this->session->userdata('tglawalbcmaterial');
+        $tglakhir = $this->session->userdata('tglakhirbcmaterial');
         $jnsbc = $this->session->userdata('jnsbc');
 
         $this->db->select('tb_detail.*, tb_header.*, barang.nama_barang, barang.nama_alias, barang.kode, satuan.kodesatuan, supplier.nama_supplier, customer.nama_customer, ref_mt_uang.mt_uang as xmtuang, dept.departemen');

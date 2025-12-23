@@ -5,7 +5,10 @@
                 <a href="#tabs-home-8" class="nav-link bg-teal-lt active btn-flat" data-bs-toggle="tab">Dokumen</a>
             </li>
             <li class="nav-item">
-                <a href="#tabs-profile-8" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Detail Dokumen</a>
+                <a href="#tabs-profile-8" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Dokumen SPPB</a>
+            </li>
+            <li class="nav-item">
+                <a href="#tabs-profilex-8" class="nav-link bg-cyan-lt btn-flat" data-bs-toggle="tab">Formulir BC</a>
             </li>
             <li class="nav-item">
                 <a href="#tabs-riwayat-8" class="nav-link bg-yellow-lt btn-flat" data-bs-toggle="tab"><span class="text-black">Riwayat Dokumen</span></a>
@@ -18,6 +21,26 @@
     <?php $tanpabc = $header['tanpa_bc'] == 1 ? 'hilang' : ''; ?>
     <div class="card-body">
         <div class="tab-content">
+            <div class="tab-pane fade p-2" id="tabs-profilex-8">
+                <div class="card">
+                    <div class="col-md-3">
+                    </div>
+                    <!-- <hr class="p-1 m-1"> -->
+                    <div class="card-body pt-1 pb-1" style="overflow: auto;">
+                        <?php if (!empty(trim($header['filepdf']))) { ?>
+                            <iframe src="<?= LOK_UPLOAD_DOK_BC . trim($header['filepdf']); ?>" style="width:100%;height:700px;" alt="Tidak ditemukan"></iframe>
+                        <?php } else { ?>
+                            <div style="width:100%;height:700px;" class="text-center font-bold m-0">
+                                <h3>BELUM ADA DOKUMEN</h3>
+                            </div>
+                            <?= LOK_UPLOAD_DOK_BC . trim($header['filepdf']); ?>
+                        <?php } ?>
+                        <!-- <object data="test.pdf" type="application/pdf" width="100%" height="700">
+                            alt : <a href="test.pdf">test.pdf</a>
+                        </object> -->
+                    </div>
+                </div>
+            </div>
             <div class="tab-pane fade active show p-2" id="tabs-home-8">
                 <div class="row mb-1 no-gutters">
                     <div class="col-4 text-primary font-bold">

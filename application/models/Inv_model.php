@@ -324,6 +324,7 @@ class inv_model extends CI_Model
         $this->db->where('tb_header.tgl <= ',tglmysql($tglakhir));
         $this->db->where('tb_header.kode_dok','ADJ');
         $this->db->where('tb_header.data_ok',1);
+        $this->db->where('tb_header.ok_valid',1);
         // $this->db->where('tb_detail.po','KI-6391');
         // $this->db->where('tb_detail.nobale','58');
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,stok,exnet');
@@ -505,7 +506,7 @@ class inv_model extends CI_Model
         }
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
-        $this->db->join('tb_po','tb_po.po = stokdept.po AND tb_po.item = stokdept.item','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(stokdept.po,stokdept.item,stokdept.dis)','left');
         $this->db->join('kategori','barang.id_kategori = kategori.kategori_id','left');
         $this->db->join('satuan','barang.id_satuan = satuan.id','left');
         $this->db->join('tb_hargamaterial','stokdept.id_barang = tb_hargamaterial.id_barang AND stokdept.nobontr = tb_hargamaterial.nobontr  AND trim(tb_hargamaterial.nobontr) != "" ','left');
@@ -548,7 +549,7 @@ class inv_model extends CI_Model
         }
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-        $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(tb_detail.po,tb_detail.item,tb_detail.dis)','left');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->join('kategori','barang.id_kategori = kategori.kategori_id','left');
         $this->db->join('satuan','barang.id_satuan = satuan.id','left');
@@ -575,7 +576,7 @@ class inv_model extends CI_Model
         if($ada){
             $this->db->where('trim(tb_header.nomor_bc)',trim($array['nomor_bc']));
         }
-        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc');
+        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,nomor_dok');
         $query2 = $this->db->get_compiled_select();
 
         // Query untuk Out Barang
@@ -599,7 +600,7 @@ class inv_model extends CI_Model
         }
         $this->db->from('tb_detailgen');
         $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
-        $this->db->join('tb_po','tb_po.po = tb_detailgen.po AND tb_po.item = tb_detailgen.item','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(tb_detailgen.po,tb_detailgen.item,tb_detailgen.dis)','left');
         $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
         $this->db->join('kategori','barang.id_kategori = kategori.kategori_id','left');
         $this->db->join('satuan','barang.id_satuan = satuan.id','left');
@@ -623,7 +624,7 @@ class inv_model extends CI_Model
         if($ada){
             $this->db->where('trim(tb_header.nomor_bc)',trim($array['nomor_bc']));
         }
-        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc');
+        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,nomor_dok');
         $query3 = $this->db->get_compiled_select();
 
         // Query untuk ADJ Barang
@@ -647,7 +648,7 @@ class inv_model extends CI_Model
         }
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-        $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(tb_detail.po,tb_detail.item,tb_detail.dis)','left');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->join('kategori','barang.id_kategori = kategori.kategori_id','left');
         $this->db->join('satuan','barang.id_satuan = satuan.id','left');
@@ -658,6 +659,7 @@ class inv_model extends CI_Model
         $this->db->where('tb_header.tgl <= ',tglmysql($tglakhir));
         $this->db->where('tb_header.kode_dok','ADJ');
         $this->db->where('tb_header.data_ok',1);
+        $this->db->where('tb_header.ok_valid',1);
         $this->db->where('trim(tb_detail.po)',trim($array['po']));
         $this->db->where('trim(tb_detail.item)',trim($array['item']));
         $this->db->where('trim(tb_detail.dis)',$array['dis']);
@@ -671,7 +673,7 @@ class inv_model extends CI_Model
         if($ada){
             $this->db->where('trim(tb_header.nomor_bc)',trim($array['nomor_bc']));
         }
-        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc');
+        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,nomor_dok');
         $query4 = $this->db->get_compiled_select();
 
         $kolom = "Select * from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
