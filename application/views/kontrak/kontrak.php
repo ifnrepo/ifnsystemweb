@@ -46,6 +46,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <?php endfor; ?>
               </select>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2 hilang" id="the" name="the" style="width: 75px;" value="<?= $this->session->userdata('th') ?>">
+              <div class="ex mt-1" style="margin-right: 5px;">
+                <a href="<?= base_url() . 'kontrak/excel_kontrak'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export To Excel</span></a>
+              </div>
+
               <select class="form-control form-sm font-kecil font-bold mr-1 hilang" id="bl" name="bl" style="width: 100px;">
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
@@ -147,27 +151,51 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php
-              foreach ($data->result_array() as $datdet) : 
-              $jumlahbcmasuk = 0;
-              if(getjumlahbcmasuk($datdet['nomor_bc'])->num_rows() > 0){
-                $jbcmasuk = getjumlahbcmasuk($datdet['nomor_bc'])->row_array();
-                $jumlahbcmasuk = $jbcmasuk['tot_kgs'];
-              }
-              $bold = ($datdet['kgs'] < $datdet['total_kgs']) ? 'font-bold' : '';
-              $warnahuruf = ($datdet['kgs'] < $datdet['total_kgs']) ? 'text-pink' : 'text-primary';
-              $saldo = $datdet['total_kgs'] - $jumlahbcmasuk;
-              $tahap = $datdet['tipe']==0 ? '' : ($datdet['tipe']==1 ? 'TIPE 1' : 'TIPE 2');
+
+
+              foreach ($data->result_array() as $datdet) :
+
+                $tgl_sekarang = new DateTime();
+                $tgl_sekarang->setTime(0, 0, 0);
+
+                $class_tgl_akhir = '';
+
+                if (!empty($datdet['tgl_akhir']) && $datdet['tgl_akhir'] != '0000-00-00') {
+
+                  $tgl_akhir = new DateTime($datdet['tgl_akhir']);
+                  $tgl_akhir->setTime(0, 0, 0);
+
+                  $selisih_hari = $tgl_sekarang->diff($tgl_akhir)->days;
+
+                  if ($tgl_akhir <= $tgl_sekarang || $selisih_hari <= 10) {
+                    $class_tgl_akhir = 'text-yellow fw-bold';
+                  } elseif ($tgl_akhir <= $tgl_sekarang || $selisih_hari <= 20) {
+                    $class_tgl_akhir = 'text-pink fw-bold';
+                  }
+                }
+
+                $jumlahbcmasuk = 0;
+                if (getjumlahbcmasuk($datdet['nomor_bc'])->num_rows() > 0) {
+                  $jbcmasuk = getjumlahbcmasuk($datdet['nomor_bc'])->row_array();
+                  $jumlahbcmasuk = $jbcmasuk['tot_kgs'];
+                }
+                $bold = ($datdet['kgs'] < $datdet['total_kgs']) ? 'font-bold' : '';
+                $warnahuruf = ($datdet['kgs'] < $datdet['total_kgs']) ? 'text-pink' : 'text-primary';
+                $saldo = $datdet['total_kgs'] - $jumlahbcmasuk;
+                $tahap = $datdet['tipe'] == 0 ? '' : ($datdet['tipe'] == 1 ? 'TIPE 1' : 'TIPE 2');
               ?>
                 <tr>
                   <td class="line-12"><?= $datdet['nomor']; ?><br><span class="text-pink" style="font-size: 11px"><?= $datdet['nama_supplier']; ?></span></td>
                   <td class="line-12"><?= $datdet['proses']; ?><br><span class="text-primary" style="font-size: 11px"><?= $tahap ?></span></td>
                   <td><?= tglmysql($datdet['tgl_awal']); ?></td>
-                  <td><?= tglmysql($datdet['tgl_akhir']); ?></td>
+                  <td class="<?= $class_tgl_akhir ?>">
+                    <?= $datdet['tgl_akhir'] ? tglmysql($datdet['tgl_akhir']) : '-' ?>
+                  </td>
                   <td class="text-right"><?= rupiah($datdet['pcs'], 2); ?></td>
                   <td class="text-right"><?= rupiah($datdet['kgs'], 2); ?></td>
-                  <td class="text-right <?= $warnahuruf ?> <?= $bold ?>"><?= rupiah($datdet['total_kgs'],2); ?></td>
-                  <td class="text-right"><?= rupiah($jumlahbcmasuk,2) ?></td>
-                  <td class="text-right <?= $warnahuruf ?> "><a href="<?= base_url().'kontrak/viewdetail/'.$datdet['id'] ?>" class="" title="View detail" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Realisasi dan Pengembalian"><?= rupiah($saldo,2)  ?></a></td>
+                  <td class="text-right <?= $warnahuruf ?> <?= $bold ?>"><?= rupiah($datdet['total_kgs'], 2); ?></td>
+                  <td class="text-right"><?= rupiah($jumlahbcmasuk, 2) ?></td>
+                  <td class="text-right <?= $warnahuruf ?> "><a href="<?= base_url() . 'kontrak/viewdetail/' . $datdet['id'] ?>" class="" title="View detail" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Realisasi dan Pengembalian"><?= rupiah($saldo, 2)  ?></a></td>
                   <td>
                     <a href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" style="padding: 3px 5px !important;" class="btn btn-sm btn-success btn-icon p-0">View</a>
                     <a href="<?= base_url() . 'kontrak/editdata/' . $datdet['id']; ?>" class="onprogress btn btn-sm btn-primary btn-icon p-0" style="padding: 3px 5px !important;">Edit</a>
