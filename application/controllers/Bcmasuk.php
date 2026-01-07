@@ -238,17 +238,17 @@ class Bcmasuk extends CI_Controller
             $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
-            if ($data['xmtuang'] == 'USD') {
-                $nilaiusd = $data['harga'] * $nilaiqty;
-                $nilaiidr = $nilaiusd * $data['kurs_usd'];
-            } else {
-                $nilaiidr = $data['harga'] * $nilaiqty;
-                if (!empty($data['kurs_usd']) && $data['kurs_usd'] != 0) {
-                    $nilaiusd = $nilaiidr / $data['kurs_usd'];
-                } else {
-                    $nilaiusd = 0;
-                }
-            }
+            // if ($data['xmtuang'] == 'USD') {
+            //     $nilaiusd = $data['harga'] * $nilaiqty;
+            //     $nilaiidr = $nilaiusd * $data['kurs_usd'];
+            // } else {
+            //     $nilaiidr = $data['harga'] * $nilaiqty;
+            //     if (!empty($data['kurs_usd']) && $data['kurs_usd'] != 0) {
+            //         $nilaiusd = $nilaiidr / $data['kurs_usd'];
+            //     } else {
+            //         $nilaiusd = 0;
+            //     }
+            // }
 
 
 
@@ -259,6 +259,28 @@ class Bcmasuk extends CI_Controller
             } else {
                 $suppl = $data['departemen'];
             }
+
+
+            $kurs_data = getkurssekarang($data['tgl_aju'])->row();
+
+            $kurs_usd = (empty($data['kurs_usd']) || $data['kurs_usd'] == 0)
+                ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
+                : $data['kurs_usd'];
+
+            $kurs_yen = (empty($data['kurs_yen']) || $data['kurs_yen'] == 0)
+                ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
+                : $data['kurs_yen'];
+
+            // $kurs_yen = $detail['kurs_yen'] ?? 0;
+
+            $pengali = $data['mtuang'] == 2
+                ? $data['nilai_pab'] * $kurs_usd
+                : ($data['mtuang'] == 3
+                    ? $data['nilai_pab'] * $kurs_yen
+                    : $data['nilai_pab']);
+
+            $usd = $data['kurs_usd'] == 0 ? 1 : $data['kurs_usd'];
+            $xpengali = $data['mtuang'] == 2 ? $data['nilai_pab'] : ($data['mtuang'] == 3 ? ($data['nilai_pab'] * $kurs_yen) / $usd : $data['nilai_pab'] / $usd);
 
 
             $tinggi = 6;
@@ -288,7 +310,7 @@ class Bcmasuk extends CI_Controller
 
             $pdf->Cell(15, $tinggiMaks, $data['tgl'], 1, 0, 'L');
             $pdf->Cell(45, $tinggiMaks, $suppl, 1, 0, 'L');
-            $pdf->Cell(13, $tinggiMaks, $sku, 1, 0, 'L');
+            $pdf->Cell(15, $tinggiMaks, $sku, 1, 0, 'L');
 
 
             $x_nama = $pdf->GetX();
@@ -301,8 +323,8 @@ class Bcmasuk extends CI_Controller
             $pdf->Cell(6, $tinggiMaks, $data['kodesatuan'], 1, 0, 'L');
             $pdf->Cell(12, $tinggiMaks, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
             $pdf->Cell(10, $tinggiMaks, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(18, $tinggiMaks, number_format($nilaiidr, 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(15, $tinggiMaks, number_format($nilaiusd, 2, ',', '.'), 1, 1, 'R');
+            $pdf->Cell(18, $tinggiMaks, number_format($pengali, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(15, $tinggiMaks, number_format($xpengali, 2, ',', '.'), 1, 1, 'R');
 
             $ceknomor_bc = $data['nomor_bc'];
         }
