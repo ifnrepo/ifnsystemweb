@@ -145,7 +145,7 @@ class PDF_Bcmasuk extends FPDF
         $this->SetXY($x_bukti + 50, $y);
 
         $this->Cell(45, 12, 'Pemasok/Pengirim', 1, 0, 'C', true);
-        $this->Cell(13, 12, 'Kode', 1, 0, 'C', true);
+        $this->Cell(15, 12, 'Kode', 1, 0, 'C', true);
         $this->Cell(70, 12, 'Nama Barang', 1, 0, 'C', true);
         $this->Cell(6, 12, 'Sat', 1, 0, 'C', true);
         $this->Cell(12, 12, 'Jum', 1, 0, 'C', true);
@@ -240,7 +240,7 @@ class PDF_Bckeluar extends FPDF
         $this->Cell(15, 6, 'Tanggal', 1, 0, 'C', true);
         $this->SetXY($x_bukti + 42, $y);
         $this->Cell(43, 12, 'Customer', 1, 0, 'C', true);
-        $this->Cell(13, 12, 'Kode', 1, 0, 'C', true);
+        $this->Cell(17, 12, 'Kode', 1, 0, 'C', true);
         $this->Cell(70, 12, 'Nama Barang', 1, 0, 'C', true);
         $this->Cell(8, 12, 'Sat', 1, 0, 'C', true);
         $this->Cell(12, 12, 'Jum', 1, 0, 'C', true);
