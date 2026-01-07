@@ -23,8 +23,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
               <?php $disab=''; if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null){ $disab = 'disabled';} ?>
-              <a href="<?= base_url() . 'out/adddata/1'; ?>" class="btn btn-info btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
-              <!-- <a href="<?= base_url() . 'out/adddata/0'; ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="buttonpilih2"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
+              <a href="<?= base_url() . 'out/adddata/0'; ?>" class="btn btn-info btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+              <div id="tujuanbon" class="hilang"> <?= $this->session->userdata('deptsekarang').' ke '.$this->session->userdata('tujusekarang'); ?></div>
               <div class="dropdown hilang " id="buttonpilih2">
                   <button class="btn btn-primary btn-sm dropdown-toggle <?= cekclosebook(); ?>" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                   <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
@@ -73,7 +73,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-1 font-kecil">.</h4>
+                  <h4 class="mb-1 font-kecil" style="color: #FFFFFF">.</h4>
                   <span class="font-kecil">
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
@@ -103,7 +103,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                 </div>
                 <div class="col-2" id="div-filter2">
-                  <h5 class="m-0">.</h5>
+                  <h5 class="m-0" style="color: #FFFFFF">.</h5>
                     <div class="font-kecil ">
                       <select class="form-select form-control form-sm font-kecil font-bold text-primary" style="height: 30px; padding-top: 4.5px;" id="filterbon2" name="filterbon2">
                         <?php foreach (getkettujuanout($this->session->userdata('deptsekarang')."-".$this->session->userdata('tujusekarang'))->result_array() as $ketuju) { ?>
@@ -116,7 +116,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </div>
             </div>
           </div>
-
         </div>
         <div class="mt-2">
           <table id="pbtabel" class="table nowrap order-column datatable" style="width: 100% !important;">

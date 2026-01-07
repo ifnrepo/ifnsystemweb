@@ -525,18 +525,21 @@ class Helper_model extends CI_Model
     }
     public function getkettujuanout($kode)
     {
-        $data = $this->db->get_where('ref_transaksi_tujuan', ['tujuan' => $kode]);
+        $data = $this->db->order_by('urut')->get_where('ref_transaksi_tujuan', ['tujuan' => $kode]);
         return $data;
     }
     public function getquerytujuanout($kode, $val, $ke)
     {
         $data = $this->db->get_where('ref_transaksi_tujuan', ['tujuan' => $kode, 'value' => $val]);
+        $hasil = '';
         if ($data->num_rows() > 0) {
             $xdata = $data->row_array();
-            if ($ke == 0) {
-                $hasil = $xdata['kueri'];
-            } else {
-                $hasil = $xdata['isi'];
+            if($xdata['kueri']!=''){
+                if ($ke == 0) {
+                    $hasil = $xdata['kueri'].' '.$xdata['kondisi'];
+                } else {
+                    $hasil = $xdata['isi'];
+                }
             }
         } else {
             $hasil = '';

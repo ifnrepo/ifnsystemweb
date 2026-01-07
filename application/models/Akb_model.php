@@ -597,7 +597,9 @@ class Akb_model extends CI_Model
     public function getdatanomoraju($id)
     {
         $detail = $this->db->get_where('tb_header', ['id' => $id])->row_array();
-        $kodeaju = str_repeat('0', 6 - strlen(trim($detail['jns_bc']))) . trim($detail['jns_bc']);
+        // $kodeaju = str_repeat('0', 6 - strlen(trim($detail['jns_bc']))) . trim($detail['jns_bc']);
+        $prefix = trim($detail['prefix_aju'])=='' ? '000' : trim($detail['prefix_aju']);
+        $kodeaju = $prefix.str_repeat('0', 3 - strlen(trim($detail['jns_bc']))) . trim($detail['jns_bc']);
         return $kodeaju . '010017' . str_replace('-', '', $detail['tgl_aju']) . $detail['nomor_aju'];
     }
     public function isitokenbc($data)
@@ -636,10 +638,10 @@ class Akb_model extends CI_Model
         $this->db->update('tb_ajuceisa', ['nomor_aju' => $isi]);
         return $hass['nomor_aju'];
     }
-    public function updatesendceisa($id)
+    public function updatesendceisa($id,$aju='000')
     {
         $this->db->where('id', $id);
-        $this->db->update('tb_header', ['send_ceisa' => 1, 'user_tuju' => $this->session->userdata('id'), 'tgl_tuju' => date("Y-m-d H:i:s")]);
+        $this->db->update('tb_header', ['send_ceisa' => 1, 'user_tuju' => $this->session->userdata('id'), 'tgl_tuju' => date("Y-m-d H:i:s"),'prefix_aju' => substr($aju, 0, 3)]);
     }
     public function simpanresponbc($data)
     {

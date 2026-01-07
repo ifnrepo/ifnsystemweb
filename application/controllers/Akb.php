@@ -2559,7 +2559,7 @@ class Akb extends CI_Controller
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL" . $data['nomorAju']);
             $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message']);
-            $this->akbmodel->updatesendceisa($id);
+            $this->akbmodel->updatesendceisa($id,$data['nomorAju']);
             $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
         } else {
@@ -2616,7 +2616,7 @@ class Akb extends CI_Controller
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 - 261 BERHASIL" . $data['nomorAju']);
             $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message']);
-            $this->akbmodel->updatesendceisa($id);
+            $this->akbmodel->updatesendceisa($id,$data['nomorAju']);
             $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             redirect($url);
         } else {

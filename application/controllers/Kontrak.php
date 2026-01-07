@@ -454,14 +454,15 @@ class Kontrak extends CI_Controller
         $sheet = $spreadsheet->getActiveSheet();
 
 
-        $sheet->mergeCells('B1:J1');
+        $sheet->mergeCells('B1:K1');
         $sheet->setCellValue('B1', 'LAPORAN DATA KONTRAK');
         $sheet->getStyle('B1')->applyFromArray([
             'font' => ['bold' => true, 'size' => 14],
             'alignment' => ['horizontal' => 'center'],
         ]);
-        $sheet->mergeCells('B2:J2');
-        $sheet->setCellValue('B2', 'REKANAN : ' . $head['nama_supplier']);
+        $sheet->mergeCells('B2:K2');
+        $rekanan = $this->session->userdata('deptkontrak')=='' ? 'SEMUA' : $head['nama_supplier'];
+        $sheet->setCellValue('B2', 'REKANAN : ' . $rekanan);
         $sheet->getStyle('B2')->applyFromArray([
             'font' => ['bold' => true, 'size' => 14],
             'alignment' => ['horizontal' => 'center'],
@@ -470,21 +471,22 @@ class Kontrak extends CI_Controller
 
         $header = [
             'B4' => 'Nomor',
-            'C4' => 'Proses',
-            'D4' => "Tgl\nBerlaku",
-            'E4' => "Tgl\nBerakhir",
-            'F4' => 'Pcs',
-            'G4' => 'Kgs',
-            'H4' => 'Realisasi',
-            'I4' => 'Pengembalian',
-            'J4' => 'Saldo',
+            'C4' => 'Rekanan',
+            'D4' => 'Proses',
+            'E4' => "Tgl\nBerlaku",
+            'F4' => "Tgl\nBerakhir",
+            'G4' => 'Pcs',
+            'H4' => 'Kgs',
+            'I4' => 'Realisasi',
+            'J4' => 'Pengembalian',
+            'K4' => 'Saldo',
         ];
 
         foreach ($header as $cell => $text) {
             $sheet->setCellValue($cell, $text);
         }
 
-        $sheet->getStyle('B4:J4')->applyFromArray([
+        $sheet->getStyle('B4:K4')->applyFromArray([
             'font' => ['bold' => true],
             'alignment' => [
                 'horizontal' => 'center',
@@ -493,7 +495,7 @@ class Kontrak extends CI_Controller
             ],
         ]);
 
-        $sheet->getStyle('B4:J4')->getBorders()
+        $sheet->getStyle('B4:K4')->getBorders()
             ->getAllBorders()->setBorderStyle(
                 \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN
             );
@@ -535,32 +537,33 @@ class Kontrak extends CI_Controller
             $saldo = $dt['total_kgs'] - $jumlahbcmasuk;
             $tahap = $dt['tipe'] == 0 ? '' : ($dt['tipe'] == 1 ? 'TIPE 1' : 'TIPE 2');
 
-            $sheet->setCellValue('B' . $row, $dt['nomor'] . "\n" . $dt['nama_supplier']);
-            $sheet->setCellValue('C' . $row, $dt['proses'] . "\n" . $tahap);
-            $sheet->setCellValue('D' . $row, $dt['tgl_awal']);
+            $sheet->setCellValue('B' . $row, $dt['nomor']);
+            $sheet->setCellValue('C' . $row,  $dt['nama_supplier']);
+            $sheet->setCellValue('D' . $row, $dt['proses'] . "\n" . $tahap);
+            $sheet->setCellValue('E' . $row, $dt['tgl_awal']);
             $sheet->setCellValue(
-                'E' . $row,
+                'F' . $row,
                 $dt['tgl_akhir'] ? tglmysql($dt['tgl_akhir']) : '-'
             );
 
-            $sheet->setCellValue('F' . $row, $dt['pcs']);
-            $sheet->setCellValue('G' . $row, $dt['kgs']);
-            $sheet->setCellValue('H' . $row, $dt['total_kgs']);
-            $sheet->setCellValue('I' . $row, $jumlahbcmasuk);
-            $sheet->setCellValue('J' . $row, $saldo);
+            $sheet->setCellValue('G' . $row, $dt['pcs']);
+            $sheet->setCellValue('H' . $row, $dt['kgs']);
+            $sheet->setCellValue('I' . $row, $dt['total_kgs']);
+            $sheet->setCellValue('J' . $row, $jumlahbcmasuk);
+            $sheet->setCellValue('K' . $row, $saldo);
 
 
             $sheet->getStyle("B$row:C$row")->getAlignment()->setWrapText(true);
 
-            $sheet->getStyle("F$row:J$row")->getAlignment()
+            $sheet->getStyle("G$row:K$row")->getAlignment()
                 ->setHorizontal(\PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_RIGHT);
 
-            $sheet->getStyle("F$row:J$row")->getNumberFormat()
+            $sheet->getStyle("G$row:K$row")->getNumberFormat()
                 ->setFormatCode('#,##0.00');
 
 
             if ($dt['kgs'] < $dt['total_kgs']) {
-                $sheet->getStyle("H$row:J$row")->applyFromArray([
+                $sheet->getStyle("I$row:K$row")->applyFromArray([
                     'font' => [
                         'bold' => true,
                         'color' => ['rgb' => 'E91E63'],
@@ -572,17 +575,17 @@ class Kontrak extends CI_Controller
                     ->getColor()->setRGB('0D6EFD');
             }
 
-            $sheet->getStyle("B$row:J$row")->getBorders()
+            $sheet->getStyle("B$row:K$row")->getBorders()
                 ->getAllBorders()->setBorderStyle('thin');
 
             $row++;
         }
 
-        foreach (range('B', 'J') as $col) {
+        foreach (range('B', 'K') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
-        $filename = 'Kontrak ' . $head['nama_supplier'] . '' . date('Y') . '.xlsx';
+        $filename = 'Kontrak ' . $rekanan . '' . date('Y') . '.xlsx';
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment; filename="' . $filename . '"');
 

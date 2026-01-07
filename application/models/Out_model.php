@@ -77,6 +77,74 @@ class Out_model extends CI_Model{
         $query = $this->db->get_where('tb_header',['tb_header.id'=>$kode]);
         return $query;
     }
+    public function getdatadetailbyid($kode){
+        $this->db->select('*');
+        $query = $this->db->get_where('tb_detail',['id'=>$kode]);
+        return $query;
+    }
+    public function getdatadetailgen($kode){
+        $this->db->select('tb_detailgen.*,satuan.kodesatuan');
+        $this->db->join('satuan','satuan.id = tb_detailgen.id_satuan','left');
+        $query = $this->db->get_where('tb_detailgen',['id_detail'=>$kode]);
+        return $query;
+    }
+    public function getdatadetailgenbyid($kode){
+        $this->db->select('tb_detailgen.*,satuan.kodesatuan');
+        $this->db->join('satuan','satuan.id = tb_detailgen.id_satuan','left');
+        $query = $this->db->get_where('tb_detailgen',['tb_detailgen.id'=>$kode]);
+        return $query;
+    }
+    public function getdatadetailgentemp($kode,$mode){
+        if($mode==0){
+            $this->db->where('id_detail',$kode);
+            $this->db->delete('tb_detailgen_temp');
+
+            $data = $this->db->get_where('tb_detailgen',['id_detail'=>$kode]);
+            foreach($data->result_array() as $hasil){
+                $this->db->insert('tb_detailgen_temp',$hasil);
+            }
+        }
+
+        $this->db->select('tb_detailgen_temp.*,satuan.kodesatuan');
+        $this->db->join('satuan','satuan.id = tb_detailgen_temp.id_satuan','left');
+        $query = $this->db->get_where('tb_detailgen_temp',['id_detail'=>$kode]);
+        return $query;
+    }
+    public function getdatadetailgentempbyid($kode){
+        $this->db->select('tb_detailgen_temp.*,satuan.kodesatuan,barang.nama_barang');
+        $this->db->join('satuan','satuan.id = tb_detailgen_temp.id_satuan','left');
+        $this->db->join('barang','barang.id = tb_detailgen_temp.id_barang','left');
+        $query = $this->db->get_where('tb_detailgen_temp',['tb_detailgen_temp.id'=>$kode]);
+        return $query->row_array();
+    }
+    public function hapusdatadetailgentemp($id){
+        $this->db->where('id',$id);
+        return $this->db->delete('tb_detailgen_temp');
+    }
+    public function simpandetailbarangtemp($data)
+    {
+        return $this->db->insert('tb_detailgen_temp', $data);
+    }
+    public function updategentemp($data){
+        $this->db->where('id',$data['id']);
+        unset($data['id']);
+        return $this->db->update('tb_detailgen_temp',$data);
+    }
+    public function simpandetailgentemp($detail){
+        $this->db->trans_start();
+        $this->db->where('id_detail',$detail);
+        $this->db->delete('tb_detailgen');
+
+        $data = $this->db->get_where('tb_detailgen_temp',['id_detail'=>$detail]);
+        foreach($data->result_array() as $hasil){
+            $this->db->insert('tb_detailgen',$hasil);
+        }
+
+        $this->db->where('id_detail',$detail);
+        $this->db->delete('tb_detailgen_temp');
+
+        return $this->db->trans_complete();
+    }
     public function getdepttuju($kode){
         $xkode = [];
         $hasil = [];
@@ -274,7 +342,7 @@ class Out_model extends CI_Model{
         $this->db->order_by('a.seri_barang','asc');
         // $this->db->group_by('po,item,dis,id_barang')
         // $this->db->order_by('c.nama_barang','asc');
-        return $this->db->get()->result_array();
+        return $this->db->get();
     }
     public function getdatadetailoutbyid($data){
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
@@ -334,26 +402,31 @@ class Out_model extends CI_Model{
         $this->db->trans_start();
         $this->db->where('id',$id);
         $query = $this->db->get('tb_header')->row_array();
-        if($query){
-            $this->db->where('id_header',$id);
-            $detail = $this->db->get('tb_detail');
-            foreach ($detail->result_array() as $det) {
-                $this->db->where('id_out',$det['id']);
-                $this->db->update('tb_detail',['id_out'=>0]);
+        if($query['ok_tuju']!=1){
+            if($query){
+                $this->db->where('id_header',$id);
+                $detail = $this->db->get('tb_detail');
+                foreach ($detail->result_array() as $det) {
+                    $this->db->where('id_out',$det['id']);
+                    $this->db->update('tb_detail',['id_out'=>0]);
+                }
+                $this->db->where('id_header',$id);
+                $this->db->delete('tb_detmaterial');
+                $this->db->where('id_header',$id);
+                $this->db->delete('tb_detailgen');
+                $this->db->where('id_header',$id);
+                $this->db->delete('tb_detail');
             }
-            $this->db->where('id_header',$id);
-            $this->db->delete('tb_detmaterial');
-            $this->db->where('id_header',$id);
-            $this->db->delete('tb_detailgen');
-            $this->db->where('id_header',$id);
-            $this->db->delete('tb_detail');
+            $this->db->where('id_keluar',$id);
+            $this->db->update('tb_header',['id_keluar' => 0]);
+            
+            $this->db->where('id',$id);
+            $this->db->delete('tb_header');
+            $this->helpermodel->isilog($this->db->last_query());
+        }else{
+             $this->session->set_flashdata('errorsimpan',1);
+             $this->session->set_flashdata('pesanerror','BON tidak bisa di Hapus, sudah dibuatkan DOKUMEN BC');
         }
-        $this->db->where('id_keluar',$id);
-        $this->db->update('tb_header',['id_keluar' => 0]);
-        
-        $this->db->where('id',$id);
-        $this->db->delete('tb_header');
-        $this->helpermodel->isilog($this->db->last_query());
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -361,36 +434,51 @@ class Out_model extends CI_Model{
         $this->db->trans_start();
         $this->db->where('id',$id);
         $query = $this->db->get('tb_header')->row_array();
-        if($query){
-            $this->db->where('id_header',$id);
-            $detail = $this->db->get('tb_detail');
-            foreach ($detail->result_array() as $det) {
-                $this->db->where('id_out',$det['id']);
-                $this->db->update('tb_detail',['id_out'=>0]);
+        if($query['ok_tuju']!=1){
+            if($query){
+                $this->db->where('id_header',$id);
+                $detail = $this->db->get('tb_detail');
+                foreach ($detail->result_array() as $det) {
+                    $this->db->where('id_out',$det['id']);
+                    $this->db->update('tb_detail',['id_out'=>0]);
+                }
+                $this->db->where('id_header',$id);
+                $this->db->delete('tb_detmaterial');
+                $this->db->where('id_header',$id);
+                $this->db->delete('tb_detail');
+                $this->db->where('id_header',$id);
+                $this->db->delete('tb_detailgen');
             }
-            $this->db->where('id_header',$id);
-            $this->db->delete('tb_detmaterial');
-            $this->db->where('id_header',$id);
-            $this->db->delete('tb_detail');
-            $this->db->where('id_header',$id);
-            $this->db->delete('tb_detailgen');
+            $this->db->where('id_keluar',$id);
+            $this->db->update('tb_header',['id_keluar' => 0]);
+            $hasil = $this->db->trans_complete();
+        }else{
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror','BON tidak bisa di Hapus, sudah dibuatkan DOKUMEN BC');
         }
-        $this->db->where('id_keluar',$id);
-        $this->db->update('tb_header',['id_keluar' => 0]);
-        $hasil = $this->db->trans_complete();
         return $hasil;
     }
     public function hapusdetailout($id){
         $this->db->trans_start();
-            $this->db->where('id_out',$id);
-            $this->db->update('tb_detail',['id_out'=>0]);
-
-            $this->db->where('id_detail',$id);
-            $this->db->delete('tb_detmaterial');
-            $this->db->where('id_detail',$id);
-            $this->db->delete('tb_detailgen');
             $this->db->where('id',$id);
-            $this->db->delete('tb_detail');
+            $datdetl = $this->db->get('tb_detail')->row_array();
+
+            $this->db->where('id',$datdetl['id_header']);
+            $dathead = $this->db->get('tb_header')->row_array();
+            if($dathead['ok_tuju']!=1){
+                $this->db->where('id_out',$id);
+                $this->db->update('tb_detail',['id_out'=>0]);
+
+                $this->db->where('id_detail',$id);
+                $this->db->delete('tb_detmaterial');
+                $this->db->where('id_detail',$id);
+                $this->db->delete('tb_detailgen');
+                $this->db->where('id',$id);
+                $this->db->delete('tb_detail');
+            }else{
+                $this->session->set_flashdata('errorsimpan',1);
+                $this->session->set_flashdata('pesanerror','Data tidak bisa di Hapus, BON sudah dibuatkan DOKUMEN BC');
+            }
         $hasil = $this->db->trans_complete();
         return $hasil;
     }
@@ -852,24 +940,27 @@ class Out_model extends CI_Model{
     }
     public function simpandetailbarangx($data)
     {
+        $ceknomor = $this->db->get_where('tb_detail',['id_header' => $data['id_header']]);
+        $jumlahceknomor = $ceknomor->num_rows();
+        $data['seri_barang'] = ($jumlahceknomor > 0) ? (int)$jumlahceknomor+1 : 1;
         $hasil =  $this->db->insert('tb_detail', $data);
         $idnya = $this->db->insert_id();
         $this->helpermodel->isilog($this->db->last_query());
         $data['id_detail'] = $idnya;
-        $hasil =  $this->db->insert('tb_detailgen', $data);
-        $idnya = $this->db->get_where('tb_detail', array('id_barang' => $data['id_barang'], 'id_header' => $data['id_header']))->row_array();
-        // Isi data detmaterial
-        $cek = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
-        if ($cek->num_rows() > 0) {
-            foreach ($cek->result_array() as $kec) {
+        $cektabelbarang = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
+        if ($cektabelbarang->num_rows() > 0) {
+            foreach ($cektabelbarang->result_array() as $kec) {
+                $databarang = $this->db->get_where('barang',['id' => $kec['id_barang_bom']])->row_array();
                 $xdata = [
                     'id_header' => $data['id_header'],
-                    'id_detail' => $idnya['id'],
+                    'id_detail' => $idnya,
                     'id_barang' => $kec['id_barang_bom'],
                     'persen' => $kec['persen'],
-                    'kgs' => ($kec['persen'] / 100) * $data['kgs']
+                    'id_satuan' => $databarang['id_satuan'],
+                    'dln' => $databarang['dln'],
+                    'kgs' => round(($kec['persen'] / 100) * $data['kgs'],2),
                 ];
-                $this->db->insert('tb_detmaterial', $xdata);
+                $this->db->insert('tb_detailgen', $xdata);
                 $this->helpermodel->isilog($this->db->last_query());
             }
         }

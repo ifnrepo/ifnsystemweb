@@ -221,6 +221,9 @@ $("#netto").blur(function () {
 $("#kd_kemasan").change(function () {
 	savedata("kd_kemasan", $(this).val());
 });
+$("#kode_kantor").change(function () {
+	savedata("kode_kantor", $(this).val());
+});
 $("#jml_kemasan").blur(function () {
 	savedata("jml_kemasan", toAngka($(this).val()));
 });
@@ -359,6 +362,10 @@ $("#getblawb").click(function () {
 		pesan("Isi Tanggal BL", "error");
 		return;
 	}
+	if ($("#kode_kantor").val() == "") {
+		pesan("Pilih Kantor", "error");
+		return;
+	}
 	// $("#getblawbasli").attr(
 	// 	"href",
 	// 	base_url +
@@ -378,7 +385,9 @@ $("#getblawb").click(function () {
 			"/" +
 			$("#tgl_blawb").val() +
 			"/" +
-			$("#id_header").val();
+			$("#id_header").val() +
+			"/" +
+			$("#kode_kantor").val();
 	}, 500);
 });
 $("#cekdata").click(function () {

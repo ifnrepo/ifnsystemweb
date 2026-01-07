@@ -58,10 +58,12 @@
                     <div class="d-flex justify-content-between">
                         <div class="p-2 font-kecil">
                             <?php if ($mode == 0) { ?>
+                                ID : <span class="text-pink font-bold"><?= $datheader['id_pemasok'] ?></span><br>
                                 Nama Pengirim : <?= $datheader['namasupplier']; ?><br>
                                 Alamat Pengirim : <?= $datheader['alamat']; ?></br>
                                 NPWP : <?= $datheader['npwp']; ?>
                             <?php } else { if($datheader['id_pemasok']!=null){ ?>
+                                ID : <span class="text-pink font-bold"><?= $datheader['id_pemasok'] ?></span><br>
                                 Nama Rekanan : <?= datasupplier($datheader['id_pemasok'], 'nama_supplier'); ?><br>
                                 Alamat : <?= datasupplier($datheader['id_pemasok'], 'alamat'); ?></br>
                                 NPWP : <?= datasupplier($datheader['id_pemasok'], 'npwp'); ?>
@@ -294,7 +296,24 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <a class="btn btn-sm btn-success mb-1 font-bold" id="getblawb" style="width: 100%;">Get Data By Nomor BL</a>
+                                        <div class="mb-1 row">
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil">Kantor</label>
+                                                    <div class="col">
+                                                        <select class="form-select font-kecil btn-flat" name="kode_kantor" data-placeholder="Pilih Pelabuhan" id="kode_kantor" <?= $selectnonaktif; ?>>
+                                                            <option value="">-- Pilih Kantor --</option>
+                                                            <option value="040300" <?php if($datheader['kode_kantor']=="040300"){ echo "selected"; } ?>>040300 - TANJUNG PRIOK</option>
+                                                            <option value="050100" <?php if($datheader['kode_kantor']=="050100"){ echo "selected"; } ?>>050100 - SOEKARNO HATTA</option>
+                                                        </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col">
+                                             
+                                            </div>
+                                        </div>
+                                        <a class="btn btn-sm btn-success mb-1 font-bold <?= $selectnonaktif ?>" id="getblawb" style="width: 100%;">Get Data By Nomor BL</a>
                                         <hr class="m-1">
                                     </div>
                                     <!-- BL AWB  -->

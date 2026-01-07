@@ -105,50 +105,55 @@ class Out extends CI_Controller {
         $query = $this->out_model->getdatadetailout($id);
         $jumlah=0;
         $deptinsno = ['GP','RR'];
-        foreach ($query as $que) {
-            $tandakurang = trim($this->session->userdata('serierror'))==trim($que['seri_barang']) ? 'text-danger' : '';
-            $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
-            $sku =trim($que['po'])=='' ? $que['kode'] : formatsku($que['po'],$que['item'],$que['dis'],$que['id_barang']);
-            $modecari = trim($que['po'])=='' ? 0 : 1; // Jika 0 pencarian ID Barang, jika 1 pencarian PO
-            $kodecari = trim($que['po'])=='' ? $que['id_barang'] : trim($que['po']).'_'.trim($que['item']).'_'.$que['dis'];
-            $nmbarang = trim($que['po'])==''? $que['nama_barang'] : spekpo($que['po'],$que['item'],$que['dis']);
-            $nobale = trim($que['nobale'])=='' ? '' : ' Bale Nomor : '.$que['nobale']; 
-            // $infoinsno = '';
-            // if($this->session->userdata('deptsekarang')=='NT'){
-                $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
-            // }
-            $hasil .= "<tr>";
-            $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large-loading' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek'].$nobale."'>".$que['seri_barang'].'. '.$nmbarang.$infoinsno."</a></td>";
-            $hasil .= "<td>".$sku."</td>";
-            $hasil .= "<td>".$que['kodesatuan']."</td>";
-            $hasil .= "<td id='".$que['id']."'>".trim($que['nobale'])."</td>";
-                $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
-                $hasil .= "<td>".rupiah($que['kgsminta'],2)."</td>";
-            $hasil .= "<td class='text-primary'>".rupiah($que['pcs'],0)."</td>";
-            $hasil .= "<td class='text-primary'>".rupiah($que['kgs'],2)."</td>";
-            if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']!=''){
-                $hasil .= "<td class='text-primary'>".$que['nobontr']."</td>";
-            }else{
-                if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']==''){
-                    $hasil .= "<td class='text-primary'><a class='text-info' href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
+        if($query->num_rows() > 0){
+            foreach ($query->result_array() as $que) {
+                $tandakurang = trim($this->session->userdata('serierror'))==trim($que['seri_barang']) ? 'text-danger' : '';
+                $dis = $que['dis']==0 ? '' : ' dis '.$que['dis'];
+                $sku =trim($que['po'])=='' ? $que['kode'] : formatsku($que['po'],$que['item'],$que['dis'],$que['id_barang']);
+                $modecari = trim($que['po'])=='' ? 0 : 1; // Jika 0 pencarian ID Barang, jika 1 pencarian PO
+                $kodecari = trim($que['po'])=='' ? $que['id_barang'] : trim($que['po']).'_'.trim($que['item']).'_'.$que['dis'];
+                $nmbarang = trim($que['po'])==''? $que['nama_barang'] : spekpo($que['po'],$que['item'],$que['dis']);
+                $nobale = trim($que['nobale'])=='' ? '' : ' Bale Nomor : '.$que['nobale']; 
+                // $infoinsno = '';
+                // if($this->session->userdata('deptsekarang')=='NT'){
+                    $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
+                // }
+                $hasil .= "<tr>";
+                $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large-loading' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek'].$nobale."'>".$que['seri_barang'].'. '.$nmbarang.$infoinsno."</a></td>";
+                $hasil .= "<td>".$sku."</td>";
+                $hasil .= "<td>".$que['kodesatuan']."</td>";
+                $hasil .= "<td id='".$que['id']."'>".trim($que['nobale'])."</td>";
+                    $hasil .= "<td>".rupiah($que['pcsminta'],0)."</td>";
+                    $hasil .= "<td>".rupiah($que['kgsminta'],2)."</td>";
+                $hasil .= "<td class='text-primary'>".rupiah($que['pcs'],0)."</td>";
+                $hasil .= "<td class='text-primary'>".rupiah($que['kgs'],2)."</td>";
+                if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']!=''){
+                    $hasil .= "<td class='text-primary'>".$que['nobontr']."</td>";
+                }else{
+                    if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']==''){
+                        $hasil .= "<td class='text-primary'><a class='text-info' href='".base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang']."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data Nobontr'>Pilih Nobontr</a></td>";
+                    }
                 }
-            }
-            if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && trim($que['insno'])!=''){
-                $hasil .= "<td class='text-primary'>".$que['insno']."</td>";
-            }else{
-                if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && trim($que['insno'])==''){
-                    $hasil .= "<td class='text-primary'><a href='".base_url().'out/addinsno/'.$que['id'].'/'.$modecari.'/'.$kodecari."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data insno'>Pilih Insno</a></td>";
+                if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && trim($que['insno'])!=''){
+                    $hasil .= "<td class='text-primary'>".$que['insno']."</td>";
+                }else{
+                    if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && trim($que['insno'])==''){
+                        $hasil .= "<td class='text-primary'><a href='".base_url().'out/addinsno/'.$que['id'].'/'.$modecari.'/'.$kodecari."' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Pilih Data insno'>Pilih Insno</a></td>";
+                    }
                 }
+                if($this->session->userdata('deptsekarang')=='GS'){
+                    $hasil .= "<td class='text-primary font-bold'>".$que['sublok']."</td>";
+                }
+                $hasil .= "<td>";
+                $hasil .= "<a href=".base_url().'out/editdetailout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah Qty</a>";
+                $hasil .= "<a href='#' data-href=".base_url().'out/hapusdetailout/'.$que['id'].'/'.$que['id_header']." data-message='Akan menghapus data barang ".$que['nama_barang']."' class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
+                $hasil .= "<a href=".base_url().'out/editdetailgenout/'.$que['id'].'/'.$que['id_header']." class='btn btn-sm btn-success' style='padding: 3px 5px !important;' title='Ubah data Detailgen'>Edit Detail</a>";
+                $hasil .= "</td>";
+                $hasil .= "</tr>";
+                $jumlah++;
             }
-            if($this->session->userdata('deptsekarang')=='GS'){
-                $hasil .= "<td class='text-primary font-bold'>".$que['sublok']."</td>";
-            }
-            $hasil .= "<td>";
-            $hasil .= "<a href=".base_url().'out/editdetailout/'.$que['id']." class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Ubah data Detail'>Ubah Qty</a>";
-            $hasil .= "<a href='#' data-href=".base_url().'out/hapusdetailout/'.$que['id'].'/'.$que['id_header']." data-message='Akan menghapus data barang ".$que['nama_barang']."' class='btn btn-sm btn-danger' style='padding: 3px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>";
-            $hasil .= "</td>";
-            $hasil .= "</tr>";
-            $jumlah++;
+        }else{
+            $hasil .= "<tr class='text-center'><td colspan='7'>-- Barang Kosong --</td></tr>";
         }
         $cocok = array('datagroup' => $hasil,'jmlrek' => $jumlah);
         echo json_encode($cocok);
@@ -351,7 +356,7 @@ class Out extends CI_Controller {
         $no=1;
         $pcs =0;
         $kgs = 0;
-         foreach ($data as $val) {
+         foreach ($data->result_array() as $val) {
             $pcs += $val['pcs'];
             $kgs += $val['kgs'];
             $infoinsno = '';
@@ -402,6 +407,7 @@ class Out extends CI_Controller {
         $html .= "<td style='line-height: 13px;'>".$val['seri_barang'].'. '.$spek." # <span class='text-teal'>".$val['insno'].' '.$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
         $html .= "<td>".$sku."</td>";
         $html .= "<td>".$val['namasatuan']."</td>";
+        $html .= "<td>".$val['nobale']."</td>";
         $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
         $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
         $html .= "<td></td>";
@@ -411,7 +417,7 @@ class Out extends CI_Controller {
         $kgs += $val['kgs'];
        }
         $html .= "<tr>";
-        $html .= "<td colspan='3' class='text-end'>TOTAL</td>";
+        $html .= "<td colspan='4' class='text-end'>TOTAL</td>";
         $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
         $html .= "<td class='text-right font-bold'>".rupiah($kgs,2)."</td>";
         $html .= "<td></td>";
@@ -525,6 +531,93 @@ class Out extends CI_Controller {
         $data['header'] = $this->out_model->getdatabyid($id)->row_array();
         $data['data'] = $this->out_model->viewrekapbom($id);
         $this->load->view('out/viewrekapbom',$data);
+    }
+    public function editdetailgenout($kode,$head,$mode=0){
+        $header['header'] = 'transaksi';
+        $data['data'] = $this->out_model->getdatabyid($head)->row_array();
+        $data['detail'] = $this->out_model->getdatadetailbyid($kode)->row_array();
+        $data['detailgen'] = $this->out_model->getdatadetailgentemp($kode,$mode);
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $data['mode'] = 'tambah';
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'out';
+		$this->load->view('layouts/header',$header);
+		$this->load->view('out/dataoutgen',$data);
+		$this->load->view('layouts/footer',$footer);
+    }
+    public function hapusdatadetailgentemp($kode){
+        $getkode = $this->out_model->getdatadetailgenbyid($kode)->row_array();
+        if($getkode){
+            $idhead = $getkode['id_header'];
+            $iddetail = $getkode['id_detail'];
+            $hapus = $this->out_model->hapusdatadetailgentemp($kode);
+            if($hapus){
+                $url = base_url().'out/editdetailgenout/'.$iddetail.'/'.$idhead.'/1';
+                redirect($url);
+            }
+        }
+    }
+    public function addbarangoutgentemp(){
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $this->load->view('out/addbarangouttemp',$data);
+    }
+    public function simpandetailbaranggentemp()
+    {
+        $data = [
+            'id_header' => $_POST['id_header'],
+            'id_detail' => $_POST['id_detail'],
+            'id_barang' => $_POST['id_barang'],
+            'id_satuan' => $_POST['id_satuan'],
+            'pcs' => $_POST['pcs'],
+            'kgs' => $_POST['kgs'],
+            'keterangan' => $_POST['keterangan']
+        ];
+        $hasil = $this->out_model->simpandetailbarangtemp($data);
+        if ($hasil) {
+            $url = base_url().'out/editdetailgenout/'.$_POST['id_detail'].'/'.$_POST['id_header'].'/1';
+            redirect($url);
+        }
+    }
+    public function editgentemp($id){
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $data['data'] = $this->out_model->getdatadetailgentempbyid($id);
+        $this->load->view('out/editbarangtemp',$data);
+    }
+    public function updategentemp(){
+        $data = [
+            'id' => $_POST['id'],
+            'pcs' => $_POST['pcs'],
+            'kgs' => $_POST['kgs'],
+            'id_satuan' => $_POST['sat'],
+            'insno' => $_POST['insno'],
+            'nobontr' => $_POST['nobontr'],
+            'exnet' => $_POST['exnet'],
+            'nobale' => $_POST['nobale']
+        ];
+        $hasil = $this->out_model->updategentemp($data);
+        echo $hasil;
+    }
+    public function simpandetailgenbarang($detail,$head){
+        $cekkgsdetail = $this->out_model->getdatadetailbyid($detail)->row_array();
+        $kgsdetail = round($cekkgsdetail['kgs'],2);
+        $cekkgstemp = $this->out_model->getdatadetailgentemp($detail,1);
+        $kgstemp = 0;
+        foreach($cekkgstemp->result_array() as $k){
+            $kgstemp += round($k['kgs'],2);
+        }
+
+        if($kgstemp != $kgsdetail){
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',"(Error) Kgs detail tidak sama dengan Kgs Header");
+            $url = base_url().'out/editdetailgenout/'.$detail.'/'.$head.'/1';
+            redirect($url);
+        }else{
+            $hasil = $this->out_model->simpandetailgentemp($detail);
+             if ($hasil) {
+                $url = base_url().'out/dataout/'.$head;
+                redirect($url);
+            }
+        }
     }
     function cetakqr2($isi,$id){
 		$tempdir = "temp/";

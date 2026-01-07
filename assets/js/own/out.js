@@ -39,6 +39,7 @@ $(document).ready(function () {
 });
 $("#dept_kirim").change(function () {
 	var kirim = $(this).val();
+	var darike = $("#tujuanbon").html();
 	$.ajax({
 		// dataType: "json",
 		type: "POST",
@@ -47,12 +48,13 @@ $("#dept_kirim").change(function () {
 			kode: $(this).val(),
 		},
 		success: function (data) {
-			if (kirim == "GS" || kirim == "GP") {
-				$("#adddataout").removeClass("hilang");
-				$("#buttonpilih2").addClass("hilang");
-			} else {
+			if (kirim == "GS" || kirim == "GP" || kirim == "GM") {
 				$("#adddataout").addClass("hilang");
 				$("#buttonpilih2").removeClass("hilang");
+			} else {
+				$("#adddataout").removeClass("hilang");
+				$("#buttonpilih2").addClass("hilang");
+				$("#adddataout").html('<i class="fa fa-plus"></i><span class="ml-1">Tambah Data '+darike+'</span>');
 			}
 			$("#dept_tuju").html(data);
 			$("#dept_tuju").change();
@@ -80,6 +82,7 @@ $("#dept_tuju").change(function () {
 			} else {
 				$("#div-filter2").addClass("hilang");
 			}
+			// getdataout();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);

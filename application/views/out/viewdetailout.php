@@ -78,6 +78,7 @@
                                 <th>Specific</th>
                                 <th>SKU</th>
                                 <th>Satuan</th>
+                                <th>No Bale</th>
                                 <th>Qty</th>
                                 <th>Kgs</th>
                                 <th>Keterangan</th>

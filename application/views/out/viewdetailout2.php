@@ -40,7 +40,7 @@
                     $xnet = $val['exnet']==0 ? '' : 'Y';
                     ?>
                     <tr>
-                        <td style="line-height: 12px;"><?= $namabarang.' <span class="text-danger">('.$val['jmlrekstok'].')</span><br><span class="text-teal" style="font-style: italic; font-size: 12px;">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
+                        <td style="line-height: 12px;"><?= $namabarang.'<br><span class="text-teal" style="font-style: italic; font-size: 12px;">'.$val['insno'].' '.$val['nobontr'].'</span>'; ?></td>
                         <td><?= $sku ?></td>
                         <td><?= $nmsatuan; ?></td>
                         <td><?= $val['nobale'] ?></td>
