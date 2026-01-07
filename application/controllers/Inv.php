@@ -253,6 +253,7 @@ class Inv extends CI_Controller
         $sheet->setCellValue('Q3', "SELISIH QTY");
         $sheet->setCellValue('R3', "SELISIH KGS");
         $sheet->setCellValue('S3', "KETERANGAN");
+        $sheet->setCellValue('T3', "KETERANGAN");
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->invmodel->toexcel();
@@ -289,6 +290,7 @@ class Inv extends CI_Controller
             $sheet->setCellValue('Q' . $numrow, '-');
             $sheet->setCellValue('R' . $numrow, '-');
             $sheet->setCellValue('S' . $numrow, '-');
+            $sheet->setCellValue('T' . $numrow, $data['nobale']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

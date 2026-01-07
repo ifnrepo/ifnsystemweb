@@ -1883,7 +1883,7 @@ class Ib extends CI_Controller
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL" . $data['nomorAju']);
             $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message']);
-            $this->ibmodel->updatesendceisa($id);
+            $this->ibmodel->updatesendceisa($id,$data['nomorAju']);
             $url = base_url() . 'ib/isidokbc/' . $id . $tmb;
             redirect($url);
         } else {
@@ -1897,12 +1897,12 @@ class Ib extends CI_Controller
             redirect($url);
         }
     }
-    public function getdatablawb($nomorbl, $tglbl, $id)
+    public function getdatablawb($nomorbl, $tglbl, $id, $kantor="")
     {
         $token = $this->ibmodel->gettoken();
         // $token = 'XXX';
         $namaimpor = urlencode('INDONEPTUNE NET MANUFACTURING');
-        $kodekantor = urlencode('040300');
+        $kodekantor = urlencode($kantor);
         $tglurl = urlencode($tglbl);
         $blurl = urlencode($nomorbl);
         $curl = curl_init();

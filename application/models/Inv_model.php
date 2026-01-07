@@ -335,7 +335,7 @@ class inv_model extends CI_Model
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
         $kolom .= " left join kategori on kategori.kategori_id = left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4)";
         if($this->session->userdata('currdept') != 'GS'){
-        $kolom .= " where (jns <= 2)";
+        $kolom .= " where (jns <= 2 )";
         }
         if($ifndln!='all'){
             $kolom .= " AND xdln = ".$ifndln;

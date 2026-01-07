@@ -164,6 +164,7 @@ class Ib_model extends CI_Model
         $this->db->where('trim(tb_header.nomor_bc)', $kode);
         $this->db->where('tb_header.kode_dok != ','ADJ');
         $this->db->where('tb_header.kode_dok != ','IB');
+        $this->db->where('tb_header.jns_bc','261');
         return $this->db->get()->row_array();
         // return $this->db->get_where('tb_header',['trim(nomor_bc)' => $kode])->row_array();
     }
@@ -560,7 +561,9 @@ class Ib_model extends CI_Model
     public function getdatanomoraju($id)
     {
         $detail = $this->db->get_where('tb_header', ['id' => $id])->row_array();
-        $kodeaju = str_repeat('0', 6 - strlen(trim($detail['jns_bc']))) . trim($detail['jns_bc']);
+        // $kodeaju = str_repeat('0', 6 - strlen(trim($detail['jns_bc']))) . trim($detail['jns_bc']);
+        $prefix = trim($detail['prefix_aju'])=='' ? '000' : trim($detail['prefix_aju']);
+        $kodeaju = $prefix.str_repeat('0', 3 - strlen(trim($detail['jns_bc']))) . trim($detail['jns_bc']);
         return $kodeaju . '010017' . str_replace('-', '', $detail['tgl_aju']) . $detail['nomor_aju'];
     }
     public function isitokenbc($data)
@@ -583,10 +586,10 @@ class Ib_model extends CI_Model
         $this->db->update('tb_ajuceisa', ['nomor_aju' => $isi]);
         return $hass['nomor_aju'];
     }
-    public function updatesendceisa($id)
+    public function updatesendceisa($id,$aju='000')
     {
         $this->db->where('id', $id);
-        $this->db->update('tb_header', ['send_ceisa' => 1]);
+        $this->db->update('tb_header', ['send_ceisa' => 1,'prefix_aju' => substr($aju, 0, 3)]);
     }
     public function updatebc11($data)
     {
@@ -999,6 +1002,16 @@ class Ib_model extends CI_Model
                     $this->db->where('id', $iddet);
                     $this->db->update('tb_detail', ['in_exbc' => 'in_exbc - ' . $idjumdet[$ke - 1]]);
                 }
+            }
+
+            $this->db->select("*");
+            $this->db->from('tb_detail');
+            $this->db->where('id_akb', $id);
+            $this->db->group_by('id_header');
+            $getdata = $this->db->get();
+            foreach($getdata->result_array() as $datahead){
+                $this->db->where('id',$datahead['id_header']);
+                $this->db->update('tb_header',['ok_tuju' => 0]);
             }
 
             $this->db->where('id_akb', $id);

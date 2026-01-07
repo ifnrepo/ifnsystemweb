@@ -10,6 +10,7 @@ define('LOK_UPLOAD_DOK', "./assets/image/dokmesin/dok/");
 define('LOK_UPLOAD_DOK_BC', "./assets/file/dok/");
 define('kodeunik', 'concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');
 define('LOK_UPLOAD_PDFRESPON', "./assets/file/");
+define('PREFIXAJU','IFN');
 
 function visibpass($kata)
 {
@@ -618,7 +619,7 @@ function cekdetout($header)
 function isikurangnol($data)
 {
     $len = strlen(trim($data));
-    return str_repeat('0', 6 - $len) . trim($data);
+    return 'IFN'.str_repeat('0', 3 - $len) . trim($data);
 }
 function max_upload()
 {

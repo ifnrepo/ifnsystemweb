@@ -14,7 +14,7 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label font-kecil">Keyword</label>
                 <div class="col input-group">
-                    <input type="text" class="form-control font-kecil inputangka" name="keyw" id="keyw" placeholder="Cari.." >
+                    <input type="text" class="form-control font-kecil inputangka" name="keyw" id="keyw" placeholder="Cari.." autofocus>
                     <a href="#" class="btn font-kecil bg-success text-white" id="getbarang">Get!</a>
                 </div>
             </div>
@@ -92,11 +92,11 @@
 </div>
 <script>
     $(document).ready(function(){
-        $("#keyw").focus();
-        $("#keyw").val($("#nama_barang").val());
-        if($("#keyw").val() != ''){
-            $("#getbarang").click();
-        }
+        // $("#keyw").focus();
+        // $("#keyw").val($("#nama_barang").val());
+        // if($("#keyw").val() != ''){
+        //     $("#getbarang").click();
+        // }
     })
     $("#keyw").on('keyup',function(e){
         if(e.key == 'Enter' || e.keycode === 13){
@@ -137,9 +137,10 @@
         $.ajax({
             // dataType: "json",
             type: "POST",
-            url: base_url+'out/simpandetailbarangx',
+            url: base_url+'out/simpandetailbaranggentemp',
             data: {
                 id_header: $("#id_header").val(),
+                id_detail: $("#id_detail").val(),
                 id_barang: $("#id_barang").val(),
                 id_satuan: $("#id_satuan").val(),
                 pcs: toAngka($("#pcs").val()),
