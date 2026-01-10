@@ -1577,7 +1577,7 @@ class Akb_model extends CI_Model
         $this->db->like('barang.nama_barang', $kode);
         $this->db->or_like('tb_header.nomor_dok', $kode);
         $this->db->group_end();
-        $this->db->order_by('tb_header.id DESC');
+        $this->db->order_by('tb_header.tgl DESC','tb_header.id DESC');
         $this->db->limit(50);
         return $this->db->get();
     }

@@ -2,7 +2,7 @@
     <div class="row">
         <div class="col-12">
             <input id="iddetail" class="btn btn-sm btn-danger hilang" value="">
-            <div class="mb-1 line-12"><h4 class="mb-1">Nomor Dokumen : <?= $header['nomor_dok']; ?></h4><span class="text-pink" style="font-style: italic;">Periode Inventory : "<?= tambahnol($this->session->userdata('bl')).'-'.$this->session->userdata('th'); ?>"</span></div>
+            <div class="mb-1 line-12"><h4 class="mb-1">Nomor Dokumen : <?= $header['nomor_dok']; ?></h4><span class="text-pink" style="font-style: italic;">Periode Inventory : "<?= tambahnol($this->session->userdata('blout')).'-'.$this->session->userdata('thout'); ?>"</span></div>
             <div id="table-default" class="table-responsive mb-1">
               <table class="table datatable" id="cobasisip">
                 <thead style="background-color: blue !important">

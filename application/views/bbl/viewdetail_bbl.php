@@ -80,6 +80,9 @@
                     </div>
                 </div>
                 <hr class="m-1">
+                <?php if($header['pesan_bbl']!=''){ ?>
+                    <div class="bg-danger-lt p-1"><span class="text-black"><?= 'PERHATIAN : '.strtoupper($header['pesan_bbl']) ?></span></div>
+                <?php } ?>
                 <div class="row mb-1">
                     <div class="col-3">
                         <div class="<?php if($header['ok_pp']==1 && $header['bbl_pp']==0){ echo "hilang"; } ?>">
@@ -142,7 +145,7 @@
             $ttdke = $header['data_ok']+$header['ok_pp']+$header['ok_valid']+$header['ok_tuju']+$header['ok_pc']+1; 
             $hilang = datauser($this->session->userdata('id'),'cekpc')==1 ? "hilang" : ""; ?>     
             <div class="text-center mt-0">
-            <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan validasi bon <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'task/validasibbl/' . $header['id'] . '/' . $ttdke; ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve Dokumen</a>
+            <a href="<?= base_url() . 'task/validasitask/' . $header['id'] . '/' . $ttdke ?>" style="padding: 5px !important" data-bs-target="#veriftask" data-message="Anda yakin akan validasi bon <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'task/validasitask/' . $header['id'] . '/' . $ttdke; ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve Dokumen</a>
             <a href="<?= base_url() . 'task/canceltask/' . $header['id'] . '/' . $ttdke ?>" style="padding: 5px !important" data-bs-target="#canceltask" data-message="Anda yakin akan membatalkan bon <br><?= $header['nomor_dok']; ?>" data-href="<?= base_url() . 'task/canceltask/' . $header['id'] . '/' . $ttdke ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-danger <?= $hilang; ?>">Cancel</a>
             </div>           
         <?php endif; ?>

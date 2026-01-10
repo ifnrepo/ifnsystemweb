@@ -39,6 +39,14 @@
         </div>
         <div class="col-12 hilang" id="databarang">
             <input type="text" id="id_barang" name="id_barang" class="hilang">
+            <input type="text" id="po" name="po" class="hilang">
+            <input type="text" id="item" name="item" class="hilang">
+            <input type="text" id="dis" name="dis" class="hilang">
+            <input type="text" id="weightjala" name="weightjala" class="hilang">
+            <div class="row font-kecil mb-0" id="cont-spek">
+                <label class="col-3 col-form-label font-kecil font-bold">SKU</label>
+                <div class="col input-group mb-1 text-teal font-bold mt-2" id="skubarangnya">XXXX YYYY</div>
+            </div>
             <div class="row font-kecil mb-0" id="cont-spek">
                 <label class="col-3 col-form-label font-kecil font-bold">Spesifikasi Barang</label>
                 <div class="col input-group mb-1 text-teal font-bold mt-2" id="spekbarangnya">XXXX YYYY</div>
@@ -78,6 +86,26 @@
                 </div>
             </div>
             <div class="row font-kecil mb-1">
+                <label class="col-3 col-form-label font-bold">Insno</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil btn-flat text-uppercase" id="insno" name="insno"  autocomplete="off" aria-describedby="emailHelp" placeholder="Nomor instruksi">
+                </div>
+            </div>
+            <div class="row font-kecil mb-1">
+                <label class="col-3 col-form-label font-bold">Nomor IB</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil btn-flat text-uppercase" id="nobontr" name="nobontr"  autocomplete="off" aria-describedby="emailHelp" placeholder="Nomor Inpuut Barang">
+                </div>
+            </div>
+            <?php if($this->session->userdata('deptsekarang')=='GF'): ?>
+                <div class="row font-kecil mb-1">
+                    <label class="col-3 col-form-label font-bold">No Bale</label>
+                    <div class="col">
+                        <input type="text" class="form-control font-kecil btn-flat text-uppercase" id="nobale" name="nobale"  autocomplete="off" aria-describedby="emailHelp" placeholder="Nomor Nomor Bale">
+                    </div>
+                </div>
+            <?php endif; ?>
+            <div class="row font-kecil mb-1">
                 <label class="col-3 col-form-label font-bold">Ket</label>
                 <div class="col">
                     <textarea class="form-control font-kecil btn-flat" id="keterangan" name="keterangan" placeholder="Keterangan"></textarea>
@@ -87,8 +115,11 @@
     </div>
 </div>
 <div class="modal-footer">
-    <button type="button" class="btn btn-sm btn-primary mr-1 hilang" id="simpanbar">Simpan</button>
-    <button type="button" class="btn btn-sm btn-danger m-0" data-bs-dismiss="modal">Close / Cancel</button>
+    <div></div>
+    <div>
+        <button type="button" class="btn btn-sm btn-primary mr-1 hilang" id="simpanbar">Simpan</button>
+        <button type="button" class="btn btn-sm btn-danger m-0" data-bs-dismiss="modal">Close / Cancel</button>
+    </div>
 </div>
 <script>
     $(document).ready(function(){
@@ -103,11 +134,20 @@
             $("#getbarang").click();
         }
     })
+    $("#pcs").on('blur',function(e){
+        if($("#weightjala").val()!='0'){
+            var berat = parseFloat($("#weightjala").val());
+            var qty = parseFloat($(this).val());
+
+            $("#kgs").val(berat*qty);
+        }
+    })
     $("#getbarang").click(function(){
         if($("#keyw").val() == ''){
             pesan('Isi dahulu keyword pencarian barang','info');
             return;
         }
+        $("#getbarang").html('<i class="fa fa-circle-o-notch fa-spin mr-2"></i> Loading')
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -117,6 +157,7 @@
                 data: $("#keyw").val(),
             },
             success: function(data){
+                $("#getbarang").html('Get!')
                 $("#body-table").html(data.datagroup).show();
             },
             error: function (xhr, ajaxOptions, thrownError) {
@@ -143,6 +184,12 @@
                 id_detail: $("#id_detail").val(),
                 id_barang: $("#id_barang").val(),
                 id_satuan: $("#id_satuan").val(),
+                po: $("#po").val(),
+                item: $("#item").val(),
+                dis: $("#dis").val(),
+                insno: $("#insno").val(),
+                nobontr: $("#nobontr").val(),
+                nobale: $("#nobale").val(),
                 pcs: toAngka($("#pcs").val()),
                 kgs: toAngka($("#kgs").val()),
                 keterangan: $("#keterangan").val(),
@@ -150,7 +197,8 @@
             success: function(data){
                 // $("#body-table").html(data.datagroup).show();
                 // alert('BERHASIL');
-                window.location.reload();
+                var url = base_url+'out/editdetailgenout/'+$("#id_detail").val()+'/'+$("#id_header").val()+'/1';
+                window.location.replace(url);
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
@@ -162,10 +210,20 @@
         var x = $(this).attr('rel1');
         var y = $(this).attr('rel2');
         var z = $(this).attr('rel3');
+        var xpo = $(this).attr('rel5');
+        var xitem = $(this).attr('rel6');
+        var xdis = $(this).attr('rel7');
+        var jala = $(this).attr('rel8');
+        var sku = $(this).attr('rel9');
         // $("#nama_barang").val(x);
         $("#spekbarangnya").text(x);
+        $("#skubarangnya").text(sku);
         $("#id_barang").val(y);
         $("#id_satuan").val(z)
+        $("#po").val(xpo)
+        $("#item").val(xitem)
+        $("#dis").val(xdis)
+        $("#weightjala").val(jala)
         $("#databarang").removeClass('hilang');
         $("#simpanbar").removeClass('hilang');
         $("#caribarang").addClass('hilang');

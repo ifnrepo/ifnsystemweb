@@ -1,35 +1,36 @@
 <?php 
 class In_model extends CI_Model{
     public function getdata($kode){
+        $deptsubkon = in_array($kode['dept_id'],daftardeptsubkon());
         $arrkondisi = [
-            'id_perusahaan'=>IDPERUSAHAAN,
-            'dept_tuju' => $kode['dept_id'],
-            'dept_id' => $kode['dept_tuju'],
+            'tb_header.id_perusahaan'=>IDPERUSAHAAN,
+            'tb_header.dept_tuju' => $kode['dept_id'],
+            'tb_header.dept_id' => $kode['dept_tuju'],
             // 'kode_dok' => 'T',
-            'month(tgl)' => $this->session->userdata('blin'),
-            'year(tgl)' => $this->session->userdata('thin'),
-            'data_ok' => 1,
-            'ok_tuju' => 1
+            'month(tb_header.tgl)' => $this->session->userdata('blin'),
+            'year(tb_header.tgl)' => $this->session->userdata('thin'),
+            'tb_header.data_ok' => 1,
+            'tb_header.ok_tuju' => 1
             // 'ok_valid' => 0,
         ];
         // $kondisi = " (kode_dok='T' OR (kode_dok = 'IB' AND (nomor_bc != '' OR tanpa_bc = 1)))";
-        $kondisi = " (kode_dok='T' OR kode_dok = 'IB')";
-        $kondisisubkon = " kode_dok='T' AND (nomor_bc != '' OR tanpa_bc = 1)";
+        $kondisi = " (tb_header.kode_dok='T' OR tb_header.kode_dok = 'IB')";
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
+        $this->db->from('tb_header');
+        $this->db->join('tb_header a','a.id = (SELECT tb_detail.id_akb FROM tb_detail WHERE tb_detail.id_header = tb_header.id LIMIT 1)','left');
         $this->db->where($arrkondisi);
-        $this->db->where('left(nomor_dok,3) !=','IFN');
-        // if($kode['katedept']==3){
-        //     $this->db->where($kondisisubkon);
-        // }else{
-            $this->db->where($kondisi);
-        // }
-        if($this->session->userdata('filterbon')==1){
-            $this->db->where('ok_valid',0);
+        $this->db->where($kondisi);
+        $this->db->where('left(tb_header.nomor_dok,3) !=','IFN');
+        if($deptsubkon){
+            $this->db->where('trim(a.nomor_bc) != ','');
         }
-        $this->db->order_by('tgl');
-        $this->db->order_by('nomor_dok');
-        $hasil = $this->db->get('tb_header');
+        if($this->session->userdata('filterbon')==1){
+            $this->db->where('tb_header.ok_valid',0);
+        }
+        $this->db->order_by('tb_header.tgl');
+        $this->db->order_by('tb_header.nomor_dok');
+        $hasil = $this->db->get();
         return $hasil;
     }
     public function getdatabyid($kode){
@@ -100,11 +101,7 @@ class In_model extends CI_Model{
             $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id,barang.id_kategori');
             $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
             $this->db->join('barang','tb_detail.id_barang=barang.id','left');
-            // if($mode==0){
-                $this->db->where('id_header',$id);
-            // }else{
-            //     $this->db->where('id_akb',$id);
-            // }
+            $this->db->where('id_header',$id);
             $detail = $this->db->get('tb_detail')->result_array();
             foreach($detail as $det){
                 $kondisistok = [

@@ -7,14 +7,15 @@
             <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">Spec Barang</label>
                 <div class="col">
-                    <input type="text" class="form-control font-kecil" value="<?= $data['nama_barang']; ?>" placeholder="Spec Barang" disabled>
+                    <?php $spek = trim($data['po'])=='' ? namaspekbarang($data['id_barang'],'kode') : spekpo($data['po'],$data['item'],$data['dis']); ?>
+                    <input type="text" class="form-control font-kecil" value="<?= $spek; ?>" placeholder="Spec Barang" disabled>
                 </div>
             </div>
             <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">SKU</label>
                 <div class="col">
                     <?php $sku = trim($data['po'])=='' ? namaspekbarang($data['id_barang'],'kode') : viewsku($data['po'],$data['item'],$data['dis']); ?>
-                    <input type="text" class="form-control font-kecil" id="pcs" name="pcs" value="<?= $sku; ?>" placeholder="Spec Barang" disabled>
+                    <input type="text" class="form-control font-kecil" id="sku" name="sku" value="<?= $sku; ?>" placeholder="Spec Barang" disabled>
                 </div>
             </div>
             <div class="row font-kecil mb-1">

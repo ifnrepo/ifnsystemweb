@@ -120,6 +120,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             foreach ($data as $datdet) :
                                 $jmlrec = $datdet['jmlrex'] == null ? '' : $datdet['jmlrex'] . ' Item ';
                                 $jnbbl = $datdet['jn_bbl']==0 ? '' : 'text-danger';
+                                $pesanbbl = $datdet['pesan_bbl']=='' ? '' : '<br><span class="text-pink">Noted: '.$datdet['pesan_bbl'].'</span>';
                             ?>
                                 <tr>
                                     <td class="<?= $jnbbl; ?>"><?= tglmysql($datdet['tgl']); ?></td>
@@ -134,7 +135,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php }else{ ?>
                                     <td></td>
                                     <?php } ?>
-                                    <td><?= $datdet['keterangan'] ?></td>
+                                    <td class="line-12"><?= $datdet['keterangan'].$pesanbbl ?></td>
                                     <td>
                                         <?php if($datdet['ok_bb']==1 && $datdet['data_ok']==0 && $datdet['ok_valid']==0){ ?>
                                         Tunggu Validasi Kep Dept

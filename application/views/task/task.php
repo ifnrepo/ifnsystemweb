@@ -116,7 +116,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       $btnno = base_url() . 'task/canceltask/' . $datpb['id'] . '/3';
                     }else{
                       $viewdetail = base_url() . 'bbl/viewdetail_bbl/' . $datpb['id'] . '/' . $this->session->userdata('ttd').'/1';
-                      $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $ttdke;
+                      // $btnok = base_url() . 'task/validasibbl/' . $datpb['id'] . '/' . $ttdke;
+                      $btnok = base_url() . 'task/validasitask/' . $datpb['id'] . '/' . $ttdke;
                       // $btnno = base_url() . 'task/cancelbbl/' . $datpb['id'] . '/' . $ttdke;
                       $btnno = base_url() . 'task/canceltask/' . $datpb['id'] . '/' . $ttdke;
                       $ciriurgent = $datpb['urgent']==1 ? 'bg-red-lt' : '';
@@ -147,7 +148,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php } else if ($this->session->userdata('modetask') == 'bbl' && count(arrdep(datauser($this->session->userdata('id'),'bbl_cekmng'))) > 0 && $datpb['ok_pp']==1) { ?>
                       <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan edit Approver bon <br><?= $datpb['nomor_dok']; ?> ?" data-href="<?= $btneditapprover ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-primary">Edit</a>
                     <?php } $hilang = datauser($this->session->userdata('id'),'cekpc')==1 ? "hilang" : ""; ?>
+                    <?php if($this->session->userdata('modetask')=='bbl'){ ?>
+                    <a href="<?= $btnok; ?>" style="padding: 5px !important" data-bs-target="#veriftask" data-message="Anda yakin akan validasi bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnok ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve</a>
+                    <?php }else{ ?>
                     <a href="#" style="padding: 5px !important" data-bs-target="#modal-info" data-message="Anda yakin akan validasi bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnok ?>" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-info">Approve</a>
+                    <?php } ?>
                     <a href="<?= $btnno; ?>" style="padding: 5px !important" data-bs-target="#canceltask" data-message="Anda yakin akan membatalkan bon <br><?= $datpb['nomor_dok']; ?>" data-href="<?= $btnno ?>" data-tombol="Ya" data data-bs-toggle="modal" data-title="Validasi Bon" class="btn btn-sm btn-danger <?= $hilang; ?>">Cancel</a>
                   </td>
                 </tr>

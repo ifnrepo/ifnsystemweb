@@ -112,22 +112,29 @@ class Po extends CI_Controller
     }
     public function getdetailbarangpo()
     {
-        $data = $_POST['data'];
+        $data = strtoupper($_POST['data']);
         $query = $this->pomodel->getbarangpo($data);
         $html  = '';
         $no = 0;
-        foreach ($query->result_array() as $que) {
-            $no++;
+        if($query->num_rows() > 0){
+            foreach ($query->result_array() as $que) {
+                $no++;
+                $html .= "<tr class='font-kecil'>";
+                $html .= "<td>" . $que['nomor_dok'] . "</td>";
+                $html .= "<td>" . $que['nomorpb'] . "</td>";
+                $html .= "<td>" . $que['nama_barang'] . "</td>";
+                $html .= "<td>" . $que['pesan_bbl'] . "</td>";
+                $html .= "<td>";
+                $html .= "<label class='form-check'>";
+                $html .= "<input class='form-check-input' name='cekpilihbarang' title='cekbok" . $no . "' id='cekbok" . $no . "' rel='" . $que['iddetbbl'] . "' type='checkbox'>";
+                $html .= "<span class='form-check-label'>Pilih</span>";
+                $html .= "</label>";
+                $html .= "</td>";
+                $html .= "</tr>";
+            }
+        }else{
             $html .= "<tr>";
-            $html .= "<td>" . $que['nomor_dok'] . "</td>";
-            $html .= "<td>" . $que['nomorpb'] . "</td>";
-            $html .= "<td>" . $que['nama_barang'] . "</td>";
-            $html .= "<td>";
-            $html .= "<label class='form-check'>";
-            $html .= "<input class='form-check-input' name='cekpilihbarang' title='cekbok" . $no . "' id='cekbok" . $no . "' rel='" . $que['iddetbbl'] . "' type='checkbox'>";
-            $html .= "<span class='form-check-label'>Pilih</span>";
-            $html .= "</label>";
-            $html .= "</td>";
+            $html .= "<td class='text-center' colspan='5'>--Data tidak ditemukan, cari dengan Keyword lain--</td>";
             $html .= "</tr>";
         }
         $cocok = array('datagroup' => $html);

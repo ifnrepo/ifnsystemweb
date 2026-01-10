@@ -87,7 +87,8 @@ class Task extends CI_Controller {
                 $arraykolom[$kolom-1] => 1,
                 $arraytgl[$kolom-1] => date('Y-m-d H:i:s'),
                 $arrayuser[$kolom-1] => $this->session->userdata('id'),
-                'id' => $id
+                'id' => $id,
+                'pesan_bbl' => $pesan
             ];
             $simpan = $this->taskmodel->validasibbl($data);
             $this->helpermodel->isilog($this->db->last_query());
@@ -98,6 +99,38 @@ class Task extends CI_Controller {
             $url = base_url() . 'task';
             redirect($url);
         }
+        // echo $simpan;
+    }
+    public function validasibbltask()
+    {  
+        // $id,$kolom
+        $id = $_POST['id'];
+        $pesan = trim($_POST['ketvalid']);
+        $kolom = $_POST['ke'];
+        $kolom = $kolom < 1 ? 1 : $kolom;
+        $kolom = datauser($this->session->userdata('id'),'cekbbl')==1 && $kolom==2 ? 1 : $kolom;
+        $arraykolom=['data_ok','ok_pp','ok_valid','ok_tuju','ok_pc'];
+        $arraytgl=['tgl_ok','tgl_pp','tgl_valid','tgl_tuju','tgl_pc'];
+        $arrayuser=['user_ok','user_pp','user_valid','user_tuju','user_pc'];
+        $cek = $this->taskmodel->cekfield($id,$arraykolom[$kolom-1],0)->num_rows();
+        if($cek==1){
+            $data = [
+                $arraykolom[$kolom-1] => 1,
+                $arraytgl[$kolom-1] => date('Y-m-d H:i:s'),
+                $arrayuser[$kolom-1] => $this->session->userdata('id'),
+                'id' => $id,
+                'pesan_bbl' => $pesan
+            ];
+            $simpan = $this->taskmodel->validasibbl($data);
+            $this->helpermodel->isilog($this->db->last_query());
+        }else{
+            $simpan = 1;
+        }
+        // if ($simpan) {
+        //     $url = base_url() . 'task';
+        //     redirect($url);
+        // }
+        echo $simpan;
     }
     public function cancelbbl()
     {
@@ -247,6 +280,11 @@ class Task extends CI_Controller {
         //     redirect($url);
         // }
         echo $simpan;
+    }
+    public function validasitask($id=0,$ke=0){
+        $data['ke'] = $ke;
+        $data['data'] = $this->taskmodel->getdatabyid($id);
+        $this->load->view('task/validasitask',$data);
     }
     public function canceltask($id=0,$ke=0){
         $data['ke'] = $ke;
