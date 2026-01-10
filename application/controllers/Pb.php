@@ -243,12 +243,19 @@ class Pb extends CI_Controller
         $html = '';
         $query = $this->pb_model->getspecbarang($mode, $brg);
         foreach ($query as $que) {
+            $spek = $mode==0 ? $que['nama_barang'] : spekpo($que['po'],$que['item'],$que['dis']);
+            $kode = $mode==0 ? $que['kode'] : viewsku($que['po'],$que['item'],$que['dis']);
+            $satuan = $mode==0 ? $que['id_satuan'] : 21;
+            $po = $mode==0 ? '' : $que['po'];
+            $item = $mode==0 ? '' : $que['item'];
+            $dis = $mode==0 ? '' : $que['dis'];
+            $weightjala = $mode==0 ? 0 : $que['weight'];
             $html .= "<tr>";
-            $html .= "<td>" . $que['nama_barang'] . "</td>";
-            $html .= "<td>" . $que['kode'] . "</td>";
+            $html .= "<td>" . $spek . "</td>";
+            $html .= "<td>" . $kode . "</td>";
             $html .= "<td>-</td>";
             $html .= "<td>";
-            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $que['nama_barang'] . "' rel2='" . $que['id'] . "' rel3=" . $que['id_satuan'] . " rel4=" . $que['dln'] . ">Pilih</a>";
+            $html .= "<a href='#' class='btn btn-sm btn-success pilihbarang' style='padding: 3px !important;' rel1='" . $spek . "' rel2='" . $que['id'] . "' rel3='" . $satuan . "' rel4='" . $que['dln'] . "' rel5='" . $po . "' rel6='" . $item . "' rel7='" . $dis . "' rel8='" . $weightjala . "' rel9='" . $kode . "'>Pilih</a>";
             $html .= "</td>";
             $html .= "</tr>";
         }

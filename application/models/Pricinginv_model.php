@@ -563,6 +563,28 @@ class Pricinginv_model extends CI_Model
     public function toexcel(){
         return $this->db->query($this->getdata());
     }
+    public function getdatacutoff(){
+        $this->db->order_by('tgl');
+        return $this->db->get_where('tb_req_inventory',['year(tgl)' => $this->session->userdata('thpricing')]);
+    }
+    public function hapuscutoff($id){
+        $this->db->trans_start();
+        $cekdata = $this->db->get_where('tb_req_inventory',['id' => $id])->row_array();
+
+        $this->db->where('tgl',$cekdata['tgl']);
+        $datastok = $this->db->get('stokinv');
+        foreach($datastok->result_array() as $d){
+            $this->db->where('id_stok',$d['id']);
+            $this->db->delete('stokinv_detail');
+        }
+
+        $this->db->where('tgl',$cekdata['tgl']);
+        $this->db->delete('stokinv');
+
+        $this->db->where('id',$id);
+        $this->db->delete('tb_req_inventory');
+        return $this->db->trans_complete();
+    }
 
     // End Pricing
     public function depttujupb($kode)

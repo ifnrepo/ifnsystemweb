@@ -2,7 +2,7 @@ var table = null;
 $(document).ready(function () {
 	$(".loadered").removeClass('hilang');
 	table = $('#tabelnya').DataTable({
-		"processing": true,
+		// "processing": true,
 		// "responsive":true,
 		"serverSide": true,
 		"orderSequence": ['desc', 'asc'],
@@ -171,11 +171,13 @@ $(document).ready(function () {
     // });
 
 	$("#buttoncari").click(function(){
+		$(".loadered").removeClass('hilang');
 		var isi = $("#textcari").val();
 		table.search(isi).draw();
 		return false;
 	})
 	$("#buttonreset").click(function(){
+		$(".loadered").removeClass('hilang');
 		$("#textcari").val('');
 		table.search('').draw();
 		return false;

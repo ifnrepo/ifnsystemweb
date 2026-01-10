@@ -31,10 +31,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <?php $diskuncitgl2 = $tglkunci==0 ? 'hilang' : ''; ?>
               <a href="#" data-href="<?= base_url().'pricinginv/unlockinv' ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-title="Unlock INV" data-message="Akan Membuka data Inventory" class="btn btn-sm btn-primary <?= $distombollock ?><?= $diskuncitgl2 ?>" title="<?= $userlockinv ?>" style="height: 40px; min-width: 40px;" id="butunlock"><i class="fa fa-lock fa-2x"></i></a>
               <a href="#" data-href="<?= base_url().'pricinginv/lockinv' ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-title="Lock INV" data-message="Akan mengunci data Inventory" class="btn btn-sm btn-success <?= $distombollock ?><?= $diskuncitgl ?>" title="<?= $userlockinv ?>" style="height: 40px; min-width: 40px;" id="butlock"><i class="fa fa-unlock fa-2x"></i></a>
-              <a href="<?= base_url().'pricinginv/addcutoff' ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Tambah data Cut Off" data-tombol="Ya" class="btn btn-sm btn-primary mr-1" style="height: 40px;min-width:45px;" id="butcutoff"><i class="fa fa-plus mr-1"></i> Tambah Cut Off</a>
+              <a href="<?= base_url().'pricinginv/viewcutoff' ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View data Cut Off" class="btn btn-sm btn-blue mr-1" style="height: 40px;min-width:45px;" id="butcutoff" title="View Data Cut Off Inventory">View Cut Off</a>
+              <a href="<?= base_url().'pricinginv/addcutoff' ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Tambah data Cut Off" data-tombol="Ya" class="btn btn-sm btn-primary mr-1" style="height: 40px;min-width:45px;" id="butcutoff" title="Add tanggal permintaan Cut Off Inventory Departemen"><i class="fa fa-plus mr-1"></i> Tambah Cut Off</a>
               <a href="#" class="btn btn-sm btn-warning mr-1" style="height: 40px;min-width:45px;" id="butref"><i class="fa fa-refresh"></i></a>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-1" id="thpricing" name="th" style="width: 75px;" value="<?= $this->session->userdata('thpricing') ?>">
-              <select class="form-control form-sm font-kecil font-bold mr-1 form-select" id="blpricing" name="bl" style="width: 120px;">
+              <select class="form-control form-sm font-kecil font-bold mr-1 form-select" id="blpricing" name="bl" style="width: 120px;height: 40px;">
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
                   <option value="<?= $x; ?>" <?php if ($this->session->userdata('blpricing') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
                   <?php endfor; ?>

@@ -82,6 +82,11 @@ class Out_model extends CI_Model{
         $query = $this->db->get_where('tb_detail',['id'=>$kode]);
         return $query;
     }
+    public function getdataheaderbyid($kode){
+        $this->db->select('*');
+        $query = $this->db->get_where('tb_header',['id'=>$kode]);
+        return $query;
+    }
     public function getdatadetailgen($kode){
         $this->db->select('tb_detailgen.*,satuan.kodesatuan');
         $this->db->join('satuan','satuan.id = tb_detailgen.id_satuan','left');
@@ -105,7 +110,7 @@ class Out_model extends CI_Model{
             }
         }
 
-        $this->db->select('tb_detailgen_temp.*,satuan.kodesatuan');
+        $this->db->select('tb_detailgen_temp.*,satuan.kodesatuan,tb_detailgen_temp.id as idx');
         $this->db->join('satuan','satuan.id = tb_detailgen_temp.id_satuan','left');
         $query = $this->db->get_where('tb_detailgen_temp',['id_detail'=>$kode]);
         return $query;
@@ -137,9 +142,9 @@ class Out_model extends CI_Model{
 
         $data = $this->db->get_where('tb_detailgen_temp',['id_detail'=>$detail]);
         foreach($data->result_array() as $hasil){
+            unset($hasil['id']);
             $this->db->insert('tb_detailgen',$hasil);
         }
-
         $this->db->where('id_detail',$detail);
         $this->db->delete('tb_detailgen_temp');
 
@@ -940,35 +945,51 @@ class Out_model extends CI_Model{
     }
     public function simpandetailbarangx($data)
     {
+        $this->db->trans_start();
         $ceknomor = $this->db->get_where('tb_detail',['id_header' => $data['id_header']]);
         $jumlahceknomor = $ceknomor->num_rows();
         $data['seri_barang'] = ($jumlahceknomor > 0) ? (int)$jumlahceknomor+1 : 1;
+        if(trim($data['po']!='')){
+            $data['id_barang']=0;
+        }
         $hasil =  $this->db->insert('tb_detail', $data);
         $idnya = $this->db->insert_id();
         $this->helpermodel->isilog($this->db->last_query());
         $data['id_detail'] = $idnya;
-        $cektabelbarang = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
-        if ($cektabelbarang->num_rows() > 0) {
-            foreach ($cektabelbarang->result_array() as $kec) {
-                $databarang = $this->db->get_where('barang',['id' => $kec['id_barang_bom']])->row_array();
-                $xdata = [
-                    'id_header' => $data['id_header'],
-                    'id_detail' => $idnya,
-                    'id_barang' => $kec['id_barang_bom'],
-                    'persen' => $kec['persen'],
-                    'id_satuan' => $databarang['id_satuan'],
-                    'dln' => $databarang['dln'],
-                    'kgs' => round(($kec['persen'] / 100) * $data['kgs'],2),
-                ];
-                $this->db->insert('tb_detailgen', $xdata);
-                $this->helpermodel->isilog($this->db->last_query());
+        if(trim($data['po'])==''){
+            $cektabelbarang = $this->db->get_where('bom_barang', array('id_barang' => $data['id_barang']));
+            if ($cektabelbarang->num_rows() > 0) {
+                foreach ($cektabelbarang->result_array() as $kec) {
+                    $databarang = $this->db->get_where('barang',['id' => $kec['id_barang_bom']])->row_array();
+                    $xdata = [
+                        'id_header' => $data['id_header'],
+                        'id_detail' => $idnya,
+                        'id_barang' => $kec['id_barang_bom'],
+                        'persen' => $kec['persen'],
+                        'id_satuan' => $databarang['id_satuan'],
+                        'dln' => $databarang['dln'],
+                        'kgs' => round(($kec['persen'] / 100) * $data['kgs'],2),
+                    ];
+                    $this->db->insert('tb_detailgen', $xdata);
+                }
             }
+        }else{
+            $this->db->where('id',$idnya);
+            $xdata = $this->db->get('tb_detail')->row_array();
+            $xdata['id_detail'] = $xdata['id'];
+            unset($xdata['id']);
+            $this->db->insert('tb_detailgen', $xdata);
         }
         if ($hasil) {
             $this->db->where('id', $data['id_header']);
             $que = $this->db->get('tb_header')->row_array();
         }
+        $this->db->trans_complete();
         return $que;
+    }
+    public function setdetailtidaksama($id,$cek){
+        $this->db->where('id',$id);
+        return $this->db->update('tb_header',['taksama' => $cek]);
     }
     public function updatecustomer($data){
         $this->db->where('id',$data['id']);

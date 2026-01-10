@@ -177,7 +177,7 @@ class Po_model extends CI_Model
     }
     public function getbarangpo($data)
     {
-        $this->db->select('tb_detail.*,tb_detail.id as iddetbbl,a.nomor_dok,b.nama_barang,d.nomor_dok as nomorpb');
+        $this->db->select('tb_detail.*,tb_detail.id as iddetbbl,a.nomor_dok,b.nama_barang,d.nomor_dok as nomorpb,d.pesan_bbl');
         $this->db->from('tb_detail');
         $this->db->join('tb_header a', 'a.id = tb_detail.id_header', 'left');
         $this->db->join('barang b', 'b.id = tb_detail.id_barang', 'left');

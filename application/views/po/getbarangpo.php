@@ -2,7 +2,7 @@
     <div class="mb-1 row">
         <label class="col-3 col-form-label required font-kecil">Nomor BBL</label>
         <div class="col input-group">
-            <input type="text" class="form-control font-kecil inputangka" name="keyw" id="keyw" placeholder="Cari.." >
+            <input type="text" class="form-control font-kecil inputangka text-uppercase" name="keyw" id="keyw" placeholder="Cari.." >
             <a href="#" class="btn font-kecil bg-success text-white" id="getbarang">Get!</a>
         </div>
     </div>
@@ -15,11 +15,14 @@
                             <th>Bon BBL</th>
                             <th>Bon PB</th>
                             <th>Nama Barang</th>
+                            <th>Noted</th>
                             <th>Pilih</th>
                         </tr>
                     </thead>
                     <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                      
+                        <tr>
+                            <td colspan="5" class="text-center">-- Cari Nomor BBL --</td>
+                        </tr>
                     </tbody>
                 </table>
             </div>
@@ -31,7 +34,8 @@
 </div>
 <script>
     $(document).ready(function(){
-        $("#getbarang").click();
+        // alert('Cek');
+        // $("#getbarang").click();
     });
     $("#keyw").on('keyup',function(e){
         if(e.key == 'Enter' || e.keycode === 13){
@@ -39,6 +43,7 @@
         }
     })
     $("#getbarang").click(function(){
+        $("#getbarang").html("<i class='fa fa-circle-o-notch fa-spin mr-2'></i> Loading")
          $.ajax({
             dataType: "json",
             type: "POST",
@@ -49,6 +54,7 @@
             },
             success: function(data){
                 $("#body-table").html(data.datagroup).show();
+                $("#getbarang").html("Get!")
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

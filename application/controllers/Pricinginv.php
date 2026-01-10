@@ -161,6 +161,17 @@ class Pricinginv extends CI_Controller
     public function addcutoff(){
         $this->load->view('pricinginv/addcutoff');
     }
+    public function viewcutoff(){
+        $data['data'] = $this->pricingmodel->getdatacutoff();
+        $this->load->view('pricinginv/viewcutoff',$data);
+    }
+    public function hapuscutoff($id){
+        $hapus = $this->pricingmodel->hapuscutoff($id);
+        if($hapus){
+            $url = base_url().'pricinginv';
+            redirect($url);
+        }
+    }
     public function simpancutoff(){
         $data = [
             'tgl' => tglmysql($_POST['tgl']),

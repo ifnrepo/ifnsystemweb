@@ -461,6 +461,12 @@ class Out extends CI_Controller {
             'id_header' => $_POST['id_header'],
             'id_barang' => $_POST['id_barang'],
             'id_satuan' => $_POST['id_satuan'],
+            'po' => $_POST['po'],
+            'item' => $_POST['item'],
+            'dis' => $_POST['dis'],
+            'insno' => trim($_POST['insno']),
+            'nobontr' => trim($_POST['nobontr']),
+            'nobale' => trim($_POST['nobale']),
             'pcs' => $_POST['pcs'],
             'kgs' => $_POST['kgs'],
             'keterangan' => $_POST['keterangan']
@@ -546,7 +552,7 @@ class Out extends CI_Controller {
 		$this->load->view('layouts/footer',$footer);
     }
     public function hapusdatadetailgentemp($kode){
-        $getkode = $this->out_model->getdatadetailgenbyid($kode)->row_array();
+        $getkode = $this->out_model->getdatadetailgentempbyid($kode);
         if($getkode){
             $idhead = $getkode['id_header'];
             $iddetail = $getkode['id_detail'];
@@ -568,15 +574,18 @@ class Out extends CI_Controller {
             'id_detail' => $_POST['id_detail'],
             'id_barang' => $_POST['id_barang'],
             'id_satuan' => $_POST['id_satuan'],
+            'po' => $_POST['po'],
+            'item' => $_POST['item'],
+            'dis' => $_POST['dis'],
+            'insno' => trim($_POST['insno']),
+            'nobontr' => trim($_POST['nobontr']),
+            'nobale' => trim($_POST['nobale']),
             'pcs' => $_POST['pcs'],
             'kgs' => $_POST['kgs'],
             'keterangan' => $_POST['keterangan']
         ];
         $hasil = $this->out_model->simpandetailbarangtemp($data);
-        if ($hasil) {
-            $url = base_url().'out/editdetailgenout/'.$_POST['id_detail'].'/'.$_POST['id_header'].'/1';
-            redirect($url);
-        }
+        echo $hasil;
     }
     public function editgentemp($id){
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
@@ -598,6 +607,7 @@ class Out extends CI_Controller {
         echo $hasil;
     }
     public function simpandetailgenbarang($detail,$head){
+        $cekdataheader = $this->out_model->getdataheaderbyid($head)->row_array();
         $cekkgsdetail = $this->out_model->getdatadetailbyid($detail)->row_array();
         $kgsdetail = round($cekkgsdetail['kgs'],2);
         $cekkgstemp = $this->out_model->getdatadetailgentemp($detail,1);
@@ -606,7 +616,7 @@ class Out extends CI_Controller {
             $kgstemp += round($k['kgs'],2);
         }
 
-        if($kgstemp != $kgsdetail){
+        if(($kgstemp != $kgsdetail) && $cekdataheader['taksama']==0){
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror',"(Error) Kgs detail tidak sama dengan Kgs Header");
             $url = base_url().'out/editdetailgenout/'.$detail.'/'.$head.'/1';
@@ -617,6 +627,13 @@ class Out extends CI_Controller {
                 $url = base_url().'out/dataout/'.$head;
                 redirect($url);
             }
+        }
+    }
+    function setdetailtidaksama($id,$cek){
+        $hasil = $this->out_model->setdetailtidaksama($id,$cek);
+        if ($hasil) {
+            $url = base_url().'out';
+            redirect($url);
         }
     }
     function cetakqr2($isi,$id){
