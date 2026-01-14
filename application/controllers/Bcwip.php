@@ -33,16 +33,17 @@ class Bcwip extends CI_Controller
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->getdeptwip();
         $data['kategori'] = $this->bcwipmodel->getdatakategori();
+        $data['getopname'] = $this->bcwipmodel->getopname();
         if ($this->session->userdata('tglawalbcwip') == null) {
             $data['tglawal'] = tglmysql(date('Y-m-01'));
             $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
             $data['kategoricari'] = 'Cari Barang';
-            $data['data'] = null;
+            // $data['data'] = null;
         }else{
-            $data['tglawal'] = tglmysql($this->session->userdata('tglawalbcwip'));
-            $data['tglakhir'] = tglmysql($this->session->userdata('tglakhirbcwip'));     
+            $data['tglawal'] = $this->session->userdata('tglawalbcwip');
+            $data['tglakhir'] = $this->session->userdata('tglakhirbcwip');     
             $data['kategoricari'] = $this->session->userdata('kategoricari');    
-            $data['data'] = $this->bcwipmodel->getdata();  
+            // $data['data'] = $this->bcwipmodel->getdata();  
         }
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'bcwip';
@@ -55,13 +56,41 @@ class Bcwip extends CI_Controller
         $monthawal = date('m',strtotime(tglmysql($_POST['tga'])));
         $tahunawal = date('Y',strtotime(tglmysql($_POST['tga'])));
         $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
-        $this->session->set_userdata('tglawalbcwip',tglmysql($jaditahun));
-        $this->session->set_userdata('tglakhirbcwip',tglmysql($_POST['tgk']));
+        $this->session->set_userdata('tglawalbcwip',$jaditahun);
+        $this->session->set_userdata('tglakhirbcwip',$_POST['tgk']);
         $this->session->set_userdata('kepemilikanbcwip',$_POST['punya']);
         $this->session->set_userdata('katebarbcwip',$_POST['katbar']);
         $this->session->set_userdata('currdeptbcwip',$_POST['curr']);
         $this->session->set_userdata('pcskgsbcwip',$_POST['pcskgs']);
         echo 1;
+    }
+    public function getdatabaru($mode=0){
+        $arrayu = [];
+        $filter_kategori = $_POST['filt'];
+        $filter_exdo = $_POST['exdo'];
+        $filter_stok = $_POST['stok'];
+        $filter_buyer = $_POST['buyer'];
+        $filter_exnet = $_POST['exnet'];
+        $filter_aneh = $_POST['dataneh'];
+        if($filter_kategori!='all'){
+            $arrayu['id_kategori'] = $filter_kategori;
+        }
+        if($filter_exdo!="all"){
+            $arrayu['exdo'] = $filter_exdo;
+        }
+        if($filter_stok!="all"){
+            $arrayu['stok'] = $filter_stok;
+        }
+        if($filter_buyer!='all'){
+            $arrayu['id_buyer'] = $filter_buyer;
+        }
+        if($filter_exnet!='all'){
+            $arrayu['exnet'] = $filter_exnet;
+        }
+        if($filter_aneh=='true'){
+            $arrayu['minus'] = 1;
+        }
+        echo $this->bcwipmodel->getdatabaru($arrayu,$mode);
     }
     public function clear(){
         $this->session->unset_userdata('tglawalbcwip');
@@ -75,6 +104,35 @@ class Bcwip extends CI_Controller
         $this->session->set_userdata('jmlpcs',0);
         $url = base_url() . 'bcwip';
         redirect($url);
+    }
+    public function viewdetail($isi = '',$mode=0)
+    {
+        $split = explode('-', $isi);
+        $array = [
+            'po' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[1])))),
+            'item' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[2])))),
+            'dis' => $split[3],
+            'id_barang' => $split[4],
+            'nobontr' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[5])))),
+            'insno' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[6])))),
+            // 'insno' => $split[6],
+            'nobale' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[7])))),
+            'nomor_bc' => $split[8],
+            'dept' => $split[9]
+        ];
+        $array2 = [
+            'id_barang' => $split[4],
+            'nobontr' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[5])))),
+        ];
+       
+        $data['header'] = $this->bcwipmodel->getdatadetailbaru($array)->row_array();
+        $data['detail'] = $this->bcwipmodel->getdatadetailbaru($array);
+        $data['dok'] = $this->invmodel->getdatadok($array2)->row_array();
+        // $data['detailbom'] = $this->invmodel->getdatadetailbom($data['header']['id_bom']);
+        $data['detailbom'] = $this->invmodel->getdatadetailbom($array);
+        $data['isi'] = $array;
+        $data['dok2'] = NULL;
+        $this->load->view('bcwip/viewdetail', $data);
     }
     public function getdatabyid($id){
         $kodata = $this->bcwipmodel->getdatabyid($id);

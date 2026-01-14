@@ -34,6 +34,7 @@ class Inv extends CI_Controller
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         $data['kat'] = $this->invmodel->getdatakategori();
         $data['buyer'] = $this->invmodel->getbuyer();
+        $data['getopname'] = $this->invmodel->getopname();
         if ($this->session->userdata('tglawal') == null) {
             $data['tglawal'] = tglmysql(date('Y-m-01'));
             $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
@@ -87,7 +88,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('ifndln', $_POST['idln']);
         echo 1;
     }
-    public function getdatabaru(){
+    public function getdatabaru($mode=0){
         $arrayu = [];
         $filter_kategori = $_POST['filt'];
         $filter_exdo = $_POST['exdo'];
@@ -113,7 +114,7 @@ class Inv extends CI_Controller
         if($filter_aneh=='true'){
             $arrayu['minus'] = 1;
         }
-        echo $this->invmodel->getdatabaru($arrayu);
+        echo $this->invmodel->getdatabaru($arrayu,$mode);
     }
     public function simpandatainv(){
         $hasil = $this->invmodel->simpandatainv();

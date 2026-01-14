@@ -122,17 +122,21 @@ $(document).ready(function () {
 					return rupiah(saldo.toFixed(2),'.',',',2);
 				}
 			 },
-			{ "data": "kodeinv",
-				"className": "text-right",
+			{ "data": "kgs_taking",
+				"className": "text-right line-11",
 				"render": function(data, type, row, meta){
-					return rupiah(0,'.',',',2);
+					// return rupiah(data,'.',',',2);
+					var pcs = row.pcs_taking ?? 0;
+					var kgs = row.kgs_taking ?? 0;
+					return "<span class='text-pink font-11'>"+rupiah(pcs,'.',',',0)+"</span><br><span>"+rupiah(kgs,'.',',',2)+"</span>"
 				}
 			 },
 			{ "data": "kodeinv",
-				"className": "text-center",
+				"className": "text-center line-11",
 				"render": function(data, type, row, meta){
 					// return rupiah(0,'.',',',2);
 					// var buto = '<a href="'+base_url+"inv/confirmverifikasidata/' . $det['idu']; ?>" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>"><span>Verify</span></a>
+					var cek = '';
 					return "<a href='"+base_url+"inv/confirmverifikasidata/"+row.idu+"' class='btn btn-success btn-sm font-bold' data-bs-toggle='modal' data-bs-target='#veriftask' data-tombol='Ya' data-message='Akan memverifikasi data' style='padding: 2px 3px !important'>Verify</a>";
 				}
 			 },
@@ -185,6 +189,11 @@ $(document).ready(function () {
 	// if($("#ifndln").val()=='all'){
 	// 	$("#simpaninv").removeClass('disabled');
 	// }
+	if($("#tglopname").val() != ''){
+		$("#headopname").html('Opname<br>'+$("#tglopname").val());
+	}else{
+		$("#headopname").html('Opname<br>');
+	}
 });
 function gantislash(stri){
 	let cek = stri.trim();

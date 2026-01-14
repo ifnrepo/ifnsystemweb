@@ -205,6 +205,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div>
+          <?php $cektglopname = $getopname['tgl']=='' ? '' : tglmysql($getopname['tgl']); ?>
+          <input type="text" name="tglopname" id="tglopname" value="<?= $cektglopname ?>" class="hilang">
           <table id="tabelnya" class="table table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;"> <!-- table order-column table-hover table-bordered cell-border -->
             <thead>
               <tr>
@@ -218,7 +220,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Exnet</th>
                 <th>Qty</th>
                 <th>Kgs</th>
-                <th>Opname</th>
+                <th id="headopname" class="line-12">Opname<br>31-12-2025</th>
                 <th>Verified</th>
               </tr>
             </thead>

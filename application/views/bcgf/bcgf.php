@@ -46,55 +46,54 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </select>
                     </div>
                   </div>
-                  <!-- <div class="row">
-                    <label class="col-3 col-form-label font-kecil font-bold">Kategori</label>
-                    <div class="col">
-                      <select name="katbarang" id="katbarang" class="form-control form-select form-sm font-kecil">
-                        <option value="">Semua</option>
-                       
+                  <div class="row" id="div-exdo">
+                    <label class="col-3 col-form-label font-kecil font-bold">Exdo</label>
+                    <div class="col mb-1">
+                      <select name="exdo" id="exdo" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1">
+                        <option value="all">All</option>
+                        <option value="EXPORT" <?php if($this->session->userdata('exdobcgf')=='EXPORT'){ echo "selected"; } ?>>Export</option>
+                        <option value="DOMESTIC" <?php if($this->session->userdata('exdobcgf')=='DOMESTIC'){ echo "selected"; } ?>>Domestic</option>
                       </select>
                     </div>
-                  </div> -->
+                  </div>
+                  <label class="form-check mt-1 mb-1 bg-danger-lt" id="cekaneh">
+                    <input class="form-check-input" type="checkbox" id="dataneh">
+                    <span class="form-check-label font-bold">View Data Tidak Sesuai</span>
+                  </label>
                 </div>
-                <div class="col-3 font-kecil">
-                  <!-- <div class="text-blue font-bold mt-2">Jumlah IDR : <span id="jumlahidr" style="font-weight: normal;">Loading ..</span></div> -->
-                  <!-- <div class="text-blue font-bold">Jumlah USD : <span id="jumlahusd" style="font-weight: normal;">Loading ..</span></div> -->
-                </div>
-                <div class="col-3 ml-2">
+                <div class="col-6">
                   <!-- <div class="text-blue font-bold mt-2 ">Jumlah Dok : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div> -->
                   <div class="text-blue font-bold">Jumlah Bale : <span id="jumlahpcs" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
                 </div>
-                
                 <div class="col-3">
-                  <!-- <div class="">
-                    <label class="form-check form-check-inline mb-1">
-                      <input class="form-check-input" type="radio" name="radios-inline" value="Cari Barang" checked>
-                      <span class="form-check-label font-kecil">No Pendaftaran</span>
+                  <div class="mb-0">
+                    <label class="font-bold">
+                      Cari Barang / SKU :
                     </label>
                   </div>
-                  <div class="input-group mb-0">
-                    <?php $textcari = $this->session->userdata('nopen') != null ? $this->session->userdata('nopen') : ''; ?>
-                    <input type="text" class="form-control form-sm font-kecil" placeholder="Cari Nomor Pendaftaran …" value="<?= $textcari; ?>" id="textcari" style="text-transform: uppercase; height: 38px;">
-                    <button class="btn text-center font-kecil" type="button" id="buttoncaribcmasuk" style="height: 38px;">
-                      Cari
-                    </button>
-                  </div> -->
-                </div>
-                <div class="col-2">
-                  <h4 class="mb-1"></h4>
+                  <div class="">
+                    <div class="" >
+                    <textarea class="form form-control p-2 m-0 font-kecil" id='textcari' style="text-transform: uppercase;"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button type="button" id="buttoncari" class="btn btn-sm btn-success btn-flat w-100 mt-1">Cari</button>
+                      <button type="button" id="buttonreset" class="btn btn-sm btn-danger btn-flat w-25 mt-1">Reset</button>
+                    </div>
+                  </div>
                 </div>
               </div>
-              <!-- <div class="hr m-1"></div> -->
             </div>
           </div>
         </div>
         <div>
-          <table id="tabelnya" class="table mt-2 hover" style="width: 100% !important;">
+          <?php $cektglopname = $getopname['tgl']=='' ? '' : tglmysql($getopname['tgl']); ?>
+          <input type="text" name="tglopname" id="tglopname" value="<?= $cektglopname ?>" class="hilang">
+          <table id="tabelnya" class="table order-column table-hover table-bordered mt-2" style="width: 100% !important; border-collapse: collapse;">
             <thead>
               <tr class="text-left">
                 <th class="text-center">No</th>
-                <th class="text-left">Sku / Nama Barang</th>
+                <th class="text-left">Sku / Spesifikasi Barang</th>
                 <th class="text-left">No Bale</th>
                 <th class="text-left">Satuan</th>
                 <th class="text-left">S. Awal</th>
@@ -102,7 +101,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th class="text-left">Pengeluaran</th>
                 <th class="text-left">Adjustment</th>
                 <th class="text-left">S. Akhir</th>
-                <th class="text-left">Opname</th>
+                <th class="text-left line-11" id="headopname">Opname</th>
                 <th class="text-left">Ket</th>
               </tr>
             </thead>

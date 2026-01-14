@@ -33,12 +33,13 @@ class Bcgf extends CI_Controller
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
         $data['dephak'] = $this->deptmodel->getdata();
+        $data['getopname'] = $this->bcgfmodel->getopname();
         if ($this->session->userdata('tglawalbcgf') == null) {
             $data['tglawal'] = tglmysql(date('Y-m-01'));
             $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
         }else{
-            $data['tglawal'] = tglmysql($this->session->userdata('tglawalbcgf'));
-            $data['tglakhir'] = tglmysql($this->session->userdata('tglakhirbcgf'));
+            $data['tglawal'] = $this->session->userdata('tglawalbcgf');
+            $data['tglakhir'] = $this->session->userdata('tglakhirbcgf');
         }
 
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
@@ -52,7 +53,8 @@ class Bcgf extends CI_Controller
         $ahir = lastday(date('Y') . '-' . date('m') . '-01');
         $this->session->unset_userdata('tglawalbcgf');
         $this->session->unset_userdata('tglakhirbcgf');
-        $this->session->unset_userdata('currdeptbcgf');
+        $this->session->unset_userdata('kepemilikanbcgf');
+        $this->session->unset_userdata('exdobcgf');
         $this->session->set_userdata('jmlrec',0);
         $this->session->set_userdata('jmlkgs',0);
         $this->session->set_userdata('jmlpcs',0);
@@ -63,18 +65,41 @@ class Bcgf extends CI_Controller
         $monthawal = date('m',strtotime(tglmysql($_POST['tga'])));
         $tahunawal = date('Y',strtotime(tglmysql($_POST['tga'])));
         $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
-        $this->session->set_userdata('tglawalbcgf',tglmysql($jaditahun));
-        $this->session->set_userdata('tglakhirbcgf',tglmysql($_POST['tgk']));
+        $this->session->set_userdata('tglawalbcgf',$jaditahun);
+        $this->session->set_userdata('tglakhirbcgf',$_POST['tgk']);
         $this->session->set_userdata('kepemilikanbcgf',$_POST['punya']);
-        // $this->session->set_userdata('katebarbcwip',$_POST['katbar']);
+        $this->session->set_userdata('exdobcgf',$_POST['exdo']);
         // $this->session->set_userdata('currdeptbcwip',$_POST['curr']);
         echo 1;
     }
-    public function getdatabaru(){
-        // if ($this->session->userdata('tglawalbcgf') != null){
-            echo $this->bcgfmodel->getdatabaru();
-        // }
-    }
+    public function getdatabaru($mode=0){
+        $arrayu = [];
+        $filter_kategori = $_POST['filt'];
+        $filter_exdo = $_POST['exdo'];
+        $filter_stok = $_POST['stok'];
+        $filter_buyer = $_POST['buyer'];
+        $filter_exnet = $_POST['exnet'];
+        $filter_aneh = $_POST['dataneh'];
+        if($filter_kategori!='all'){
+            $arrayu['xdln'] = $filter_kategori;
+        }
+        if($filter_exdo!="all"){
+            $arrayu['exdo'] = $filter_exdo;
+        }
+        if($filter_stok!="all"){
+            $arrayu['stok'] = $filter_stok;
+        }
+        if($filter_buyer!='all'){
+            $arrayu['id_buyer'] = $filter_buyer;
+        }
+        if($filter_exnet!='all'){
+            $arrayu['exnet'] = $filter_exnet;
+        }
+        if($filter_aneh=='true'){
+            $arrayu['minus'] = 1;
+        }
+        echo $this->bcgfmodel->getdatabaru($arrayu,$mode);
+    }   
     public function getdatabyid($id){
         $kodata = $this->bcgfmodel->getdatabyid($id);
         $data['header'] = $kodata->row_array();
