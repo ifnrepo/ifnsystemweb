@@ -23,7 +23,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="sticky-top bg-white mb-2">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 d-flex">
-              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" id="pcskgsbcwip" name="pcskgsbcwip" title="Jumlah yang ditambpilkan" style="width: 15% !important">
+              <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white hilang" id="pcskgsbcwip" name="pcskgsbcwip" title="Jumlah yang ditambpilkan" style="width: 15% !important">
                 <option value="kgs" <?php if($this->session->userdata('pcskgsbcwip')=='kgs'){ echo "selected"; } ?>>KGS</option>
                 <option value="pcs" <?php if($this->session->userdata('pcskgsbcwip')=='pcs'){ echo "selected"; } ?>>PCS</option>
               </select>
@@ -68,7 +68,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <label class="col-3 col-form-label font-kecil font-bold">KATEGORI</label>
                     <div class="col">
                       <select name="katbarang" id="katbarang" class="form-control form-select form-sm font-kecil">
-                        <option value="">Semua</option>
+                        <option value="all">Semua</option>
                         <?php foreach($kategori->result_array() as $kateg): ?>
                         <?php $selek = $kateg['id_kategori']==$this->session->userdata('katebarbcwip') ? 'selected' : ''; ?>
                           <option value="<?= $kateg['kategori_id'] ?>" <?= $selek ?>><?= $kateg['nama_kategori'] ?></option>
@@ -76,20 +76,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </select>
                     </div>
                   </div>
+                  <label class="form-check mt-1 mb-1 bg-danger-lt" id="cekaneh">
+                    <input class="form-check-input" type="checkbox" id="dataneh">
+                    <span class="form-check-label font-bold">View Data Tidak Sesuai</span>
+                  </label>
                 </div>
-                <div class="col-3 ">
-                </div>
-                <input type="text" id="paramload" class="hilang" value="<?= $this->session->userdata('currdept'); ?>">
-                <div class="col-3 font-kecil">
+                <div class="col-6 font-kecil">
+                  <input type="text" id="paramload" class="hilang" value="<?= $this->session->userdata('currdept'); ?>">
                   <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs" style="font-weight: normal;"><?= $this->session->userdata('jumlahpc'); ?></span></div>
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
                 </div>
                 <div class="col-3">
-
-                </div>
-                <div class="col-2">
-                  <h4 class="mb-1"></h4>
+                  <div class="mb-0">
+                    <label class="font-bold">
+                      Cari Barang / SKU :
+                    </label>
+                  </div>
+                  <div class="">
+                    <div class="" >
+                    <textarea class="form form-control p-2 m-0 font-kecil" id='textcari' style="text-transform: uppercase;"></textarea>
+                    </div>
+                    <div class="d-flex justify-content-between">
+                      <button type="button" id="buttoncari" class="btn btn-sm btn-success btn-flat w-100 mt-1">Cari</button>
+                      <button type="button" id="buttonreset" class="btn btn-sm btn-danger btn-flat w-25 mt-1">Reset</button>
+                    </div>
+                  </div>
                 </div>
               </div>
               <!-- <div class="hr m-1"></div> -->
@@ -97,73 +109,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div>
-          <table id="tabelnya" class="table order-column table-hover mt-1 datatable11" style="width: 100% !important;">
+          <?php $cektglopname = $getopname['tgl']=='' ? '' : tglmysql($getopname['tgl']); ?>
+          <input type="text" name="tglopname" id="tglopname" value="<?= $cektglopname ?>" class="hilang">
+          <table id="tabelnya" class="table order-column table-hover table-bordered mt-2" style="width: 100% !important; border-collapse: collapse;">
             <thead>
-              <tr>
-                <th>No</th>
-                <th>SKU/Spesifikasi</th>
-                <th>Satuan</th>
-                <th>S. Awal</th>
-                <th>Pemasukan</th>
-                <th>Pengeluaran</th>
-                <th>Adjustment</th>
-                <th>S. Akhir</th>
-                <th>Opname</th>
-                <th>Ket</th>
+              <tr class="text-left">
+                <th class="text-center">No</th>
+                <th class="text-center">Dept</th>
+                <th class="text-left">Sku / Spesifikasi</th>
+                <th class="text-left">Satuan</th>
+                <th class="text-left">S. Awal</th>
+                <th class="text-left">Pemasukan</th>
+                <th class="text-left">Pengeluaran</th>
+                <th class="text-left">Adjustment</th>
+                <th class="text-left">S. Akhir</th>
+                <th class="text-left line-11" id="headopname">Opname<br>xx-xx-xxxx</th>
+                <th class="text-left">Ket</th>
               </tr>
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-            <?php 
-              $jmlpcs=0;$jmlkgs=0;
-              $no=0; 
-              if($data != null): foreach($data->result_array() as $data): $no++; 
-              $pcs = $data['saldopcs'] + $data['inpcs'] - $data['outpcs'] + $data['adjpcs'];
-              $kgs = $data['saldokgs'] + $data['inkgs'] - $data['outkgs'] + $data['adjkgs']; 
-              $sku = trim($data['po'])=='' ? namaspekbarang($data['id_barang'],'kode')  : viewsku($data['po'],$data['item'],$data['dis']);
-              $spekbarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang'])  : spekpo($data['po'],$data['item'],$data['dis']);
-              $sat = trim($data['po'])=='' ? $data['kodesatuan']  : 'KGS';
-              $kondisi = 'OME-'.$data['id_barang'].'-'.encrypto(trim($data['po'])).'-'.encrypto(trim($data['item'])).'-'.$data['dis'].'-'.$data['dept_id'];
-              $jmlpcs += $pcs;
-              $jmlkgs += $kgs;
-              $adjpcsplus = 0;$adjpcsmin =0;
-              $adjkgsplus = 0;$adjkgsmin =0;
-              // if($data['kodeinv']=='3'){
-                if($data['adjpcs'] > 0){
-                  $adjpcsplus = $data['adjpcs'];
-                }else{
-                  $adjpcsmin = $data['adjpcs']*-1;
-                }
-                if($data['adjkgs'] > 0){
-                  $adjkgsplus = $data['adjkgs'];
-                }else{
-                  $adjkgsmin = $data['adjkgs']*-1;
-                }
-              // }
-              if($this->session->userdata('pcskgsbcwip')=='kgs'){
-                $saldo = $data['saldokgs'];
-                $in = $data['inkgs']+$adjkgsplus;
-                $out = $data['outkgs']+$adjkgsmin;
-                $akhir = $kgs;
-              }else{
-                $saldo = $data['saldopcs'];
-                $in = $data['inpcs']+$adjpcsplus;
-                $out = $data['outpcs']+$adjpcsmin;
-                $akhir = $pcs;
-              }
-            ?>
-              <tr>
-                <td><?= $no ?></td>
-                <td class="line-12"><span class="text-pink font-11"><?= $sku.' ('.$data['dept_id'].')' ?></span><br><a href="<?= base_url().'bcwip/getdatabyid/'.$kondisi ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'><?= $spekbarang ?></a></td>
-                <td><?= $sat ?></td>
-                <td class="text-right"><?= rupiah($saldo,2) ?></td>
-                <td class="text-right"><?= rupiah($in,2) ?></td>
-                <td class="text-right"><?= rupiah($out,2) ?></td>
-                <td  class="text-right"><?= rupiah(0,2) ?></td>
-                <td  class="text-right"><?= rupiah($akhir,2) ?></td>
-                <td  class="text-right"><?= rupiah(0,2) ?></td>
-                <td></td>
-              </tr>
-            <?php endforeach; endif; ?>
+            
             </tbody>
           </table>
         </div>

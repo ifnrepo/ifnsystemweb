@@ -2,7 +2,7 @@
     <div class="row mb-1">
         <div class="col-3 font-bold">
             <span class="text-primary">Inventory per Tanggal</span>
-            <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal')), 1); ?></h4>
+            <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglakhirbcmaterial')), 1); ?></h4>
 
         </div>
         <div class="col-7 text-primary font-bold">

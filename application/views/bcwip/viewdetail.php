@@ -2,7 +2,7 @@
     <div class="row mb-1">
         <div class="col-3 font-bold">
             <span class="text-primary">Inventory per Tanggal</span>
-            <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglawal')), 1); ?></h4>
+            <h4 class="mb-1 text-teal-green"><?= tgl_indo(tglmysql($this->session->userdata('tglakhirbcwip')), 1); ?></h4>
 
         </div>
         <div class="col-7 text-primary font-bold">
@@ -85,7 +85,7 @@
                             $saldoawal = $saldo;
                             $saldoawalkgs = $saldokgs;
                         }
-                        if($init==1 && $det['nomor_dok']=='SALDO'){
+                        if($init==1 && $det['mode']=='SALDO'){
                             $xsaldo = $saldoawal;
                             $xsaldokgs = $saldoawalkgs;
                         }
@@ -96,7 +96,7 @@
                         $boninsno = '';
                         $adjpcsplus = 0;$adjkgsplus = 0;
                         $adjpcsmin = 0;$adjkgsmin = 0;
-                        if($det['kodeinv']==3){
+                        if($det['mode']=='ADJ'){
                             if($det['adjpcs'] > 0){
                                 $adjpcsplus = $det['adjpcs'];
                             }else{
@@ -110,7 +110,7 @@
                         }
                         $saldo_akhirkgs += $saldokgs;
                         $saldo_akhirpcs += $saldo;
-                        $warnatek = $det['kodeinv']==3 ? '' : '';
+                        $warnatek = $det['mode']=='ADJ' ? '' : '';
                         $jmpcin += $det['inpcs']+$adjpcsplus;
                         $jmkgin += $det['inkgs']+$adjkgsplus;
                         $jmpcout += $det['outpcs']+$adjpcsmin;

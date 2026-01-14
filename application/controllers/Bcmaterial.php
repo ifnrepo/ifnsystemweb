@@ -31,14 +31,15 @@ class Bcmaterial extends CI_Controller
     {
         $header['header'] = 'other';
         $data['level'] = $this->usermodel->getdatalevel();
+        $data['getopname'] = $this->bcmaterialmodel->getopname();
         if ($this->session->userdata('tglawalbcmaterial') == null) {
             $data['tglawal'] = tglmysql(date('Y-m-01'));
             $data['tglakhir'] = tglmysql(lastday($this->session->userdata('thbcmaterial') . '-' . $this->session->userdata('blbcmaterial') . '-01'));
-            $data['data'] = null;
+            // $data['data'] = null;
         }else{
-            $data['tglawal'] = tglmysql($this->session->userdata('tglawalbcmaterial'));
-            $data['tglakhir'] = tglmysql($this->session->userdata('tglakhirbcmaterial'));
-            $data['data'] = $this->bcmaterialmodel->getdata();
+            $data['tglawal'] = $this->session->userdata('tglawalbcmaterial');
+            $data['tglakhir'] = $this->session->userdata('tglakhirbcmaterial');
+            // $data['data'] = $this->bcmaterialmodel->getdata();
         }
         $data['kategori'] = $this->bcmaterialmodel->getdatakategori();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
@@ -62,11 +63,39 @@ class Bcmaterial extends CI_Controller
         $monthawal = date('m',strtotime(tglmysql($_POST['tga'])));
         $tahunawal = date('Y',strtotime(tglmysql($_POST['tga'])));
         $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
-        $this->session->set_userdata('tglawalbcmaterial',tglmysql($jaditahun));
-        $this->session->set_userdata('tglakhirbcmaterial',tglmysql($_POST['tgk']));
+        $this->session->set_userdata('tglawalbcmaterial',$jaditahun);
+        $this->session->set_userdata('tglakhirbcmaterial',$_POST['tgk']);
         $this->session->set_userdata('kepemilikan',$_POST['punya']);
         $this->session->set_userdata('katebar',$_POST['katbar']);
         echo 1;
+    }
+    public function getdatabaru($mode=0){
+        $arrayu = [];
+        $filter_kategori = $_POST['filt'];
+        $filter_exdo = $_POST['exdo'];
+        $filter_stok = $_POST['stok'];
+        $filter_buyer = $_POST['buyer'];
+        $filter_exnet = $_POST['exnet'];
+        $filter_aneh = $_POST['dataneh'];
+        if($filter_kategori!='all'){
+            $arrayu['id_kategori'] = $filter_kategori;
+        }
+        if($filter_exdo!="all"){
+            $arrayu['exdo'] = $filter_exdo;
+        }
+        if($filter_stok!="all"){
+            $arrayu['stok'] = $filter_stok;
+        }
+        if($filter_buyer!='all'){
+            $arrayu['id_buyer'] = $filter_buyer;
+        }
+        if($filter_exnet!='all'){
+            $arrayu['exnet'] = $filter_exnet;
+        }
+        if($filter_aneh=='true'){
+            $arrayu['minus'] = 1;
+        }
+        echo $this->bcmaterialmodel->getdatabaru($arrayu,$mode);
     }
     public function getdatabyid($id){
         $kodata = $this->bcmaterialmodel->getdatabyid($id);
