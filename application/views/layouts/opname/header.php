@@ -483,6 +483,11 @@
             <img src=<?= base_url() . "assets/image/logodepan.png" ?> width="100" height="30" alt="IFN" class="navbar-brand-image">
           </a>
         </h1>
+        <h1 class="navbar-brand d-print-none m-0 p-1">
+          <a href="<?= base_url(); ?>" style="text-decoration: none;">
+            STOK OPNAME
+          </a>
+        </h1>
         <div class="hr mt-2 mb-0"></div>
         <div class="navbar-nav flex-row d-lg-none d-print-none">
           <div class="d-none d-lg-flex">
@@ -531,377 +536,44 @@
             <li class="nav-item">
               <a class="nav-link <?php if (!isset($header)) {
                                     echo 'active';
-                                  } ?>" href="<?= base_url(); ?>">
+                                  } ?>" href="<?= base_url().'opname'; ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dashboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M13.45 11.55l2.05 -2.05" /><path d="M6.4 20a9 9 0 1 1 11.2 0l-11.2 0" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M5 12l-2 0l9 -9l9 9l-2 0" />
+                    <path d="M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-7" />
+                    <path d="M9 21v-6a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v6" />
+                  </svg>
                 </span>
                 <span class="nav-link-title">
                   Dashboard
                 </span>
               </a>
             </li>
-            <li class="nav-item <?php if (($this->session->userdata('level_user') <= 1) && (count((array)$this->session->userdata('hak_ttd_pb')) == 0) && ($this->session->userdata('cekpo') == 0)) {
-                                  echo "hilang";
-                                } ?>">
-              <a class="nav-link <?php if (isset($header) && $header == 'pendingtask') {
+            <li class="nav-item">
+              <a class="nav-link <?php if (!isset($header)) {
                                     echo 'active';
-                                  } ?>" href="<?= base_url() . 'task/clear'; ?>">
+                                  } ?>" href="<?= base_url().'opname/dataopname'; ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-checklist">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M9.615 20h-2.615a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2h8a2 2 0 0 1 2 2v8" />
-                    <path d="M14 19l2 2l4 -4" />
-                    <path d="M9 8h4" />
-                    <path d="M9 12h2" />
-                  </svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-list-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.5 5.5l1.5 1.5l2.5 -2.5" /><path d="M3.5 11.5l1.5 1.5l2.5 -2.5" /><path d="M3.5 17.5l1.5 1.5l2.5 -2.5" /><path d="M11 6l9 0" /><path d="M11 12l9 0" /><path d="M11 18l9 0" /></svg>
                 </span>
                 <span class="nav-link-title">
-                  Pending Task <span class="badges bg-red hilang" id="notiftask">11</span>
+                  Rekap Data Opname
                 </span>
               </a>
-            </li>
-            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('master')); ?>">
-              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'master') {
-                                                    echo 'active';
-                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M4 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                    <path d="M4 13m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                    <path d="M14 4m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v3a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                    <path d="M14 15m0 2a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2v1a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2z" />
-                  </svg>
-                </span>
-                <span class="nav-link-title ">
-                  Master Data
-                </span>
-              </a>
-              <div class="dropdown-menu <?php if (isset($header) && $header == 'master') {
-                                          echo 'show active';
-                                        } ?>">
-                <div class="dropdown-menu-columns">
-                  <div class="dropdown-menu-column">
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 1); ?>" href="<?= base_url() . 'satuan'; ?>">
-                      Satuan
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 2); ?>" href="<?= base_url('kategori'); ?>">
-                      Kategori Barang
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 3); ?>" href="<?= base_url() . 'barang/clear'; ?>">
-                      Barang
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 4); ?>" href="<?= base_url('supplier'); ?>">
-                      Supplier
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 5); ?>" href="<?= base_url('customer'); ?>">
-                      Customer
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 6); ?>" href="<?= base_url('nettype'); ?>">
-                      Nettype
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 7); ?>" href="<?= base_url('dept'); ?>">
-                      Departemen
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 8); ?>" href="<?= base_url('ref_dokumen'); ?>">
-                      Referensi Document
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 9); ?>" href="<?= base_url('kategori_dept'); ?>">
-                      Kategori Departemen
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 10); ?>" href="<?= base_url('personil'); ?>">
-                      Personil
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 11); ?>" href="<?= base_url('jabatan'); ?>">
-                      Data Jabatan
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 12); ?>" href="<?= base_url('grup'); ?>">
-                      Data Grup
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 14); ?>" href="<?= base_url('hargacost'); ?>">
-                      Cost division
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 15); ?>" href="<?= base_url('setcost/clear'); ?>">
-                      Setting Division Cost
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 26); ?>" href="<?= base_url('jobcostdiv'); ?>">
-                      Referensi Division Price
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 16); ?>" href="<?= base_url('prosbor'); ?>">
-                      Proses Borongan
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 17); ?>" href="<?= base_url('mastermsn/clear'); ?>">
-                      Data Mesin
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 18); ?>" href="<?= base_url('agama'); ?>">
-                      Data Agama
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 19); ?>" href="<?= base_url('pendidikan'); ?>">
-                      Data Pendidikan Personil
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 20); ?>" href="<?= base_url('status'); ?>">
-                      Data Status Personil
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 21); ?>" href="<?= base_url('kelompokpo'); ?>">
-                      Kelompok PO
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 22); ?>" href="<?= base_url('ket_proses'); ?>">
-                      Data Ket Proses
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 23); ?>" href="<?= base_url('rekanan'); ?>">
-                      Data Rekanan
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 24); ?>" href="<?= base_url('billmaterial'); ?>">
-                      Bill Of Material
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 25); ?>" href="<?= base_url('billmaterial_cost'); ?>">
-                      Bill Of Material Cost
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('transaksi')); ?>">
-              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'transaksi') {
-                                                    echo 'active';
-                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-coin">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M12 12m-9 0a9 9 0 1 0 18 0a9 9 0 1 0 -18 0" />
-                    <path d="M14.8 9a2 2 0 0 0 -1.8 -1h-2a2 2 0 1 0 0 4h2a2 2 0 1 1 0 4h-2a2 2 0 0 1 -1.8 -1" />
-                    <path d="M12 7v10" />
-                  </svg>
-                </span>
-                <span class="nav-link-title ">
-                  Transaksi
-                </span>
-              </a>
-              <div class="dropdown-menu <?php if (isset($header) && $header == 'transaksi') {
-                                          echo 'show active';
-                                        } ?>">
-                <div class="dropdown-menu-columns">
-                  <div class="dropdown-menu-column">
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 1); ?>" href="<?= base_url('pb/clear'); ?>">
-                      PB (Bon Permintaan Barang)
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 2); ?>" href="<?= base_url('bbl/clear'); ?>">
-                      BBL (Bon Pembelian Barang)
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 3); ?>" href="<?= base_url('in/clear'); ?>">
-                      IN (Bon Perpindahan)
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 4); ?>" href="<?= base_url('out/clear'); ?>">
-                      OUT (Bon Perpindahan)
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 5); ?>" href="<?= base_url('adj/clear'); ?>">
-                      ADJ (Bon Adjustment)
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 6); ?>" href="<?= base_url('po/clear'); ?>">
-                      PO (Purchase Order)
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 7); ?>" href="<?= base_url('ib/clear'); ?>">
-                      AMB (AJU Masuk Barang)
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 8); ?>" href="<?= base_url('akb/clear'); ?>">
-                      AKB (AJU Keluar Barang)
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 9); ?>" href="<?= base_url('kontrak/clear'); ?>">
-                      Kontrak
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('transaksi'), 10); ?>" href="<?= base_url('benang'); ?>">
-                      Benang
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('other')); ?>">
-              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'other') {
-                                                    echo 'active';
-                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-warehouse">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M3 21v-13l9 -4l9 4v13" />
-                    <path d="M13 13h4v8h-10v-6h6" />
-                    <path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3" />
-                  </svg>
-                </span>
-                <span class="nav-link-title ">
-                  Report
-                </span>
-              </a>
-              <div class="dropdown-menu <?php if (isset($header) && $header == 'other') {
-                                          echo 'show active';
-                                        } ?>">
-                <div class="dropdown-menu-columns">
-                  <div class="dropdown-menu-column">
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 1); ?>" href="<?= base_url('ponet'); ?>">
-                      Ponet
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 2); ?>" href="<?= base_url('inv/clear'); ?>">
-                      Inventory
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 8); ?>" href="<?= base_url('hargamat/clear'); ?>">
-                      Harga Material
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 9); ?>" href="<?= base_url('pricinginv/clear'); ?>">
-                      Pricing Inventory
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 4); ?>" href="<?= base_url('bcmasuk/clear'); ?>">
-                      BC Masuk
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 5); ?>" href="<?= base_url('bckeluar/clear'); ?>">
-                      BC Keluar
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 10); ?>" href="<?= base_url('bcmaterial/clear'); ?>">
-                      Material
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 11); ?>" href="<?= base_url('bcwip/clear'); ?>">
-                      WIP
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 12); ?>" href="<?= base_url('bcgf/clear'); ?>">
-                      Finished Goods
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 3); ?>" href="<?= base_url('invmesin/clear'); ?>">
-                      Barang Modal & Sparepart
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 13); ?>" href="<?= base_url('bcwaste'); ?>">
-                      Scrap / Waste
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 14); ?>" href="<?= base_url('priceinv'); ?>">
-                      Pricing Inventory
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 7); ?>" href="<?= base_url('cctv'); ?>">
-                      Tutorial Akses CCTV
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('other'), 6); ?>" href="<?= base_url('logact/clear'); ?>">
-                      Log Activity
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('rfid')); ?>">
-              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'rfid') {
-                                                    echo 'active';
-                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-layout-collage">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M4 4m0 2a2 2 0 0 1 2 -2h12a2 2 0 0 1 2 2v12a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2z" />
-                    <path d="M10 4l4 16" />
-                    <path d="M12 12l-8 2" />
-                  </svg>
-                </span>
-                <span class="nav-link-title ">
-                  RFID
-                </span>
-              </a>
-              <div class="dropdown-menu <?php if (isset($header) && $header == 'rfid') {
-                                          echo 'show active';
-                                        } ?>">
-                <div class="dropdown-menu-columns">
-                  <div class="dropdown-menu-column">
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 1); ?>" href="<?= base_url('rfid/fn'); ?>">
-                      Finishing OUT
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 2); ?>" href="<?= base_url('rfid/fg'); ?>">
-                      Finished Goods IN
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 3); ?>" href="<?= base_url('rfid/out'); ?>">
-                      Container IN
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('manajemen')); ?>">
-              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'manajemen') {
-                                                    echo 'active';
-                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-command">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M7 9a2 2 0 1 1 2 -2v10a2 2 0 1 1 -2 -2h10a2 2 0 1 1 -2 2v-10a2 2 0 1 1 2 2h-10" />
-                  </svg>
-                </span>
-                <span class="nav-link-title ">
-                  User Manajemen
-                </span>
-              </a>
-              <div class="dropdown-menu <?php if (isset($header) && $header == 'manajemen') {
-                                          echo 'show active';
-                                        } ?>">
-                <div class="dropdown-menu-columns">
-                  <div class="dropdown-menu-column">
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 1); ?>" href="<?= base_url('userapps'); ?>">
-                      Setting User
-                    </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 2); ?>" href="<?= base_url('lockinv'); ?>">
-                      Close Book Inventory
-                    </a>
-                  </div>
-                </div>
-              </div>
-            </li>
-
-            <li class="nav-item dropdown <?= cekmenuheader($this->session->userdata('setting')); ?>">
-              <a class="nav-link dropdown-toggle <?php if (isset($header) && $header == 'setting') {
-                                                    echo 'active';
-                                                  } ?>" href="#navbar-base" data-bs-toggle="dropdown" data-bs-auto-close="false" role="button" aria-expanded="true">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-settings">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M10.325 4.317c.426 -1.756 2.924 -1.756 3.35 0a1.724 1.724 0 0 0 2.573 1.066c1.543 -.94 3.31 .826 2.37 2.37a1.724 1.724 0 0 0 1.065 2.572c1.756 .426 1.756 2.924 0 3.35a1.724 1.724 0 0 0 -1.066 2.573c.94 1.543 -.826 3.31 -2.37 2.37a1.724 1.724 0 0 0 -2.572 1.065c-.426 1.756 -2.924 1.756 -3.35 0a1.724 1.724 0 0 0 -2.573 -1.066c-1.543 .94 -3.31 -.826 -2.37 -2.37a1.724 1.724 0 0 0 -1.065 -2.572c-1.756 -.426 -1.756 -2.924 0 -3.35a1.724 1.724 0 0 0 1.066 -2.573c-.94 -1.543 .826 -3.31 2.37 -2.37c1 .608 2.296 .07 2.572 -1.065z" />
-                    <path d="M9 12a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
-                  </svg>
-                </span>
-                <span class="nav-link-title ">
-                  Setting
-                </span>
-              </a>
-              <div class="dropdown-menu <?php if (isset($header) && $header == 'setting') {
-                                          echo 'show active';
-                                        } ?>">
-                <div class="dropdown-menu-columns">
-                  <div class="dropdown-menu-column">
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('setting'), 1); ?>" href="<?= base_url('footer'); ?>">
-                      Footer
-                    </a>
-                  </div>
-                </div>
-              </div>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="<?= base_url() . 'opname/clear'; ?>">
+              <a class="nav-link <?php if (!isset($header)) {
+                                    echo 'active';
+                                  } ?>" href="<?= base_url(); ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-stack text-danger"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M5 21h14" /><path d="M5 18h14" /><path d="M5 15h14" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
                 </span>
                 <span class="nav-link-title">
-                  Stok Opname
+                  Back to Home
                 </span>
               </a>
             </li>
-
-            <!-- <li class="nav-item">
-              <a class="nav-link <?php if (isset($header) && $header == 'inventory') {
-                                    echo 'active';
-                                  } ?>" href="<?= base_url('inv/clear'); ?>">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-building-warehouse">
-                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                    <path d="M3 21v-13l9 -4l9 4v13" />
-                    <path d="M13 13h4v8h-10v-6h6" />
-                    <path d="M13 21v-9a1 1 0 0 0 -1 -1h-2a1 1 0 0 0 -1 1v3" />
-                  </svg>
-                </span>
-                <span class="nav-link-title">
-                  Inventory
-                </span>
-              </a>
-            </li> -->
           </ul>
         </div>
       </div>

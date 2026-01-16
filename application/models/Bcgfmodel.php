@@ -311,8 +311,8 @@ class bcgfmodel extends CI_Model
         $query4 = $this->db->get_compiled_select();
 
         $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs,ifnull(kgs_taking,0) as kgstaking,ifnull(pcs_taking,0) as pcstaking from (Select kategori.jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,satuan.kodesatuan,barang.nama_barang,barang.imdo,spek,exdo,id_buyer,deptt,skupo,";
-        $kolom .= "(select kgs from stokopname_hasil where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and nobale = r1.nobale and dept_id = 'GF' and tgl='".tglmysql($tglakhir)."') as kgs_taking,";
-        $kolom .= "(select pcs from stokopname_hasil where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and nobale = r1.nobale and dept_id = 'GF' and tgl='".tglmysql($tglakhir)."') as pcs_taking ";
+        $kolom .= "(select kgs from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and nobale = r1.nobale and dept_id = 'GF' and tgl='".tglmysql($tglakhir)."') as kgs_taking,";
+        $kolom .= "(select pcs from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and nobale = r1.nobale and dept_id = 'GF' and tgl='".tglmysql($tglakhir)."') as pcs_taking ";
         $kolom .= "from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
@@ -460,8 +460,8 @@ class bcgfmodel extends CI_Model
         }
         $this->db->where('dept_id','GF');
         $this->db->where('tgl',tglmysql($tglakhir));
-        $cek = $this->db->get('stokopname_hasil');
-        // $cek = $this->db->get_where('stokopname_hasil',['tgl' => tglmysql($tglakhir),'dept_id'],1)->num_rows();
+        $cek = $this->db->get('stokopname_detail');
+        // $cek = $this->db->get_where('stokopname_detail',['tgl' => tglmysql($tglakhir),'dept_id'],1)->num_rows();
         if($cek->num_rows() > 0){
             return $cek->row_array();
         }else{
