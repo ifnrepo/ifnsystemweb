@@ -63,6 +63,7 @@ class Userapps extends CI_Controller
 		$data['deptpb'] = $this->deptmodel->getdata_dept_pb();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$data['dept'] = $this->db->order_by('departemen')->get('dept')->result_array();
+		$data['dept_opname'] = $this->userappsmodel->dept_Stok_Opname();
 		$data['jabat'] = $this->db->order_by('nojab', 'ASC')->get('jabatan')->result_array();
 		$footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 		$footer['fungsi'] = 'userapps';
@@ -99,7 +100,8 @@ class Userapps extends CI_Controller
 			redirect($url);
 		}
 	}
-	public function cekusername(){
+	public function cekusername()
+	{
 		$data = $_POST['data'];
 		$hasil = $this->userappsmodel->cekusername($data);
 		echo $hasil;

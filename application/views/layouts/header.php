@@ -533,7 +533,12 @@
                                     echo 'active';
                                   } ?>" href="<?= base_url(); ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dashboard"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 13a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M13.45 11.55l2.05 -2.05" /><path d="M6.4 20a9 9 0 1 1 11.2 0l-11.2 0" /></svg>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-dashboard">
+                    <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                    <path d="M10 13a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" />
+                    <path d="M13.45 11.55l2.05 -2.05" />
+                    <path d="M6.4 20a9 9 0 1 1 11.2 0l-11.2 0" />
+                  </svg>
                 </span>
                 <span class="nav-link-title">
                   Dashboard
@@ -874,16 +879,28 @@
                 </div>
               </div>
             </li>
-            <li class="nav-item">
-              <a class="nav-link" href="<?= base_url() . 'opname/clear'; ?>">
-                <span class="nav-link-icon d-md-none d-lg-inline-block">
-                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-stack text-danger"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M5 21h14" /><path d="M5 18h14" /><path d="M5 15h14" /></svg>
-                </span>
-                <span class="nav-link-title">
-                  Stok Opname
-                </span>
-              </a>
-            </li>
+
+            <!-- <?php var_dump($this->session->userdata('hakstokopname')); ?> -->
+
+            <?php if ($this->session->userdata('cek_so') == '1') : ?>
+              <li class="nav-item">
+                <a class="nav-link" href="<?= base_url() . 'opname/clear'; ?>">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-stack text-danger">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M14 3v4a1 1 0 0 0 1 1h4" />
+                      <path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" />
+                      <path d="M5 21h14" />
+                      <path d="M5 18h14" />
+                      <path d="M5 15h14" />
+                    </svg>
+                  </span>
+                  <span class="nav-link-title">
+                    Stok Opname
+                  </span>
+                </a>
+              </li>
+            <?php endif; ?>
 
             <!-- <li class="nav-item">
               <a class="nav-link <?php if (isset($header) && $header == 'inventory') {
@@ -962,5 +979,5 @@
       </div>
     </header>
     <div class="page-wrapper">
-    <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
-    <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
+      <input type="hidden" name="errorsimpan" id="errorsimpan" value="<?= $this->session->flashdata('errorsimpan'); ?>">
+      <input type="hidden" name="pesanerror" id="pesanerror" value="<?= $this->session->flashdata('pesanerror'); ?>">
