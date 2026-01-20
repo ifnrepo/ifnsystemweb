@@ -4,10 +4,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row g-0 d-flex align-items-between">
-            <div class="col-md-6">
+            <div class="col-md-6 line-12">
                 <h2 class="page-title p-2">
                     Rekap Data Stok Opname
                 </h2>
+                <small class="pl-2">Periode <?= tglmysql($this->session->userdata('periodeopname')) ?></small>
             </div>
             <div class="col-md-6 d-flex justify-content-end" style="text-align: right;">
                 <a href="<?= base_url() . 'opname'; ?>" style="height: 38px;" class="btn btn-primary btn-sm ml-1"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali </span></a>
@@ -34,7 +35,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <a href="#" class="btn btn-success btn-sm font-bold <?php if($this->session->userdata('periodeopname')==''){ echo "disabled"; } ?>" id="updateopname"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
                     </div>
                     <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-                        <a href="<?= base_url().'opname/tambahopname'; ?>" class="btn btn-primary btn-sm font-bold mr-1 <?php if($this->session->userdata('currdeptopname')==''){ echo "disabled"; } ?>" id="toexcel"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                        <a href="<?= base_url().'opname/tambahdataopname'; ?>" class="btn btn-primary btn-sm font-bold mr-1 <?php if($this->session->userdata('currdeptopname')==''){ echo "disabled"; } ?>" id="toexcel"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
                     </div>
                 </div>
                 <div class="card card-active mb-2">

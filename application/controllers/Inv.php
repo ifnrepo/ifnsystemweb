@@ -33,6 +33,7 @@ class Inv extends CI_Controller
         $data['dephak'] = $this->deptmodel->getdata();
         $data['levnow'] = $this->session->userdata['level_user'] == 1 ? 'disabled' : '';
         $data['kat'] = $this->invmodel->getdatakategori();
+        $data['nombc'] = $this->invmodel->getdatanomorbc();
         $data['buyer'] = $this->invmodel->getbuyer();
         $data['getopname'] = $this->invmodel->getopname();
         if ($this->session->userdata('tglawal') == null) {
@@ -96,6 +97,8 @@ class Inv extends CI_Controller
         $filter_buyer = $_POST['buyer'];
         $filter_exnet = $_POST['exnet'];
         $filter_aneh = $_POST['dataneh'];
+        $filter_opaneh = $_POST['opaneh'];
+        $filter_nombc = $_POST['nobc'];
         if($filter_kategori!='all'){
             $arrayu['id_kategori'] = $filter_kategori;
         }
@@ -113,6 +116,12 @@ class Inv extends CI_Controller
         }
         if($filter_aneh=='true'){
             $arrayu['minus'] = 1;
+        }
+        if($filter_opaneh=='true'){
+            $arrayu['opminus'] = 1;
+        }
+        if($filter_nombc!='all'){
+            $arrayu['nomor_bc'] = $filter_nombc;
         }
         echo $this->invmodel->getdatabaru($arrayu,$mode);
     }

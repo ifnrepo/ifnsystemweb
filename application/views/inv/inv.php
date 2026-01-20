@@ -9,7 +9,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <?php if (isset($repbeac) && $repbeac == 1) { ?>
             IT Inventory <?= $this->session->userdata('currdept'); ?> - <?= datadepartemen($this->session->userdata('currdept'), 'departemen'); ?>
           <?php } else { ?>
-            Inventory Barang <?= $this->session->userdata('currdept'); ?>
+            Inventory Barang <?= $this->session->userdata('currdept'); ?> - <?= datadepartemen($this->session->userdata('currdept'), 'departemen'); ?>
           <?php } ?>
           <input type="hidden" id="bukavalid" value="<?= datauser($this->session->userdata('id'), 'cekbatalstok'); ?>">
         </h2>
@@ -130,17 +130,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <input class="form-check-input" type="checkbox" id="dataneh">
                       <span class="form-check-label font-bold">View Data Aneh</span>
                     </label>
+                    <label class="form-check mt-1 mb-1 bg-danger-lt" id="cekaneh">
+                      <input class="form-check-input" type="checkbox" id="opaneh">
+                      <span class="form-check-label font-bold">S-O tidak sesuai</span>
+                    </label>
                   <select class="form-control form-select font-kecil font-bold bg-cyan-lt hilang" id="nomorbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
                     <option value="X">Pilih BC</option>
                   </select>   
                   <!-- Start      -->
-                  
                   <label class="form-check mt-1 mb-3 bg-red-lt hilang">
                     <input class="form-check-input" type="checkbox" id="viewinv">
                     <span class="form-check-label font-bold">Tampilkan Barang No Inv</span>
                   </label>
-                  <select class="form-control form-select font-kecil font-bold bg-yellow-lt hilang" id="kontrakbcnya" style="height: 25px !important; padding-top:2px;color: black !important;">
-                    <option value="X">Semua - Kontrak BC</option>
+                  <select class="form-control form-select font-kecil font-bold bg-yellow-lt <?php if(!in_array($this->session->userdata('currdept'),daftardeptsubkon())){echo "hilang"; } ?>" id="filtnomorbc" style="height: 25px !important; padding-top:2px;color: black !important;">
+                    <option value="all">Semua - Nomor BC</option>
+                    <?php if(!empty($nombc)){foreach($nombc->result_array() as $nobc): ?>
+                      <option value="<?= $nobc['nomor_bc'] ?>"><?= $nobc['nomor_bc'] ?></option>
+                    <?php endforeach;} ?>
                   </select>
                    <!-- End  -->
                     <hr class="small m-1">
@@ -221,6 +227,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Qty</th>
                 <th>Kgs</th>
                 <th id="headopname" class="line-12">Opname<br>31-12-2025</th>
+                <th>Stat</th>
                 <th>Verified</th>
               </tr>
             </thead>

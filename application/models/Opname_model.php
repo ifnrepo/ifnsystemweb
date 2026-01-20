@@ -16,7 +16,7 @@ class Opname_model extends CI_Model
         if($this->session->userdata('currdeptopname')!==''){
             $this->db->where('dept_id',$this->session->userdata('currdeptopname'));
         }
-        $this->db->group_by('po,item,dis,id_barang,nobale');
+        // $this->db->group_by('po,item,dis,id_barang,insno,nobontr,stok,exnet,nobale');
 
         $query = $this->db->get_compiled_select();
 
@@ -173,6 +173,18 @@ class Opname_model extends CI_Model
         $this->db->where('id',$data['id']);
         return $this->db->update('tb_periode_stokopname',$data);
     }
+    public function updatestokopname($data)
+    {
+        $this->db->where('id',$data['id']);
+        return $this->db->update('stokopname_detail',$data);
+    }
+    public function hapusrekapopname($id)
+    {
+        $this->db->where('id',$id);
+        return $this->db->delete('stokopname_detail');
+    }
+
+    // End Func
     public function getdatadept()
     {
         $this->db->order_by('departemen');
