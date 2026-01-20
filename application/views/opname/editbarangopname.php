@@ -51,7 +51,7 @@
             <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">Grade</label>
                 <div class="col">
-                    <select name="id_satuan" id="id_satuan" class="form-control font-kecil form-select btn-flat">
+                    <select name="stok" id="stok" class="form-control font-kecil form-select btn-flat">
                         <option value="0" <?php if($data['stok']==0){ echo "selected"; } ?>>Non Grade</option>
                         <option value="1" <?php if($data['stok']==1){ echo "selected"; } ?>>Grade A</option>
                         <option value="2" <?php if($data['stok']==2){ echo "selected"; } ?>>Grade B</option>
@@ -122,7 +122,8 @@
                 insno: $("#insno").val(),
                 nobontr: $("#nobontr").val(),
                 exnet: $("#exnet").val(),
-                nobale: $("#nobale").val()
+                nobale: $("#nobale").val(),
+                stok: $("#stok").val()
             },
             success: function (data) {
                 // alert(data.jmlrek);

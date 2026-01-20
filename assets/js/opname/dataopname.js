@@ -78,14 +78,14 @@ $(document).ready(function(){
 				}
 			},
 			{ "data": "id",
-				"className": "line-11",
+				"className": "line-11 font-kecil",
 				"render": function(data, type, row, meta){
 					var lokal = row.imdo==0 ? 'LO' : 'IM';
 					var sku = row.po.trim() == '' ? lokal+'-'+row.kode : viewsku(row.po,row.item,row.dis) ;
 					var spek = row.po.trim() == '' ? row.nama_barang : row.spek ;
 					var idbrg = row.id_barang == null ? 0 : row.id_barang;
 					var ide = 'OME-'+encodeURIComponent(gantislash(row.po.trim()))+'-'+encodeURIComponent(gantislash(row.item.trim()))+'-'+row.dis+'-'+idbrg+'-'+encodeURIComponent(gantislash(row.nobontr.trim()))+'-'+encodeURIComponent(gantislash(row.insno.trim()))+'-'+encodeURIComponent(gantislash(row.nobale.trim()))+'-'+encodeURIComponent(row.nomor_bc.trim())+'-'+row.deptt;
-					return "<span class='hilang'>"+spek+"</span><span class='text-pink font-11'>"+sku+"</span>"+"<br><a href='#' title='View Detail'>"+spek+"</a>";
+					return "<span class='hilang'>"+spek+"</span><span class='text-pink font-11'>"+sku+"</span>"+"<br><a href='#' title='View Detail'>"+spek.trim()+"</a>";
 				}
 			},
 			{ "data": "stok",
@@ -97,9 +97,15 @@ $(document).ready(function(){
 				}
 			},
 			{ "data": "kodesatuan"},
-			{ "data": "insno"},
-			{ "data": "nobontr"},
-			{ "data": "nobale"},
+			{ "data": "insno",
+				"className": "line-11 font-kecil"
+			},
+			{ "data": "nobontr",
+				"className": "line-11 font-kecil"
+			},
+			{ "data": "nobale",
+				"className": "line-11 font-kecil"
+			},
 			{ "data": "pcs",
 				"className" : "text-right line-12",
 				"render": function(data, type, row, meta){
@@ -126,7 +132,7 @@ $(document).ready(function(){
 					var spek = row.po.trim() == '' ? row.nama_barang : row.spek ;
 					var idbrg = row.id_barang == null ? 0 : row.id_barang;
 					var ide = 'OME-'+encodeURIComponent(gantislash(row.po.trim()))+'-'+encodeURIComponent(gantislash(row.item.trim()))+'-'+row.dis+'-'+idbrg+'-'+encodeURIComponent(gantislash(row.nobale.trim()))+'-'+row.dept_id;
-					return '<a href="'+base_url+"opname/editrekapopname/"+row.id+'" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a>';
+					return '<a href="'+base_url+"opname/editrekapopname/"+row.id+'" class="btn btn-sm btn-success mr-1" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a><a href="#" data-href="'+base_url+"opname/hapusrekapopname/"+row.id+'" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data '+spek+' ('+sku+')" style="padding:0 3px !important">Hapus</a>';
 				}
 			},
 		],

@@ -141,6 +141,44 @@ class Opname extends CI_Controller
         $data['data'] = $this->opnamemodel->getdatabyid($isi);
         $this->load->view('opname/editbarangopname', $data);
     }
+    public function updatestokopname(){
+        $data = [
+            'id' => $_POST['id'],
+            'po' => $_POST['po'],
+            'item' => $_POST['item'],
+            'dis' => $_POST['dis'],
+            'id_barang' => $_POST['idb'],
+            'pcs' => $_POST['pcs'],
+            'kgs' => $_POST['kgs'],
+            'insno' => $_POST['insno'],
+            'nobontr' => $_POST['nobontr'],
+            'exnet' => $_POST['exnet'],
+            'nobale' => $_POST['nobale'],
+            'stok' => $_POST['stok'],
+        ];
+        echo $this->opnamemodel->updatestokopname($data);
+    }
+    public function hapusrekapopname($id){
+        $hasil = $this->opnamemodel->hapusrekapopname($id);
+        if($hasil){
+            $url = base_url().'opname/dataopname';
+            redirect($url);
+        }
+    }
+    public function tambahdataopname(){
+        // $dept = $this->session->userdata('currdeptopname');
+        $header['header'] = 'master';
+        $data = [
+            'dept' => $this->dept_model->getdata(),
+            'periode' => $this->opnamemodel->getdataperiode(),
+            'fungsi' => 'opname',
+            'datadept' => $this->opnamemodel->getdatadept()
+        ];
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $this->load->view('layouts/opname/header', $header);
+        $this->load->view('opname/addopname', $data);
+        $this->load->view('layouts/opname/footer', $footer);
+    }
 
     public function excel()
     {
