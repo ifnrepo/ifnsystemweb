@@ -1533,6 +1533,16 @@ class Akb_model extends CI_Model
             $this->db->where('id_header', $id);
             $this->db->delete('tb_detail');
         } else {
+            $this->db->select('id_header');
+            $this->db->from('tb_detail');
+            $this->db->where('id_akb',$id);
+            $this->db->group_by('id_header');
+            $hasil = $this->db->get();
+            foreach($hasil->result_array() as $has){
+                $this->db->where('id',$has['id_header']);
+                $this->db->update('tb_header',['ok_tuju' => 0]);
+            }
+
             $this->db->where('id_akb', $id);
             $this->db->update('tb_detail', ['id_akb' => NULL]);
             $this->helpermodel->isilog($this->db->last_query());

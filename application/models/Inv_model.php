@@ -334,8 +334,8 @@ class inv_model extends CI_Model
         $query4 = $this->db->get_compiled_select();
 
         $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs from (Select kategori.jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,";
-        $kolom .= "(select kgs from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and trim(insno)=trim(r1.insno) and trim(nobontr)=trim(r1.nobontr) and trim(nobale)=trim(r1.nobale) and trim(nomor_bc)=trim(r1.xnomor_bc) and stok=r1.stok and exnet=r1.exnet and dept_id = '".$dept."' and tgl='".tglmysql($tglakhir)."') as kgs_taking,";
-        $kolom .= "(select pcs from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and trim(insno)=trim(r1.insno) and trim(nobontr)=trim(r1.nobontr) and trim(nobale)=trim(r1.nobale) and trim(nomor_bc)=trim(r1.xnomor_bc) and stok=r1.stok and exnet=r1.exnet and dept_id = '".$dept."' and tgl='".tglmysql($tglakhir)."') as pcs_taking ";
+        $kolom .= "(select sum(kgs) from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and trim(insno)=trim(r1.insno) and trim(nobontr)=trim(r1.nobontr) and trim(nobale)=trim(r1.nobale) and stok=r1.stok and exnet=r1.exnet and dept_id = '".$dept."' and tgl='".tglmysql($tglakhir)."') as kgs_taking,";
+        $kolom .= "(select sum(pcs) from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and trim(insno)=trim(r1.insno) and trim(nobontr)=trim(r1.nobontr) and trim(nobale)=trim(r1.nobale) and stok=r1.stok and exnet=r1.exnet and dept_id = '".$dept."' and tgl='".tglmysql($tglakhir)."') as pcs_taking ";
         $kolom .= "from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
@@ -373,7 +373,11 @@ class inv_model extends CI_Model
                 if($key=='minus'){
                     $setWhere[] = '(sumkgs < 0 OR sumpcs < 0)';
                 }else{
-                    $setWhere[] = $key."='".$value."'";
+                    if($key=='opminus'){
+                        $setWhere[] = '(sumkgs != ifnull(kgs_taking,0) OR sumpcs != ifnull(pcs_taking,0))';
+                    }else{
+                        $setWhere[] = $key."='".$value."'";
+                    }
                 }
             }
             $fwhere = implode(' AND ', $setWhere);
@@ -1209,6 +1213,16 @@ class inv_model extends CI_Model
 
        $query = "Select id_kategori,kategori.nama_kategori from (".$get.") r3 left join kategori on id_kategori = kategori.kategori_id group by id_kategori order by nama_kategori";
        return $this->db->query($query);
+    }
+    public function getdatanomorbc(){
+        if(in_array($this->session->userdata('currdept'),daftardeptsubkon())){
+            $get = $this->getdata();
+
+            $query = "Select nomor_bc from (".$get.") r3 group by nomor_bc order by nomor_bc";
+            return $this->db->query($query);
+        }else{
+            return [];
+        }
     }
     public function getreqinv(){
         $tgl = $this->session->userdata('tglakhir');

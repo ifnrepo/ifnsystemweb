@@ -86,6 +86,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="text-blue font-bold mt-2 ">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div>
                   <div class="text-blue font-bold">Jumlah Pcs : <span id="jumlahpcs" style="font-weight: normal;"><?= $this->session->userdata('jumlahpc'); ?></span></div>
                   <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">Loading ..</span></div>
+                  <div id="rekapopname" class="hilang">
+                  <hr class="m-1">
+                  <h5 class="m-0">Rekap Opname</h5>
+                  <div class="text-secondary font-bold">Jumlah Pcs : <span id="jumlahpcsopname" style="font-weight: normal;">Loading ..</span></div>
+                  <div class="text-secondary font-bold">Jumlah Kgs : <span id="jumlahkgsopname" style="font-weight: normal;">Loading ..</span></div>
+                  </div>
                 </div>
                 <div class="col-3">
                   <div class="mb-0">

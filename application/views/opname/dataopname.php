@@ -4,10 +4,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
 <div class="page-header d-print-none">
     <div class="container-xl">
         <div class="row g-0 d-flex align-items-between">
-            <div class="col-md-6">
+            <div class="col-md-6 line-12">
                 <h2 class="page-title p-2">
                     Rekap Data Stok Opname
                 </h2>
+                <small class="pl-2">Periode <?= tglmysql($this->session->userdata('periodeopname')) ?></small>
             </div>
             <div class="col-md-6 d-flex justify-content-end" style="text-align: right;">
                 <a href="<?= base_url() . 'opname'; ?>" style="height: 38px;" class="btn btn-primary btn-sm ml-1"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali </span></a>

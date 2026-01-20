@@ -9,6 +9,8 @@ $(document).ready(function () {
 	$("#jumlahrekod").text('Loading...');
 	$("#jumlahpcs").text('Loading...');
 	$("#jumlahkgs").text('Loading...');
+	$("#jumlahpcsopname").text('Loading...');
+	$("#jumlahkgsopname").text('Loading...');
 	// $("#jumlahidr").text(rupiah(jmlidr, ".", ",", 2));
 	// $("#jumlahusd").text(rupiah(jmlusd, ".", ",", 2));
 	$(".loadered").removeClass('hilang');
@@ -36,8 +38,8 @@ $(document).ready(function () {
             if(api2.recordsFiltered > 0){
 				$("#jumlahkgs").text(rupiah(data[0]['totalkgs'],'.',',',2));
 				$("#jumlahpcs").text(rupiah(data[0]['totalpcs'],'.',',',0));
-				// $("#sawalpcs").text(rupiah(data[0]['sawalpcs'],'.',',',0));
-				// $("#sawalkgs").text(rupiah(data[0]['sawalkgs'],'.',',',2));
+				$("#jumlahkgsopname").text(rupiah(data[0]['totalkgstaking'],'.',',',2));
+				$("#jumlahpcsopname").text(rupiah(data[0]['totalpcstaking'],'.',',',0));
 				// $("#inkgs").text(rupiah(data[0]['totalinkgs'],'.',',',2));
 				// $("#outkgs").text(rupiah(data[0]['totaloutkgs'],'.',',',2));
 				// $("#adjkgs").text(rupiah(data[0]['totaladjkgs'],'.',',',2));
@@ -48,8 +50,8 @@ $(document).ready(function () {
 			}else{
 				$("#jumlahkgs").text('0');
 				$("#jumlahpcs").text('0');
-				// $("#sawalpcs").text('0');
-				// $("#sawalkgs").text('0');
+				$("#jumlahkgsopname").text('0');
+				$("#jumlahpcsopname").text('0');
 				// $("#inkgs").text('0');
 				// $("#outkgs").text('0');
 				// $("#adjkgs").text('0');
@@ -216,9 +218,11 @@ $(document).ready(function () {
 	if($("#tglopname").val() != ''){
 		$("#headopname").html('Opname<br>'+$("#tglopname").val());
 		$("#cekaneh").removeClass('hilang');
+		$("#rekapopname").removeClass('hilang');
 	}else{
 		$("#headopname").html('Opname<br>');
 		$("#cekaneh").addClass('hilang');
+		$("#rekapopname").addClass('hilang');
 	}
 });
 // var butoncari = false;
