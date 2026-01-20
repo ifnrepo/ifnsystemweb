@@ -11,6 +11,15 @@ class Userappsmodel extends CI_Model
         return $this->db->order_by('user.id', 'DESC')->get()->result_array();
     }
 
+    public function dept_Stok_Opname()
+    {
+        $this->db->select("dept.*");
+        $this->db->from('dept');
+        $this->db->where_in('dept_id', ['AM', 'AN', 'AR', 'MD', 'NU', 'GF', 'FN', 'FG', 'GP', 'GM', 'NT', 'DL', 'TN', 'RR', 'ST', 'GS', 'SP', 'GW']);
+        $this->db->order_by('departemen', 'ASC');
+        return $this->db->get()->result_array();
+    }
+
     public function getdatabyid($id)
     {
         $query = $this->db->query("Select user.*,level_user.id as idlevel from user left join level_user on level_user.id = user.id_level_user where user.id = " . $id);
@@ -46,6 +55,7 @@ class Userappsmodel extends CI_Model
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
         $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
         $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
+        $data['cekopname'] = isset($data['cekopname']) ? 1 : 0;
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -186,6 +196,7 @@ class Userappsmodel extends CI_Model
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
         $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
         $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
+        $data['cek_so'] = isset($data['cek_so']) ? 1 : 0;
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -253,6 +264,14 @@ class Userappsmodel extends CI_Model
                 unset($data[$dept['dept_id']]);
             }
         }
+        // Set hak departemen STOK OPNAME
+        $hakstokopname = '';
+        if (isset($data['stokopname'])) {
+            foreach ($data['stokopname'] as $deptid) {
+                $hakstokopname .= $deptid;
+            }
+            unset($data['stokopname']);
+        }
         // Set hak tandatangan PB
         $cekpb = '';
         $datdept = $this->deptmodel->getdata_dept_pb();
@@ -292,6 +311,7 @@ class Userappsmodel extends CI_Model
         $data['rfid'] = $rfid;
         $data['hakdowntime'] = $hakdowntime;
         $data['hakdepartemen'] = $hakdepartemen;
+        $data['hakstokopname'] = $hakstokopname;
         $data['cekpb'] = $cekpb;
         // $data['cekpc'] = $cekpc;
         $datdept = $this->deptmodel->getdata();
@@ -332,6 +352,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('rfid', $cek['rfid']);
             $this->session->set_userdata('hakdowntime', $cek['hakdowntime']);
             $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
+            $this->session->set_userdata('hakstokopname', $cek['hakstokopname']);
             $this->session->set_userdata('arrdep', arrdep($cek['hakdepartemen']));
             $this->session->set_userdata('hak_ttd_pb', arrdep($cek['cekpb']));
             $this->session->set_userdata('ttd', $cek['ttd']);

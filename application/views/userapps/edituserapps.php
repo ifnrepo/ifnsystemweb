@@ -288,6 +288,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Cek Stokopname">
+                      <span class="col font-bold">Cek Stokopname</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <?php $pcaktif = $user['cek_so'] == 1 ? 'checked' : ''; ?>
+                          <!-- <?php var_dump($user['cek_so']) ?> -->
+                          <input class="form-check-input" name="cek_so" id="cek_so" type="checkbox" <?= $pcaktif; ?>>
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="hr mt-2 mb-1"></div>
               <div class="card-body pt-2">
                 <div class="row">
@@ -341,6 +358,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-hakdowntime-1" class="nav-link text-blue mb-1" data-bs-toggle="tab">Hak Downtime</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#tabs-stokopname-1" class="nav-link text-blue mb-1" data-bs-toggle="tab">Hak Stokopname</a>
                         </li>
                       </ul>
                     </div>
@@ -806,6 +826,29 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="hakdowntime6" name="hakdowntime6" type="checkbox" <?= cekceklis($user['hakdowntime'], 6); ?>>
                                 <span class="form-check-label">Gudang</span>
                               </label>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="tab-pane" id="tabs-stokopname-1">
+                          <div class="row">
+                            <div class="col-6">
+                              <?php $no = 0;
+                              $nox = 0;
+                              $jml = $jmldept / 2;
+                              foreach ($dept_opname as $dept) : $no++; ?>
+                                <?php if ($no % $jml == 0 && $nox == 0) {
+                                  $nox = 1; ?>
+                            </div>
+                            <div class="col-6">
+                            <?php } ?>
+                            <label class="form-check mb-1">
+                              <!-- <input class="form-check-input" id="<?= $dept['dept_id']; ?>" name="<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['hakstokopname'], $dept['dept_id']); ?>> -->
+                              <input class="form-check-input" type="checkbox" name="stokopname[]" value="<?= $dept['dept_id']; ?>" <?= cekceklisdep($user['hakstokopname'], $dept['dept_id']); ?>>
+
+                              <span class="form-check-label"><?= $dept['departemen']; ?></span>
+                            </label>
+                          <?php endforeach; ?>
                             </div>
                           </div>
                         </div>

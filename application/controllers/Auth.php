@@ -66,6 +66,7 @@ class Auth extends CI_Controller
         $password = $pass;
         // $user = $this->db->get_where('user', ['username' => $username])->row_array();
         $user = $this->userappsmodel->getdatabyuser($username)->row_array();
+
         if ($user) {
             if (encrypto($password) == $user['password'] && $user['aktif'] == 1) {
                 $user_data = [
@@ -85,9 +86,12 @@ class Auth extends CI_Controller
                     'cekpo' => $user['cekpo'],
                     'cekadj' => $user['cekadj'],
                     'viewharga' => $user['view_harga'],
+                    'cek_so' => $user['cek_so'],
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);
+
+
 
                 $this->session->set_userdata('arrdep', arrdep($user['hakdepartemen']));
                 $this->session->set_userdata('hak_ttd_pb', arrdep($user['cekpb']));
@@ -152,12 +156,14 @@ class Auth extends CI_Controller
                     'transaksi' => $user['transaksi'],
                     'other' => $user['other'],
                     'hakdepartemen' => $user['hakdepartemen'],
+                    'hakstokopname' => $user['hakstokopname'],
                     'level_user' => $user['idlevel'],
                     'dept_user' => $user['id_dept'],
                     'ttd' => $user['ttd'],
                     'cekpo' => $user['cekpo'],
                     'cekadj' => $user['cekadj'],
                     'viewharga' => $user['view_harga'],
+                    'cek_so' => $user['cek_so'],
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);
@@ -194,12 +200,12 @@ class Auth extends CI_Controller
                 $this->helpermodel->isilog('LOGIN Aplikasi momois DG USERNAME PASSWORD');
 
                 $cekkursnow = $this->akbmodel->cekkursnow();
-                if($cekkursnow->num_rows() == 0 && strtoupper(ENVIRONMENT) == 'PRODUCTION'){
+                if ($cekkursnow->num_rows() == 0 && strtoupper(ENVIRONMENT) == 'PRODUCTION') {
                     $cektoken = $this->cektoken();
-                }else{
+                } else {
                     $cektoken = true;
                 }
-                if($cektoken){
+                if ($cektoken) {
                     $url = base_url('Main');
                     redirect($url);
                 }
@@ -215,7 +221,8 @@ class Auth extends CI_Controller
         }
     }
 
-    public function cektoken(){
+    public function cektoken()
+    {
         $this->session->unset_userdata('datatokenbeacukai');
         $curl = curl_init();
         $headers = array(
@@ -226,7 +233,7 @@ class Auth extends CI_Controller
             'password' => 'Ifn123456' //'Bandung#14',
         ];
 
-        curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
         curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "POST");
         curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
         curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
@@ -236,55 +243,56 @@ class Auth extends CI_Controller
         $result = curl_exec($curl);
         curl_close($curl);
 
-        $databalik = json_decode($result,true);
+        $databalik = json_decode($result, true);
         // print_r($databalik);
-        if($databalik['status']=='success'){
+        if ($databalik['status'] == 'success') {
             $data = [
                 'token' => $databalik['item']['access_token'],
                 'refresh_token' => $databalik['item']['refresh_token']
             ];
             $this->akbmodel->isitokenbc($data);
-            $this->session->set_userdata('datatokenbeacukai',$databalik['item']['access_token']);
+            $this->session->set_userdata('datatokenbeacukai', $databalik['item']['access_token']);
             $this->helpermodel->isilog('Refresh Token CEISA 40');
             $kurs = $this->getkurs();
-            if($kurs){
+            if ($kurs) {
                 return true;
             }
-        }else{
+        } else {
             // $url = base_url().'ib/kosong';
             // redirect($url);
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',$databalik['message'].'[EXCEPTION]'.$databalik['Exception']);
+            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
         }
     }
 
-    public function getkurs(){
+    public function getkurs()
+    {
         $token = $this->akbmodel->gettoken();
-        $kode = ['usd','jpy','eur'];
-        for($x=0;$x<count($kode);$x++){
+        $kode = ['usd', 'jpy', 'eur'];
+        for ($x = 0; $x < count($kode); $x++) {
             $kodex = $kode[$x];
             $curl = curl_init();
             // $token = $consID;
             $headers = array(
                 "Content-Type: application/json",
-                "Authorization: Bearer ".$token,
+                "Authorization: Bearer " . $token,
             );
 
-            curl_setopt($curl, CURLOPT_HTTPHEADER,$headers);
+            curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
             curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
             curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
             // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
-            curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/kurs/'.$kodex);
+            curl_setopt($curl, CURLOPT_URL, 'https://apis-gw.beacukai.go.id/openapi/kurs/' . $kodex);
             curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
             curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
             $result = curl_exec($curl);
             curl_close($curl);
 
-            $databalik = json_decode($result,true);
+            $databalik = json_decode($result, true);
             // print_r($databalik['data'][0]['nilaiKurs']);
-            if($databalik['status']=='true'){
-                $this->akbmodel->isikursbc($databalik['data'][0]['nilaiKurs'],$kodex);
-                $this->helpermodel->isilog('Isi KURS BC CEISA 40 - '.strtoupper($kodex));
+            if ($databalik['status'] == 'true') {
+                $this->akbmodel->isikursbc($databalik['data'][0]['nilaiKurs'], $kodex);
+                $this->helpermodel->isilog('Isi KURS BC CEISA 40 - ' . strtoupper($kodex));
             }
         }
         return true;
