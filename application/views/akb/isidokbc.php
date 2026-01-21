@@ -755,7 +755,7 @@
                                 <?php endif; ?>
                             </tbody>
                         </table>
-                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail2, 2); ?>">
+                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah(ceil($sumdetail2), 2); ?>">
                         <input type="text" id="jumlahhskosong" class="hilang" value="<?= $jumlahhskosong; ?>">
                     </div>
                 </div>

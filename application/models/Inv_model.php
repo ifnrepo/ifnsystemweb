@@ -186,6 +186,8 @@ class inv_model extends CI_Model
         $this->db->select('0 as totalpcsin,0 as totalkgsin');
         $this->db->select('0 as totalpcsout,0 as totalkgsout');
         $this->db->select('0 as totalpcsadj,0 as totalkgsadj');
+        $this->db->select('stokdept.user_verif,stokdept.tgl_verif');
+        $this->db->select('user.username as username_verif');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('stokdept.nobale');
         }else{
@@ -199,6 +201,7 @@ class inv_model extends CI_Model
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(stokdept.po,stokdept.item,stokdept.dis)','left');
+        $this->db->join('user','user.id = stokdept.user_verif','left');
         $this->db->where('dept_id',$dept);
         $this->db->where('periode',$periode);
         // $this->db->where('stokdept.po','KI-6391');
@@ -220,6 +223,8 @@ class inv_model extends CI_Model
         $this->db->select('SUM(sum(pcs)) over() as totalpcsin,SUM(sum(kgs)) over() as totalkgsin');
         $this->db->select('0 as totalpcsout,0 as totalkgsout');
         $this->db->select('0 as totalpcsadj,0 as totalkgsadj');
+        $this->db->select('0 as user_verif,"" as tgl_verif');
+        $this->db->select('"" as username_verif');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
         }else{
@@ -264,6 +269,8 @@ class inv_model extends CI_Model
         $this->db->select('0 as totalpcsin,0 as totalkgsin');
         $this->db->select('SUM(sum(tb_detailgen.pcs)) over() as totalpcsout,SUM(sum(tb_detailgen.kgs)) over() as totalkgsout');
         $this->db->select('0 as totalpcsadj,0 as totalkgsadj');
+        $this->db->select('0 as user_verif,"" as tgl_verif');
+        $this->db->select('"" as username_verif');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detailgen.nobale');
         }else{
@@ -306,6 +313,8 @@ class inv_model extends CI_Model
         $this->db->select('0 as totalpcsin,0 as totalkgsin');
         $this->db->select('0 as totalpcsout,0 as totalkgsout');
         $this->db->select('SUM(sum(pcs)) over() as totalpcsadj,SUM(sum(kgs)) over() as totalkgsadj');
+        $this->db->select('0 as user_verif,"" as tgl_verif');
+        $this->db->select('"" as username_verif');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
         }else{
@@ -333,7 +342,7 @@ class inv_model extends CI_Model
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query4 = $this->db->get_compiled_select();
 
-        $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs from (Select kategori.jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,";
+        $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs,sum(pcs_taking) over() as totalsopcs,sum(kgs_taking) over() as totalsokgs from (Select kategori.jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,";
         $kolom .= "(select sum(kgs) from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and trim(insno)=trim(r1.insno) and trim(nobontr)=trim(r1.nobontr) and trim(nobale)=trim(r1.nobale) and stok=r1.stok and exnet=r1.exnet and dept_id = '".$dept."' and tgl='".tglmysql($tglakhir)."') as kgs_taking,";
         $kolom .= "(select sum(pcs) from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and trim(insno)=trim(r1.insno) and trim(nobontr)=trim(r1.nobontr) and trim(nobale)=trim(r1.nobale) and stok=r1.stok and exnet=r1.exnet and dept_id = '".$dept."' and tgl='".tglmysql($tglakhir)."') as pcs_taking ";
         $kolom .= "from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
@@ -967,6 +976,64 @@ class inv_model extends CI_Model
             }
         }
         return $hasil;
+    }
+    public function savesaw(){
+        if($this->session->userdata('tglakhir')==null){
+            $tglawal = '01-01-1970';
+        }else{
+            $tglawal = $this->session->userdata('tglakhir');
+        }
+        $periode = cekperiodedaritgl($tglawal);
+        $this->db->trans_start();
+        //Cek data ada atau belum 
+        $cekexistdata = $this->db->get_where('stokdept',['periode' => cekperiodedaritgl($tglawal,1),'dept_id' => $this->session->userdata('currdept')]);
+        if($cekexistdata->num_rows() > 0) {
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror','Data stok dept periode '.cekperiodedaritgl($tglawal,1).' sudah ada. Hubungi IT');
+            return 1;
+        }else{
+            $data = $this->getdata();
+            $query = $this->db->query($data);
+            if(count($query->result_array()) > 0){
+                // foreach($query->result_array() as $det){
+                $det = $query->row_array();
+                // var_dump($det);
+                    if(($det['sumpcs']+$det['sumkgs']) != 0){
+                        $isidata = [
+                            'tgl' => date('Y-m-d'),
+                            'dept_id' => $this->session->userdata('currdept'),
+                            'periode' => cekperiodedaritgl($tglawal,1),
+                            'nobontr' => $det['nobontr'],
+                            'insno' => $det['insno'],
+                            'id_barang' => $det['id_barang'],
+                            'po' => $det['po'],
+                            'item' => $det['item'],
+                            'dis' => $det['dis'],
+                            'exnet' => $det['exnet'],
+                            'stok' => $det['stok'],
+                            'dln' => $det['xdln'],
+                            'nobale' => $det['nobale'],
+                            'harga' => 0,
+                            'kgs_awal' => $det['sumkgs'],
+                            'pcs_awal' => $det['sumpcs'],
+                            'kgs_masuk' => 0,
+                            'pcs_masuk' => 0,
+                            'kgs_keluar' => 0,
+                            'pcs_keluar' => 0,
+                            'kgs_adj' => 0,
+                            'pcs_adj' => 0,
+                            'kgs_akhir' => $det['sumkgs'],
+                            'pcs_akhir' => $det['sumpcs'],
+                            'nomor_bc' => $det['nomor_bc'],
+                            // 'tgl_bc' => $det['tgl_bc'],
+                        ];
+                        $this->db->insert('stokdept',$isidata);
+                    }
+                // }
+            }
+            return $this->db->trans_complete();
+            // return $det;
+        }
     }
     public function getexport_data()
     {

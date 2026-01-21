@@ -30,7 +30,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     echo "selected";
                                                 } ?>>PCS</option>
                         </select>
-                        <?php var_dump($this->session->userdata('hakstokopname')); ?>
                         <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" title="Departemen" id="currdeptopname" name="currdeptopname">
                             <?php
                             $dep = $this->session->userdata('hakstokopname');

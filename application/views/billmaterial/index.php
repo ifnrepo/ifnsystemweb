@@ -17,11 +17,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
 </div>
 <div class="page-body">
     <div class="container-xl">
-
         <div class="card">
             <div class="card-body">
                 <div class="card card-active mb-2">
-                    <div class="card-body p-1">
+                    <div class="card-body p-3">
                         <div class="text-left float-left">
                             <div class="row">
                                 <label class="col-3 col-form-label font-kecil font-bold">Cari SKU</label>
@@ -36,7 +35,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     </div>
                                 </div>
                             </div>
-                            
                         </div>
                         <div class="text-right float-right">
                         <a href="<?= base_url() . 'kategori/excel'; ?>" class="btn btn-success btn-sm hilang"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export To Excel</span></a>

@@ -55,8 +55,8 @@
             autoclose: true,
             format : "dd-mm-yyyy",
             todayHighlight: true,
-            startDate: xminDate,
-            endDate: xmaxDate
+            // startDate: xminDate,
+            // endDate: xmaxDate
             // minDate: xminDate,
             // maxDate: xmaxDate
         });

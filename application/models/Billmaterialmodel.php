@@ -11,6 +11,8 @@ class Billmaterialmodel extends CI_Model
             $this->db->like('po',$this->session->userdata('katcari'));
             $this->db->or_like('kode',$this->session->userdata('katcari'));
             $this->db->or_like('nama_barang',$this->session->userdata('katcari'));
+            $this->db->or_like('insno',$this->session->userdata('katcari'));
+            $this->db->or_like('nobontr',$this->session->userdata('katcari'));
         }else{
             $this->db->order_by('id Desc');
         }

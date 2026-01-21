@@ -6,9 +6,9 @@
         <path d="M12 16h.01" />
     </svg>
     <h3>Anda Yakin ?</h3>
-    <div class="text-secondary" id="message">Akan memverifikasi data <br><span class="font-bold">Saldo Saat ini : </span></div>
+    <div class="text-secondary" id="message">Akan memverifikasi data <br><span class="font-bold">Saldo Saat ini <br>Kgs : <?= rupiah($data['kgs_akhir'],2) ?>, Pcs : <?= rupiah($data['pcs_akhir'],0) ?></span></div>
 </div>
-<input type="text" value="" id="idrek">
+<input type="text" value="<?= $data['idu'] ?>" id="idreko" class="hilang">
 <div class="modal-footer mt-1">
     <div class="w-100">
         <div class="row">
@@ -28,7 +28,7 @@
         var isinya =
 		'<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>';
 	    $("#loadview").html(isinya);
-        reko = $("#idrek").val();
+        var reko = $("#idreko").val();
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -39,7 +39,7 @@
             success: function (data) {
                 // window.location.reload();
                 // alert(data); 
-                if($("#bukavalid")==1){
+                if($("#bukavalid").val()==1){
                     butto = '<a href="'+base_url+'inv/batalverifikasidata/'+data[2]+'" data-bs-toggle="modal" data-bs-target="#canceltask" data-tombol="Ya" data-message="Akan membatalkan verifikasi data <br> '+data[3]+'" style="padding: 2px 3px !important" id="verifrek'+data[2]+'" rel="'+data[2]+'" title="'+data[2]+'">';
                     butto2 = '</a>';
                 }else{

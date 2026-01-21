@@ -703,10 +703,16 @@ function namaspekbarang($brg,$kolom = 'nama_barang')
     }
     return $x;
 }
-function cekperiodedaritgl($tgl)
-{
-    $unt = strtotime($tgl);
-    return date('m', $unt) . date('Y', $unt);
+function cekperiodedaritgl($tgl,$nextmonth=0)
+{   
+    if($nextmonth==0){
+        $unt = strtotime($tgl);
+        return date('m', $unt) . date('Y', $unt);
+    }else{
+        $date = new DateTime($tgl);
+        $date->modify('last day of next month');
+        return $date->format('m').$date->format('Y');
+    }
 }
 function spekpo($po, $item, $dis)
 {
