@@ -30,9 +30,11 @@ $(document).ready(function () {
 				$("#inkgs").text(rupiah(data[0]['totalinkgs'],'.',',',2));
 				$("#outkgs").text(rupiah(data[0]['totaloutkgs'],'.',',',2));
 				$("#adjkgs").text(rupiah(data[0]['totaladjkgs'],'.',',',2));
+				$("#sokgs").text(rupiah(data[0]['totalsokgs'],'.',',',2));
 				$("#inpcs").text(rupiah(data[0]['totalinpcs'],'.',',',0));
 				$("#outpcs").text(rupiah(data[0]['totaloutpcs'],'.',',',0));
 				$("#adjpcs").text(rupiah(data[0]['totaladjpcs'],'.',',',0));
+				$("#sopcs").text(rupiah(data[0]['totalsopcs'],'.',',',0));
 				$("#jumlahrekod").text(rupiah(api2.recordsFiltered,'.',',',0));
 			}else{
 				$("#jumlahkgs").text('0');
@@ -42,9 +44,11 @@ $(document).ready(function () {
 				$("#inkgs").text('0');
 				$("#outkgs").text('0');
 				$("#adjkgs").text('0');
+				$("#sokgs").text('0');
 				$("#inpcs").text('0');
 				$("#outpcs").text('0');
 				$("#adjpcs").text('0');
+				$("#sopcs").text('0');
 				$("#jumlahrekod").text('0');
 			}
 		},
@@ -165,11 +169,23 @@ $(document).ready(function () {
 			},
 			{ "data": "kodeinv",
 				"className": "text-center line-11",
+				"createdCell": function (td, cellData, rowData, row, col) {
+					$(td).attr('id', 'row'+rowData.idu); // Add a custom attribute
+				},
 				"render": function(data, type, row, meta){
 					// return rupiah(0,'.',',',2);
 					// var buto = '<a href="'+base_url+"inv/confirmverifikasidata/' . $det['idu']; ?>" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data <br> <?= $det['nama_barang'] ?>" style="padding: 2px 3px !important" id="verifrek<?= $det['idu']; ?>" rel="<?= $det['idu']; ?>" title="<?= $det['idu']; ?>"><span>Verify</span></a>
 					var cek = '';
-					return "<a href='"+base_url+"inv/confirmverifikasidata/"+row.idu+"' class='btn btn-success btn-sm font-bold' data-bs-toggle='modal' data-bs-target='#veriftask' data-tombol='Ya' data-message='Akan memverifikasi data' style='padding: 2px 3px !important'>Verify</a>";
+					var spek = row.po.trim() == '' ? row.nama_barang : row.spek ;
+					var usernya = row.username_verif;
+					if(row.user_verif == 0){
+						return "<a href='"+base_url+"inv/confirmverifikasidata/"+row.idu+"' class='btn btn-success btn-sm font-bold' data-bs-toggle='modal' data-bs-target='#veriftask' data-tombol='Ya' data-message='Akan memverifikasi data' title='Verifikasi Saldo' style='padding: 2px 3px !important'>Verify</a>";
+					}else{
+						var cek = "<a href='"+base_url+"inv/batalverifikasidata/"+row.idu+"' data-bs-toggle='modal' data-bs-target='#canceltask' data-tombol='Ya' data-message='Akan membatalkan verifikasi data <br> '"+spek+"' style='padding: 2px 3px !important' id='verifrek'"+row.idu+"' rel='"+row.idu+"' title='"+row.idu+"'>";
+						cek += "verified : "+usernya+"<br><span class='font-10'>"+row.tgl_verif+"</span>";
+						cek += "</a>";
+						return cek;
+					}
 				}
 			 },
 		],

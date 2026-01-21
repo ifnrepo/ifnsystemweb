@@ -132,6 +132,14 @@ class Inv extends CI_Controller
         redirect($url);
         }
     }
+    public function savesaw(){
+        $hasil = $this->invmodel->savesaw();
+        // echo $hasil;
+        if($hasil){
+            $url = base_url('Inv');
+        redirect($url);
+        }
+    }
     public function getdatawip()
     {
         $this->session->set_userdata('tglawal', $_POST['tga']);

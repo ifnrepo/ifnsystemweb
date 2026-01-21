@@ -4931,8 +4931,9 @@ class Akb extends CI_Controller
 
         // Proses file excel    
         ob_end_clean();
+        $namafile = 'Perhitungan Jaminan '.$header['nomor_dok'];
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Perhitungan Jaminan "' . $id . '".xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="'.$namafile.'".xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');

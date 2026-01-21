@@ -56,8 +56,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
             <div class="col-sm-5 d-flex flex-row-reverse" style="text-align: right;">
               <!-- <a href="<?= base_url('inv/cetakpdf'); ?>" target="_blank" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a> -->
-              <a href="<?= base_url() . 'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
               <?php $aktiv = (int) $req_inv > 0 ? '' : 'disabled'; ?>
+              <?php $aktivsavesaw = $ifndln != 'all' ? 'disabled' : ''; ?>
+              <a href="<?= base_url() . 'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
+              <a href="#" data-href="<?= base_url().'inv/savesaw'; ?>" class="btn btn-cyan btn-sm btn-flat mr-1 <?= $aktivsavesaw ?>" id="simpansaw" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data SAK to SAW <br> data tidak bisa dirubah'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save to<br>SAW</span></a>
               <a href="#" data-href="<?= base_url().'inv/simpandatainv'; ?>" class="btn btn-info btn-sm btn-flat mr-1 <?= $aktiv ?>" id="simpaninv" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data ke Pricing Inventory'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save Pricing <br>Inventory</span></a>
             </div>
           </div>
@@ -160,10 +162,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <tr>
                         <th class="text-center text-black">Unit</th>
                         <th class="text-center text-black">S.Awal</th>
-                        <th class="text-center text-black">Pemasukan</th>
-                        <th class="text-center text-black">Pengeluaran</th>
-                        <th class="text-center text-black">Adjustment</th>
+                        <th class="text-center text-black">IN</th>
+                        <th class="text-center text-black">OUT</th>
+                        <th class="text-center text-black">ADJ</th>
                         <th class="text-center text-black">S.Akhir</th>
+                        <th class="text-center text-black">SO</th>
                       </tr>
                     </thead>
                     <tbody class="table-tbody">
@@ -174,6 +177,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <td class="text-right" id="outpcs">Loading..</td>
                         <td class="text-right" id="adjpcs">Loading..</td>
                         <td class="text-right" id="jumlahpcs">Loading..</td>
+                        <td class="text-right text-cyan" id="sopcs">Loading..</td>
                       </tr>
                       <tr>
                         <td class="font-bold">KGS</td>
@@ -182,6 +186,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <td class="text-right" id="outkgs">Loading..</td>
                         <td class="text-right" id="adjkgs">Loading..</td>
                         <td class="text-right" id="jumlahkgs">Loading..</td>
+                        <td class="text-right text-cyan" id="sokgs">Loading..</td>
                       </tr>
                     </tbody>
                   </table>
