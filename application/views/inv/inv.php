@@ -57,9 +57,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="col-sm-5 d-flex flex-row-reverse" style="text-align: right;">
               <!-- <a href="<?= base_url('inv/cetakpdf'); ?>" target="_blank" class="btn btn-danger btn-sm font-bold" id="topdf"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export PDF</span></a> -->
               <?php $aktiv = (int) $req_inv > 0 ? '' : 'disabled'; ?>
-              <?php $aktivsavesaw = $ifndln != 'all' ? 'disabled' : ''; ?>
+              <?php 
+                $aktivsavesaw = 'disabled';
+                if($ifndln != 'all'){
+                  $aktivsavesaw = 'disabled';
+                }else if($tglakhir != lastdate2($tglakhir)){
+                  $aktivsavesaw = 'disabled';
+                }else{
+                  $aktivsavesaw = '';
+                }
+              ?>
               <a href="<?= base_url() . 'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
-              <a href="#" data-href="<?= base_url().'inv/savesaw'; ?>" class="btn btn-cyan btn-sm btn-flat mr-1 <?= $aktivsavesaw ?>" id="simpansaw" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data SAK to SAW <br> data tidak bisa dirubah'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save to<br>SAW</span></a>
+              <a href="#" data-href="<?= base_url().'inv/savesaw'; ?>" class="btn btn-cyan btn-sm btn-flat mr-1 <?= $aktivsavesaw ?> <?php if($this->session->userdata('sess_ceksaw')==0){ echo "hilang"; } ?>" id="simpansaw" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data SAK to SAW <br> data tidak bisa dirubah'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save to<br>SAW</span></a>
               <a href="#" data-href="<?= base_url().'inv/simpandatainv'; ?>" class="btn btn-info btn-sm btn-flat mr-1 <?= $aktiv ?>" id="simpaninv" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data ke Pricing Inventory'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save Pricing <br>Inventory</span></a>
             </div>
           </div>

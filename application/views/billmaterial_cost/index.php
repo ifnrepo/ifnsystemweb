@@ -22,7 +22,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body">
                 <div class="card card-active mb-2">
                     <div class="card-body p-3">
-
                         <div class="row">
                             <div class="col-md-6">
                                 <a href="<?= base_url() . 'billmaterial_cost/tambahdata'; ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>

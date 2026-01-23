@@ -116,15 +116,16 @@ $(document).ready(function () {
 				"className": "text-right",
 				"render": function(data, type, row, meta){
 					var saldo = parseFloat(row.saldopcs)+parseFloat(row.inpcs)-parseFloat(row.outpcs)+parseFloat(row.adjpcs);
-					var saldokgs = row.saldopcs+row.inpcs-row.outpcs+row.adjpcs;
-					return rupiah(saldo,'.',',',0);
+					var saldo2 = row.sumpcs;
+					return rupiah(saldo2,'.',',',0);
 				}
 			 },
 			{ "data": "kodeinv",
 				"className": "text-right",
 				"render": function(data, type, row, meta){
 					var saldo = parseFloat(parseFloat(row.saldokgs).toFixed(2))+parseFloat(parseFloat(row.inkgs).toFixed(2))-parseFloat(parseFloat(row.outkgs).toFixed(2))+parseFloat(parseFloat(row.adjkgs).toFixed(2));
-					return rupiah(saldo.toFixed(2),'.',',',2);
+					var saldo2 = row.sumkgs;
+					return rupiah(saldo2,'.',',',2);
 				}
 			 },
 			{ "data": "kgs_taking",

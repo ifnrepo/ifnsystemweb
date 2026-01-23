@@ -143,6 +143,7 @@ class Out_model extends CI_Model{
         $data = $this->db->get_where('tb_detailgen_temp',['id_detail'=>$detail]);
         foreach($data->result_array() as $hasil){
             unset($hasil['id']);
+            $hasil['insno'] = trim(preg_replace('/\t+/','', $hasil['insno']));
             $this->db->insert('tb_detailgen',$hasil);
         }
         $this->db->where('id_detail',$detail);

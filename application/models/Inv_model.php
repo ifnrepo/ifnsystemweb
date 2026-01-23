@@ -716,6 +716,27 @@ class inv_model extends CI_Model
         return $hasil = $this->db->query($this->getdata());
     }
     public function simpandatainv(){
+        //Cek data yang IN yang masih belum keterima 
+        $this->db->select("*");
+        $this->db->where('dept_tuju',$this->session->userdata('currdept'));
+        $this->db->where('month(tgl)',substr($periode,0,2));
+        $this->db->where('year(tgl)',substr($periode,2,4));
+        $this->db->where('kode_dok','T');
+        $this->db->where('data_ok',1);
+        $this->db->where('ok_valid',0);
+        $this->db->where('left(nomor_dok,3) !=','IFN');
+        $this->db->order_by('tgl');
+        $cekdatabonin = $this->db->get('tb_header');
+        if($cekdatabonin->num_rows() > 0){
+            $kodebon = '';
+            foreach($cekdatabonin->result_array() as $bon){
+                $kodebon .= "\r\n &#9679 ".$bon['nomor_dok']." (".tglmysql($bon['tgl']).")";
+            }
+            $kodebon .= "\r\n Selesaikan dahulu semua Transaksi Penerimaan.";
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',"Masih ada ".$cekdatabonin->num_rows()." data transaksi Penerimaan ( IN ), yang belum dikonfirmasi".$kodebon);
+            return 1;
+        }
         $cekdata = $this->db->get_where('stokinv',['dept_id' => $this->session->userdata('currdept'),'tgl' => tglmysql($this->session->userdata('tglakhir')),'kunci' => 1]);
         if(count($cekdata->result_array()) > 0){
             $datacek = $cekdata->row_array();
@@ -984,6 +1005,27 @@ class inv_model extends CI_Model
             $tglawal = $this->session->userdata('tglakhir');
         }
         $periode = cekperiodedaritgl($tglawal);
+        //Cek data yang IN yang masih belum keterima 
+        $this->db->select("*");
+        $this->db->where('dept_tuju',$this->session->userdata('currdept'));
+        $this->db->where('month(tgl)',substr($periode,0,2));
+        $this->db->where('year(tgl)',substr($periode,2,4));
+        $this->db->where('kode_dok','T');
+        $this->db->where('data_ok',1);
+        $this->db->where('ok_valid',0);
+        $this->db->where('left(nomor_dok,3) !=','IFN');
+        $this->db->order_by('dept_id','tgl');
+        $cekdatabonin = $this->db->get('tb_header');
+        if($cekdatabonin->num_rows() > 0){
+            $kodebon = '';
+            foreach($cekdatabonin->result_array() as $bon){
+                $kodebon .= "\r\n &#9679 ".$bon['nomor_dok']." (".tglmysql($bon['tgl']).")";
+            }
+            $kodebon .= "\r\n Selesaikan dahulu semua Transaksi Penerimaan.";
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror',"Masih ada ".$cekdatabonin->num_rows()." data transaksi Penerimaan ( IN ), yang belum dikonfirmasi".$kodebon);
+            return 1;
+        }
         $this->db->trans_start();
         //Cek data ada atau belum 
         $cekexistdata = $this->db->get_where('stokdept',['periode' => cekperiodedaritgl($tglawal,1),'dept_id' => $this->session->userdata('currdept')]);

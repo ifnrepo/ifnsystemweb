@@ -623,9 +623,6 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 12); ?>" href="<?= base_url('grup'); ?>">
                       Data Grup
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 14); ?>" href="<?= base_url('hargacost'); ?>">
-                      Cost division
-                    </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 15); ?>" href="<?= base_url('setcost/clear'); ?>">
                       Setting Division Cost
                     </a>

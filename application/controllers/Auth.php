@@ -87,6 +87,7 @@ class Auth extends CI_Controller
                     'cekadj' => $user['cekadj'],
                     'viewharga' => $user['view_harga'],
                     'cek_so' => $user['cek_so'],
+                    'sess_ceksaw' => $user['cek_saw'],
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);
@@ -164,6 +165,7 @@ class Auth extends CI_Controller
                     'cekadj' => $user['cekadj'],
                     'viewharga' => $user['view_harga'],
                     'cek_so' => $user['cek_so'],
+                    'sess_ceksaw' => $user['cek_saw'],
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);

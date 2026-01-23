@@ -20,7 +20,7 @@
                             <td class="font-bold"><?= tglmysql($d['tgl']) ?></td>
                             <td><?= $d['catatan'] ?></td>
                             <td class="line-11"><?= datauser($d['user_add'],'name').'<br><span class="text-secondary" style="font-size: 11px;">'.tglmysql2($d['tgl_add']).'</span>' ?></td>
-                            <td class="line-11"><?= datauser($d['user_lock'],'name').'<br><span class="text-teal">'.tglmysql2($d['tgl_lock']).'</span>' ?></td>
+                            <td class="line-11"><?= datauser($d['user_lock'],'name').'<br><span class="text-teal" style="font-size: 11px;">'.tglmysql2($d['tgl_lock']).'</span>' ?></td>
                             <td class="text-center">
                                 <?php $lock = $d['user_lock']!=NULL ? 'disabled' : ''; ?>
                                 <a href="#" class="btn btn-sm btn-danger <?= $lock ?>" title="Hapus data Cut Off Inventory" id="kuncidata" rel="<?= $d['id'] ?>" rel2="<?= $d['tgl'] ?>"><i class="fa fa-trash-o"></i></a>
