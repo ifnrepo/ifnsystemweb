@@ -87,7 +87,6 @@
             var pcs2 = parseFloat($("#pcsreal").val());
             var kgs1 = parseFloat(toAngka($("#kgsminta").val()));
             var kgs2 = parseFloat(toAngka($("#kgsreal").val()));
-            var bbl = $("#tempbbl").is(':checked') ? 1 : null;
             if(pcs1 < pcs2){
                 pesan('Pcs Real tidak boleh lebih besar dari Pcs minta','error');
                 return false;
@@ -96,6 +95,8 @@
                 pesan('Kgs Real tidak boleh lebih besar dari Kgs minta','error');
                 return false;
             }
+            // var bbl = $("#tempbbl").is(':checked') ? 1 : null;
+            var bbl = (pcs1!=pcs2 || kgs1!=kgs2) ? 1 : null;
             $.ajax({
                 dataType: "json",
                 type: "POST",

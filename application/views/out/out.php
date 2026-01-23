@@ -22,19 +22,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div id="sisipkan" class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6 mb-1">
-              <?php $disab=''; if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null){ $disab = 'disabled';} ?>
-              <a href="<?= base_url() . 'out/adddata/0'; ?>" class="btn btn-info btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
-              <div id="tujuanbon" class="hilang"> <?= $this->session->userdata('deptsekarang').' ke '.$this->session->userdata('tujusekarang'); ?></div>
-              <div class="dropdown hilang " id="buttonpilih2">
-                  <button class="btn btn-primary btn-sm dropdown-toggle <?= cekclosebook(); ?>" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-                  <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
-                  </button>
-                  <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                  <a class="dropdown-item font-kecil text-primary font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/1'; ?>" title="Dari BON Permintaan">Dari BON Permintaan</a>
-                  <a class="dropdown-item font-kecil font-bold disabled" data-title="Add Data" href="<?= base_url() . 'out/adddata/0'; ?>" title="Tanpa BON Permintaan">Tanpa BON Permintaan</a>
-                  </div>
+              <div class="<?php IF(cekclosebook($this->session->userdata('blout'),$this->session->userdata('thout'))=='disabled'){ echo "hilang"; } ?>">
+                <?php $disab=''; if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null){ $disab = 'disabled';} ?>
+                <a href="<?= base_url() . 'out/adddata/0'; ?>" class="btn btn-info btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                <div id="tujuanbon" class="hilang"> <?= $this->session->userdata('deptsekarang').' ke '.$this->session->userdata('tujusekarang'); ?></div>
+                <div class="dropdown hilang " id="buttonpilih2">
+                    <button class="btn btn-primary btn-sm dropdown-toggle <?= cekclosebook(); ?>" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                    <i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span>
+                    </button>
+                    <div class="dropdown-menu" aria-labelledby="dropdownMenuButton">
+                    <a class="dropdown-item font-kecil text-primary font-bold" data-title="Add Data" href="<?= base_url() . 'out/adddata/1'; ?>" title="Dari BON Permintaan">Dari BON Permintaan</a>
+                    <a class="dropdown-item font-kecil font-bold disabled" data-title="Add Data" href="<?= base_url() . 'out/adddata/0'; ?>" title="Tanpa BON Permintaan">Tanpa BON Permintaan</a>
+                    </div>
+                </div>
+                <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
               </div>
-              <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
+              <div class="<?php IF(cekclosebook($this->session->userdata('blout'),$this->session->userdata('thout'))!='disabled'){ echo "hilang"; } ?>">
+                <!-- <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon text-primary" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg> -->
+                <div class="line-11 text-danger m-0 font-kecil">
+                  <span class="font-bold">Periode Bulan ini sudah Di Close Book Inventory</span><br>
+                  <span class="text-primary">Diclose Oleh : <?= cekclosebook($this->session->userdata('blout'),$this->session->userdata('thout'),'nama') ?></span>
+                </div>
+              </div>
             </div>
             <div class="col-sm-6 mb-0 d-flex flex-row-reverse" style="text-align: right;">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="th" name="th" style="width: 75px;" value="<?= $this->session->userdata('thout') ?>">
@@ -150,7 +159,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td class="line-12"><?= $datdet['keterangan'].$ceknombc; ?></td>
                   <td class="text-end line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
-                      <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
+                      <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook($this->session->userdata('blout'),$this->session->userdata('thout')) ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
                       <a href="#" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini <br> <?= $datdet['nomor_dok']; ?>" data-href="<?= base_url() . 'out/hapusdataout/' . $datdet['id']; ?>" class='btn btn-sm btn-danger <?= cekclosebook(); ?>' style='padding: 3px 5px !important;' title='Hapus Transaksi'><i class='fa fa-trash-o mr-1'></i> Hapus</a>
                       <a href="#" class="btn btn-outline" style='padding: 3px 5px !important;' data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                         <i class="fa fa-ellipsis-v "></i>

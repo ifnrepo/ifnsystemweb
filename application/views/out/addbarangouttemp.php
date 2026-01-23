@@ -175,6 +175,7 @@
             pesan('Pilih Satuan','info');
             return;
         }
+        var xpo = $("#po").val();
         $.ajax({
             // dataType: "json",
             type: "POST",
@@ -182,7 +183,7 @@
             data: {
                 id_header: $("#id_header").val(),
                 id_detail: $("#id_detail").val(),
-                id_barang: $("#id_barang").val(),
+                id_barang: xpo.trim() == '' ? $("#id_barang").val() : 0,
                 id_satuan: $("#id_satuan").val(),
                 po: $("#po").val(),
                 item: $("#item").val(),

@@ -20,47 +20,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         <div class="card">
             <div class="card-body">
-                <div id="table-default" class="table-responsive">
-                    <table class="table datatable">
-                        <thead>
-                            <tr>
-                                <th>No</th>
-                                <th>Periode</th>
-                                <th>Dibuat Oleh </th>
-                                <th>Dibuat Pada</th>
-                                <th>Aksi</th>
-                            </tr>
-                        </thead>
-                        <tbody class="table-tbody" style="font-size: 13px !important;">
-                            <?php $no = 0;
-                            foreach ($lock as $key) : $no++; 
-                            $daribulan = namabulan(substr($key['periode'],0,2)).' '.substr($key['periode'],2,4);
-                            $kebulan = substr($key['periode'],0,2)=='12' ? namabulan('01') : namabulan((int) substr($key['periode'],0,2)+1);
-                            $ketahun = substr($key['periode'],0,2)=='12' ? (int) substr($key['periode'],2,4)+1 : substr($key['periode'],2,4);
-                            ?>
-                                <tr>
-                                    <td><?= $no; ?></td>
-                                    <td class="font-bold"><?= namabulan(substr($key['periode'],0,2)).' '.substr($key['periode'],2,4); ?></td>
-                                    <td><?= $key['name']; ?></td>
-                                    <td><?= tglmysql2($key['dibuat_pada']); ?></td>
-                                    <td>
-                                        <a class="btn btn-sm btn-danger btn-icon text-white font-kecil" style="padding: 3px 5px !important;" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'lockinv/hapusdata/' . $key['id']; ?>" title="Hapus data">
-                                            <i class="fa fa-trash-o mr-1"></i> Hapus Data
-                                        </a>
-                                        <a href="#" class="btn btn-sm btn-success btn-icon text-white font-kecil" style="padding: 3px 5px !important;" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan memindahkan Saldo bulan <?= $daribulan; ?> ke Bulan <?= $kebulan.' '.$ketahun; ?>" data-href="<?= base_url() . 'lockinv/saktosaw/' . $key['id']; ?>" title="Hapus data">
-                                            <i class="fa fa-arrow-right mr-1"></i> Sak to Saw
-                                        </a>
-                                        <?php if($key['dibuat_pada'] != $key['diupdate_pada']){ ?>
-                                            <span class="text-purple font-kecil">Update On. <?= tglmysql2($key['diupdate_pada']); ?></span>
-                                        <?php }else{ ?>
-                                            <span class="text-purple font-kecil">Data Belum Submit ke Saldo Awal <?= $kebulan.' '.$ketahun; ?></span>
-                                        <?php } ?>
-                                    </td>
-                                </tr>
-                            <?php endforeach; ?>
-                        </tbody>
-                    </table>
-                </div>
+                <table id="tabelnya" class="table table-hover table-bordered cell-border" style="width: 100% !important; border-collapse: collapse;"> <!-- table order-column table-hover table-bordered cell-border -->
+            <thead>
+              <tr>
+                <th>No</th>
+                <th>Periode</th>
+                <th>Dibuat Oleh</th>
+                <th>Dibuat Tgl</th>
+                <th>Aksi</th>
+              </tr>
+            </thead>
+            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important; width: 100% !important;">
+                <?php $no=1; foreach($lock as $l): ?>
+                    <tr>
+                        <td><?= $no++ ?></td>
+                        <td class="font-bold"><?= namabulan(substr($l['periode'],0,2)).' '.substr($l['periode'],2,4) ?></td>
+                        <td><?= datauser($l['dibuat_oleh'],'name') ?></td>
+                        <td><?= tglmysql2($l['dibuat_pada']) ?></td>
+                        <td class="text-center">
+                             <a class="btn btn-sm btn-danger btn-icon text-white font-kecil" style="padding: 3px 5px !important;" id="hapususer" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini" data-href="<?= base_url() . 'lockinv/hapusdata/' . $l['id']; ?>" title="Hapus data">
+                                <i class="fa fa-trash-o mr-1"></i> Hapus Data
+                            </a>
+                        </td>
+                    </tr>
+                <?php endforeach; ?>
+            </tbody>
+          </table>
             </div>
         </div>
     </div>

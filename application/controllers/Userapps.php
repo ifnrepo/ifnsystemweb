@@ -45,6 +45,7 @@ class Userapps extends CI_Controller
 		$data['jmldept'] = $this->deptmodel->jmldept();
 		$data['deptpb'] = $this->deptmodel->getdata_dept_pb();
 		$data['dept'] = $this->db->order_by('departemen')->get('dept')->result_array();
+		$data['dept_opname'] = $this->userappsmodel->dept_Stok_Opname();
 		$data['level'] = $this->db->get('level_user')->result_array();
 		$data['jabat'] = $this->db->order_by('nojab', 'ASC')->get('jabatan')->result_array();
 		$footer['data'] = $this->helpermodel->getdatafooter()->row_array();

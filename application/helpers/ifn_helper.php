@@ -215,6 +215,11 @@ function lastdate($bl, $th)
     $a_date = $tgl;
     return date("Y-m-t", strtotime($a_date));
 }
+function lastdate2($tgl)
+{
+    $last_day = date('t-m-Y', strtotime($tgl));
+    return $last_day;
+}
 function rupiah($nomor, $dec)
 {
     if ($nomor == '0' || $nomor == '-6.821210263297E-13' || $nomor == '' || $nomor == NULL || is_null($nomor)) {
@@ -567,14 +572,19 @@ function getdevice($str)
     }
     return $tart . ' on ' . $device;
 }
-function cekclosebook()
+function cekclosebook($bl=0,$th=0,$nama='')
 {
     $isi = '';
     $CI = &get_instance();
-    $periode = kodebulan($CI->session->userdata('bl')) . $CI->session->userdata('th');
-    $hasil = $CI->helpermodel->cekclosebook($periode);
-    if ($hasil != 0) {
-        $isi = 'disabled';
+    $periode = kodebulan($bl) . $th;
+    if($nama==''){
+        $hasil = $CI->helpermodel->cekclosebook($periode)->num_rows();
+        if ($hasil != 0) {
+            $isi = 'disabled';
+        }
+    }else{
+        $hasil = $CI->helpermodel->cekclosebook($periode)->row_array();
+        $isi = datauser($hasil['dibuat_oleh'],'name').' on '.tglmysql2($hasil['dibuat_pada']);
     }
     return $isi;
 }

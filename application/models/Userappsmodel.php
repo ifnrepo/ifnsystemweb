@@ -55,7 +55,8 @@ class Userappsmodel extends CI_Model
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
         $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
         $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
-        $data['cekopname'] = isset($data['cekopname']) ? 1 : 0;
+        $data['cek_so'] = isset($data['cek_so']) ? 1 : 0;
+        $data['cek_saw'] = isset($data['cek_saw']) ? 1 : 0;
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -144,6 +145,14 @@ class Userappsmodel extends CI_Model
                 unset($data['hakdowntime' . $x]);
             }
         }
+        // Set hak departemen STOK OPNAME
+        $hakstokopname = '';
+        if (isset($data['stokopname'])) {
+            foreach ($data['stokopname'] as $deptid) {
+                $hakstokopname .= $deptid;
+            }
+            unset($data['stokopname']);
+        }
 
         $data['master'] = $master;
         $data['transaksi'] = $transaksi;
@@ -151,6 +160,7 @@ class Userappsmodel extends CI_Model
         $data['manajemen'] = $manajemen;
         $data['setting'] = $setting;
         $data['hakdepartemen'] = $hakdepartemen;
+        $data['hakstokopname'] = $hakstokopname;
         $data['rfid'] = $rfid;
         $data['hakdowntime'] = $hakdowntime;
         $data['cekpb'] = $cekpb;
@@ -197,6 +207,7 @@ class Userappsmodel extends CI_Model
         $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
         $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
         $data['cek_so'] = isset($data['cek_so']) ? 1 : 0;
+        $data['cek_saw'] = isset($data['cek_saw']) ? 1 : 0;
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
@@ -357,7 +368,9 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('hak_ttd_pb', arrdep($cek['cekpb']));
             $this->session->set_userdata('ttd', $cek['ttd']);
             $this->session->set_userdata('viewharga', $cek['view_harga']);
+            $this->session->set_userdata('cek_so', $cek['cek_so']);
             $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
+            $this->session->set_userdata('sess_ceksaw', $cek['cek_saw']);
         }
 
         return $hasil;
@@ -383,7 +396,9 @@ class Userappsmodel extends CI_Model
         $this->session->set_userdata('viewharga', $cek['view_harga']);
         $this->session->set_userdata('cekadj', $cek['cekadj']);
         $this->session->set_userdata('cekpo', $cek['cekpo']);
+        $this->session->set_userdata('cek_so', $cek['cek_so']);
         $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
+        $this->session->set_userdata('sess_ceksaw', $cek['cek_saw']);
         return 1;
     }
     public function cekusername($data)

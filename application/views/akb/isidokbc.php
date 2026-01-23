@@ -755,7 +755,7 @@
                                 <?php endif; ?>
                             </tbody>
                         </table>
-                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah(ceil($sumdetail2), 2); ?>">
+                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail2, 2); ?>">
                         <input type="text" id="jumlahhskosong" class="hilang" value="<?= $jumlahhskosong; ?>">
                     </div>
                 </div>
@@ -998,7 +998,6 @@
                     ?>
 
                         <div id="mediaCarousel" class="carousel slide" data-bs-ride="carousel" data-bs-interval="30000">
-
                             <div class="carousel-indicators">
                                 <?php foreach ($path_files as $index => $path) { ?>
                                     <button type="button" data-bs-target="#mediaCarousel" data-bs-slide-to="<?php echo $index; ?>" class="<?php echo ($index == 0) ? 'active' : ''; ?>" aria-current="<?php echo ($index == 0) ? 'true' : 'false'; ?>" aria-label="Slide <?php echo $index + 1; ?>">

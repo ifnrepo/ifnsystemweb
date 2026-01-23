@@ -197,7 +197,37 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="row bg-primary-lt">
+              <div class="mb-0 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Hak ke Modul Stokopname">
+                      <span class="col font-bold">Akses Modul Stokopname</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cek_so" id="cek_so" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
+                      <span class="col font-bold">Akses Fitur Sak to Saw</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cek_saw" id="cek_saw" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-cyan-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -212,7 +242,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-primary-lt">
+              <div class="mb-1 row bg-dark-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -227,7 +257,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-primary-lt">
+              <div class="row bg-warning-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -242,7 +272,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-primary-lt">
+              <div class="mb-1 row bg-warning-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -310,6 +340,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </li>
                         <li class="nav-item">
                           <a href="#tabs-hakdowntime-1" class="nav-link text-blue mb-1" data-bs-toggle="tab">Hak Downtime</a>
+                        </li>
+                        <li class="nav-item">
+                          <a href="#tabs-stokopname-1" class="nav-link text-blue mb-1" data-bs-toggle="tab">Hak Stokopname</a>
                         </li>
                       </ul>
                     </div>
@@ -762,6 +795,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="hakdowntime6" name="hakdowntime6" type="checkbox">
                                 <span class="form-check-label">Gudang</span>
                               </label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-stokopname-1">
+                          <div class="row">
+                            <div class="col-6">
+                              <?php $no = 0;
+                              $nox = 0;
+                              $jml = $jmldept / 2;
+                              foreach ($dept_opname as $dept) : $no++; ?>
+                                <?php if ($no % $jml == 0 && $nox == 0) {
+                                  $nox = 1; ?>
+                            </div>
+                            <div class="col-6">
+                            <?php } ?>
+                            <label class="form-check mb-1">
+                              <input class="form-check-input" type="checkbox" name="stokopname[]" value="<?= $dept['dept_id']; ?>">
+                              <span class="form-check-label"><?= $dept['departemen']; ?></span>
+                            </label>
+                          <?php endforeach; ?>
                             </div>
                           </div>
                         </div>

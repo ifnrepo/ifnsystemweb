@@ -383,7 +383,7 @@ class Helper_model extends CI_Model
     public function cekclosebook($periode)
     {
         $this->db->where('periode', $periode);
-        $hasil = $this->db->get('tb_lockinv')->num_rows();
+        $hasil = $this->db->get('tb_lockinv');
         return $hasil;
     }
     public function cekdetout($header)

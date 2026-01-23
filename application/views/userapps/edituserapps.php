@@ -224,7 +224,40 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="row bg-primary-lt">
+              <div class="mb-0 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Hak ke Modul Stokopname">
+                      <span class="col font-bold">Akses Modul Stokopname</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <?php $pcaktif = $user['cek_so'] == 1 ? 'checked' : ''; ?>
+                          <!-- <?php var_dump($user['cek_so']) ?> -->
+                          <input class="form-check-input" name="cek_so" id="cek_so" type="checkbox" <?= $pcaktif; ?>>
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
+                      <span class="col font-bold">Akses Fitur Sak to Saw</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <?php $pcaktif = $user['cek_saw'] == 1 ? 'checked' : ''; ?>
+                          <input class="form-check-input" name="cek_saw" id="cek_saw" type="checkbox" <?= $pcaktif; ?>>
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-cyan-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -240,11 +273,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-primary-lt">
+              <div class="mb-1 row bg-dark-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
-                    <label class="row" title="Kunci dan Edit Data Project RND">
+                    <label class="row" title="Kunci dan Edit Data Downtime Mesin">
                       <span class="col font-bold">Close/Open Downtime Mesin</span>
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
@@ -256,7 +289,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-primary-lt">
+              <div class="mb-0 row bg-warning-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -272,7 +305,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-primary-lt">
+              <div class="mb-1 row bg-warning-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -282,23 +315,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <label class="form-check form-check-single form-switch">
                           <?php $pcaktif = $user['hakveri_env'] == 1 ? 'checked' : ''; ?>
                           <input class="form-check-input" name="hakveri_env" id="hakveri_env" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Cek Stokopname">
-                      <span class="col font-bold">Cek Stokopname</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cek_so'] == 1 ? 'checked' : ''; ?>
-                          <!-- <?php var_dump($user['cek_so']) ?> -->
-                          <input class="form-check-input" name="cek_so" id="cek_so" type="checkbox" <?= $pcaktif; ?>>
                         </label>
                       </span>
                     </label>
@@ -852,6 +868,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                           </div>
                         </div>
+                        
                       </div>
                     </div>
                   </div>

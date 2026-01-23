@@ -528,12 +528,22 @@ class Pricinginv_model extends CI_Model
         return $ret;
     }
     public function lockinv(){
+        $this->db->trans_start();
         $this->db->where('tgl',$this->session->userdata('tglpricinginv'));
-        return $this->db->update('stokinv',['kunci' => 1,'user_lock' => $this->session->userdata('id'),'tgl_lock' => date('Y-m-d H:i:s')]);
+        $this->db->update('tb_req_inventory',['user_lock' => $this->session->userdata('id'),'tgl_lock' => date('Y-m-d H:i:s')]);
+
+        $this->db->where('tgl',$this->session->userdata('tglpricinginv'));
+        $this->db->update('stokinv',['kunci' => 1,'user_lock' => $this->session->userdata('id'),'tgl_lock' => date('Y-m-d H:i:s')]);
+        return $this->db->trans_complete();
     }
     public function unlockinv(){
+        $this->db->trans_start();
         $this->db->where('tgl',$this->session->userdata('tglpricinginv'));
-        return $this->db->update('stokinv',['kunci' => 0,'user_lock' => $this->session->userdata('id'),'tgl_lock' => date('Y-m-d H:i:s')]);
+        $this->db->update('tb_req_inventory',['user_lock' => NULL,'tgl_lock' => NULL]);
+
+        $this->db->where('tgl',$this->session->userdata('tglpricinginv'));
+        $this->db->update('stokinv',['kunci' => 0,'user_lock' => $this->session->userdata('id'),'tgl_lock' => date('Y-m-d H:i:s')]);
+        return $this->db->trans_complete();
     }
     public function tglkunci(){
         $hasil = 0;
