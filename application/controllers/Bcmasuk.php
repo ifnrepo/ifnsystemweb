@@ -119,8 +119,8 @@ class Bcmasuk extends CI_Controller
         $sheet->getColumnDimension('K')->setWidth(10);
         $sheet->getColumnDimension('L')->setWidth(10);
         $sheet->getColumnDimension('M')->setWidth(10);
-        $sheet->getColumnDimension('N')->setWidth(12);
-        $sheet->getColumnDimension('O')->setWidth(12);
+        $sheet->getColumnDimension('N')->setWidth(17);
+        $sheet->getColumnDimension('O')->setWidth(15);
 
         $sheet->getStyle('B6:O7')->applyFromArray([
             'font' => ['bold' => true],
@@ -151,19 +151,7 @@ class Bcmasuk extends CI_Controller
 
             $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
-
-            if ($data['xmtuang'] == 'USD') {
-                $nilaiusd = $data['harga'] * $nilaiqty;
-                $nilaiidr = $nilaiusd * $data['kurs_usd'];
-            } else {
-                $nilaiidr = $data['harga'] * $nilaiqty;
-                if (!empty($data['kurs_usd']) && $data['kurs_usd'] != 0) {
-                    $nilaiusd = $nilaiidr / $data['kurs_usd'];
-                } else {
-                    $nilaiusd = 0;
-                }
-            }
-
+            $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
 
             if ($data['nomor_bc'] == $ceknomor_bc) {
                 $sheet->setCellValue('B' . $numrow, '');
@@ -181,6 +169,32 @@ class Bcmasuk extends CI_Controller
             }
 
 
+            $kurs_data = getkurssekarang($data['tgl_aju'])->row();
+
+            $kurs_usd = (empty($data['kurs_usd']) || $data['kurs_usd'] == 0)
+                ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
+                : $data['kurs_usd'];
+
+            $kurs_yen = (empty($data['kurs_yen']) || $data['kurs_yen'] == 0)
+                ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
+                : $data['kurs_yen'];
+
+            if ($data['mtuang'] == 1) {
+                $harga_idr = $data['harga'];
+                $harga_usd = $data['harga'] / $kurs_usd;
+            } elseif ($data['mtuang'] == 2) {
+                $harga_usd = $data['harga'];
+                $harga_idr = $data['harga'] * $kurs_usd;
+            } elseif ($data['mtuang'] == 3) {
+                $harga_idr = $data['harga'] * $kurs_yen;
+                $harga_usd = ($data['harga'] * $kurs_yen) / $kurs_usd;
+            }
+
+            $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
+            $subtotal_idr = $harga_idr * $pengali;
+            $subtotal_usd = $harga_usd * $pengali;
+
+
             $sheet->setCellValue('C' . $numrow, "BC " . $data['jns_bc']);
             $sheet->setCellValue('D' . $numrow, $data['nomor_bc']);
             $sheet->setCellValue('E' . $numrow, $data['tgl_bc']);
@@ -188,12 +202,13 @@ class Bcmasuk extends CI_Controller
             $sheet->setCellValue('G' . $numrow, $data['tgl']);
             $sheet->setCellValue('H' . $numrow, $suppl);
             $sheet->setCellValue('I' . $numrow, $sku);
-            $sheet->setCellValue('J' . $numrow, $data['nama_barang']);
+            $sheet->setCellValue('J' . $numrow, $spekbarang);
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
             $sheet->setCellValue('M' . $numrow, $data['kgs']);
-            $sheet->setCellValue('N' . $numrow, round($nilaiidr, 2));
-            $sheet->setCellValue('O' . $numrow, round($nilaiusd, 2));
+            $sheet->setCellValueExplicit('N' . $numrow, rupiah($subtotal_idr, 2), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
+
+            $sheet->setCellValue('O' . $numrow, rupiah($subtotal_usd, 2));
 
             $ceknomor_bc = $data['nomor_bc'];
             $numrow++;
@@ -238,19 +253,9 @@ class Bcmasuk extends CI_Controller
             $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
-            // if ($data['xmtuang'] == 'USD') {
-            //     $nilaiusd = $data['harga'] * $nilaiqty;
-            //     $nilaiidr = $nilaiusd * $data['kurs_usd'];
-            // } else {
-            //     $nilaiidr = $data['harga'] * $nilaiqty;
-            //     if (!empty($data['kurs_usd']) && $data['kurs_usd'] != 0) {
-            //         $nilaiusd = $nilaiidr / $data['kurs_usd'];
-            //     } else {
-            //         $nilaiusd = 0;
-            //     }
-            // }
 
 
+            $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
 
             if (!empty($data['nama_supplier'])) {
                 $suppl = $data['nama_supplier'];
@@ -271,16 +276,22 @@ class Bcmasuk extends CI_Controller
                 ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
                 : $data['kurs_yen'];
 
-            // $kurs_yen = $detail['kurs_yen'] ?? 0;
+            if ($data['mtuang'] == 1) {
+                $harga_idr = $data['harga'];
+                $harga_usd = $data['harga'] / $kurs_usd;
+            } elseif ($data['mtuang'] == 2) {
+                $harga_usd = $data['harga'];
+                $harga_idr = $data['harga'] * $kurs_usd;
+            } elseif ($data['mtuang'] == 3) {
+                $harga_idr = $data['harga'] * $kurs_yen;
+                $harga_usd = ($data['harga'] * $kurs_yen) / $kurs_usd;
+            }
+            $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
-            $pengali = $data['mtuang'] == 2
-                ? $data['nilai_pab'] * $kurs_usd
-                : ($data['mtuang'] == 3
-                    ? $data['nilai_pab'] * $kurs_yen
-                    : $data['nilai_pab']);
+            $subtotal_idr = $harga_idr * $pengali;
+            $subtotal_usd = $harga_usd * $pengali;
 
-            $usd = $data['kurs_usd'] == 0 ? 1 : $data['kurs_usd'];
-            $xpengali = $data['mtuang'] == 2 ? $data['nilai_pab'] : ($data['mtuang'] == 3 ? ($data['nilai_pab'] * $kurs_yen) / $usd : $data['nilai_pab'] / $usd);
+
 
 
             $tinggi = 6;
@@ -315,16 +326,16 @@ class Bcmasuk extends CI_Controller
 
             $x_nama = $pdf->GetX();
             $y_nama = $pdf->GetY();
-            $pdf->MultiCell($lebarNamaBarang, $tinggi, $data['nama_barang'], 1, 'L');
+            $pdf->MultiCell($lebarNamaBarang, $tinggi,  $spekbarang, 1, 'L');
 
 
             $pdf->SetXY($x_nama + $lebarNamaBarang, $y_nama);
 
             $pdf->Cell(6, $tinggiMaks, $data['kodesatuan'], 1, 0, 'L');
             $pdf->Cell(12, $tinggiMaks, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(10, $tinggiMaks, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(18, $tinggiMaks, number_format($pengali, 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(15, $tinggiMaks, number_format($xpengali, 2, ',', '.'), 1, 1, 'R');
+            $pdf->Cell(12, $tinggiMaks, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(18, $tinggiMaks, number_format($subtotal_idr, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(15, $tinggiMaks, number_format($subtotal_usd, 2, ',', '.'), 1, 1, 'R');
 
             $ceknomor_bc = $data['nomor_bc'];
         }
