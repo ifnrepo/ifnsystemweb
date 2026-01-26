@@ -212,7 +212,7 @@ class Out_model extends CI_Model{
         $query = $this->db->get();
         return $query;
     }
-    public function getbondengankey($bon,$key){
+    public function getbondengankey($bon,$key,$mod=0){
         $kondisi = [
             'b.dept_id' => $this->session->userdata('tujusekarang'),
             'b.dept_tuju' => $this->session->userdata('deptsekarang'),
@@ -231,7 +231,11 @@ class Out_model extends CI_Model{
         $this->db->join('barang c','c.id = a.id_barang','left');
         $this->db->where($kondisi);
         if($bon != ''){
-            $this->db->where('b.nomor_dok',$bon);
+            if($mod=0){
+                $this->db->where('b.nomor_dok',$bon);
+            }else{
+                $this->db->like('b.nomor_dok',$bon);
+            }
         }
         if($key != ''){
             $this->db->like('c.nama_barang',$key);

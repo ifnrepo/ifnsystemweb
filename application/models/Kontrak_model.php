@@ -109,7 +109,7 @@ class Kontrak_model extends CI_Model
         }
         // $this->db->where("tb_kontrak.kgs-SUM(round(tb_detail.kgs,2)) >= ",$header['netto']);
         $this->db->group_start();
-        $this->db->where_in('tb_kontrak.dept_id', ['DL', 'MD', 'AR']);
+        $this->db->where_in('tb_kontrak.dept_id', ['DL', 'MD', 'AR','AN','AM','NU']);
         $this->db->or_where_in('tb_kontrak.id_supplier', [441, 994, 392]);
         $this->db->group_end();
         $this->db->group_by('tb_kontrak.id');
