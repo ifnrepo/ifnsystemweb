@@ -149,7 +149,7 @@ class PDF_Bcmasuk extends FPDF
         $this->Cell(70, 12, 'Nama Barang', 1, 0, 'C', true);
         $this->Cell(6, 12, 'Sat', 1, 0, 'C', true);
         $this->Cell(12, 12, 'Jum', 1, 0, 'C', true);
-        $this->Cell(10, 12, 'Kgs', 1, 0, 'C', true);
+        $this->Cell(12, 12, 'Kgs', 1, 0, 'C', true);
         $this->Cell(18, 12, 'Nilai (IDR)', 1, 0, 'C', true);
         $this->Cell(15, 12, 'Nilai (USD)', 1, 1, 'C', true);
     }

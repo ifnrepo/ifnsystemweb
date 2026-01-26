@@ -214,6 +214,7 @@ class Bckeluar extends CI_Controller
     }
 
 
+
     public function excel()
     {
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
@@ -290,19 +291,11 @@ class Bckeluar extends CI_Controller
                 $spek = trim($data['po']) == '' ? $data['nama_barang'] : spekpo($data['po'], $data['item'], $data['dis']);
             } else {
                 if ($this->session->userdata('jnsbc') == '25' || $this->session->userdata('jnsbc') == '41') {
-                    $spek = $data['po'] == '' ? $data['nama_barang'] : spekdom($data['po'], $data['item'], $data['dis']);
+                    $spek = trim($data['po']) == '' ? $data['nama_barang'] : spekpo($data['po'], $data['item'], $data['dis']);
                 }
             }
 
-
-
-
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
-
-
-
-
-
 
             if ($data['nomor_bc'] == $ceknomor_bc) {
                 $sheet->setCellValue('B' . $numrow, '');
@@ -327,25 +320,31 @@ class Bckeluar extends CI_Controller
                 : $data['kurs_yen'];
 
 
-            $pengali = $data['mtuang'] == 2 ? $kurs_usd : ($data['mtuang'] == 3 ? $kurs_yen : 1);
+            if ($data['mtuang'] == 1) {
+                $harga_idr = $data['harga'];
+                $harga_usd = $data['harga'] / $kurs_usd;
+            } elseif ($data['mtuang'] == 2) {
+                $harga_usd = $data['harga'];
+                $harga_idr = $data['harga'] * $kurs_usd;
+            } elseif ($data['mtuang'] == 3) {
+                $harga_idr = $data['harga'] * $kurs_yen;
+                $harga_usd = ($data['harga'] * $kurs_yen) / $kurs_usd;
+            }
 
-            $kondisi_idr = ($data['jns_bc'] == 25 || $data['jns_bc'] == 41)
-                ? $data['nilai_serah']
-                : $pengali * $data['nilai_pab'];
 
+            $jmspdiskon = $data['sp_disc'];
+            $jmcashdiskon = $data['cash_disc'];
 
-            $nilai = ($data['jns_bc'] == 25 || $data['jns_bc'] == 41)
-                ? $data['nilai_serah']
-                : $data['nilai_pab'];
+            $harga_idr    = round($harga_idr, 2);
+            $jmspdiskon   = round($jmspdiskon, 2);
+            $jmcashdiskon = round($jmcashdiskon, 2);
 
+            $subtotal_idr = round(
+                $harga_idr - $jmspdiskon - $jmcashdiskon,
+                2
+            );
+            $subtotal_usd = round($subtotal_idr / $kurs_usd, 2);
 
-            $xpengali = ($data['jns_bc'] == 25 || $data['jns_bc'] == 41)
-                ? $nilai / $kurs_usd
-                : (($data['mtuang'] == 2)
-                    ? $nilai
-                    : (($data['mtuang'] == 3)
-                        ? ($nilai * $kurs_yen) / $kurs_usd
-                        : ($nilai / $kurs_usd)));
 
             $sheet->setCellValue('C' . $numrow, "BC " . $data['jns_bc']);
             $sheet->setCellValue('D' . $numrow, $data['nomor_bc']);
@@ -358,8 +357,8 @@ class Bckeluar extends CI_Controller
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
             $sheet->setCellValue('M' . $numrow, $data['kgs']);
-            $sheet->setCellValue('N' . $numrow, round($kondisi_idr, 2));
-            $sheet->setCellValue('O' . $numrow, round($xpengali, 2));
+            $sheet->setCellValue('N' . $numrow, round($subtotal_idr, 2));
+            $sheet->setCellValue('O' . $numrow, round($subtotal_usd, 2));
 
             $ceknomor_bc = $data['nomor_bc'];
             $numrow++;
@@ -405,9 +404,17 @@ class Bckeluar extends CI_Controller
                 $spek = trim($data['po']) == '' ? $data['nama_barang'] : spekpo($data['po'], $data['item'], $data['dis']);
             } else {
                 if ($this->session->userdata('jnsbc') == '25' || $this->session->userdata('jnsbc') == '41') {
-                    $spek = $data['po'] == '' ? $data['nama_barang'] : spekdom($data['po'], $data['item'], $data['dis']);
+                    $spek = trim($data['po']) == '' ? $data['nama_barang'] : spekpo($data['po'], $data['item'], $data['dis']);
                 }
             }
+
+
+
+            // echo '<pre>';
+            // print_r($data);
+            // die;
+
+
             $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
             $kurs_data = getkurssekarang($data['tgl_aju'])->row();
@@ -420,25 +427,33 @@ class Bckeluar extends CI_Controller
                 : $data['kurs_yen'];
 
 
-            $pengali = $data['mtuang'] == 2 ? $kurs_usd : ($data['mtuang'] == 3 ? $kurs_yen : 1);
+            if ($data['mtuang'] == 1) {
+                $harga_idr = $data['harga'];
+                $harga_usd = $data['harga'] / $kurs_usd;
+            } elseif ($data['mtuang'] == 2) {
+                $harga_usd = $data['harga'];
+                $harga_idr = $data['harga'] * $kurs_usd;
+            } elseif ($data['mtuang'] == 3) {
+                $harga_idr = $data['harga'] * $kurs_yen;
+                $harga_usd = ($data['harga'] * $kurs_yen) / $kurs_usd;
+            }
+            $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
-            $kondisi_idr = ($data['jns_bc'] == 25 || $data['jns_bc'] == 41)
-                ? $data['nilai_serah']
-                : $pengali * $data['nilai_pab'];
+            $jmspdiskon = $data['sp_disc'];
+            $jmcashdiskon = $data['cash_disc'];
+
+            $harga_idr    = round($harga_idr, 2);
+            $jmspdiskon   = round($jmspdiskon, 2);
+            $jmcashdiskon = round($jmcashdiskon, 2);
+
+            $subtotal_idr = round(
+                $harga_idr - $jmspdiskon - $jmcashdiskon,
+                2
+            );
+            $subtotal_usd = round($subtotal_idr / $kurs_usd, 2);
 
 
-            $nilai = ($data['jns_bc'] == 25 || $data['jns_bc'] == 41)
-                ? $data['nilai_serah']
-                : $data['nilai_pab'];
 
-
-            $xpengali = ($data['jns_bc'] == 25 || $data['jns_bc'] == 41)
-                ? $nilai / $kurs_usd
-                : (($data['mtuang'] == 2)
-                    ? $nilai
-                    : (($data['mtuang'] == 3)
-                        ? ($nilai * $kurs_yen) / $kurs_usd
-                        : ($nilai / $kurs_usd)));
 
             if (!empty($data['nama_customer'])) {
                 $cus = $data['nama_customer'];
@@ -482,8 +497,8 @@ class Bckeluar extends CI_Controller
             $pdf->Cell(8, $tinggiMaks, $data['kodesatuan'], 1, 0, 'L');
             $pdf->Cell(12, $tinggiMaks, number_format($nilaiqty, 2, ',', '.'), 1, 0, 'R');
             $pdf->Cell(12, $tinggiMaks, number_format($data['kgs'], 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(27, $tinggiMaks, number_format($kondisi_idr, 2, ',', '.'), 1, 0, 'R');
-            $pdf->Cell(15, $tinggiMaks, number_format($xpengali, 2, ',', '.'), 1, 1, 'R');
+            $pdf->Cell(27, $tinggiMaks, number_format($subtotal_idr, 2, ',', '.'), 1, 0, 'R');
+            $pdf->Cell(15, $tinggiMaks, number_format($subtotal_usd, 2, ',', '.'), 1, 1, 'R');
 
             $ceknomor_bc = $data['nomor_bc'];
         }

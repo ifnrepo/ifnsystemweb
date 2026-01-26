@@ -136,7 +136,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       : $detail['nilai_pab']);
 
                   $usd = $detail['kurs_usd'] == 0 ? 1 : $detail['kurs_usd'];
-                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $kurs_yen) / $usd : $detail['nilai_pab'] / $usd);
+                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $kurs_yen) / $kurs_usd : $detail['nilai_pab'] / $kurs_usd);
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>

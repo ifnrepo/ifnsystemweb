@@ -99,7 +99,7 @@ class bckeluarmodel extends CI_Model
             $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         }
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
-        $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
+        $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->join('customer', 'customer.id = tb_header.id_buyer', 'left');
         $this->db->join('ref_mt_uang', 'ref_mt_uang.id = tb_header.mtuang', 'left');

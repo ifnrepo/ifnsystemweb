@@ -11,11 +11,7 @@ class Kontrak_model extends CI_Model
 
     public function getdatakontrak($kode)
     {
-        $this->db->select("tb_kontrak.*,dept.departemen,sum(round(tb_detail.kgs,2)) AS total_kgs,tb_header.nomor_bc,supplier.nama_supplier");
-        // $this->db->select("(SELECT SUM(round(det.kgs,2)) AS tot_kgs 
-        //                     FROM tb_detail det 
-        //                     LEFT JOIN tb_header head ON head.id = det.id_akb 
-        //                     WHERE det.id_akb = head.id AND head.exnomor_bc = tb_header.nomor_bc AND head.send_ceisa = 1 AND trim(head.exnomor_bc) != '' AND trim(tb_header.nomor_bc) != '') as tot_kgs_masuk");
+        $this->db->select("tb_kontrak.*,dept.departemen,ROUND(SUM(tb_detail.kgs), 2) AS total_kgs,tb_header.nomor_bc,supplier.nama_supplier");
         $this->db->from('tb_kontrak');
         $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id', 'left');
         $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
