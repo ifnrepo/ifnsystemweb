@@ -21,30 +21,30 @@
                     <input type="text" class="form-control font-kecil" id="pcs" name="pcs" value="<?= $data['namasatuan']; ?>" placeholder="Spec Barang">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6 mb-1">
-                    <label class="form-label mb-0 font-kecil">Qty Minta</label>
+            <div class="row mb-0">
+                <div class="col-sm-6 mb-0 bg-warning-lt">
+                    <label class="form-label mb-0 font-kecil text-black">Qty Minta</label>
                     <input type="text" class="form-control font-kecil mt-1 text-right font-bold" id="pcsminta" placeholder="Pcs Minta" value="<?= $data['pcsminta']; ?>" disabled>
                 </div>
-                <div class="col-sm-6 mb-1">
-                    <label class="form-label mb-0 font-kecil">Qty Real</label>
+                <div class="col-sm-6 mb-0 bg-danger-lt">
+                    <label class="form-label mb-0 font-kecil text-black">Qty Real</label>
                     <input type="text" class="form-control font-kecil mt-1 font-bold text-right" id="pcsreal" placeholder="Masukan Nilai" value="<?= $data['pcs']; ?>">
                     <input type="text" class="form-control font-kecil mt-1 font-bold text-right hilang" id="pcsreal2" placeholder="Masukan Nilai" value="">
                 </div>
             </div>
-            <div class="row">
-                <div class="col-sm-6 mb-1">
-                    <label class="form-label mb-0 font-kecil">Kgs Minta</label>
+            <div class="row mt-0">
+                <div class="col-sm-6 mb-1 bg-warning-lt">
+                    <label class="form-label mb-0 font-kecil text-black">Kgs Minta</label>
                     <input type="text" class="form-control font-kecil mt-1 text-right font-bold" id="kgsminta" placeholder="Kgs Minta" value="<?= rupiah($data['kgsminta'],0); ?>" disabled>
                 </div>
-                <div class="col-sm-6 mb-1">
-                    <label class="form-label mb-0 font-kecil">Kgs Real</label>
+                <div class="col-sm-6 mb-1 bg-danger-lt">
+                    <label class="form-label mb-0 font-kecil text-black">Kgs Real</label>
                     <input type="text" class="form-control font-kecil mt-1 font-bold text-right" id="kgsreal" placeholder="Masukan Nilai" value="<?= rupiah($data['kgs'],0); ?>">
                     <input type="text" class="form-control font-kecil mt-1 font-bold text-right hilang" id="kgsreal2" placeholder="Masukan Nilai" value="">
                 </div>
             </div>
-            <hr class="m-1">
-            <div class="row">
+            <hr class="m-1 mb-2">
+            <div class="row mb-1">
                 <div class="col-sm-6">
                     <label class="form-check mb-1 font-bold text-info">
                         <input class="form-check-input" id="bagidua" name="bagidua" type="checkbox" title="Split Qty menjadi 2">

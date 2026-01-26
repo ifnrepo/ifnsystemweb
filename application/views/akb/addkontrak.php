@@ -2,6 +2,16 @@
     <div class="row font-kecil">
         <input type="text" class="hilang" name="idheader" id="idheader" value="<?= $idheader; ?>">
         <input type="text" name="kode" id="kode" class="hilang" value="<?= $kode ?>">
+        <!-- <div class="row g-2 mb-1">
+            <div class="col">
+                <input type="text" class="form-control btn-square font-kecil text-uppercase" placeholder="Cari Nomor Kontrak">
+            </div>
+            <div class="col-auto">
+                <a href="#" class="btn btn-icon btn-square btn-primary" aria-label="button">
+                <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M10 10m-7 0a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                </a>
+            </div>
+        </div> -->
         <div class="col-12 mb-1">
             <table class="table w-100 mb-1">
                 <thead style="background-color: blue !important">

@@ -171,7 +171,8 @@ class Out extends CI_Controller {
     public function getbondengankey(){
         $bon = $_POST['bon'];
         $key = $_POST['barang'];
-        $data = $this->out_model->getbondengankey($bon,$key);
+        $mod = isset($_POST['mode']) ? $_POST['mode'] : 0;
+        $data = $this->out_model->getbondengankey($bon,$key,$mod);
         $html = '';
         if($data->num_rows() > 0){
             $no=1;
@@ -598,10 +599,11 @@ class Out extends CI_Controller {
             'pcs' => $_POST['pcs'],
             'kgs' => $_POST['kgs'],
             'id_satuan' => $_POST['sat'],
-            'insno' => $_POST['insno'],
-            'nobontr' => $_POST['nobontr'],
+            'insno' => trim($_POST['insno']),
+            'nobontr' => trim($_POST['nobontr']),
             'exnet' => $_POST['exnet'],
-            'nobale' => $_POST['nobale']
+            'nobale' => trim($_POST['nobale']),
+            'dln' => substr($_POST['nobontr'],0,3)=='DLN' ? 1 : 0
         ];
         $hasil = $this->out_model->updategentemp($data);
         echo $hasil;
