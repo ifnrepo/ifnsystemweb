@@ -206,9 +206,8 @@ class Bcmasuk extends CI_Controller
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
             $sheet->setCellValue('M' . $numrow, $data['kgs']);
-            $sheet->setCellValueExplicit('N' . $numrow, rupiah($subtotal_idr, 2), \PhpOffice\PhpSpreadsheet\Cell\DataType::TYPE_STRING);
-
-            $sheet->setCellValue('O' . $numrow, rupiah($subtotal_usd, 2));
+            $sheet->setCellValue('N' . $numrow, $subtotal_idr);
+            $sheet->setCellValue('O' . $numrow, $subtotal_usd);
 
             $ceknomor_bc = $data['nomor_bc'];
             $numrow++;
