@@ -6,6 +6,10 @@ class Auth extends CI_Controller
     public function __construct()
     {
         parent::__construct();
+        // if ($this->session->userdata('getinifn') == true) {
+        //     $url = base_url();
+        //     redirect($url);
+        // }
         $this->load->library('form_validation');
         // $this->load->library('session');
         $this->load->model('userappsmodel');

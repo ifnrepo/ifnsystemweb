@@ -2564,8 +2564,17 @@ class Akb extends CI_Controller
             redirect($url);
         } else {
             // print_r($databalik);
+            $mess = '';
+            if(count($databalik['message']) > 0){
+                foreach($databalik['message'] as $ms){
+                            $mess .= $ms."\r\n";
+                }
+            }else{ 
+                $mess = $databalik['message'];
+            }
+            echo $mess;
             $this->session->set_flashdata('errorsimpan', 1);
-            $this->session->set_flashdata('pesanerror', $databalik['message'][0] . '[EXCEPTION]' . $databalik['message'][1]);
+            $this->session->set_flashdata('pesanerror', $mess . '[EXCEPTION]');
             $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
         }

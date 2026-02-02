@@ -85,16 +85,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <select name="blperiode" id="blperiode" class="form-select font-kecil mt-0">
                 <option value="">Semua</option>
                 <?php for ($x = 1; $x <= 12; $x++) : ?>
-                  <option value="<?= $x; ?>" <?php if ($this->session->userdata('bl') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
+                  <option value="<?= $x; ?>" <?php if ($this->session->userdata('blhargamat') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
                 <?php endfor; ?>
               </select>
             </div>
             <div class="col-5">
-              <?php $thperiode = $this->session->userdata('th') != '' ? $this->session->userdata('th') : date('Y'); ?>
+              <?php $thperiode = $this->session->userdata('thhargamat') != '' ? $this->session->userdata('thhargamat') : date('Y'); ?>
               <select name="thperiode" id="thperiode" class="form-select font-kecil mt-0">
                 <option value="">Semua</option>
                 <?php foreach ($tahune->result_array() as $thn) { ?>
-                  <option value="<?= $thn['thun']; ?>" <?php if ($this->session->userdata('th') == $thn['thun']) echo "selected"; ?>><?= $thn['thun']; ?></option>
+                  <option value="<?= $thn['thun']; ?>" <?php if ($this->session->userdata('thhargamat') == $thn['thun']) echo "selected"; ?>><?= $thn['thun']; ?></option>
                 <?php } ?>
               </select>
             </div>

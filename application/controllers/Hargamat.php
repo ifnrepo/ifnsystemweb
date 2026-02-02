@@ -44,8 +44,8 @@ class Hargamat extends CI_Controller
     }
     public function clear()
     {
-        $this->session->unset_userdata('bl');
-        $this->session->userdata('th', date('Y'));
+        $this->session->unset_userdata('blhargamat');
+        $this->session->userdata('thhargamat', date('Y'));
         $url = base_url() . 'hargamat';
         redirect($url);
     }
@@ -263,8 +263,8 @@ class Hargamat extends CI_Controller
     }
     public function ubahperiode()
     {
-        $this->session->set_userdata('bl', $_POST['bl']);
-        $this->session->set_userdata('th', $_POST['th']);
+        $this->session->set_userdata('blhargamat', $_POST['bl']);
+        $this->session->set_userdata('thhargamat', $_POST['th']);
         echo 1;
     }
     //End Controller

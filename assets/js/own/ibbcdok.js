@@ -192,7 +192,17 @@ $("#nomor_aju").blur(function () {
 	}
 });
 $("#tgl_aju").change(function () {
-	savedata("tgl_aju", tglmysql($(this).val()));
+	var tglsekarang = new Date();
+	var formattedISO = tglsekarang.toISOString().split('T')[0];
+	var selisih = daysBetween(formattedISO,tglmysql($(this).val()));
+	if(selisih < 0){
+		var nowi = tglmysql(formattedISO);
+		alert('Tanggal tidak boleh lebih besar dari tanggal '+nowi);
+		$("#tgl_aju").val(nowi);
+		window.location.reload();
+	}else{
+		savedata("tgl_aju", tglmysql($(this).val()));
+	}
 });
 $("#jns_angkutan").change(function () {
 	savedata("jns_angkutan", $(this).val());
