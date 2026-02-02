@@ -650,14 +650,14 @@ class Akb_model extends CI_Model
         $this->db->update('tb_header', $data);
 
         $jnsbc = $this->db->get_where('tb_header',['id' => $data['id']])->row_array();
-        if($jnsbc == '261'){    
+        if($jnsbc['jns_bc'] == '261'){    
             $this->db->select('id_header,id_akb');
             $this->db->from('tb_detail');
             $this->db->where('id_akb',$data['id']);
             $this->db->group_by('id_header');
             $isi = $this->db->get();
-            foreach($isi->result_array() as $isi){
-                $this->db->where('id',$isi['id_header']);
+            foreach($isi->result_array() as $i){
+                $this->db->where('id',$i['id_header']);
                 $this->db->update('tb_header',['nomor_bc' => $data['nomor_bc'],'ok_tuju' => 1,'user_tuju' => $this->session->userdata('id'),'tgl_tuju' => date('Y-m-d H:i:s')]);
             }
         }

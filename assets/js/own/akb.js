@@ -152,6 +152,7 @@ $(".inputtgl").datepicker({
 	autoclose: true,
 	format: "dd-mm-yyyy",
 	todayHighlight: true,
+	maxDate : "+5D"
 });
 $("#nomor_sj").focus(function () {
 	value_old = $(this).val();

@@ -28,11 +28,11 @@ class Hargamat_model extends CI_Model
             $this->db->where('tb_hargamaterial.jns_bc', $filter_bc);
         }
 
-        if ($this->session->userdata('bl') != '') {
-            $this->db->where('month(tgl)', $this->session->userdata('bl'));
+        if ($this->session->userdata('blhargamat') != '') {
+            $this->db->where('month(tgl)', $this->session->userdata('blhargamat'));
         }
-        if ($this->session->userdata('th') != '') {
-            $this->db->where('year(tgl)', $this->session->userdata('th'));
+        if ($this->session->userdata('thhargamat') != '') {
+            $this->db->where('year(tgl)', $this->session->userdata('thhargamat'));
         }
         $i = 0;
         foreach ($this->column_search as $item) {

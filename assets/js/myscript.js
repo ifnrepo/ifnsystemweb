@@ -662,6 +662,19 @@ function selisihhari(tglawal, tglakhir) {
 	}
 	return hasilnya;
 }
+function daysBetween(date1x, date2x) {
+	var date1 = new Date(date1x);
+	var date2 = new Date(date2x);
+    // The number of milliseconds in one day
+    const ONE_DAY = 1000 * 60 * 60 * 24; // 86,400,000
+    
+    // Calculate the difference in milliseconds
+    // const differenceMs = Math.abs(date1.getTime() - date2.getTime());
+    const differenceMs = date1.getTime() - date2.getTime();
+
+    // Convert back to days and return
+    return Math.round(differenceMs / ONE_DAY);
+}
 
 function validasitgl(tgl, elm, ket) {
 	var pattern = /^([0-9]{2})\-([0-9]{2})\-([0-9]{4})$/;

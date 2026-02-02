@@ -108,7 +108,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-1 font-kecil">.</h4>
+                  <h4 class="mb-1 font-kecil" style="color: #FFFF">.</h4>
                   <span class="font-kecil">
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>

@@ -467,7 +467,8 @@ class Helper_model extends CI_Model
             $hasilnya = $hasil->row_array();
             $nilai = $hasilnya['spek'];
         }
-        return htmlspecialchars($nilai);
+        // return htmlspecialchars($nilai);
+        return $nilai;
     }
     public function spekdom($po, $item, $dis)
     {
