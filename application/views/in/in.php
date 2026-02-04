@@ -166,15 +166,15 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="row">
               <div class="col-3">
                 <div class="font-bold">Jumlah Rec : </div>
-                <div id="jumlahrekod">XX</div>
+                <div id="jumlahrekod"><?= $noreke ?></div>
               </div>
               <div class="col-3">
                 <div class="font-bold">Pcs : </div>
-                <div id="jumlahpcs">XX</div>
+                <div id="xjumlahpcs"><?= $jmlpcs ?></div>
               </div>
               <div class="col-3">
                 <div class="font-bold">Kgs : </div>
-                <div id="jumlahkgs">XX</div>
+                <div id="xjumlahkgs"><?= $jmlkgs ?></div>
               </div>
             </div>
           </div>

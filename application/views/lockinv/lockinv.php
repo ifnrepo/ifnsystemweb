@@ -24,6 +24,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <thead>
               <tr>
                 <th>No</th>
+                <th>Dept ID</th>
                 <th>Periode</th>
                 <th>Dibuat Oleh</th>
                 <th>Dibuat Tgl</th>
@@ -34,6 +35,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <?php $no=1; foreach($lock as $l): ?>
                     <tr>
                         <td><?= $no++ ?></td>
+                        <td class="font-bold"><?= $l['dept_id'] ?></td>
                         <td class="font-bold"><?= namabulan(substr($l['periode'],0,2)).' '.substr($l['periode'],2,4) ?></td>
                         <td><?= datauser($l['dibuat_oleh'],'name') ?></td>
                         <td><?= tglmysql2($l['dibuat_pada']) ?></td>

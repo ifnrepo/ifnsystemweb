@@ -18,6 +18,18 @@
         </div>
         <div class="col-9">
             <div class="mb-1 row">
+                <label class="col-3 col-form-label required">Departemen</label>
+                <div class="col">
+                    <select class="form-control form-select font-kecil font-bold mr-1" id="deptlock" name="deptlock">
+                        <option value="">-- Pilih Departemen --</option>
+                        <?php foreach($dept->result_array() as $dp): ?>
+                            <option value="<?= $dp['dept_id'] ?>"><?= $dp['dept_id'].' - '.$dp['departemen'] ?></option>
+                        <?php endforeach; ?>
+                    </select>
+                    <!-- <input type="text" class="form-control inputangka" id="tahunlock"> -->
+                </div>
+            </div>
+            <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Bulan</label>
                 <div class="col">
                     <select class="form-control form-select font-kecil font-bold mr-1" id="bulanlock" name="bulanlock">
@@ -54,11 +66,16 @@
     $("#buatpb").click(function() {
         // alert($("#bulanlock").val());
         // alert($("#tahunlock").val());
+        if($("#deptlock").val() == ''){
+            alert('Isi Dulu Departemen !');
+            return false;
+        }
         $.ajax({
             dataType: "json",
             type: "POST",
             url: base_url+"lockinv/tambah",
             data: {
+                dept: $("#deptlock").val(),
                 bulan: $("#bulanlock").val(),
                 tahun: $("#tahunlock").val(),
             },

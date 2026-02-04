@@ -28,6 +28,10 @@ class Lockinvmodel extends CI_Model
         $this->db->where('personil.personil_id', $personil_id);
         return $this->db->get()->row_array();
     }
+    public function getdepartemen()
+    {
+        return $this->db->order_by('departemen')->get_where('dept',['katedept_id <= '=> 3]);
+    }
     public function simpandata()
     {
         $data = $_POST;

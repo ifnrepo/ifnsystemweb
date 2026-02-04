@@ -572,18 +572,18 @@ function getdevice($str)
     }
     return $tart . ' on ' . $device;
 }
-function cekclosebook($bl=0,$th=0,$nama='')
+function cekclosebook($bl=0,$th=0,$dept='',$nama='')
 {
     $isi = '';
     $CI = &get_instance();
     $periode = kodebulan($bl) . $th;
     if($nama==''){
-        $hasil = $CI->helpermodel->cekclosebook($periode)->num_rows();
+        $hasil = $CI->helpermodel->cekclosebook($periode,$dept)->num_rows();
         if ($hasil != 0) {
             $isi = 'disabled';
         }
     }else{
-        $hasil = $CI->helpermodel->cekclosebook($periode)->row_array();
+        $hasil = $CI->helpermodel->cekclosebook($periode,$dept)->row_array();
         $isi = datauser($hasil['dibuat_oleh'],'name').' on '.tglmysql2($hasil['dibuat_pada']);
     }
     return $isi;
