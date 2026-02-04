@@ -369,7 +369,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
         if($dept=='GF' || $dept=='GW'){
-            $this->db->select('tb_detail.nobale');
+            $this->db->select('stokopname_detail.nobale');
         }else{
             $this->db->select('"" as nobale');
         }
@@ -1091,41 +1091,49 @@ class inv_model extends CI_Model
             $data = $this->getdata();
             $query = $this->db->query($data);
             if(count($query->result_array()) > 0){
-                // foreach($query->result_array() as $det){
-                $det = $query->row_array();
-                // var_dump($det);
-                    if(($det['sumpcs']+$det['sumkgs']) != 0){
-                        $isidata = [
-                            'tgl' => date('Y-m-d'),
-                            'dept_id' => $this->session->userdata('currdept'),
-                            'periode' => cekperiodedaritgl($tglawal,1),
-                            'nobontr' => $det['nobontr'],
-                            'insno' => $det['insno'],
-                            'id_barang' => $det['id_barang'],
-                            'po' => $det['po'],
-                            'item' => $det['item'],
-                            'dis' => $det['dis'],
-                            'exnet' => $det['exnet'],
-                            'stok' => $det['stok'],
-                            'dln' => $det['xdln'],
-                            'nobale' => $det['nobale'],
-                            'harga' => 0,
-                            'kgs_awal' => $det['sumkgs'],
-                            'pcs_awal' => $det['sumpcs'],
-                            'kgs_masuk' => 0,
-                            'pcs_masuk' => 0,
-                            'kgs_keluar' => 0,
-                            'pcs_keluar' => 0,
-                            'kgs_adj' => 0,
-                            'pcs_adj' => 0,
-                            'kgs_akhir' => $det['sumkgs'],
-                            'pcs_akhir' => $det['sumpcs'],
-                            'nomor_bc' => $det['nomor_bc'],
-                            // 'tgl_bc' => $det['tgl_bc'],
-                        ];
-                        $this->db->insert('stokdept',$isidata);
+                foreach($query->result_array() as $det){
+                    // $det = $query->row_array();
+                    // var_dump($det);
+                        if(($det['sumpcs']+$det['sumkgs']) != 0){
+                            $isidata = [
+                                'tgl' => date('Y-m-d'),
+                                'dept_id' => $this->session->userdata('currdept'),
+                                'periode' => cekperiodedaritgl($tglawal,1),
+                                'nobontr' => $det['nobontr'],
+                                'insno' => $det['insno'],
+                                'id_barang' => $det['id_barang'],
+                                'po' => $det['po'],
+                                'item' => $det['item'],
+                                'dis' => $det['dis'],
+                                'exnet' => $det['exnet'],
+                                'stok' => $det['stok'],
+                                'dln' => $det['xdln'],
+                                'nobale' => $det['nobale'],
+                                'harga' => 0,
+                                'kgs_awal' => $det['sumkgs'],
+                                'pcs_awal' => $det['sumpcs'],
+                                'kgs_masuk' => 0,
+                                'pcs_masuk' => 0,
+                                'kgs_keluar' => 0,
+                                'pcs_keluar' => 0,
+                                'kgs_adj' => 0,
+                                'pcs_adj' => 0,
+                                'kgs_akhir' => $det['sumkgs'],
+                                'pcs_akhir' => $det['sumpcs'],
+                                'nomor_bc' => $det['nomor_bc'],
+                                // 'tgl_bc' => $det['tgl_bc'],
+                            ];
+                            $this->db->insert('stokdept',$isidata);
+                        }
                     }
-                // }
+                // Kunci Inventory Dept Tersebut 
+                $lockinv = [
+                    'dept_id' => $this->session->userdata('currdept'),
+                    'periode' => cekperiodedaritgl($tglawal),
+                    'dibuat_oleh' => $this->session->userdata('id'),
+                    'dibuat_pada' => date('Y-m-d H:i:s')
+                ];
+                $this->db->insert('tb_lockinv',$lockinv);
             }
             return $this->db->trans_complete();
             // return $det;

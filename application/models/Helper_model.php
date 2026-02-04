@@ -380,9 +380,10 @@ class Helper_model extends CI_Model
             preg_match('/^172\.(1[6-9]|2[0-9]|3[0-1])\..*/', $ip);
     }
 
-    public function cekclosebook($periode)
+    public function cekclosebook($periode,$dept)
     {
         $this->db->where('periode', $periode);
+        $this->db->where('dept_id', $dept);
         $hasil = $this->db->get('tb_lockinv');
         return $hasil;
     }

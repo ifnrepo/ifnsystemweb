@@ -96,6 +96,21 @@ class In_model extends CI_Model{
         $cek = $this->helpermodel->cekkolom($id,'ok_valid',0,'tb_header')->num_rows();
         // $dataheader = $this->db->get_where('tb_header',['id' => $id])->row_array();
         $dataheader = $this->getdatabyid($id);
+
+        // Cek Saldo Awal sudah di submit atau belum 
+        $this->db->where('periode',tambahnol($this->session->userdata('blin')).$this->session->userdata('thin'));
+        $this->db->where('dept_id',$dataheader['dept_tuju']);
+        $this->db->group_start();
+            $this->db->where('pcs_awal > ',0);
+            $this->db->or_where('kgs_awal > ',0);
+        $this->db->group_end();
+        $hasil = $this->db->get('stokdept');
+        if($hasil->num_rows()==0){
+            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('pesanerror','Data Stok Awal belum di SUBMIT, hubungi PPIC');
+            return true;
+        }
+
         $arraynobontr = ['SP','GM'];
         if($cek==1){
             $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id,barang.id_kategori');

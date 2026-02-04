@@ -28,10 +28,12 @@ class Lockinv extends CI_Controller
     }
     public function tambahdata()
     {
-        $this->load->view('lockinv/add_lock');
+        $data['dept'] = $this->lockinvmodel->getdepartemen();
+        $this->load->view('lockinv/add_lock',$data);
     }
     public function tambah(){
         $data = [
+            'dept_id' => $_POST['dept'],
             'periode' => kodebulan($_POST['bulan']).$_POST['tahun'],
             'dibuat_oleh' => $this->session->userdata('id')
         ];
