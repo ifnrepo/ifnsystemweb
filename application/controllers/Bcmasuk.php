@@ -191,8 +191,14 @@ class Bcmasuk extends CI_Controller
             }
 
             $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
-            $subtotal_idr = $harga_idr * $pengali;
-            $subtotal_usd = $harga_usd * $pengali;
+
+            if ($data['jns_bc'] == 262) {
+                $subtotal_idr = $data['exbc_ndpbm'] * $data['exbc_cif'];
+                $subtotal_usd = $subtotal_idr / $kurs_usd;
+            } else {
+                $subtotal_idr = $harga_idr * $pengali;
+                $subtotal_usd = $harga_usd * $pengali;
+            };
 
 
             $sheet->setCellValue('C' . $numrow, "BC " . $data['jns_bc']);
@@ -286,9 +292,13 @@ class Bcmasuk extends CI_Controller
                 $harga_usd = ($data['harga'] * $kurs_yen) / $kurs_usd;
             }
             $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
-
-            $subtotal_idr = $harga_idr * $pengali;
-            $subtotal_usd = $harga_usd * $pengali;
+            if ($data['jns_bc'] == 262) {
+                $subtotal_idr = $data['exbc_ndpbm'] * $data['exbc_cif'];
+                $subtotal_usd = $subtotal_idr / $kurs_usd;
+            } else {
+                $subtotal_idr = $harga_idr * $pengali;
+                $subtotal_usd = $harga_usd * $pengali;
+            };
 
 
 
