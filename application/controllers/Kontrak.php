@@ -461,7 +461,7 @@ class Kontrak extends CI_Controller
             'alignment' => ['horizontal' => 'center'],
         ]);
         $sheet->mergeCells('B2:K2');
-        $rekanan = $this->session->userdata('deptkontrak')=='' ? 'SEMUA' : $head['nama_supplier'];
+        $rekanan = $this->session->userdata('deptkontrak') == '' ? 'SEMUA' : $head['nama_supplier'];
         $sheet->setCellValue('B2', 'REKANAN : ' . $rekanan);
         $sheet->getStyle('B2')->applyFromArray([
             'font' => ['bold' => true, 'size' => 14],

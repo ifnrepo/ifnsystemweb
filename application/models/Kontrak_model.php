@@ -13,7 +13,8 @@ class Kontrak_model extends CI_Model
     {
         $this->db->select("tb_kontrak.*,dept.departemen,ROUND(SUM(tb_detail.kgs), 2) AS total_kgs,tb_header.nomor_bc,supplier.nama_supplier");
         $this->db->from('tb_kontrak');
-        $this->db->join('tb_header', 'tb_header.id_kontrak = tb_kontrak.id', 'left');
+        $this->db->join('tb_header', "tb_header.id_kontrak = tb_kontrak.id AND tb_header.jns_bc = '" . $kode['jnsbc'] . "'", 'left');
+
         $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
         $this->db->join('supplier', 'supplier.id = tb_kontrak.id_supplier', 'left');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
@@ -23,6 +24,8 @@ class Kontrak_model extends CI_Model
         }
 
         $this->db->where('tb_kontrak.jns_bc', $kode['jnsbc']);
+
+
 
         if ($kode['status'] == 1) {
             $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
@@ -38,11 +41,15 @@ class Kontrak_model extends CI_Model
             $datkont = $this->db->query("SELECT id_kontrak FROM tb_header WHERE id_kontrak IS NOT NULL")->result_array();
         }
 
+
+
         $this->db->group_by('tb_kontrak.id');
         $this->db->order_by('nomor DESC,tgl_akhir');
 
         return $this->db->get();
     }
+
+
     public function getjumlahbcmasuk($nomorbc)
     {
         $this->db->select('SUM(round(det.kgs,2)) AS tot_kgs');
@@ -105,7 +112,7 @@ class Kontrak_model extends CI_Model
         }
         // $this->db->where("tb_kontrak.kgs-SUM(round(tb_detail.kgs,2)) >= ",$header['netto']);
         $this->db->group_start();
-        $this->db->where_in('tb_kontrak.dept_id', ['DL', 'MD', 'AR','AN','AM','NU']);
+        $this->db->where_in('tb_kontrak.dept_id', ['DL', 'MD', 'AR', 'AN', 'AM', 'NU']);
         $this->db->or_where_in('tb_kontrak.id_supplier', [441, 994, 392]);
         $this->db->group_end();
         $this->db->group_by('tb_kontrak.id');
@@ -114,19 +121,44 @@ class Kontrak_model extends CI_Model
     }
     public function getdatapcskgskontrak($kode)
     {
-        $this->db->select('count(*) as jmlrek,sum(pcs) as pcs,sum(kgs) as kgs');
+        $this->db->select("
+        COUNT(DISTINCT tb_kontrak.id) AS jmlrek,
+        ROUND(SUM(tb_detail.pcs), 2) AS pcs,
+        ROUND(SUM(tb_detail.kgs), 2) AS kgs
+       ");
+
         $this->db->from('tb_kontrak');
-        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id');
-        if ($kode['id_supplier'] != "") {
+        $this->db->join(
+            'tb_header',
+            "tb_header.id_kontrak = tb_kontrak.id AND tb_header.jns_bc = '" . $kode['jnsbc'] . "'",
+            'left'
+        );
+        $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
+        $this->db->join('supplier', 'supplier.id = tb_kontrak.id_supplier', 'left');
+        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
+
+
+        if (!empty($kode['id_supplier'])) {
             $this->db->where('tb_kontrak.id_supplier', $kode['id_supplier']);
         }
-        $this->db->where('jns_bc', $kode['jnsbc']);
+
+
+        $this->db->where('tb_kontrak.jns_bc', $kode['jnsbc']);
+
+
         if ($kode['status'] == 1) {
             $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
         } else if ($kode['status'] == 2) {
             $this->db->where("tgl_akhir < '" . date('Y-m-d') . "'");
         }
-        $this->db->order_by('tgl_akhir');
+
+
+        if (!empty($kode['thkontrak'])) {
+            $this->db->where("YEAR(tgl_awal)", $kode['thkontrak']);
+        }
+
+
+
         return $this->db->get();
     }
 
@@ -199,6 +231,7 @@ class Kontrak_model extends CI_Model
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->where('tb_header.id_kontrak', $sesi);
+        $this->db->where('tb_header.id_rekanan IS NOT NULL', null, false);
         $this->db->where('tb_header.send_ceisa', 1);
         $this->db->order_by('tb_detail.seri_urut_akb');
         return $this->db->get()->result_array();
@@ -211,6 +244,7 @@ class Kontrak_model extends CI_Model
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->where('tb_header.id_kontrak', $sesi);
+        $this->db->where('tb_header.id_rekanan IS NOT NULL', null, false);
         $this->db->where('tb_header.send_ceisa', 1);
         $this->db->order_by('tb_detail.seri_urut_akb');
         return $this->db->get()->result_array();
