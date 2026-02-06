@@ -9,6 +9,15 @@ class Kontrak_model extends CI_Model
         return $hasil;
     }
 
+    // public function get_list_proses()
+    // {
+    //     return $this->db->select('kode, ket')
+    //         ->from('tb_proses')
+    //         ->order_by('ket', 'ASC')
+    //         ->get()
+    //         ->result_array();
+    // }
+
     public function getdatakontrak($kode)
     {
         $this->db->select("tb_kontrak.*,dept.departemen,ROUND(SUM(tb_detail.kgs), 2) AS total_kgs,tb_header.nomor_bc,supplier.nama_supplier");
@@ -22,6 +31,10 @@ class Kontrak_model extends CI_Model
         if (!empty($kode['id_supplier'])) {
             $this->db->where('tb_kontrak.id_supplier', $kode['id_supplier']);
         }
+
+        // if (!empty($kode['ketprc'])) {
+        //     $this->db->like('tb_kontrak.ketprc', $kode['ketprc'] . ',', 'both');
+        // }
 
         $this->db->where('tb_kontrak.jns_bc', $kode['jnsbc']);
 
@@ -50,15 +63,6 @@ class Kontrak_model extends CI_Model
     }
 
 
-    public function getjumlahbcmasuk($nomorbc)
-    {
-        $this->db->select('SUM(round(det.kgs,2)) AS tot_kgs');
-        $this->db->from('tb_detail');
-        $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');
-        $this->db->where('tb_header.exnomor_bc', $nomorbc);
-        $this->db->where('tb_detail.id_akb = tb_header.id AND tb_header.send_ceisa = 1 and trim(tb_header.exnomor_bc) != "" ');
-        return $this->db->get()->row_array();
-    }
     public function getdatakontrak261($kode, $id)
     {
         $header = $this->db->get_where('tb_header', ['id' => $id])->row_array();
@@ -119,7 +123,7 @@ class Kontrak_model extends CI_Model
         $this->db->order_by('tgl_akhir');
         return $this->db->get();
     }
-    public function getdatapcskgskontrak($kode)
+    public function getdatapcskgs($kode)
     {
         $this->db->select("
         COUNT(DISTINCT tb_kontrak.id) AS jmlrek,
@@ -161,6 +165,37 @@ class Kontrak_model extends CI_Model
 
         return $this->db->get();
     }
+    public function getdatapcskgskontrak($kode)
+    {
+        $this->db->select("
+        COUNT(*) AS jmlrek,
+        ROUND(SUM(tb_kontrak.pcs), 2) AS pcs,
+        ROUND(SUM(tb_kontrak.kgs), 2) AS kgs
+    ");
+
+        $this->db->from('tb_kontrak');
+        $this->db->join('supplier', 'supplier.id = tb_kontrak.id_supplier', 'left');
+        $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
+
+        if (!empty($kode['id_supplier'])) {
+            $this->db->where('tb_kontrak.id_supplier', $kode['id_supplier']);
+        }
+
+        $this->db->where('tb_kontrak.jns_bc', $kode['jnsbc']);
+
+        if ($kode['status'] == 1) {
+            $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
+        } else if ($kode['status'] == 2) {
+            $this->db->where("tgl_akhir < '" . date('Y-m-d') . "'");
+        }
+
+        if (!empty($kode['thkontrak'])) {
+            $this->db->where("YEAR(tgl_awal)", $kode['thkontrak']);
+        }
+
+        return $this->db->get();
+    }
+
 
     public function adddata()
     {
