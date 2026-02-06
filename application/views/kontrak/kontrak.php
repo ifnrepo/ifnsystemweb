@@ -59,7 +59,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
           <div class="card card-active" style="clear:both;">
             <div class="card-body p-2 font-kecil">
-              <div class="row">
+              <!-- <div class="row">
                 <div class="col-2">
                   <h4 class="mb-1 font-kecil">Nama Rekanan</h4>
                   <span class="font-kecil">
@@ -75,7 +75,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-2">
-                  <h4 class="mb-1 font-kecil">Jenis Dokumen</h4>
+                  <h4 class="mb-1 font-kecil"> Dokumen</h4>
                   <span class="font-kecil">
                     <div class="font-kecil">
                       <select class="form-select form-control form-sm font-kecil font-bold" id="jns_bc" name="jns_bc">
@@ -113,20 +113,136 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
                 </div>
-                <div class="col-2">
+                <div class="col-3" style="border: 1px solid red;">
                   <h4 class="mb-1">
                     <?php if ($disab != '') { ?>
                       <small class="text-pink text-center">Tekan <b>GO</b> untuk Load Data</small>
                     <?php } else { ?>
-                      <div class="text-blue font-kecil" style="line-height: 10px;">
-                        <label style="width: 70px;">Jumlah Rec</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['jmlrek'], 0); ?></label><br>
-                        <label style="width: 70px;">Jumlah Pcs</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['pcs'], 0); ?></label><br>
-                        <label style="width: 70px;">Jumlah Kgs</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['kgs'], 2); ?></label>
+                      <?php
+                      $totalbcmasuk = 0;
+
+                      foreach ($data->result_array() as $datdet) {
+
+                        $jumlahbcmasuk = 0;
+                        if (getjumlahbcmasuk($datdet['nomor_bc'])->num_rows() > 0) {
+                          $jbcmasuk = getjumlahbcmasuk($datdet['nomor_bc'])->row_array();
+                          $jumlahbcmasuk = $jbcmasuk['tot_kgs'];
+                        }
+
+                        $totalbcmasuk += $jumlahbcmasuk;
+                      }
+                      ?>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="text-blue font-kecil" style="line-height: 10px;">
+                            <label style=" width: 70px;">Jumlah Rec</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['jmlrek'], 0); ?></label><br>
+                            <label style="width: 70px;">Jumlah Pcs</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['pcs'], 0); ?></label><br>
+                            <label style="width: 70px;">Jumlah Kgs</label><label style="width: 8px;">:</label><label><?= rupiah($jmlpcskgs['kgs'], 2); ?></label>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="text-blue font-kecil" style="line-height: 10px;">
+                            <label style="width: 70px;">Kembali</label><label style="width: 8px;">:</label><label><?= rupiah($totalbcmasuk, 2); ?></label>
+                          </div>
+                        </div>
                       </div>
+
+
                     <?php } ?>
                   </h4>
                 </div>
+              </div> -->
+
+              <div class="row g-1">
+                <div class="col-2">
+                  <h4 class="mb-1 font-kecil">Nama Rekanan</h4>
+                  <select class="form-select form-control form-sm font-kecil font-bold" id="deptkontrak" name="deptkontrak">
+                    <option value="">Semua Rekanan</option>
+                    <?php foreach ($deprekanan as $deptrekanan) {
+                      $selek = $this->session->userdata('deptkontrak') == $deptrekanan['id_supplier'] ? 'selected' : ''; ?>
+                      <option value="<?= $deptrekanan['id_supplier']; ?>" <?= $selek; ?>><?= $deptrekanan['nama_supplier']; ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+
+                <div class="col-2">
+                  <h4 class="mb-1 font-kecil">Dokumen</h4>
+                  <select class="form-select form-control form-sm font-kecil font-bold" id="jns_bc" name="jns_bc">
+                    <option value="261" <?= $this->session->userdata('jnsbckontrak') == "261" ? "selected" : ""; ?>>BC 2.6.1</option>
+                    <option value="40" <?= $this->session->userdata('jnsbckontrak') == "40" ? "selected" : ""; ?>>BC 4.0</option>
+                  </select>
+                </div>
+
+                <div class="col-2">
+                  <h4 class="mb-1 font-kecil">Status Dokumen</h4>
+                  <select class="form-select form-control form-sm font-kecil font-bold" id="statuskontrak" name="statuskontrak">
+                    <option value="3" <?= $this->session->userdata('statuskontrak') == "3" ? "selected" : ""; ?>>Semua</option>
+                    <option value="1" <?= $this->session->userdata('statuskontrak') == "1" ? "selected" : ""; ?>>Masih Aktif</option>
+                    <option value="2" <?= $this->session->userdata('statuskontrak') == "2" ? "selected" : ""; ?>>Sudah Berakhir</option>
+                  </select>
+                </div>
+
+                <div class="col-2">
+                  <h4 class="mb-1 font-kecil" style="color:#fff;">.</h4>
+                  <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
+                </div>
+
+                <div class="col-4 ">
+                  <?php if ($disab != '') { ?>
+                    <div class="text-pink text-center font-kecil p-2">
+                      Tekan <b>GO</b> untuk Load Data
+                    </div>
+                  <?php } else { ?>
+
+                    <?php
+                    $totalbcmasuk = 0;
+                    foreach ($data->result_array() as $datdet) {
+                      $jumlahbcmasuk = 0;
+                      if (getjumlahbcmasuk($datdet['nomor_bc'])->num_rows() > 0) {
+                        $jbcmasuk = getjumlahbcmasuk($datdet['nomor_bc'])->row_array();
+                        $jumlahbcmasuk = $jbcmasuk['tot_kgs'];
+                      }
+                      $totalbcmasuk += $jumlahbcmasuk;
+                      $saldo_kgs = $jmlpcskgs['kgs'] - $totalbcmasuk;
+                      $saldo_pcs = $jmlpcskgs['pcs'] - $pcskgs_in['pcs'];
+                    }
+                    ?>
+
+                    <div class="row g-0 p-2">
+                      <div class="col-6">
+                        <div class="text-danger font-kecil" style="line-height: 14px;">
+                          <div>Jumlah Rec : <?= rupiah($jmlpcskgs['jmlrek'], 0); ?></div>
+                          <div>Jumlah Pcs : <?= rupiah($jmlpcskgs['pcs'], 0); ?></div>
+                          <div>Jumlah Kgs : <?= rupiah($jmlpcskgs['kgs'], 2); ?></div>
+                        </div>
+                      </div>
+
+                      <div class="col-6" style="border-left: solid 1px grey;">
+                        <div class="text-success font-kecil" style="line-height: 14px; text-align : right ;">
+                          <div> Pcs In : <?= rupiah($pcskgs_in['pcs'], 0); ?></div>
+                          <div>Saldo Pcs : <?= rupiah($saldo_pcs, 0); ?></div>
+                          <div class="mt-1">Kgs In: <?= rupiah($totalbcmasuk, 2); ?></div>
+                          <div>Saldo Kgs: <?= rupiah($saldo_kgs, 2); ?></div>
+                        </div>
+                      </div>
+                    </div>
+
+                  <?php } ?>
+                </div>
               </div>
+              <!-- <div class="row">
+                <div class="col-4">
+                  <h4 class="mb-1 font-kecil">Nama Proses</h4>
+                  <select class="form-select form-control form-sm font-kecil font-bold" name="ketprc" id="ketprc">
+                    <option value=""> Semua Proses </option>
+                    <?php foreach ($list_proses as $p) {
+                      $selek = $this->session->userdata('ketprc') == $p['kode'] ? 'selected' : ''; ?>
+                      <option value="<?= $p['kode'] ?>" <?= $selek; ?>><?= $p['ket'] ?></option>
+                    <?php } ?>
+                  </select>
+                </div>
+              </div> -->
+
               <!-- <div class="hr m-1"></div> -->
             </div>
           </div>

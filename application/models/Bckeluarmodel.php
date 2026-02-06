@@ -60,22 +60,84 @@ class bckeluarmodel extends CI_Model
     }
 
 
+    // public function getdetailbyid($id)
+    // {
+    //     $header = $this->db->get_where('tb_header', ['id' => $id])->row_array();
+
+    //     $this->db->select('tb_detail.*,satuan.kodesatuan,barang.nama_barang,barang.kode,tb_po.spek,tb_klppo.engklp');
+    //     $this->db->from('tb_detail');
+    //     $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
+    //     $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
+    //     $this->db->join('tb_po', 'tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item AND tb_po.dis = tb_detail.dis', 'left');
+    //     $this->db->join('tb_klppo', 'tb_klppo.id = tb_po.klppo', 'left');
+
+    //     if ($header && $header['jns_bc'] == '261') {
+    //         $this->db->where('tb_detail.id_akb', $id);
+    //     } else {
+    //         $this->db->where('tb_detail.id_header', $id);
+    //     }
+
+    //     return $this->db->get();
+    // }
+
     public function getdetailbyid($id)
     {
         $header = $this->db->get_where('tb_header', ['id' => $id])->row_array();
 
-        $this->db->select('tb_detail.*,satuan.kodesatuan,barang.nama_barang,barang.kode,tb_po.spek,tb_klppo.engklp');
+
+        if (!empty($header) && $header['jns_bc'] == '261') {
+
+            $this->db->select("
+                a.*,
+                ROUND(SUM(a.pcs),2) as pcs,
+                ROUND(SUM(a.kgs),2) as kgs,
+                b.namasatuan,
+                g.spek,
+                b.kodesatuan,
+                b.kodebc as satbc,
+                c.kode,
+                c.nama_barang,
+                c.nohs as hsx,
+                e.keterangan as keter,
+                d.pcs as pcsminta,
+                d.kgs as kgsminta,
+                f.nama_kategori,
+                f.kategori_id,
+                g.klppo,
+                h.engklp,
+                h.hs as nohs,
+                i.kdkem,
+                j.nomor_dok as dokgaichu
+            ");
+
+            $this->db->from('tb_detail a');
+            $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
+            $this->db->join('barang c', 'c.id = a.id_barang', 'left');
+            $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
+            $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
+            $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left');
+            $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
+            $this->db->join('tb_klppo h', 'h.id = g.klppo', 'left');
+            $this->db->join('ref_kemas i', 'i.id = a.kd_kemasan', 'left');
+            $this->db->join('tb_header j', 'j.id = a.id_header', 'left');
+
+            $this->db->where('a.id_akb', $id);
+            $this->db->group_by('j.ketprc,a.po,a.item,a.dis,a.insno,c.kode');
+            $this->db->order_by('a.po,a.item,a.dis,a.insno,c.kode');
+
+            return $this->db->get();
+        }
+
+        // =========================
+        // JIKA BUKAN 261
+        // =========================
+        $this->db->select('tb_detail.*, satuan.kodesatuan, barang.nama_barang, barang.kode, tb_po.spek, tb_klppo.engklp');
         $this->db->from('tb_detail');
         $this->db->join('satuan', 'satuan.id = tb_detail.id_satuan', 'left');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('tb_po', 'tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item AND tb_po.dis = tb_detail.dis', 'left');
         $this->db->join('tb_klppo', 'tb_klppo.id = tb_po.klppo', 'left');
-
-        if ($header && $header['jns_bc'] == '261') {
-            $this->db->where('tb_detail.id_akb', $id);
-        } else {
-            $this->db->where('tb_detail.id_header', $id);
-        }
+        $this->db->where('tb_detail.id_header', $id);
 
         return $this->db->get();
     }

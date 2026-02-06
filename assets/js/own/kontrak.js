@@ -31,6 +31,8 @@ $("#butgo").click(function () {
 			jnsbc: $("#jns_bc").val(),
 			status: $("#statuskontrak").val(),
 			thkontrak: $("#th").val(),
+			// ketprc : $("#ketprc"). val()
+
 		},
 		success: function (data) {
 			window.location.reload();

@@ -30,6 +30,7 @@ class Kontrak extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['deprekanan'] = $this->kontrakmodel->getkontrakrekanan()->result_array();
+        // $data['list_proses']  = $this->kontrakmodel->get_list_proses();
         // $data['deprekanan'] = $this->helpermodel->getkontrakrekanan();
         if ($this->session->userdata('statuskontrak') == "") {
             $this->session->set_userdata('statuskontrak', 1);
@@ -39,10 +40,12 @@ class Kontrak extends CI_Controller
             'jnsbc' => $this->session->userdata('jnsbckontrak') == null ? '' : $this->session->userdata('jnsbckontrak'),
             'status' => $this->session->userdata('statuskontrak'),
             'thkontrak' => $this->session->userdata('thkontrak') == null ? '' : $this->session->userdata('thkontrak'),
+            'ketprc' => $this->session->userdata('ketprc') == null ? '' : $this->session->userdata('ketprc')
         ];
         $this->session->unset_userdata('sesikontrak');
         $data['data'] = $this->kontrakmodel->getdatakontrak($kode);
         $data['jmlpcskgs'] = $this->kontrakmodel->getdatapcskgskontrak($kode)->row_array();
+        $data['pcskgs_in'] = $this->kontrakmodel->getdatapcskgs($kode)->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'kontrak';
         $this->load->view('layouts/header', $header);
@@ -94,6 +97,7 @@ class Kontrak extends CI_Controller
         $this->session->set_userdata('jnsbckontrak', $_POST['jnsbc']);
         $this->session->set_userdata('statuskontrak', $_POST['status']);
         $this->session->set_userdata('thkontrak', $_POST['thkontrak']);
+        $this->session->set_userdata('ketprc', $_POST['ketprc']);
         // $url = base_url('kontrak');
         // redirect($url);
         echo 1;
@@ -210,106 +214,7 @@ class Kontrak extends CI_Controller
     }
 
 
-    // public function pdf()
-    // {
-    //     $this->load->model('kontrakmodel');
-    //     $sesi = $this->session->userdata('sesikontrak');
-    //     $header = $this->kontrakmodel->getHeader_kontrak($sesi);
-    //     $detail = $this->kontrakmodel->getDetail_kontrak_ex($sesi);
-    //     $terima = $this->kontrakmodel->getdatapengembalian($sesi);
-    //     $ttd = $this->kontrakmodel->get_Ttd($sesi);
 
-    //     $pdf = new PDF_Kontrak('L', 'mm', 'A4');
-    //     $pdf->setHeaderData($header);
-    //     $pdf->AddPage();
-    //     $pdf->SetFont('Arial', '', 7);
-
-    //     $widths = [5, 12, 15, 20, 60, 12, 13];
-    //     $startXLeft = 10;
-    //     $startXRight = $startXLeft + array_sum($widths) + 5;
-
-    //     $leftRows = $this->groupData($detail);
-    //     $rightRows = $this->groupData($terima->result_array());
-    //     $maxRows = max(count($leftRows), count($rightRows));
-
-    //     $totalPcsOut = $totalKgsOut = $totalPcsIn = $totalKgsIn = 0;
-
-    //     for ($i = 0; $i < $maxRows; $i++) {
-
-    //         if ($pdf->GetY() > 180) $pdf->AddPage();
-
-    //         // KIRI
-    //         $pdf->SetX($startXLeft);
-    //         if (isset($leftRows[$i])) {
-    //             $left = $leftRows[$i];
-    //             $pdf->Cell($widths[0], 5, $i + 1, 1, 0, 'C');
-    //             $pdf->Cell($widths[1], 5, $left['nomor_bc'], 1, 0);
-    //             $pdf->Cell($widths[2], 5, tglmysql($left['tgl_bc']), 1, 0);
-    //             $pdf->Cell($widths[3], 5, $left['sku'], 1, 0);
-    //             $pdf->Cell($widths[4], 5, substr($left['spekbarang'], 0, 30), 1, 0);
-    //             $pdf->Cell($widths[5], 5, number_format($left['pcs'], 2), 1, 0, 'R');
-    //             $pdf->Cell($widths[6], 5, number_format($left['total_kgs'], 2), 1, 0, 'R');
-    //             $totalPcsOut += $left['pcs'];
-    //             $totalKgsOut += $left['total_kgs'];
-    //         } else {
-    //             foreach ($widths as $w) $pdf->Cell($w, 5, '', 1, 0);
-    //         }
-
-    //         $pdf->Cell(8, 5, '', 0, 0);
-
-    //         // KANAN
-    //         $pdf->SetX($startXRight);
-    //         if (isset($rightRows[$i])) {
-    //             $right = $rightRows[$i];
-    //             $pdf->Cell($widths[0], 5, $i + 1, 1, 0, 'C');
-    //             $pdf->Cell($widths[1], 5, $right['nomor_bc'], 1, 0);
-    //             $pdf->Cell($widths[2], 5, tglmysql($right['tgl_bc']), 1, 0);
-    //             $pdf->Cell($widths[3], 5, $right['sku'], 1, 0);
-    //             $pdf->Cell($widths[4], 5, substr($right['spekbarang'], 0, 30), 1, 0);
-    //             $pdf->Cell($widths[5], 5, number_format($right['pcs'], 2), 1, 0, 'R');
-    //             $pdf->Cell($widths[6], 5, number_format($right['total_kgs'], 2), 1, 0, 'R');
-    //             $totalPcsIn += $right['pcs'];
-    //             $totalKgsIn += $right['total_kgs'];
-    //         } else {
-    //             foreach ($widths as $w) $pdf->Cell($w, 5, '', 1, 0);
-    //         }
-
-    //         $pdf->Ln();
-    //     }
-
-
-    //     $pdf->SetFont('Arial', 'B', 8);
-    //     $pdf->SetX($startXLeft);
-    //     $pdf->Cell(array_sum(array_slice($widths, 0, 5)), 6, 'TOTAL', 1, 0, 'C');
-    //     $pdf->Cell($widths[5], 6, number_format($totalPcsOut, 2), 1, 0, 'R');
-    //     $pdf->Cell($widths[6], 6, number_format($totalKgsOut, 2), 1, 0, 'R');
-    //     $pdf->Cell(8, 6, '', 0, 0);
-    //     $pdf->SetX($startXRight);
-    //     $pdf->Cell(array_sum(array_slice($widths, 0, 5)), 6, 'TOTAL', 1, 0, 'C');
-    //     $pdf->Cell($widths[5], 6, number_format($totalPcsIn, 2), 1, 0, 'R');
-    //     $pdf->Cell($widths[6], 6, number_format($totalKgsIn, 2), 1, 1, 'R');
-
-
-
-
-
-    //     $pdf->showHeader = false;
-    //     // $pdf->AddPage();
-
-    //     $pdf->Ln(5);
-    //     $pdf->SetFont('Arial', '', 8);
-    //     $pdf->Cell(100, 5, 'PT. INDONEPTUNE NET MANUFACTURING', 0, 0, 'C');
-    //     $pdf->Cell(80, 5, '', 0, 0);
-    //     $pdf->Cell(100, 5, 'Mengetahui, Hanggar', 0, 1, 'L');
-
-    //     $pdf->Ln(5);
-    //     $pdf->SetX(10);
-    //     $pdf->Cell(100, 5, $ttd['tg_jawab'], 0, 0, 'C');
-    //     $pdf->Ln(3);
-    //     $pdf->Cell(100, 5, $ttd['jabat_tg_jawab'], 0, 1, 'C');
-
-    //     $pdf->Output('I', 'Realisasi_Pengeluaran_Pemasukan.pdf');
-    // }
     public function pdf()
     {
         $this->load->model('kontrakmodel');
@@ -353,18 +258,21 @@ class Kontrak extends CI_Controller
                     $prevLeft['tgl_bc'] == $left['tgl_bc'] &&
                     $prevLeft['nomor_bc'] == $left['nomor_bc']
                 ) {
+                    $no = '';
                     $tgl_bc_left = '';
                     $nomor_bc_left = '';
                 } else {
+                    $no = $i;
                     $tgl_bc_left = tglmysql($left['tgl_bc']);
                     $nomor_bc_left = $left['nomor_bc'];
                 }
 
-                $pdf->Cell($widths[0], 5, $i + 1, 1, 0, 'C');
+                $noCell = ($no === '') ? '' : ($no + 1);
+                $pdf->Cell($widths[0], 5, $noCell, 1, 0, 'C');
                 $pdf->Cell($widths[1], 5, $nomor_bc_left, 1, 0);
                 $pdf->Cell($widths[2], 5, $tgl_bc_left, 1, 0);
                 $pdf->Cell($widths[3], 5, $left['sku'], 1, 0);
-                $pdf->Cell($widths[4], 5, substr($left['spekbarang'], 0, 30), 1, 0);
+                $pdf->Cell($widths[4], 5, substr($left['spekbarang'], 0, 50), 1, 0);
                 $pdf->Cell($widths[5], 5, number_format($left['pcs'], 2), 1, 0, 'R');
                 $pdf->Cell($widths[6], 5, number_format($left['total_kgs'], 2), 1, 0, 'R');
 
@@ -391,18 +299,22 @@ class Kontrak extends CI_Controller
                     $prevRight['tgl_bc'] == $right['tgl_bc'] &&
                     $prevRight['nomor_bc'] == $right['nomor_bc']
                 ) {
+                    $no = '';
                     $tgl_bc_right = '';
                     $nomor_bc_right = '';
                 } else {
+                    $no = $i;
                     $tgl_bc_right = tglmysql($right['tgl_bc']);
                     $nomor_bc_right = $right['nomor_bc'];
                 }
 
-                $pdf->Cell($widths[0], 5, $i + 1, 1, 0, 'C');
+                $noCell = ($no === '') ? '' : ($no + 1);
+                $pdf->Cell($widths[0], 5, $noCell, 1, 0, 'C');
+
                 $pdf->Cell($widths[1], 5, $nomor_bc_right, 1, 0);
                 $pdf->Cell($widths[2], 5, $tgl_bc_right, 1, 0);
                 $pdf->Cell($widths[3], 5, $right['sku'], 1, 0);
-                $pdf->Cell($widths[4], 5, substr($right['spekbarang'], 0, 30), 1, 0);
+                $pdf->Cell($widths[4], 5, substr($right['spekbarang'], 0, 50), 1, 0);
                 $pdf->Cell($widths[5], 5, number_format($right['pcs'], 2), 1, 0, 'R');
                 $pdf->Cell($widths[6], 5, number_format($right['total_kgs'], 2), 1, 0, 'R');
 
@@ -461,7 +373,7 @@ class Kontrak extends CI_Controller
             'alignment' => ['horizontal' => 'center'],
         ]);
         $sheet->mergeCells('B2:K2');
-        $rekanan = $this->session->userdata('deptkontrak')=='' ? 'SEMUA' : $head['nama_supplier'];
+        $rekanan = $this->session->userdata('deptkontrak') == '' ? 'SEMUA' : $head['nama_supplier'];
         $sheet->setCellValue('B2', 'REKANAN : ' . $rekanan);
         $sheet->getStyle('B2')->applyFromArray([
             'font' => ['bold' => true, 'size' => 14],
