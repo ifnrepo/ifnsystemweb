@@ -170,6 +170,7 @@ class Auth extends CI_Controller
                     'viewharga' => $user['view_harga'],
                     'cek_so' => $user['cek_so'],
                     'sess_ceksaw' => $user['cek_saw'],
+                    'rfid' => $user['rfid'],
                     'getinifn' => true
                 ];
                 $this->session->set_userdata($user_data);
