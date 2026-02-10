@@ -2112,6 +2112,7 @@ class Akb extends CI_Controller
                             "seriBahanBaku" => $nob,
                             "tarif" => (float) $tarif,
                             "tarifFasilitas" => 100,
+                            "kodeAsalBahanBaku" => $asalbar,
                         ];
                         array_push($arraybahanbakutarif, $bahanbakutarif);
                     }

@@ -98,18 +98,20 @@ class In_model extends CI_Model{
         $dataheader = $this->getdatabyid($id);
 
         // Cek Saldo Awal sudah di submit atau belum 
-        $this->db->where('periode',tambahnol($this->session->userdata('blin')).$this->session->userdata('thin'));
-        $this->db->where('dept_id',$dataheader['dept_tuju']);
-        $this->db->group_start();
-            $this->db->where('pcs_awal > ',0);
-            $this->db->or_where('kgs_awal > ',0);
-        $this->db->group_end();
-        $hasil = $this->db->get('stokdept');
-        if($hasil->num_rows()==0){
-            $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror','Data Stok Awal belum di SUBMIT, hubungi PPIC');
-            return true;
-        }
+        if($dataheader['dept_id']!='GS'):
+            $this->db->where('periode',tambahnol($this->session->userdata('blin')).$this->session->userdata('thin'));
+            $this->db->where('dept_id',$dataheader['dept_tuju']);
+            $this->db->group_start();
+                $this->db->where('pcs_awal > ',0);
+                $this->db->or_where('kgs_awal > ',0);
+            $this->db->group_end();
+            $hasil = $this->db->get('stokdept');
+            if($hasil->num_rows()==0){
+                $this->session->set_flashdata('errorsimpan',1);
+                $this->session->set_flashdata('pesanerror','Data Stok Awal departemen '.$dataheader['dept_tuju'].' belum di SUBMIT, hubungi PPIC !');
+                return true;
+            }
+        endif;
 
         $arraynobontr = ['SP','GM'];
         if($cek==1){

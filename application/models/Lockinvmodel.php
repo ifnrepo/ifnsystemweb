@@ -30,7 +30,7 @@ class Lockinvmodel extends CI_Model
     }
     public function getdepartemen()
     {
-        return $this->db->order_by('departemen')->get_where('dept',['katedept_id <= '=> 3]);
+        return $this->db->get_where('dept',["katedept_id <= " => 3]);
     }
     public function simpandata()
     {

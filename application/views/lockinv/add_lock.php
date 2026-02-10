@@ -15,6 +15,7 @@
                 <path d="M12 16h.01" />
             </svg>
             <div class="font-bold">Anda Yakin akan mengunci data inventory ?</div>
+            <?= var_dump($data) ?>
         </div>
         <div class="col-9">
             <div class="mb-1 row">
@@ -22,7 +23,7 @@
                 <div class="col">
                     <select class="form-control form-select font-kecil font-bold mr-1" id="deptlock" name="deptlock">
                         <option value="">-- Pilih Departemen --</option>
-                        <?php foreach($dept->result_array() as $dp): ?>
+                        <?php foreach($depart as $dp): ?>
                             <option value="<?= $dp['dept_id'] ?>"><?= $dp['dept_id'].' - '.$dp['departemen'] ?></option>
                         <?php endforeach; ?>
                     </select>

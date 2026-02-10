@@ -1,0 +1,234 @@
+{
+  "asalData": "S",
+  "bruto": 520,
+  "cif": 0,
+  "disclaimer": "1",
+  "hargaPenyerahan": 53010500,
+  "idPengguna": "",
+  "jabatanTtd": "MANAGER KEUANGAN & AKUNTING",
+  "jumlahKontainer": 0,
+  "kodeCaraBayar": "1",
+  "kodeDokumen": "25",
+  "kodeJenisTpb": "1",
+  "kodeKantor": "050500",
+  "kodeLokasiBayar": "1",
+  "kodeTujuanPengiriman": "5",
+  "kodeValuta": "USD",
+  "kotaTtd": "BANDUNG",
+  "namaTtd": "MIRA AMALIA WULAN",
+  "ndpbm": 16777,
+  "netto": 500,
+  "nomorAju": "IFN02501001720260206000025",
+  "seri": 0,
+  "tanggalAju": "2026-02-06",
+  "tanggalTtd": "2026-02-06",
+  "volume": 0,
+  "entitas": [
+    {
+      "alamatEntitas": "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004\/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT",
+      "kodeEntitas": "3",
+      "kodeJenisIdentitas": "6",
+      "kodeJenisApi": "02",
+      "kodeNegara": "ID",
+      "kodeStatus": "",
+      "namaEntitas": "INDONEPTUNE NET MANUFACTURING",
+      "nomorIdentitas": "0010017176057000000000",
+      "nibEntitas": "9120011042693",
+      "seriEntitas": 3,
+      "niperEntitas": "",
+      "nomorIjinEntitas": "1555\/KM.4\/2017",
+      "tanggalIjinEntitas": "2017-07-10"
+    },
+    {
+      "alamatEntitas": "JL. RAYA BANDUNG GARUT KM 25 RT 04 RW 01,\r\nDESA CANGKUANG 004\/001 CANGKUANG,\r\nRANCAEKEK, BANDUNG, JAWA BARAT",
+      "kodeEntitas": "7",
+      "kodeJenisIdentitas": "6",
+      "kodeJenisApi": "02",
+      "kodeNegara": "ID",
+      "kodeStatus": "10",
+      "namaEntitas": "INDONEPTUNE NET MANUFACTURING",
+      "nomorIdentitas": "0010017176057000000000",
+      "nibEntitas": "",
+      "seriEntitas": 7,
+      "niperEntitas": ""
+    },
+    {
+      "alamatEntitas": "",
+      "kodeEntitas": "8",
+      "kodeJenisIdentitas": "6",
+      "kodeJenisApi": "02",
+      "kodeNegara": "ID",
+      "kodeStatus": "",
+      "namaEntitas": "LAUTAN SAMUDERA,CV.",
+      "nomorIdentitas": "032129587214000",
+      "nibEntitas": "",
+      "seriEntitas": 8,
+      "niperEntitas": "",
+      "nomorIjinEntitas": null,
+      "tanggalIjinEntitas": null
+    }
+  ],
+  "dokumen": [
+    {
+      "idDokumen": "",
+      "kodeDokumen": "380",
+      "nomorDokumen": "FY\/03\/26",
+      "seriDokumen": 1,
+      "tanggalDokumen": "2026-02-06"
+    },
+    {
+      "idDokumen": "",
+      "kodeDokumen": "217",
+      "nomorDokumen": "FY\/03\/26",
+      "seriDokumen": 2,
+      "tanggalDokumen": "2026-02-06"
+    },
+    {
+      "idDokumen": "",
+      "kodeDokumen": "315",
+      "nomorDokumen": "5557\/LAUTAN SAMUDRA\/2025",
+      "seriDokumen": 3,
+      "tanggalDokumen": "2025-11-25"
+    },
+    {
+      "idDokumen": "",
+      "kodeDokumen": "23",
+      "nomorDokumen": "038149  ",
+      "seriDokumen": 4,
+      "tanggalDokumen": "2025-09-24"
+    }
+  ],
+  "pengangkut": [
+    {
+      "idPengangkut": "",
+      "namaPengangkut": "REDEX",
+      "nomorPengangkut": "            ",
+      "seriPengangkut": 1,
+      "kodeCaraAngkut": "3"
+    }
+  ],
+  "kemasan": [
+    {
+      "jumlahKemasan": 20,
+      "kodeJenisKemasan": "BL",
+      "merkKemasan": "-",
+      "seriKemasan": 1
+    }
+  ],
+  "barang": [
+    {
+      "cif": 825,
+      "cifRupiah": 13841025,
+      "diskon": 0,
+      "fob": 0,
+      "freight": 0,
+      "hargaEkspor": 0,
+      "hargaPenyerahan": 53010500,
+      "hargaPerolehan": 0,
+      "isiPerKemasan": 0,
+      "jumlahKemasan": 20,
+      "jumlahSatuan": 500,
+      "kodeBarang": "NO.05557 # 1",
+      "kodeDokAsal": "",
+      "kodeGunaBarang": "3",
+      "kodeJenisKemasan": "BL",
+      "kodeKategoriBarang": "1",
+      "kodeKondisiBarang": "1",
+      "kodePerhitungan": "0",
+      "kodeSatuanBarang": "KGM",
+      "merk": "-",
+      "ndpbm": 16777,
+      "netto": 500,
+      "nilaiBarang": 0,
+      "posTarif": "",
+      "seriBarang": 1,
+      "spesifikasiLain": "-",
+      "tipe": "-",
+      "ukuran": "-",
+      "uraian": "MT._1.5GX15 (500GR\/SPOOL) F.WHITE ",
+      "barangDokumen": [],
+      "barangTarif": [],
+      "bahanBaku": [
+        {
+          "cif": 825,
+          "cifRupiah": 13841025,
+          "hargaPenyerahan": 52800,
+          "hargaPerolehan": 52800,
+          "jumlahSatuan": 500,
+          "kodeAsalBahanBaku": "0",
+          "kodeBarang": "P8647180",
+          "kodeDokAsal": "23",
+          "kodeKantor": "050500",
+          "kodeSatuanBarang": "KGM",
+          "merkBarang": "-",
+          "ndpbm": 0,
+          "nomorAjuDokAsal": "0002301001720250924000048",
+          "nomorDaftarDokAsal": "038149  ",
+          "posTarif": "39081010",
+          "seriBahanBaku": 1,
+          "seriBarang": 1,
+          "seriBarangDokAsal": 1,
+          "seriIjin": 0,
+          "spesifikasiLainBarang": "-",
+          "tanggalDaftarDokAsal": "2025-09-24",
+          "tipeBarang": "-",
+          "ukuranBarang": "-",
+          "uraianBarang": "POLYAMIDE 6 - 1022T TU 09131 UBE NYLON CHIP",
+          "bahanBakuTarif": [
+            {
+              "kodeJenisTarif": "1",
+              "jumlahSatuan": 500,
+              "kodeFasilitasTarif": "1",
+              "kodeJenisPungutan": "PPN",
+              "nilaiBayar": 1522513,
+              "nilaiFasilitas": 0,
+              "nilaiSudahDilunasi": 1,
+              "seriBahanBaku": 1,
+              "tarif": 11,
+              "tarifFasilitas": 100
+            },
+            {
+              "kodeJenisTarif": "1",
+              "jumlahSatuan": 500,
+              "kodeFasilitasTarif": "1",
+              "kodeJenisPungutan": "PPH",
+              "nilaiBayar": 346026,
+              "nilaiFasilitas": 0,
+              "nilaiSudahDilunasi": 1,
+              "seriBahanBaku": 1,
+              "tarif": 2.5,
+              "tarifFasilitas": 100
+            }
+          ]
+        }
+      ]
+    }
+  ],
+  "pungutan": [
+    {
+      "idPungutan": "",
+      "kodeFasilitasTarif": "1",
+      "kodeJenisPungutan": "BM",
+      "nilaiPungutan": 0
+    },
+    {
+      "idPungutan": "",
+      "kodeFasilitasTarif": "1",
+      "kodeJenisPungutan": "PPN",
+      "nilaiPungutan": 1522513
+    },
+    {
+      "idPungutan": "",
+      "kodeFasilitasTarif": "1",
+      "kodeJenisPungutan": "PPH",
+      "nilaiPungutan": 346026
+    },
+    {
+      "idPungutan": "",
+      "kodeFasilitasTarif": "1",
+      "kodeJenisPungutan": "PPNLOKAL",
+      "nilaiPungutan": 0
+    }
+  ],
+  "kontainer": []
+}
