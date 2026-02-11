@@ -1031,7 +1031,11 @@ class Out_model extends CI_Model{
         $this->db->join('satuan','satuan.id = barang.id_satuan','left');
         $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
         $this->db->where('tb_detailgen.id_header',$id);
-        $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln,nobale,exnet,stok,nomor_bc');
+        if($header['dept_id']=='GS'){
+            $this->db->group_by('po,item,dis,id_barang,dln');
+        }else{
+            $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln,nobale,exnet,stok,nomor_bc');
+        }
         $this->db->order_by('po,item,dis,nama_barang,id_barang');
         return $this->db->get();
     }

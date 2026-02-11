@@ -11,9 +11,11 @@ $(document).ready(function () {
 				d.filter_kategori = $("#filter").val();
 				d.filter_inv = $("#filterinv").val();
 				d.filter_bc = $("#filter_bc").val();
+				d.filter_milik = $("#filter_milik").val();
 				console.log("Filter kategori:", d.filter_kategori);
 				console.log("Filter inv:", d.filter_inv);
 				console.log("Filter bc:", d.filter_bc);
+				console.log("Filter Milik:", d.filter_milik);
 			},
 		},
 		columnDefs: [
@@ -26,16 +28,22 @@ $(document).ready(function () {
 				// className: "text-right",
 				targets: [3],
 				// orderable: false,
+				className: "text-danger font-kecil",
+			},
+			{
+				// className: "text-right",
+				targets: [4],
+				// orderable: false,
 				className: "text-primary",
 			},
 			{
 				className: "text-right",
-				targets: [4],
+				targets: [5],
 				orderable: false,
 			},
 			{
 				className: "text-right",
-				targets: [5],
+				targets: [6],
 				orderable: false,
 			},
 			// {
@@ -45,12 +53,17 @@ $(document).ready(function () {
 			// },
 			{
 				className: "text-right",
-				targets: [6],
+				targets: [7],
 				orderable: false,
 			},
 			{
 				className: "text-right",
-				targets: [7],
+				targets: [8],
+				orderable: false,
+			},
+			{
+				className: "text-right",
+				targets: [9],
 				orderable: false,
 			},
 			// {
@@ -69,6 +82,7 @@ $(document).ready(function () {
 			$("#reko2").html(rupiah(response.json.jumlahKgs, ".", ",", 2));
 			$("#reko3").html(rupiah(response.json.jumlahPcs, ".", ",", 0));
 			$("#reko4").html(rupiah(response.json.jumlahTotal, ".", ",", 2));
+			$("#reko5").html(rupiah(response.json.jumlahAkt, ".", ",", 8));
 		},
 		pageLength: 50,
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
@@ -95,19 +109,22 @@ $(document).ready(function () {
 			},
 		});
 	});
-	$("#filter, #filterinv,#filter_bc").on("change", function () {
+	$("#filter, #filterinv,#filter_bc,#filter_milik").on("change", function () {
 		table.ajax.reload();
 	});
-	$("#filter, #filterinv").on("change", function () {
+	$("#filter, #filterinv,#filter_milik").on("change", function () {
 		var filter_kategori = $("#filter").val();
 		var filter_inv = $("#filterinv").val();
+		var filter_milik = $("#filter_milik").val();
 
 		var exportUrlExcel =
 			base_url +
 			"hargamat/excel?filter=" +
 			filter_kategori +
 			"&filterinv=" +
-			filter_inv;
+			filter_inv +
+			"&filtermilik=" +
+			filter_milik;
 		$(".btn-export-excel").attr("href", exportUrlExcel);
 
 		var exportUrlPdf =

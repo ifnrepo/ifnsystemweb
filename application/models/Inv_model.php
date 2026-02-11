@@ -171,6 +171,7 @@ class inv_model extends CI_Model
         $bl = date('m', strtotime($tglawal));
         $th = date('Y', strtotime($tglawal));
         $ada = in_array($dept,daftardeptsubkon());
+        $arrbarangexcludejenis = "'4170','5691','6019','39991','40394','40395','40396'";
 
         // Query untuk CekSaldobarang
         $this->db->select("0 as kodeinv,stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,stokdept.dln as xdln,barang.id_kategori,stokdept.insno,stokdept.nobontr,barang.kode,stokdept.id as idu");
@@ -396,15 +397,14 @@ class inv_model extends CI_Model
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query5 = $this->db->get_compiled_select();
 
-        $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs,sum(pcs_taking) over() as totalsopcs,sum(kgs_taking) over() as totalsokgs from (Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif ";
-        // $kolom .= "(select sum(kgs) from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and trim(insno)=trim(r1.insno) and trim(nobontr)=trim(r1.nobontr) and trim(nobale)=trim(r1.nobale) and stok=r1.stok and exnet=r1.exnet and dept_id = '".$dept."' and tgl='".tglmysql($tglakhir)."') as kgs_taking,";
-        // $kolom .= "(select sum(pcs) from stokopname_detail where trim(po)=trim(r1.po) and trim(item)=trim(r1.item) and dis=r1.dis and id_barang = r1.id_barang and trim(insno)=trim(r1.insno) and trim(nobontr)=trim(r1.nobontr) and trim(nobale)=trim(r1.nobale) and stok=r1.stok and exnet=r1.exnet and dept_id = '".$dept."' and tgl='".tglmysql($tglakhir)."') as pcs_taking ";
+        $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs,sum(pcs_taking) over() as totalsopcs,sum(kgs_taking) over() as totalsokgs from (";
+        $kolom .= "Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif ";
         $kolom .= "from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4." union all ".$query5.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
         $kolom .= " left join kategori on kategori.kategori_id = left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4)";
         if($this->session->userdata('currdept') != 'GS'){
-        $kolom .= " where (jns <= 2 )";
+            $kolom .= " where (jns <= 2 OR id_barang IN (".$arrbarangexcludejenis."))";
         }
         if($ifndln!='all'){
             $kolom .= " AND xdln = ".$ifndln;
