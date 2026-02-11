@@ -116,8 +116,15 @@
                             <input type="text" class="form-control font-kecil text-end" id="harga_akt" name="harga_akt" placeholder="Input Harga Akunting" value="<?= rupiah($data['harga_akt'], 8); ?>">
                         </div>
                     </div>
-                    <div class="col-6">
-
+                     <div class="col-6">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold font-hitam bg-teal-lt pl-2">Kode F. Pajak</label>
+                            <select class="form-select font-kecil font-bold btn-flat" name="kode_faktur_pajak" id="kode_faktur_pajak">
+                                <option value="">Pilih Kode Faktur</option>
+                                <option value="010" <?php if($data['kode_faktur_pajak']=='010'){ echo "selected"; } ?>>010 - PPN dibayar</option>
+                                <option value="070" <?php if($data['kode_faktur_pajak']=='070'){ echo "selected"; } ?>>070 - PPN ditangguhkan</option>
+                            </select>
+                        </div>
                     </div>
                 </div>
                 <div class="row">

@@ -5,9 +5,12 @@ class Hargamat_model extends CI_Model
     var $column_order = array(null, 'nama_barang', 'nama_supplier', 'remark', 'tgl');
     var $order = array('tgl' => 'asc');
     // var $table = 'barang';
-    public function getdata($filter_kategori, $filter_inv,  $filter_bc)
+    public function getdata($filter_kategori, $filter_inv,  $filter_bc, $filter_milik)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang,tb_hargamaterial.id_satuan as idsat');
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang,tb_hargamaterial.id_satuan as idsat,barang.dln,tb_hargamaterial.qty as xqty');
+        $this->db->select("sum(tb_hargamaterial.qty) over() as jmqty");
+        $this->db->select("sum(tb_hargamaterial.weight) over() as jmkgs");
+        $this->db->select("SUM(IFNULL(harga_akt,0)*IF(tb_hargamaterial.id_satuan=22,weight,qty)) OVER() AS jmakt");
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->join('ref_dok_bc', 'ref_dok_bc.jns_bc = tb_hargamaterial.jns_bc', 'left');
@@ -26,6 +29,21 @@ class Hargamat_model extends CI_Model
         }
         if ($filter_bc && $filter_bc != 'all') {
             $this->db->where('tb_hargamaterial.jns_bc', $filter_bc);
+        }
+        if ($filter_milik && $filter_milik != 'all') {
+            $this->db->group_start();
+            if($filter_milik=='ifn'){
+                // $this->db->where('barang.dln', 0);
+                // $this->db->or_where("left(tb_hargamaterial.nobontr,3) != ",'DLN');
+                $where = "barang.dln=0 AND left(tb_hargamaterial.nobontr,3) != 'DLN'";
+                $this->db->where($where);
+            }else{
+                // $this->db->where('barang.dln', 1);
+                // $this->db->or_where("left(tb_hargamaterial.nobontr,3) == ",'DLN');
+                $where = "barang.dln=1 OR left(tb_hargamaterial.nobontr,3) = 'DLN'";
+                $this->db->where($where);
+            }
+            $this->db->group_end();
         }
 
         if ($this->session->userdata('blhargamat') != '') {
@@ -428,18 +446,18 @@ class Hargamat_model extends CI_Model
 
         return $this->db->trans_status();
     }
-    public function get_datatables($filter_kategori, $filter_inv, $filter_bc)
+    public function get_datatables($filter_kategori, $filter_inv, $filter_bc, $filter_milik)
     {
-        $this->getdata($filter_kategori, $filter_inv, $filter_bc);
+        $this->getdata($filter_kategori, $filter_inv, $filter_bc, $filter_milik);
         // $this->getdata();
         if ($_POST['length'] != -1)
             $this->db->limit($_POST['length'], $_POST['start']);
         $query = $this->db->get();
         return $query->result();
     }
-    public function count_filtered($filter_kategori, $filter_inv, $filter_bc)
+    public function count_filtered($filter_kategori, $filter_inv, $filter_bc, $filter_milik)
     {
-        $this->getdata($filter_kategori, $filter_inv, $filter_bc);
+        $this->getdata($filter_kategori, $filter_inv, $filter_bc, $filter_milik);
         // $this->getdata();
         $query = $this->db->get();
         return $query->num_rows();
@@ -449,9 +467,9 @@ class Hargamat_model extends CI_Model
         $this->db->from('tb_hargamaterial');
         return $this->db->count_all_results();
     }
-    public function hitungrec($filter_kategori, $filter_inv, $filter_bc)
+    public function hitungrec($filter_kategori, $filter_inv, $filter_bc, $filter_milik)
     {
-        $this->getdata($filter_kategori, $filter_inv, $filter_bc);
+        $this->getdata($filter_kategori, $filter_inv, $filter_bc, $filter_milik);
         $query = $this->db->get();
         return $query->num_rows();
     }
@@ -473,9 +491,9 @@ class Hargamat_model extends CI_Model
     {
         return $this->db->order_by('kodesatuan')->get('satuan');
     }
-    public function getdata_export($filter_kategori, $filter_inv)
+    public function getdata_export($filter_kategori, $filter_inv, $filter_milik)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang');
+        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang,barang.dln');
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->join('supplier', 'supplier.id = tb_hargamaterial.id_supplier', 'left');
@@ -486,6 +504,21 @@ class Hargamat_model extends CI_Model
             } else {
                 $this->db->where('barang.id_kategori is null');
             }
+        }
+        if ($filter_milik && $filter_milik != 'all') {
+            $this->db->group_start();
+            if($filter_milik=='ifn'){
+                // $this->db->where('barang.dln', 0);
+                // $this->db->or_where("left(tb_hargamaterial.nobontr,3) != ",'DLN');
+                $where = "barang.dln=0 AND left(tb_hargamaterial.nobontr,3) != 'DLN'";
+                $this->db->where($where);
+            }else{
+                // $this->db->where('barang.dln', 1);
+                // $this->db->or_where("left(tb_hargamaterial.nobontr,3) == ",'DLN');
+                $where = "barang.dln=1 OR left(tb_hargamaterial.nobontr,3) = 'DLN'";
+                $this->db->where($where);
+            }
+            $this->db->group_end();
         }
         if ($filter_inv && $filter_inv != 'all') {
             $this->db->where('barang.id', $filter_inv);

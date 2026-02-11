@@ -575,20 +575,31 @@ class Helper_model extends CI_Model
         return $this->db->get();
     }
     public function getstokdept($data){
-        $kondisi = [
-            'dept_id' => $data['dept_id'],
-            'trim(po)' => trim($data['po']),
-            'trim(item)' => trim($data['item']),
-            'dis' => $data['dis'],
-            'trim(insno)' => trim($data['insno']),
-            'trim(nobontr)' => trim($data['nobontr']),
-            'trim(nomor_bc)' => trim($data['nomor_bc']),
-            'stokdept.dln' => $data['dln'],
-            'id_barang' => $data['id_barang'],
-            'trim(nobale)' => trim($data['nobale']),
-            'exnet' => 0,
-            'periode' => $data['periode']
-        ];
+        if($data['dept_id']=='GS'){
+            $kondisi = [
+                'dept_id' => $data['dept_id'],
+                'trim(po)' => trim($data['po']),
+                'trim(item)' => trim($data['item']),
+                'stokdept.dln' => $data['dln'],
+                'id_barang' => $data['id_barang'],
+                'periode' => $data['periode']
+            ];
+        }else{
+            $kondisi = [
+                'dept_id' => $data['dept_id'],
+                'trim(po)' => trim($data['po']),
+                'trim(item)' => trim($data['item']),
+                'dis' => $data['dis'],
+                'trim(insno)' => trim($data['insno']),
+                'trim(nobontr)' => trim($data['nobontr']),
+                'trim(nomor_bc)' => trim($data['nomor_bc']),
+                'stokdept.dln' => $data['dln'],
+                'id_barang' => $data['id_barang'],
+                'trim(nobale)' => trim($data['nobale']),
+                'exnet' => 0,
+                'periode' => $data['periode']
+            ];
+        }
         $this->db->select('stokdept.*,barang.id_satuan,sum(kgs_akhir) as kgsstok,sum(pcs_akhir) as pcsstok');
         $this->db->from('stokdept');
         $this->db->where($kondisi);

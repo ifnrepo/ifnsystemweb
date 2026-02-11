@@ -7,25 +7,25 @@ $(document.body).bind("mousemove keypress", function (e) {
 	time = new Date().getTime();
 });
 
-function refresh() {
-	//7200000 = 2 Jam
-	if (new Date().getTime() - time >= 3600000) keluar();
-	else setTimeout(refresh, 10000);
-}
+// function refresh() {
+// 	//7200000 = 2 Jam
+// 	if (new Date().getTime() - time >= 3600000) keluar();
+// 	else setTimeout(refresh, 10000);
+// }
 
-setTimeout(refresh, 10000);
+// setTimeout(refresh, 10000);
 
-function keluar() {
-	$.ajax({
-		// dataType: "json",
-		type: "POST",
-		url: base_url + "Auth/logout",
-		data: {
-			dta: 1,
-		},
-		success: function (data) {
-			// alert(data[0]);
-			window.location.reload(true);
-		},
-	});
-}
+// function keluar() {
+// 	$.ajax({
+// 		// dataType: "json",
+// 		type: "POST",
+// 		url: base_url + "Auth/logout",
+// 		data: {
+// 			dta: 1,
+// 		},
+// 		success: function (data) {
+// 			// alert(data[0]);
+// 			window.location.reload(true);
+// 		},
+// 	});
+// }

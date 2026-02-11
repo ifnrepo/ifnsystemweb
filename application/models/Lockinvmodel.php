@@ -6,7 +6,7 @@ class Lockinvmodel extends CI_Model
         $this->db->select('tb_lockinv.*, user.name');
         $this->db->from('tb_lockinv');
         $this->db->join('user', 'user.id = tb_lockinv.dibuat_oleh', 'left');
-
+        $this->db->order_by('periode','DESC');
         return $this->db->get()->result_array();
     }
     public function tambah($data){
@@ -28,9 +28,13 @@ class Lockinvmodel extends CI_Model
         $this->db->where('personil.personil_id', $personil_id);
         return $this->db->get()->row_array();
     }
-    public function getdepartemen()
+    public function getdept()
     {
-        return $this->db->get_where('dept',["katedept_id <= " => 3]);
+        $this->db->select('dept_id,departemen');
+        $this->db->where('katedept_id <= ',3);
+        $this->db->order_by('dept_id');
+        $hasil = $this->db->get('dept');
+        return $hasil;
     }
     public function simpandata()
     {

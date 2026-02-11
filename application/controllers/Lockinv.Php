@@ -28,7 +28,7 @@ class Lockinv extends CI_Controller
     }
     public function tambahdata()
     {
-        $data = $this->lockinvmodel->getdepartemen()->result_array();
+        $data['deptx'] = $this->lockinvmodel->getdept();
         $this->load->view('lockinv/add_lock',$data);
     }
     public function tambah(){

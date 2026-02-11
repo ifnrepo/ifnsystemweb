@@ -200,7 +200,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     }
                  ?>
                 <div class="d-flex justify-content-between">
-                  <div class="subheader mb-2 text-white">Jumlah Dokumen BC</div>
+                  <div class="subheader mb-2 text-white font-bold" style="font-size: 13px;">Jumlah Dokumen BC</div>
                   <div class="row mb-1">
                     <label class="subheader col-3 col-form-label text-white p-1"></label>
                     <div class="col">
@@ -333,6 +333,26 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
         </div>
       </div>
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title text-primary">Data Pengeluaran Barang (Kg)</h3>
+            <div id="chart-mentionse" class="chart-lg"></div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-body">
+            <h3 class="card-title">Locations</h3>
+            <div class="ratio ratio-21x9">
+              <div>
+                <div id="map-world" class="w-100 h-100"></div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="col-12">
         <div class="row row-cards">
           <!-- <div class="col-md-6 col-lg-3">
@@ -434,26 +454,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
         </div>
       </div>
-      <div class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <h3 class="card-title">Traffic summary</h3>
-            <div id="chart-mentions" class="chart-lg"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <h3 class="card-title">Locations</h3>
-            <div class="ratio ratio-21x9">
-              <div>
-                <div id="map-world" class="w-100 h-100"></div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
+      
       <!-- <div class="col-lg-6">
         <div class="row row-cards">
           <div class="col-12">

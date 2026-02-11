@@ -493,6 +493,18 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- Kode FP -->
+                                    <div class="text-center bg-green-lt mb-1 font-bold font-hitam">Kode Faktur Pajak</div>
+                                    <div class="mb-1 mt-0 row">
+                                        <label class="col-3 col-form-label font-kecil mx-2">Kode</label>
+                                        <div class="col">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="kode_faktur_pajak" id="kode_faktur_pajak" <?= $selectnonaktif; ?>>
+                                                <option value="">Pilih Kode Faktur</option>
+                                                <option value="010" <?php if($datheader['kode_faktur_pajak']=='010'){ echo "selected"; } ?>>010 - Pajak Dibayar</option>
+                                                <option value="070" <?php if($datheader['kode_faktur_pajak']=='070'){ echo "selected"; } ?>>070 - Pajak Ditangguhkan</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>

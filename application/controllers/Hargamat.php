@@ -165,10 +165,12 @@ class Hargamat extends CI_Controller
         $filter_kategori = $this->input->post('filter_kategori');
         $filter_inv = $this->input->post('filter_inv');
         $filter_bc = $this->input->post('filter_bc');
-        $list = $this->hargamatmodel->get_datatables($filter_kategori, $filter_inv, $filter_bc);
+        $filter_milik = $this->input->post('filter_milik');
+        $list = $this->hargamatmodel->get_datatables($filter_kategori, $filter_inv, $filter_bc,$filter_milik);
         $data = array();
         $no = $_POST['start'];
         $total = 0;
+        $totakt = 0;
         $kgs = 0;
         $pcs = 0;
         foreach ($list as $field) {
@@ -183,6 +185,7 @@ class Hargamat extends CI_Controller
             $row[] = $barang;
             $row[] = $field->kodesatuan;
             $row[] = tglmysql($field->tgl);
+            $row[] = $field->kode_faktur_pajak;
             $row[] = $field->nobontr;
             $row[] = $field->nomor_inv;
             // $row[] = $nobc;
@@ -229,19 +232,21 @@ class Hargamat extends CI_Controller
             $data[] = $row;
 
             $total += $tampil * $field->price;
-            $pcs += $field->qty;
-            $kgs += $field->weight;
+            $pcs = $field->jmqty;
+            $kgs = $field->jmkgs;
+            $totakt = $field->jmakt;
         }
         $output = array(
             "draw" => $_POST['draw'],
             "recordsTotal" => $this->hargamatmodel->count_all(),
-            "recordsFiltered" => $this->hargamatmodel->count_filtered($filter_kategori, $filter_inv, $filter_bc),
+            "recordsFiltered" => $this->hargamatmodel->count_filtered($filter_kategori, $filter_inv, $filter_bc, $filter_milik),
             "jumlahTotal" => $total,
+            "jumlahAkt" => $totakt,
             "jumlahPcs" => $pcs,
             "jumlahKgs" => $kgs,
             "data" => $data,
         );
-        $this->session->set_userdata('jmlrek', $this->hargamatmodel->hitungrec($filter_kategori, $filter_inv, $filter_bc));
+        $this->session->set_userdata('jmlrek', $this->hargamatmodel->hitungrec($filter_kategori, $filter_inv, $filter_bc, $filter_milik));
         // $isinya = $this->session->userdata('jmlrek');
         echo "<script type='text/javascript'>
                 isirekod = '<?= base_url() ?>';
@@ -549,7 +554,8 @@ class Hargamat extends CI_Controller
 
         $filter_kategori = $this->input->get('filter');
         $filter_inv = $this->input->get('filterinv');
-        $harga = $this->hargamatmodel->getdata_export($filter_kategori, $filter_inv);
+        $filter_milik = $this->input->get('filtermilik');
+        $harga = $this->hargamatmodel->getdata_export($filter_kategori, $filter_inv, $filter_milik);
 
         $no = 1;
         $numrow = 3;

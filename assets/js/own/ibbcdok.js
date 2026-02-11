@@ -330,6 +330,9 @@ $("#nilai_serah").blur(function () {
 $("#pelabuhan_muat").change(function () {
 	savedata("pelabuhan_muat", $(this).val());
 });
+$("#kode_faktur_pajak").change(function () {
+	savedata("kode_faktur_pajak", $(this).val());
+});
 // $("#pelabuhan_muat").val("").trigger("change");
 $("#pelabuhan_bongkar").change(function () {
 	savedata("pelabuhan_bongkar", $(this).val());
@@ -563,6 +566,10 @@ function cekkolom(mode) {
 			pesan("Nomor peti kemas harus di isi", "error");
 			return false;
 		}
+		if ($("#kode_faktur_pajak").val() == "") {
+			pesan("Kode Faktur Pajak Harus di isi", "error");
+			return false;
+		}
 	}
 	// Untuk cek BC 30
 	if ($("#jns_bc").val() == "30") {
@@ -616,6 +623,13 @@ function cekkolom(mode) {
 	if ($("#jns_bc").val() == "262") {
 		if ($("#exnomor_bc").val() == "") {
 			pesan("Nomor Ex BC harus di isi", "error");
+			return false;
+		}
+	}
+	// Untuk cek BC 40 Bukan MAKLOON
+	if ($("#jns_bc").val() == "40" ) {
+		if ($("#kode_faktur_pajak").val() == "") {
+			pesan("Kode Faktur Pajak Harus di isi", "error");
 			return false;
 		}
 	}

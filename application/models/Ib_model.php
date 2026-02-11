@@ -1334,6 +1334,7 @@ class Ib_model extends CI_Model
                     'seri_barang' => $hasil['seri_barang'],
                     'nomor_aju' => $this->getdatanomoraju($id),
                     'tgl_aju' => $header['tgl_aju'],
+                    'kode_faktur_pajak' => $header['kode_faktur_pajak'],
                     // 'kode_negara' => "ID"
                 ];
                 $this->db->insert('tb_hargamaterial', $datasimpan);

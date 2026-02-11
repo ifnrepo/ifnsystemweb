@@ -68,6 +68,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <option value="<?= $bc['jns_bc']; ?>" <?= $selek; ?>><?= $bc['ket_bc']; ?></option>
             <?php } ?>
           </select>
+          <div class="mb-0 mt-1 row">
+            <label class="col-4 col-form-label font-kecil font-bold text-teal">Milik</label>
+            <div class="col">
+              <select name="filter_milik" id="filter_milik" class="form-select font-kecil mt-0">
+                <option value="all">Semua</option>
+                <option value="ifn">IFN</option>
+                <option value="dln">DLN</option>
+              </select>
+            </div>
+          </div>
 
         </div>
         <div class="col-md-3" style="border-left: 1px solid !important;">
@@ -103,11 +113,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
         <div class="col-md-7 bg-cyan-lt">
           <div style="line-height: 10px !important">
-            <label class="font-kecil font-bold mt-1">Unit : <span id="reko3" style="font-size: 14px !important"></span></label><br>
+            <label class="font-kecil font-bold mt-1">Qty : <span id="reko3" style="font-size: 14px !important"></span></label><br>
             <label class="font-kecil font-bold">Weight : <span id="reko2" style="font-size: 14px !important"></span></label><br>
             <label class="font-kecil font-bold">Rp : <span id="reko4" style="font-size: 14px !important"></span></label><br>
           </div>
-          <label class="font-kecil font-bold">Jumlah Record : <span id="reko1" style="font-size: 14px !important"></span></label><br>
+          <div style="line-height: 10px !important" class="mt-2">
+            <label class="font-kecil font-bold">Jumlah Record : <span id="reko1" style="font-size: 14px !important"></span></label><br>
+            <label class="font-kecil font-bold font-hitam">Jumlah Harga Akt : <span id="reko5" style="font-size: 13px !important"></span></label><br>
+          </div>
           <!-- <a href="<?= base_url() . 'hargamat/getbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get data IB" class="btn btn-success btn-sm" style="position: absolute; bottom:5px; right:5px;"><i class="fa fa-plus"></i><span class="ml-1">Get Barang</span></a> -->
           <!-- <a id="tambahdata" class="btn btn-primary text-white" style="position: absolute; bottom:5px; right:5px;" data-title="Get data IB" role="button">
             <i class="fa fa-plus"></i><span class="ml-1">Get Barang</span>
@@ -129,6 +142,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Article</th>
                 <th>Sat</th>
                 <th>Tgl</th>
+                <th>FP</th>
                 <th>Nomor IB</th>
                 <th>Invoice</th>
                 <!-- <th class="text-left">Info BC</th> -->
