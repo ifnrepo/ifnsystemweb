@@ -7,6 +7,14 @@
 .font-italic {
 	font-style: italic !important;
 }
+.laser-area {
+  height: 320px;
+  width: 100%;
+  border: solid rgb(128, 133, 138) 1px;
+  /* padding:10px 10px;  */
+  position: relative;
+  overflow: hidden;
+}
 .dataTables_wrapper .dataTables_paginate {
 	float: right !important;
 }

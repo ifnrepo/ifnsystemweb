@@ -161,12 +161,18 @@
 <?php if (isset($fungsi) && $fungsi == 'setcost') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/setcost.js?<?= $updatejs; ?>"></script>
 <?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'sublok') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/webcam/qrcodelib.js?<?= $updatejs ?>"></script>
+	<script src="<?= base_url(); ?>assets/js/own/webcam/webcodecamjs.js?<?= $updatejs ?>"></script>
+	<script src="<?= base_url(); ?>assets/js/own/webcam/main.js?<?= $updatejs ?>"></script>
+	<script src="<?= base_url(); ?>assets/js/own/webcam/konfirm.js?<?= $updatejs ?>"></script>
+<?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/main.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
-	if($this->session->flashdata('errortanggalbcmon')!=''){
-		echo "<script>pesan('".$this->session->flashdata('errortanggalbcmon')."','error'); </script>";
+	if ($this->session->flashdata('errortanggalbcmon') != '') {
+		echo "<script>pesan('" . $this->session->flashdata('errortanggalbcmon') . "','error'); </script>";
 	}
 	// print_r(json_encode($dataproduksi['data_isi'])); 
 	// echo 'XXXX';
@@ -195,22 +201,27 @@
 		array_push($arrayusd, $usd);
 		array_push($arrayjpy, $jpy);
 	}
-	foreach($personlogin->result_array() as $personlog){
-		array_push($arraylogin,$personlog['personlog']);
-		array_push($arraylogindate,$personlog['tgllog']);
+	foreach ($personlogin->result_array() as $personlog) {
+		array_push($arraylogin, $personlog['personlog']);
+		array_push($arraylogindate, $personlog['tgllog']);
 	}
 	$arraydatebc = [];
-	$bc23=[];
-	$bc40=[];$bc25=[];$bc30=[];$bc41=[];
-	$bc261=[];$bc262=[];
-	$bc40m=[];$bc41m=[];
+	$bc23 = [];
+	$bc40 = [];
+	$bc25 = [];
+	$bc30 = [];
+	$bc41 = [];
+	$bc261 = [];
+	$bc262 = [];
+	$bc40m = [];
+	$bc41m = [];
 	$jumlahhari = jumlahhari(date('Y-m-d', $this->session->userdata('tglmonbcawal')), date('Y-m-d', $this->session->userdata('tglmonbcakhir')));
 	$datuk = date('Y-m-d', $this->session->userdata('tglmonbcakhir'));
 	for ($x = $jumlahhari; $x >= 0; $x--) {
-		$dateawal =  strtotime('-'.$x . ' day', strtotime($datuk));
+		$dateawal =  strtotime('-' . $x . ' day', strtotime($datuk));
 		$xdate = date('Y-m-d', $dateawal);
-		$getdata = $this->helpermodel->getdatabc2bulan($xdate,1);
-		for($y=1;$y<=9;$y++){
+		$getdata = $this->helpermodel->getdatabc2bulan($xdate, 1);
+		for ($y = 1; $y <= 9; $y++) {
 			switch ($y) {
 				case 1:
 					$inx = '230';
@@ -253,74 +264,74 @@
 					break;
 			}
 			$cekada = 0;
-			if($getdata->num_rows() > 0){
-				foreach($getdata->result_array() as $datbc){
-					if($inx == trim($datbc['jns_bc']).$datbc['bc_makloon']){
+			if ($getdata->num_rows() > 0) {
+				foreach ($getdata->result_array() as $datbc) {
+					if ($inx == trim($datbc['jns_bc']) . $datbc['bc_makloon']) {
 						switch ($y) {
 							case 1:
-								array_push($bc23,$datbc['jmlbc']);
+								array_push($bc23, $datbc['jmlbc']);
 								break;
 							case 2:
-								array_push($bc40,$datbc['jmlbc']);
+								array_push($bc40, $datbc['jmlbc']);
 								break;
 							case 3:
-								array_push($bc25,$datbc['jmlbc']);
+								array_push($bc25, $datbc['jmlbc']);
 								break;
 							case 4:
-								array_push($bc30,$datbc['jmlbc']);
+								array_push($bc30, $datbc['jmlbc']);
 								break;
 							case 5:
-								array_push($bc41,$datbc['jmlbc']);
+								array_push($bc41, $datbc['jmlbc']);
 								break;
 							case 6:
-								array_push($bc261,$datbc['jmlbc']);
+								array_push($bc261, $datbc['jmlbc']);
 								break;
 							case 7:
-								array_push($bc262,$datbc['jmlbc']);
+								array_push($bc262, $datbc['jmlbc']);
 								break;
 							case 8:
-								array_push($bc41m,$datbc['jmlbc']);
+								array_push($bc41m, $datbc['jmlbc']);
 								break;
 							case 9:
-								array_push($bc40m,$datbc['jmlbc']);
+								array_push($bc40m, $datbc['jmlbc']);
 								break;
 							default:
 								# code...
 								break;
 						}
-						$cekada=1;
+						$cekada = 1;
 						break;
 					}
 				}
 			}
-			if($cekada==0){
+			if ($cekada == 0) {
 				switch ($y) {
 					case 1:
-						array_push($bc23,0);
+						array_push($bc23, 0);
 						break;
 					case 2:
-						array_push($bc40,0);
+						array_push($bc40, 0);
 						break;
 					case 3:
-						array_push($bc25,0);
+						array_push($bc25, 0);
 						break;
 					case 4:
-						array_push($bc30,0);
+						array_push($bc30, 0);
 						break;
 					case 5:
-						array_push($bc41,0);
+						array_push($bc41, 0);
 						break;
 					case 6:
-						array_push($bc261,0);
+						array_push($bc261, 0);
 						break;
 					case 7:
-						array_push($bc262,0);
+						array_push($bc262, 0);
 						break;
 					case 8:
-						array_push($bc41m,0);
+						array_push($bc41m, 0);
 						break;
 					case 9:
-						array_push($bc40m,0);
+						array_push($bc40m, 0);
 						break;
 					default:
 						# code...
@@ -329,7 +340,7 @@
 			}
 			// array_push($bc23,100);
 		}
-		array_push($arraydatebc,$xdate);
+		array_push($arraydatebc, $xdate);
 	}
 	// print_r(json_encode($arraydate));
 ?>
@@ -610,7 +621,7 @@
 				// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
 				// ],
 				labels: <?= json_encode($arraydatebc) ?>,
-				colors: [tabler.getColor("green"), tabler.getColor("gray-600"),tabler.getColor("orange")],
+				colors: [tabler.getColor("green"), tabler.getColor("gray-600"), tabler.getColor("orange")],
 				legend: {
 					show: false,
 				},
