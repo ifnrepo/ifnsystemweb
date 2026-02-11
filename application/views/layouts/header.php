@@ -812,7 +812,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 2); ?>" href="<?= base_url('rfid/fg'); ?>">
                       Finished Goods IN
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 3); ?>" href="<?= base_url('rfid/out'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('rfid'), 3); ?>" href="<?= base_url('rfid_out'); ?>">
                       Container IN
                     </a>
                   </div>
@@ -894,6 +894,24 @@
                   </span>
                   <span class="nav-link-title">
                     Stok Opname
+                  </span>
+                </a>
+              </li>
+            <?php endif; ?>
+
+            <?php if ($this->session->userdata('dept_user') == 'IT') : ?>
+              <li class="nav-item">
+                <a class="nav-link" href="<?= base_url() . 'sublok'; ?>">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-map-pin-check">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M9 11a3 3 0 1 0 6 0a3 3 0 0 0 -6 0" />
+                      <path d="M11.87 21.48a1.992 1.992 0 0 1 -1.283 -.58l-4.244 -4.243a8 8 0 1 1 13.355 -3.474" />
+                      <path d="M15 19l2 2l4 -4" />
+                    </svg>
+                  </span>
+                  <span class="nav-link-title">
+                    Sub Lokasi
                   </span>
                 </a>
               </li>
