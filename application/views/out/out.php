@@ -145,6 +145,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $deptsubkon = daftardeptsubkon(); 
                 $notdetail = $datdet['taksama']==1 ? 'text-teal' : '';
                 $ceknombc = in_array($datdet['dept_id'],daftardeptsubkon()) ? '<br><span style="font-size:11px" class="text-pink">Ex BC. '.getnomorbcbykontrak($datdet['keterangan'],$datdet['dept_id'],$datdet['dept_tuju']).'</span>' : '';
+                $ceknombc2 = in_array($datdet['dept_tuju'],daftardeptsubkon()) && $datdet['nomor_bc']!='' ? '<br><span style="font-size:12px" class="text-primary">BC. '.$datdet['nomor_bc'].'</span>' : '';
                 ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
@@ -156,7 +157,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <?php } ?>
                   <td class="line-12"><?= $jmlrek; ?><br><span class="badge badge-outline text-pink"><?= rupiah($datdet['jumlahpcs'],0); ?> Pcs, <?= rupiah($datdet['netto'],2); ?> Kgs</span></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
-                  <td class="line-12"><?= $datdet['keterangan'].$ceknombc; ?></td>
+                  <td class="line-12"><?= $datdet['keterangan'].$ceknombc.$ceknombc2; ?></td>
                   <td class="text-end line-12"><span style="color: white;">.</span>
                     <?php if ($datdet['data_ok'] == 0) { ?>
                       <a href="<?= base_url() . 'out/dataout/' . $datdet['id'] ?>" class='btn btn-sm btn-primary <?= cekclosebook($this->session->userdata('blout'),$this->session->userdata('thout'),$this->session->userdata('deptsekarang')) ?>' style='padding: 3px 5px !important;' title='Lanjutkan Transaksi'><i class='fa fa-edit mr-1'></i> Lanjutkan Transaksi</a>
