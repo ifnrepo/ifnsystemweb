@@ -39,7 +39,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                             <a href="<?= base_url() . 'rfid_out/excel'; ?>" class="btn btn-success btn-sm"><i class="fa fa-file-excel-o"></i><span class="ml-1">Export To Excel</span></a>
                             <a href="<?= base_url() . 'rfid_out/pdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export To PDF</span></a>
-
+                            <br>
                             <span class="text-primary">Total Record: <span style="text-decoration:underline;" class="text-danger" id="totalFiltered"></span></span>
                         </div>
                     </div>

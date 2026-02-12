@@ -899,7 +899,7 @@
               </li>
             <?php endif; ?>
 
-            <?php if ($this->session->userdata('dept_user') == 'IT') : ?>
+            <?php if ($this->session->userdata('cek_sublok') == '1') : ?>
               <li class="nav-item">
                 <a class="nav-link" href="<?= base_url() . 'sublok'; ?>">
                   <span class="nav-link-icon d-md-none d-lg-inline-block">
