@@ -121,7 +121,7 @@
                             <label class="form-label font-kecil mb-0 font-bold font-hitam bg-teal-lt pl-2">Kode F. Pajak</label>
                             <select class="form-select font-kecil font-bold btn-flat" name="kode_faktur_pajak" id="kode_faktur_pajak">
                                 <option value="">Pilih Kode Faktur</option>
-                                <option value="010" <?php if($data['kode_faktur_pajak']=='010'){ echo "selected"; } ?>>010 - PPN dibayar</option>
+                                <option value="040" <?php if($data['kode_faktur_pajak']=='040'){ echo "selected"; } ?>>040 - PPN dibayar</option>
                                 <option value="070" <?php if($data['kode_faktur_pajak']=='070'){ echo "selected"; } ?>>070 - PPN ditangguhkan</option>
                             </select>
                         </div>
