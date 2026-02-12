@@ -10,7 +10,7 @@ define('LOK_UPLOAD_DOK', "./assets/image/dokmesin/dok/");
 define('LOK_UPLOAD_DOK_BC', "./assets/file/dok/");
 define('kodeunik', 'concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');
 define('LOK_UPLOAD_PDFRESPON', "./assets/file/");
-define('PREFIXAJU','IFN');
+define('PREFIXAJU', 'IFN');
 
 function visibpass($kata)
 {
@@ -572,19 +572,19 @@ function getdevice($str)
     }
     return $tart . ' on ' . $device;
 }
-function cekclosebook($bl=0,$th=0,$dept='',$nama='')
+function cekclosebook($bl = 0, $th = 0, $dept = '', $nama = '')
 {
     $isi = '';
     $CI = &get_instance();
     $periode = kodebulan($bl) . $th;
-    if($nama==''){
-        $hasil = $CI->helpermodel->cekclosebook($periode,$dept)->num_rows();
+    if ($nama == '') {
+        $hasil = $CI->helpermodel->cekclosebook($periode, $dept)->num_rows();
         if ($hasil != 0) {
             $isi = 'disabled';
         }
-    }else{
-        $hasil = $CI->helpermodel->cekclosebook($periode,$dept)->row_array();
-        $isi = datauser($hasil['dibuat_oleh'],'name').' on '.tglmysql2($hasil['dibuat_pada']);
+    } else {
+        $hasil = $CI->helpermodel->cekclosebook($periode, $dept)->row_array();
+        $isi = datauser($hasil['dibuat_oleh'], 'name') . ' on ' . tglmysql2($hasil['dibuat_pada']);
     }
     return $isi;
 }
@@ -629,7 +629,7 @@ function cekdetout($header)
 function isikurangnol($data)
 {
     $len = strlen(trim($data));
-    return 'IFN'.str_repeat('0', 3 - $len) . trim($data);
+    return 'IFN' . str_repeat('0', 3 - $len) . trim($data);
 }
 function max_upload()
 {
@@ -693,35 +693,35 @@ function formatsku($po, $item, $dis, $brg)
     }
     return $isi;
 }
-function namaspekbarang($brg,$kolom = 'nama_barang')
+function namaspekbarang($brg, $kolom = 'nama_barang')
 {
     $x = "";
     if ($brg > 0) {
         $CI = &get_instance();
         $hasil = $CI->barangmodel->getdatabyid($brg);
-        if($hasil->num_rows() > 0){
+        if ($hasil->num_rows() > 0) {
             $data = $hasil->row_array();
-            if($kolom=='kode'){
-                $kode = $data['imdo']==0 ? 'LO' : 'IM';
-                $x = $kode.'-'.$data[$kolom];
-            }else{
+            if ($kolom == 'kode') {
+                $kode = $data['imdo'] == 0 ? 'LO' : 'IM';
+                $x = $kode . '-' . $data[$kolom];
+            } else {
                 $x = $data[$kolom];
             }
-        }else{
-            $x = 'NOT FOUND ('.$brg.')';
+        } else {
+            $x = 'NOT FOUND (' . $brg . ')';
         }
     }
     return $x;
 }
-function cekperiodedaritgl($tgl,$nextmonth=0)
-{   
-    if($nextmonth==0){
+function cekperiodedaritgl($tgl, $nextmonth = 0)
+{
+    if ($nextmonth == 0) {
         $unt = strtotime($tgl);
         return date('m', $unt) . date('Y', $unt);
-    }else{
+    } else {
         $date = new DateTime($tgl);
         $date->modify('last day of next month');
-        return $date->format('m').$date->format('Y');
+        return $date->format('m') . $date->format('Y');
     }
 }
 function spekpo($po, $item, $dis)
@@ -820,14 +820,14 @@ function getstokdeptbaru(
     string $item = '',
     int $dis = 0,
     string $insno = '',
-    string $nobontr='',
+    string $nobontr = '',
     string $nomor_bc = '',
     int $dln = 0,
     int $id_barang = 0,
     string $nobale = '',
     int $exnet = 0,
     string $periode = ''
-){
+) {
     echo "<script>console.log('Masuk');</script>";
     $data = [
         'dept_id' => $dept,
@@ -1064,56 +1064,61 @@ function jumlahhari($date1, $date2)
     }
     return $hasil;
 }
-function jmlkgs261($id){
+function jmlkgs261($id)
+{
     $CI = &get_instance();
     $hasil = $CI->helpermodel->jmlkgs261($id);
-    if(count($hasil->result())==0){
+    if (count($hasil->result()) == 0) {
         // $hasil['jmlkgs'] = 0;
         $datahasil = 0;
-    }else{
+    } else {
         $hasil = $hasil->row_array();
         $datahasil = $hasil['jmlkgs'];
     }
     return $datahasil;
 }
-function getnomorbcbykontrak($kontrak,$dept='',$depttu=''){
+function getnomorbcbykontrak($kontrak, $dept = '', $depttu = '')
+{
     $CI = &get_instance();
-    $hasil = $CI->helpermodel->getnomorbcbykontrak($kontrak,$dept,$depttu);
-    if(count($hasil->result())==0){
+    $hasil = $CI->helpermodel->getnomorbcbykontrak($kontrak, $dept, $depttu);
+    if (count($hasil->result()) == 0) {
         // $hasil['jmlkgs'] = 0;
         $datahasil = 'Tidak ditemukan';
-    }else{
+    } else {
         $hasil = $hasil->row_array();
         $datahasil = $hasil['nomor_bc'];
     }
     return $datahasil;
 }
 
-function kodeimdo($id){
+function kodeimdo($id)
+{
     $CI = &get_instance();
     $hasil = $CI->helpermodel->kodeimdo($id);
-    if(count($hasil->result())==0){
+    if (count($hasil->result()) == 0) {
         // $hasil['jmlkgs'] = 0;
         $datahasil = 'Tidak ditemukan';
-    }else{
+    } else {
         $hasil = $hasil->row_array();
-        $kodeimdo = $hasil['imdo']==1 ? 'IM' : 'LO';
-        $datahasil = $kodeimdo.'-'.$hasil['kode'];
+        $kodeimdo = $hasil['imdo'] == 1 ? 'IM' : 'LO';
+        $datahasil = $kodeimdo . '-' . $hasil['kode'];
     }
     return $datahasil;
 }
 
-function cekdeptinv($dept,$tgl){
+function cekdeptinv($dept, $tgl)
+{
     $CI = &get_instance();
-    $hasil = $CI->helpermodel->cekdeptinv($dept,$tgl);
-    if(count($hasil->result())==0){
+    $hasil = $CI->helpermodel->cekdeptinv($dept, $tgl);
+    if (count($hasil->result()) == 0) {
         $datahasil = 0;
-    }else{
+    } else {
         $datahasil = 1;
     }
     return $datahasil;
 }
-function getdatabomcost($que){
+function getdatabomcost($que)
+{
     $CI = &get_instance();
     $kondisi = [
         'trim(po)' => trim($que['po']),
@@ -1125,15 +1130,15 @@ function getdatabomcost($que){
         'trim(nobale)' => trim($que['nobale']),
     ];
     $hass = [];
-    $rawsub = ['8189','6319'];
-    if(in_array($que['id_kategori'],$rawsub)){
-        $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $que['id_barang'],'trim(nobontr)' => trim($que['nobontr']),'trim(nobontr) != ' => "",'trim(nomor_bc) != ' => ""]);
-        if($datahamat->num_rows() > 0){
+    $rawsub = ['8189', '6319'];
+    if (in_array($que['id_kategori'], $rawsub)) {
+        $datahamat = $CI->db->get_where('tb_hargamaterial', ['id_barang' => $que['id_barang'], 'trim(nobontr)' => trim($que['nobontr']), 'trim(nobontr) != ' => "", 'trim(nomor_bc) != ' => ""]);
+        if ($datahamat->num_rows() > 0) {
             $hamat = $datahamat->row_array();
-            $hamat['hargarm'] = $que['id_kategori']=='8189' ? $hamat['harga_akt'] : 0;
-            $hamat['hargasm'] = $que['id_kategori']=='6319' ? $hamat['harga_akt'] : 0;
-            $hamat['price'] = $hamat['hargarm']+$hamat['hargasm'];
-        }else{
+            $hamat['hargarm'] = $que['id_kategori'] == '8189' ? $hamat['harga_akt'] : 0;
+            $hamat['hargasm'] = $que['id_kategori'] == '6319' ? $hamat['harga_akt'] : 0;
+            $hamat['price'] = $hamat['hargarm'] + $hamat['hargasm'];
+        } else {
             $hamat = [
                 'jns_bc' => NULL,
                 'nomor_bc' => NULL,
@@ -1164,37 +1169,37 @@ function getdatabomcost($que){
             'harga_acct' => $hamat['harga_akt'],
             'prod_date' => $hamat['tgl']
         ];
-        array_push($hass,$hasil);
-    }else{
-        $cekdatabom = $CI->db->get_where('ref_bom_cost',$kondisi);
-        if($cekdatabom->num_rows() == 0){
+        array_push($hass, $hasil);
+    } else {
+        $cekdatabom = $CI->db->get_where('ref_bom_cost', $kondisi);
+        if ($cekdatabom->num_rows() == 0) {
             $hasil = [];
-        }else{
+        } else {
             $databom = $cekdatabom->row_array();
             // $datadetbom = $CI->db->get_where('ref_bom_detail_cost',['id_bom' => $databom['id']]);
             $CI->db->select("*");
             $CI->db->from('ref_bom_detail_cost');
-            $CI->db->where('id_bom',$databom['id']);
-            if($que['dept_id']!='GF'){
-                $CI->db->where('persen > ',0);
+            $CI->db->where('id_bom', $databom['id']);
+            if ($que['dept_id'] != 'GF') {
+                $CI->db->where('persen > ', 0);
             }
             $datadetbom = $CI->db->get();
-            foreach($datadetbom->result_array() as $datadetbom){
+            foreach ($datadetbom->result_array() as $datadetbom) {
                 $CI->db->select('tb_hargamaterial.*,barang.id_kategori');
                 $CI->db->from('tb_hargamaterial');
-                $CI->db->join('barang','barang.id = tb_hargamaterial.id_barang','left');
-                $CI->db->where('id_barang',$datadetbom['id_barang']);
-                $CI->db->where('trim(nobontr)',trim($datadetbom['nobontr']));
-                $CI->db->where('trim(nobontr) != ',"");
-                $CI->db->where('trim(nomor_bc) != ',"");
+                $CI->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
+                $CI->db->where('id_barang', $datadetbom['id_barang']);
+                $CI->db->where('trim(nobontr)', trim($datadetbom['nobontr']));
+                $CI->db->where('trim(nobontr) != ', "");
+                $CI->db->where('trim(nomor_bc) != ', "");
                 $datahamat = $CI->db->get();
                 // $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $datadetbom['id_barang'],'trim(nobontr)' => trim($datadetbom['nobontr']),'trim(nobontr) != ' => "",'trim(nomor_bc) != ' => ""]);
-                if($datahamat->num_rows() > 0){
+                if ($datahamat->num_rows() > 0) {
                     $hamat = $datahamat->row_array();
-                    $hamat['hargarm'] = $hamat['id_kategori']=='8189' ? $hamat['harga_akt'] : 0;
-                    $hamat['hargasm'] = $hamat['id_kategori']=='6319' ? $hamat['harga_akt'] : 0;
-                    $hamat['price'] = $hamat['hargarm']+$hamat['hargasm'];
-                }else{
+                    $hamat['hargarm'] = $hamat['id_kategori'] == '8189' ? $hamat['harga_akt'] : 0;
+                    $hamat['hargasm'] = $hamat['id_kategori'] == '6319' ? $hamat['harga_akt'] : 0;
+                    $hamat['price'] = $hamat['hargarm'] + $hamat['hargasm'];
+                } else {
                     $hamat = [
                         'jns_bc' => NULL,
                         'nomor_bc' => NULL,
@@ -1212,21 +1217,58 @@ function getdatabomcost($que){
                     'urut' => $que['urut'],
                     'id_barang' => $datadetbom['id_barang'],
                     'nobontr' => $datadetbom['nobontr'],
-                    'kgs' => $que['kgs_akhir']*($datadetbom['persen']/100),
-                    'kgs_sm' => $que['kgs_akhir']*($datadetbom['persen_sm']/100),
+                    'kgs' => $que['kgs_akhir'] * ($datadetbom['persen'] / 100),
+                    'kgs_sm' => $que['kgs_akhir'] * ($datadetbom['persen_sm'] / 100),
                     'id_satuan' => $hamat['id_satuan'],
                     'jns_bc' => $hamat['jns_bc'],
                     'nomor_bc' => $hamat['nomor_bc'],
                     'tgl_bc' => $hamat['tgl_bc'],
-                    'harga_rm' => $hamat['hargarm']*($datadetbom['persen']/100),
-                    'harga_sm' => $hamat['hargasm']*($datadetbom['persen']/100),
+                    'harga_rm' => $hamat['hargarm'] * ($datadetbom['persen'] / 100),
+                    'harga_sm' => $hamat['hargasm'] * ($datadetbom['persen'] / 100),
                     'price' => $hamat['price'],
                     'harga_acct' => $hamat['harga_akt'],
                     'prod_date' => $databom['prod_date']
                 ];
-                array_push($hass,$hasil);
+                array_push($hass, $hasil);
             }
         }
     }
     return $hass;
+}
+
+function format_tanggal_indonesia_waktu($tanggal)
+{
+    $hari_indonesia = [
+        'Sunday' => 'Minggu',
+        'Monday' => 'Senin',
+        'Tuesday' => 'Selasa',
+        'Wednesday' => 'Rabu',
+        'Thursday' => 'Kamis',
+        'Friday' => 'Jumat',
+        'Saturday' => 'Sabtu'
+    ];
+
+    $bulan_indonesia = [
+        'January' => 'Januari',
+        'February' => 'Februari',
+        'March' => 'Maret',
+        'April' => 'April',
+        'May' => 'Mei',
+        'June' => 'Juni',
+        'July' => 'Juli',
+        'August' => 'Agustus',
+        'September' => 'September',
+        'October' => 'Oktober',
+        'November' => 'November',
+        'December' => 'Desember'
+    ];
+
+    $date = new DateTime($tanggal);
+    $hari = $hari_indonesia[$date->format('l')];
+    $tgl = $date->format('d');
+    $bulan = $bulan_indonesia[$date->format('F')];
+    $tahun = $date->format('Y');
+    $jam = $date->format('H:i');
+
+    return "$hari, $tgl $bulan $tahun - $jam";
 }

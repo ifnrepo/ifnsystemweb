@@ -47,8 +47,16 @@ class Rfid_out extends CI_Controller
         $draw = $this->input->post('draw');
         $search = $this->input->post('search')['value'];
 
-        $this->db->select('tb_balenumber.*');
+        $this->db->select('tb_balenumber.*, tb_packfin.nw');
         $this->db->from('tb_balenumber');
+        $this->db->join(
+            'tb_packfin',
+            'tb_packfin.po = tb_balenumber.po 
+             AND tb_packfin.item = tb_balenumber.item
+             AND tb_packfin.nobale = tb_balenumber.nobale',
+            'left'
+        );
+
 
         if ($filter_pl !== 'all' && !empty($filter_pl)) {
             $this->db->where('tb_balenumber.plno', $filter_pl);
@@ -62,7 +70,7 @@ class Rfid_out extends CI_Controller
             $this->db->group_end();
         }
 
-        $this->db->order_by('tb_balenumber.id', 'DESC');
+        $this->db->order_by('tb_balenumber.id', 'ASC');
         $this->db->limit($limit, $start);
         $data = $this->db->get()->result_array();
 
@@ -70,21 +78,48 @@ class Rfid_out extends CI_Controller
         foreach ($data as &$row) {
             $row['no'] = $no++;
             $row['plno'] = $row['plno'];
-            $row['po'] = $row['po'] . '/' . $row['item'] . ' Bale' . $row['nobale'];
-            if ($row['selesai'] == 0) {
-                $row['selesai'] = '<span class="text-danger">Belum di cek</span>';
-            } else if ($row['selesai'] == 1) {
-                $row['selesai'] = '<span class="text-success">Selesai</span>';
+            $row['po'] = $row['po'];
+            $row['item'] = $row['item'];
+            $row['nobale'] = $row['nobale'];
+            $row['berat'] = $row['nw'];
+            $selesai = $row['selesai'];
+            $status = '';
+
+            if ($selesai == 0) {
+                $status = '<div class="p-2 rounded" style="background:#fff3cd; border-left:4px solid #ffc107; font-size:12px;">
+                <strong><i class="fa fa-spinner fa-spin"></i> Waiting..</strong><br>
+              </div>';
+            } else {
+                $status = '<div class="p-2 rounded" style="background:#d4edda; border-left:4px solid #28a745; font-size:12px;">
+                <strong><i class="fa fa-check-circle"></i> Selesai</strong><br>
+                <span>Dicek Oleh: <b>' . ucwords(strtolower($row['user_ok'])) . '</b></span><br>
+                <span>Pada Tgl: ' . format_tanggal_indonesia_waktu($row['waktu_ok']) . '</span>
+              </div>';
+            }
+
+            $row['selesai'] = $status;
+
+            $row['aksi'] = '';
+
+            if ($selesai == 0) {
+                $row['aksi'] =  '
+                <a class="btn btn-sm btn-info btn-icon text-dark verifikasi"
+                    data-id="' . $row['id'] . '"
+                    data-url="' . base_url() . 'rfid_out/verifikasi/' . $row['id'] . '" href="#">
+                    <i class="fa fa-check"></i>
+                </a>';
             }
         }
 
-
-        $this->db->select('tb_balenumber.*');
+        $this->db->select('tb_balenumber.*, tb_packfin.nw');
         $this->db->from('tb_balenumber');
-
-        if ($filter_pl !== 'all' && !empty($filter_pl)) {
-            $this->db->where('tb_balenumber.plno', $filter_pl);
-        }
+        $this->db->join(
+            'tb_packfin',
+            'tb_packfin.po = tb_balenumber.po 
+             AND tb_packfin.item = tb_balenumber.item
+             AND tb_packfin.nobale = tb_balenumber.nobale',
+            'left'
+        );
 
 
         if (!empty($search)) {
@@ -109,6 +144,16 @@ class Rfid_out extends CI_Controller
         ]);
     }
 
+    public function verifikasi($id)
+    {
+        $update = $this->Rfid_outmodel->verifikasi_data($id);
+        if ($update) {
+            $this->session->set_flashdata('success', 'Data berhasil diverifikasi!');
+        } else {
+            $this->session->set_flashdata('error', 'Gagal melakukan verifikasi data.');
+        }
+        redirect('rfid_out');
+    }
 
 
     public function excel()
@@ -120,9 +165,7 @@ class Rfid_out extends CI_Controller
         $sheet = $spreadsheet->getActiveSheet();
         $sheet->setTitle('RFID OUT');
 
-        // =========================
-        // Judul + Info Filter
-        // =========================
+
         $sheet->setCellValue('A1', 'DATA RFID OUT');
         $sheet->mergeCells('A1:D1');
 
@@ -130,26 +173,25 @@ class Rfid_out extends CI_Controller
         $sheet->setCellValue('B2', ($filter_pl == 'all') ? 'ALL' : $filter_pl);
         $sheet->mergeCells('B2:D2');
 
-        // Style judul
+
         $sheet->getStyle('A1')->getFont()->setBold(true)->setSize(14);
         $sheet->getStyle('A1')->getAlignment()->setHorizontal('center');
 
-        // Style filter
+
         $sheet->getStyle('A2')->getFont()->setBold(true);
 
-        // =========================
-        // Header Tabel
-        // =========================
         $headerRow = 4;
 
         $sheet->setCellValue('A' . $headerRow, 'No');
         $sheet->setCellValue('B' . $headerRow, 'PLNO');
-        $sheet->setCellValue('C' . $headerRow, 'INPUT LIST');
-        $sheet->setCellValue('D' . $headerRow, 'STATUS');
+        $sheet->setCellValue('C' . $headerRow, 'PO');
+        $sheet->setCellValue('D' . $headerRow, 'ITEM');
+        $sheet->setCellValue('E' . $headerRow, 'NO BALE');
+        $sheet->setCellValue('F' . $headerRow, 'BERAT');
+        $sheet->setCellValue('G' . $headerRow, 'STATUS');
 
-        // Style header
-        $sheet->getStyle("A{$headerRow}:D{$headerRow}")->getFont()->setBold(true);
-        $sheet->getStyle("A{$headerRow}:D{$headerRow}")->getAlignment()->setHorizontal('center');
+        $sheet->getStyle("A{$headerRow}:G{$headerRow}")->getFont()->setBold(true);
+        $sheet->getStyle("A{$headerRow}:G{$headerRow}")->getAlignment()->setHorizontal('center');
 
 
         $rowExcel = $headerRow + 1;
@@ -157,25 +199,28 @@ class Rfid_out extends CI_Controller
 
         foreach ($data as $row) {
 
-            $status = ($row['selesai'] == 1) ? 'Selesai' : 'Belum di cek';
+            $status = ($row['selesai'] == 1) ? 'OK' : 'NG';
             $inputList = $row['po'] . '/' . $row['item'] . ' Bale ' . $row['nobale'];
 
             $sheet->setCellValue('A' . $rowExcel, $no++);
             $sheet->setCellValue('B' . $rowExcel, $row['plno']);
-            $sheet->setCellValue('C' . $rowExcel, $inputList);
-            $sheet->setCellValue('D' . $rowExcel, $status);
+            $sheet->setCellValue('C' . $rowExcel, $row['po']);
+            $sheet->setCellValue('D' . $rowExcel, $row['item']);
+            $sheet->setCellValue('E' . $rowExcel, $row['nobale']);
+            $sheet->setCellValue('F' . $rowExcel, $row['nw']);
+            $sheet->setCellValue('G' . $rowExcel, $status);
 
             $rowExcel++;
         }
 
 
-        foreach (range('A', 'D') as $col) {
+        foreach (range('A', 'G') as $col) {
             $sheet->getColumnDimension($col)->setAutoSize(true);
         }
 
 
         $lastRow = $rowExcel - 1;
-        $sheet->getStyle("A{$headerRow}:D{$lastRow}")
+        $sheet->getStyle("A{$headerRow}:G{$lastRow}")
             ->getBorders()
             ->getAllBorders()
             ->setBorderStyle(\PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN);
@@ -217,7 +262,10 @@ class Rfid_out extends CI_Controller
 
         $pdf->Cell(12, 8, 'No', 1, 0, 'C');
         $pdf->Cell(35, 8, 'PLNO', 1, 0, 'C');
-        $pdf->Cell(170, 8, 'INPUT LIST', 1, 0, 'C');
+        $pdf->Cell(35, 8, 'PO', 1, 0, 'C');
+        $pdf->Cell(35, 8, 'ITEM', 1, 0, 'C');
+        $pdf->Cell(35, 8, 'NO BALE', 1, 0, 'C');
+        $pdf->Cell(35, 8, 'BERAT', 1, 0, 'C');
         $pdf->Cell(55, 8, 'STATUS', 1, 1, 'C');
 
 
@@ -226,12 +274,15 @@ class Rfid_out extends CI_Controller
         $no = 1;
         foreach ($data as $row) {
 
-            $status = ($row['selesai'] == 1) ? 'Selesai' : 'Belum di cek';
+            $status = ($row['selesai'] == 1) ? 'OK' : 'NG';
             $inputList = $row['po'] . '/' . $row['item'] . ' Bale ' . $row['nobale'];
 
             $pdf->Cell(12, 7, $no++, 1, 0, 'C');
             $pdf->Cell(35, 7, $row['plno'], 1, 0, 'L');
-            $pdf->Cell(170, 7, $inputList, 1, 0, 'L');
+            $pdf->Cell(35, 7, $row['po'], 1, 0, 'L');
+            $pdf->Cell(35, 7, $row['item'], 1, 0, 'L');
+            $pdf->Cell(35, 7, $row['nobale'], 1, 0, 'L');
+            $pdf->Cell(35, 7, $row['nw'], 1, 0, 'L');
             $pdf->Cell(55, 7, $status, 1, 1, 'C');
         }
 
