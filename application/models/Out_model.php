@@ -650,7 +650,10 @@ class Out_model extends CI_Model{
                     }
                 }else{
                     // Untuk pengeluaran selain dari departemen GS
-                    // if ($datdet['id_barang'] == 40396) continue; // Spek KARUNG di skip
+                    // Apabila Departemen pengirim Gaichu dan Penerima adalah departemen subkon maka Stokdept untuk Karung, Besi, Rapia diabaikan
+                    if($this->session->userdata('deptsekarang')=='FG' && in_array($this->session->userdata('tujusekarang'),daftardeptsubkon()) && in_array($datdet['id_barang'],barangtidakcekstok())){
+                        continue;
+                    }
                     $cekbckeluar = $this->db->get_where('tb_header',['id' => $id])->row_array();
                     $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($cekbckeluar['keterangan']),'jns_bc' => '261','dept_id' => $cekbckeluar['dept_tuju'],'dept_tuju' => $cekbckeluar['dept_id']])->row_array();
                     $kondisistok = [

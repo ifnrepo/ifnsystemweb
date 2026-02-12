@@ -619,6 +619,18 @@ class Helper_model extends CI_Model
         }
         return $arr;
     }
+    public function barangtidakcekstok()
+    {
+        $arr = [];
+        $this->db->select('id_barang');
+        $this->db->from('tb_barangtidakstok');
+        $this->db->order_by('id');
+        $cek = $this->db->get();
+        foreach ($cek->result_array() as $value) {
+            array_push($arr, $value['id_barang']);
+        }
+        return $arr;
+    }
     public function showbom($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs)
     {
         $data = [];

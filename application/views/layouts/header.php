@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 
-  <link href=<?= base_url() . "assets/css/own-style.css?1764748054" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/own-style.css?1764748062" ?> rel="stylesheet" />
   <style>
     .ui-autocomplete {
       z-index: 99999 !important;

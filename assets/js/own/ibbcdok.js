@@ -566,10 +566,10 @@ function cekkolom(mode) {
 			pesan("Nomor peti kemas harus di isi", "error");
 			return false;
 		}
-		if ($("#kode_faktur_pajak").val() == "") {
-			pesan("Kode Faktur Pajak Harus di isi", "error");
-			return false;
-		}
+		// if ($("#kode_faktur_pajak").val() == "") {
+		// 	pesan("Kode Faktur Pajak Harus di isi", "error");
+		// 	return false;
+		// }
 	}
 	// Untuk cek BC 30
 	if ($("#jns_bc").val() == "30") {
@@ -626,18 +626,18 @@ function cekkolom(mode) {
 			return false;
 		}
 	}
-	// Untuk cek BC 40 Bukan MAKLOON
-	if ($("#jns_bc").val() == "40" ) {
-		if ($("#kode_faktur_pajak").val() == "") {
-			pesan("Kode Faktur Pajak Harus di isi", "error");
-			return false;
-		}
-	}
-	// Untuk cek BC 40 MAKLOON
+	// Untuk cek BC 40
 	if ($("#jns_bc").val() == "40" && $("#cirimakloon").text() != '') {
-		if ($("#nomorkontrak").val() == "") {
-			pesan("Nomor kontrak harus di isi", "error");
-			return false;
+		if($("#cirimakloon").text() != ''){ // BC MAKLOON
+			if ($("#nomorkontrak").val() == "") {
+				pesan("Nomor kontrak harus di isi", "error");
+				return false;
+			}
+		}else{
+			if ($("#kode_faktur_pajak").val() == "") {
+				pesan("Kode Faktur Pajak Harus di isi", "error");
+				return false;
+			}
 		}
 	}
 	if (mode != 1) {
