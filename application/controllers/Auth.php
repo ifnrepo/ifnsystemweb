@@ -91,6 +91,7 @@ class Auth extends CI_Controller
                     'cekadj' => $user['cekadj'],
                     'viewharga' => $user['view_harga'],
                     'cek_so' => $user['cek_so'],
+                    'cek_sublok' => $user['cek_sublok'],
                     'sess_ceksaw' => $user['cek_saw'],
                     'getinifn' => true
                 ];
@@ -169,6 +170,7 @@ class Auth extends CI_Controller
                     'cekadj' => $user['cekadj'],
                     'viewharga' => $user['view_harga'],
                     'cek_so' => $user['cek_so'],
+                    'cek_sublok' => $user['cek_sublok'],
                     'sess_ceksaw' => $user['cek_saw'],
                     'rfid' => $user['rfid'],
                     'getinifn' => true
