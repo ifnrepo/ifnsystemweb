@@ -15,6 +15,62 @@
   position: relative;
   overflow: hidden;
 }
+.laser-area {
+	height: 320px;
+	width: 100%;
+	border: solid gray 1px;
+	/* padding:10px 10px;  */
+	position: relative;
+	overflow: hidden;
+}
+.laser-leftTop,
+.laser-node-top-left {
+	position: absolute;
+	height: 40px;
+	width: 40px;
+	top: 0;
+	left: 0;
+	margin: 10px;
+	border-top: solid red 5px;
+	border-left: solid red 5px;
+	opacity: 0.6;
+}
+.laser-rightTop,
+.laser-node-top-right {
+	position: absolute;
+	height: 40px;
+	width: 40px;
+	top: 0;
+	right: 0;
+	margin: 10px;
+	border-top: solid red 5px;
+	border-right: solid red 5px;
+	opacity: 0.6;
+}
+.laser-rightBottom,
+.laser-node-bottom-left {
+	position: absolute;
+	height: 40px;
+	width: 40px;
+	bottom: 0;
+	left: 0;
+	margin: 10px;
+	border-bottom: solid red 5px;
+	border-left: solid red 5px;
+	opacity: 0.6;
+}
+.laser-leftBottom,
+.laser-node-bottom-right {
+	position: absolute;
+	height: 40px;
+	width: 40px;
+	bottom: 0;
+	right: 0;
+	margin: 10px;
+	border-bottom: solid red 5px;
+	border-right: solid red 5px;
+	opacity: 0.6;
+}
 .dataTables_wrapper .dataTables_paginate {
 	float: right !important;
 }

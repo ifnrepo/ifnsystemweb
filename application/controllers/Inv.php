@@ -247,7 +247,7 @@ class Inv extends CI_Controller
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
 
-        $sheet->setCellValue('A1', "INVENTORY " . $this->session->userdata('currdept')); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->setCellValue('A1', "INVENTORY " . datadepartemen($this->session->userdata('currdept'),'departemen')); // Set kolom A1 dengan tulisan "DATA SISWA"    
         $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
         $sheet->setCellValue('A2', "Periode " . tgl_indo(tglmysql($this->session->userdata('tglawal')))." s/d ".tgl_indo(tglmysql($this->session->userdata('tglakhir')))); // Set kolom A1 dengan tulisan "DATA SISWA"    
 
@@ -263,7 +263,7 @@ class Inv extends CI_Controller
         $sheet->setCellValue('I3', "OUT QTY");
         $sheet->setCellValue('J3', "OUT KGS");
         $sheet->setCellValue('K3', "ADJ QTY");
-        $sheet->setCellValue('L3', "ADJ PCS");
+        $sheet->setCellValue('L3', "ADJ KGS");
         $sheet->setCellValue('M3', "SALDO AKHIR QTY");
         $sheet->setCellValue('N3', "SALDO AKHIR KGS");
         $sheet->setCellValue('O3', "SO QTY");
@@ -271,7 +271,15 @@ class Inv extends CI_Controller
         $sheet->setCellValue('Q3', "SELISIH QTY");
         $sheet->setCellValue('R3', "SELISIH KGS");
         $sheet->setCellValue('S3', "KETERANGAN");
-        $sheet->setCellValue('T3', "KETERANGAN");
+        $sheet->setCellValue('T3', "NO BALE");
+        $sheet->setCellValue('U3', "PO");
+        $sheet->setCellValue('V3', "ITEM");
+        $sheet->setCellValue('W3', "DIS");
+        $sheet->setCellValue('X3', "ID BARANG");
+        $sheet->setCellValue('Y3', "INSNO");
+        $sheet->setCellValue('Z3', "NOBONTR");
+        $sheet->setCellValue('AA3', "STOK");
+        $sheet->setCellValue('AB3', "NOMOR BC");
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->invmodel->toexcel();
@@ -301,14 +309,24 @@ class Inv extends CI_Controller
             $sheet->setCellValue('J' . $numrow, $data['outkgs']);
             $sheet->setCellValue('K' . $numrow, $data['adjpcs']);
             $sheet->setCellValue('L' . $numrow, $data['adjkgs']);
-            $sheet->setCellValue('M' . $numrow, $data['saldopcs']+$data['inpcs']-$data['outpcs']);
-            $sheet->setCellValue('N' . $numrow, $data['saldokgs']+$data['inkgs']-$data['outkgs']);
-            $sheet->setCellValue('O' . $numrow, '-');
-            $sheet->setCellValue('P' . $numrow, '-');
-            $sheet->setCellValue('Q' . $numrow, '-');
-            $sheet->setCellValue('R' . $numrow, '-');
+            $sheet->setCellValue('M' . $numrow, $data['saldopcs']+$data['inpcs']-$data['outpcs']+$data['adjpcs']);
+            $sheet->setCellValue('N' . $numrow, $data['saldokgs']+$data['inkgs']-$data['outkgs']+$data['adjkgs']);
+            $sheet->setCellValue('O' . $numrow, $data['pcs_taking']);
+            $sheet->setCellValue('P' . $numrow, $data['kgs_taking']);
+            $selisihpcstaking = ($data['saldopcs']+$data['inpcs']-$data['outpcs']+$data['adjpcs'])-$data['pcs_taking'];
+            $selisihkgstaking = ($data['saldokgs']+$data['inkgs']-$data['outkgs']+$data['adjkgs'])-$data['kgs_taking'];
+            $sheet->setCellValue('Q' . $numrow, $selisihpcstaking);
+            $sheet->setCellValue('R' . $numrow, $selisihkgstaking);
             $sheet->setCellValue('S' . $numrow, '-');
             $sheet->setCellValue('T' . $numrow, $data['nobale']);
+            $sheet->setCellValue('U' . $numrow, $data['po']);
+            $sheet->setCellValue('V' . $numrow, $data['item']);
+            $sheet->setCellValue('W' . $numrow, $data['dis']);
+            $sheet->setCellValue('X' . $numrow, $data['kode']);
+            $sheet->setCellValue('Y' . $numrow, $data['insno']);
+            $sheet->setCellValue('Z' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('AA' . $numrow, $data['stok']);
+            $sheet->setCellValue('AB' . $numrow, $data['nomor_bc']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    
@@ -323,8 +341,9 @@ class Inv extends CI_Controller
         $sheet->setTitle(" DATA INV");
 
         // Proses file excel    
+        $filename = 'DATA INV '.str_replace('.','',datadepartemen($this->session->userdata('currdept'),'departemen'));
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="Data INV.xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');

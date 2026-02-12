@@ -193,8 +193,11 @@ class Bcmasuk extends CI_Controller
             $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
 
             if ($data['jns_bc'] == 262) {
-                $subtotal_idr = $data['exbc_ndpbm'] * $data['exbc_cif'];
-                $subtotal_usd = $subtotal_idr / $kurs_usd;
+                // $subtotal_idr = $data['exbc_ndpbm'] * $data['exbc_cif'];
+                // $subtotal_usd = $subtotal_idr / $kurs_usd;
+                $pembagi = (float) $data['in_pcs_exbc']==0 ? 1 : (float) $data['in_pcs_exbc'];
+                $subtotal_usd = ($data['exbc_cif']/$pembagi)*$data['kgs'];
+                $subtotal_idr = $subtotal_usd*$data['exbc_ndpbm'];
             } else {
                 $subtotal_idr = $harga_idr * $pengali;
                 $subtotal_usd = $harga_usd * $pengali;
@@ -236,8 +239,9 @@ class Bcmasuk extends CI_Controller
             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $filaname = 'LAPORAN BC '.$this->session->userdata('jnsbc').' # '.date('d-m-Y');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="LAPORAN BC MASUK.xlsx"');
+        header('Content-Disposition: attachment;filename="'.$filaname.'.xlsx"');
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
     }

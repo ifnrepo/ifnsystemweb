@@ -854,6 +854,13 @@ function daftardeptsubkon()
     $getkode = $CI->helpermodel->deptsubkon();
     return $getkode;
 }
+function barangtidakcekstok()
+{
+    // $xkode = trim($kode);
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->barangtidakcekstok();
+    return $getkode;
+}
 
 function nomor_dokumen($dept_id, $dept_tuju, $tb_header, $db, $tgl_input)
 {
@@ -1025,6 +1032,9 @@ function getquerytujuanout($kode, $val, $ke = 0)
 }
 function getkurssekarang($date = '')
 {
+    if($date=='0000-00-00' || $date==''){
+        $date = '1970-01-01';
+    }
     $CI = &get_instance();
     $getkode = $CI->helpermodel->getkurssekarang($date);
     return $getkode;

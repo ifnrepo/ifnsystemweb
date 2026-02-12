@@ -2352,7 +2352,7 @@ class Akb extends CI_Controller
                 "hargaPerolehan" => 0,
                 "isiPerKemasan" => 0,
                 "jumlahKemasan" => (float) $detx['qty'],
-                "jumlahSatuan" => (float) $detx['pcs'],
+                "jumlahSatuan" => $detx['id_satuan']==22 ? (float) $detx['kgs'] :(float) $detx['pcs'],
                 "kodeAsalBahanBaku" => "1",
                 "kodeBarang" => $kodebarang,
                 "kodeDokumen" => "",

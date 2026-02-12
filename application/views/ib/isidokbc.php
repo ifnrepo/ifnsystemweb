@@ -500,6 +500,7 @@
                                         <div class="col">
                                             <select class="form-select font-kecil font-bold btn-flat" name="kode_faktur_pajak" id="kode_faktur_pajak" <?= $selectnonaktif; ?>>
                                                 <option value="">Pilih Kode Faktur</option>
+                                                <option value="000" <?php if($datheader['kode_faktur_pajak']=='000'){ echo "selected"; } ?>>000 - Tanpa Faktur Pajak</option>
                                                 <option value="040" <?php if($datheader['kode_faktur_pajak']=='040'){ echo "selected"; } ?>>040 - Pajak Dibayar</option>
                                                 <option value="070" <?php if($datheader['kode_faktur_pajak']=='070'){ echo "selected"; } ?>>070 - Pajak Ditangguhkan</option>
                                             </select>
