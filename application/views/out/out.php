@@ -127,7 +127,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div class="mt-2">
-          <table id="pbtabel" class="table nowrap order-column datatable" style="width: 100% !important;">
+          <table id="pbtabel" class="table nowrap order-column datatable table-hover" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Tgl</th>

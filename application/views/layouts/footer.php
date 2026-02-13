@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1770802518'; ?>
+<?php $updatejs = '1770802519'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -160,6 +160,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'setcost') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/setcost.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'lockinv') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/lockinv.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'sublok') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/webcam/qrcodelib.js?<?= $updatejs ?>"></script>
