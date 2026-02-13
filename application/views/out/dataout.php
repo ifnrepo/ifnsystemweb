@@ -134,6 +134,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </tbody>
               </table>
             </div>
+            <div class="text-end text-primary" id="jumtotdet">
+
+            </div>
           </div>
         </div>
         <hr class="m-1">

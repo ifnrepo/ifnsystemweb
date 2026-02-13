@@ -104,6 +104,7 @@ class Out extends CI_Controller {
         $id = $_POST['id_header'];
         $query = $this->out_model->getdatadetailout($id);
         $jumlah=0;
+        $jumtotdet=0;
         $deptinsno = ['GP','RR'];
         if($query->num_rows() > 0){
             foreach ($query->result_array() as $que) {
@@ -118,6 +119,7 @@ class Out extends CI_Controller {
                 // if($this->session->userdata('deptsekarang')=='NT'){
                     $infoinsno = "<br><span class='text-teal font-kecil'>".$que['insno']."</span>";
                 // }
+                $jumtotdet += $que['kgs'];
                 $hasil .= "<tr>";
                 $hasil .= "<td style='line-height: 12px !important; vertical-align: middle;' ><a class='".$tandakurang."' href='".base_url().'out/getdatadetail/'.$que['id_header']."/".$que['id']."' data-bs-toggle='modal' data-bs-target='#modal-large-loading' data-title='Data Detail Barang : ".$que['nama_barang'].$que['spek'].$nobale."'>".$que['seri_barang'].'. '.$nmbarang.$infoinsno."</a></td>";
                 $hasil .= "<td>".$sku."</td>";
@@ -155,7 +157,7 @@ class Out extends CI_Controller {
         }else{
             $hasil .= "<tr class='text-center'><td colspan='7'>-- Barang Kosong --</td></tr>";
         }
-        $cocok = array('datagroup' => $hasil,'jmlrek' => $jumlah);
+        $cocok = array('datagroup' => $hasil,'jmlrek' => $jumlah,'jumtotdet' => $jumtotdet);
         echo json_encode($cocok);
     }
     public function getdatadetail($id,$id2){
@@ -618,9 +620,9 @@ class Out extends CI_Controller {
             $kgstemp += round($k['kgs'],2);
         }
 
-        if(($kgstemp != $kgsdetail) && $cekdataheader['taksama']==0){
+        if((round($kgstemp,2) != $kgsdetail) && $cekdataheader['taksama']==0){
             $this->session->set_flashdata('errorsimpan',1);
-            $this->session->set_flashdata('pesanerror',"(Error) Kgs detail tidak sama dengan Kgs Header");
+            $this->session->set_flashdata('pesanerror',"(Error) Kgs detail (".$kgstemp.") tidak sama dengan Kgs Header (".$kgsdetail.")");
             $url = base_url().'out/editdetailgenout/'.$detail.'/'.$head.'/1';
             redirect($url);
         }else{

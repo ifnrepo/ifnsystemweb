@@ -119,6 +119,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </tbody>
               </table>
             </div>
+            <div id="jmltotdet" class="text-end text-primary">
+                Total : <?= $totkgs ?>
+            </div>
           </div>
         </div>
         <hr class="m-1">
