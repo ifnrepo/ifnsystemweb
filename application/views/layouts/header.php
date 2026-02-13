@@ -158,6 +158,7 @@
               <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
                   Tidak
                 </a></div>
+                <!--  -->
             </div>
           </div>
         </div>
@@ -841,7 +842,7 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 1); ?>" href="<?= base_url('userapps'); ?>">
                       Setting User
                     </a>
-                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 2); ?>" href="<?= base_url('lockinv'); ?>">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('manajemen'), 2); ?>" href="<?= base_url('lockinv/clear'); ?>">
                       Close Book Inventory
                     </a>
                   </div>

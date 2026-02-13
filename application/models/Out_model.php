@@ -715,7 +715,7 @@ class Out_model extends CI_Model{
             }
         }else{
             $iniquery = true;
-            $this->session->set_flashdata('errornya','Data detail atau detailgen kosong, HUBUNGI PROGRAMMER !');
+            $this->session->set_flashdata('errornya','Data detail atau detailgen kosong, HUBUNGI PPIC !');
         }
         // Cek data temp yang akan dibuat BBL
         $datacekbbl = $this->db->get_where('tb_detail',['id_header'=>$id,'tempbbl'=>1]);

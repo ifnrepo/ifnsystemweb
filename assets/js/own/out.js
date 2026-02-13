@@ -164,10 +164,11 @@ function getdatadetailout() {
 			id_header: $("#id_header").val(),
 		},
 		success: function (data) {
-			// alert(data.jmlrek);
+			// alert(data.jumtotdet);
 			// window.location.reload();
 			$("#body-table").html(data.datagroup).show();
 			$("#jmlrek").val(data.jmlrek);
+			$("#jumtotdet").html('Total Kgs : '+rupiah(data.jumtotdet,'.',',',2));
 			if (data.jmlrek == 0) {
 				$("#xsimpanout").addClass("disabled");
 			}

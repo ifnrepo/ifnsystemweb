@@ -6,7 +6,13 @@ class Lockinvmodel extends CI_Model
         $this->db->select('tb_lockinv.*, user.name');
         $this->db->from('tb_lockinv');
         $this->db->join('user', 'user.id = tb_lockinv.dibuat_oleh', 'left');
-        $this->db->order_by('periode','DESC');
+        if($this->session->userdata('bllock')!=''){
+            if($this->session->userdata('bllock')!='all'){
+                $this->db->where('left(periode,2)',$this->session->userdata('bllock'));
+            }
+        }
+        $this->db->where('right(trim(periode),4)',$this->session->userdata('thlock'));
+        $this->db->order_by('periode','AS');
         return $this->db->get()->result_array();
     }
     public function tambah($data){

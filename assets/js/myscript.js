@@ -55,6 +55,9 @@ $(document).ready(function () {
 	// 	format: 'dd-mm-yyyy',
 	// 	startDate: '-1d'
 	// })
+	$("#btn-ok").click(function(){
+		$(this).html('<i class="fa fa-circle-o-notch fa-spin fa-fw mr-2"></i> Loading ..');
+	})
 	$(".datatableasli").DataTable({
 		language: {
 			paginate: {
