@@ -6,7 +6,7 @@ class Rfid_outmodel extends CI_Model
         $this->db->select("plno");
         $this->db->from('tb_balenumber');
         $this->db->group_by('plno');
-        $this->db->order_by('plno', 'ASC');
+        $this->db->order_by('plno', 'DESC');
         return $this->db->get()->result_array();
     }
 
@@ -32,9 +32,17 @@ class Rfid_outmodel extends CI_Model
 
     public function verifikasi_data($id)
     {
-        $this->db->set('selesai', 1);
-        $this->db->set('user_ok', $this->session->userdata('name'));
+        $this->db->set('masuk', 1);
+        $this->db->set('user_ok', $this->session->userdata('username'));
         $this->db->set('waktu_ok', date('Y-m-d H:i'));
+        $this->db->where('id', $id);
+        return $this->db->update('tb_balenumber');
+    }
+    public function verifikasi_selesai($id)
+    {
+        $this->db->set('selesai', 1);
+        // $this->db->set('user_ok', $this->session->userdata('username'));
+        // $this->db->set('waktu_ok', date('Y-m-d H:i'));
         $this->db->where('id', $id);
         return $this->db->update('tb_balenumber');
     }
