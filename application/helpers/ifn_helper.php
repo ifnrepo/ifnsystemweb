@@ -1032,7 +1032,7 @@ function getquerytujuanout($kode, $val, $ke = 0)
 }
 function getkurssekarang($date = '')
 {
-    if($date=='0000-00-00' || $date==''){
+    if ($date == '0000-00-00' || $date == '') {
         $date = '1970-01-01';
     }
     $CI = &get_instance();
