@@ -381,3 +381,65 @@ class PDF_Kontrak extends FPDF
         $this->Cell(0, 10, 'Halaman ' . $this->PageNo(), 0, 0, 'C');
     }
 }
+
+class PDF_CONTAINER extends FPDF
+{
+    public $filter_pl = 'all';
+
+    function Header()
+    {
+        $startX = $this->GetX();
+        $startY = $this->GetY();
+        $headerHeight = 24;
+
+        $this->Cell(60, $headerHeight, '', 1, 0, 'C');
+        $this->Image(FCPATH . 'assets/image/new1.jpg', $startX + 18, $startY + 2, 25);
+        $this->SetXY($startX, $startY + 18);
+        $this->SetFont('Arial', 'B', 9);
+        $this->Cell(60, 5, 'PT. Indoneptune Net Mfg.', 0, 0, 'C');
+
+
+        $this->SetXY($startX + 60, $startY);
+        $this->SetFont('Arial', 'B', 18);
+        $this->Cell(110, $headerHeight, 'LIST NUMBER of BALE', 1, 0, 'C');
+
+
+        $this->SetFont('Arial', '', 9);
+        $currentX = $this->GetX();
+        $this->Cell(45, 8, 'Mengetahui', 1, 0, 'C');
+        $this->Cell(60, 8, ' No. Dok.  : FM-GD-10', 1, 1, 'L');
+
+        $this->SetX($currentX);
+        $this->SetFont('Arial', '', 8);
+        $this->Cell(22.5, 16, 'Spv Marketing', 1, 0, 'C');
+        $this->Cell(22.5, 16, 'Spv Gudang', 1, 0, 'C');
+        $this->SetFont('Arial', '', 9);
+        $this->Cell(60, 8, ' Revisi      : 0', 1, 1, 'L');
+
+        $this->SetX($currentX + 45);
+        $this->Cell(60, 8, ' Tanggal    : 24-05-2007', 1, 1, 'L');
+
+        $this->Ln(5);
+
+
+        $this->SetFont('Arial', '', 10);
+        $this->Cell(14, 7, 'PLNO :', 0, 0, 'L');
+        $this->Cell(0, 7, ($this->filter_pl == 'all') ? 'ALL' : $this->filter_pl, 0, 1, 'L');
+
+        $this->Ln(3);
+
+
+        $this->SetFont('Arial', 'B', 10);
+        $this->Cell(12, 8, 'No', 1, 0, 'C');
+        $this->Cell(35, 8, 'PLNO', 1, 0, 'C');
+        $this->Cell(35, 8, 'PO', 1, 0, 'C');
+        $this->Cell(80, 8, 'SPEK', 1, 0, 'C');
+        $this->Cell(15, 8, 'PCS', 1, 0, 'C');
+        $this->Cell(15, 8, 'ITEM', 1, 0, 'C');
+        $this->Cell(25, 8, 'BALE', 1, 0, 'C');
+        $this->Cell(25, 8, 'BERAT', 1, 0, 'C');
+        $this->Cell(33, 8, 'MEAS', 1, 1, 'C');
+
+        $this->SetFont('Arial', '', 9);
+    }
+}

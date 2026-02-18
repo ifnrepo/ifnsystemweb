@@ -20,126 +20,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         <div class="card">
             <div class="card-body">
-                <!-- <div class="card card-active mb-2">
-                    <div class="row align-items-end g-2" style="margin: 10px;">
-                        <div class="col-12 col-md-4 col-lg-2">
-                            <label class="font-kecil font-bold text-azure text-primary">Pilih Exdo</label>
-                            <select name="filter_exdo" id="filter_exdo" class="form-select font-kecil mt-0">
-                                <option value="all" <?= $filter_exdo == 'all' ? 'selected' : '' ?>>Semua</option>
-                                <option class="text-dark" value="EXPORT" <?= $filter_exdo == 'EXPORT'  ? 'selected' : '' ?>>EXPORT</option>
-                                <option class="text-dark" value="DOMESTIC" <?= $filter_exdo == 'DOMESTIC'  ? 'selected' : '' ?>>DOMESTIC</option>
-                            </select>
-                        </div>
-
-                        <div class="col-12 col-md-4 col-lg-2">
-                            <label class="font-kecil font-bold text-azure text-primary">Pilih PLNO</label>
-                            <select name="filter" id="filter" class="form-select font-kecil">
-                                <option value="all" <?= $filter_pl == 'all' ? 'selected' : '' ?>>Semua</option>
-                                <?php foreach ($plno as $no) : ?>
-                                    <option value="<?= $no['plno']; ?>" <?= $filter_pl == $no['plno'] ? 'selected' : ''  ?>>
-                                        <?= $no['plno']; ?>
-                                    </option>
-                                <?php endforeach; ?>
-                            </select>
-                        </div>
-                        <div class=" col-12 col-md-4 col-lg-2">
-                            <label class="font-kecil font-bold text-azure text-primary">Cek Masuk</label>
-                            <select name="filter_cekmasuk" id="filter_cekmasuk" class="form-select font-kecil mt-0">
-                                <option value="all" <?= $filter_cekmasuk == 'all' ? 'selected' : '' ?>>Semua</option>
-                                <option value="0" <?= $filter_cekmasuk == 0  ? 'selected' : '' ?>>Verify</option>
-                                <option value="1" <?= $filter_cekmasuk == 1  ? 'selected' : '' ?>>Noted</option>
-
-                            </select>
-                        </div>
-                        <div class=" col-12 col-md-4 col-lg-2">
-                            <label class="font-kecil font-bold text-azure text-primary">Cek Selesai</label>
-                            <select name="filter_selesai" id="filter_selesai" class="form-select font-kecil mt-0">
-                                <option value="all" <?= $filter_selesai == 'all' ? 'selected' : '' ?>>Semua</option>
-                                <option value="0" <?= $filter_selesai == 0  ? 'selected' : '' ?>>Waiting</option>
-                                <option value="1" <?= $filter_selesai == 1  ? 'selected' : '' ?>>Complite</option>
-
-                            </select>
-                        </div>
-
-                        <div class="col-12 col-md-4 col-lg-4 ">
-                            <div class="d-flex flex-wrap gap-2 justify-content-md-end">
-                                <a href="<?= base_url() . 'rfid_out/excel'; ?>" class="btn btn-success btn-sm">
-                                    <i class="fa fa-file-excel-o"></i>
-                                    <span class="ms-1">Export To Excel</span>
-                                </a>
-
-                                <a href="<?= base_url() . 'rfid_out/pdf'; ?>" target="_blank" class="btn btn-danger btn-sm">
-                                    <i class="fa fa-file-pdf-o"></i>
-                                    <span class="ms-1">Export To PDF</span>
-                                </a>
-                            </div>
-                            <div class="row" style="font-size: 12px; text-align:right;">
-                                <div class="col-lg-6">
-                                    <span class="text-primary">
-                                        Total Record:
-                                        <span style="text-decoration:underline;" class="text-success" id="totalFiltered"></span>
-                                    </span> <br>
-                                    <span class="text-primary">
-                                        Total Berat:
-                                        <span style="text-decoration:underline;" class="text-success" id="total_nw"></span>
-                                    </span> <br>
-                                </div>
-                                <div class="col-lg-6">
-                                    <span class="text-primary">
-                                        Total pcs :
-                                        <span style="text-decoration:underline;" class="text-success" id="total_pcs"></span>
-                                    </span> <br>
-                                    <span class="text-primary">
-                                        Total Meas:
-                                        <span style="text-decoration:underline;" class="text-success" id="total_meas"></span>
-                                    </span>
-                                </div>
-                            </div>
-
-
-
-
-                        </div>
-                    </div>
-
-                    <div class="row align-items-end g-2" style="margin: 5px;">
-                        <div class="col-lg-3">
-
-                        </div>
-                    </div>
-
-                </div> -->
                 <div class="card border-0 shadow-sm mb-4">
                     <div class="card-body">
-                        <!-- <div class="row g-3 mb-4">
-                            <div class="col-6 col-md-3">
-                                <div class="p-3 border-start border-primary border-4 bg-light rounded shadow-sm">
-                                    <small class="text-muted d-block mb-1">Total Record</small>
-                                    <h5 class="fw-bold text-primary mb-0" id="totalFiltered">0</h5>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <div class="p-3 border-start border-success border-4 bg-light rounded shadow-sm">
-                                    <small class="text-muted d-block mb-1">Total Pcs</small>
-                                    <h5 class="fw-bold text-success mb-0" id="total_pcs">0</h5>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <div class="p-3 border-start border-info border-4 bg-light rounded shadow-sm">
-                                    <small class="text-muted d-block mb-1">Total Berat</small>
-                                    <h5 class="fw-bold text-info mb-0" id="total_nw">0</h5>
-                                </div>
-                            </div>
-                            <div class="col-6 col-md-3">
-                                <div class="p-3 border-start border-warning border-4 bg-light rounded shadow-sm">
-                                    <small class="text-muted d-block mb-1">Total Meas</small>
-                                    <h5 class="fw-bold text-warning mb-0" id="total_meas">0</h5>
-                                </div>
-                            </div>
-                        </div> -->
-                        <hr class="opacity-50 mb-4">
-                        <div class="row align-items-end g-3">
+                        <div class="text-right">
+                            <a href="<?= base_url('rfid_out') ?>" class="btn btn-primary btn-sm">
+                                <i class="fa fa-refresh"></i>
+                                <span class="ms-1">Refresh</span>
+                            </a>
+                        </div>
 
+                        <div class="row align-items-end g-3">
                             <div class="col-12 col-sm-6 col-md-2">
                                 <label class="form-label fw-bold text-primary small">Pilih PLNO</label>
                                 <select name="filter" id="filter" class="form-select form-select-sm">
@@ -166,8 +56,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <label class="form-label fw-bold text-primary small">Cek Masuk</label>
                                 <select name="filter_cekmasuk" id="filter_cekmasuk" class="form-select form-select-sm">
                                     <option value="all" <?= $filter_cekmasuk == 'all' ? 'selected' : '' ?>>Semua</option>
-                                    <option value="0" <?= $filter_cekmasuk == 0 ? 'selected' : '' ?>>Verify</option>
-                                    <option value="1" <?= $filter_cekmasuk == 1 ? 'selected' : '' ?>>Noted</option>
+                                    <option value="0" <?= $filter_cekmasuk == 0 ? 'selected' : '' ?>>Waiting</option>
+                                    <option value="1" <?= $filter_cekmasuk == 1 ? 'selected' : '' ?>>Verified</option>
                                 </select>
                             </div>
 
@@ -188,12 +78,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <a href="<?= base_url() . 'rfid_out/pdf'; ?>" target="_blank" class="btn btn-outline-danger btn-sm px-3">
                                         <i class="fa fa-file-pdf-o me-1"></i> PDF
                                     </a> -->
-                                    <a href="#" class="btn btn-success btn-sm">
+
+                                    <a href="<?= base_url() . 'rfid_out/excel'; ?>" class="btn btn-success btn-sm">
                                         <i class="fa fa-file-excel-o"></i>
                                         <span class="ms-1">Export To Excel</span>
                                     </a>
 
-                                    <a href="#" class="btn btn-danger btn-sm">
+                                    <a href="<?= base_url() . 'rfid_out/pdf'; ?>" target="_blank" class="btn btn-danger btn-sm">
                                         <i class="fa fa-file-pdf-o"></i>
                                         <span class="ms-1">Export To PDF</span>
                                     </a>
@@ -245,7 +136,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Meas</th>
                                 <th>Cek Masuk</th>
                                 <th>Cek Selesai</th>
-                                <th>Aksi</th>
+                                <!-- <th>Aksi</th> -->
                             </tr>
                         </thead>
                         <tbody class="table-tbody" style="font-size: 13px !important;">
@@ -382,9 +273,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 {
                     data: 'selesai'
                 },
-                {
-                    data: 'aksi'
-                },
+                // {
+                //     data: 'aksi'
+                // },
             ],
             columnDefs: [{
                 targets: 1,
