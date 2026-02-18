@@ -57,7 +57,7 @@ class Rfid_out extends CI_Controller
         $search = $this->input->post('search')['value'];
 
 
-        $this->db->select('tb_balenumber.*, tb_packfin.nw, tb_packfin.pcs, tb_packfin.meas , tb_po.spek');
+        $this->db->select('tb_balenumber.*, tb_packfin.gw as nw , tb_packfin.pcs, tb_packfin.meas , tb_po.spek');
         $this->db->from('tb_balenumber');
 
         $this->db->join(
@@ -223,7 +223,7 @@ class Rfid_out extends CI_Controller
 
         // sum nw
 
-        $this->db->select('SUM(tb_packfin.nw) as total_nw');
+        $this->db->select('SUM(tb_packfin.gw) as total_nw');
         $this->db->from('tb_balenumber');
 
         $this->db->join(

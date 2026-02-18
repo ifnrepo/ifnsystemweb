@@ -1892,7 +1892,7 @@ class Ib extends CI_Controller
             // print_r($databalik);
             $this->session->set_flashdata('errorsimpan', 1);
             $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . var_dump($databalik['Exception']));
-            // $this->session->set_flashdata('pesanerror',print_r($databalik));
+            // $this->session->set_flashdata('pesanerror',$databalik);
             $url = base_url() . 'ib/isidokbc/' . $id . $tmb;
             redirect($url);
         }
