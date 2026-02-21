@@ -203,6 +203,32 @@ class Ib_model extends CI_Model
         WHERE kode_dok = 'IB' AND dept_tuju = '" . $this->session->userdata('depttuju') . "' AND nomor_dok like '%PROFORMA%' ")->row_array();
         return $hasil;
     }
+    public function isiadditionaldetail($id){
+        $this->db->trans_start();
+        $header = $this->getdatabyid($id);
+        $nilaihead = $header['nilai_additional'];
+        $detail = $this->getdatadetailib($id);
+        if(count($detail) > 0){
+            $countadd = 0;
+            $arrdet = [];
+            foreach($detail as $dt){
+                $nilaiadd = round(($dt['harga']/$header['nilai_pab'])*$header['nilai_additional'],2);
+                $this->db->where('id',$dt['id']);
+                $this->db->update('tb_detail',['additional' => $nilaiadd]);
+                $arrdet[] = $dt['id'];
+                $countadd += $nilaiadd;
+            }
+            if($nilaihead != $countadd){
+                $diff = $nilaihead - $countadd;
+                $cariarray = ceil(count($arrdet)/2)-1;
+                $additional = $this->db->get_where('tb_detail',['id' => $arrdet[$cariarray] ])->row_array();
+
+                $this->db->where('id',$arrdet[$cariarray]);
+                $this->db->update('tb_detail',['additional' => $additional['additional'] + (float) $diff]);
+            }
+        }
+        return $this->db->trans_complete();
+    }
     public function tambahdataib()
     {
         $this->db->trans_start();

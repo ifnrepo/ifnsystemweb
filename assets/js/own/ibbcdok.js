@@ -307,6 +307,16 @@ $("#tg_jawab").blur(function () {
 $("#jabat_tg_jawab").blur(function () {
 	savedata("jabat_tg_jawab", $(this).val());
 });
+$("#nilai_additional").on("keypress", function (e) {
+	if (e.keyCode == 13) {
+		savedata("nilai_additional", toAngka($(this).val()));
+		$("#nilai_additional").blur();
+	}
+});
+$("#nilai_additional").blur(function () {
+	savedata("nilai_additional", toAngka($(this).val()));
+	hitungdevisa();
+});
 $("#nilai_pab").on("keypress", function (e) {
 	if (e.keyCode == 13) {
 		savedata("nilai_pab", toAngka($(this).val()));
@@ -480,7 +490,7 @@ function cekkolom(mode) {
 				return false;
 			}
 		}else{
-			if ($("#sumdetail").val() != $("#nilai_pab").val()) {
+			if ($("#sumdetail").val() != $("#jumlahcif").val()) {
 				// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
 				pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
 				return false;
@@ -741,18 +751,20 @@ function hitungdevisa() {
 	// alert(xu);
 	switch (xu) {
 		case "1": //IDR
-			tothar = parseFloat(toAngka($("#nilai_pab").val()));
+			tothar = parseFloat(toAngka($("#nilai_pab").val()))+parseFloat(toAngka($("#nilai_additional").val()));
 			devidr = parseFloat(toAngka($("#kurs_idr").val()));
 			devusd = parseFloat(toAngka($("#kurs_usd").val()));
 			$("#devisa_usd").val(rupiah(tothar / devusd, ".", ",", 3));
 			$("#devisa_idr").val(rupiah(tothar * devidr, ".", ",", 2));
+			$("#jumlahcif").val(rupiah(tothar, ".", ",", 2))
 			break;
-		case "2": //USD
-			tothar = parseFloat(toAngka($("#nilai_pab").val()));
+			case "2": //USD
+			tothar = parseFloat(toAngka($("#nilai_pab").val()))+parseFloat(toAngka($("#nilai_additional").val()));
 			devidr = parseFloat(toAngka($("#kurs_idr").val()));
 			devusd = parseFloat(toAngka($("#kurs_usd").val()));
 			$("#devisa_idr").val(rupiah(tothar * devusd, ".", ",", 3));
 			$("#devisa_usd").val(rupiah(tothar / devidr, ".", ",", 2));
+			$("#jumlahcif").val(rupiah(tothar, ".", ",", 2))
 			break;
 		default:
 			break;

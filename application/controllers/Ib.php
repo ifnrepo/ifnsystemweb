@@ -1175,6 +1175,20 @@ class Ib extends CI_Controller
             echo json_encode($cocok);
         }
     }
+    public function isiadditionaldetail($id){
+        $header = $this->ibmodel->getdatabyid($id);
+        // if($header['nilai_additional']==0){
+        //     $this->session->set_flashdata('errorsimpan', 1);
+        //     $this->session->set_flashdata('pesanerror', 'Jumlah Additional harus di isi');
+        //     $url = base_url().'ib/isidokbc/'.$id;
+        //     redirect($url);
+        // }
+        $hasil = $this->ibmodel->isiadditionaldetail($id);
+        if($hasil){
+            $url = base_url().'ib/isidokbc/'.$id;
+            redirect($url);
+        }
+    }
     function kirimdatakeceisa40($id)
     {
         $data = $this->ibmodel->getdatabyid($id);
@@ -1370,7 +1384,7 @@ class Ib extends CI_Controller
             "ndpbm" => (float) $data['kurs_usd'],
             "netto" => (float) $data['netto'],
             "nik" => "",
-            "nilaiBarang" => (float) $data['nilai_pab'],
+            "nilaiBarang" => (float) $data['nilai_pab'] + (float) $data['nilai_additional'],
             "nomorAju" => $noaju,
             "nomorBc11" => $data['bc11'],
             "posBc11" => $data['nomor_posbc11'],
@@ -1486,18 +1500,18 @@ class Ib extends CI_Controller
         foreach ($datadet as $detx) {
             $no++;
             $jumlah = $detx['kodesatuan'] == 'KGS' ? $detx['kgs'] : $detx['pcs'];
-            $cifrupiah = (float) $data['kurs_usd'] * ($detx['harga'] * $jumlah);
+            $cifrupiah = (float) $data['kurs_usd'] * ($detx['harga']+$detx['additional'] * $jumlah);
             $arrayke = [
                 "seriBarang" => $no,
                 "asuransi" => 0,
-                "cif" => (float) $detx['harga'] * $jumlah,
+                "cif" => ((float) $detx['harga']+(float) $detx['harga']) * $jumlah,
                 "diskon" => 0,
                 "fob" => 0,
                 "freight" => 0,
                 "hargaEkspor" => 0,
-                "hargaSatuan" => (float) $detx['harga'],
+                "hargaSatuan" => (float) $detx['harga']+(float) $detx['additional'],
                 "bruto" => 0,
-                "hargaPenyerahan" => (float) $detx['harga'] * $jumlah,
+                "hargaPenyerahan" => ((float) $detx['harga']+(float) $detx['additional']) * $jumlah,
                 "jumlahSatuan" => (int) $jumlah,
                 "kodeBarang" => $detx['brg_id'],
                 "kodeDokumen" => "40",
@@ -1518,7 +1532,7 @@ class Ib extends CI_Controller
                 "uraian" => "",
                 "ndpbm" => (float) $data['kurs_usd'],
                 "cifRupiah" => $cifrupiah,
-                "hargaPerolehan" => (float) $detx['harga'] * $jumlah,
+                "hargaPerolehan" => ((float) $detx['harga']+(float) $detx['additional']) * $jumlah,
                 "kodeAsalBahanBaku" => "0",
                 "volume" => 0,
                 "jumlahKemasan" => (int) $data['jml_kemasan'],
