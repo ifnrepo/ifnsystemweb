@@ -534,11 +534,24 @@
                                                     <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'], 2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
+                                            <?php 
+                                                $hilangtomboladdkontrak = $datheader['nomorkontrak']==NULL && $datheader['send_ceisa']==0 ? '' : 'hilang';  
+                                                $hilangtombolhapuskontrak = $datheader['nomorkontrak']!=NULL && $datheader['send_ceisa']==0  ? '' : 'hilang';  
+                                            ?>
+                                            <div class="mb-1 mt-1 row <?= $hilangbc40; ?><?= $hilangbc262; ?>">
+                                                <label class="col-3 col-form-label font-kecil"></label>
+                                                <div class="col text-right">
+                                                  <label class="col-form-label font-kecil">Additional</label>
+                                                </div>
+                                                <div class="col">
+                                                    <div class="input-group">
+                                                    <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_additional" name="nilai_additional" value="<?= rupiah($datheader['nilai_additional'], 2); ?>" aria-describedby="emailHelp" placeholder="Nilai Additional" <?= $nonaktif; ?>>
+                                                    <a href="#" data-href="<?= base_url().'ib/isiadditionaldetail/'.$datheader['id'] ?>" class="btn btn-yellow font-kecil btn-flat text-black <?= $hilangtomboladdkontrak; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Menambah nilai ini ke Detail Barang" title="Add to Detail Barang" >Add</a>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <input type="text" name="jumlahcif" id="jumlahcif" class="hilang" value="<?= rupiah($datheader['nilai_pab']+$datheader['nilai_additional'],2) ?>">
                                             <div class="mb-1 row">
-                                                <?php 
-                                                    $hilangtomboladdkontrak = $datheader['nomorkontrak']==NULL && $datheader['send_ceisa']==0 ? '' : 'hilang';  
-                                                    $hilangtombolhapuskontrak = $datheader['nomorkontrak']!=NULL && $datheader['send_ceisa']==0  ? '' : 'hilang';  
-                                                ?>
                                                 <label class="col-3 col-form-label font-kecil">Nomor Kontrak</label>
                                                 <div class="col">
                                                     <div class="input-group mb-2">
@@ -672,7 +685,7 @@
                                 foreach ($header as $data) {
                                     $no++;
                                     $jumlah = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
-                                    $sumdetail += $mode == 0 ? $data['harga'] * $jumlah : $data['xcif'] * $data['xndpbm'];
+                                    $sumdetail += $mode == 0 ? round(($data['harga']+$data['additional']) * $jumlah,2) : $data['xcif'] * $data['xndpbm'];
                                     $sumpcs += $mode == 0 ? $data['pcs'] : $data['pcsx'];
                                     $sumkgs += $mode == 0 ? $data['kgs'] : $data['kgsx'];
                                     $spekbarang = trim($data['po']) == '' ? $data['nama_barang'] : spekpo($data['po'], $data['item'], $data['dis']);
@@ -694,8 +707,8 @@
                                         <?php if ($mode == 0) { ?>
                                             <td class="text-right"><?= rupiah($data['pcs'], 0); ?></td>
                                             <td class="text-right" id="kgss<?= $data['id'] ?>"><?= rupiah($data['kgs'], 2); ?></td>
-                                            <td class="text-right"><?= rupiah($data['harga'], 2); ?></td>
-                                            <td class="text-right"><?= rupiah($data['harga'] * $jumlah, 2); ?></td>
+                                            <td class="text-right"><?= rupiah($data['harga']+$data['additional'], 2); ?></td>
+                                            <td class="text-right"><?= rupiah(($data['harga']+$data['additional']) * $jumlah, 2); ?></td>
                                         <?php } else { ?>
                                             <?php $datkgs = $data['kgsx'] == 0 ? 1 : $data['kgsx']; ?>
                                             <td class="text-right"><?= rupiah($data['pcsx'], 0); ?></td>
