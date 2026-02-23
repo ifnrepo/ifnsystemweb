@@ -551,6 +551,8 @@
                                                     <input type="text" class="form-control font-kecil btn-flat inputangka text-right" id="nilai_pab" name="nilai_pab" value="<?= rupiah($datheader['nilai_pab'], 2); ?>" aria-describedby="emailHelp" placeholder="Nilai Pabean" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
+                                            <input type="text" class="form-control font-kecil btn-flat inputangka hilang" id="nilai_additional" name="nilai_additional" value="<?= rupiah($datheader['nilai_additional'], 2); ?>" aria-describedby="emailHelp" placeholder="Nilai Additional">
+                                            <input type="text" name="jumlahcif" id="jumlahcif" class="hilang" value="<?= rupiah($datheader['nilai_pab']+$datheader['nilai_additional'],2) ?>">
                                             <div class="mb-1 row <?= $hilangbc261 ?>">
                                                 <label class="col-3 col-form-label font-kecil mx-2">Nilai Penyerahan</label>
                                                 <div class="col">
