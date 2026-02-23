@@ -243,9 +243,14 @@ class Kontrak extends CI_Controller
         $prevLeft  = ['tgl_bc' => '', 'nomor_bc' => ''];
         $prevRight = ['tgl_bc' => '', 'nomor_bc' => ''];
 
+        $noLeftCounter = 0;
+        $noRightCounter = 0;
+
+
         for ($i = 0; $i < $maxRows; $i++) {
 
             if ($pdf->GetY() > 180) $pdf->AddPage();
+
 
             //kiri
             $pdf->SetX($startXLeft);
@@ -258,16 +263,16 @@ class Kontrak extends CI_Controller
                     $prevLeft['tgl_bc'] == $left['tgl_bc'] &&
                     $prevLeft['nomor_bc'] == $left['nomor_bc']
                 ) {
-                    $no = '';
+                    $noCell = '';
                     $tgl_bc_left = '';
                     $nomor_bc_left = '';
                 } else {
-                    $no = $i;
+                    $noLeftCounter++;
+                    $noCell = $noLeftCounter;
                     $tgl_bc_left = tglmysql($left['tgl_bc']);
                     $nomor_bc_left = $left['nomor_bc'];
                 }
 
-                $noCell = ($no === '') ? '' : ($no + 1);
                 $pdf->Cell($widths[0], 5, $noCell, 1, 0, 'C');
                 $pdf->Cell($widths[1], 5, $nomor_bc_left, 1, 0);
                 $pdf->Cell($widths[2], 5, $tgl_bc_left, 1, 0);
@@ -299,16 +304,16 @@ class Kontrak extends CI_Controller
                     $prevRight['tgl_bc'] == $right['tgl_bc'] &&
                     $prevRight['nomor_bc'] == $right['nomor_bc']
                 ) {
-                    $no = '';
+                    $noCell = '';
                     $tgl_bc_right = '';
                     $nomor_bc_right = '';
                 } else {
-                    $no = $i;
+                    $noRightCounter++;
+                    $noCell = $noRightCounter;
                     $tgl_bc_right = tglmysql($right['tgl_bc']);
                     $nomor_bc_right = $right['nomor_bc'];
                 }
 
-                $noCell = ($no === '') ? '' : ($no + 1);
                 $pdf->Cell($widths[0], 5, $noCell, 1, 0, 'C');
 
                 $pdf->Cell($widths[1], 5, $nomor_bc_right, 1, 0);
