@@ -214,7 +214,6 @@ class Kontrak extends CI_Controller
     }
 
 
-
     public function pdf()
     {
         $this->load->model('kontrakmodel');
@@ -249,15 +248,38 @@ class Kontrak extends CI_Controller
 
         for ($i = 0; $i < $maxRows; $i++) {
 
-            if ($pdf->GetY() > 180) $pdf->AddPage();
+            $lineHeight = 4;
 
 
-            //kiri
-            $pdf->SetX($startXLeft);
+            $leftHeight = 5;
+            if (isset($leftRows[$i])) {
+                $nbLeft = $pdf->NbLines($widths[4], $leftRows[$i]['spekbarang']);
+                $leftHeight = max(5, $nbLeft * $lineHeight);
+            }
+
+
+            $rightHeight = 5;
+            if (isset($rightRows[$i])) {
+                $nbRight = $pdf->NbLines($widths[4], $rightRows[$i]['spekbarang']);
+                $rightHeight = max(5, $nbRight * $lineHeight);
+            }
+
+            $rowHeight = max($leftHeight, $rightHeight);
+
+            if ($pdf->GetY() + $rowHeight > 185) {
+                $pdf->AddPage();
+            }
+
+            $yStart = $pdf->GetY();
+
+
+            //KIRI 
+
+            $pdf->SetXY($startXLeft, $yStart);
+
             if (isset($leftRows[$i])) {
 
                 $left = $leftRows[$i];
-
 
                 if (
                     $prevLeft['tgl_bc'] == $left['tgl_bc'] &&
@@ -273,29 +295,49 @@ class Kontrak extends CI_Controller
                     $nomor_bc_left = $left['nomor_bc'];
                 }
 
-                $pdf->Cell($widths[0], 5, $noCell, 1, 0, 'C');
-                $pdf->Cell($widths[1], 5, $nomor_bc_left, 1, 0);
-                $pdf->Cell($widths[2], 5, $tgl_bc_left, 1, 0);
-                $pdf->Cell($widths[3], 5, $left['sku'], 1, 0);
-                $pdf->Cell($widths[4], 5, substr($left['spekbarang'], 0, 50), 1, 0);
-                $pdf->Cell($widths[5], 5, number_format($left['pcs'], 2), 1, 0, 'R');
-                $pdf->Cell($widths[6], 5, number_format($left['total_kgs'], 2), 1, 0, 'R');
+                $dataLeft = [
+                    $noCell,
+                    $nomor_bc_left,
+                    $tgl_bc_left,
+                    $left['sku'],
+                    $left['spekbarang'],
+                    number_format($left['pcs'], 2),
+                    number_format($left['total_kgs'], 2)
+                ];
+
+                foreach ($dataLeft as $k => $val) {
+
+                    $x = $pdf->GetX();
+                    $pdf->Rect($x, $yStart, $widths[$k], $rowHeight);
+
+                    if ($k == 4) {
+                        $pdf->MultiCell($widths[$k], $lineHeight, $val, 0);
+                        $pdf->SetXY($x + $widths[$k], $yStart);
+                    } else {
+                        $align = ($k >= 5) ? 'R' : 'C';
+                        $pdf->Cell($widths[$k], $rowHeight, $val, 0, 0, $align);
+                    }
+                }
 
                 $totalPcsOut += $left['pcs'];
                 $totalKgsOut += $left['total_kgs'];
-
 
                 $prevLeft = [
                     'tgl_bc'   => $left['tgl_bc'],
                     'nomor_bc' => $left['nomor_bc']
                 ];
             } else {
-                foreach ($widths as $w) $pdf->Cell($w, 5, '', 1, 0);
+
+                foreach ($widths as $w) {
+                    $pdf->Rect($pdf->GetX(), $yStart, $w, $rowHeight);
+                    $pdf->Cell($w, $rowHeight, '', 0, 0);
+                }
             }
 
-            $pdf->Cell(8, 5, '', 0, 0);
-            //kanan
-            $pdf->SetX($startXRight);
+
+            //  KANAkN 
+            $pdf->SetXY($startXRight, $yStart);
+
             if (isset($rightRows[$i])) {
 
                 $right = $rightRows[$i];
@@ -314,14 +356,29 @@ class Kontrak extends CI_Controller
                     $nomor_bc_right = $right['nomor_bc'];
                 }
 
-                $pdf->Cell($widths[0], 5, $noCell, 1, 0, 'C');
+                $dataRight = [
+                    $noCell,
+                    $nomor_bc_right,
+                    $tgl_bc_right,
+                    $right['sku'],
+                    $right['spekbarang'],
+                    number_format($right['pcs'], 2),
+                    number_format($right['total_kgs'], 2)
+                ];
 
-                $pdf->Cell($widths[1], 5, $nomor_bc_right, 1, 0);
-                $pdf->Cell($widths[2], 5, $tgl_bc_right, 1, 0);
-                $pdf->Cell($widths[3], 5, $right['sku'], 1, 0);
-                $pdf->Cell($widths[4], 5, substr($right['spekbarang'], 0, 50), 1, 0);
-                $pdf->Cell($widths[5], 5, number_format($right['pcs'], 2), 1, 0, 'R');
-                $pdf->Cell($widths[6], 5, number_format($right['total_kgs'], 2), 1, 0, 'R');
+                foreach ($dataRight as $k => $val) {
+
+                    $x = $pdf->GetX();
+                    $pdf->Rect($x, $yStart, $widths[$k], $rowHeight);
+
+                    if ($k == 4) {
+                        $pdf->MultiCell($widths[$k], $lineHeight, $val, 0);
+                        $pdf->SetXY($x + $widths[$k], $yStart);
+                    } else {
+                        $align = ($k >= 5) ? 'R' : 'C';
+                        $pdf->Cell($widths[$k], $rowHeight, $val, 0, 0, $align);
+                    }
+                }
 
                 $totalPcsIn += $right['pcs'];
                 $totalKgsIn += $right['total_kgs'];
@@ -331,10 +388,14 @@ class Kontrak extends CI_Controller
                     'nomor_bc' => $right['nomor_bc']
                 ];
             } else {
-                foreach ($widths as $w) $pdf->Cell($w, 5, '', 1, 0);
+
+                foreach ($widths as $w) {
+                    $pdf->Rect($pdf->GetX(), $yStart, $w, $rowHeight);
+                    $pdf->Cell($w, $rowHeight, '', 0, 0);
+                }
             }
 
-            $pdf->Ln();
+            $pdf->SetY($yStart + $rowHeight);
         }
 
 
