@@ -27,7 +27,7 @@
                         $totkgs += $detail['totkgs'];
                         $xnet = $detail['exnet']==0 ? '' : 'Y';
                         $periode = tambahnol($this->session->userdata('blout')).$this->session->userdata('thout');
-                        $stokdept = getstokdeptbaru(dept: $detail['dept_id'],po: $detail['po'],item: $detail['item'],dis: $detail['dis'],insno: $detail['insno'],nobontr: $detail['nobontr'],nomor_bc: $detail['nomor_bc'],dln: $detail['dln'],id_barang: $detail['id_barang'],nobale: $detail['nobale'],exnet: $detail['exnet'],periode: $periode)->row_array();
+                        $stokdept = getstokdeptbaru(dept: $detail['dept_id'],po: $detail['po'],item: $detail['item'],dis: $detail['dis'],insno: $detail['insno'],nobontr: $detail['nobontr'],nomor_bc: $detail['nomor_bc'],dln: $detail['dln'],id_barang: $detail['id_barang'],nobale: $detail['nobale'],exnet: $detail['exnet'],periode: $periode,stok: $detail['stok'])->row_array();
                         $kgsstok = $stokdept['kgsstok'];
                         $pcsstok = $stokdept['pcsstok'];
                         if($sku=='P6974831'){

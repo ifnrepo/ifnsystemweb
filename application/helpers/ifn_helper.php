@@ -474,13 +474,17 @@ function gethrg($idb, $nobo)
     $hasil = $CI->bbl_model->gethrg($idb, $nobo);
     return $hasil;
 }
-function generatekodebc($jnsbc, $tglbc, $nobc)
+function generatekodebc($jnsbc, $tglbc, $nobc, $pref='')
 {
     $datenow = "2024-01-01";
     $kode = '000000-010017-00000000-000000';
     if ($tglbc >= $datenow) {
         if (trim($jnsbc) != '') {
-            $kode1 = str_repeat('0', 6 - strlen(trim($jnsbc))) . trim($jnsbc);
+            if(trim($pref) != ''){
+                $kode1 = trim($pref).str_repeat('0', 3 - strlen(trim($jnsbc))) . trim($jnsbc);
+            }else{
+                $kode1 = str_repeat('0', 6 - strlen(trim($jnsbc))) . trim($jnsbc);
+            }
         } else {
             $kode1 = '000000';
         }
@@ -826,7 +830,8 @@ function getstokdeptbaru(
     int $id_barang = 0,
     string $nobale = '',
     int $exnet = 0,
-    string $periode = ''
+    string $periode = '',
+    int $stok = 0
 ) {
     echo "<script>console.log('Masuk');</script>";
     $data = [
@@ -841,7 +846,8 @@ function getstokdeptbaru(
         'id_barang' => $id_barang,
         'nobale' => trim($nobale),
         'exnet' => $exnet,
-        'periode' => $periode
+        'periode' => $periode,
+        'stok' => $stok
     ];
     $CI = &get_instance();
     $getkode = $CI->helpermodel->getstokdept($data);

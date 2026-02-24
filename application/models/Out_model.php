@@ -687,7 +687,7 @@ class Out_model extends CI_Model{
                         break;
                     }else{
                         $detil = $adaisi->row_array();
-                        if($detil['pcs_akhir'] >= $datdet['pcs'] && $detil['kgs_akhir'] >= $datdet['kgs']){
+                        if(($detil['pcs_akhir'] >= $datdet['pcs']) && ($detil['kgs_akhir'] >= $datdet['kgs'])){
                             $this->db->set('pcs_keluar','pcs_keluar +'.toAngka($datdet['pcs']),false);
                             $this->db->set('kgs_keluar','kgs_keluar +'.toAngka($datdet['kgs']),false);
                             $this->db->where('id',$detil['id']);
