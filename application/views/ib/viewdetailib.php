@@ -72,7 +72,7 @@
                                 $notglaju =  '';
                                 $notglaju .= $header['nomor_aju'];
                                 $notglaju .= $header['tgl_aju'] == null ? "" : ' (' . $header['tgl_aju'] . ')';
-                                $noaju = $header['jns_bc'] == '' ? '' : generatekodebc($header['jns_bc'], $header['tgl_aju'], $header['nomor_aju']);
+                                $noaju = $header['jns_bc'] == '' ? '' : generatekodebc($header['jns_bc'], $header['tgl_aju'], $header['nomor_aju'], $header['prefix_aju']);
                                 $notglbc =  '';
                                 $notglbc .= $header['nomor_bc'];
                                 $notglbc .= $header['tgl_bc'] == null ? "" : ' (' . $header['tgl_bc'] . ')';

@@ -597,7 +597,8 @@ class Helper_model extends CI_Model
                 'id_barang' => $data['id_barang'],
                 'trim(nobale)' => trim($data['nobale']),
                 'exnet' => 0,
-                'periode' => $data['periode']
+                'periode' => $data['periode'],
+                'stok' => $data['stok']
             ];
         }
         $this->db->select('stokdept.*,barang.id_satuan,sum(kgs_akhir) as kgsstok,sum(pcs_akhir) as pcsstok');
