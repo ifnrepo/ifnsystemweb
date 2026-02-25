@@ -41,10 +41,10 @@ class Rfid_out extends CI_Controller
 
     public function filter_data()
     {
-        $filter_pl = $this->input->post('filter');
-        $filter_exdo = $this->input->post('filter_exdo');
-        $filter_cekmasuk = $this->input->post('filter_cekmasuk');
-        $filter_selesai = $this->input->post('filter_selesai');
+        $filter_pl        = $this->input->post('filter');
+        $filter_exdo      = $this->input->post('filter_exdo');
+        $filter_cekmasuk  = $this->input->post('filter_cekmasuk');
+        $filter_selesai   = $this->input->post('filter_selesai');
 
         $this->session->set_userdata('filter_pl', $filter_pl);
         $this->session->set_userdata('filter_exdo', $filter_exdo);
@@ -57,41 +57,40 @@ class Rfid_out extends CI_Controller
         $search = $this->input->post('search')['value'];
 
 
-        $this->db->select('tb_balenumber.*, tb_packfin.gw as nw , tb_packfin.pcs, tb_packfin.meas , tb_po.spek');
+
+        $this->db->select("
+            tb_balenumber.*,
+            tb_po.spek,
+            SUM(tb_packfin.gw)   as nw,
+            SUM(tb_packfin.pcs)  as pcs,
+            SUM(tb_packfin.meas) as meas
+        ");
+
         $this->db->from('tb_balenumber');
 
-        $this->db->join(
-            'tb_packfin',
-            'tb_packfin.po = tb_balenumber.po 
-         AND tb_packfin.item = tb_balenumber.item
-         AND tb_packfin.nobale = tb_balenumber.nobale',
-            'left'
-        );
+        $this->db->join('tb_packfin', '
+            tb_packfin.po = tb_balenumber.po
+            AND tb_packfin.item = tb_balenumber.item
+            AND tb_packfin.nobale = tb_balenumber.nobale
+        ', 'left');
 
-        $this->db->join(
-            'tb_po',
-            'tb_po.po = tb_balenumber.po AND tb_po.item = tb_balenumber.item',
-            'left'
-        );
+        $this->db->join('tb_po', '
+            tb_po.po = tb_balenumber.po
+            AND tb_po.item = tb_balenumber.item
+        ', 'left');
 
 
-
-        if ($filter_pl !== 'all' && !empty($filter_pl)) {
+        if ($filter_pl && $filter_pl !== 'all')
             $this->db->where('tb_balenumber.plno', $filter_pl);
-        }
-        if ($filter_exdo !== 'all' && !empty($filter_exdo)) {
+
+        if ($filter_exdo && $filter_exdo !== 'all')
             $this->db->where('tb_balenumber.exdo', $filter_exdo);
-        }
-        if ($filter_cekmasuk !== 'all' && !empty($filter_cekmasuk)) {
+
+        if ($filter_cekmasuk && $filter_cekmasuk !== 'all')
             $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
-        }
 
-        if ($filter_selesai != 'all') {
+        if ($filter_selesai && $filter_selesai !== 'all')
             $this->db->where('tb_balenumber.selesai', $filter_selesai);
-        }
-
-
-
 
         if (!empty($search)) {
             $this->db->group_start();
@@ -100,12 +99,13 @@ class Rfid_out extends CI_Controller
             $this->db->group_end();
         }
 
+        $this->db->group_by('tb_balenumber.id');
         $this->db->order_by('tb_balenumber.id', 'ASC');
         $this->db->limit($limit, $start);
 
         $data = $this->db->get()->result_array();
-
         $no = $start + 1;
+
         foreach ($data as &$row) {
 
             $row['no'] = $no++;
@@ -185,81 +185,102 @@ class Rfid_out extends CI_Controller
         }
 
 
+
         $this->db->from('tb_balenumber');
-        $this->db->join(
-            'tb_packfin',
-            'tb_packfin.po = tb_balenumber.po 
-         AND tb_packfin.item = tb_balenumber.item
-         AND tb_packfin.nobale = tb_balenumber.nobale',
-            'left'
-        );
-        $this->db->join(
-            'tb_po',
-            'tb_po.po = tb_balenumber.po AND tb_po.item = tb_balenumber.item',
-            'left'
-        );
 
-        if ($filter_pl !== 'all' && !empty($filter_pl)) {
-            $this->db->where('tb_balenumber.plno', $filter_pl);
-        }
+        if ($filter_pl && $filter_pl !== 'all')
+            $this->db->where('plno', $filter_pl);
 
-        if ($filter_exdo !== 'all' && !empty($filter_exdo)) {
-            $this->db->where('tb_balenumber.exdo', $filter_exdo);
-        }
-        if ($filter_cekmasuk !== 'all' && !empty($filter_cekmasuk)) {
-            $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
-        }
-        if ($filter_selesai != 'all') {
-            $this->db->where('tb_balenumber.selesai', $filter_selesai);
-        }
+        if ($filter_exdo && $filter_exdo !== 'all')
+            $this->db->where('exdo', $filter_exdo);
 
+        if ($filter_cekmasuk && $filter_cekmasuk !== 'all')
+            $this->db->where('masuk', $filter_cekmasuk);
+
+        if ($filter_selesai && $filter_selesai !== 'all')
+            $this->db->where('selesai', $filter_selesai);
 
         if (!empty($search)) {
             $this->db->group_start();
-            $this->db->like('tb_balenumber.nobale', $search);
-            $this->db->or_like('tb_balenumber.po', $search);
+            $this->db->like('nobale', $search);
+            $this->db->or_like('po', $search);
             $this->db->group_end();
         }
 
         $recordsFiltered = $this->db->count_all_results();
 
-
-
+        //cek masuj
         $this->db->from('tb_balenumber');
-        $recordsTotal = $this->db->count_all_results();
+        if ($filter_pl && $filter_pl !== 'all')
+            $this->db->where('plno', $filter_pl);
 
-        // sum nw
+        if ($filter_exdo && $filter_exdo !== 'all')
+            $this->db->where('exdo', $filter_exdo);
 
-        $this->db->select('SUM(tb_packfin.gw) as total_nw');
+        if ($filter_selesai && $filter_selesai !== 'all')
+            $this->db->where('selesai', $filter_selesai);
+
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('nobale', $search);
+            $this->db->or_like('po', $search);
+            $this->db->group_end();
+        }
+
+        $this->db->where('masuk', 1);
+
+        $total_cekmasuk_1 = $this->db->count_all_results();
+
+
+        //cek selesai
         $this->db->from('tb_balenumber');
+        if ($filter_pl && $filter_pl !== 'all')
+            $this->db->where('plno', $filter_pl);
 
-        $this->db->join(
-            'tb_packfin',
-            'tb_packfin.po = tb_balenumber.po 
-         AND tb_packfin.item = tb_balenumber.item
-         AND tb_packfin.nobale = tb_balenumber.nobale',
-            'left'
-        );
-        $this->db->join(
-            'tb_po',
-            'tb_po.po = tb_balenumber.po AND tb_po.item = tb_balenumber.item',
-            'left'
-        );
+        if ($filter_exdo && $filter_exdo !== 'all')
+            $this->db->where('exdo', $filter_exdo);
 
-        if ($filter_pl !== 'all' && !empty($filter_pl)) {
+        if ($filter_selesai && $filter_selesai !== 'all')
+            $this->db->where('selesai', $filter_selesai);
+
+        if (!empty($search)) {
+            $this->db->group_start();
+            $this->db->like('nobale', $search);
+            $this->db->or_like('po', $search);
+            $this->db->group_end();
+        }
+
+        $this->db->where('selesai', 1);
+
+        $total_cekselesai_1 = $this->db->count_all_results();
+
+
+        $recordsTotal = $this->db->count_all('tb_balenumber');
+        $this->db->select("
+            SUM(tb_packfin.gw)   as total_nw,
+            SUM(tb_packfin.pcs)  as total_pcs,
+            SUM(tb_packfin.meas) as total_meas
+        ");
+
+        $this->db->from('tb_packfin');
+
+        $this->db->join('tb_balenumber', '
+            tb_packfin.po = tb_balenumber.po
+            AND tb_packfin.item = tb_balenumber.item
+            AND tb_packfin.nobale = tb_balenumber.nobale
+        ', 'left');
+
+        if ($filter_pl && $filter_pl !== 'all')
             $this->db->where('tb_balenumber.plno', $filter_pl);
-        }
 
-        if ($filter_exdo !== 'all' && !empty($filter_exdo)) {
+        if ($filter_exdo && $filter_exdo !== 'all')
             $this->db->where('tb_balenumber.exdo', $filter_exdo);
-        }
-        if ($filter_cekmasuk !== 'all' && !empty($filter_cekmasuk)) {
-            $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
-        }
 
-        if ($filter_selesai != 'all') {
+        if ($filter_cekmasuk && $filter_cekmasuk !== 'all')
+            $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
+
+        if ($filter_selesai && $filter_selesai !== 'all')
             $this->db->where('tb_balenumber.selesai', $filter_selesai);
-        }
 
         if (!empty($search)) {
             $this->db->group_start();
@@ -268,102 +289,17 @@ class Rfid_out extends CI_Controller
             $this->db->group_end();
         }
 
-        $total_nw = $this->db->get()->row()->total_nw;
-        $total_nw = $total_nw ? $total_nw : 0;
-
-        // SUM PCS
-        $this->db->select('SUM(tb_packfin.pcs) as total_pcs');
-        $this->db->from('tb_balenumber');
-
-        $this->db->join(
-            'tb_packfin',
-            'tb_packfin.po = tb_balenumber.po 
-         AND tb_packfin.item = tb_balenumber.item
-         AND tb_packfin.nobale = tb_balenumber.nobale',
-            'left'
-        );
-
-        $this->db->join(
-            'tb_po',
-            'tb_po.po = tb_balenumber.po AND tb_po.item = tb_balenumber.item',
-            'left'
-        );
-        if ($filter_pl !== 'all' && !empty($filter_pl)) {
-            $this->db->where('tb_balenumber.plno', $filter_pl);
-        }
-
-        if ($filter_exdo !== 'all' && !empty($filter_exdo)) {
-            $this->db->where('tb_balenumber.exdo', $filter_exdo);
-        }
-        if ($filter_cekmasuk !== 'all' && !empty($filter_cekmasuk)) {
-            $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
-        }
-
-        if ($filter_selesai != 'all') {
-            $this->db->where('tb_balenumber.selesai', $filter_selesai);
-        }
-
-        if (!empty($search)) {
-            $this->db->group_start();
-            $this->db->like('tb_balenumber.nobale', $search);
-            $this->db->or_like('tb_balenumber.po', $search);
-            $this->db->group_end();
-        }
-
-        $total_pcs = $this->db->get()->row()->total_pcs;
-        $total_pcs = $total_pcs ? $total_pcs : 0;
-
-        // SUM MEAS
-        $this->db->select('SUM(tb_packfin.meas) as total_meas');
-        $this->db->from('tb_balenumber');
-
-        $this->db->join(
-            'tb_packfin',
-            'tb_packfin.po = tb_balenumber.po 
-         AND tb_packfin.item = tb_balenumber.item
-         AND tb_packfin.nobale = tb_balenumber.nobale',
-            'left'
-        );
-
-        $this->db->join(
-            'tb_po',
-            'tb_po.po = tb_balenumber.po AND tb_po.item = tb_balenumber.item',
-            'left'
-        );
-        if ($filter_pl !== 'all' && !empty($filter_pl)) {
-            $this->db->where('tb_balenumber.plno', $filter_pl);
-        }
-
-        if ($filter_exdo !== 'all' && !empty($filter_exdo)) {
-            $this->db->where('tb_balenumber.exdo', $filter_exdo);
-        }
-        if ($filter_cekmasuk !== 'all' && !empty($filter_cekmasuk)) {
-            $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
-        }
-        if ($filter_selesai != 'all') {
-            $this->db->where('tb_balenumber.selesai', $filter_selesai);
-        }
-
-
-        if (!empty($search)) {
-            $this->db->group_start();
-            $this->db->like('tb_balenumber.nobale', $search);
-            $this->db->or_like('tb_balenumber.po', $search);
-            $this->db->group_end();
-        }
-
-        $total_meas = $this->db->get()->row()->total_meas;
-        $total_meas = $total_meas ? $total_meas : 0;
-
-
+        $totals = $this->db->get()->row();
 
         echo json_encode([
             'draw'            => intval($draw),
             'recordsTotal'    => $recordsTotal,
-            'recordsFiltered' =>  $recordsFiltered,
-            'total_nw'        =>  number_format((float)$total_nw, 2),
-            'total_pcs' => number_format((float)$total_pcs, 0, '', ''),
-            'total_meas'        =>  $total_meas,
+            'recordsFiltered' => $recordsFiltered,
+            'total_cekmasuk' => $total_cekmasuk_1,
+            'total_cekselesai' => $total_cekselesai_1,
+            'total_nw'        => number_format((float)$totals->total_nw, 2),
+            'total_pcs'       => number_format((float)$totals->total_pcs, 0),
+            'total_meas'      => (float)$totals->total_meas,
             'data'            => $data
         ]);
     }

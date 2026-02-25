@@ -95,8 +95,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="row g-3 mb-4">
                             <div class="col-6 col-md-3">
                                 <div class="p-3 border-start border-primary border-4 bg-light rounded shadow-sm">
-                                    <small class="text-muted d-block mb-1">Total Record</small>
-                                    <h5 class="fw-bold text-primary mb-0" id="totalFiltered">0</h5>
+
+                                    <div class="d-flex justify-content-between align-items-start">
+                                        <div>
+                                            <small class="text-muted d-block mb-1">Total Record</small>
+                                            <h5 class="fw-bold text-primary mb-0" id="totalFiltered">0</h5>
+                                        </div>
+                                        <div class="text-end" style="font-size: 10px;">
+                                            <p class="fw-bold text-warning mb-0">
+                                                Verified : <span id="total_cekmasuk"></span>
+                                            </p>
+                                            <p class="fw-bold text-success mb-0">
+                                                Complete : <span id="total_cekselesai"></span>
+                                            </p>
+                                        </div>
+                                    </div>
+
                                 </div>
                             </div>
                             <div class="col-6 col-md-3">
@@ -286,6 +300,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
         });
         table.on('xhr.dt', function(e, settings, json) {
             $('#totalFiltered').text(json.recordsFiltered);
+            $('#total_cekmasuk').text(json.total_cekmasuk);
+            $('#total_cekselesai').text(json.total_cekselesai);
             $("#total_nw").text(json.total_nw);
             $("#total_pcs").text(json.total_pcs);
             $("#total_meas").text(json.total_meas);
