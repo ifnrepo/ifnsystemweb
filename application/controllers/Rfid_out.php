@@ -86,11 +86,23 @@ class Rfid_out extends CI_Controller
         if ($filter_exdo && $filter_exdo !== 'all')
             $this->db->where('tb_balenumber.exdo', $filter_exdo);
 
-        if ($filter_cekmasuk && $filter_cekmasuk !== 'all')
-            $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
+        if ($filter_cekmasuk !== 'all') {
 
-        if ($filter_selesai && $filter_selesai !== 'all')
-            $this->db->where('tb_balenumber.selesai', $filter_selesai);
+            if ($filter_cekmasuk === '0') {
+                $this->db->where('tb_balenumber.masuk IS NULL', null, false);
+            } elseif ($filter_cekmasuk === '1') {
+                $this->db->where('tb_balenumber.masuk >', 0);
+            }
+        }
+        if ($filter_selesai !== 'all') {
+
+            if ($filter_selesai === '0') {
+                $this->db->where('tb_balenumber.selesai ', 0);
+            } elseif ($filter_selesai === '1') {
+                $this->db->where('tb_balenumber.selesai >', 0);
+            }
+        }
+
 
         if (!empty($search)) {
             $this->db->group_start();
@@ -152,7 +164,7 @@ class Rfid_out extends CI_Controller
 
             $cek_selesai = $row['selesai'];
 
-            if ($cek_masuk == 1) {
+            if ($cek_masuk > 0) {
                 if ($cek_selesai == 0) {
                     $row['selesai'] = ' 
                     <a href="' . base_url('rfid_out/verifikasi_selesai/' . $row['id']) . '" style="text-decoration:none; display:block; color:black;">
@@ -194,11 +206,22 @@ class Rfid_out extends CI_Controller
         if ($filter_exdo && $filter_exdo !== 'all')
             $this->db->where('exdo', $filter_exdo);
 
-        if ($filter_cekmasuk && $filter_cekmasuk !== 'all')
-            $this->db->where('masuk', $filter_cekmasuk);
+        if ($filter_cekmasuk !== 'all') {
 
-        if ($filter_selesai && $filter_selesai !== 'all')
-            $this->db->where('selesai', $filter_selesai);
+            if ($filter_cekmasuk === '0') {
+                $this->db->where('tb_balenumber.masuk IS NULL', null, false);
+            } elseif ($filter_cekmasuk === '1') {
+                $this->db->where('tb_balenumber.masuk >', 0);
+            }
+        }
+        if ($filter_selesai !== 'all') {
+
+            if ($filter_selesai === '0') {
+                $this->db->where('tb_balenumber.selesai ', 0);
+            } elseif ($filter_selesai === '1') {
+                $this->db->where('tb_balenumber.selesai >', 0);
+            }
+        }
 
         if (!empty($search)) {
             $this->db->group_start();
@@ -216,10 +239,22 @@ class Rfid_out extends CI_Controller
 
         if ($filter_exdo && $filter_exdo !== 'all')
             $this->db->where('exdo', $filter_exdo);
+        if ($filter_cekmasuk !== 'all') {
 
-        if ($filter_selesai && $filter_selesai !== 'all')
-            $this->db->where('selesai', $filter_selesai);
+            if ($filter_cekmasuk === '0') {
+                $this->db->where('tb_balenumber.masuk IS NULL', null, false);
+            } elseif ($filter_cekmasuk === '1') {
+                $this->db->where('tb_balenumber.masuk >', 0);
+            }
+        }
+        if ($filter_selesai !== 'all') {
 
+            if ($filter_selesai === '0') {
+                $this->db->where('tb_balenumber.selesai ', 0);
+            } elseif ($filter_selesai === '1') {
+                $this->db->where('tb_balenumber.selesai >', 0);
+            }
+        }
         if (!empty($search)) {
             $this->db->group_start();
             $this->db->like('nobale', $search);
@@ -227,30 +262,43 @@ class Rfid_out extends CI_Controller
             $this->db->group_end();
         }
 
-        $this->db->where('masuk', 1);
 
+
+        $this->db->where('masuk >', 0);
         $total_cekmasuk_1 = $this->db->count_all_results();
 
 
         //cek selesai
         $this->db->from('tb_balenumber');
+
         if ($filter_pl && $filter_pl !== 'all')
             $this->db->where('plno', $filter_pl);
 
         if ($filter_exdo && $filter_exdo !== 'all')
             $this->db->where('exdo', $filter_exdo);
+        if ($filter_cekmasuk !== 'all') {
 
-        if ($filter_selesai && $filter_selesai !== 'all')
-            $this->db->where('selesai', $filter_selesai);
+            if ($filter_cekmasuk === '0') {
+                $this->db->where('tb_balenumber.masuk IS NULL', null, false);
+            } elseif ($filter_cekmasuk === '1') {
+                $this->db->where('tb_balenumber.masuk >', 0);
+            }
+        }
+        if ($filter_selesai !== 'all') {
 
+            if ($filter_selesai === '0') {
+                $this->db->where('tb_balenumber.selesai ', 0);
+            } elseif ($filter_selesai === '1') {
+                $this->db->where('tb_balenumber.selesai >', 0);
+            }
+        }
         if (!empty($search)) {
             $this->db->group_start();
             $this->db->like('nobale', $search);
             $this->db->or_like('po', $search);
             $this->db->group_end();
         }
-
-        $this->db->where('selesai', 1);
+        $this->db->where('selesai >', 0);
 
         $total_cekselesai_1 = $this->db->count_all_results();
 
