@@ -306,6 +306,7 @@ class Out extends CI_Controller {
         $header['header'] = 'transaksi';
         $data['data'] = $this->out_model->getdatabyid($kode)->row_array();
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $data['detail'] = $this->out_model->getdatadetailout($kode);
         $data['mode'] = 'tambah';
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'out';
@@ -373,19 +374,21 @@ class Out extends CI_Controller {
             // if($this->session->userdata('deptsekarang')=='NT'){
                 $infoinsno = "<br><span class='text-teal font-kecil'>".$val['insno'].' '.$val['nobontr']."</span>";
             // }
+            $stk = $val['stok']==0 ? '' : ($val['stok']==1 ? 'Gr A' : 'Gr B');
             $html .= "<tr>";
             $html .= "<td class='line-12'>".$val['seri_barang'].'. '.$spek.$infoinsno."</td>";
             $html .= "<td>".$sku."</td>";
             $html .= "<td>".$val['namasatuan']."</td>";
             $html .= "<td class='text-center'>".$val['nobale']."</td>";
             $html .= "<td class='text-center'>".$xnet."</td>";
+            $html .= "<td class='text-center'>".$stk."</td>";
             $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
             $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
             $html .= "<td>".$val['nodok']."</td>";
             $html .= "</tr>";
         }
         $html .= "<tr>";
-        $html .= "<td colspan='3' class='text-end'>TOTAL</td>";
+        $html .= "<td colspan='4' class='text-end'>TOTAL</td>";
         $html .= "<td></td>";
         $html .= "<td></td>";
         $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
@@ -406,11 +409,13 @@ class Out extends CI_Controller {
         $ketbc = $val['bcnomor']!=null ? 'BC. '.trim($val['jns_bc']).'-'.$val['bcnomor'].'('.$val['bctgl'].')' : '';
         $sku = trim($val['po'])=='' ? $val['brg_id'] : formatsku($val['po'],$val['item'],$val['dis'],$val['id_barang']);
         $spek = trim($val['po'])=='' ? $val['nama_barang'] : spekpo($val['po'],$val['item'],$val['dis']);
+        $stk = $val['stok']==0 ? '' : ($val['stok']==1 ? 'Gr A' : 'Gr B');
         $html .= "<tr>";
         $html .= "<td style='line-height: 13px;'>".$val['seri_barang'].'. '.$spek." # <span class='text-teal'>".$val['insno'].' '.$val['nobontr']."<br><span class='text-cyan'>".$ketbc."</span></span></td>";
         $html .= "<td>".$sku."</td>";
         $html .= "<td>".$val['namasatuan']."</td>";
         $html .= "<td>".$val['nobale']."</td>";
+        $html .= "<td class='text-center'>".$stk."</td>";
         $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
         $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
         $html .= "<td></td>";
@@ -420,7 +425,7 @@ class Out extends CI_Controller {
         $kgs += $val['kgs'];
        }
         $html .= "<tr>";
-        $html .= "<td colspan='4' class='text-end'>TOTAL</td>";
+        $html .= "<td colspan='5' class='text-end'>TOTAL</td>";
         $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
         $html .= "<td class='text-right font-bold'>".rupiah($kgs,2)."</td>";
         $html .= "<td></td>";

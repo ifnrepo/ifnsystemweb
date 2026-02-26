@@ -9,7 +9,7 @@
                   <tr>
                     <th>Specific</th>
                     <th>Sku</th>
-                    <th>Sat</th>
+                    <th>Stok</th>
                     <th class='text-center'>No<br>bale</th>
                     <th class='text-center'>Ex<br>net</th>
                     <th class="text-right">Qty</th>
@@ -37,11 +37,12 @@
                             $cekkurang = $detail['totkgs'] > $kgsstok ? ' text-danger' : '';
                             $cekkurangpcs = $detail['totpcs'] > $pcsstok ? ' text-danger' : '';
                         }
+                        $stk = $detail['stok']==0 ? '' : ($detail['stok']==1 ? 'Gr A' : 'Gr B');
                     ?>
                         <tr class="font-kecil">
                             <td class="line-12 <?= $cekkurang; ?><?= $cekkurangpcs; ?>"><?= $namabarang.'<br><span class="text-success">'.$detail['insno'].$detail['nobontr'].'</span>' ?></td>
                             <td class="line-12"><?= $sku ?><br><span class="text-pink"><?= $detail['nomor_bc'] ?></span></td>
-                            <td><?= $detail['kode']; ?></td>
+                            <td class="text-center font-bold"><?= $stk; ?></td>
                             <td class='text-center'><?= $detail['nobale']; ?></td>
                             <td class='text-center text-success font-bold'><?= $xnet; ?></td>
                             <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($detail['totpcs'],0); ?></td>

@@ -49,6 +49,7 @@
                                     <th>Satuan</th>
                                     <th class="text-center">No Bale</th>
                                     <th class="text-center">Exnet</th>
+                                    <th class="text-center">Stok</th>
                                     <th>Qty</th>
                                     <th>Kgs</th>
                                     <th>Keterangan</th>
@@ -79,6 +80,7 @@
                                 <th>SKU</th>
                                 <th>Satuan</th>
                                 <th>No Bale</th>
+                                <th>Stok</th>
                                 <th>Qty</th>
                                 <th>Kgs</th>
                                 <th>Keterangan</th>
