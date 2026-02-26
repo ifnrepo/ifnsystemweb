@@ -188,29 +188,31 @@ class Kontrak extends CI_Controller
     }
     private function groupData($data)
     {
-        $grouped = [];
-        foreach ((array)$data as $row) {
-            $nomor_bc = $row['nomor_bc'];
-            $tgl_bc = $row['tgl_bc'];
-            $sku = trim($row['po']) == '' ? $row['kode'] : (function_exists('viewsku') ? viewsku($row['po'], $row['item'], $row['dis']) : $row['kode']);
-            $spekbarang = trim($row['po']) == '' ? namaspekbarang($row['id_barang']) : spekpo($row['po'], $row['item'], $row['dis']);
-            $pcs = $row['pcs'] ?? 0;
-            $key = $nomor_bc . '|' . $sku;
+        $result = [];
 
-            if (!isset($grouped[$key])) {
-                $grouped[$key] = [
-                    'nomor_bc' => $nomor_bc,
-                    'tgl_bc' => $tgl_bc,
-                    'sku' => $sku,
-                    'spekbarang' => $spekbarang,
-                    'pcs' => 0,
-                    'total_kgs' => 0
-                ];
-            }
-            $grouped[$key]['pcs'] += (float)$pcs;
-            $grouped[$key]['total_kgs'] += (float)$row['kgs'];
+        foreach ((array)$data as $row) {
+
+            $sku = trim($row['po']) == ''
+                ? $row['kode']
+                : (function_exists('viewsku')
+                    ? viewsku($row['po'], $row['item'], $row['dis'])
+                    : $row['kode']);
+
+            $spekbarang = trim($row['po']) == ''
+                ? namaspekbarang($row['id_barang'])
+                : spekpo($row['po'], $row['item'], $row['dis']);
+
+            $result[] = [
+                'nomor_bc'   => $row['nomor_bc'],
+                'tgl_bc'     => $row['tgl_bc'],
+                'sku'        => $sku,
+                'spekbarang' => $spekbarang,
+                'pcs'        => (float)$row['pcs'],
+                'total_kgs'  => (float)$row['kgs']
+            ];
         }
-        return array_values($grouped);
+
+        return $result;
     }
 
 
