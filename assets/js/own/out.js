@@ -13,14 +13,14 @@ $(document).ready(function () {
 	// alert(pisah[5]);
 	if (pisah[2] == "localhost") {
 		if (pisah[5] == "dataout") {
-			getdatadetailout();
+			// getdatadetailout();
 		}
 	} else {
 		if (pisah[4] == "addinvoice" || pisah[4] == "editinvoice") {
 			// getdatainvoice();
 		}
 		if (pisah[5] == "dataout") {
-			getdatadetailout();
+			// getdatadetailout();
 		}
 	}
 	if ($("#errornya").val() != "" && $("#errornya").length > 0) {
