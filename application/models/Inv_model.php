@@ -191,6 +191,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as totalpcsso,0 as totalkgsso');
         $this->db->select('stokdept.user_verif,stokdept.tgl_verif');
         $this->db->select('user.username as username_verif');
+        $this->db->select("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') AS skupo");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('stokdept.nobale');
         }else{
@@ -230,6 +231,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as totalpcsso,0 as totalkgsso');
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
+        $this->db->select("IF(TRIM(tb_detail.po)!='',CONCAT(TRIM(tb_detail.po),'#',TRIM(tb_detail.item),IF(tb_detail.dis > 0,CONCAT(' dis ',tb_detail.dis),'')),'') AS skupo");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
         }else{
@@ -278,6 +280,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as totalpcsso,0 as totalkgsso');
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
+        $this->db->select("IF(TRIM(tb_detailgen.po)!='',CONCAT(TRIM(tb_detailgen.po),'#',TRIM(tb_detailgen.item),IF(tb_detailgen.dis > 0,CONCAT(' dis ',tb_detailgen.dis),'')),'') AS skupo");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detailgen.nobale');
         }else{
@@ -324,6 +327,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as totalpcsso,0 as totalkgsso');
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
+        $this->db->select("IF(TRIM(tb_detail.po)!='',CONCAT(TRIM(tb_detail.po),'#',TRIM(tb_detail.item),IF(tb_detail.dis > 0,CONCAT(' dis ',tb_detail.dis),'')),'') AS skupo");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
         }else{
@@ -369,6 +373,7 @@ class inv_model extends CI_Model
         $this->db->select('SUM(sum(pcs)) over() as totalpcsso,SUM(sum(kgs)) over() as totalkgsso');
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
+        $this->db->select("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') AS skupo");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('stokopname_detail.nobale');
         }else{
@@ -398,18 +403,18 @@ class inv_model extends CI_Model
         $query5 = $this->db->get_compiled_select();
 
         $kolom = " Select *,sum(saldokgs+inkgs-outkgs+adjkgs) over() as totalkgs,sum(saldopcs+inpcs-outpcs+adjpcs) over() as totalpcs,sum(saldopcs) over() as sawalpcs,sum(saldokgs) over() as sawalkgs,sum(inpcs) over() as totalinpcs,sum(outpcs) over() as totaloutpcs,sum(inkgs) over() as totalinkgs,sum(outkgs) over() as totaloutkgs,sum(adjpcs) over() as totaladjpcs,sum(adjkgs) over() as totaladjkgs,sum(pcs_taking) over() as totalsopcs,sum(kgs_taking) over() as totalsokgs from (";
-        $kolom .= "Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif ";
+        $kolom .= "Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,skupo ";
         $kolom .= "from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4." union all ".$query5.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
         $kolom .= " left join kategori on kategori.kategori_id = left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4)";
         if($this->session->userdata('currdept') != 'GS'){
-            $kolom .= " where (jns <= 2 OR id_barang IN (".$arrbarangexcludejenis."))";
+            $kolom .= " where (jns <= 2 OR id_barang IN (".$arrbarangexcludejenis.")) ";
         }
         if($ifndln!='all'){
             $kolom .= " AND xdln = ".$ifndln;
         }
-        $kolom .= " group by po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,stok,exnet) r2";
+        $kolom .= " group by po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,stok,exnet order by po,item,dis,nobale,id_barang,insno,nobontr,nomor_bc,stok,exnet) r2";
         $hasil = $this->db->query($kolom);
 
         return $kolom;
@@ -418,7 +423,7 @@ class inv_model extends CI_Model
     public function getdatabaru($filtkat,$mode=0){
         $query = $this->getdata($mode);
         // $cari = array('barang.kode','nama_barang','nama_kategori');
-        $cari = array('po','insno','nobontr','spek','nobale','id_barang','nama_barang','kode');
+        $cari = array('po','insno','nobontr','spek','nobale','id_barang','nama_barang','kode','skupo');
         $where = $filtkat;
         $isWhere = null;
         // Ambil data yang di ketik user pada textbox pencarian
@@ -459,8 +464,9 @@ class inv_model extends CI_Model
             $order_field = $_POST['order'][0]['column']; 
 
             // Untuk menentukan order by "ASC" atau "DESC"
-            $order_ascdesc = $_POST['order'][0]['dir']; 
-            $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+            // $order_ascdesc = $_POST['order'][0]['dir']; 
+            // $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+            $order = " ";
 
             if(!empty($iswhere))
             {
@@ -503,8 +509,9 @@ class inv_model extends CI_Model
             $order_field = $_POST['order'][0]['column']; 
 
             // Untuk menentukan order by "ASC" atau "DESC"
-            $order_ascdesc = $_POST['order'][0]['dir']; 
-            $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+            // $order_ascdesc = $_POST['order'][0]['dir']; 
+            // $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+            $order = " ";
 
             if(!empty($iswhere))
             {                
@@ -591,10 +598,11 @@ class inv_model extends CI_Model
         $this->db->where('trim(stokdept.dis)',$array['dis']);
         $this->db->where('trim(stokdept.insno)',trim($array['insno']));
         $this->db->where('trim(stokdept.nobontr)',trim($array['nobontr']));
+        $this->db->where('trim(stokdept.id_barang)',$array['id_barang']);
         if($dept=='GF' || $dept=='GW'){
             $this->db->where('trim(stokdept.nobale)',trim($array['nobale']));
         }else{
-            $this->db->where('trim(stokdept.id_barang)',$array['id_barang']);
+            // $this->db->where('trim(stokdept.id_barang)',$array['id_barang']);
         }
         if($ada){
             $this->db->where('trim(stokdept.nomor_bc)',trim($array['nomor_bc']));
@@ -643,10 +651,11 @@ class inv_model extends CI_Model
         $this->db->where('trim(tb_detail.dis)',$array['dis']);
         $this->db->where('trim(tb_detail.insno)',trim($array['insno']));
         $this->db->where('trim(tb_detail.nobontr)',trim($array['nobontr']));
+        $this->db->where('trim(tb_detail.id_barang)',$array['id_barang']);
         if($dept=='GF' || $dept=='GW'){
             $this->db->where('trim(tb_detail.nobale)',trim($array['nobale']));
         }else{
-            $this->db->where('trim(tb_detail.id_barang)',$array['id_barang']);
+            // $this->db->where('trim(tb_detail.id_barang)',$array['id_barang']);
         }
         if($ada){
             $this->db->where('(SELECT trim(nomor_bc) FROM tb_header tbhead where id = tb_detail.id_akb) = ',trim($array['nomor_bc']));
@@ -692,10 +701,11 @@ class inv_model extends CI_Model
         $this->db->where('trim(tb_detailgen.dis)',$array['dis']);
         $this->db->where('trim(tb_detailgen.insno)',trim($array['insno']));
         $this->db->where('trim(tb_detailgen.nobontr)',trim($array['nobontr']));
+        $this->db->where('trim(tb_detailgen.id_barang)',$array['id_barang']);
         if($dept=='GF' || $dept=='GW'){
             $this->db->where('trim(tb_detailgen.nobale)',trim($array['nobale']));
         }else{
-            $this->db->where('trim(tb_detailgen.id_barang)',$array['id_barang']);
+            // $this->db->where('trim(tb_detailgen.id_barang)',$array['id_barang']);
         }
         if($ada){
             $this->db->where('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id ) =',trim($array['nomor_bc']));
@@ -741,10 +751,11 @@ class inv_model extends CI_Model
         $this->db->where('trim(tb_detail.dis)',$array['dis']);
         $this->db->where('trim(tb_detail.insno)',trim($array['insno']));
         $this->db->where('trim(tb_detail.nobontr)',trim($array['nobontr']));
+        $this->db->where('trim(tb_detail.id_barang)',$array['id_barang']);
         if($dept=='GF' || $dept=='GW'){
             $this->db->where('trim(tb_detail.nobale)',trim($array['nobale']));
         }else{
-            $this->db->where('trim(tb_detail.id_barang)',$array['id_barang']);
+            // $this->db->where('trim(tb_detail.id_barang)',$array['id_barang']);
         }
         if($ada){
             $this->db->where('trim(tb_header.nomor_bc)',trim($array['nomor_bc']));

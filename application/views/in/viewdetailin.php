@@ -39,6 +39,8 @@
                                     <th>Specific</th>
                                     <th>SKU</th>
                                     <th>Satuan</th>
+                                    <th>No bale</th>
+                                    <th>Stok</th>
                                     <th>Qty</th>
                                     <th>Kgs</th>
                                     <th>Verifikasi</th>
@@ -53,6 +55,7 @@
                                     $sku = trim($val['po']) == '' ? $val['brg_id'] : formatsku($val['po'], $val['item'], $val['dis'], $val['brg_id']);
                                     $totalpcs += $val['pcs'];
                                     $totalkgs += $val['kgs'];
+                                    $stk = $val['stok']==0 ? '' : ($val['stok']==1 ? 'Gr A' : 'Gr B');
                                 ?>
                                     <tr>
                                         <td class="line-12">
@@ -61,6 +64,8 @@
                                         </td>
                                         <td><?= $sku ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
+                                        <td><?= $val['nobale']; ?></td>
+                                        <td class="text-center"><?= $stk ?></td>
                                         <td><?= rupiah($val['pcs'], 0); ?></td>
                                         <td><?= rupiah($val['kgs'], 2); ?></td>
                                         <td>
@@ -74,7 +79,7 @@
 
 
                                 <tr style="font-weight: bold; background: #f2f2f2;">
-                                    <td colspan="3" class="text-center">TOTAL</td>
+                                    <td colspan="5" class="text-center">TOTAL</td>
                                     <td><?= rupiah($totalpcs, 0); ?></td>
                                     <td><?= rupiah($totalkgs, 2); ?></td>
                                     <td></td>
