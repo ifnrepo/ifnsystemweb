@@ -12,97 +12,128 @@ defined('BASEPATH') or exit('No direct script access allowed');
     }
 </style> -->
 
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
     <div class="container-xl">
         <div class="row g-0 d-flex align-items-between">
             <div class="col-md-6">
-                <h2 class="page-title p-2">
+                <h2 class="page-title p-0">
                     <?= $title ?>
                 </h2>
+                <div class="page-pretitle">
+                  Data alur barang
+                </div>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <!-- <a href="<?= base_url() . 'agama/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Agama"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
+
             </div>
         </div>
     </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
     <div class="container-xl">
-
         <div class="card">
             <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-12">
-                        <!-- <div class="infohalaman">Dalam Pembuatan</div> -->
-                        <div class="row">
-                            <div class="col-sm-4">
-                                <div class="form-group" id="formtgldari">
-                                    <label class="col-md-4 control-label" style="text-align: left;" for="inputDefault">Camera</label>
-                                    <div class="col-md-8">
-                                        <select class="form-control form-control-sm" id="camera-select"></select>
+                <div id="sisipkan" class="sticky-top bg-white">
+                    <div class="row mb-1 d-flex align-items-between">
+                        <div class="col-sm-6 col-12 mt-1">
+                            <div class="mb-0 d-flex">
+                                <span class="row">
+                                    <label class="col-3 col-form-label font-kecil font-bold">Dept</label>
+                                    <div class="col mr-1">
+                                        <select class="form-select form-control form-sm font-kecil font-bold mr-1" id="deptsublok" name="deptsublok">
+                                            <option value="">-- Pilih Dept --</option>
+                                            <?php foreach($deptlokasi->result_array() as $dept): $selek = $this->session->userdata('deptsublok')==$dept['dept_id'] ? 'selected' : ''; ?>
+                                                <option value="<?= $dept['dept_id'] ?>" <?= $selek ?>><?= $dept['departemen'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
                                     </div>
-                                </div>
-                                <a href="<?= base_url() ?>" id="kebase" class="hilang">Te2s</a>
-                                <div class="form-group hilang">
-                                    <input id="image-url" type="text" class="form-control" placeholder="Image url">
-                                    <button title="Decode Image" class="btn btn-default btn-sm" id="decode-img" type="button" data-toggle="tooltip">Grab</button>
-                                    <button title="Image shoot" class="btn btn-info btn-sm disabled" id="grab-img" type="button" data-toggle="tooltip">Grab</button>
-                                    <button title="Play" class="btn btn-success btn-sm" id="play" type="button" data-toggle="tooltip">Play</button>
-                                    <button title="Pause" class="btn btn-warning btn-sm" id="pause" type="button" data-toggle="tooltip">pause</button>
-                                    <button title="Stop streams" class="btn btn-danger btn-sm" id="stop" type="button" data-toggle="tooltip">Stop</button>
-                                </div>
-                                <div class="well" style="width: 100%;">
-                                    <label id="zoom-value" width="100">Zoom: 1</label>
-                                    <input id="zoom" onchange="Page.changeZoom();" type="range" min="10" max="30" value="0">
-                                    <label id="brightness-value" width="100">Brightness: 0</label>
-                                    <input id="brightness" onchange="Page.changeBrightness();" type="range" min="0" max="128" value="0">
-                                    <label id="contrast-value" width="100">Contrast: 0</label>
-                                    <input id="contrast" onchange="Page.changeContrast();" type="range" min="0" max="64" value="0">
-                                    <label id="threshold-value" width="100">Threshold: 0</label>
-                                    <input id="threshold" onchange="Page.changeThreshold();" type="range" min="0" max="512" value="0">
-                                    <label id="sharpness-value" width="100">Sharpness: off</label>
-                                    <input id="sharpness" onchange="Page.changeSharpness();" type="checkbox">
-                                    <label id="grayscale-value" width="100">grayscale: off</label>
-                                    <input id="grayscale" onchange="Page.changeGrayscale();" type="checkbox">
-                                    <br>
-                                    <label id="flipVertical-value" width="100">Flip Vertical: off</label>
-                                    <input id="flipVertical" onchange="Page.changeVertical();" type="checkbox">
-                                    <label id="flipHorizontal-value" width="100">Flip Horizontal: off</label>
-                                    <input id="flipHorizontal" onchange="Page.changeHorizontal();" type="checkbox">
-                                </div>
+                                </span>
+                                <a href="#" class="btn btn-primary btn-sm" id="butgo" style="height: 38px;min-width:45px;"><span class="ml-0">Go</span></a>
+                                <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
                             </div>
-                            <div class="col-sm-4">
-                                <div class="laser-area">
-                                    <!-- <div class="laser-area" style="display: inline-block; background-color :red; padding:0;"> -->
-                                    <canvas id="webcodecam-canvas" style="position:absolute; height:100%; width:100%;"></canvas>
-                                    <div class="scanner-laser laser-rightBottom" style="opacity: 0.5;"></div>
-                                    <div class="scanner-laser laser-rightTop" style="opacity: 0.5;"></div>
-                                    <div class="scanner-laser laser-leftBottom" style="opacity: 0.5;"></div>
-                                    <div class="scanner-laser laser-leftTop" style="opacity: 0.5;"></div>
-                                    <!-- </div> -->
-                                </div>
-
+                        </div>
+                        <div class="col-sm-6 col-12 mt-1">
+                            <div class="d-flex flex-row-reverse">
+                                <input type="text" class="form-control form-sm font-kecil font-bold mr-2" id="thsublok" name="thsublok" style="width: 75px;" value="<?= $this->session->userdata('thsublok') ?>">
+                                <select class="form-select form-control form-sm font-kecil font-bold mr-1" id="blsublok" name="blsublok" style="width: 100px;" <?= $levnow; ?>>
+                                    <?php for ($x = 1; $x <= 12; $x++) : ?>
+                                    <option value="<?= $x; ?>" <?php if ($this->session->userdata('blsublok') == $x) echo "selected"; ?>><?= namabulan($x); ?></option>
+                                    <?php endfor; ?>
+                                </select>
                             </div>
-                            <div class="col-sm-4">
-                                <div class="thumbnail" id="result" style="text-align: center;">
-                                    <div class="well hilang" style="overflow: hidden;">
-                                        <img width="320" height="240" id="scanned-img" src="">
-                                    </div>
-                                    <div class="caption">
-                                        <h4>Scanned result</h4>
-                                        <p id="scanned-QR"></p>
-                                    </div>
+                        </div>
+                    </div>
+                    <div class="card card-active" style="clear:both;">
+                        <div class="card-body p-2 font-kecil">
+                            <div class="row">
+                                <div class="col-sm-3 col-12">
+                                    <h4 class="mb-1 font-kecil">Sub-lokasi <?= $this->session->userdata('sublokasi') ?></h4>
+                                    <span class="font-kecil">
+                                        <div class="font-kecil">
+                                        <select class="form-select form-control form-sm font-kecil font-bold" id="sublokasi" name="sublokasi">
+                                            <option value="">-- Pilih sublokasi --</option>
+                                            <?php foreach ($lokasi->result_array() as $lok): ?>
+                                                <option value="<?= $lok['id']; ?>" <?php if($this->session->userdata('sublokasi') == $lok['id']){ echo "selected"; } ?>><?= $lok['kode_lokasi'].'-'.$lok['nama_lokasi'] ?></option>
+                                            <?php endforeach; ?>
+                                        </select>
+                                        </div>
+                                    </span>
+                                </div>
+                                <div class="col-3">
+                                    <h4 class="mb-1 font-kecil" style="color: #FFFFFF">.</h4>
+                                    <span class="font-kecil">
+                                        <a href="<?= base_url().'sublok/adddata' ?>" class="btn btn-sm btn-info" style="height: 38px;min-width:45px;" id="adddata"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                                    </span>
+                                </div>
+                                    <!-- <div class="col-3" style="font-size: 13px;">
+                                    <div class="text-blue font-bold mt-2 ">Jumlah Rec : </div>
+                                    <div class="text-blue font-bold">Jumlah Pcs : </div>
+                                    <div class="text-blue font-bold">Jumlah Kgs : </div> -->
+                                </div>
+                                <div class="col-2">
+                                    <!-- <h4 class="mb-1">
+                                        <small class="text-pink text-center">Tekan <b>GO</b> untuk mengaktifkan Tombol Tambah Data dan Load Data</small>
+                                    </h4> -->
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <hr class="small">
-                        <div style="text-align: center;">
-                            <a href="<?= base_url() ?>" class="btn btn-sm btn-success btn-flat"><i class="fa fa-arrow-left"></i> Kembali</a>
-                        </div>
+                    <div class="mt-2" style="overflow: auto;">
+                        <table id="pbtabel" class="table nowrap order-column table-hover table-bordered" style="width: 100% !important;">
+                            <thead>
+                            <tr>
+                                <th>No</th>
+                                <th>Tgl</th>
+                                <th>Nomor</th>
+                                <th>Jumlah Item</th>
+                                <th>Dibuat Oleh</th>
+                                <th>Keterangan</th>
+                                <th class="text-center">Aksi</th>
+                            </tr>
+                            </thead>
+                            <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
+                                <?php if($data->num_rows() > 0): ?>
+                                    <?php $no=1; foreach($data->result_array() as $dt): ?>
+                                        <tr>
+                                            <td class="text-center"><?= $no++; ?></td>
+                                            <td><?= tglmysql($dt['tgl']) ?></td>
+                                            <td><?= $dt['nomor'] ?></td>
+                                            <td class="text-pink"><?= rupiah($dt['pcs'],0).' Pcs, '.rupiah($dt['kgs'],2).' Kgs' ?></td>
+                                            <td class="line-12 font-kecil text-azure"><span><?= datauser($dt['dibuat_oleh'],'name') ?></span><br><span><?= tglmysql2($dt['tgl_buat']) ?></span></td>
+                                            <td></td>
+                                            <td class="text-center">
+                                                AKSI
+                                            </td>
+                                        </tr>
+                                    <?php endforeach; ?>
+                                <?php else: ?>
+                                    <tr>
+                                        <td colspan="6" class="text-center"> Data Kosong</td>
+                                    </tr>
+                                <?php endif; ?>
+                            </tbody>
+                        </table>
                     </div>
-
                 </div>
             </div>
         </div>

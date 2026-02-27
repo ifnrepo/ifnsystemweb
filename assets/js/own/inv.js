@@ -5,9 +5,9 @@ $(document).ready(function () {
 		// "processing": true,
 		// "responsive":true,
 		"serverSide": true,
-		"orderSequence": ['desc', 'asc'],
-		"ordering": true, // Set true agar bisa di sorting
-		"order": [[ 0, 'asc' ]], // Default sortingnya berdasarkan kolom / field ke 0 (paling pertama)
+		// "orderSequence": ['desc', 'asc'],
+		// "ordering": true, // Set true agar bisa di sorting
+		// "order": [[ 0, 'asc' ]], // Default sortingnya berdasarkan kolom / field ke 0 (paling pertama)
 		"initComplete": function(set, json){
 			// alert('Data is Loaded');
 			var json = table.ajax.json();

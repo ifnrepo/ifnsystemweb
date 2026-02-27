@@ -19,7 +19,7 @@ class Sublok extends CI_Controller
         $this->load->model('userappsmodel', 'usermodel');
         $this->load->model('helper_model', 'helpermodel');
         $this->load->model('barangmodel');
-        $this->load->model('bcmasukmodel');
+        $this->load->model('sublokmodel');
 
         $this->load->library('Pdf');
         // $this->load->library('Codeqr');
@@ -29,13 +29,56 @@ class Sublok extends CI_Controller
 
     public function index()
     {
-        $header['header'] = 'other';
-        $data['title'] = 'Sub Lokasi';
-
+        $header['header'] = 'sublok';
+        $data['title'] = 'Add Data Sub Lokasi';
+        $data['deptlokasi'] = $this->sublokmodel->getdeplokasi();
+        $data['lokasi'] = $this->sublokmodel->getlokasi();
+        $data['data'] = $this->sublokmodel->getdata();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'sublok';
         $this->load->view('layouts/header', $header);
         $this->load->view('sublok/index', $data);
+        $this->load->view('layouts/footer', $footer);
+    }
+    public function clear(){
+        $this->session->set_userdata('blsublok',date('m'));
+        $this->session->set_userdata('thsublok',date('Y'));
+        $this->session->unset_userdata('deptsublok');
+        $this->session->unset_userdata('sublokasi');
+        $url = base_url().'sublok';
+        redirect($url);
+    }
+    public function getdata(){
+        $dept = $_POST['dept'];
+        $bl = $_POST['bulan'];
+        $th = $_POST['tahun'];
+        $sub = $_POST['sub'];
+        if($dept!=''){
+            $this->session->set_userdata('deptsublok',$dept);
+        }
+        if($sub!=''){
+            $this->session->set_userdata('sublokasi',$sub);
+        }
+        $this->session->set_userdata('blsublok',$bl);
+        $this->session->set_userdata('thsublok',$th);
+        echo 1;
+    }
+    public function adddata($id){
+        $hasil = $this->sublokmodel->adddata($id);
+        if($hasil){
+            $url = base_url().'sublok/inputdata/'.$hasil;
+            redirect($url);
+        }
+    }
+    public function inputdata($id){
+        $header['header'] = 'sublok';
+        $data['title'] = 'Input Data Sub Lokasi';
+        $data['deptlokasi'] = $this->sublokmodel->getdeplokasi();
+        $data['lokasi'] = $this->sublokmodel->getlokasi();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'sublok';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('sublok/inputdata', $data);
         $this->load->view('layouts/footer', $footer);
     }
 
