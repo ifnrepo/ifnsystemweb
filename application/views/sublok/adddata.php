@@ -16,12 +16,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
     <div class="container-xl">
         <div class="row g-0 d-flex align-items-between">
             <div class="col-md-6">
-                <h2 class="page-title p-2">
+                <h2 class="page-title p-0">
                     <?= $title ?>
                 </h2>
+                <div class="page-pretitle">
+                  <?= $header['nomor'] ?>
+                </div>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <!-- <a href="<?= base_url() . 'agama/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Agama"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a> -->
+
             </div>
         </div>
     </div>
@@ -36,21 +39,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <!-- <div class="infohalaman">Dalam Pembuatan</div> -->
                         <div class="row">
                             <div class="col-sm-4">
-                                <div class="form-group" id="formtgldari">
+                                <div class="form-group mb-1">
                                     <label class="col-md-4 control-label" style="text-align: left;" for="inputDefault">Camera</label>
                                     <div class="col-md-8">
                                         <select class="form-control form-control-sm" id="camera-select"></select>
                                     </div>
                                 </div>
+                                <hr class="m-1">
                                 <a href="<?= base_url() ?>" id="kebase" class="hilang">Te2s</a>
-                                <div class="form-group hilang">
-                                    <input id="image-url" type="text" class="form-control" placeholder="Image url">
-                                    <button title="Decode Image" class="btn btn-default btn-sm" id="decode-img" type="button" data-toggle="tooltip">Grab</button>
-                                    <button title="Image shoot" class="btn btn-info btn-sm disabled" id="grab-img" type="button" data-toggle="tooltip">Grab</button>
-                                    <button title="Play" class="btn btn-success btn-sm" id="play" type="button" data-toggle="tooltip">Play</button>
-                                    <button title="Pause" class="btn btn-warning btn-sm" id="pause" type="button" data-toggle="tooltip">pause</button>
-                                    <button title="Stop streams" class="btn btn-danger btn-sm" id="stop" type="button" data-toggle="tooltip">Stop</button>
+                                <div class="form-group text-center mb-1">
+                                    <input id="image-url" type="text" class="form-control hilang" placeholder="Image url">
+                                    <button title="Decode Image" class="btn btn-default btn-sm hilang" id="decode-img" type="button" data-toggle="tooltip">Grab</button>
+                                    <button title="Image shoot" class="btn btn-info btn-sm disabled hilang" id="grab-img" type="button" data-toggle="tooltip">Grab</button>
+                                    <button title="Play" class="btn btn-success btn-sm" id="play" type="button" data-toggle="tooltip">Activate Scanner</button>
+                                    <button title="Pause" class="btn btn-warning btn-sm hilang" id="pause" type="button" data-toggle="tooltip">pause</button>
+                                    <button title="Stop streams" class="btn btn-danger btn-sm" id="stop" type="button" data-toggle="tooltip">Stop Scanner</button>
                                 </div>
+                                <hr class="m-1">
                                 <div class="well hilang" style="width: 100%;">
                                     <label id="zoom-value" width="100">Zoom: 1</label>
                                     <input id="zoom" onchange="Page.changeZoom();" type="range" min="10" max="30" value="0">
@@ -92,6 +97,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <h4>Scanned result</h4>
                                         <p id="scanned-QR"></p>
                                     </div>
+                                    <hr class="m-0">
+                                    <div class="mt-2">
+                                        <div class="text-left font-kecil">Data Collection</div>
+                                        <input type="text" id="contoh" name="contoh">
+                                        <div>
+                                            <table id="pbtabel" class="table nowrap order-column table-hover table-bordered" style="width: 100% !important;">
+                                                <thead>
+                                                <tr>
+                                                    <th>No</th>
+                                                    <th>SKU</th>
+                                                    <th>Lot no</th>
+                                                    <th>Qty</th>
+                                                    <!-- <th>Kgs</th> -->
+                                                </tr>
+                                                </thead>
+                                                <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
+                                                    <tr>
+                                                        <td>1</td>
+                                                        <td class="line-12">FU-0174#2<br><span class="font-kecil text-cyan">FU 1041</span></td>  
+                                                        <td>01-01</td>
+                                                        <td>1</td>
+                                                    </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                    </div>
                                 </div>
                             </div>
                         </div>
@@ -99,7 +130,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <div class="col-sm-12">
                         <hr class="small">
                         <div style="text-align: center;">
-                            <a href="<?= base_url() ?>" class="btn btn-sm btn-success btn-flat"><i class="fa fa-arrow-left"></i> Kembali</a>
+                            <a href="<?= base_url().'sublok/inputdata/'.$header['id'] ?>" class="btn btn-sm btn-success btn-flat"><i class="fa fa-arrow-left mr-1"></i> Kembali</a>
                         </div>
                     </div>
 

@@ -52,15 +52,17 @@ class Sublok extends CI_Controller
         $dept = $_POST['dept'];
         $bl = $_POST['bulan'];
         $th = $_POST['tahun'];
-        $sub = $_POST['sub'];
         if($dept!=''){
             $this->session->set_userdata('deptsublok',$dept);
         }
-        if($sub!=''){
-            $this->session->set_userdata('sublokasi',$sub);
-        }
+        $this->session->unset_userdata('sublokasi');
         $this->session->set_userdata('blsublok',$bl);
         $this->session->set_userdata('thsublok',$th);
+        echo 1;
+    }
+    public function filterdata(){
+        $sub = $_POST['sub'];
+        $this->session->set_userdata('sublokasi',$sub);
         echo 1;
     }
     public function adddata($id){
@@ -73,13 +75,45 @@ class Sublok extends CI_Controller
     public function inputdata($id){
         $header['header'] = 'sublok';
         $data['title'] = 'Input Data Sub Lokasi';
-        $data['deptlokasi'] = $this->sublokmodel->getdeplokasi();
+        $data['header'] = $this->sublokmodel->getdatabyid($id);
+        $data['data'] = $this->sublokmodel->getdatadetail($id);
         $data['lokasi'] = $this->sublokmodel->getlokasi();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'sublok';
         $this->load->view('layouts/header', $header);
         $this->load->view('sublok/inputdata', $data);
         $this->load->view('layouts/footer', $footer);
+    }
+    public function hapusdata($id){
+        $data = $this->sublokmodel->hapusdata($id);
+        if($data){
+            $url = base_url().'sublok';
+            redirect($url);
+        }
+    }
+    public function scandata($id){
+        $header['header'] = 'sublok';
+        $data['title'] = 'Add Data';
+        $data['header'] = $this->sublokmodel->getdatabyid($id);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'sublok';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('sublok/adddata', $data);
+        $this->load->view('layouts/footer', $footer);
+    }
+    public function inimasukdata(){
+        $insno = $_POST['insno'];
+        $lot = $_POST['lot'];
+        $jlr = $_POST['jlr'];
+        $po = [];
+        $data = $this->sublokmodel->cekmasukdata($insno);
+        foreach($data->result_array() as $dt){
+           $po[] = $dt['po'].$dt['item'].$dt['dis'];
+        }
+        // $datapo = array()
+        $cocok = array('datagroup' => $po);
+        echo json_encode($cocok);
+        // echo $cocok;
     }
 
     // public function cekkonfirmizin(){

@@ -62,8 +62,8 @@ var WebCodeCamJS = function(element) {
             flipVertical: false,
             flipHorizontal: false,
             zoom: 0,
-            beep: 'assets/js/webcam/audio/beep.mp3',
-            decoderWorker: 'assets/js/webcam/js/DecoderWorker.js',
+            beep: 'assets/js/own/webcam/beep.mp3',
+            decoderWorker: 'assets/js/own/webcam/js/DecoderWorker.js',
             brightness: 0,
             autoBrightnessValue: 0,
             grayScale: 0,
@@ -257,7 +257,7 @@ var WebCodeCamJS = function(element) {
                             imgData: lastImageSrc
                         });
                         stop();
-                        insertdataizin(a);
+                        insertdatainstruksi(a);
                     }
                 }, 0);
             }
