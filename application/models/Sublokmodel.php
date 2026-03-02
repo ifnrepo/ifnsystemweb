@@ -3,10 +3,31 @@ class Sublokmodel extends CI_Model
 {
 
     public function getdata(){
-        $this->db->where('id_lokasi',$this->session->userdata('sublokasi'));
+        $this->db->select('tb_inputsublokasi.*,tb_lokasi.dept_id');
+        $this->db->from('tb_inputsublokasi');
+        $this->db->join('tb_lokasi','tb_lokasi.id = tb_inputsublokasi.id_lokasi','left');
+        if($this->session->userdata('sublokasi')!=''){
+            $this->db->where('id_lokasi',$this->session->userdata('sublokasi'));
+        }
+        $this->db->where('tb_lokasi.dept_id',$this->session->userdata('deptsublok'));
         $this->db->where('year(tgl)',$this->session->userdata('thsublok'));
         $this->db->where('month(tgl)',$this->session->userdata('blsublok'));
-        return $this->db->get('tb_inputsublokasi');
+        return $this->db->get();
+    }
+    public function getdatabyid($id){
+        $this->db->select('tb_inputsublokasi.*,tb_lokasi.kode_lokasi,tb_lokasi.nama_lokasi,dept.departemen');
+        $this->db->from('tb_inputsublokasi');
+        $this->db->join('tb_lokasi','tb_lokasi.id = tb_inputsublokasi.id_lokasi','left');
+        $this->db->join('dept','dept.dept_id = tb_lokasi.dept_id','left');
+        $this->db->where('tb_inputsublokasi.id',$id);
+        return $this->db->get()->row_array();
+    }
+    public function getdatadetail($id){
+        $this->db->select('tb_inputsublokasi_detail.*');
+        $this->db->from('tb_inputsublokasi_detail');
+        $this->db->join('tb_inputsublokasi','tb_inputsublokasi.id = tb_inputsublokasi_detail.id_inputsublokasi','left');
+        $this->db->where('tb_inputsublokasi_detail.id_inputsublokasi',$id);
+        return $this->db->get();
     }
     public function getdeplokasi(){
         $this->db->select('tb_lokasi.*,dept.departemen');
@@ -56,18 +77,19 @@ class Sublokmodel extends CI_Model
         $idnya = $this->db->insert_id();
         return $idnya;
     }
+    public function hapusdata($id){
+        $this->db->trans_start();
+        $this->db->where('id_inputsublokasi',$id);
+        $this->db->delete('tb_inputsublokasi_detail');
 
-    //End data sublok
-    public function getdatabyid($id)
-    {
-        $this->db->select('ref_jobcostdep.*,kategori.nama_kategori,dept.departemen');
-        $this->db->from('ref_jobcostdep');
-        $this->db->join('kategori','kategori.kategori_id = ref_jobcostdep.id_kategori','left');
-        $this->db->join('dept','dept.dept_id = ref_jobcostdep.dept_id','left');
-        $this->db->where('ref_jobcostdep.id', $id);
-        $query = $this->db->get();
-        return $query->row_array();
+        $this->db->where('id',$id);
+        $this->db->delete('tb_inputsublokasi');
+        return $this->db->trans_complete();
     }
+    public function cekmasukdata($insno){
+        return $this->db->get_where('tb_netinstr',['insno' => $insno ]);
+    }
+    //End data sublok
     public function simpandata($data)
     {
         $cekdata = $this->db->get_where('ref_jobcostdep',['dept_id' => $data['dept_id'],'id_kategori' => $data['id_kategori'],'sublok' => $data['sublok'],'asal' => $data['asal']]);
@@ -91,10 +113,5 @@ class Sublokmodel extends CI_Model
             $query = $this->db->update('ref_jobcostdep', $data);
             return $query;
         }
-    }
-    public function hapusdata($id)
-    {
-        $query = $this->db->query("Delete from ref_jobcostdep where id =" . $id);
-        return $query;
     }
 }

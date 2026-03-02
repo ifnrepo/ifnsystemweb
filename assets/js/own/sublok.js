@@ -8,7 +8,26 @@ $("#blsublok").change(function(){
 	$("#butgo").click();
 })
 $("#sublokasi").change(function(){
-	$("#butgo").click();
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "sublok/filterdata",
+		data: {
+			// dept: $("#deptsublok").val(),
+			// bulan: $("#blsublok").val(),
+			// tahun: $("#thsublok").val(),
+			sub: $("#sublokasi").val()
+			// ctgr: $("#kategcost").val(),
+		},
+		success: function (data) {
+			// alert(data);
+			window.location.reload();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
 })
 $("#butgo").click(function () {
 	// alert($("#dept").val());
@@ -20,7 +39,7 @@ $("#butgo").click(function () {
 			dept: $("#deptsublok").val(),
 			bulan: $("#blsublok").val(),
 			tahun: $("#thsublok").val(),
-			sub: $("#sublokasi").val()
+			// sub: $("#sublokasi").val()
 			// ctgr: $("#kategcost").val(),
 		},
 		success: function (data) {

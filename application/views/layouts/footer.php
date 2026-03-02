@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1770802525'; ?>
+<?php $updatejs = '1772442138'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -165,11 +165,11 @@
 	<script src="<?= base_url(); ?>assets/js/own/lockinv.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'sublok') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/sublok.js?<?= $updatejs; ?>"></script>
-	<script src="<?= base_url(); ?>assets/js/own/webcam/qrcodelib.js?<?= $updatejs ?>"></script>
-	<script src="<?= base_url(); ?>assets/js/own/webcam/webcodecamjs.js?<?= $updatejs ?>"></script>
-	<script src="<?= base_url(); ?>assets/js/own/webcam/main.js?<?= $updatejs ?>"></script>
-	<script src="<?= base_url(); ?>assets/js/own/webcam/konfirm.js?<?= $updatejs ?>"></script>
+<script src="<?= base_url(); ?>assets/js/own/webcam/qrcodelib.js?<?= $updatejs ?>"></script>
+<script src="<?= base_url(); ?>assets/js/own/webcam/webcodecamjs.js?<?= $updatejs ?>"></script>
+<script src="<?= base_url(); ?>assets/js/own/webcam/main.js?<?= $updatejs ?>"></script>
+<script src="<?= base_url(); ?>assets/js/own/webcam/konfirm.js?<?= $updatejs ?>"></script>
+<script src="<?= base_url(); ?>assets/js/own/sublok.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/main.js?<?= $updatejs; ?>"></script>

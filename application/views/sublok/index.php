@@ -67,7 +67,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="card-body p-2 font-kecil">
                             <div class="row">
                                 <div class="col-sm-3 col-12">
-                                    <h4 class="mb-1 font-kecil">Sub-lokasi <?= $this->session->userdata('sublokasi') ?></h4>
+                                    <h4 class="mb-1 font-kecil">Sub-lokasi</h4>
                                     <span class="font-kecil">
                                         <div class="font-kecil">
                                         <select class="form-select form-control form-sm font-kecil font-bold" id="sublokasi" name="sublokasi">
@@ -117,18 +117,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <tr>
                                             <td class="text-center"><?= $no++; ?></td>
                                             <td><?= tglmysql($dt['tgl']) ?></td>
-                                            <td><?= $dt['nomor'] ?></td>
+                                            <td><a href="#" class="font-bold"><?= $dt['nomor'] ?></a></td>
                                             <td class="text-pink"><?= rupiah($dt['pcs'],0).' Pcs, '.rupiah($dt['kgs'],2).' Kgs' ?></td>
                                             <td class="line-12 font-kecil text-azure"><span><?= datauser($dt['dibuat_oleh'],'name') ?></span><br><span><?= tglmysql2($dt['tgl_buat']) ?></span></td>
                                             <td></td>
                                             <td class="text-center">
-                                                AKSI
+                                                <a href="<?= base_url().'sublok/inputdata/'.$dt['id'] ?>" class="btn btn-sm btn-blue">Lanjutkan Transaksi</a>
+                                                <a href="#" data-href="<?= base_url().'sublok/hapusdata/'.$dt['id'] ?>" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini (<?= $dt['nomor'] ?>)">Hapus Data</a>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="6" class="text-center"> Data Kosong</td>
+                                        <td colspan="7" class="text-center"> Data Kosong</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
