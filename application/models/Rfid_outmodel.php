@@ -1,12 +1,39 @@
 <?php
 class Rfid_outmodel extends CI_Model
 {
-    public function getdata_pl()
+    public function getTahun()
+    {
+        $this->db->select('YEAR(tgl) as tahun');
+        $this->db->from('tb_balenumber');
+        $this->db->group_by('YEAR(tgl)');
+        $this->db->order_by('tahun', 'DESC');
+        return $this->db->get()->result_array();
+    }
+
+    public function getBulan()
+    {
+        $this->db->select('MONTH(tgl) as bulan, MONTHNAME(tgl) as nama_bulan');
+        $this->db->from('tb_balenumber');
+        $this->db->group_by('MONTH(tgl)');
+        $this->db->order_by('bulan', 'ASC');
+        return $this->db->get()->result_array();
+    }
+
+
+    public function getdata_pl($bulan = null, $tahun = null)
     {
         $this->db->select("plno");
         $this->db->from('tb_balenumber');
+
+        if ($bulan !== 'all' && $tahun !== 'all') {
+
+            $this->db->where('MONTH(tgl)', $bulan);
+            $this->db->where('YEAR(tgl)', $tahun);
+        }
+
         $this->db->group_by('plno');
         $this->db->order_by('plno', 'DESC');
+
         return $this->db->get()->result_array();
     }
 

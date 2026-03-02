@@ -27,13 +27,22 @@ class Rfid_out extends CI_Controller
     {
         $data['title'] = 'Container IN';
         $header['header'] = 'rfid';
-        $data['plno'] = $this->Rfid_outmodel->getdata_pl();
+        $data['bln_sekarang'] = date('m');
+        $data['thn_sekarang'] = date('Y');
+        $bulan = $this->session->userdata('filter_bulan') ?? 'all';
+        $tahun = $this->session->userdata('filter_tahun') ?? 'all';
+        $data['plno'] = $this->Rfid_outmodel->getdata_pl($bulan, $tahun);
+        $data['bulan_options'] = $this->Rfid_outmodel->getBulan();
+        $data['tahun_options'] = $this->Rfid_outmodel->getTahun();
         // $footer['fungsi'] = 'container';
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $data['filter_pl'] = $this->session->userdata('filter_pl') ?? 'all';
         $data['filter_exdo'] = $this->session->userdata('filter_exdo') ?? 'all';
         $data['filter_cekmasuk'] = $this->session->userdata('filter_cekmasuk') ?? 'all';
         $data['filter_selesai'] = $this->session->userdata('filter_selesai') ?? 'all';
+
+        $data['filter_bulan'] = $this->session->userdata('filter_bulan') ?? 'all';
+        $data['filter_tahun'] = $this->session->userdata('filter_tahun') ?? 'all';
         $this->load->view('layouts/header', $header);
         $this->load->view('rfid_out/index', $data);
         $this->load->view('layouts/footer', $footer);
@@ -45,11 +54,15 @@ class Rfid_out extends CI_Controller
         $filter_exdo      = $this->input->post('filter_exdo');
         $filter_cekmasuk  = $this->input->post('filter_cekmasuk');
         $filter_selesai   = $this->input->post('filter_selesai');
+        $filter_bulan   = $this->input->post('filter_bulan');
+        $filter_tahun   = $this->input->post('filter_tahun');
 
         $this->session->set_userdata('filter_pl', $filter_pl);
         $this->session->set_userdata('filter_exdo', $filter_exdo);
         $this->session->set_userdata('filter_cekmasuk', $filter_cekmasuk);
         $this->session->set_userdata('filter_selesai', $filter_selesai);
+        $this->session->set_userdata('filter_bulan', $filter_bulan);
+        $this->session->set_userdata('filter_tahun', $filter_tahun);
 
         $limit  = $this->input->post('length');
         $start  = $this->input->post('start');
@@ -79,6 +92,11 @@ class Rfid_out extends CI_Controller
             AND tb_po.item = tb_balenumber.item
         ', 'left');
 
+        if ($filter_bulan !== 'all')
+            $this->db->where('MONTH(tb_balenumber.tgl)', $filter_bulan);
+
+        if ($filter_tahun !== 'all')
+            $this->db->where('YEAR(tb_balenumber.tgl)', $filter_tahun);
 
         if ($filter_pl && $filter_pl !== 'all')
             $this->db->where('tb_balenumber.plno', $filter_pl);
@@ -200,6 +218,12 @@ class Rfid_out extends CI_Controller
 
         $this->db->from('tb_balenumber');
 
+        if ($filter_bulan !== 'all')
+            $this->db->where('MONTH(tb_balenumber.tgl)', $filter_bulan);
+
+        if ($filter_tahun !== 'all')
+            $this->db->where('YEAR(tb_balenumber.tgl)', $filter_tahun);
+
         if ($filter_pl && $filter_pl !== 'all')
             $this->db->where('plno', $filter_pl);
 
@@ -234,6 +258,11 @@ class Rfid_out extends CI_Controller
 
         //cek masuj
         $this->db->from('tb_balenumber');
+        if ($filter_bulan !== 'all')
+            $this->db->where('MONTH(tb_balenumber.tgl)', $filter_bulan);
+
+        if ($filter_tahun !== 'all')
+            $this->db->where('YEAR(tb_balenumber.tgl)', $filter_tahun);
         if ($filter_pl && $filter_pl !== 'all')
             $this->db->where('plno', $filter_pl);
 
@@ -270,6 +299,12 @@ class Rfid_out extends CI_Controller
 
         //cek selesai
         $this->db->from('tb_balenumber');
+
+        if ($filter_bulan !== 'all')
+            $this->db->where('MONTH(tb_balenumber.tgl)', $filter_bulan);
+
+        if ($filter_tahun !== 'all')
+            $this->db->where('YEAR(tb_balenumber.tgl)', $filter_tahun);;
 
         if ($filter_pl && $filter_pl !== 'all')
             $this->db->where('plno', $filter_pl);
@@ -318,17 +353,34 @@ class Rfid_out extends CI_Controller
             AND tb_packfin.nobale = tb_balenumber.nobale
         ', 'left');
 
+        if ($filter_bulan !== 'all')
+            $this->db->where('MONTH(tb_balenumber.tgl)', $filter_bulan);
+
+        if ($filter_tahun !== 'all')
+            $this->db->where('YEAR(tb_balenumber.tgl)', $filter_tahun);
+
         if ($filter_pl && $filter_pl !== 'all')
             $this->db->where('tb_balenumber.plno', $filter_pl);
 
         if ($filter_exdo && $filter_exdo !== 'all')
             $this->db->where('tb_balenumber.exdo', $filter_exdo);
 
-        if ($filter_cekmasuk && $filter_cekmasuk !== 'all')
-            $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
+        if ($filter_cekmasuk !== 'all') {
 
-        if ($filter_selesai && $filter_selesai !== 'all')
-            $this->db->where('tb_balenumber.selesai', $filter_selesai);
+            if ($filter_cekmasuk === '0') {
+                $this->db->where('tb_balenumber.masuk IS NULL', null, false);
+            } elseif ($filter_cekmasuk === '1') {
+                $this->db->where('tb_balenumber.masuk >', 0);
+            }
+        }
+        if ($filter_selesai !== 'all') {
+
+            if ($filter_selesai === '0') {
+                $this->db->where('tb_balenumber.selesai ', 0);
+            } elseif ($filter_selesai === '1') {
+                $this->db->where('tb_balenumber.selesai >', 0);
+            }
+        }
 
         if (!empty($search)) {
             $this->db->group_start();

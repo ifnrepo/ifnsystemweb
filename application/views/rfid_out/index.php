@@ -1,3 +1,24 @@
+<style>
+    .hover-lift {
+        transition: transform 0.2s ease, box-shadow 0.2s ease;
+    }
+
+    .hover-lift:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1) !important;
+    }
+
+    .form-select-sm {
+        cursor: pointer;
+    }
+
+    .card-body h3 {
+        letter-spacing: -1px;
+    }
+</style>
+
+
+
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
@@ -21,14 +42,40 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="card">
             <div class="card-body">
                 <div class="card border-0 shadow-sm mb-4">
-                    <div class="card-body">
+                    <!-- <div class="card-body">
+                        <div class="row">
+                            <div class="col-lg-2">
+                                <label class="font-kecil font-bold text-azure text-primary" st>Bulan</label>
+                                <select name="filter_bulan" id="filter_bulan" class="form-select font-kecil mt-0">
+                                    <option value="all" <?= $filter_bulan == 'all' ? 'selected' : '' ?>>Semua Bulan</option>
+                                    <?php foreach ($bulan_options as $bl) : ?>
+                                        <?php if (!empty($bl['bulan']) && !empty($bl['nama_bulan'])) : ?>
+                                            <option value="<?= $bl['bulan']; ?>" <?= ($filter_bulan == $bl['bulan'] || ($filter_bulan == 'all' && $bln_sekarang == $bl['bulan'])) ? 'selected' : '' ?>>
+                                                <?= $bl['nama_bulan']; ?>
+                                            </option>
+                                        <?php endif; ?>
+                                    <?php endforeach; ?>
+                                </select>
+                            </div>
+                            <div class="col-lg-2">
+                                <label class="font-kecil font-bold text-azure text-primary">Tahun</label>
+                                <select name="filter_tahun" id="filter_tahun" class="form-select font-kecil mt-0">
+                                    <option value="all" <?= $filter_tahun == 'all' ? 'selected' : '' ?>>Semua Tahun</option>
+                                    <?php foreach ($tahun_options as $th) : ?>
+                                        <option value="<?= $th['tahun']; ?>" <?= ($filter_tahun == $th['tahun'] || ($filter_tahun == 'all' && $thn_sekarang == $th['tahun'])) ? 'selected' : '' ?>>
+                                            <?= $th['tahun']; ?></option>
+                                    <?php endforeach; ?>
+                                </select>
+
+                            </div>
+
+                        </div>
                         <div class="text-right">
                             <a href="<?= base_url('rfid_out') ?>" class="btn btn-primary btn-sm">
                                 <i class="fa fa-refresh"></i>
                                 <span class="ms-1">Refresh</span>
                             </a>
                         </div>
-
                         <div class="row align-items-end g-3">
                             <div class="col-12 col-sm-6 col-md-2">
                                 <label class="form-label fw-bold text-primary small">Pilih PLNO</label>
@@ -72,12 +119,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                             <div class="col-12 col-md-4">
                                 <div class="d-flex justify-content-md-end gap-2">
-                                    <!-- <a href="<?= base_url() . 'rfid_out/excel'; ?>" class="btn btn-outline-success btn-sm px-3">
-                                        <i class="fa fa-file-excel-o me-1"></i> Excel
-                                    </a>
-                                    <a href="<?= base_url() . 'rfid_out/pdf'; ?>" target="_blank" class="btn btn-outline-danger btn-sm px-3">
-                                        <i class="fa fa-file-pdf-o me-1"></i> PDF
-                                    </a> -->
 
                                     <a href="<?= base_url() . 'rfid_out/excel'; ?>" class="btn btn-success btn-sm">
                                         <i class="fa fa-file-excel-o"></i>
@@ -92,6 +133,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                         </div>
                         <hr class="opacity-50 mb-4">
+
                         <div class="row g-3 mb-4">
                             <div class="col-6 col-md-3">
                                 <div class="p-3 border-start border-primary border-4 bg-light rounded shadow-sm">
@@ -132,7 +174,172 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+
+                    <div class="card-body bg-white rounded-3 shadow-sm">
+                        <div class="row g-3 mb-4">
+                            <div class="col-lg-4">
+                                <div class="p-3 border rounded-3 bg-light">
+                                    <div class="row g-2">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fa fa-calendar me-2"></i>
+                                            <span class="fw-bold text-muted small uppercase">Periode Container IN</span>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fw-bold text-primary small">Bulan</label>
+                                            <select name="filter_bulan" id="filter_bulan" class="form-select form-select-sm border-0 shadow-sm">
+                                                <option value="all" <?= $filter_bulan == 'all' ? 'selected' : '' ?>>Semua Bulan</option>
+                                                <?php foreach ($bulan_options as $bl) : ?>
+                                                    <?php if (!empty($bl['bulan']) && !empty($bl['nama_bulan'])) : ?>
+                                                        <option value="<?= $bl['bulan']; ?>" <?= ($filter_bulan == $bl['bulan'] || ($filter_bulan == 'all' && $bln_sekarang == $bl['bulan'])) ? 'selected' : '' ?>>
+                                                            <?= $bl['nama_bulan']; ?>
+                                                        </option>
+                                                    <?php endif; ?>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-6">
+                                            <label class="form-label fw-bold text-primary small">Tahun</label>
+                                            <select name="filter_tahun" id="filter_tahun" class="form-select form-select-sm border-0 shadow-sm">
+                                                <option value="all" <?= $filter_tahun == 'all' ? 'selected' : '' ?>>Semua Tahun</option>
+                                                <?php foreach ($tahun_options as $th) : ?>
+                                                    <option value="<?= $th['tahun']; ?>" <?= ($filter_tahun == $th['tahun'] || ($filter_tahun == 'all' && $thn_sekarang == $th['tahun'])) ? 'selected' : '' ?>>
+                                                        <?= $th['tahun']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                            <!-- <input type="number" class="form-control font-kecil mt-0" name="filter_tahun" id="filter_tahun" value="<?= $filter_tahun == 'all' ? $thn_sekarang : $filter_tahun; ?>"> -->
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-lg-8">
+                                <div class="p-3 border rounded-3 bg-light h-100 shadow-sm">
+                                    <div class="row g-2 mb-3">
+                                        <div class="d-flex align-items-center mb-2">
+                                            <i class="fa fa-barcode text-black me-2"></i>
+                                            <span class="fw-bold text-muted small uppercase">Filter Bale Number</span>
+                                        </div>
+                                        <div class="col-3">
+                                            <label class="form-label fw-bold text-primary small">Pilih PLNO</label>
+                                            <select name="filter" id="filter" class="form-select form-select-sm border-0 shadow-sm">
+                                                <option value="all" <?= $filter_pl == 'all' ? 'selected' : '' ?>>Semua</option>
+                                                <?php foreach ($plno as $no) : ?>
+                                                    <option value="<?= $no['plno']; ?>" <?= $filter_pl == $no['plno'] ? 'selected' : '' ?>>
+                                                        <?= $no['plno']; ?>
+                                                    </option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            <label class="form-label fw-bold text-primary small mb-1">Exdo</label>
+                                            <select name="filter_exdo" id="filter_exdo" class="form-select form-select-sm border-0 shadow-sm">
+                                                <option value="all" <?= $filter_exdo == 'all' ? 'selected' : '' ?>>Semua</option>
+                                                <option value="EXPORT" <?= $filter_exdo == 'EXPORT' ? 'selected' : '' ?>>EXPORT</option>
+                                                <option value="DOMESTIC" <?= $filter_exdo == 'DOMESTIC' ? 'selected' : '' ?>>DOMESTIC</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            <label class="form-label fw-bold text-primary small mb-1">Cek Masuk</label>
+                                            <select name="filter_cekmasuk" id="filter_cekmasuk" class="form-select form-select-sm border-0 shadow-sm">
+                                                <option value="all" <?= $filter_cekmasuk == 'all' ? 'selected' : '' ?>>Semua</option>
+                                                <option value="0" <?= $filter_cekmasuk == 0 ? 'selected' : '' ?>>Waiting</option>
+                                                <option value="1" <?= $filter_cekmasuk == 1 ? 'selected' : '' ?>>Verified</option>
+                                            </select>
+                                        </div>
+                                        <div class="col-3">
+                                            <label class="form-label fw-bold text-primary small mb-1">Cek Selesai</label>
+                                            <select name="filter_selesai" id="filter_selesai" class="form-select form-select-sm border-0 shadow-sm">
+                                                <option value="all" <?= $filter_selesai == 'all' ? 'selected' : '' ?>>Semua</option>
+                                                <option value="0" <?= $filter_selesai == 0 ? 'selected' : '' ?>>Waiting</option>
+                                                <option value="1" <?= $filter_selesai == 1 ? 'selected' : '' ?>>Complete</option>
+                                            </select>
+                                        </div>
+                                    </div>
+
+                                    <div class="d-flex flex-column flex-md-row justify-content-md-end gap-2 mt-3">
+                                        <a href="<?= base_url('rfid_out') ?>" class="btn btn-primary btn-sm px-3 rounded-2 shadow-sm">
+                                            <i class="fa fa-refresh me-1"></i> Refresh
+                                        </a>
+                                        <a href="<?= base_url() . 'rfid_out/excel'; ?>" class="btn btn-success btn-sm px-3 rounded-2 shadow-sm">
+                                            <i class="fa fa-file-excel-o me-1"></i> Excel
+                                        </a>
+                                        <a href="<?= base_url() . 'rfid_out/pdf'; ?>" target="_blank" class="btn btn-danger btn-sm px-3 rounded-2 shadow-sm">
+                                            <i class="fa fa-file-pdf-o me-1"></i> PDF
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row g-3">
+                            <div class="col-md-3">
+                                <div class="card border-0 border-bottom border-primary border-4 shadow-sm h-10 hover-lift">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h6 class="text-bold fw-bold mb-0">Total Record</h6>
+                                            <div class="bg-primary bg-opacity-10 p-2 rounded">
+                                                <i class="fa fa-list text-white"></i>
+                                            </div>
+                                        </div>
+                                        <div class="d-flex align-items-end justify-content-between">
+                                            <h3 class="fw-bold mb-0 text-dark" id="totalFiltered">0</h3>
+                                            <div class="text-end small">
+                                                <span class="d-block text-warning fw-bold">Verified: <span id="total_cekmasuk">0</span></span>
+                                                <span class="d-block text-success fw-bold">Complete: <span id="total_cekselesai">0</span></span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card border-0 border-bottom border-success border-4 shadow-sm h-100 hover-lift">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h6 class="text-bold fw-bold mb-0">Total Pcs</h6>
+                                            <div class="bg-success bg-opacity-10 p-2 rounded">
+                                                <i class="fa fa fa-tags text-white "></i>
+                                            </div>
+                                        </div>
+                                        <h3 class="fw-bold mb-0 text-dark" id="total_pcs">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card border-0 border-bottom border-info border-4 shadow-sm h-100 hover-lift">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h6 class="text-bold fw-bold mb-0">Total Berat</h6>
+                                            <div class="bg-info bg-opacity-10 p-2 rounded">
+                                                <i class="fa fa-balance-scale text-white"></i>
+                                            </div>
+                                        </div>
+                                        <h3 class="fw-bold mb-0 text-dark" id="total_nw">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="col-md-3">
+                                <div class="card border-0 border-bottom border-warning border-4 shadow-sm h-100 hover-lift">
+                                    <div class="card-body">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            <h6 class="text-bold fw-bold mb-0">Total Meas</h6>
+                                            <div class="bg-warning bg-opacity-10 p-2 rounded">
+                                                <i class="fa fa-truck text-white"></i>
+                                            </div>
+                                        </div>
+                                        <h3 class="fw-bold mb-0 text-dark" id="total_meas">0</h3>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
+
                 </div>
                 <div class="table-responsive">
                     <table id="container-table" class="table">
@@ -233,6 +440,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
     });
 </script>
 <script>
+    $('#filter_bulan, #filter_tahun').change(function() {
+        location.reload();
+    });
     $(document).ready(function() {
 
         var table = $('#container-table').DataTable({
@@ -248,6 +458,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     d.filter_exdo = $('#filter_exdo').val();
                     d.filter_cekmasuk = $('#filter_cekmasuk').val();
                     d.filter_selesai = $('#filter_selesai').val();
+                    d.filter_bulan = $('#filter_bulan').val();
+                    d.filter_tahun = $('#filter_tahun').val();
 
                 }
             },
@@ -309,7 +521,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
 
 
-        $('#filter, #filter_exdo, #filter_cekmasuk, #filter_selesai').change(function() {
+        $('#filter, #filter_exdo, #filter_cekmasuk, #filter_selesai, #filter_bulan, #filter_tahun').change(function() {
             table.ajax.reload();
         });
     });
