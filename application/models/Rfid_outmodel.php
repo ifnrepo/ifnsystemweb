@@ -25,9 +25,11 @@ class Rfid_outmodel extends CI_Model
         $this->db->select("plno");
         $this->db->from('tb_balenumber');
 
-        if ($bulan !== 'all' && $tahun !== 'all') {
-
+        if ($bulan !== 'all') {
             $this->db->where('MONTH(tgl)', $bulan);
+        }
+
+        if ($tahun !== 'all') {
             $this->db->where('YEAR(tgl)', $tahun);
         }
 
@@ -37,7 +39,8 @@ class Rfid_outmodel extends CI_Model
         return $this->db->get()->result_array();
     }
 
-    public function getdata_ex($filter_pl, $filter_exdo, $filter_cekmasuk, $filter_selesai)
+
+    public function getdata_ex($filter_pl, $filter_bulan, $filter_tahun)
     {
 
         $this->db->select('tb_balenumber.*, tb_packfin.nw, tb_packfin.pcs, tb_packfin.meas , tb_po.spek');
@@ -61,16 +64,23 @@ class Rfid_outmodel extends CI_Model
         if ($filter_pl !== 'all' && !empty($filter_pl)) {
             $this->db->where('tb_balenumber.plno', $filter_pl);
         }
-        if ($filter_exdo !== 'all' && !empty($filter_exdo)) {
-            $this->db->where('tb_balenumber.exdo', $filter_exdo);
-        }
-        if ($filter_cekmasuk !== 'all' && !empty($filter_cekmasuk)) {
-            $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
-        }
+        // if ($filter_exdo !== 'all' && !empty($filter_exdo)) {
+        //     $this->db->where('tb_balenumber.exdo', $filter_exdo);
+        // }
+        // if ($filter_cekmasuk !== 'all' && !empty($filter_cekmasuk)) {
+        //     $this->db->where('tb_balenumber.masuk', $filter_cekmasuk);
+        // }
 
-        if ($filter_selesai != 'all') {
-            $this->db->where('tb_balenumber.selesai', $filter_selesai);
-        }
+        // if ($filter_selesai != 'all') {
+        //     $this->db->where('tb_balenumber.selesai', $filter_selesai);
+        // }
+        if ($filter_bulan !== 'all')
+            $this->db->where('MONTH(tb_balenumber.tgl)', $filter_bulan);
+
+        if ($filter_tahun !== 'all')
+            $this->db->where('YEAR(tb_balenumber.tgl)', $filter_tahun);
+
+        $this->db->group_by('tb_balenumber.id');
         $this->db->order_by('tb_balenumber.id', 'DESC');
         return $this->db->get()->result_array();
     }
