@@ -50,8 +50,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                         </div>
                     </div>
-                    <div class="mt-1 text-right">
-                        <a href="<?= base_url() . 'sublok/scandata/'.$header['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                    <div class="d-flex justify-content-between">
+                        <div class="mt-1">
+                            <a href="<?= base_url() . 'sublok/scandata/'.$header['id']; ?>" class="btn btn-primary btn-sm"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                        </div>
+                        <div class="mt-1 text-right">
+                            <a href="<?= base_url() . 'sublok' ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
+                        </div>
                     </div>
                     <div class="mt-2" style="overflow: auto;">
                         <table id="pbtabel" class="table nowrap order-column table-hover table-bordered" style="width: 100% !important;">

@@ -89,6 +89,36 @@ class Sublokmodel extends CI_Model
     public function cekmasukdata($insno){
         return $this->db->get_where('tb_netinstr',['insno' => $insno ]);
     }
+    public function tambahketemp($data){
+        $caripo = $this->db->get_where('tb_po',['ind_po' => $data['ind']]);
+        if($caripo->num_rows() > 0){
+            $hasilcaripo = $caripo->row_array();
+            $isi = [
+                'id_inputsublokasi' => $data['id'],
+                'po' => $hasilcaripo['po'],
+                'item' => $hasilcaripo['item'],
+                'dis' => $hasilcaripo['dis'],
+                'lot' => $data['lot'],
+                'jalur' => $data['jalur'],
+                'insno' => $data['insno'],
+                'pcs' => 1,
+                'kgs' => 10000
+            ];
+            return $this->db->insert('tb_inputsublokasi_detail_temp',$isi);
+        }
+    }
+    public function getdatatemp($id){
+        $this->db->where('id_inputsublokasi',$id);
+        return $this->db->get('tb_inputsublokasi_detail_temp');
+    }
+    public function hapusdettemp($id){
+        $data = $this->db->get_where('tb_inputsublokasi_detail_temp',['id' => $id])->row_array();
+
+        $this->db->where('id',$id);
+        $this->db->delete('tb_inputsublokasi_detail_temp');
+
+        return $data['id_inputsublokasi'];
+    }
     //End data sublok
     public function simpandata($data)
     {

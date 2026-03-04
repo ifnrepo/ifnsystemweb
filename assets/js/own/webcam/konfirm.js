@@ -1,5 +1,20 @@
 $(document).ready(function(){
     // $("#play").click();
+    var url = window.location.href;
+	var pisah = url.split("/");
+	// alert(pisah[5]);
+	if (pisah[2] == "localhost") {
+		if (pisah[5] == "scandata") {
+			getdatatemp();
+            // alert('ada');
+
+		}
+	} else {
+		if (pisah[5] == "scandata") {
+			// getdatadetailib();
+            alert('ada');
+		}
+	}
 })
 
 $("#contoh").blur(function(){
@@ -34,12 +49,22 @@ function insertdatainstruksi(x){
         url : base_url + "sublok/inimasukdata",
         data : {insno : insnoe,lot: lote, jlr: jlre},
         success : function(data){
-            if(data.datagroup.length == 1){
+            if(data.datapo.length == 1){
                 alert('Data ada satu');
-                isiketemp(data.datagroup[0])
+                isiketemp(data.datapo[0])
             }else{
-                if(data.datagroup.length > 1){
-                    alert('Data lebih dari 1');
+                if(data.datapo.length > 1){
+                    // alert('Data lebih dari 1');
+                    for(let lp=0; lp < data.datapo.length; lp++){
+                        // isiketemp(data.datapo[lp]['po']);
+                        let kode = insnoe.replaceAll('-','@');
+                        let xkode = kode.replaceAll(' ','-');
+                        $("#jalurnya").val(jlre);
+                        $("#lotnya").val(lote);
+                        $("#insnonya").val(insnoe);
+                        $("#pilihpoadadua").attr('href',base_url+'sublok/pilihpo/'+xkode);
+                        document.getElementById('pilihpoadadua').click();
+                    }
                 }
             }
             // if(data.length > 0){
@@ -63,4 +88,30 @@ function isiketemp(po,jm=1){
     if(jm==1){
 
     }
+}
+function getdatatemp() {
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "sublok/getdatatemp",
+		data: {
+			id_header: $("#idreal").val(),
+		},
+		success: function (data) {
+			// alert(data.jmlrek);
+			// window.location.reload();
+			// $("#jmlrek").val(data.jmlrek);
+			$("#body-table").html(data.datagroup).show();
+			// $("#totalharga").val(rupiah(data.totalharga, ".", ",", 2));
+			// if (data.jmlrek > 0) {
+			// 	$("#jn_ib").attr("disabled", true);
+			// 	$("#pilihsup").addClass("disabled");
+			// }
+			// hitunggrandtotal();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
 }
