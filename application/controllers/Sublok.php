@@ -108,12 +108,60 @@ class Sublok extends CI_Controller
         $po = [];
         $data = $this->sublokmodel->cekmasukdata($insno);
         foreach($data->result_array() as $dt){
-           $po[] = $dt['po'].$dt['item'].$dt['dis'];
+           $po[] = array('po' => $dt['po'],'item' => $dt['item'],'dis' =>$dt['dis']);
         }
         // $datapo = array()
-        $cocok = array('datagroup' => $po);
+        $cocok = array('datapo' => $po);
         echo json_encode($cocok);
         // echo $cocok;
+    }
+    public function pilihpo($insno){
+        $datains = str_replace('@','-',str_replace('-',' ',$insno));
+        $data['data'] = $this->sublokmodel->cekmasukdata($datains);
+        $this->load->view('sublok/pilihpo', $data);
+    }
+    public function tambahketemp(){
+        $data = [
+            'ind' => $_POST['ind'],
+            'id' => $_POST['id'],
+            'lot' => $_POST['lot'],
+            'jalur' => $_POST['jlr'],
+            'insno' => $_POST['ins']
+        ];
+
+        $hasil = $this->sublokmodel->tambahketemp($data);
+        echo $hasil;
+    }
+    public function hapusdettemp($id){
+        $db = $this->sublokmodel->hapusdettemp($id);
+        $url = base_url().'sublok/scandata/'.$db;
+        redirect($url);
+    }
+    public function getdatatemp(){
+        $html = '';
+        $id = $_POST['id_header'];
+        $datatemp = $this->sublokmodel->getdatatemp($id);
+        if($datatemp->num_rows() > 0){
+            // $hasiltemp = $datatemp->row_array();
+            $no=1;
+            foreach($datatemp->result_array() as $hsl){
+                $dis = $hsl['dis']!=0 ? ' dis '.$hsl['dis'] : '';
+                $html .= '<tr>';
+                $html .= '<td>'.$no++.'</td>';
+                $html .= '<td class="line-12">'.$hsl["po"].'#'.$hsl["item"].$dis.'<br><span class="font-kecil text-cyan">'.$hsl["insno"].'</span></td>';
+                $html .= '<td>'.$hsl['lot'].'-'.$hsl['jalur'].'</td>';
+                $html .= '<td>1</td>';
+                $html .= '<td><a href="'.base_url().'sublok/hapusdettemp/'.$hsl['id'].'" class="btn btn-sm btn-danger">Hapus</a></td>';
+                $html .= '</tr>';
+            }
+        }else{
+            $html .= '<tr>';
+            $html .= '<td colspan="4" class="text-center">Data Kosong</td>';
+            $html .= '</tr>';
+        }
+
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
     }
 
     // public function cekkonfirmizin(){

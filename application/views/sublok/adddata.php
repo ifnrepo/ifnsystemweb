@@ -12,7 +12,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     }
 </style> -->
 
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
     <div class="container-xl">
         <div class="row g-0 d-flex align-items-between">
             <div class="col-md-6">
@@ -29,7 +29,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
     </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
     <div class="container-xl">
 
         <div class="card">
@@ -101,6 +101,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <div class="mt-2">
                                         <div class="text-left font-kecil">Data Collection</div>
                                         <input type="text" id="contoh" name="contoh">
+                                        <input type="text" id="idreal" name="idreal" class="hilang" value="<?= $header['id'] ?>">
+                                        <input type="text" id="insnonya" name="insnonya" class="hilang">
+                                        <input type="text" id="lotnya" name="lotnya" class="hilang">
+                                        <input type="text" id="jalurnya" name="jalurnya" class="hilang">
+                                        <a href="<?= base_url().'sublok/pilih' ?>" class="btn btn-sm btn-warning hilang" id="pilihpoadadua" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Pilih PO yang dimaksud">Pilih</a>
                                         <div>
                                             <table id="pbtabel" class="table nowrap order-column table-hover table-bordered" style="width: 100% !important;">
                                                 <thead>
@@ -109,7 +114,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     <th>SKU</th>
                                                     <th>Lot no</th>
                                                     <th>Qty</th>
-                                                    <!-- <th>Kgs</th> -->
+                                                    <th>Act</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
@@ -118,6 +123,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                         <td class="line-12">FU-0174#2<br><span class="font-kecil text-cyan">FU 1041</span></td>  
                                                         <td>01-01</td>
                                                         <td>1</td>
+                                                        <td>
+                                                            <a href="#" class="btn btn-sm">Hapus</a>
+                                                        </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
