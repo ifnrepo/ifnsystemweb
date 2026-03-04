@@ -12,7 +12,8 @@ $(document).ready(function(){
 	} else {
 		if (pisah[5] == "scandata") {
 			// getdatadetailib();
-            alert('ada');
+            // alert('ada');
+            getdatatemp();
 		}
 	}
 })
@@ -50,12 +51,15 @@ function insertdatainstruksi(x){
         data : {insno : insnoe,lot: lote, jlr: jlre},
         success : function(data){
             if(data.datapo.length == 1){
-                alert('Data ada satu');
-                isiketemp(data.datapo[0])
+                // alert('Data ada satu');
+                $("#jalurnya").val(jlre);
+                $("#lotnya").val(lote);
+                $("#insnonya").val(insnoe);
+                isiketemp(data.datapo[0]['po']+data.datapo[0]['item']+data.datapo[0]['dis']);
             }else{
                 if(data.datapo.length > 1){
                     // alert('Data lebih dari 1');
-                    for(let lp=0; lp < data.datapo.length; lp++){
+                    // for(let lp=0; lp < data.datapo.length; lp++){
                         // isiketemp(data.datapo[lp]['po']);
                         let kode = insnoe.replaceAll('-','@');
                         let xkode = kode.replaceAll(' ','-');
@@ -64,7 +68,10 @@ function insertdatainstruksi(x){
                         $("#insnonya").val(insnoe);
                         $("#pilihpoadadua").attr('href',base_url+'sublok/pilihpo/'+xkode);
                         document.getElementById('pilihpoadadua').click();
-                    }
+                    // }
+                }else{
+                    alert('DATA TIDAK DITEMUKAN !');
+                    return false;
                 }
             }
             // if(data.length > 0){
@@ -83,11 +90,27 @@ function insertdatainstruksi(x){
         }
     })
 }
-function isiketemp(po,jm=1){
+function isiketemp(po){
     alert(po);
-    if(jm==1){
-
-    }
+    $.ajax({
+        dataType: 'json',
+        type : "POST",
+        url : base_url+"sublok/tambahketemp",
+        data : {
+            id: $("#idreal").val(),
+            lot: $("#lotnya").val(),
+            jlr: $("#jalurnya").val(),
+            ins: $("#insnonya").val(),
+            ind: po
+        },
+        success : function(data){
+            getdatatemp();
+            // $("#keluar").click();
+            // if(data==1){
+            //     document.getElementById('kebase').click();
+            // }
+        }
+    })
 }
 function getdatatemp() {
 	$.ajax({

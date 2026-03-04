@@ -41,6 +41,7 @@ class Inv extends CI_Controller
             $data['tglakhir'] = tglmysql(lastday(date('Y') . '-' . date('m') . '-01'));
             $data['currdept'] = "$%";
             $data['ifndln'] = 'X';
+            $data['exdo'] = 'all';
             $data['req_inv'] = 0;
             // $data['buyer'] = []; 
         }else{
@@ -48,6 +49,7 @@ class Inv extends CI_Controller
             $data['tglakhir'] = $this->session->userdata('tglakhir');
             $data['currdept'] = $this->session->userdata('currdept');
             $data['ifndln'] = $this->session->userdata('ifndln');
+            $data['exdo'] = $this->session->userdata('dataexdo');
             $data['req_inv'] = $this->invmodel->getreqinv();
             // if($this->session->userdata('currdept')=='GF'){
             // }else{
@@ -75,6 +77,7 @@ class Inv extends CI_Controller
         $this->session->unset_userdata('katcari');
         $this->session->unset_userdata('nomorbcnya');
         $this->session->unset_userdata('ifndln');
+        $this->session->unset_userdata('dataexdo');
         $url = base_url('Inv');
         redirect($url);
     }
@@ -87,12 +90,13 @@ class Inv extends CI_Controller
         $this->session->set_userdata('tglakhir', $_POST['tgk']);
         $this->session->set_userdata('currdept', $_POST['dpt']);
         $this->session->set_userdata('ifndln', $_POST['idln']);
+        $this->session->set_userdata('dataexdo', $_POST['exdo']);
         echo 1;
     }
     public function getdatabaru($mode=0){
         $arrayu = [];
         $filter_kategori = $_POST['filt'];
-        $filter_exdo = $_POST['exdo'];
+        // $filter_exdo = $_POST['exdo'];
         $filter_stok = $_POST['stok'];
         $filter_buyer = $_POST['buyer'];
         $filter_exnet = $_POST['exnet'];
@@ -102,9 +106,9 @@ class Inv extends CI_Controller
         if($filter_kategori!='all'){
             $arrayu['id_kategori'] = $filter_kategori;
         }
-        if($filter_exdo!="all"){
-            $arrayu['exdo'] = $filter_exdo;
-        }
+        // if($filter_exdo!="all"){
+        //     $arrayu['exdo'] = $filter_exdo;
+        // }
         if($filter_stok!="all"){
             $arrayu['stok'] = $filter_stok;
         }
@@ -656,7 +660,8 @@ class Inv extends CI_Controller
             'insno' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[6])))),
             // 'insno' => $split[6],
             'nobale' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[7])))),
-            'nomor_bc' => $split[8]
+            'nomor_bc' => $split[8],
+            'stok' => $split[9],
         ];
         $array2 = [
             'id_barang' => $split[4],

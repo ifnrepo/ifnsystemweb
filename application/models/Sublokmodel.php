@@ -102,7 +102,7 @@ class Sublokmodel extends CI_Model
                 'jalur' => $data['jalur'],
                 'insno' => $data['insno'],
                 'pcs' => 1,
-                'kgs' => 10000
+                'kgs' => $hasilcaripo['jala']+$hasilcaripo['mimi']
             ];
             return $this->db->insert('tb_inputsublokasi_detail_temp',$isi);
         }

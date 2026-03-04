@@ -355,6 +355,18 @@ class Ib_model extends CI_Model
             $this->helpermodel->isilog($this->db->last_query());
             $itembarang = $this->db->where('id_header', $id)->get('tb_detail')->num_rows();
             $this->db->where('id', $id)->update('tb_header', ['jumlah_barang' => $itembarang]);
+
+            //Update seri barang 
+            $this->db->where('id_header',$id);
+            $this->db->order_by('id');
+            $detail = $this->db->get('tb_detail');
+            $no=1;
+            foreach($detail->result_array() as $dt){
+                $iddet = $dt['id'];
+                $nomber = $no++;
+                $this->db->where('id',$iddet);
+                $this->db->update('tb_detail',['seri_barang' => $nomber]);
+            }
         }
         $hasil = $this->db->trans_complete();
         return $hasil;

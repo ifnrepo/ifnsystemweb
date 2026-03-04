@@ -1,5 +1,6 @@
 var table = null;
 $(document).ready(function () {
+	$("#currdept").change();
 	$(".loadered").removeClass('hilang');
 	table = $('#tabelnya').DataTable({
 		// "processing": true,
@@ -58,7 +59,7 @@ $(document).ready(function () {
 			"type": "POST",
 			"data": function(d){
 				d.filt = $('#katbar').val();
-				d.exdo = $('#exdonya').val();
+				// d.exdo = $('#exdonya').val();
 				d.stok = $('#idstok').val();
 				d.buyer = $('#idbuyer').val();
 				d.exnet = $('#idexnet').val();
@@ -79,7 +80,7 @@ $(document).ready(function () {
 					var sku = row.po.trim() == '' ? row.kode : viewsku(row.po,row.item,row.dis) ;
 					var spek = row.po.trim() == '' ? row.nama_barang : row.spek ;
 					var idbrg = row.id_barang == null ? 0 : row.id_barang;
-					var ide = 'OME-'+encodeURIComponent(gantislash(row.po.trim()))+'-'+encodeURIComponent(gantislash(row.item.trim()))+'-'+row.dis+'-'+idbrg+'-'+encodeURIComponent(gantislash(row.nobontr.trim()))+'-'+encodeURIComponent(gantislash(row.insno.trim()))+'-'+encodeURIComponent(gantislash(row.nobale.trim()))+'-'+encodeURIComponent(row.nomor_bc.trim());
+					var ide = 'OME-'+encodeURIComponent(gantislash(row.po.trim()))+'-'+encodeURIComponent(gantislash(row.item.trim()))+'-'+row.dis+'-'+idbrg+'-'+encodeURIComponent(gantislash(row.nobontr.trim()))+'-'+encodeURIComponent(gantislash(row.insno.trim()))+'-'+encodeURIComponent(gantislash(row.nobale.trim()))+'-'+encodeURIComponent(row.nomor_bc.trim())+'-'+encodeURIComponent(row.stok.trim());
 					return "<span class='hilang'>"+spek+"</span><span class='text-pink font-11'>"+sku+"</span>"+"<br><a href='"+base_url+"inv/viewdetail/"+ide+"' data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='View Detail' title='View Detail'>"+spek+"</a>";
 				}
 			 },
@@ -303,6 +304,11 @@ $("#tglawal").datepicker({
 	maxDate: 0,
 });
 $("#currdept").change(function () {
+	if($(this).val()=='GF'){
+		$("#exdo").removeClass('hilang');
+	}else{
+		$("#exdo").addClass('hilang');
+	}
 	// let ini = $(this).val();
 	// if (ini == "GF") {
 	// 	$("#div-exdo").removeClass("hilang");
@@ -374,6 +380,7 @@ $("#updateinv").click(function () {
 	var nomorbcnya = $("#nomorbcnya").val();
 	var kontrakbcnya = $("#kontrakbcnya").val();
 	var textcari = $("#textcari").val();
+	var exd = $("#exdo").val();
 	if ($("#gbg").is(":checked")) {
 		var gbg = 1;
 	} else {
@@ -393,7 +400,8 @@ $("#updateinv").click(function () {
 			tga: tglawal,
 			tgk: tglakhir,
 			dpt: currdept,
-			idln: ifndl
+			idln: ifndl,
+			exdo: exd
 			// gbn: gbg,
 			// kat: katbar,
 			// kcari: katcari,
@@ -401,7 +409,6 @@ $("#updateinv").click(function () {
 			// nobcnya: nomorbcnya,
 			// ifndln: ifndl,
 			// kontbc: kontrakbcnya,
-			// exdo: $("#exdonya").val(),
 		},
 		success: function (data) {
 			// alert(data);
