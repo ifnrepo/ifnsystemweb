@@ -440,9 +440,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
     });
 </script>
 <script>
-    $('#filter_bulan, #filter_tahun').change(function() {
-        location.reload();
-    });
     $(document).ready(function() {
 
         var table = $('#container-table').DataTable({
@@ -503,12 +500,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 //     data: 'aksi'
                 // },
             ],
-            columnDefs: [{
-                targets: 1,
-                render: function(data, type, row) {
-                    return data;
-                }
-            }]
+
         });
         table.on('xhr.dt', function(e, settings, json) {
             $('#totalFiltered').text(json.recordsFiltered);
@@ -519,7 +511,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
             $("#total_meas").text(json.total_meas);
         });
 
-
+        $('#filter_bulan, #filter_tahun').change(function() {
+            location.reload();
+        });
 
         $('#filter, #filter_exdo, #filter_cekmasuk, #filter_selesai, #filter_bulan, #filter_tahun').change(function() {
             table.ajax.reload();

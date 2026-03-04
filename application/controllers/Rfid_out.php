@@ -452,8 +452,11 @@ class Rfid_out extends CI_Controller
         $filter_exdo = $this->session->userdata('filter_exdo') ?? 'all';
         $filter_cekmasuk = $this->session->userdata('filter_cekmasuk') ?? 'all';
         $filter_selesai = $this->session->userdata('filter_selesai') ?? 'all';
+        $filter_bulan = $this->session->userdata('filter_bulan') ?? 'all';
+        $filter_tahun = $this->session->userdata('filter_tahun') ?? 'all';
 
-        $data = $this->Rfid_outmodel->getdata_ex($filter_pl, $filter_exdo, $filter_cekmasuk, $filter_selesai);
+
+        $data = $this->Rfid_outmodel->getdata_ex($filter_pl, $filter_bulan, $filter_tahun);
 
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
@@ -540,7 +543,9 @@ class Rfid_out extends CI_Controller
         $filter_exdo = $this->session->userdata('filter_exdo') ?? 'all';
         $filter_cekmasuk = $this->session->userdata('filter_cekmasuk') ?? 'all';
         $filter_selesai = $this->session->userdata('filter_selesai') ?? 'all';
-        $data = $this->Rfid_outmodel->getdata_ex($filter_pl, $filter_exdo, $filter_cekmasuk, $filter_selesai);
+        $filter_bulan = $this->session->userdata('filter_bulan') ?? 'all';
+        $filter_tahun = $this->session->userdata('filter_tahun') ?? 'all';
+        $data = $this->Rfid_outmodel->getdata_ex($filter_pl, $filter_bulan, $filter_tahun);
 
 
         $pdf = new PDF_CONTAINER('L', 'mm', 'A4');
