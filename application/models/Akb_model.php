@@ -1302,6 +1302,10 @@ class Akb_model extends CI_Model
                         $datasimpan['cif'] = $xcif;
                         $datasimpan['ndpbm'] = $kursusd;
                         $datasimpan['jns_bc'] = $cekjenisbc['jns_bc'];
+                        if($cekjenisbc['jns_bc']=='40'){
+                            $datasimpan['ppn'] = 11;
+                            $datasimpan['pph'] = 2.5;
+                        }
                         if ($cekjenisbc['jns_bc'] == '23') {
                             // if($cekjenisbc['co']==0){
                             $datasimpan['bm'] = $cekjenisbc['bm'];

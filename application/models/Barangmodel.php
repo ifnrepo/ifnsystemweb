@@ -286,6 +286,7 @@ class Barangmodel extends CI_Model
         $this->db->from('kategori');
         $this->db->join('barang', 'barang.id_kategori = kategori.id', 'left');
         $this->db->where('net',0);
+        $this->db->order_by('kategori.nama_kategori');
         $query = $this->db->get()->result_array();
 
         return $query;

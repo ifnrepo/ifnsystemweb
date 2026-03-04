@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
   <div class="container-xl">
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
@@ -20,7 +20,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
@@ -50,6 +50,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </option>
                 <?php endforeach; ?>
               </select>
+              <select class="form-control form-sm font-kecil mr-1 bg-primary text-white hilang" id="exdo" name="exdo" style="width: 22% !important">
+                <option value="all">All</option>
+                <option value="EXPORT" <?php if($this->session->userdata('dataexdo')=='EXPORT'){ echo "selected"; } ?>>Export</option>
+                <option value="DOMESTIC" <?php if($this->session->userdata('dataexdo')=='DOMESTIC'){ echo "selected"; } ?>>Domestic</option>
+              </select>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-1 text-blue" id="tglawal" name="tglawal" style="width: 95px;" value="<?= $tglawal ?>">
               <input type="text" class="form-control form-sm font-kecil font-bold mr-2 tglpilih" id="tglakhir" name="tglakhir" style="width: 95px;" value="<?= $tglakhir ?>">
               <a href="#" class="btn btn-success btn-sm font-bold" id="updateinv"><i class="fa fa-refresh"></i><span class="ml-1 font-kecil">UPDATE</span></a>
@@ -76,16 +81,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body p-2 font-kecil">
               <div class="row">
                 <div class="col-3">
-                  <div class="row <?php if($this->session->userdata('currdept')!='GF'){ echo "hilang"; } ?>" id="div-exdo">
-                    <label class="col-3 col-form-label font-kecil font-bold required" style="height: 28px !important; padding-top:2px;color: black !important;">EXDO</label>
-                    <div class="col mb-1">
-                      <select name="exdonya" id="exdonya" class="form-control form-select form-sm font-kecil" style="height: 28px !important; padding-top:2px;color: black !important;">
-                        <option value="all">All</option>
-                        <option value="EXPORT" <?php if($this->session->userdata('exdonya')=='EXPORT'){ echo "selected"; } ?>>EXPORT</option>
-                        <option value="DOMESTIC" <?php if($this->session->userdata('exdonya')=='DOMESTIC'){ echo "selected"; } ?>>DOMESTIC</option>
-                      </select>
-                    </div>
-                  </div>
                   <div class="row <?php if($this->session->userdata('currdept')!='GF'){ echo "hilang"; } ?>" id="div-exdo">
                     <label class="col-3 col-form-label font-kecil font-bold required" style="height: 28px !important; padding-top:2px;color: black !important;">Buyer</label>
                     <div class="col mb-1">

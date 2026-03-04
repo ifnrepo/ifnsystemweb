@@ -34,7 +34,7 @@
     $(document).ready(function(){
         // $("#departemenasal").val($("#dept_tuju option:selected").attr('rel'));
     })
-    $(document).on('click','#pilihnya',function(){
+    $(document).off('click').on('click','#pilihnya',function(){
         let ind_po = $(this).attr('rel');
         $.ajax({
             dataType: 'json',
