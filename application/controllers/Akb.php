@@ -3039,7 +3039,7 @@ class Akb extends CI_Controller
 
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('C' . $numrow, '050500');
-            $sheet->setCellValue('H' . $numrow, $hs);
+            $sheet->setCellValue('H' . $numrow, trim($hs));
             $sheet->setCellValue('I' . $numrow, '-');
             $sheet->setCellValue('J' . $numrow, '-');
             $sheet->setCellValue('K' . $numrow, '-');
@@ -3252,7 +3252,7 @@ class Akb extends CI_Controller
                     $sheet->setCellValue('F' . $numrow, $det['nomor_bc']);
                     $sheet->setCellValue('G' . $numrow, date('d-m-Y', strtotime($det['tgl_bc'])));
                     $sheet->setCellValue('H' . $numrow, $det['serbar']);
-                    $sheet->setCellValue('I' . $numrow, $det['nohs']);
+                    $sheet->setCellValue('I' . $numrow, trim($det['nohs']));
                     $sheet->setCellValue('M' . $numrow, $spekbarang);
                     $sheet->setCellValue('N' . $numrow, $det['kode']);
                     $sheet->setCellValue('O' . $numrow, $asalbar);

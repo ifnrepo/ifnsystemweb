@@ -56,7 +56,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <button title="Stop streams" class="btn btn-danger btn-sm" id="stop" type="button" data-toggle="tooltip">Stop Scanner</button>
                                 </div>
                                 <hr class="m-1">
-                                <div class="well" style="width: 100%;">
+                                <div class="well hilang" style="width: 100%;">
                                     <label id="zoom-value" width="100">Zoom: 1</label>
                                     <input id="zoom" onchange="Page.changeZoom();" type="range" min="10" max="30" value="0">
                                     <label id="brightness-value" width="100">Brightness: 0</label>

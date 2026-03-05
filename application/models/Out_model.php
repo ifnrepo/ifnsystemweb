@@ -731,8 +731,16 @@ class Out_model extends CI_Model{
                 if($ceknomordok != $xisiheader['nomor_dok']){
                     $hasilheader = $this->db->insert_batch('tb_header',$isiheader->result_array());
                     $idheader = $this->db->insert_id();
+
+                    $cekhuruf = substr(trim($xisiheader['nomor_dok']),-2);
+                    if(substr($cekhuruf,0,1)=='-'){
+                        $kodehuruf = '-'.uruthuruf(substr($cekhuruf,1,1));
+                    }else{
+                        $kodehuruf = '-A';
+                    }
+                    $kodedok = substr(trim($xisiheader['nomor_dok']),0,strlen(trim($xisiheader['nomor_dok']))-2);
                     $this->db->where('id',$idheader);
-                    $this->db->update('tb_header',['nomor_dok' => trim($xisiheader['nomor_dok']).'-A']);
+                    $this->db->update('tb_header',['nomor_dok' => $kodedok.$kodehuruf]);
                     $ceknomordok = $xisiheader['nomor_dok'];
                 }else{
                     $idheader = $xisiheader['id'];
