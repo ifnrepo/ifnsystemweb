@@ -28,7 +28,7 @@
                 </div>
                 <hr class='m-1'>
                 <div class="card card-lg">
-                    <input type="text" name="iddet" id="iddet" value="<?= $header['id']; ?>" class="">
+                    <input type="text" name="iddet" id="iddet" value="<?= $header['id']; ?>" class="hilang">
                     <div class="card-body p-2">
                         <div class="container container-slim py-4" id="syncloader">
                             <div class="text-center">
