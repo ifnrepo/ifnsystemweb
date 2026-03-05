@@ -1288,3 +1288,13 @@ function format_tanggal_indonesia_waktu($tanggal)
 
     return "$hari, $tgl $bulan $tahun - $jam";
 }
+function uruthuruf($str){
+    $string = $str;
+    $ascii_values = array_map('ord', str_split($string));
+
+    $nilascii = (int) $ascii_values[0];
+    $nilascii++;
+
+    $nilascii_values = array_map('chr', array($nilascii));
+    return $nilascii_values[0];
+}

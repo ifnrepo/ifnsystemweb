@@ -332,9 +332,9 @@ class Out_model extends CI_Model{
     }
     public function getdatadetailout($data){
         $nofilt = "and f.dis=a.dis";
-        if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
-            $nofilt = '';
-        }
+        // if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
+        //     $nofilt = '';
+        // }
         // $ini = $this->session->flashdata('barangerror')=='' ? "''" : $this->session->flashdata('barangerror');
         $ini = 7184;
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.spek,g.engklp");
@@ -731,8 +731,16 @@ class Out_model extends CI_Model{
                 if($ceknomordok != $xisiheader['nomor_dok']){
                     $hasilheader = $this->db->insert_batch('tb_header',$isiheader->result_array());
                     $idheader = $this->db->insert_id();
+
+                    $cekhuruf = substr(trim($xisiheader['nomor_dok']),-2);
+                    if(substr($cekhuruf,0,1)=='-'){
+                        $kodehuruf = '-'.uruthuruf(substr($cekhuruf,1,1));
+                    }else{
+                        $kodehuruf = '-A';
+                    }
+                    $kodedok = substr(trim($xisiheader['nomor_dok']),0,strlen(trim($xisiheader['nomor_dok']))-2);
                     $this->db->where('id',$idheader);
-                    $this->db->update('tb_header',['nomor_dok' => trim($xisiheader['nomor_dok']).'-A']);
+                    $this->db->update('tb_header',['nomor_dok' => $kodedok.$kodehuruf]);
                     $ceknomordok = $xisiheader['nomor_dok'];
                 }else{
                     $idheader = $xisiheader['id'];
