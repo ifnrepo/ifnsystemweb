@@ -24,7 +24,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
             </div>
             <div class="col-md-6" style="text-align: right;">
-
+                <a href="<?= base_url() . 'sublok/inputdata/'.$header['id'] ?>" class="btn btn-primary btn-sm"><i class="fa fa-arrow-left"></i><span class="ml-1">Kembali</span></a>
             </div>
         </div>
     </div>
@@ -39,7 +39,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <!-- <div class="infohalaman">Dalam Pembuatan</div> -->
                         <div class="row">
                             <div class="col-sm-4">
-                                <div class="form-group mb-1">
+                                <div class="form-group mb-1" id="pilihkamera">
                                     <label class="col-md-4 control-label" style="text-align: left;" for="inputDefault">Camera</label>
                                     <div class="col-md-8">
                                         <select class="form-control form-control-sm" id="camera-select"></select>
@@ -51,9 +51,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <input id="image-url" type="text" class="form-control hilang" placeholder="Image url">
                                     <button title="Decode Image" class="btn btn-default btn-sm hilang" id="decode-img" type="button" data-toggle="tooltip">Grab</button>
                                     <button title="Image shoot" class="btn btn-info btn-sm disabled hilang" id="grab-img" type="button" data-toggle="tooltip">Grab</button>
-                                    <button title="Play" class="btn btn-success btn-sm" id="play" type="button" data-toggle="tooltip">Activate Scanner</button>
+                                    <button title="Play" class="btn btn-success btn-sm" id="play" type="button" data-toggle="tooltip">Activate Camera</button>
                                     <button title="Pause" class="btn btn-warning btn-sm hilang" id="pause" type="button" data-toggle="tooltip">pause</button>
-                                    <button title="Stop streams" class="btn btn-danger btn-sm" id="stop" type="button" data-toggle="tooltip">Stop Scanner</button>
+                                    <button title="Stop streams" class="btn btn-danger btn-sm" id="stop" type="button" data-toggle="tooltip">Stop Camera</button>
+                                    <button title="Manual Input" class="btn btn-info btn-sm" id="manual" type="button">Manual Mode</button>
                                 </div>
                                 <hr class="m-1">
                                 <div class="well hilang" style="width: 100%;">
@@ -86,7 +87,38 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <div class="scanner-laser laser-leftTop" style="opacity: 0.5;"></div>
                                     <!-- </div> -->
                                 </div>
-
+                                <div class="input-manual mt-2 hilang">
+                                    <h4>Input Form</h4>
+                                    <hr class="m-1">
+                                    <div class="mb-1 mt-3 row">
+                                        <label class="col-3 col-form-label">Insno</label>
+                                        <div class="col">
+                                            <input type="text" id="inputinsno" class="form-control form-sm btn-square" aria-describedby="emailHelp" placeholder="Nomor Instruksi">
+                                        </div>
+                                    </div>
+                                    <div class="mb-1 row">
+                                        <label class="col-3 col-form-label">Lot</label>
+                                        <div class="col">
+                                            <input type="text" id="inputlot" class="form-control form-sm btn-square" aria-describedby="emailHelp" placeholder="Nomor Lot">
+                                        </div>
+                                    </div>
+                                    <div class="mb-3 row">
+                                        <label class="col-3 col-form-label">Jalur</label>
+                                        <div class="col">
+                                            <input type="text" id="inputjalur" class="form-control form-sm btn-square" aria-describedby="emailHelp" placeholder="Nomor Jalur">
+                                        </div>
+                                    </div>
+                                    <hr class="m-1">
+                                    <div class="btn-list justify-content-between">
+                                        <a href="#" class="btn btn-link link-secondary" id="bersihkan-input-manual">
+                                            Reset
+                                        </a>
+                                        <a href="#" class="btn btn-square btn-primary" id="simpan-input-manual">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M10 14a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
+                                            <span class="font-kecil">Simpan Data</span>
+                                        </a>
+                                    </div>
+                                </div>
                             </div>
                             <div class="col-sm-4">
                                 <div class="thumbnail" id="result" style="text-align: center;">
@@ -100,14 +132,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <hr class="m-0">
                                     <div class="mt-2">
                                         <div class="text-left font-kecil">Data Collection</div>
-                                        <input type="text" id="contoh" name="contoh">
+                                        <input type="text" id="contoh" name="contoh" class="hilang">
                                         <input type="text" id="idreal" name="idreal" class="hilang" value="<?= $header['id'] ?>">
                                         <input type="text" id="insnonya" name="insnonya" class="hilang">
                                         <input type="text" id="lotnya" name="lotnya" class="hilang">
                                         <input type="text" id="jalurnya" name="jalurnya" class="hilang">
                                         <a href="<?= base_url().'sublok/pilih' ?>" class="btn btn-sm btn-warning hilang" id="pilihpoadadua" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Pilih PO yang dimaksud">Pilih</a>
                                         <div>
-                                            <table id="pbtabel" class="table nowrap order-column table-hover table-bordered" style="width: 100% !important;">
+                                            <table id="pbtabel" class="table nowrap order-column table-hover table-bordered mb-1" style="width: 100% !important;">
                                                 <thead>
                                                 <tr>
                                                     <th>No</th>
@@ -119,29 +151,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                 </thead>
                                                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
                                                     <tr>
-                                                        <td>1</td>
-                                                        <td class="line-12">FU-0174#2<br><span class="font-kecil text-cyan">FU 1041</span></td>  
-                                                        <td>01-01</td>
-                                                        <td>1</td>
+                                                        <td>Nomor</td>
+                                                        <td class="line-12">PO#item<br><span class="font-kecil text-cyan">Instruksi Nomor</span></td>  
+                                                        <td>lot-jalur</td>
+                                                        <td>Qty</td>
                                                         <td>
                                                             <a href="#" class="btn btn-sm">Hapus</a>
                                                         </td>
                                                     </tr>
                                                 </tbody>
                                             </table>
+                                            <hr class="m-1">
+                                            <div class="btn-list justify-content-between mt-1">
+                                                <a href="#" class="btn btn-link link-secondary" id="bersihkan-input" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Yakin akan menghapus semua data yang sudah di input">
+                                                    Reset
+                                                </a>
+                                                <a href="#" data-href="<?= base_url().'sublok/simpantempkeasli/'.$header['id'] ?>" class="btn btn-square btn-primary" id="simpan-input" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Yakin akan menyimpan data">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M10 14a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
+                                                    <span class="font-kecil">Simpan Transaksi</span>
+                                                </a>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
-                    <div class="col-sm-12">
-                        <hr class="small">
-                        <div style="text-align: center;">
-                            <a href="<?= base_url().'sublok/inputdata/'.$header['id'] ?>" class="btn btn-sm btn-success btn-flat"><i class="fa fa-arrow-left mr-1"></i> Kembali</a>
-                        </div>
-                    </div>
-
                 </div>
             </div>
         </div>

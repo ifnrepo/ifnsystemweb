@@ -20,7 +20,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?= $title ?>
                 </h2>
                 <div class="page-pretitle">
-                  Data alur barang
+                  Input data pada Sub Lokasi dengan QR Code
                 </div>
             </div>
             <div class="col-md-6" style="text-align: right;">
@@ -82,7 +82,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <div class="col-3">
                                     <h4 class="mb-1 font-kecil" style="color: #FFFFFF">.</h4>
                                     <span class="font-kecil">
-                                        <a href="<?= base_url().'sublok/adddata' ?>" class="btn btn-sm btn-info" style="height: 38px;min-width:45px;" id="adddata"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                                        <a href="<?= base_url().'sublok/adddata' ?>" class="btn btn-sm btn-info <?php if($this->session->userdata('deptsublok')=='' || $this->session->userdata('sublokasi')==''){ echo "hilang"; } ?>" style="height: 38px;min-width:45px;" id="adddata"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
                                     </span>
                                 </div>
                                     <!-- <div class="col-3" style="font-size: 13px;">
@@ -117,13 +117,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <tr>
                                             <td class="text-center"><?= $no++; ?></td>
                                             <td><?= tglmysql($dt['tgl']) ?></td>
-                                            <td><a href="#" class="font-bold"><?= $dt['nomor'] ?></a></td>
+                                            <td><a href="<?= base_url().'sublok/viewdetail/'.$dt['id'] ?>" data-bs-target="#canvasdet" data-bs-toggle="offcanvas" data-title='View Detail' class="font-bold"><?= $dt['nomor'] ?></a></td>
                                             <td class="text-pink"><?= rupiah($dt['pcs'],0).' Pcs, '.rupiah($dt['kgs'],2).' Kgs' ?></td>
                                             <td class="line-12 font-kecil text-azure"><span><?= datauser($dt['dibuat_oleh'],'name') ?></span><br><span><?= tglmysql2($dt['tgl_buat']) ?></span></td>
                                             <td></td>
-                                            <td class="text-center">
-                                                <a href="<?= base_url().'sublok/inputdata/'.$dt['id'] ?>" class="btn btn-sm btn-blue">Lanjutkan Transaksi</a>
-                                                <a href="#" data-href="<?= base_url().'sublok/hapusdata/'.$dt['id'] ?>" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini (<?= $dt['nomor'] ?>)">Hapus Data</a>
+                                            <td class="line-11 <?php if($dt['disimpan_oleh'] > 0){echo "text-right"; }else{ echo "text-center"; } ?>">
+                                                <?php if($dt['disimpan_oleh'] > 0){ ?>
+                                                    <span class="text-teal font-kecil">
+                                                        Disimpan Oleh : <?= datauser($dt['disimpan_oleh'],'name') ?><br><span><?= tglmysql2($dt['tgl_simpan']) ?></span>
+                                                    </span>
+                                                <?php }else{ ?>
+                                                    <a href="<?= base_url().'sublok/inputdata/'.$dt['id'] ?>" class="btn btn-sm btn-blue" style="height: 28px !important">Lanjutkan Transaksi</a>
+                                                    <a href="#" data-href="<?= base_url().'sublok/hapusdata/'.$dt['id'] ?>" class="btn btn-sm btn-danger" style="height: 28px !important" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini (<?= $dt['nomor'] ?>)">Hapus Data</a>
+                                                <?php } ?>
                                             </td>
                                         </tr>
                                     <?php endforeach; ?>

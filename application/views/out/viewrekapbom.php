@@ -66,8 +66,8 @@
         </div>
     </div>
 </div>
-<div class="modal-footer font-kecil">
-    <!-- <button type="button" class="btn me-auto btn-sm text-black" data-bs-dismiss="modal">Batal</button> -->
+<div class="modal-footer font-kecil justify-content-between">
+    <button type="button" class="btn me-auto btn-link" data-bs-dismiss="modal">Batal</button>
     <button type="button" class="btn btn-success btn-sm text-black" data-bs-dismiss="modal">Keluar</button>
 </div>
 <script>
