@@ -49,10 +49,10 @@
             },
             success : function(data){
                 getdatatemp();
+                if($("#input-manual").hasClass('hilang')){
+                    $("#play").click();
+                }
                 $("#keluar").click();
-                // if(data==1){
-                //     document.getElementById('kebase').click();
-                // }
             }
         })
     })
@@ -65,21 +65,21 @@
                 id_header: $("#idreal").val(),
             },
             success: function (data) {
-                // alert(data.jmlrek);
-                // window.location.reload();
-                // $("#jmlrek").val(data.jmlrek);
                 $("#body-table").html(data.datagroup).show();
-                // $("#totalharga").val(rupiah(data.totalharga, ".", ",", 2));
-                // if (data.jmlrek > 0) {
-                // 	$("#jn_ib").attr("disabled", true);
-                // 	$("#pilihsup").addClass("disabled");
-                // }
-                // hitunggrandtotal();
+                kosongkanform();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);
                 console.log(thrownError);
             },
         });
+    }
+    function kosongkanform(){
+        $("#jalurnya").val('');
+        $("#lotnya").val('');
+        $("#insnonya").val('');
+        $("#inputinsno").val('');
+        $("#inputlot").val('');
+        $("#inputjalur").val('');
     }
 </script>

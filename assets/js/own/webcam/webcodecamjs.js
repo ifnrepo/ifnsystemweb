@@ -217,6 +217,7 @@ var WebCodeCamJS = function(element) {
     }
 
     function setCallBack() {
+        var ax = '';
         DecodeWorker.onmessage = function(e) {
             if (localImage || (!delayBool && !video.paused)) {
                 if (e.data.success === true && e.data.success != 'localization') {
@@ -257,7 +258,11 @@ var WebCodeCamJS = function(element) {
                             imgData: lastImageSrc
                         });
                         stop();
-                        insertdatainstruksi(a);
+                        if(ax != a){
+                            insertdatainstruksi(a);
+                        }else{
+                            ax = a;
+                        }
                     }
                 }, 0);
             }

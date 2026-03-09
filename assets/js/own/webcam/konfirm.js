@@ -70,28 +70,14 @@ function insertdatainstruksi(x){
                         document.getElementById('pilihpoadadua').click();
                     // }
                 }else{
-                    alert('DATA TIDAK DITEMUKAN !');
+                    alert('DATA INSTRUKSI TIDAK DITEMUKAN !');
                     return false;
                 }
             }
-            // if(data.length > 0){
-            //     $.ajax({
-            //         dataType: 'json',
-            //         type : "POST",
-            //         url : "konfirm/kembali",
-            //         data : {},
-            //         success : function(data){
-            //             if(data==1){
-            //                 document.getElementById('kebase').click();
-            //             }
-            //         }
-            //     })
-            // }
         }
     })
 }
 function isiketemp(po){
-    alert(po);
     $.ajax({
         dataType: 'json',
         type : "POST",
@@ -105,6 +91,9 @@ function isiketemp(po){
         },
         success : function(data){
             getdatatemp();
+            if($("#input-manual").hasClass('hilang')){
+                $("#play").click();
+            }
             // $("#keluar").click();
             // if(data==1){
             //     document.getElementById('kebase').click();
@@ -125,6 +114,7 @@ function getdatatemp() {
 			// window.location.reload();
 			// $("#jmlrek").val(data.jmlrek);
 			$("#body-table").html(data.datagroup).show();
+            kosongkanform();
 			// $("#totalharga").val(rupiah(data.totalharga, ".", ",", 2));
 			// if (data.jmlrek > 0) {
 			// 	$("#jn_ib").attr("disabled", true);
@@ -137,4 +127,12 @@ function getdatatemp() {
 			console.log(thrownError);
 		},
 	});
+}
+function kosongkanform(){
+    $("#jalurnya").val('');
+    $("#lotnya").val('');
+    $("#insnonya").val('');
+    $("#inputinsno").val('');
+    $("#inputlot").val('');
+    $("#inputjalur").val('');
 }

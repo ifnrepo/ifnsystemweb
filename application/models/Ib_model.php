@@ -216,15 +216,17 @@ class Ib_model extends CI_Model
                 $this->db->where('id',$dt['id']);
                 $this->db->update('tb_detail',['additional' => $nilaiadd]);
                 $arrdet[] = $dt['id'];
-                $countadd += $nilaiadd;
+                $countadd += $nilaiadd*$dt['kgs'];
             }
             if($nilaihead != $countadd){
                 $diff = $nilaihead - $countadd;
                 $cariarray = ceil(count($arrdet)/2)-1;
                 $additional = $this->db->get_where('tb_detail',['id' => $arrdet[$cariarray] ])->row_array();
 
+                $diffe = $diff/$additional['kgs'];
+
                 $this->db->where('id',$arrdet[$cariarray]);
-                $this->db->update('tb_detail',['additional' => $additional['additional'] + (float) $diff]);
+                $this->db->update('tb_detail',['additional' => $additional['additional'] + (float) $diffe]);
             }
         }
         return $this->db->trans_complete();

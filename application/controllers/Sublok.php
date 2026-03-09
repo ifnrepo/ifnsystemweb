@@ -156,12 +156,38 @@ class Sublok extends CI_Controller
             }
         }else{
             $html .= '<tr>';
-            $html .= '<td colspan="4" class="text-center">Data Kosong</td>';
+            $html .= '<td colspan="5" class="text-center">Data Kosong</td>';
             $html .= '</tr>';
         }
 
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
+    }
+    public function simpantempkeasli($id){
+        $data = $this->sublokmodel->simpantempkeasli($id);
+        if($data){
+            $url = base_url().'sublok/inputdata/'.$id;
+            redirect($url);
+        }
+    }
+    public function hapusinputdata($id,$head){
+        $data = $this->sublokmodel->hapusinputdata($id,$head);
+        if($data){
+            $url = base_url().'sublok/inputdata/'.$head;
+            redirect($url);
+        }
+    }
+    public function simpandata($id){
+        $data = $this->sublokmodel->simpandata($id);
+        if($data){
+            $url = base_url().'sublok';
+            redirect($url);
+        }
+    }
+    public function viewdetail($id){
+        $data['header'] = $this->sublokmodel->getdatabyid($id);
+        $data['data'] = $this->sublokmodel->getdatadetail($id);
+        $this->load->view('sublok/viewdetail', $data);
     }
 
     // public function cekkonfirmizin(){

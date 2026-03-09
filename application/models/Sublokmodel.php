@@ -119,29 +119,41 @@ class Sublokmodel extends CI_Model
 
         return $data['id_inputsublokasi'];
     }
-    //End data sublok
-    public function simpandata($data)
-    {
-        $cekdata = $this->db->get_where('ref_jobcostdep',['dept_id' => $data['dept_id'],'id_kategori' => $data['id_kategori'],'sublok' => $data['sublok'],'asal' => $data['asal']]);
-        if(count($cekdata->result()) > 0){
-            $this->session->set_flashdata('errorsimpan', 1);
-            $this->session->set_flashdata('pesanerror', 'Data yang anda masukan sudah ada dalam tabel, [Proses simpan BATAL]');
-            return 1;
-        }else{
-            return $this->db->insert('ref_jobcostdep', $data);
+    public function simpantempkeasli($id){
+        $this->db->trans_start();
+        $data = $this->db->get_where('tb_inputsublokasi_detail_temp',['id_inputsublokasi' => $id]);
+        foreach($data->result_array() as $dt){
+            unset($dt['id']);
+            $this->db->insert('tb_inputsublokasi_detail',$dt);
         }
+        $this->db->where('id_inputsublokasi',$id);
+        $this->db->delete('tb_inputsublokasi_detail_temp');
+
+        $this->db->select("sum(pcs) over() as xpcs,sum(kgs) over() as xkgs");
+        $this->db->from('tb_inputsublokasi_detail');
+        $this->db->where('id_inputsublokasi',$id);
+        $hasil = $this->db->get()->row_array();
+
+        $this->db->where('id',$id);
+        $this->db->update('tb_inputsublokasi',['pcs' => $hasil['xpcs'],'kgs' => $hasil['xkgs']]);
+
+        return $this->db->trans_complete();
     }
-    public function updatedata($data)
-    {
-        $cekdata = $this->db->get_where('ref_jobcostdep',['dept_id' => $data['dept_id'],'id_kategori' => $data['id_kategori'],'sublok' => $data['sublok'],'asal' => $data['asal'],'id !=' => $data['id']]);
-        if(count($cekdata->result()) > 0){
-            $this->session->set_flashdata('errorsimpan', 1);
-            $this->session->set_flashdata('pesanerror', 'Data yang anda masukan sudah ada dalam tabel, [Proses update BATAL]');
-            return 1;
-        }else{
-            $this->db->where('id', $data['id']);
-            $query = $this->db->update('ref_jobcostdep', $data);
-            return $query;
-        }
+    public function hapusinputdata($id,$head){
+        $this->db->where('id',$id);
+        $this->db->delete('tb_inputsublokasi_detail');
+        
+        $this->db->select("sum(pcs) over() as xpcs,sum(kgs) over() as xkgs");
+        $this->db->from('tb_inputsublokasi_detail');
+        $this->db->where('id_inputsublokasi',$head);
+        $hasil = $this->db->get()->row_array();
+
+        $this->db->where('id',$head);
+        return $this->db->update('tb_inputsublokasi',['pcs' => $hasil['xpcs'],'kgs' => $hasil['xkgs']]);
+
+    }
+    public function simpandata($id){
+        $this->db->where('id',$id);
+        return $this->db->update('tb_inputsublokasi',['disimpan_oleh' => $this->session->userdata('id'),'tgl_simpan' => date('Y-m-d H:i:s')]);
     }
 }
