@@ -143,6 +143,98 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
         </div>
       </div>
+      <div class="col-lg-6">
+        <div class="card">
+          <div class="card-stamp">
+            <div class="card-stamp-icon bg-teal">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-package"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /><path d="M16 5.25l-8 4.5" /></svg>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title" style="font-weight: 600;">Data Pengiriman Ke Finished Goods</h3>
+              <div class="row">
+                <div class="col">
+                  <select name="sel-kirimgf" id="sel-kirimgf" class="form-control form-select form-sm font-kecil bg-primary-lt font-bold" style="height: 28px !important; padding-top:4px;color: black !important;">
+                    <option value="all">All</option>
+                    <option value="EX">Export</option>
+                    <option value="DO">Domestic</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="position-relative">
+              <div class="position-absolute top-0 left-0 mt-0 w-75">
+                <div class="row">
+                  <div class="col-auto">
+                    <div class="chart-sparkline chart-sparkline-square" id="sparkline-activity"></div>
+                  </div>
+                   <div class="col">
+                  <!--  <div class="text-primary font-kecil">Previous Month</div>
+                    <div><span style="display:inline-block; width:100px;">Export</span>: XXXX Kgs</div>
+                    <div> <span style="display:inline-block; width:100px;">Domestic</span>: YYYY Kgs</div>
+                    <hr class="m-1"> -->
+                    <!-- <div class="text-primary font-kecil">Current Month</div>
+                    <div><span style="display:inline-block; width:100px;">Export</span>: XXXX Kgs</div>
+                    <div> <span style="display:inline-block; width:100px;">Domestic</span>: YYYY Kgs</div>
+                    <div class="text-secondary font-kecil">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline text-green" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
+                      +5% more than yesterday</div> -->
+                  </div>
+                </div>
+              </div>
+              <div id="chart-mentionse" class="chart-lg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-lg-6">
+        <div class="card bg-yellow-lt">
+          <div class="card-stamp">
+            <div class="card-stamp-icon bg-yellow">
+              <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-package"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 3l8 4.5l0 9l-8 4.5l-8 -4.5l0 -9l8 -4.5" /><path d="M12 12l8 -4.5" /><path d="M12 12l0 9" /><path d="M12 12l-8 -4.5" /><path d="M16 5.25l-8 4.5" /></svg>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="d-flex justify-content-between">
+              <h3 class="card-title" style="font-weight: 600;">Data Pengiriman Ke Gudang Loss</h3>
+              <div class="row">
+                <div class="col">
+                  <select name="sel-loss" id="sel-loss" class="form-control form-select form-sm font-kecil bg-yellow-lt font-bold" style="height: 28px !important; padding-top:4px;color: black !important;">
+                    <option value="all">All</option>
+                    <option value="0">Spinning</option>
+                    <option value="1">Ringrope</option>
+                    <option value="1">Netting</option>
+                    <option value="1">Finishing</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+            <div class="position-relative">
+              <div class="position-absolute top-0 left-0 mt-0 w-75">
+                <div class="row">
+                  <div class="col-auto">
+                    <div class="chart-sparkline chart-sparkline-square" id="sparkline-activity"></div>
+                  </div>
+                   <div class="col">
+                  <!--  <div class="text-primary font-kecil">Previous Month</div>
+                    <div><span style="display:inline-block; width:100px;">Export</span>: XXXX Kgs</div>
+                    <div> <span style="display:inline-block; width:100px;">Domestic</span>: YYYY Kgs</div>
+                    <hr class="m-1"> -->
+                    <!-- <div class="text-primary font-kecil">Current Month</div>
+                    <div><span style="display:inline-block; width:100px;">Export</span>: XXXX Kgs</div>
+                    <div> <span style="display:inline-block; width:100px;">Domestic</span>: YYYY Kgs</div>
+                    <div class="text-secondary font-kecil">
+                      <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-inline text-green" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg>
+                      +5% more than yesterday</div> -->
+                  </div>
+                </div>
+              </div>
+              <div id="chart-loss" class="chart-lg"></div>
+            </div>
+          </div>
+        </div>
+      </div>
       <div class="col-12">
         <div class="row row-cards">
           <div class="col-sm-12">
@@ -328,26 +420,6 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                   </div>
                 </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <h3 class="card-title text-primary">Data Pengeluaran Barang (Kg)</h3>
-            <div id="chart-mentionse" class="chart-lg"></div>
-          </div>
-        </div>
-      </div>
-      <div class="col-lg-6">
-        <div class="card">
-          <div class="card-body">
-            <h3 class="card-title">Locations</h3>
-            <div class="ratio ratio-21x9">
-              <div>
-                <div id="map-world" class="w-100 h-100"></div>
               </div>
             </div>
           </div>

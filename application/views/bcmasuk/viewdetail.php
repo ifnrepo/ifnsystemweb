@@ -66,7 +66,7 @@
                                     <div class="m-0">
                                         <div class="row">
                                             <div class="col-8">
-                                                <input type="email" class="form-control font-kecil btn-flat" aria-describedby="emailHelp" value="<?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>" placeholder="Enter email">
+                                                <input type="email" class="form-control font-kecil btn-flat" aria-describedby="emailHelp" value="<?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju'], $detail['prefix_aju']); ?>" placeholder="Enter email">
                                             </div>
                                             <div class="col-4">
                                                 <input type="email" class="form-control font-kecil btn-flat" aria-describedby="emailHelp" value="<?= $detail['tgl_aju']; ?>" placeholder="Enter email">
@@ -227,9 +227,10 @@
                                             <div class="col-12 mt-1">
                                                 <div class="input-icon">
                                                     <span class="input-icon-addon" style="border-right: 2px solid gray;">
-                                                        <div class="text-black font-kecil" role="status">Usd</div>
+                                                        <?php $mtuang = $detail['xmt_uang']=='IDR' ? 'Usd' : ucwords(strtolower($detail['xmt_uang'])); ?>
+                                                        <div class="text-black font-kecil" role="status"><?=  $mtuang ?></div>
                                                     </span>
-                                                    <?php $nilaiusd = $detail['xmt_uang'] == 'IDR' ? $detail['nilai_pab'] / $detail['kurs_usd'] : $detail['nilai_pab']; ?>
+                                                    <?php $bagi= $detail['kurs_usd']==0 ? 1 : $detail['kurs_usd']; $nilaiusd = $detail['xmt_uang'] == 'IDR' ? $detail['nilai_pab'] / $bagi : $detail['nilai_pab']; ?>
                                                     <input type="text" value="<?= rupiah($nilaiusd, 2); ?>" class="form-control font-kecil btn-sm btn-flat text-right" placeholder="Loading…" style="padding-left: 45px !important;">
                                                 </div>
                                             </div>

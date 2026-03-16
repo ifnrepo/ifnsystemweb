@@ -26,6 +26,7 @@ class Main extends CI_Controller {
         $datakurs = $this->helpermodel->getkurs30hari();
         $datapersonlogin = $this->helpermodel->getpersonloginpermonth(date('Y-m-d'));
         $datajumlahbc = $this->helpermodel->getdatabc2bulan();
+        $datapengiriman = $this->helpermodel->getdatapengirimangf();
 		$this->load->view('layouts/header');
         $data['dataproduksi'] = $dataproduksi;
         $data['kurshariini'] = $kurshariini;
@@ -38,6 +39,7 @@ class Main extends CI_Controller {
         $footer['datakurs'] = $datakurs;
         $footer['personlogin'] = $datapersonlogin;
         $footer['bc2bulan'] = $datajumlahbc;
+        $footer['datapengirimangf'] = $datapengiriman;
 		$this->load->view('layouts/footer',$footer);
 	}
     public function ceknotif(){
@@ -47,6 +49,16 @@ class Main extends CI_Controller {
             $jumlah = $this->taskmodel->getuntukvalidasi();
             echo $jumlah;
         }
+    }
+    public function getdatapengirimangf(){
+        $fl = $_POST['kode']=='all' ? '' : $_POST['kode'];
+        $hasil = $this->helpermodel->getdatapengirimangf($fl);
+        $jmarraypengiriman = [];
+        foreach($hasil->result_array() as $kirim){
+            $tgarraypengiriman[] = $kirim['tgl'];
+            $jmarraypengiriman[] = round($kirim['kgs'],2);
+        }	
+        echo json_encode($jmarraypengiriman);
     }
     public function settglmonitoring(){
         $tglawal = tglmysql($_POST['tglawal']);

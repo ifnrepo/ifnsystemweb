@@ -19,12 +19,40 @@ class Out_model extends CI_Model{
             $kolom = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'));
             $arrkondisi[$kolom] = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'),1);
         }
+         if(!empty($this->session->userdata('filterproses')) && $this->session->userdata('filterproses')!== ""){
+            $arrkondisi['ketprc'] = $this->session->userdata('filterproses');
+         }
         $this->db->select('tb_header.*');
         $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
         $this->db->select('(SELECT SUM(pcs) AS pcs FROM tb_detail WHERE tb_detail.id_header = tb_header.id GROUP BY id_header ) AS jumlahpcs');
         $this->db->join('(select distinct id_header from tb_detail) as tb_detail','tb_detail.id_header = tb_header.id','left');
         $this->db->where($arrkondisi);
         // $this->db->order_by('tb_header.tgl DESC');
+        $hasil = $this->db->get('tb_header');
+        return $hasil->result_array();
+    }
+    public function getdataproses($kode){
+        $arrkondisi = [
+            'id_perusahaan'=>IDPERUSAHAAN,
+            'dept_id' => $kode['dept_id'],
+            'dept_tuju' => $kode['dept_tuju'],
+            'kode_dok' => 'T',
+            'month(tgl)' => $this->session->userdata('blout'),
+            'year(tgl)' => $this->session->userdata('thout'),
+        ];
+        if(($kode['dept_id']!='GF' && $kode['dept_tuju']!='CU') || ($kode['dept_id']=='FG')){ // && $kode['dept_tuju']!='DL'
+            $arrkondisi['left(nomor_dok,3) != '] = 'IFN';
+        }
+        if($kode['filterbon']==1){
+            $arrkondisi['data_ok'] = 0;
+        }
+        $this->db->select('tb_header.ketprc');
+        $this->db->select('(select b.nomor_dok from tb_header b where b.id_keluar = tb_header.id) as nodok');
+        $this->db->select('(SELECT SUM(pcs) AS pcs FROM tb_detail WHERE tb_detail.id_header = tb_header.id GROUP BY id_header ) AS jumlahpcs');
+        $this->db->join('(select distinct id_header from tb_detail) as tb_detail','tb_detail.id_header = tb_header.id','left');
+        $this->db->where($arrkondisi);
+        $this->db->group_by('tb_header.ketprc');
+        $this->db->order_by('tb_header.ketprc');
         $hasil = $this->db->get('tb_header');
         return $hasil->result_array();
     }
@@ -42,7 +70,7 @@ class Out_model extends CI_Model{
             $kolom = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'));
             $arrkondisi[$kolom] = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'),1);
         }
-        $this->db->select('count(distinct nomor_dok) as jmrek,sum(tb_detail.pcs) as pcs, sum(tb_detail.kgs) as kgs');
+        $this->db->select('count(distinct nomor_dok) as jmrek,sum(tb_detail.pcs) as pcs, sum(tb_detail.kgs/if(tb_detail.id_satuan=45,"0.453592","1")) as kgs');
         $this->db->from('tb_header');
         $this->db->join('tb_detail','tb_header.id = tb_detail.id_header','left');
         $this->db->where($arrkondisi);
@@ -63,6 +91,9 @@ class Out_model extends CI_Model{
             $kolom = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'));
             $arrkondisi[$kolom] = getquerytujuanout($kode['dept_id'].'-'.$kode['dept_tuju'],$this->session->userdata('filterbon2'),1);
         }
+        if(!empty($this->session->userdata('filterproses')) && $this->session->userdata('filterproses')!== ""){
+            $arrkondisi['ketprc'] = $this->session->userdata('filterproses');
+         }
         $this->db->select('count(distinct nomor_dok) as jmlrek');
         $this->db->from('tb_header');
         $this->db->join('tb_detail','tb_header.id = tb_detail.id_header','left');
@@ -817,6 +848,28 @@ class Out_model extends CI_Model{
             $this->db->trans_commit();
         }
         return !$iniquery;
+    }
+    public function ceksumberat($id){
+        $dari = $this->session->userdata('deptsekarang');
+        $ke = $this->session->userdata('tujusekarang');
+        $iniquery = true;
+        if(in_array($dari,daftardeptsubkon())){
+            $this->db->select('sum(tb_detail.kgs) as sumkgs');
+            $this->db->from('tb_detail');
+            $this->db->where('id_header',$id);
+            $detail = $this->db->get()->row_array();
+
+            $this->db->select('sum(tb_detailgen.kgs) as sumkgs');
+            $this->db->from('tb_detailgen');
+            $this->db->where('id_header',$id);
+            $detailgen = $this->db->get()->row_array();
+
+            if($detail['sumkgs'] != $detailgen['sumkgs']){
+                $iniquery = false;
+                $this->session->set_flashdata('errornya','Periksa Berat DETAIL dan DETAILGEN, HUBUNGI PPIC !');
+            }
+        }
+        return $iniquery;
     }
     public function getdatagm($idbarang,$periode){
         $kondisi = [

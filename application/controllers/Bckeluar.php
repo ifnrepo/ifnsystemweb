@@ -220,12 +220,13 @@ class Bckeluar extends CI_Controller
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
-
+        $sheet->getRowDimension('1')->setRowHeight(4.5);
         $sheet->mergeCells('B2:H2')->setCellValue('B2', 'KAWASAN BERIKAT PT. INDONEPTUNE NET MANUFACTURING');
         $sheet->mergeCells('B3:H3')->setCellValue('B3', 'LAPORAN PEMASUKAN BARANG PER DOKUMEN PABEAN');
         $sheet->mergeCells('B4:H4')->setCellValue('B4', "PERIODE: " . $this->session->userdata('tglawal') . " S/D " . $this->session->userdata('tglakhir'));
         $sheet->getStyle('B2:B4')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('B2:B4')->getAlignment()->setHorizontal('left');
+        $sheet->getRowDimension('5')->setRowHeight(4.5);
 
         $sheet->mergeCells('B6:B7')->setCellValue('B6', 'No Urut');
         $sheet->mergeCells('C6:C7')->setCellValue('C6', 'Jenis Dokumen');
@@ -245,6 +246,7 @@ class Bckeluar extends CI_Controller
         $sheet->setCellValue('G7', 'Tanggal');
 
 
+        $sheet->getColumnDimension('A')->setWidth(2);
         $sheet->getColumnDimension('B')->setWidth(6);
         $sheet->getColumnDimension('C')->setWidth(10);
         $sheet->getColumnDimension('D')->setWidth(12);
@@ -381,8 +383,9 @@ class Bckeluar extends CI_Controller
             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $filaname = 'LAPORAN BC KELUAR ('.$this->session->userdata('jnsbc').') # '.date('d-m-Y');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment;filename="LAPORAN BC KELUAR.xlsx"');
+        header('Content-Disposition: attachment;filename="'.$filaname.'.xlsx"');
         header('Cache-Control: max-age=0');
         $writer->save('php://output');
     }

@@ -199,8 +199,8 @@ class Ib_model extends CI_Model
     }
     public function getnomorproforma($bl, $th)
     {
-        $hasil = $this->db->query("SELECT MAX(substr(nomor_dok,10,3)) AS maxkode FROM tb_header 
-        WHERE kode_dok = 'IB' AND dept_tuju = '" . $this->session->userdata('depttuju') . "' AND nomor_dok like '%PROFORMA%' ")->row_array();
+        $hasil = $this->db->query("SELECT substr(nomor_dok,10,3) AS maxkode FROM tb_header 
+        WHERE kode_dok = 'IB' AND dept_tuju = '" . $this->session->userdata('depttuju') . "' AND nomor_dok like '%PROFORMA%' ORDER BY id DESC LIMIT 1 ")->row_array();
         return $hasil;
     }
     public function isiadditionaldetail($id){
@@ -298,12 +298,12 @@ class Ib_model extends CI_Model
         $this->db->join('tb_header d', 'd.id = c.id_header', 'left');
         $this->db->join('satuan e', 'e.id = b.id_satuan', 'left');
         $this->db->where('a.id_perusahaan', IDPERUSAHAAN);
+        $this->db->where('a.kode_dok', 'PO');
         $this->db->where('a.data_ok', 1);
         $this->db->where('a.ok_valid', 1);
         $this->db->where('a.ok_tuju', 0);
         $this->db->where('a.ok_pp', 0);
         $this->db->where('a.ok_pc', 0);
-        $this->db->where('a.kode_dok', 'PO');
         // $this->db->where('tb_detail.id_ib',0);
         $this->db->where('tb_detail.id_po', 0);
         $this->db->where('a.id_pemasok', $sup);
@@ -335,10 +335,16 @@ class Ib_model extends CI_Model
         $jumlah = count($data['data']);
         $id = $data['id'];
         $this->db->trans_start();
+        $idpo = 0;
+        $mtuang = 0;$jnsbc='';
         for ($x = 0; $x < $jumlah; $x++) {
             $arrdat = $data['data'];
             $detail = $this->db->where('id', $arrdat[$x])->get('tb_detail')->row_array();
             $header = $this->db->where('id', $detail['id_header'])->get('tb_header')->row_array();
+            if($idpo==0){
+                $idpo = $detail['id_header'];
+                $mtuang = $header['mtuang'];
+            }
             $headerx = $this->db->where('id', $id)->get('tb_header')->row_array();
             $isi = [
                 'id_header' => $id,
@@ -369,6 +375,11 @@ class Ib_model extends CI_Model
                 $this->db->where('id',$iddet);
                 $this->db->update('tb_detail',['seri_barang' => $nomber]);
             }
+        }
+        //Update MataUang
+        if($idpo!=0){
+             $this->db->where('id',$id);
+             $this->db->update('tb_header',['mtuang' => $mtuang]);
         }
         $hasil = $this->db->trans_complete();
         return $hasil;
