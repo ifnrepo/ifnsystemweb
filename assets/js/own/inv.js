@@ -303,71 +303,29 @@ $("#tglawal").datepicker({
 	todayHighlight: true,
 	maxDate: 0,
 });
+$("#tglawal").on('change',function(){
+	// alert($(this).val());
+	var datestr = $(this).val();
+	const split = datestr.split('-');
+	const today = new Date(split[2],split[1],split[0]);	
+
+	const hasil = new Date(today.getFullYear(),today.getMonth(),0);
+	var m = hasil.getMonth()+1;
+	m = m > 9 ? m : "0"+m;
+
+	var cok = hasil.getDate()+'-'+m+'-'+hasil.getFullYear();
+    console.log(cok);
+	$("#tglakhir").val(cok);
+	$("#tglakhir").change();
+})
 $("#currdept").change(function () {
 	if($(this).val()=='GF'){
 		$("#exdo").removeClass('hilang');
 	}else{
 		$("#exdo").addClass('hilang');
 	}
-	// let ini = $(this).val();
-	// if (ini == "GF") {
-	// 	$("#div-exdo").removeClass("hilang");
-	// } else {
-	// 	$("#div-exdo").addClass("hilang");
-	// }
 });
-// $("#buttoncari").click(function () {
-// 	var tglawal = $("#tglawal").val();
-// 	var tglakhir = $("#tglakhir").val();
-// 	var currdept = $("#currdept").val();
-// 	var currdept = $("#currdept").val();
-// 	var katbar = $("#katbar").val();
-// 	var ifndl = $("#ifndln").val();
-// 	// var katcari = document.getElementById("caribar").innerHTML;
-// 	var katcari = $("input:radio[name=radios-inline]:checked").val();
-// 	// $("#textcari").val("");
-// 	var nomorbcnya = $("#nomorbcnya").val();
-// 	var kontrakbcnya = $("#kontrakbcnya").val();
-// 	var textcari = $("#textcari").val();
-// 	if ($("#gbg").is(":checked")) {
-// 		var gbg = 1;
-// 	} else {
-// 		var gbg = 0;
-// 	}
-// 	// alert(gbg);
-// 	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
-// 		pesan("Tanggal awal lebih besar dari tanggal akhir", "info");
-// 		return false;
-// 	}
-// 	$.ajax({
-// 		dataType: "json",
-// 		type: "POST",
-// 		url: base_url + "inv/getdata",
-// 		data: {
-// 			tga: tglawal,
-// 			tgk: tglakhir,
-// 			dpt: currdept,
-// 			gbn: gbg,
-// 			kat: katbar,
-// 			kcari: katcari,
-// 			cari: textcari,
-// 			nobcnya: nomorbcnya,
-// 			ifndln: ifndl,
-// 			kontbc: kontrakbcnya,
-// 			exdo: $("#exdonya").val(),
-// 		},
-// 		success: function (data) {
-// 			// alert(data);
-// 			console.log("KONTRAK" + kontrakbcnya);
-// 			window.location.reload();
-// 			// $("#body-table").html(data.datagroup).show();
-// 		},
-// 		error: function (xhr, ajaxOptions, thrownError) {
-// 			console.log(xhr.status);
-// 			console.log(thrownError);
-// 		},
-// 	});
-// });
+
 $("#updateinv").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();

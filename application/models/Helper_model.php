@@ -1176,6 +1176,26 @@ class Helper_model extends CI_Model
         $this->db->limit(24);
         return $this->db->get();
     }
+    public function getdatapengirimanloss($fil=''){
+        $this->db->select("tb_header.tgl,tb_header.dept_id,dept.departemen,COUNT(*) AS jmrek");
+        $this->db->select("sum(tb_detail.pcs) as pcs");
+        $this->db->select("SUM(tb_detail.kgs) AS kgs");
+        $this->db->from("tb_detail");
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->join('dept','dept.dept_id = tb_header.dept_id','left');
+        $this->db->where('tb_header.kode_dok','T');
+        $this->db->where('tb_header.dept_tuju','GW');
+        $this->db->where('tb_header.data_ok',1);
+        if($fil != ''){
+            $this->db->where('concat(MONTH(tb_header.tgl),YEAR(tb_header.tgl))',$fil);
+        }else{
+            $this->db->where('concat(MONTH(tb_header.tgl),YEAR(tb_header.tgl))',date('nY'));
+        }
+        $this->db->group_by('tb_header.dept_id,month(tb_header.tgl),YEAR(tb_header.tgl)');
+        $this->db->order_by('tb_header.dept_id');
+        $this->db->limit(24);
+        return $this->db->get();
+    }
     public function getdetailbcasal($exbc, $data)
     {
         $this->db->select('tb_detail.*,tb_header.nomor_aju');

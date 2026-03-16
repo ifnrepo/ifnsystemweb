@@ -852,6 +852,7 @@ class Out_model extends CI_Model{
     public function ceksumberat($id){
         $dari = $this->session->userdata('deptsekarang');
         $ke = $this->session->userdata('tujusekarang');
+        $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
         $iniquery = true;
         if(in_array($dari,daftardeptsubkon())){
             $this->db->select('sum(tb_detail.kgs) as sumkgs');
@@ -867,6 +868,9 @@ class Out_model extends CI_Model{
             if($detail['sumkgs'] != $detailgen['sumkgs']){
                 $iniquery = false;
                 $this->session->set_flashdata('errornya','Periksa Berat DETAIL dan DETAILGEN, HUBUNGI PPIC !');
+            }
+            if($header['taksama']==1){
+                $iniquery = true;
             }
         }
         return $iniquery;

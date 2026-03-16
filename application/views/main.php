@@ -197,17 +197,43 @@ defined('BASEPATH') OR exit('No direct script access allowed');
           </div>
           <div class="card-body">
             <div class="d-flex justify-content-between">
-              <h3 class="card-title" style="font-weight: 600;">Data Pengiriman Ke Gudang Loss</h3>
+              <h3 class="card-title text-black" style="font-weight: 600;">Data Pengiriman Ke Gudang Loss</h3>
               <div class="row">
                 <div class="col">
-                  <select name="sel-loss" id="sel-loss" class="form-control form-select form-sm font-kecil bg-yellow-lt font-bold" style="height: 28px !important; padding-top:4px;color: black !important;">
+                  <select name="sel-loss-date" id="sel-loss-date" class="form-control form-select form-sm font-kecil bg-yellow-lt font-bold" style="height: 28px !important; padding-top:4px;color: black !important;">
+                    <?php $selek = date('m').date('Y'); ?>
+                    <?php 
+                      $dtawal = date('d-m-Y', strtotime('- 1 year'));
+                      $th = date('Y', strtotime($dtawal));
+                      $bl = date('n', strtotime($dtawal));
+
+                      for($x=date('Y');$x>=$th;$x--){
+                        if($x < date('Y')){
+                          for($y=12;$y>$bl;$y--){
+                    ?>
+                            <option value="<?= $y.$x ?>" <?php if($selek==$y.$x){ echo "selected"; } ?>><?= tambahnol($y,2).'-'.$x ?></option>
+                    <?php     
+                          }
+                        }else{
+                          for($y=$bl;$y>=1;$y--){
+                    ?>
+                            <option value="<?= $y.$x ?>" <?php if($selek==$y.$x){ echo "selected"; } ?>><?= tambahnol($y,2).'-'.$x ?></option>
+                    <?php
+                          }
+                        }
+                      } 
+                    ?>
+                  </select>
+                </div>
+                <!-- <div class="col">
+                  <select name="sel-loss" id="sel-loss" class="form-control form-select form-sm font-kecil bg-yellow-lt font-bold hilang" style="height: 28px !important; padding-top:4px;color: black !important;">
                     <option value="all">All</option>
                     <option value="0">Spinning</option>
                     <option value="1">Ringrope</option>
                     <option value="1">Netting</option>
                     <option value="1">Finishing</option>
                   </select>
-                </div>
+                </div> -->
               </div>
             </div>
             <div class="position-relative">
@@ -230,7 +256,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div id="chart-loss" class="chart-lg"></div>
+              <div id="chart-loss" class="chart-lg mt-5 text-black"></div>
             </div>
           </div>
         </div>

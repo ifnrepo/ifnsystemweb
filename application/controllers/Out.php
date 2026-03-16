@@ -457,6 +457,9 @@ class Out extends CI_Controller {
                 $url = base_url().'out/dataout/'.$id;
             }
             redirect($url);
+        }else{
+             $url = base_url().'out/dataout/'.$id;
+             redirect($url);
         }
     }
     public function addspecbarang()

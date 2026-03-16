@@ -27,6 +27,7 @@ class Main extends CI_Controller {
         $datapersonlogin = $this->helpermodel->getpersonloginpermonth(date('Y-m-d'));
         $datajumlahbc = $this->helpermodel->getdatabc2bulan();
         $datapengiriman = $this->helpermodel->getdatapengirimangf();
+        $dataloss = $this->helpermodel->getdatapengirimanloss();
 		$this->load->view('layouts/header');
         $data['dataproduksi'] = $dataproduksi;
         $data['kurshariini'] = $kurshariini;
@@ -40,6 +41,7 @@ class Main extends CI_Controller {
         $footer['personlogin'] = $datapersonlogin;
         $footer['bc2bulan'] = $datajumlahbc;
         $footer['datapengirimangf'] = $datapengiriman;
+        $footer['datapengirimanloss'] = $dataloss;
 		$this->load->view('layouts/footer',$footer);
 	}
     public function ceknotif(){
@@ -59,6 +61,18 @@ class Main extends CI_Controller {
             $jmarraypengiriman[] = round($kirim['kgs'],2);
         }	
         echo json_encode($jmarraypengiriman);
+    }
+    public function getdatapengirimanloss(){
+        $fl = $_POST['kode'];
+        $hasil = $this->helpermodel->getdatapengirimanloss($fl);
+        $tgarraypengiriman = [];
+        $jmarraypengiriman = [];
+        foreach($hasil->result_array() as $kirim){
+            $tgarraypengiriman[] = $kirim['departemen'];
+            $jmarraypengiriman[] = round($kirim['kgs'],2);
+        }	
+        $html = array('data' => $jmarraypengiriman,'label' => $tgarraypengiriman);
+        echo json_encode($html);
     }
     public function settglmonitoring(){
         $tglawal = tglmysql($_POST['tglawal']);
