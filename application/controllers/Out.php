@@ -34,6 +34,7 @@ class Out extends CI_Controller {
         $data['data'] = $this->out_model->getdata($kode);
         $data['jumlahpcskgs'] = $this->out_model->getdatapcskgs($kode);
         $data['jmlrekod'] = $this->out_model->getrekod($kode);
+        $data['getproses'] = $this->out_model->getdataproses($kode);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'out';
         $this->session->unset_userdata('barangerror');
@@ -96,6 +97,11 @@ class Out extends CI_Controller {
             $this->session->set_userdata('filterbon2',$_POST['filterbon2']);
         }else{
             $this->session->unset_userdata('filterbon2');
+        }
+        if(isset($_POST['filterproses']) && $_POST['filterproses'] != '' && (in_array($_POST['dept_id'],daftardeptsubkon()) || in_array($_POST['dept_tuju'],daftardeptsubkon()))){
+            $this->session->set_userdata('filterproses',$_POST['filterproses']);
+        }else{
+            $this->session->unset_userdata('filterproses');
         }
         echo 1;
     }
@@ -442,13 +448,16 @@ class Out extends CI_Controller {
     }
     public function simpanheaderout($id){
         $this->session->unset_userdata('serierror');
-        $query = $this->out_model->simpanheaderout($id);
-        if($query){
-            $url = base_url().'out';
-        }else{
-            $url = base_url().'out/dataout/'.$id;
+        $ceksum = $this->out_model->ceksumberat($id);
+        if($ceksum){
+            $query = $this->out_model->simpanheaderout($id);
+            if($query){
+                $url = base_url().'out';
+            }else{
+                $url = base_url().'out/dataout/'.$id;
+            }
+            redirect($url);
         }
-        redirect($url);
     }
     public function addspecbarang()
     {

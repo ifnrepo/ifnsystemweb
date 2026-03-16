@@ -84,11 +84,13 @@ class Bcmasuk extends CI_Controller
         $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();
 
+        $sheet->getRowDimension('1')->setRowHeight(4.5);
         $sheet->mergeCells('B2:H2')->setCellValue('B2', 'KAWASAN BERIKAT PT. INDONEPTUNE NET MANUFACTURING');
         $sheet->mergeCells('B3:H3')->setCellValue('B3', 'LAPORAN PEMASUKAN BARANG PER DOKUMEN PABEAN');
         $sheet->mergeCells('B4:H4')->setCellValue('B4', "PERIODE: " . $this->session->userdata('tglawal') . " S/D " . $this->session->userdata('tglakhir'));
         $sheet->getStyle('B2:B4')->getFont()->setBold(true)->setSize(12);
         $sheet->getStyle('B2:B4')->getAlignment()->setHorizontal('left');
+        $sheet->getRowDimension('5')->setRowHeight(4.5);
 
         $sheet->mergeCells('B6:B7')->setCellValue('B6', 'No Urut');
         $sheet->mergeCells('C6:C7')->setCellValue('C6', 'Jenis Dokumen');
@@ -150,7 +152,7 @@ class Bcmasuk extends CI_Controller
         foreach ($bcmasuk->result_array() as $data) {
 
             $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
-            $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
+            $nilaiqty = $data['kodesatuan'] == 'KGS' ? 0 : $data['pcs_total'];
             $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
 
             if ($data['nomor_bc'] == $ceknomor_bc) {
@@ -180,23 +182,23 @@ class Bcmasuk extends CI_Controller
                 : $data['kurs_yen'];
 
             if ($data['mtuang'] == 1) {
-                $harga_idr = $data['harga'];
-                $harga_usd = $data['harga'] / $kurs_usd;
+                $harga_idr = $data['harga']+$data['additional'];
+                $harga_usd = ($data['harga']+$data['additional']) / $kurs_usd;
             } elseif ($data['mtuang'] == 2) {
-                $harga_usd = $data['harga'];
-                $harga_idr = $data['harga'] * $kurs_usd;
+                $harga_usd = $data['harga']+$data['additional'];
+                $harga_idr = ($data['harga']+$data['additional']) * $kurs_usd;
             } elseif ($data['mtuang'] == 3) {
-                $harga_idr = $data['harga'] * $kurs_yen;
-                $harga_usd = ($data['harga'] * $kurs_yen) / $kurs_usd;
+                $harga_idr = ($data['harga']+$data['additional']) * $kurs_yen;
+                $harga_usd = (($data['harga']+$data['additional']) * $kurs_yen) / $kurs_usd;
             }
 
-            $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
+            $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs_total'] : $data['pcs_total'];
 
             if ($data['jns_bc'] == 262) {
                 // $subtotal_idr = $data['exbc_ndpbm'] * $data['exbc_cif'];
                 // $subtotal_usd = $subtotal_idr / $kurs_usd;
                 $pembagi = (float) $data['in_pcs_exbc']==0 ? 1 : (float) $data['in_pcs_exbc'];
-                $subtotal_usd = ($data['exbc_cif']/$pembagi)*$data['kgs'];
+                $subtotal_usd = ($data['exbc_cif']/$pembagi)*$data['kgs_total'];
                 $subtotal_idr = $subtotal_usd*$data['exbc_ndpbm'];
             } else {
                 $subtotal_idr = $harga_idr * $pengali;
@@ -214,7 +216,7 @@ class Bcmasuk extends CI_Controller
             $sheet->setCellValue('J' . $numrow, $spekbarang);
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
-            $sheet->setCellValue('M' . $numrow, $data['kgs']);
+            $sheet->setCellValue('M' . $numrow, $data['kgs_total']);
             $sheet->setCellValue('N' . $numrow, $subtotal_idr);
             $sheet->setCellValue('O' . $numrow, $subtotal_usd);
 
@@ -239,7 +241,7 @@ class Bcmasuk extends CI_Controller
             ->setVertical(\PhpOffice\PhpSpreadsheet\Style\Alignment::VERTICAL_CENTER);
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
-        $filaname = 'LAPORAN BC '.$this->session->userdata('jnsbc').' # '.date('d-m-Y');
+        $filaname = 'LAPORAN BC MASUK ('.$this->session->userdata('jnsbc').') # '.date('d-m-Y');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filaname.'.xlsx"');
         header('Cache-Control: max-age=0');

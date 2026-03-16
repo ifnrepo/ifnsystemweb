@@ -596,7 +596,7 @@ class Helper_model extends CI_Model
                 'stokdept.dln' => $data['dln'],
                 'id_barang' => $data['id_barang'],
                 'trim(nobale)' => trim($data['nobale']),
-                'exnet' => 0,
+                'exnet' => $data['exnet'],
                 'periode' => $data['periode'],
                 'stok' => $data['stok']
             ];
@@ -1156,6 +1156,24 @@ class Helper_model extends CI_Model
         $this->db->where('tb_header.send_ceisa',1);
         $this->db->where('trim(tb_header.nomor_bc) != ', "");
         $this->db->group_by("tgl,jns_bc,bc_makloon");
+        return $this->db->get();
+    }
+    public function getdatapengirimangf($fil=''){
+        $this->db->select("tb_header.tgl");
+        $this->db->select("sum(tb_detail.pcs) as pcs,sum(IF(substr(tb_header.nomor_dok,7,2)='EX',tb_detail.pcs,0)) AS pcs_ex,sum(IF(substr(tb_header.nomor_dok,7,2)='DO',tb_detail.pcs,0)) AS pcs_do");
+        $this->db->select("SUM(tb_detail.kgs) AS kgs,sum(IF(substr(tb_header.nomor_dok,7,2)='EX',tb_detail.kgs,0)) AS kgs_ex,sum(IF(substr(tb_header.nomor_dok,7,2)='DO',tb_detail.kgs,0)) AS kgs_do");
+        $this->db->from("tb_detail");
+        $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->where('tb_header.kode_dok','T');
+        $this->db->where('tb_header.dept_id','FN');
+        $this->db->where('tb_header.dept_tuju','GF');
+        $this->db->where('tb_header.data_ok',1);
+        if($fil != ''){
+            $this->db->where('substr(tb_header.nomor_dok,7,2)',$fil);
+        }
+        $this->db->group_by('month(tb_header.tgl),YEAR(tb_header.tgl)');
+        $this->db->order_by('tb_header.tgl DESC');
+        $this->db->limit(24);
         return $this->db->get();
     }
     public function getdetailbcasal($exbc, $data)

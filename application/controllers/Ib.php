@@ -252,7 +252,7 @@ class Ib extends CI_Controller
                 'totalharga' => $cekdetail['totalharga'],
                 'total' => 'totalharga - diskon',
                 'jumlah' => '((totalharga-diskon)+ppn)-pph',
-                'bruto' => $cekdetail['kgs']
+                'netto' => $cekdetail['kgs']
             ];
             $query = $this->ibmodel->simpanib($data);
             if ($query) {

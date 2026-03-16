@@ -111,6 +111,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </select>
                     </div>
                 </div>
+                <?php $hilang = in_array($this->session->userdata('deptsekarang'),daftardeptsubkon()) ? '' : (in_array($this->session->userdata('tujusekarang'),daftardeptsubkon()) ? '' : 'hilang'); ?>
+                <div class="col-2 <?= $hilang ?>" id="div-filter3">
+                  <h5 class="m-0">Proses Subkon</h5>
+                    <div class="font-kecil">
+                      <select class="form-select form-control form-sm font-kecil font-bold text-primary" style="height: 30px; padding-top: 4.5px;" id="filterproses" name="filterproses">
+                        <option value="">SEMUA</option>
+                       <?php foreach($getproses as $proses): ?>
+                        <option value="<?= $proses['ketprc'] ?>" <?php if($this->session->userdata('filterproses')==$proses['ketprc']) { echo "selected"; } ?>><?= getpros($proses['ketprc']) ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    </div>
+                </div>
                 <div class="col-2" id="div-filter2">
                   <h5 class="m-0" style="color: #FFFFFF">.</h5>
                     <div class="font-kecil ">
@@ -121,7 +133,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </select>
                     </div>
                 </div>
-                <div class="col-8"></div>
+                <div class="col-6"></div>
               </div>
             </div>
           </div>

@@ -83,6 +83,7 @@ $("#dept_tuju").change(function () {
 				$("#div-filter2").addClass("hilang");
 			}
 			// getdataout();
+			activateselectproses($("#dept_kirim").val(),$(this).val());
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -135,6 +136,24 @@ $("#butgo").click(function () {
 $("#xsimpanout").click(function () {
 	$("#simpanout").click();
 });
+function activateselectproses(dari,ke){
+	// $.ajax({
+	// 	// dataType: "json",
+	// 	type: "POST",
+	// 	url: base_url + "out/cekselecp",
+	// 	data: {
+	// 		bl: $(this).val(),
+	// 		th: $("#th").val(),
+	// 	},
+	// 	success: function (data) {
+	// 		alert('ada');
+	// 	},
+	// 	error: function (xhr, ajaxOptions, thrownError) {
+	// 		console.log(xhr.status);
+	// 		console.log(thrownError);
+	// 	},
+	// });
+}
 function getdataout() {
 	$.ajax({
 		dataType: "json",
@@ -145,6 +164,7 @@ function getdataout() {
 			dept_tuju: $("#dept_tuju").val(),
 			filterbon: $("#filterbon").val(),
 			filterbon2: $("#filterbon2").val(),
+			filterproses: $("#filterproses").val(),
 		},
 		success: function (data) {
 			window.location.reload();

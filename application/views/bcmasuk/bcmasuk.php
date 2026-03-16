@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
   <div class="container-xl">
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
@@ -15,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
@@ -130,17 +130,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   // $kurs_yen = $detail['kurs_yen'] ?? 0;
 
                   $pengali = $detail['mtuang'] == 2
-                    ? $detail['nilai_pab'] * $kurs_usd
+                    ? ($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_usd
                     : ($detail['mtuang'] == 3
-                      ? $detail['nilai_pab'] * $kurs_yen
-                      : $detail['nilai_pab']);
+                      ? ($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_yen
+                      : ($detail['nilai_pab']+$detail['nilai_additional']));
 
                   $usd = $detail['kurs_usd'] == 0 ? 1 : $detail['kurs_usd'];
-                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab'] : ($detail['mtuang'] == 3 ? ($detail['nilai_pab'] * $kurs_yen) / $kurs_usd : $detail['nilai_pab'] / $kurs_usd);
+                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab']+$detail['nilai_additional'] : ($detail['mtuang'] == 3 ? (($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_yen) / $kurs_usd : ($detail['nilai_pab']+$detail['nilai_additional']) / $kurs_usd);
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
-                    <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bcmasuk/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
+                    <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bcmasuk/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju'], $detail['prefix_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl']; ?></td>
                     <td class="text-left line-12"><?= ucwords(strtolower($suppl)); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>

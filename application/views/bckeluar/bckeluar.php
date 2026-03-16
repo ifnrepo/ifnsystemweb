@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
   <div class="container-xl">
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
@@ -15,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
@@ -145,7 +145,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
-                    <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bckeluar/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
+                    <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bckeluar/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju'], $detail['prefix_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
                     <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_sp']; ?><br><?= $detail['tgl_sp']; ?></td>
                     <td class="text-left line-13">
                       <?php

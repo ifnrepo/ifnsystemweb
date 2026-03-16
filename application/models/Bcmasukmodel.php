@@ -27,8 +27,17 @@ class Bcmasukmodel extends CI_Model
         $this->db->where('trim(nomor_bc) !=', '');
         if ($jnsbc != 'Y') {
             $this->db->where("jns_bc", $jnsbc);
+            if($jnsbc==23){
+                $this->db->where('ok_valid',1);
+            }
         } else {
-            $this->db->where_in("jns_bc", [23, 262, 40]);
+            $this->db->group_start();
+                $this->db->where_in("jns_bc", [262, 40]);
+                $this->db->or_group_start();
+                    $this->db->where("jns_bc", 23);
+                    $this->db->where("ok_valid", 1);
+                $this->db->group_end();
+            $this->db->group_end();
         }
         if ($this->session->userdata('nopen')) {
             $this->db->where("nomor_bc", $this->session->userdata('nopen'));
@@ -74,6 +83,8 @@ class Bcmasukmodel extends CI_Model
 
         $this->db->select('
         tb_detail.*, 
+        sum(tb_detail.pcs) as pcs_total,
+        sum(tb_detail.kgs) as kgs_total,
         tb_header.*, 
         barang.nama_barang, 
         barang.nama_alias, 
@@ -83,7 +94,6 @@ class Bcmasukmodel extends CI_Model
         ref_mt_uang.mt_uang as xmtuang, 
         dept.departemen,
         tb_rekanan.nama_rekanan,tb_rekanan.alamat_rekanan,tb_rekanan.npwp as npwp_rekanan
-       
          ');
 
         if ($jnsbc == '262') {
@@ -114,6 +124,7 @@ class Bcmasukmodel extends CI_Model
 
         $this->db->where('tb_header.data_ok', 1);
         $this->db->where('tb_header.ok_tuju', 1);
+        $this->db->group_by('jns_bc,nomor_aju,nomor_bc,po,item,dis,id_barang,insno,nobontr');
 
         return $this->db->get('tb_header');
     }
