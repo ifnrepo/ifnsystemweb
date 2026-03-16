@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1772599428'; ?>
+<?php $updatejs = '1773646521'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -350,15 +350,21 @@
 	$nokirim = 0;
 	$tgarraypengiriman =  [];
 	$jmarraypengiriman =  [];
-	$doarraypengiriman =  [];
-	$exarraypengiriman =  [];
 	foreach($datapengirimangf->result_array() as $kirim){
 		$tgarraypengiriman[] = $kirim['tgl'];
 		$jmarraypengiriman[] = round($kirim['kgs'],2);
-		$doarraypengiriman[] = round($kirim['kgs_do'],2);
-		$exarraypengiriman[] = round($kirim['kgs_ex'],2);
+	}
+	$tgarrayloss =  [];
+	$jmarrayloss =  [];
+	foreach($datapengirimanloss->result_array() as $kirim){
+		$tgarrayloss[] = $kirim['departemen'];
+		$jmarrayloss[] = round($kirim['kgs'],2);
 	}	
-	// print_r(json_encode($jmarraypengiriman));
+	print_r(json_encode($tgarrayloss));
+	print_r(json_encode($tgarrayloss));
+	print_r(json_encode($tgarrayloss));
+	print_r(json_encode($tgarrayloss));
+	print_r(json_encode($jmarrayloss));
 ?>
 	<?php
 	// Untuk Warna Chart Produksi 
@@ -947,12 +953,13 @@
     </script>
 	<script>
       // @formatter:off
+	  var chartloss = '';
       document.addEventListener("DOMContentLoaded", function () {
-      	window.ApexCharts && (new ApexCharts(document.getElementById('chart-loss'), {
+		var option_donut = {
       		chart: {
-      			type: "bar",
+      			type: "donut",
       			fontFamily: 'inherit',
-      			height: 280,
+      			height: 240,
       			parentHeightOffset: 0,
       			toolbar: {
       				show: false,
@@ -963,36 +970,44 @@
       			stacked: true,
       		},
       		plotOptions: {
-      			bar: {
-      				columnWidth: '50%',
-      			}
+				pie: {
+					donut: {
+						labels: {
+							show: true,
+							value: {
+								formatter: function (val) {
+								return rupiah(val,'.',',',2)+" Kgs"; 
+								}
+							},
+							total: {
+								show: true,
+								label: 'TOTAL',
+								formatter: function (w) {
+									return rupiah(w.globals.seriesTotals.reduce((a, b) => a + b, 0),'.',',',2) + ' Kgs';
+								}
+							}
+						}
+					}
+				},
+				// expandOnClick: false
       		},
       		dataLabels: {
-      			enabled: false,
+      			enabled: true,
       		},
       		fill: {
       			opacity: 1,
       		},
-      		series: [],
+      		series: <?= json_encode($jmarrayloss) ?>,
 			noData: {
-				text: 'Under Construction ...'
+				text: 'Empty Data ...'
 			},
       		tooltip: {
-      			theme: 'dark'
-      		},
-      		grid: {
-      			padding: {
-      				top: -20,
-      				right: 0,
-      				left: -4,
-      				bottom: -4
-      			},
-      			strokeDashArray: 4,
-      			xaxis: {
-      				lines: {
-      					show: true
-      				}
-      			},
+      			theme: 'light',
+				y: {
+					formatter: function (val) {
+					return rupiah(val,'.',',',2)+" Kgs";
+					}
+				}
       		},
       		xaxis: {
       			labels: {
@@ -1011,14 +1026,17 @@
       				padding: 4
       			},
       		},
-      		labels: [
-      			
-      		],
-      		colors: [tabler.getColor("primary"), tabler.getColor("primary", 0.8), tabler.getColor("green", 0.8)],
+      		// labels: [
+      		// 	'Apple', 'Mango', 'Orange', 'Watermelon','Grape'
+      		// ],
+			labels : <?= json_encode($tgarrayloss) ?>,
+      		// colors: [tabler.getColor("primary"), tabler.getColor("primary", 0.8), tabler.getColor("green", 0.8)],
       		legend: {
-      			show: false,
+      			show: true,
       		},
-      	})).render();
+      	};
+		chartloss = new ApexCharts(document.getElementById('chart-loss'), option_donut);
+		chartloss.render();
       });
       // @formatter:on
     </script>
