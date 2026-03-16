@@ -810,6 +810,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="hakdowntime6" name="hakdowntime6" type="checkbox">
                                 <span class="form-check-label">Gudang</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakdowntime7" name="hakdowntime7" type="checkbox">
+                                <span class="form-check-label">Cv Arroza</span>
+                              </label>
                             </div>
                           </div>
                         </div>
