@@ -104,6 +104,7 @@ class Pb_model extends CI_Model
         }
         $this->db->where('month(tgl)', $this->session->userdata('bl'));
         $this->db->where('year(tgl)', $this->session->userdata('th'));
+        $this->db->order_by('tb_header.nomor_dok','tb_header.tgl');
         return $this->db->get('tb_header')->result_array();
     }
     public function getdatadetailpb($data)

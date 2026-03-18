@@ -1,24 +1,24 @@
-<footer class="footer footer-transparent d-print-none">
-	<div class="container-xl">
-		<div class="row text-center align-items-center flex-row-reverse">
-			<div class="col-lg-auto ms-lg-auto">
-			</div>
-			<div class="col-12 col-lg-auto mt-3 mt-lg-0">
-				<ul class="list-inline list-inline-dots mb-0">
-					<li class="list-inline-item">
-						<?= $data['footer_caption']; ?>
-					</li>
-					<li class="list-inline-item">
-						<a href="<?= $data['url']; ?>" target="_blank">
-							<?= $data['url_caption']; ?>
-						</a>
-					</li>
-				</ul>
+	<footer class="footer footer-transparent d-print-none">
+		<div class="container-xl">
+			<div class="row text-center align-items-center flex-row-reverse">
+				<div class="col-lg-auto ms-lg-auto">
+				</div>
+				<div class="col-12 col-lg-auto mt-3 mt-lg-0">
+					<ul class="list-inline list-inline-dots mb-0">
+						<li class="list-inline-item">
+							<?= $data['footer_caption']; ?>
+						</li>
+						<li class="list-inline-item">
+							<a href="<?= $data['url']; ?>" target="_blank">
+								<?= $data['url_caption']; ?>
+							</a>
+						</li>
+					</ul>
+				</div>
 			</div>
 		</div>
+	</footer>
 	</div>
-</footer>
-</div>
 </div>
 <!-- jquery latest version -->
 <script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
@@ -360,11 +360,6 @@
 		$tgarrayloss[] = $kirim['departemen'];
 		$jmarrayloss[] = round($kirim['kgs'],2);
 	}	
-	print_r(json_encode($tgarrayloss));
-	print_r(json_encode($tgarrayloss));
-	print_r(json_encode($tgarrayloss));
-	print_r(json_encode($tgarrayloss));
-	print_r(json_encode($jmarrayloss));
 ?>
 	<?php
 	// Untuk Warna Chart Produksi 

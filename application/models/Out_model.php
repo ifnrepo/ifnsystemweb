@@ -766,10 +766,11 @@ class Out_model extends CI_Model{
                     $cekhuruf = substr(trim($xisiheader['nomor_dok']),-2);
                     if(substr($cekhuruf,0,1)=='-'){
                         $kodehuruf = '-'.uruthuruf(substr($cekhuruf,1,1));
+                        $kodedok = substr(trim($xisiheader['nomor_dok']),0,strlen(trim($xisiheader['nomor_dok']))-2);
                     }else{
                         $kodehuruf = '-A';
+                        $kodedok = trim($xisiheader['nomor_dok']);
                     }
-                    $kodedok = substr(trim($xisiheader['nomor_dok']),0,strlen(trim($xisiheader['nomor_dok']))-2);
                     $this->db->where('id',$idheader);
                     $this->db->update('tb_header',['nomor_dok' => $kodedok.$kodehuruf]);
                     $ceknomordok = $xisiheader['nomor_dok'];

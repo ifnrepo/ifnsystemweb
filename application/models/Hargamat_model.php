@@ -420,6 +420,7 @@ class Hargamat_model extends CI_Model
 
         $this->db->where('id', $data['id']);
         $this->db->update('tb_hargamaterial', $data);
+        $this->helpermodel->isilog($this->db->last_query());
 
         $updateFields = [
             'mt_uang'     => $mt_uang,
@@ -440,7 +441,6 @@ class Hargamat_model extends CI_Model
 
         $this->db->where('nobontr', $nobontr);
         $this->db->update('tb_hargamaterial', $updateFields);
-
         $this->helpermodel->isilog($this->db->last_query());
         $this->db->trans_complete();
 
