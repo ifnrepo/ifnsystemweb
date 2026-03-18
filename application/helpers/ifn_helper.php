@@ -409,7 +409,7 @@ function viewsku($po = '', $no = '', $dis = '', $id = '')
     } else {
         $xdis = $dis == 0 ? '' : ' dis ' . $dis;
         $xid = $id == '' ? '' : ' brg ' . $id;
-        $hasil = trim($po) . ' # ' . trim($no) . ' ' . $xdis;
+        $hasil = trim($po) . ' # ' . trim($no) . $xdis;
     }
     return trim($hasil);
 }
