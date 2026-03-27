@@ -55,6 +55,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <button title="Pause" class="btn btn-warning btn-sm hilang" id="pause" type="button" data-toggle="tooltip">pause</button>
                                     <button title="Stop streams" class="btn btn-danger btn-sm" id="stop" type="button" data-toggle="tooltip">Stop Camera</button>
                                     <button title="Manual Input" class="btn btn-info btn-sm" id="manual" type="button">Manual Mode</button>
+                                    <button title="Scanner Input" class="btn btn-warning btn-sm" id="scanner" type="button">Scan Mode</button>
                                 </div>
                                 <hr class="m-1">
                                 <div class="well hilang" style="width: 100%;">
@@ -114,6 +115,26 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             Reset
                                         </a>
                                         <a href="#" class="btn btn-square btn-primary" id="simpan-input-manual">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M10 14a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
+                                            <span class="font-kecil">Simpan Data</span>
+                                        </a>
+                                    </div>
+                                </div>
+                                <div class="input-scanner mt-2 hilang">
+                                    <h4>Scanner Form</h4>
+                                    <hr class="m-1">
+                                    <div class="mb-2 mt-2 row">
+                                        <label class="col-3 col-form-label">Code</label>
+                                        <div class="col">
+                                            <input type="text" id="inputscanner" class="form-control form-sm btn-square" aria-describedby="emailHelp" placeholder="Nomor Instruksi">
+                                        </div>
+                                    </div>
+                                    <hr class="m-1">
+                                    <div class="btn-list justify-content-between">
+                                        <a href="#" class="btn btn-link link-secondary" id="bersihkan-input-scanner">
+                                            Reset
+                                        </a>
+                                        <a href="#" class="btn btn-square btn-primary" id="simpan-input-scanner">
                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-device-floppy"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M6 4h10l4 4v10a2 2 0 0 1 -2 2h-12a2 2 0 0 1 -2 -2v-12a2 2 0 0 1 2 -2" /><path d="M10 14a2 2 0 1 0 4 0a2 2 0 1 0 -4 0" /><path d="M14 4l0 4l-6 0l0 -4" /></svg>
                                             <span class="font-kecil">Simpan Data</span>
                                         </a>
