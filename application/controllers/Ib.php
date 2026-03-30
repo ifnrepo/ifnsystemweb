@@ -1904,8 +1904,12 @@ class Ib extends CI_Controller
             // echo '<script>alert("'.$databalik['status'].'");</script>';
             // $url = base_url().'ib/kosong';
             // print_r($databalik);
+            $hsl = '';
+            foreach($databalik['message'] as $det){
+                $hsl .= "\r".$det;
+            }
             $this->session->set_flashdata('errorsimpan', 1);
-            $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . var_dump($databalik['Exception']));
+            $this->session->set_flashdata('pesanerror', $hsl. '[SCREEN SHOT dan KIRIM PESAN INI KE Bagian IT bila diperlukan]' . var_dump($databalik['Exception']));
             // $this->session->set_flashdata('pesanerror',$databalik);
             $url = base_url() . 'ib/isidokbc/' . $id . $tmb;
             redirect($url);
