@@ -1377,7 +1377,7 @@ class Ib_model extends CI_Model
                     'weight' => $hasil['kgs'],
                     'id_satuan' => $hasil['id_satuan'],
                     'id_supplier' => $header['id_pemasok'],
-                    'mt_uang' => "IDR",
+                    'mt_uang' => $header['mtuang']==2 ? "USD" : ($header['mtuang']==3 ? "JPY" : "IDR"),
                     'jns_bc' => $header['jns_bc'],
                     'nomor_bc' => $header['nomor_bc'],
                     'tgl_bc' => $header['tgl_bc'],
