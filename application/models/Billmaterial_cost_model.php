@@ -28,7 +28,7 @@ class Billmaterial_cost_model extends CI_Model
     }
     public function getdatadetailbyid($id)
     {
-        $this->db->select('ref_bom_detail_cost.*,barang.nama_barang');
+        $this->db->select('ref_bom_detail_cost.*,barang.nama_barang,barang.kode');
         $this->db->from('ref_bom_detail_cost');
         $this->db->join('barang', 'barang.id = ref_bom_detail_cost.id_barang', 'left');
         $this->db->where('id_bom', $id);

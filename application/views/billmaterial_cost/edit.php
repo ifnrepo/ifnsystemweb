@@ -138,7 +138,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     foreach ($detail->result_array() as $deta) : $no++;
                                         $jumlahpersen += $deta['persen']; ?>
                                         <tr>
-                                            <td><?= $deta['nama_barang'] ?></td>
+                                            <td class="line-11"><span class="font-kecil text-teal"><?= $deta['kode'] ?></span><br><?= $deta['nama_barang'] ?></td>
                                             <td><?= $deta['nobontr'] ?></td>
                                             <td class="text-right"><?= rupiah($deta['persen'], 6) ?></td>
                                             <td class="text-center">
