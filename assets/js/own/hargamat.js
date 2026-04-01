@@ -23,6 +23,7 @@ $(document).ready(function () {
 				
 				targets: [0],
 				orderable: false,
+				className: 'line-11'
 			},
 			{
 				// className: "text-right",
@@ -37,7 +38,7 @@ $(document).ready(function () {
 				className: "text-primary",
 			},
 			{
-				className: "text-right",
+				className: "line-11",
 				targets: [5],
 				orderable: false,
 			},

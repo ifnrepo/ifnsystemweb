@@ -253,6 +253,20 @@
                                             </div>
                                         </div>
                                     </div>
+                                    <!-- SALES NOTE  -->
+                                    <div class="<?= $hilangbc262; ?><?= $hilangbc40; ?>">
+                                        <div class="text-center bg-teal-lt mb-1 font-bold">Sales Note</div>
+                                        <div class="mb-1 row">
+                                            <div class="col">
+                                                <div class="row">
+                                                    <label class="col-3 col-form-label font-kecil">Sales Note Number</label>
+                                                    <div class="col">
+                                                        <input type="text" class="form-control font-kecil btn-flat" id="sales_note" name="sales_note" value="<?= $datheader['sales_note']; ?>" aria-describedby="emailHelp" placeholder="Sales Note" <?= $nonaktif; ?>>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <!-- Ex BC  -->
                                     <div class="<?= $hilangbc23; ?><?= $hilangbc40; ?>">
                                         <div class="text-center bg-danger-lt mb-1 font-bold">Ex BC</div>

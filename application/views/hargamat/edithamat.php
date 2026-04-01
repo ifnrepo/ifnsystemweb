@@ -98,14 +98,22 @@
                 <div class="row">
                     <div class="col-6">
                         <div class="mb-1">
-                            <label class="form-label font-kecil mb-0 font-bold text-primary">Harga</label>
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Harga (IDR/Unit)</label>
                             <input type="text" class="form-control font-kecil text-end inputangka" id="price" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'], 4); ?>">
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="mb-1">
-                            <label class="form-label font-kecil mb-0 font-bold text-primary">Harga Lainnya (<?= $data['mt_uang']  ?>)</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" name="oth_amount" placeholder="Input Amount" value="<?= rupiah($data['oth_amount'], 2); ?>">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Harga (<?= $data['mt_uang']  ?>/Unit)</label>
+                            <input type="text" class="form-control font-kecil text-end inputangka" name="oth_amount" placeholder="Input Amount" value="<?= rupiah($data['oth_amount'], 3); ?>">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-6">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-primary">Landing Ch (IDR/Unit)</label>
+                            <input type="text" class="form-control font-kecil text-end inputangkad" id="landing_ch" name="landing_ch" placeholder="Input Harga" value="<?= rupiah($data['landing_ch'], 8); ?>">
                         </div>
                     </div>
                 </div>
@@ -113,7 +121,7 @@
                      <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-danger bg-danger-lt pl-2">Harga Akunting</label>
-                            <input type="text" class="form-control font-kecil text-end" id="harga_akt" name="harga_akt" placeholder="Input Harga Akunting" value="<?= rupiah($data['harga_akt'], 8); ?>">
+                            <input type="text" class="form-control font-kecil text-end" id="harga_akt" name="harga_akt" readonly placeholder="Input Harga Akunting" value="<?= rupiah($data['harga_akt'], 8); ?>">
                         </div>
                     </div>
                      <div class="col-6">
@@ -293,6 +301,20 @@
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
+    $("#landing_ch").on("change click keyup input paste", function() {
+        var hgbaru;
+        var price = $("#price").val();
+        var hgakt = $("#harga_akt").val();
+        var isi = $(this).val();
+        if(price.trim() != '-' && isi.trim() != ''){
+            var hgbr = parseFloat(toAngka(price));
+            hgbaru = hgbr + parseFloat(isi);
+
+            $("#harga_akt").val(rupiah(hgbaru,'.',',',4));
+        }else{
+            $("#harga_akt").val(hgakt);
+        }
+    });
     $("#nomor_bc").blur(function() {
         var nobc = $("#nomor_bc").val();
         $(this).val(isikurangnol(nobc));
@@ -320,6 +342,42 @@
         var nol = "0";
         var jnsbc = nol.repeat(6 - val.length) + val;
         return jnsbc;
+    }
+    function rupiah(amount, decimalSeparator, thousandsSeparator, nDecimalDigits) {
+        if (amount == 0 || amount == 0.00 || !amount) {
+            return "-";
+        } else {
+            var num = parseFloat(amount); //convert to float
+            //default values
+            decimalSeparator = decimalSeparator || ".";
+            thousandsSeparator = thousandsSeparator || ",";
+            nDecimalDigits = nDecimalDigits == null ? 2 : nDecimalDigits;
+
+            var fixed = num.toFixed(nDecimalDigits); //limit or add decimal digits
+            //separate begin [$1], middle [$2] and decimal digits [$4]
+            var parts = new RegExp(
+                "^(-?\\d{1,3})((?:\\d{3})+)(\\.(\\d{" + nDecimalDigits + "}))?$",
+            ).exec(fixed);
+
+            if (parts) {
+                //num >= 1000 || num < = -1000
+                return (
+                    parts[1] +
+                    parts[2].replace(/\d{3}/g, thousandsSeparator + "$&") +
+                    (parts[4] ? decimalSeparator + parts[4] : "")
+                );
+            } else {
+                return fixed.replace(".", decimalSeparator);
+            }
+        }
+    }
+
+    function toAngka(rp) {
+        if (rp == "" || rp.trim() == "-") {
+            return 0;
+        } else {
+            return rp.replace(/,*|\D/g, "");
+        }
     }
 
     document.getElementById('co').addEventListener('change', function() {
