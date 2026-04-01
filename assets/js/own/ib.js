@@ -178,6 +178,9 @@ $("#no_kendaraan").focus(function () {
 $("#no_faktur_pajak").focus(function () {
 	value_old = $(this).val();
 });
+$("#sales_note").focus(function () {
+	value_old = $(this).val();
+});
 $("#nomor_sj").blur(function () {
 	if ($("#nomor_sj").val() != value_old) {
 		updatekolom($("#id_header").val(), "tb_header", "nomor_sj", $(this).val());
@@ -241,6 +244,16 @@ $("#no_faktur_pajak").blur(function () {
 			$("#id_header").val(),
 			"tb_header",
 			"no_faktur_pajak",
+			$(this).val(),
+		);
+	}
+});
+$("#sales_note").blur(function () {
+	if ($("#sales_note").val() != value_old) {
+		updatekolom(
+			$("#id_header").val(),
+			"tb_header",
+			"sales_note",
 			$(this).val(),
 		);
 	}

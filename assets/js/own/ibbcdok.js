@@ -373,6 +373,9 @@ $("#jenis_kontainer").change(function () {
 $("#tipe_kontainer").change(function () {
 	savedata("tipe_kontainer", $(this).val());
 });
+$("#sales_note").blur(function () {
+	savedata("sales_note", $(this).val());
+});
 $("#simpanhakbc").click(function () {
 	cekkolom();
 });
@@ -576,10 +579,10 @@ function cekkolom(mode) {
 			pesan("Nomor peti kemas harus di isi", "error");
 			return false;
 		}
-		// if ($("#kode_faktur_pajak").val() == "") {
-		// 	pesan("Kode Faktur Pajak Harus di isi", "error");
-		// 	return false;
-		// }
+		if ($("#sales_note").val() == "") {
+			pesan("Nomor Sales Note harus di isi", "error");
+			return false;
+		}
 	}
 	// Untuk cek BC 30
 	if ($("#jns_bc").val() == "30") {

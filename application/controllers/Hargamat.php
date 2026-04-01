@@ -180,19 +180,20 @@ class Hargamat extends CI_Controller
             if (trim($field->nomor_bc) !=  '') {
                 $nobc = 'BC ' . trim($field->jns_bc) . '-' . $field->nomor_bc;
             }
+            $idrprice = (float) $field->price + (float) $field->landing_ch; 
             $no++;
             $row = array();
-            $row[] = $barang;
+            $row[] = '<span class="font-kecil text-teal">'.$field->kodebarang.'</span><br>'.$barang;
             $row[] = $field->kodesatuan;
             $row[] = tglmysql($field->tgl);
             $row[] = $field->kode_faktur_pajak;
             $row[] = $field->nobontr;
-            $row[] = $field->nomor_inv;
+            $row[] = $field->nomor_inv.'<br><span class="font-kecil text-teal">'.$field->sales_note.'</span>';
             // $row[] = $nobc;
             $row[] = rupiah($field->qty, 0);
             $row[] = rupiah($field->weight, 2);
-            $row[] = rupiah($field->price, 2);
-            $row[] = rupiah($tampil * $field->price, 2);
+            $row[] = rupiah($idrprice, 2);
+            $row[] = rupiah($tampil * $idrprice, 2);
             // $row[] = $field->nama_supplier;
             // $row[] = $field->mt_uang;
             // $row[] = rupiah($field->oth_amount, 2);

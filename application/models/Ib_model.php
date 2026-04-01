@@ -336,7 +336,7 @@ class Ib_model extends CI_Model
         $id = $data['id'];
         $this->db->trans_start();
         $idpo = 0;
-        $mtuang = 0;$jnsbc='';
+        $mtuang = 0;$jnsbc='';$nomorpo='';$tglpo='';
         for ($x = 0; $x < $jumlah; $x++) {
             $arrdat = $data['data'];
             $detail = $this->db->where('id', $arrdat[$x])->get('tb_detail')->row_array();
@@ -344,6 +344,8 @@ class Ib_model extends CI_Model
             if($idpo==0){
                 $idpo = $detail['id_header'];
                 $mtuang = $header['mtuang'];
+                $nomorpo = $header['nomor_dok'];
+                $tglpo = $header['tgl'];
             }
             $headerx = $this->db->where('id', $id)->get('tb_header')->row_array();
             $isi = [
@@ -376,10 +378,10 @@ class Ib_model extends CI_Model
                 $this->db->update('tb_detail',['seri_barang' => $nomber]);
             }
         }
-        //Update MataUang
+        //Update MataUang dan PO
         if($idpo!=0){
              $this->db->where('id',$id);
-             $this->db->update('tb_header',['mtuang' => $mtuang]);
+             $this->db->update('tb_header',['mtuang' => $mtuang,'nomor_po' => $nomorpo,'tgl_po' => $tglpo]);
         }
         $hasil = $this->db->trans_complete();
         return $hasil;
@@ -1362,6 +1364,14 @@ class Ib_model extends CI_Model
         $header = $this->getdatabyid($id);
         $this->db->where('id_header', $id);
         $hasil = $this->db->get('tb_detail');
+        $kurs = count(getkurs_bi($header['tgl_aju'])) > 0 ? getkurs_bi($header['tgl_aju'])->row_array() : "data kosong";
+        if(is_array($kurs)){
+            $hasilkurs = 0;
+            $xhasilkurs =  $header['mtuang']==2 ? $kurs['usd'] : ($header['mtuang']==3 ? $kurs['jpy'] : 1);
+        }else{
+            $hasilkurs = 0;
+            $xhasilkurs = 1;
+        }
         foreach ($hasil->result_array() as $hasil) {
             $datacekrekod = [
                 'id_barang' => $hasil['id_barang'],
@@ -1386,6 +1396,11 @@ class Ib_model extends CI_Model
                     'nomor_aju' => $this->getdatanomoraju($id),
                     'tgl_aju' => $header['tgl_aju'],
                     'kode_faktur_pajak' => $header['kode_faktur_pajak'],
+                    'nomor_inv' => $header['nomor_inv'],
+                    'kurs' => $hasilkurs,
+                    'cif' =>  ($hasil['harga']*$hasil['kgs'])/$xhasilkurs,
+                    'harga_akt' => $hasil['harga'],
+                    'sales_note' => $header['sales_note']
                     // 'kode_negara' => "ID"
                 ];
                 $this->db->insert('tb_hargamaterial', $datasimpan);

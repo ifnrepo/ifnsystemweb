@@ -1091,17 +1091,22 @@ class Helper_model extends CI_Model
         $this->db->where('tgl', $date);
         $this->db->limit(1);
         $query = $this->db->get();
-        // $row = $query->row();
-
-         return $query;
+        return $query;
     }
-    // public function getkurssekarang($date)
-    // {
-    //     if ($date == '' || $date == NULL) {
-    //         $date = date('Y-m-d');
-    //     }
-    //     return $this->db->get_where('tb_kurs', ['tgl' => $date]);
-    // }
+    public function getkurs_bi($date)
+    {
+        if ($date == '' || $date == NULL) {
+            $tgl = date('Y-m-01');
+        }else{
+            $tgl = date('Y-m-01',strtotime($date));
+        }
+        $this->db->select('*');
+        $this->db->from('tb_kurs_bi');
+        $this->db->where('period', $date);
+        $this->db->limit(1);
+        $query = $this->db->get();
+        return $query;
+    }
 
     public function getkurs30hari($date = '')
     {

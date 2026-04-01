@@ -1045,6 +1045,15 @@ function getkurssekarang($date = '')
     $getkode = $CI->helpermodel->getkurssekarang($date);
     return $getkode;
 }
+function getkurs_bi($date = '')
+{
+    if ($date == '0000-00-00' || $date == '') {
+        $date = '';
+    }
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->getkurs_bi($date);
+    return $getkode;
+}
 
 function getcurrentperiode()
 {

@@ -144,7 +144,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <th>Tgl</th>
                 <th>FP</th>
                 <th>Nomor IB</th>
-                <th>Invoice</th>
+                <th>Invoice<br>Sales No</th>
                 <!-- <th class="text-left">Info BC</th> -->
                 <th>Qty</th>
                 <th>Weight</th>
@@ -190,8 +190,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-
-
 <div class="modal modal-blur fade" id="modal-large-hamat" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-lg modal-dialog-centered" role="document">
     <div class="modal-content">
@@ -205,7 +203,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-
 <div class="modal modal-blur fade" id="modal-hapus" tabindex="-1" role="dialog" aria-hidden="true">
   <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
     <div class="modal-content">

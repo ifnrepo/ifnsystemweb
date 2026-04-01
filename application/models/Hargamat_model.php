@@ -1,7 +1,7 @@
 <?php
 class Hargamat_model extends CI_Model
 {
-    var $column_search = array('nama_barang', 'nama_supplier', 'remark', 'nomor_bc', 'nobontr');
+    var $column_search = array('nama_barang', 'nama_supplier', 'remark', 'nomor_bc', 'nobontr','barang.kode');
     var $column_order = array(null, 'nama_barang', 'nama_supplier', 'remark', 'tgl');
     var $order = array('tgl' => 'asc');
     // var $table = 'barang';
