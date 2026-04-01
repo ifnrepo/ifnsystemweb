@@ -99,7 +99,7 @@
                     <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Harga (IDR/Unit)</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" id="price" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'], 4); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" id="price" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'], 8); ?>">
                         </div>
                     </div>
                     <div class="col-6">
@@ -308,9 +308,9 @@
         var isi = $(this).val();
         if(price.trim() != '-' && isi.trim() != ''){
             var hgbr = parseFloat(toAngka(price));
-            hgbaru = hgbr + parseFloat(isi);
+            hgbaru = hgbr + parseFloat(toAngka(isi));
 
-            $("#harga_akt").val(rupiah(hgbaru,'.',',',4));
+            $("#harga_akt").val(rupiah(hgbaru,'.',',',8));
         }else{
             $("#harga_akt").val(hgakt);
         }

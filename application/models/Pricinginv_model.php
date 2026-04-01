@@ -197,16 +197,17 @@ class Pricinginv_model extends CI_Model
         if($this->session->userdata('deptpricinginv')!=''){
             $this->db->where('stokinv.dept_id',$this->session->userdata('deptpricinginv'));
         }
-        $this->db->order_by('stokinv.dept_id','stokinv.urut');
+        $this->db->order_by('stokinv.urut');
+        // ,stokinv.dept_id',stokinv_detail.id_stok
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select *,SUM(kgs) OVER() as totalkgsdet,SUM(pcs) OVER() as totalpcsdet,SUM(harga_acct*IF(id_satuan=22,kgs,IF(pcs=0,kgs,pcs))) OVER() AS tothargadet from (Select *,LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4) AS id_kategori from (".$query1.") r1 ";
+        $kolom = "Select * from (Select *,SUM(kgs) OVER() as totalkgsdet,SUM(pcs) OVER() as totalpcsdet,SUM(harga_acct*IF(id_satuan=22,kgs,IF(pcs=0,kgs,pcs))) OVER() AS tothargadet from (Select *,LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4) AS id_kategori from (".$query1.") r1 ";
         // $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) ";
         // $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan";
         if($this->session->userdata('milik')!=''){
             $kolom .= "where dln = '".$this->session->userdata('milik')."'";
         }
-        $kolom .= " ) r2";
+        $kolom .= " ) r2 order by urut) r3";
         return $kolom;
     }
     public function getdatainvdet($filtkat){
@@ -364,122 +365,139 @@ class Pricinginv_model extends CI_Model
         $this->db->trans_start();
         $query = $this->db->query($this->getdata());
         foreach($query->result_array() as $que){
-            // if($que['id_barang']==119){
             $this->db->where('id_stok',$que['id']);
             $this->db->delete('stokinv_detail');
 
-            $databom = getdatabomcost($que);
-            if(count($databom) > 0){
-                $ke=0;
-                $jmrm = 0;
-                $jmsm = 0;
-                $jmpri = 0;
-                $amont = 0;
-                foreach($databom as $dbom){
-                    if($ke==0){
-                        $tglpr = $dbom['prod_date'];
-                    }
-                    $jmrm += $dbom['harga_rm'];
-                    $jmsm += $dbom['harga_sm'];
-                    $jmpri += $dbom['price'];
-                    $pengali = ($dbom['id_satuan']==22) ? $dbom['kgs'] : (($dbom['pcs']==0) ? $dbom['kgs'] : $dbom['pcs']); // Apabila satuan di Hargamaterial adalah KGS maka dikali KGS selain itu dikali PCS
-                    $amont += $dbom['price']*$pengali;
-                    unset($dbom['harga_rm']);
-                    unset($dbom['harga_sm']);
-                    unset($dbom['price']);
-                    unset($dbom['prod_date']);
-                    $this->db->insert('stokinv_detail',$dbom);
-                    $ke++;
-                }
-
-                $sp=0;$rr=0;$nt=0;$sn=0;$h1=0;$ko=0;$h2=0;$pa=0;$sh=0;
-                // Cari data Cost dept Price 
-                $tahun = $tglpr==null ? 1970 : date('Y',strtotime($tglpr));
-                $cekcost = $this->db->get_where('ref_jobcost',['tahun' => $tahun,'aktif'=>1]);
-                if($cekcost->num_rows() > 0){
-                    $nilaicekcost = $cekcost->row_array();
-                }
-
-                // Cari data pengenaan bagian apa saja 
-                $cekcostdept = $this->db->get_where('ref_jobcostdep',['dept_id' => $que['dept_id'],'id_kategori'=>$que['id_kategori'],'trim(sublok)'=>trim($que['sublok']),'asal' => $que['asal_waste']]);
-                if($cekcostdept->num_rows() > 0 && $cekcost->num_rows() > 0){
-                    $nilaicekcostdept = $cekcostdept->row_array();
-                    if($nilaicekcostdept['sp']==1){
-                        $sp = $nilaicekcost['sp'];
-                    }
-                    if($nilaicekcostdept['rr']==1){
-                        $rr = $nilaicekcost['rr'];
-                    }
-                    if($nilaicekcostdept['nt']==1){
-                        $nt = $nilaicekcost['nt'];
-                    }
-                    if($nilaicekcostdept['sn']==1){
-                        $sn = $nilaicekcost['sn'];
-                    }
-                    if($nilaicekcostdept['h1']==1){
-                        $h1 = $nilaicekcost['h1'];
-                    }
-                    if($nilaicekcostdept['ko']==1){
-                        $ko = $nilaicekcost['ko'];
-                    }
-                    if($nilaicekcostdept['h2']==1){
-                        $h2 = $nilaicekcost['h2'];
-                    }
-                    if($nilaicekcostdept['pa']==1){
-                        $pa = $nilaicekcost['pa'];
-                    }
-                    if($nilaicekcostdept['sh']==1){
-                        $sh = $nilaicekcost['sh'];
-                    }
-                }
-                $artipe = '';
-                if($que['id_kategori']=='8189'){
-                    $artipe = 'RM';
-                }else{
-                    if($que['id_kategori']=='6319'){
-                        $artipe = 'SM';
-                    }else{
-                        if($que['dept_id']=='GF' || $que['dept_id']=='GW'){
-                            $artipe = 'FG';
-                        }else{
-                            $artipe = 'GP';
-                        }
-                    }
-                }
-                $pengali = $que['kodesatuan']=='KGS' ? $que['kgs_akhir'] : (($que['pcs_akhir']==0) ? $que['kgs_akhir'] : $que['pcs_akhir']);
-                $mnt = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh)*$pengali;
-                $hrg = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh);
-                $datastokinv = [
-                    'harga' => $hrg,
-                    'rm' => $jmrm,
-                    'sm' => $jmsm,
-                    'amount' => $mnt,
-                    'prod_date' => $tglpr,
-                    'spinning' => $sp,
-                    'ringrope' => $rr,
-                    'netting' => $nt,
-                    'senshoku' => $sn,
-                    'hoshu1' => $h1,
-                    'koatsu' => $ko,
-                    'hoshu2' => $h2,
-                    'packing' => $pa,
-                    'shitate' => $sh,
-                    'art_type' => $artipe
-                ];
-
-                $this->db->where('id',$que['id']);
-                $this->db->update('stokinv',$datastokinv);
-            }else{
-                $dbom = [
+            // Jika DLN, kopi langsung ke detail
+            if($que['dln']==1){
+                $hasil = [
                     'id_stok' => $que['id'],
                     'urut' => $que['urut'],
                     'id_barang' => $que['id_barang'],
-                    'kgs' => 0,
+                    'nobontr' => $que['nobontr'],
+                    'pcs' => $que['pcs_akhir'],
+                    'kgs' => $que['kgs_akhir'],
+                    'kgs_sm' => $que['kgs_akhir'],
+                    'id_satuan' => $que['id_satuan'],
+                    'jns_bc' => '-',
+                    'nomor_bc' => '-',
+                    'tgl_bc' => '-',
+                    'harga_acct' => 0
                 ];
+                $this->db->insert('stokinv_detail',$hasil);
+            }else{
+                $databom = getdatabomcost($que);
+                if(count($databom) > 0){
+                    $ke=0;
+                    $jmrm = 0;
+                    $jmsm = 0;
+                    $jmpri = 0;
+                    $amont = 0;
+                    foreach($databom as $dbom){
+                        if($ke==0){
+                            $tglpr = $dbom['prod_date'];
+                        }
+                        $jmrm += $dbom['harga_rm'];
+                        $jmsm += $dbom['harga_sm'];
+                        $jmpri += $dbom['price'];
+                        $pengali = ($dbom['id_satuan']==22) ? $dbom['kgs'] : (($dbom['pcs']==0) ? $dbom['kgs'] : $dbom['pcs']); // Apabila satuan di Hargamaterial adalah KGS maka dikali KGS selain itu dikali PCS
+                        $amont += $dbom['price']*$pengali;
+                        unset($dbom['harga_rm']);
+                        unset($dbom['harga_sm']);
+                        unset($dbom['price']);
+                        unset($dbom['prod_date']);
+                        $this->db->insert('stokinv_detail',$dbom);
+                        $ke++;
+                    }
 
-                $this->db->insert('stokinv_detail',$dbom);
+                    $sp=0;$rr=0;$nt=0;$sn=0;$h1=0;$ko=0;$h2=0;$pa=0;$sh=0;
+                    // Cari data Cost dept Price 
+                    $tahun = $tglpr==null ? 1970 : date('Y',strtotime($tglpr));
+                    $cekcost = $this->db->get_where('ref_jobcost',['tahun' => $tahun,'aktif'=>1]);
+                    if($cekcost->num_rows() > 0){
+                        $nilaicekcost = $cekcost->row_array();
+                    }
+
+                    // Cari data pengenaan bagian apa saja 
+                    $cekcostdept = $this->db->get_where('ref_jobcostdep',['dept_id' => $que['dept_id'],'id_kategori'=>$que['id_kategori'],'trim(sublok)'=>trim($que['sublok']),'asal' => $que['asal_waste']]);
+                    if($cekcostdept->num_rows() > 0 && $cekcost->num_rows() > 0){
+                        $nilaicekcostdept = $cekcostdept->row_array();
+                        if($nilaicekcostdept['sp']==1){
+                            $sp = $nilaicekcost['sp'];
+                        }
+                        if($nilaicekcostdept['rr']==1){
+                            $rr = $nilaicekcost['rr'];
+                        }
+                        if($nilaicekcostdept['nt']==1){
+                            $nt = $nilaicekcost['nt'];
+                        }
+                        if($nilaicekcostdept['sn']==1){
+                            $sn = $nilaicekcost['sn'];
+                        }
+                        if($nilaicekcostdept['h1']==1){
+                            $h1 = $nilaicekcost['h1'];
+                        }
+                        if($nilaicekcostdept['ko']==1){
+                            $ko = $nilaicekcost['ko'];
+                        }
+                        if($nilaicekcostdept['h2']==1){
+                            $h2 = $nilaicekcost['h2'];
+                        }
+                        if($nilaicekcostdept['pa']==1){
+                            $pa = $nilaicekcost['pa'];
+                        }
+                        if($nilaicekcostdept['sh']==1){
+                            $sh = $nilaicekcost['sh'];
+                        }
+                    }
+                    $artipe = '';
+                    if($que['id_kategori']=='8189'){
+                        $artipe = 'RM';
+                    }else{
+                        if($que['id_kategori']=='6319'){
+                            $artipe = 'SM';
+                        }else{
+                            if($que['dept_id']=='GF' || $que['dept_id']=='GW'){
+                                $artipe = 'FG';
+                            }else{
+                                $artipe = 'GP';
+                            }
+                        }
+                    }
+                    $pengali = $que['kodesatuan']=='KGS' ? $que['kgs_akhir'] : (($que['pcs_akhir']==0) ? $que['kgs_akhir'] : $que['pcs_akhir']);
+                    $mnt = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh)*$pengali;
+                    $hrg = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh);
+                    $datastokinv = [
+                        'harga' => $hrg,
+                        'rm' => $jmrm,
+                        'sm' => $jmsm,
+                        'amount' => $mnt,
+                        'prod_date' => $tglpr,
+                        'spinning' => $sp,
+                        'ringrope' => $rr,
+                        'netting' => $nt,
+                        'senshoku' => $sn,
+                        'hoshu1' => $h1,
+                        'koatsu' => $ko,
+                        'hoshu2' => $h2,
+                        'packing' => $pa,
+                        'shitate' => $sh,
+                        'art_type' => $artipe
+                    ];
+
+                    $this->db->where('id',$que['id']);
+                    $this->db->update('stokinv',$datastokinv);
+                }else{
+                    $dbom = [
+                        'id_stok' => $que['id'],
+                        'urut' => $que['urut'],
+                        'id_barang' => $que['id_barang'],
+                        'kgs' => 0,
+                    ];
+
+                    $this->db->insert('stokinv_detail',$dbom);
+                }
             }
-            // }
         }       
         return $this->db->trans_complete();
     }

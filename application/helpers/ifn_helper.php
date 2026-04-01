@@ -1242,6 +1242,7 @@ function getdatabomcost($que)
                     'urut' => $que['urut'],
                     'id_barang' => $datadetbom['id_barang'],
                     'nobontr' => $datadetbom['nobontr'],
+                    'pcs' => 0,
                     'kgs' => $que['kgs_akhir'] * ($datadetbom['persen'] / 100),
                     'kgs_sm' => $que['kgs_akhir'] * ($datadetbom['persen_sm'] / 100),
                     'id_satuan' => $hamat['id_satuan'],

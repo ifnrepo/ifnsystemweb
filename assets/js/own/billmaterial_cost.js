@@ -181,6 +181,7 @@ $(document).on("click", "#editdetailbillmaterial", function () {
 	$("#nobontr").val(rel3);
 	$("#persen").val(rel4);
 	$("#spekbarangnya").text(rel5);
+	// $("#nama_barang").val(rel5);
 	$("#simpandetailbarang").addClass('hilang');
 	$("#updatedetailbarang").removeClass('hilang');
 	$("#cont-spek").removeClass('hilang');
