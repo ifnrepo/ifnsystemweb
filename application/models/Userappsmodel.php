@@ -61,6 +61,7 @@ class Userappsmodel extends CI_Model
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['cekdowntime_pi'] = isset($data['cekdowntime_pi']) ? 1 : 0;
         $data['cekdowntime_gi'] = isset($data['cekdowntime_gi']) ? 1 : 0;
+        $data['cekdowntime_master'] = isset($data['cekdowntime_master']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
@@ -215,6 +216,7 @@ class Userappsmodel extends CI_Model
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['cekdowntime_pi'] = isset($data['cekdowntime_pi']) ? 1 : 0;
         $data['cekdowntime_gi'] = isset($data['cekdowntime_gi']) ? 1 : 0;
+        $data['cekdowntime_master'] = isset($data['cekdowntime_master']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         // Set modul master
