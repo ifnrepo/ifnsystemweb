@@ -294,9 +294,40 @@
                     </div>
                 </div>
             </div>
-            <div class="tab-pane fade p-2" id="tabs-riwayat-8">
-                <div style="width:100%;height:700px;" class="text-center font-bold m-0">
-                    <h3>NOT FOUND</h3>
+            <div class="tab-pane fade p-2 text-blue" id="tabs-riwayat-8">
+                <div class="card">
+                    <div class="col-md-3">
+                    </div>
+                    <!-- <hr class="p-1 m-1"> -->
+                    <div class="card-body pt-1 pb-1 text-blue" style="overflow: auto; min-height:700px !important;">
+                        <?php if(count($riwayat) > 0):  ?>
+                            <ul>
+                                <?php foreach ($riwayat as $riw) { ?>
+                                    <?php if(is_array($riw)){ ?>
+                                        <hr class="m-1">
+                                        <div class="p-2" style="border:1px solid #FBEBEB !important;">
+                                        <u>DETAIL PERMINTAAN</u>
+                                        <ol>
+                                            <?php foreach ($riw as $raw) { ?>
+                                                <?php if(is_array($raw)){ ?>
+                                                    <ul>
+                                                        <?php foreach ($raw as $ruw) { ?>
+                                                            <li style="font-size: 12px;"><?= $ruw; ?></li>
+                                                        <?php } ?>
+                                                    </ul>
+                                                <?php }else{ ?>
+                                                    <li class='text-pink'><?= $raw; ?></li>
+                                                <?php } ?>
+                                            <?php } ?>
+                                        </ol>
+                                        </div>
+                                    <?php }else{ ?>
+                                        <li><?= $riw; ?></li>
+                                    <?php } ?>
+                                <?php } ?>
+                            </ul>
+                        <?php endif; ?>
+                    </div>
                 </div>
             </div>
             <div class="tab-pane fade p-2 bg-grey-lt" id="tabs-foto-8">

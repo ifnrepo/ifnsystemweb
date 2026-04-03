@@ -4,6 +4,7 @@ class Billmaterial_cost_model extends CI_Model
     public function getdata()
     {
         $this->db->select('ref_bom_cost.*,barang.nama_barang,barang.kode');
+        $this->db->select("IF(TRIM(ref_bom_cost.po)!='',CONCAT(TRIM(ref_bom_cost.po),'#',TRIM(ref_bom_cost.item),IF(ref_bom_cost.dis > 0,CONCAT(' dis ',ref_bom_cost.dis),'')),'') AS skupo");
         $this->db->from('ref_bom_cost');
         $this->db->join('barang', 'barang.id = ref_bom_cost.id_barang', 'left');
         $this->db->limit(1000, 0);
@@ -13,6 +14,8 @@ class Billmaterial_cost_model extends CI_Model
             $this->db->or_like('nama_barang', $this->session->userdata('katcari'));
             $this->db->or_like('insno', $this->session->userdata('katcari'));
             $this->db->or_like('nobontr', $this->session->userdata('katcari'));
+            $this->db->or_like('nobale', $this->session->userdata('katcari'));
+            $this->db->or_like("IF(TRIM(ref_bom_cost.po)!='',CONCAT(TRIM(ref_bom_cost.po),'#',TRIM(ref_bom_cost.item),IF(ref_bom_cost.dis > 0,CONCAT(' dis ',ref_bom_cost.dis),'')),'')", $this->session->userdata('katcari'));
         } else {
             $this->db->order_by('id Desc');
         }
@@ -113,6 +116,7 @@ class Billmaterial_cost_model extends CI_Model
             'trim(nobale)' => trim($data['nobale']),
             'trim(insno)' => trim($data['insno']),
             'trim(nobontr)' => trim($data['nobontr']),
+            'trim(asal_waste)' => trim($data['asal_waste']),
             'dl' => $data['dl'],
         ];
         $cekdata = $this->db->get_where('ref_bom_cost', $datakondisi);
@@ -151,5 +155,9 @@ class Billmaterial_cost_model extends CI_Model
     public function simpantglprod($data){
         $this->db->where('id',$data['id']);
         return $this->db->update('ref_bom_cost',['prod_date' => $data['prod_date']]);
+    }
+    public function simpanasalwaste($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('ref_bom_cost',['asal_waste' => $data['asal_waste']]);
     }
 }

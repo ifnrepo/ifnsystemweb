@@ -62,7 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <tbody class="table-tbody" style="font-size: 13px !important;">
                             <?php $no = 0;
                             foreach ($material->result_array() as $key) : $no++;
-                                $sku = trim($key['po']) == '' ? $key['kode'] : viewsku($key['po'], $key['item'], $key['dis'], $key['id_barang']);
+                                $sku = trim($key['po']) == '' ? $key['kode'] : $key['skupo'];
                                 // $namaspek = trim($key['po']) == '' ? $key['nama_barang'] : spekpo($key['po'], $key['item'], $key['dis']);
                                 $namaspek = empty(trim($key['po']))
                                     ? (!empty($key['nama_barang']) ? $key['nama_barang'] : '-')

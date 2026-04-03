@@ -3,6 +3,44 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <div class="page-body">
   <div class="container-xl">
+    <div class="bg-blue mb-3 p-3 text-white" style="min-height: 80px; background-image: url('<?= base_url().'assets/image/blue-wave.jpg'; ?>'); background-size: cover;">
+      <?php 
+        $gretpagi = [
+          "Jadikan hari ini lebih baik daripada kemarin dengan semangat baru dan harapan baru",
+          "Setiap pagi adalah kesempatan untuk memperbaiki diri. Bangun, berdoa, dan hadapi dunia!",
+          "Jangan menunggu kesempatan, ciptakanlah.",
+          "Pagi hari adalah hadiah, buatlah itu berarti",
+          "Kerja keras hari ini adalah senyum di masa depan"
+        ];
+        $gretsiang = [
+          "Teruslah bergerak maju, bahkan jika langkahmu kecil",
+          "Setiap hari adalah kesempatan baru untuk menjadi lebih baik",
+          "Jangan ragu untuk mencoba karena yang belum dicoba belum tentu mustahil"
+        ];
+        $gretmalam = [ 
+          "Setiap detik adalah kesempatan buat berubah, Fokus !",
+          "Capek itu wajar, nyerah itu pilihan. Aku boleh ragu, tapi tetap maju.",
+          "Jadikan setiap kesalahan sebagai peluang untuk berkembang."
+        ];
+        $hour = date('H');
+
+        if ($hour >= 20) {
+            $greetings = "Selamat Malam";
+            $ucapan = $gretmalam[array_rand($gretmalam)];
+        } elseif ($hour >= 17) {
+          $greetings = "Selamat Sore";
+          $ucapan = $gretmalam[array_rand($gretmalam)];
+        } elseif ($hour >= 10) {
+            $greetings = "Selamat Siang";
+            $ucapan = $gretsiang[array_rand($gretsiang)];
+        } elseif ($hour < 10) {
+          $greetings = "Selamat Pagi";
+          $ucapan = $gretpagi[array_rand($gretpagi)];
+        }
+       ?>
+      <h2 class="mb-1"><?= $greetings ?></h2>
+      <p class="font-kecil mb-1">"<i><?= $ucapan ?></i>"</p>
+    </div>
     <div class="row row-deck row-cards">
       <div class="col-sm-6 col-lg-3">
         <div class="card">
@@ -10,24 +48,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="d-flex align-items-center">
               <div class="subheader">Php Info ON <span class="subheader"><?= ENVIRONMENT; ?> MODE</span></div>
               <div class="ms-auto lh-1">
-                <!-- <div class="dropdown">
-                  <a class="dropdown-toggle text-secondary" href="#" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Last 7 days</a>
-                  <div class="dropdown-menu dropdown-menu-end">
-                    <a class="dropdown-item active" href="#">Last 7 days</a>
-                    <a class="dropdown-item" href="#">Last 30 days</a>
-                    <a class="dropdown-item" href="#">Last 3 months</a>
-                  </div>
-                </div> -->
               </div>
             </div>
             <div class="h1 mb-3"><?= phpversion() ?></div>
             <div class="d-flex mb-2">
-              <!-- <div>Conversion rate</div> -->
               <div class="ms-auto">
-                <!-- <span class="text-green d-inline-flex align-items-center lh-1"> -->
-                  - <!-- Download SVG icon from http://tabler-icons.io/i/trending-up -->
-                  <!-- <svg xmlns="http://www.w3.org/2000/svg" class="icon ms-1" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 17l6 -6l4 4l8 -8" /><path d="M14 7l7 0l0 7" /></svg> -->
-                <!-- </span> -->
               </div>
             </div>
             <div class="progress progress-sm">

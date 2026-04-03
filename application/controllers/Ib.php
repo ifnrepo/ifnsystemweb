@@ -110,6 +110,7 @@ class Ib extends CI_Controller
         $data['header'] = $this->ibmodel->getdatabyid($id);
         $data['detail'] = $this->ibmodel->getdatadetailib($id, $mode);
         $data['lampiran'] = $this->ibmodel->getdatalampiran($id);
+        $data['riwayat'] = riwayatdokib($id);
         $data['mode'] = $mode;
         $this->load->view('ib/viewdetailib', $data);
     }
@@ -298,6 +299,7 @@ class Ib extends CI_Controller
     }
     public function viewbc($id)
     {
+        $data['dataheader'] = $this->ibmodel->getdatabyid($id);
         $data['header'] = $this->ibmodel->getdatadetailib($id);
         $data['datheader'] = $id;
         $this->load->view('ib/viewbc', $data);

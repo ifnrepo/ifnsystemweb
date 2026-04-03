@@ -17,6 +17,8 @@ $(document).ready(function () {
 	$("#dept_kirim").change();
 	$("#jumlahpcs").text(rupiah($("#xjumlahpcs").text(),'.',',',2));
 	$("#jumlahkgs").text(rupiah($("#xjumlahkgs").text(),'.',',',2));
+	$("#jumlahrekod").text(rupiah($("#xjumlahrekod").text(),'.',',',0));
+	$("#jumlahrekode").text(rupiah($("#xjumlahvalid").text(),'.',',',0));
 });
 $("#dept_kirim").change(function () {
 	$.ajax({

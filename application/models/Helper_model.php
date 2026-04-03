@@ -112,6 +112,26 @@ class Helper_model extends CI_Model
         array_push($hasil, $hasil2);
         return $hasil;
     }
+    public function riwayatdokib($id)
+    {
+        $this->db->where('id', $id);
+        $cek = $this->db->get('tb_header')->row_array();
+        $hasil = [];
+        if ($cek['data_ok'] == 1) {
+            $kata = 'Dokumen DIBUAT oleh ' . datauser($cek['user_ok'], 'name') . ' on ' . tglmysql2($cek['tgl_ok']);
+            array_push($hasil, $kata);
+        }
+        if ($cek['ok_tuju'] == 1) {
+            $str = $cek['tanpa_bc']==0 ? '(PAKAI)' : '(TIDAK PAKAI)';
+            $oleh = $cek['user_tuju']==0 ? ' OTOMATIS OLEH SISTEM' : ' oleh ' . datauser($cek['user_tuju'], 'name') . ' on ' . tglmysql2($cek['tgl_tuju']);
+            $kata = 'Dokumen BC DIKONFIRMASI '.$str.$oleh;
+            array_push($hasil, $kata);
+        }else{
+            $kata = 'Dokumen menunggu KONFIRMASI BC';
+            array_push($hasil, $kata);
+        }
+        return $hasil;
+    }
     public function riwayatbbl($id)
     {
         $this->db->where('id', $id);
