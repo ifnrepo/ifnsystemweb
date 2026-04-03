@@ -287,6 +287,36 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
+              <div class="mb-1 row bg-dark-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Downtime Master Data">
+                      <span class="col font-bold">Downtime Master Data</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekdowntime_master" id="cekdowntime_master" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-dark-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Kunci dan Edit Data Project Downtime">
+                      <span class="col font-bold">Downtime Ganti Instruksi Mesin</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cekdowntime_gi" id="cekdowntime_gi" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="row bg-warning-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
