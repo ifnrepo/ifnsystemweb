@@ -409,7 +409,7 @@ function viewsku($po = '', $no = '', $dis = '', $id = '')
     } else {
         $xdis = $dis == 0 ? '' : ' dis ' . $dis;
         $xid = $id == '' ? '' : ' brg ' . $id;
-        $hasil = trim($po) . ' # ' . trim($no) . $xdis;
+        $hasil = trim($po) . '#' . trim($no) . $xdis;
     }
     return trim($hasil);
 }
@@ -520,6 +520,12 @@ function riwayatdok($id)
 {
     $CI = &get_instance();
     $hasil = $CI->helpermodel->riwayatdok($id);
+    return $hasil;
+}
+function riwayatdokib($id)
+{
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->riwayatdokib($id);
     return $hasil;
 }
 function riwayatbbl($id)
@@ -692,7 +698,7 @@ function formatsku($po, $item, $dis, $brg)
         $hasil = $CI->barangmodel->getdatabyid($brg)->row_array();
         $isi = $hasil['kode'];
     } else {
-        $dise = $dis > 0 ? ' (dis) ' . $dis : '';
+        $dise = $dis > 0 ? ' dis ' . $dis : '';
         $isi = trim($po) . '#' . trim($item) . $dise;
     }
     return $isi;
@@ -1192,7 +1198,7 @@ function getdatabomcost($que)
             'harga_sm' => $hamat['hargasm'],
             'price' => $hamat['price'],
             'harga_acct' => $hamat['harga_akt'],
-            'prod_date' => $hamat['tgl']
+            'prod_date' => $hamat['tgl'],
         ];
         array_push($hass, $hasil);
     } else {
@@ -1253,7 +1259,8 @@ function getdatabomcost($que)
                     'harga_sm' => $hamat['hargasm'] * ($datadetbom['persen'] / 100),
                     'price' => $hamat['price'],
                     'harga_acct' => $hamat['harga_akt'],
-                    'prod_date' => $databom['prod_date']
+                    'prod_date' => $databom['prod_date'],
+                    'asal_waste' => $databom['asal_waste'],
                 ];
                 array_push($hass, $hasil);
             }

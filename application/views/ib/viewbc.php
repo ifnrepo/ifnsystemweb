@@ -1,4 +1,11 @@
 <div class="container-xl"> 
+    <div class="card card-active btn-flat">
+        <div class="card-body p-1">
+            <div class="font-kecil"><span style="display: inline-block; width: 100px;">ID</span>: <span class="text-pink"><?= $dataheader['id_pemasok'] ?></span></div>
+            <div class="font-kecil"><span style="display: inline-block; width: 100px;">Nama Supplier</span>: <span class="font-bold"><?= datasupplier($dataheader['id_pemasok'],'nama_supplier'); ?></span></div>
+            <div class="font-kecil"><span style="display: inline-block; width: 100px;">Alamat</span>: <span class="font-bold"><?= datasupplier($dataheader['id_pemasok'],'alamat'); ?></span></div>
+        </div>
+    </div>
     <div class="m-2 font-bold">Daftar Barang </div>
     <table class="table datatable6 table-hover" id="cobasisip">
         <thead style="background-color: blue !important">

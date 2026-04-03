@@ -126,6 +126,7 @@ class Billmaterial_cost extends CI_Controller
             'nobale' => $_POST['nobale'],
             'nobontr' => strtoupper($_POST['nobontr']),
             'dl' => $_POST['dl'],
+            'asal_waste' => $_POST['wst'],
             'prod_date' => tglmysql($_POST['tgl']),
         ];
         $hasil = $this->billmaterial_cost_model->simpandata($data);
@@ -146,6 +147,14 @@ class Billmaterial_cost extends CI_Controller
             'id' => $_POST['id']
         ];
         $hasil = $this->billmaterial_cost_model->simpantglprod($data);
+        echo $hasil;
+    }
+    public function updateasalwaste(){
+        $data = [
+            'asal_waste' => $_POST['wst'],
+            'id' => $_POST['id']
+        ];
+        $hasil = $this->billmaterial_cost_model->simpanasalwaste($data);
         echo $hasil;
     }
 

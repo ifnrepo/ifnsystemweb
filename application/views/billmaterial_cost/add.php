@@ -90,6 +90,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <input type="email" id="prod_date" class="form-control input-sm font-kecil tglpilih" aria-describedby="emailHelp" value="">
                                     </div>
                                 </div>
+                                <div class="mb-1 row">
+                                    <label class="col-3 col-form-label font-kecil font-bold text-right">Asal Waste</label>
+                                    <div class="col-4">
+                                        <select name="asal_waste" id="asal_waste" class="form-control form-select input-sm font-kecil">
+                                            <option value=""></option>
+                                            <option value="SP">Spinning</option>
+                                            <option value="NT">Netting</option>
+                                            <option value="RR">Ringrope</option>
+                                            <option value="FG">Gaichu/Shitate</option>
+                                            <option value="FN">Finishing</option>
+                                        </select>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

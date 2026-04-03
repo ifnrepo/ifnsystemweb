@@ -162,6 +162,7 @@ class In_model extends CI_Model{
                     'pcs_akhir' => $det['pcs'],
                     'kgs_masuk' => $det['kgs'],
                     'kgs_akhir' => $det['kgs'],
+                    'asal_waste' => $det['dept_tuju']=='GW' ? $det['dept_id'] : '',
                     ];
                     $this->db->insert('stokdept',$kondisi);
                     $cekid = $this->db->insert_id();

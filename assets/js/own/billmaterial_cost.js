@@ -18,7 +18,6 @@ $(document).ready(function () {
 	// alert('OKEE');
 });
 $("#prod_dateedit").change(function(){
-	alert('xx');
 	$(".loadered").removeClass('hilang');
 	$.ajax({
 		// dataType: "json",
@@ -27,6 +26,28 @@ $("#prod_dateedit").change(function(){
 		data: {
 			id: $("#id_header").val(),
 			tgl: $(this).val(),
+		},
+		success: function (data) {
+			$(".loadered").addClass('hilang');
+			// window.location.reload();
+			// $("#dept_tuju").html(data);
+			// $("#dept_tuju").change();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+})
+$("#asal_waste").change(function(){
+	$(".loadered").removeClass('hilang');
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "billmaterial_cost/updateasalwaste",
+		data: {
+			id: $("#id_header").val(),
+			wst: $(this).val(),
 		},
 		success: function (data) {
 			$(".loadered").addClass('hilang');
@@ -204,7 +225,8 @@ $("#simpanmaterial").click(function(){
 			insno: $("#insno").val(),
 			nobontr: $("#nobontr").val(),
 			dl: $("#dl").val(),
-			tgl: $("#prod_date").val()
+			tgl: $("#prod_date").val(),
+			wst: $("#asal_waste").val()
 		},
 		success: function (data) {
 			if(data==0){

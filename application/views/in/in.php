@@ -116,7 +116,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;" >
             <?php $katedept = datadepartemen($this->session->userdata('curdeptin'),'katedept_id'); 
-              $norek=0;$jmlpcs=0;$jmlkgs=0;$noreke=0;
+              $norek=0;$jmlpcs=0;$jmlkgs=0;$noreke=0;$jmlbon=0;$bonvalid=0;
               foreach ($data->result_array() as $que) {
               $jmlrek = $que['jumlah_barang'] != null ? $que['jumlah_barang'].' Item' : '';
               $insubkn = '';
@@ -166,7 +166,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
             <div class="row">
               <div class="col-3">
                 <div class="font-bold">Jumlah Rec : </div>
-                <div id="jumlahrekod"><?= $noreke ?></div>
+                <div id="xjumlahrekod"><?= $norek ?></div>
+                <div id="xjumlahvalid"><?= $noreke ?></div>
               </div>
               <div class="col-3">
                 <div class="font-bold">Pcs : </div>

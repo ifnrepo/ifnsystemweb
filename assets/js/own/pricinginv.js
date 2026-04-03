@@ -95,7 +95,8 @@ $(document).ready(function(){
 					var spek = row.po.trim() == '' ? row.nama_barang : row.spek ;
 					var idbrg = row.id_barang == null ? 0 : row.id_barang;
 					// var ide = 'OME-'+encodeURIComponent(gantislash(row.po.trim()))+'-'+encodeURIComponent(gantislash(row.item.trim()))+'-'+row.dis+'-'+idbrg+'-'+encodeURIComponent(gantislash(row.nobontr.trim()))+'-'+encodeURIComponent(gantislash(row.insno.trim()))+'-'+encodeURIComponent(row.nobale.trim())+'-'+encodeURIComponent(row.nomor_bc.trim());
-					return "<span class='hilang'>"+spek+"</span><span class='text-pink font-11'>"+sku+"</span>"+"<br><span class='text-primary'>"+spek+"</span>";
+					var ure = base_url+'pricinginv/viewdetailbom/'+row.id;
+					return "<span class='hilang'>"+spek+"</span><span class='text-pink font-11'>"+sku+"</span>"+"<br><span class='text-primary'><a href='"+ure+"' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='View Data' >"+spek+"</a></span>";
 				}
             },
 			{ "data": "id",
@@ -298,7 +299,8 @@ $(document).ready(function(){
 			{ "data": "urut",
 				"className": "text-center line-11 font-11 text-muted",
 				"render": function(data, type, row, meta){
-					return "<span>"+row.urut+"</span><br><span>ID Pricing : "+row.id+"</span>";
+					var ure = base_url+'pricinginv/viewdetailbom/'+row.id_stok;
+					return "<a href='"+ure+"' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='View Data'><span>"+row.urut+"</span><br><span>ID Pricing : "+row.id+"</span></a>";
 				}
 			},
 		],

@@ -482,7 +482,8 @@ class Pricinginv_model extends CI_Model
                         'hoshu2' => $h2,
                         'packing' => $pa,
                         'shitate' => $sh,
-                        'art_type' => $artipe
+                        'art_type' => $artipe,
+                        'asal_waste' => $que['dept_id']=='GW' ? $que['asal_waste'] : ''
                     ];
 
                     $this->db->where('id',$que['id']);
@@ -496,6 +497,24 @@ class Pricinginv_model extends CI_Model
                     ];
 
                     $this->db->insert('stokinv_detail',$dbom);
+
+                    $artipe = '';
+                    if($que['id_kategori']=='8189'){
+                        $artipe = 'RM';
+                    }else{
+                        if($que['id_kategori']=='6319'){
+                            $artipe = 'SM';
+                        }else{
+                            if($que['dept_id']=='GF' || $que['dept_id']=='GW'){
+                                $artipe = 'FG';
+                            }else{
+                                $artipe = 'GP';
+                            }
+                        }
+                    }
+
+                    $this->db->where('id',$que['id']);
+                    $this->db->update('stokinv',['art_type' => $artipe]);
                 }
             }
         }       
@@ -576,12 +595,19 @@ class Pricinginv_model extends CI_Model
         return $this->db->query($kolom);
     }
     public function getdatabyid($id){
-        $this->db->select('stokinv.*,barang.id_kategori');
+        $this->db->select('stokinv.*,barang.id_kategori,barang.kode');
         $this->db->select("LEFT(CONCAT(IFNULL(tb_po.id_kategori,''),IFNULL(barang.id_kategori,'')),4) AS id_kategori");
         $this->db->from('stokinv');
         $this->db->join('barang','barang.id = stokinv.id_barang','left');
         $this->db->join('tb_po','tb_po.ind_po = concat(stokinv.po,stokinv.item,stokinv.dis)','left');
         $this->db->where('stokinv.id',$id);
+        return $this->db->get();
+    }
+    public function getdatabombyid($id){
+        $this->db->select('stokinv_detail.*,barang.id_kategori,barang.kode');
+        $this->db->from('stokinv_detail');
+        $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
+        $this->db->where('stokinv_detail.id_stok',$id);
         return $this->db->get();
     }
     public function updatetglprod($data){

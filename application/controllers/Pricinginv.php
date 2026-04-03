@@ -232,6 +232,11 @@ class Pricinginv extends CI_Controller
         $data['data'] = $this->pricingmodel->getdatabyid($id)->row_array();
         $this->load->view('pricinginv/viewdetail',$data);
     }
+    public function viewdetailbom($id){
+        $data['data'] = $this->pricingmodel->getdatabyid($id)->row_array();
+        $data['detail'] = $this->pricingmodel->getdatabombyid($id);
+        $this->load->view('pricinginv/viewdetailbom',$data);
+    }
     public function toexcel(){
         $spreadsheet = new Spreadsheet();
         $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
@@ -257,6 +262,7 @@ class Pricinginv extends CI_Controller
         $sheet->setCellValue('N3', "NOBONTR");
         $sheet->setCellValue('O3', "DLN");
         $sheet->setCellValue('P3', "ASAL WASTE");
+        $sheet->setCellValue('Q3', "NO BALE");
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->pricingmodel->toexcel();
@@ -286,6 +292,7 @@ class Pricinginv extends CI_Controller
             $sheet->setCellValue('N' . $numrow, $data['nobontr']);
             $sheet->setCellValue('O' . $numrow, $data['dln']);
             $sheet->setCellValue('P' . $numrow, $data['asal_waste']);
+            $sheet->setCellValue('Q' . $numrow, $data['nobale']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

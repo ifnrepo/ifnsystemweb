@@ -71,6 +71,20 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <input type="email" class="form-control input-sm font-kecil tglpilih" aria-describedby="emailHelp" id="prod_dateedit" value="<?= tglmysql($material['prod_date']) ?>">
                                     </div>
                                 </div>
+                                <div class="mb-1 row">
+                                    <label class="col-3 col-form-label font-kecil font-bold text-right">Asal Waste</label>
+                                    <div class="col-4">
+                                        <select name="asal_waste" id="asal_waste" class="form-control form-select input-sm font-kecil">
+                                            <option value=""></option>
+                                            <option value="SP" <?= $material['asal_waste']=='SP' ? 'selected' : '' ?>>Spinning</option>
+                                            <option value="NT" <?= $material['asal_waste']=='NT' ? 'selected' : '' ?>>Netting</option>
+                                            <option value="RR" <?= $material['asal_waste']=='RR' ? 'selected' : '' ?>>Ringrope</option>
+                                            <option value="FG" <?= $material['asal_waste']=='FG' ? 'selected' : '' ?>>Gaichu/Shitate</option>
+                                            <option value="FN" <?= $material['asal_waste']=='FN' ? 'selected' : '' ?>>Finishing</option>
+                                        </select>
+                                        <!-- <input type="email" class="form-control input-sm font-kecil" aria-describedby="emailHelp" id="asal_waste" value=""> -->
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
