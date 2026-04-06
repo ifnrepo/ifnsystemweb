@@ -173,7 +173,7 @@ class inv_model extends CI_Model
         $bl = date('m', strtotime($tglawal));
         $th = date('Y', strtotime($tglawal));
         $ada = in_array($dept,daftardeptsubkon());
-        $arrbarangexcludejenis = "'4170','5691','6019','39991','40394','40395','40396'";
+        $arrbarangexcludejenis = $this->session->userdata('currdept') == 'GS' ? "'XX'" : "'4170','5691','6019','39991','40394','40395','40396'";
 
         // Query untuk CekSaldobarang
         $this->db->select("0 as kodeinv,stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,stokdept.dln as xdln,barang.id_kategori,stokdept.insno,stokdept.nobontr,barang.kode,stokdept.id as idu");
@@ -259,6 +259,9 @@ class inv_model extends CI_Model
         $this->db->or_where('tb_header.kode_dok','T');
         $this->db->group_end();
         $this->db->where('tb_header.ok_valid',1);
+        if($dept=='NT'){
+            $this->db->where('trim(tb_detail.po)','');
+        }
         // $this->db->where('tb_detail.po','KI-6391');
         // $this->db->where('tb_detail.nobale','58');
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
@@ -1183,7 +1186,7 @@ class inv_model extends CI_Model
 
             $this->db->where('periode',cekperiodedaritgl($tglawal,1));
             $this->db->where('dept_id',$this->session->userdata('currdept'));
-            $this->db->update('stokdept',['pcs_akhir' => 'pcs_awal+pcs_masuk-pcs_keluar+pcs_adj','kgs_akhir' => 'kgs_awal+kgs_masuk-kgs_keluar+kgs_adj']);
+            $this->db->update('stokdept',['pcs_akhir' => '(pcs_awal+pcs_masuk+pcs_adj)-pcs_keluar','kgs_akhir' => '(kgs_awal+kgs_masuk+kgs_adj)-kgs_keluar']);
 
             $lockinv = [
                 'dept_id' => $this->session->userdata('currdept'),

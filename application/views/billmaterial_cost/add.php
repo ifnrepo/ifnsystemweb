@@ -93,7 +93,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <div class="mb-1 row">
                                     <label class="col-3 col-form-label font-kecil font-bold text-right">Asal Waste</label>
                                     <div class="col-4">
-                                        <select name="asal_waste" id="asal_waste" class="form-control form-select input-sm font-kecil">
+                                        <select name="dept_asal" id="dept_asal" class="form-control form-select input-sm font-kecil">
                                             <option value=""></option>
                                             <option value="SP">Spinning</option>
                                             <option value="NT">Netting</option>

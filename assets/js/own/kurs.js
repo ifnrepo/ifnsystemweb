@@ -1,5 +1,7 @@
 var table = null;
 var tablekmk = null;
+var chrtkurs = '';
+var chrtkurskmk = '';
 $(document).ready(function () {
 	// $("#currdept").change();
 	$(".loadered").removeClass('hilang');
@@ -73,7 +75,7 @@ $(document).ready(function () {
 		"deferRender": true,
 		"aLengthMenu": [[5, 12, 25, 50, 100],[ 5, 12, 25, 50, 100]], // Combobox Limit
 		"pageLength": 12,
-		"dom": 'f<"pull-left"l>t<"bottom-left"i><"bottom-right"p>',
+		"dom": '<"pull-left"l>t<"bottom-left"i><"bottom-right"p>',
 		"columns": [
 			{ "data": "nameu",
 			  "className": "text-blue"
@@ -94,6 +96,13 @@ $(document).ready(function () {
 			  "className": "text-right",
 			  "render": function(data, type, row, meta){
 					return rupiah(row.eur,'.',',',2);
+			  }
+			},
+			{ "data": "id",
+			  "className": "text-center",
+			  "render": function(data, type, row, meta){
+					var urly = base_url+"kurs/editkurs/"+row.id;
+					return "<a href='"+urly+"' class='btn btn-primary py-1 btn-flat font-kecil' title='Edit' data-bs-toggle='modal' data-bs-target='#modal-large' data-message='Hapus IB' data-title='Edit Data Kurs BI'>Edit</a>";
 			  }
 			},
 		],
@@ -169,7 +178,7 @@ $(document).ready(function () {
 		"deferRender": true,
 		"aLengthMenu": [[5, 12, 25, 50, 100],[ 5, 12, 25, 50, 100]], // Combobox Limit
 		"pageLength": 12,
-		"dom": 'f<"pull-left"l>t<"bottom-left"i><"bottom-right"p>',
+		"dom": '<"pull-left"l>t<"bottom-left"i><"bottom-right"p>',
 		"columns": [
 			{ "data": "tgl",
 			  "className": "text-blue"
@@ -195,8 +204,143 @@ $(document).ready(function () {
 		],
 	});
 
+	var chrtkurs_option = {
+		chart: {
+			type: "line",
+			fontFamily: 'inherit',
+			height: 225,
+			sparkline: {
+				enabled: false
+			},
+			animations: {
+				enabled: true,
+			},
+		},
+		fill: {
+			opacity: 1,
+		},
+		stroke: {
+			width: [2, 1],
+			dashArray: [0, 3],
+			lineCap: "round",
+			curve: "smooth",
+		},
+		series: [],
+		noData: {
+			text: 'Empty Data ...'
+		},
+		tooltip: {
+			theme: 'dark',
+			y: {
+				formatter: function (val) {
+				return rupiah(val,'.',',',2);
+				}
+			},
+			x: {
+				format: 'MMM yyyy'
+			}
+		},
+		grid: {
+			strokeDashArray: 4,
+		},
+		xaxis: {
+			labels: {
+				padding: 0,
+			},
+			tooltip: {
+				enabled: false
+			},
+			type: 'datetime',
+		},
+		yaxis: {
+			labels: {
+				padding: 4
+			},
+		},
+		// labels: [
+		// 	'2020-06-20', '2020-06-21', '2020-06-22', '2020-06-23', '2020-06-24', '2020-06-25', '2020-06-26', '2020-06-27', '2020-06-28', '2020-06-29', '2020-06-30', '2020-07-01', '2020-07-02', '2020-07-03', '2020-07-04', '2020-07-05', '2020-07-06', '2020-07-07', '2020-07-08', '2020-07-09', '2020-07-10', '2020-07-11', '2020-07-12', '2020-07-13', '2020-07-14', '2020-07-15', '2020-07-16', '2020-07-17', '2020-07-18', '2020-07-19'
+		// ],
+		// labels: [],
+		colors: [tabler.getColor("primary"), tabler.getColor("gray-600"), tabler.getColor("orange")],
+		legend: {
+			show: false,
+		},
+	};
+	chrtkurs = new ApexCharts(document.getElementById('chart-kurs'), chrtkurs_option);
+	chrtkurs.render();
+
+	var chrtkurskmk_option = {
+		chart: {
+			type: "line",
+			fontFamily: 'inherit',
+			height: 225,
+			sparkline: {
+				enabled: false
+			},
+			animations: {
+				enabled: true
+			},
+		},
+		fill: {
+			opacity: 1,
+		},
+		stroke: {
+			width: [2, 1],
+			dashArray: [0, 3],
+			lineCap: "round",
+			curve: "smooth",
+		},
+		series: [],
+		noData: {
+			text: 'Empty Data ...'
+		},
+		tooltip: {
+			theme: 'dark',
+			y: {
+				formatter: function (val) {
+				return rupiah(val,'.',',',2);
+				}
+			},
+			x: {
+				format: 'dd MMM yyyy'
+			}
+		},
+		grid: {
+			strokeDashArray: 4,
+		},
+		xaxis: {
+			labels: {
+				padding: 0,
+			},
+			tooltip: {
+				enabled: false
+			},
+			type: 'datetime',
+		},
+		yaxis: {
+			labels: {
+				padding: 4
+			},
+		},
+		colors: [tabler.getColor("primary"), tabler.getColor("gray-600"), tabler.getColor("orange")],
+		legend: {
+			show: false,
+		},
+	};
+	chrtkurskmk = new ApexCharts(document.getElementById('chart-kurskmk'), chrtkurskmk_option);
+	chrtkurskmk.render();
+
+	setTimeout(() => {
+		getdatakursbi(),
+		getdatakurskmk()
+	}, 1000);
+	// getdatakursbi();
 });
 
+$("#select-kurs").change(function(){
+	getdatakursbi($(this).val());
+	getdatakurskmk($(this).val())
+})
 
 $("#kolombi").click(function(){
 	// alert('Kolom BI');
@@ -205,3 +349,60 @@ $("#kolombi").click(function(){
 $("#kolomkmk").click(function(){
 	// alert('Kolom KMK');
 })
+
+function getdatakursbi(kurs=''){
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "kurs/getdatakursbiuntukchart",
+		data: {
+			kode: kurs
+		},
+		success: function (xdata) {
+			// window.location.reload();
+			// alert(xdata['data']);
+			chrtkurs.updateSeries([
+				{
+					name: kurs=='' ? 'USD' : kurs,
+					data: xdata['data']
+				}
+			]);
+			chrtkurs.updateOptions({
+				// series: xdata['data'],
+				labels: xdata['label'] // New data
+			});
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
+function getdatakurskmk(kurs=''){
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "kurs/getdatakurskmkuntukchart",
+		data: {
+			kode: kurs
+		},
+		success: function (xdata) {
+			// window.location.reload();
+			// alert(xdata['data']);
+			chrtkurskmk.updateSeries([
+				{
+					name: kurs=='' ? 'USD' : kurs,
+					data: xdata['data']
+				}
+			]);
+			chrtkurskmk.updateOptions({
+				// series: xdata['data'],
+				labels: xdata['label'] // New data
+			});
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
