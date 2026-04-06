@@ -39,7 +39,7 @@ $("#prod_dateedit").change(function(){
 		},
 	});
 })
-$("#asal_waste").change(function(){
+$("#dept_asal").change(function(){
 	$(".loadered").removeClass('hilang');
 	$.ajax({
 		// dataType: "json",
@@ -226,7 +226,7 @@ $("#simpanmaterial").click(function(){
 			nobontr: $("#nobontr").val(),
 			dl: $("#dl").val(),
 			tgl: $("#prod_date").val(),
-			wst: $("#asal_waste").val()
+			wst: $("#dept_asal").val()
 		},
 		success: function (data) {
 			if(data==0){

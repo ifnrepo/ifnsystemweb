@@ -116,7 +116,7 @@ class Billmaterial_cost_model extends CI_Model
             'trim(nobale)' => trim($data['nobale']),
             'trim(insno)' => trim($data['insno']),
             'trim(nobontr)' => trim($data['nobontr']),
-            'trim(asal_waste)' => trim($data['asal_waste']),
+            'trim(dept_asal)' => trim($data['dept_asal']),
             'dl' => $data['dl'],
         ];
         $cekdata = $this->db->get_where('ref_bom_cost', $datakondisi);
@@ -158,6 +158,6 @@ class Billmaterial_cost_model extends CI_Model
     }
     public function simpanasalwaste($data){
         $this->db->where('id',$data['id']);
-        return $this->db->update('ref_bom_cost',['asal_waste' => $data['asal_waste']]);
+        return $this->db->update('ref_bom_cost',['dept_asal' => $data['dept_asal']]);
     }
 }

@@ -268,4 +268,35 @@ class Kurs_model extends CI_Model
         // return $query." WHERE (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start;
         return json_encode($callback); // Convert array $callback ke json
    }
+   public function getdatakursbiuntukchart(){
+        $this->db->select('tb_kurs_bi.*,CONCAT(YEAR(period),"-",MONTHNAME(period)) as nameu');
+        $this->db->from('tb_kurs_bi');
+        $this->db->order_by('period desc');
+        $this->db->limit(150);
+        $dataquery = $this->db->get_compiled_select();
+        $query = "Select * from (".$dataquery.") r1";
+        return $this->db->query($query);
+   }
+   public function getdatakurskmkuntukchart(){
+        $this->db->select('tb_kurs.*,CONCAT(YEAR(tgl),"-",MONTHNAME(tgl)) as nameu');
+        $this->db->from('tb_kurs');
+        $this->db->group_by('usd,jpy,eur');
+        $this->db->order_by('tgl desc');
+        $this->db->limit(600);
+        $dataquery = $this->db->get_compiled_select();
+        $query = "Select * from (".$dataquery.") r1";
+        return $this->db->query($query);
+   }
+   public function tambah($data){
+    return $this->db->insert('tb_kurs_bi',$data);
+   }
+   public function getdatabyid($id){
+        return $this->db->get_where('tb_kurs_bi',['id' => $id])->row_array();
+   }
+   public function edit($data){
+    $id = $data['id'];
+    unset($data['id']);
+    $this->db->where('id',$id);
+    return $this->db->update('tb_kurs_bi',$data);
+   }
 }

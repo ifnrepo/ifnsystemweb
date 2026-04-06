@@ -109,6 +109,71 @@ class Kurs extends CI_Controller
         // }
         echo $this->kursmodel->getkurskmk($arrayu,$mode);
     }
+    public function getdatakursbiuntukchart(){
+        $kurs = $_POST['kode']=='' ? 'usd' : $_POST['kode'];
+        $data = $this->kursmodel->getdatakursbiuntukchart();
+        $arrperiod = [];
+        $arr_usd = [];
+        $arr_jpy = [];
+        foreach($data->result_array() as $dt){
+            $arrperiod[] = $dt['period'];
+            $arr_usd[] = round($dt[$kurs],2);
+            $arr_jpy[] = round($dt['jpy'],2);
+        }
+        $html = array('data' => $arr_usd, 'datajpy' => $arr_jpy,'label' => $arrperiod);
+        echo json_encode($html);
+    }
+     public function getdatakurskmkuntukchart(){
+        $kurs = $_POST['kode']=='' ? 'usd' : $_POST['kode'];
+        $data = $this->kursmodel->getdatakurskmkuntukchart();
+        $arrperiod = [];
+        $arr_usd = [];
+        $arr_jpy = [];
+        foreach($data->result_array() as $dt){
+            $arrperiod[] = $dt['tgl'];
+            $arr_usd[] = round($dt[$kurs],2);
+            $arr_jpy[] = round($dt['jpy'],2);
+        }
+        $html = array('data' => $arr_usd, 'datajpy' => $arr_jpy,'label' => $arrperiod);
+        echo json_encode($html);
+    }
+    public function addkursbi(){
+        $data['id'] = '';
+        $this->load->view('kurs/add_kurs',$data);
+    }
+    public function tambah(){
+        $data = [
+            'period' => $_POST['tahun'].'-'.$_POST['bulan'].'-01',
+            'usd' => toAngka($_POST['usd']),
+            'jpy' => toAngka($_POST['jpy']),
+            'eur' => toAngka($_POST['eur']),
+        ];
+        $hasil = $this->kursmodel->tambah($data);
+        echo $hasil;
+    }
+    public function editkurs($id){
+        $data = $this->kursmodel->getdatabyid($id);
+        $hasil = [
+            'id' => $data['id'],
+            'bulan' => date('m',strtotime($data['period'])),
+            'tahun' => date('Y',strtotime($data['period'])),
+            'usd' => $data['usd'],
+            'jpy' => $data['jpy'],
+            'eur' => $data['eur'],
+        ];
+        $this->load->view('kurs/edit_kurs',$hasil);
+    }
+    public function edit(){
+        $data = [
+            'id' => $_POST['id'],
+            'period' => $_POST['tahun'].'-'.$_POST['bulan'].'-01',
+            'usd' => toAngka($_POST['usd']),
+            'jpy' => toAngka($_POST['jpy']),
+            'eur' => toAngka($_POST['eur']),
+        ];
+        $hasil = $this->kursmodel->edit($data);
+        echo $hasil;
+    }
     // End Controller
     public function tambahdata()
     {

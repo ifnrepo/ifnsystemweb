@@ -3,15 +3,6 @@ $(document).ready(function () {
 });
 
 $("#settglmonitoring").click(function(){
-    // alert('Ada');
-    // var chart = $("#chart-dokbcmasuk");
-    // chart.updateOptions({
-    //     title: {
-    //         text: 'New Chart Title'
-    //     },
-    //     colors: ['#FF0000', '#00FF00']
-    // });
-    // chart.render();
     $.ajax({
 		// dataType: "json",
 		type: "POST",

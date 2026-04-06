@@ -370,6 +370,13 @@ class Pricinginv_model extends CI_Model
 
             // Jika DLN, kopi langsung ke detail
             if($que['dln']==1){
+                $databom = getdatabomcost($que);
+                $depas = '';
+                $prod = '';
+                foreach($databom as $dbom){
+                    $depas = $dbom['dept_asal'];
+                    $prod = $dbom['prod_date'];
+                }
                 $hasil = [
                     'id_stok' => $que['id'],
                     'urut' => $que['urut'],
@@ -382,9 +389,13 @@ class Pricinginv_model extends CI_Model
                     'jns_bc' => '-',
                     'nomor_bc' => '-',
                     'tgl_bc' => '-',
-                    'harga_acct' => 0
+                    'harga_acct' => 0,
+                    'dept_asal' => $depas
                 ];
                 $this->db->insert('stokinv_detail',$hasil);
+
+                $this->db->where('id',$que['id']);
+                $this->db->update('stokinv',['prod_date' => $prod]);
             }else{
                 $databom = getdatabomcost($que);
                 if(count($databom) > 0){
