@@ -28,6 +28,7 @@ class Main extends CI_Controller {
         $datajumlahbc = $this->helpermodel->getdatabc2bulan();
         $datapengiriman = $this->helpermodel->getdatapengirimangf();
         $dataloss = $this->helpermodel->getdatapengirimanloss();
+        $data['greeting'] = $this->helpermodel->getdatagreeting();
 		$this->load->view('layouts/header');
         $data['dataproduksi'] = $dataproduksi;
         $data['kurshariini'] = $kurshariini;

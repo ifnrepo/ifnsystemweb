@@ -732,6 +732,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <!-- <label class="col-3 col-form-label pt-0">Checkboxes</label> -->
                             <div class="col">
                               <label class="form-check mb-1">
+                                <input class="form-check-input" id="setting2" name="setting2" type="checkbox">
+                                <span class="form-check-label">Header</span>
+                              </label>
+                              <label class="form-check mb-1">
                                 <input class="form-check-input" id="setting1" name="setting1" type="checkbox">
                                 <span class="form-check-label">Footer</span>
                               </label>
