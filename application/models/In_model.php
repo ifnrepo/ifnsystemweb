@@ -246,6 +246,69 @@ class In_model extends CI_Model{
         $this->db->where('id_header',$id);
         return $this->db->get();
     }
+    public function batalkandokumen($id){
+        $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
+
+        $badstok = false;
+        $this->db->trans_begin();
+        $detail = $this->db->get_where('tb_detail',['id_header' => $id]);
+        foreach($detail->result_array() as $datdet){
+            $kondisistok = [
+                'dept_id' => $header['dept_tuju'],
+                'periode' => tambahnol($this->session->userdata('blin')).$this->session->userdata('thin'),
+                'trim(nobontr)' => trim($datdet['nobontr']),
+                'trim(insno)' => trim($datdet['insno']),
+                'id_barang' => $datdet['id_barang'],
+                'trim(po)' => trim($datdet['po']),
+                'trim(item)' => trim($datdet['item']),
+                'dis' => $datdet['dis'],
+                'dln' => $datdet['dln'],
+                'trim(nobale)' => (($header['dept_tuju']=='GF' && $header['dept_id']=='FN') || ($header['dept_id']=='GW' && $header['dept_tuju']=='GF')) ? trim($datdet['nobale']) : '',
+                'exnet' => $datdet['exnet'],
+                'stok' => $datdet['stok'],
+            ];
+            if(in_array($header['dept_tuju'],daftardeptsubkon())){
+                $this->db->where('trim(nomor_bc)',trim($nomorbc['nomor_bc']));
+            }
+
+            $this->db->where($kondisistok);
+            $stokdept  = $this->db->get('stokdept');
+            if($stokdept->num_rows() == 0){
+                $badstok = true;
+                $this->session->set_flashdata('errornya','Barang tidak ada di Inventory, cek Stok !');
+                $this->session->set_userdata('barangerror',$datdet['id_barang']);
+                break;
+            }else{
+                $detstokdept = $stokdept->row_array();
+                if($detstokdept['kgs_akhir'] >= $datdet['kgs'] && $detstokdept['pcs_akhir'] >= $datdet['pcs']){
+                    $this->db->set('pcs_masuk','pcs_masuk -'.toAngka($datdet['pcs']),false);
+                    $this->db->set('kgs_masuk','kgs_masuk -'.toAngka($datdet['kgs']),false);
+                    $this->db->where('id',$detstokdept['id']);
+                    $this->db->update('stokdept');
+
+                    $this->db->set('pcs_akhir','(pcs_awal + pcs_masuk + pcs_adj - pcs_keluar)',false);
+                    $this->db->set('kgs_akhir','(kgs_awal + kgs_masuk + kgs_adj - kgs_keluar)',false);
+                    $this->db->where('id',$detstokdept['id']);
+                    $this->db->update('stokdept');
+                }else{
+                    $badstok = true;
+                    $this->session->set_flashdata('errornya','Jumlah barang kurang di Inventory, cek Stok !');
+                    $this->session->set_userdata('barangerror',$datdet['id_barang']);
+                    break;
+                }
+            }
+        }
+        if ($this->db->trans_status() === FALSE || $badstok){
+            $this->db->trans_rollback();
+        }else{
+            $this->db->where('id',$id);
+            $this->db->update('tb_header',['ok_valid' => 0]);
+            $this->helpermodel->isilog($this->db->last_query());
+        }
+        $this->db->trans_commit();
+
+        return 1;
+    }
     // END In Model
     public function konfirmasi($data){
         $this->db->where('id',$data['id']);

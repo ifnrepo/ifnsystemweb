@@ -14,6 +14,16 @@ $(document).ready(function () {
 			getdatadetailout();
 		}
 	}
+
+	if ($("#errornya").val() != "" && $("#errornya").length > 0) {
+		var ini = $("#errornya").val();
+		var isipesan = "Periksa Stok Barang " + ini + " !";
+		if (ini == "Nobontr Kosong") {
+			var isipesan = "Masih ada data yang belum pakai Nomor IB, cek data !";
+		}
+		pesan(ini, "info");
+	}
+
 	$("#dept_kirim").change();
 	$("#jumlahpcs").text(rupiah($("#xjumlahpcs").text(),'.',',',2));
 	$("#jumlahkgs").text(rupiah($("#xjumlahkgs").text(),'.',',',2));

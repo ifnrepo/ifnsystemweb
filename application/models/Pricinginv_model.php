@@ -45,7 +45,7 @@ class Pricinginv_model extends CI_Model
         // $this->db->order_by('stokinv.dept_id','stokinv.urut');
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(kgs_akhir) over() as totalkgs,sum(amount) over() as totalamount from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
+        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(round(kgs_akhir,2)) over() as totalkgs,sum(amount) over() as totalamount from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
         $kolom .= "LEFT JOIN kategori on kategori.kategori_id = LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) ";
         $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan ";
         if($this->session->userdata('milik')!=''){
@@ -187,6 +187,7 @@ class Pricinginv_model extends CI_Model
         $this->db->select("(SELECT harga_akt FROM tb_hargamaterial WHERE tb_hargamaterial.id_barang = stokinv_detail.id_barang AND tb_hargamaterial.nobontr = stokinv_detail.nobontr AND (stokinv_detail.nomor_bc != '' OR stokinv_detail.nomor_bc is not null) LIMIT 1) AS harga_akt");
         $this->db->select("ubrg.id_kategori as xid_kategori,tb_po.id_kategori as yid_kategori");
         $this->db->select("LEFT(CONCAT(IFNULL(headbarang.dln,''),IFNULL(tb_po.dln,'')),1) as mdln");
+        $this->db->select('sum(round(stokinv_detail.kgs,2)) OVER(partition by stokinv_detail.id_stok) as xkgs');
         $this->db->from('stokinv_detail');
         $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
         $this->db->join('stokinv','stokinv ON stokinv.id = stokinv_detail.id_stok ','left');
@@ -201,7 +202,7 @@ class Pricinginv_model extends CI_Model
         // ,stokinv.dept_id',stokinv_detail.id_stok
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select * from (Select *,SUM(kgs) OVER() as totalkgsdet,SUM(pcs) OVER() as totalpcsdet,SUM(harga_acct*IF(id_satuan=22,kgs,IF(pcs=0,kgs,pcs))) OVER() AS tothargadet from (Select *,LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4) AS id_kategori from (".$query1.") r1 ";
+        $kolom = "Select * from (Select *,SUM(ROUND(kgs,4)) OVER() as totalkgsdet,SUM(pcs) OVER() as totalpcsdet,SUM(harga_acct*IF(id_satuan=22,kgs,IF(pcs=0,kgs,pcs))) OVER() AS tothargadet from (Select *,LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4) AS id_kategori from (".$query1.") r1 ";
         // $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) ";
         // $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan";
         if($this->session->userdata('milik')!=''){

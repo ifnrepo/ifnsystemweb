@@ -139,6 +139,13 @@ class In extends CI_Controller {
         }
         $this->load->view('in/konfirmasinomor',$data);
     }
+    public function batalkandokumen($id){
+        $query = $this->inmodel->batalkandokumen($id);
+        if($query){
+            $url = base_url().'in';
+            redirect($url);
+        }
+    }
     // End In Controller
     public function getdatadetailout(){
         $hasil = '';

@@ -36,6 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                 </div>
                 <input type="hidden" id="errorparam" value="<?= $this->session->flashdata('errorparam'); ?>">
+                <input id="errornya" class="hilang" value="<?= $this->session->flashdata('errornya'); ?>">
               </div>
               <div class="<?php IF(cekclosebook($this->session->userdata('blout'),$this->session->userdata('thout'),$this->session->userdata('deptsekarang'))!='disabled'){ echo "hilang"; } ?>">
                 <!-- <svg xmlns="http://www.w3.org/2000/svg" class="icon alert-icon text-primary" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" /><path d="M12 9h.01" /><path d="M11 12h1v4h1" /></svg> -->
@@ -186,7 +187,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </a>
                       </div>
                     <?php } else if ($datdet['data_ok'] == 1 && $datdet['ok_tuju']==1 && $datdet['ok_valid']==1) { ?>
-                      <a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
+                      <a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" style="height: 27px;" target='_blank' class='btn btn-sm btn-danger' title='Cetak Data'><i class='fa fa-file-pdf-o'></i></a>
                     <?php }else { if($datdet['dept_tuju']=='CU' || $datdet['dept_tuju']=='DL'){  ?>
                       <?php if($datdet['nomor_bc']==''){  ?>
                         <span class="text-teal font-kecil">Tunggu Persetujuan Keluar Barang </span>
@@ -202,6 +203,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <?php } ?>
                       <?php }else{  ?>
                         <span class="text-teal font-kecil line-12">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>
+                        <br>
+                        <span><a href="#" data-href="<?= base_url().'out/batalkanout/'.$datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Dokumen <?= $datdet['nomor_dok'] ?> akan dibatalkan">Edit Data</a></span>
                     <?php }}} ?>
                   </td>
                 </tr>
