@@ -60,7 +60,8 @@
                                     <tr>
                                         <td class="line-12">
                                             <?= $val['seri_barang'] . '. ' . $namabar; ?>
-                                            <br><span class="font-kecil text-success"><?= $val['insno'] ?></span>
+                                            <?php $nomorib = trim($val['nobontr'])!='' ? 'IB .'.$val['nobontr'] : ''; ?>
+                                            <br><span class="font-kecil text-success"><?= $val['insno'].$nomorib ?></span>
                                         </td>
                                         <td><?= $sku ?></td>
                                         <td><?= $val['namasatuan']; ?></td>

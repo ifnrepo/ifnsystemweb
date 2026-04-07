@@ -462,6 +462,14 @@ class Out extends CI_Controller {
              redirect($url);
         }
     }
+    public function batalkanout($id){
+        $this->session->unset_userdata('serierror');
+        $query = $this->out_model->batalkanout($id);
+        if($query){
+            $url = base_url().'out';
+        }
+        redirect($url);
+    }
     public function addspecbarang()
     {
         $this->load->view('out/addspecbarang');

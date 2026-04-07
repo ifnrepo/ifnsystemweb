@@ -564,7 +564,7 @@
                                                     </div>
                                                 </div>
                                             </div>
-                                            <input type="text" name="jumlahcif" id="jumlahcif" class="hilang" value="<?= rupiah($datheader['nilai_pab']+$datheader['nilai_additional'],2) ?>">
+                                            <input type="text" name="jumlahcif" id="jumlahcif" class="" value="<?= rupiah($datheader['nilai_pab']+$datheader['nilai_additional'],2) ?>">
                                             <div class="mb-1 row">
                                                 <label class="col-3 col-form-label font-kecil">Nomor Kontrak</label>
                                                 <div class="col">
@@ -757,7 +757,7 @@
                                 </tr>
                             </tbody>
                         </table>
-                        <input type="text" id="sumdetail" class="hilang" value="<?= rupiah($sumdetail, 2); ?>">
+                        <input type="text" id="sumdetail" class="" value="<?= rupiah($sumdetail, 2); ?>">
                     </div>
                 </div>
             </div>

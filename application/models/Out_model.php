@@ -876,6 +876,57 @@ class Out_model extends CI_Model{
         }
         return $iniquery;
     }
+    public function batalkanout($id){
+        $data = $this->db->get_where('tb_header',['id' => $id])->row_array();
+        if($data['ok_valid']==1){
+            $this->session->set_flashdata('errornya','Data sudah diterima Departemen '.$data['dept_tuju']);
+            return true;
+        }else{
+            $this->db->trans_start();
+            $cekbckeluar = $this->db->get_where('tb_header',['id' => $id])->row_array();
+            $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($cekbckeluar['keterangan']),'jns_bc' => '261','dept_id' => $cekbckeluar['dept_tuju'],'dept_tuju' => $cekbckeluar['dept_id']])->row_array();
+
+            $datadet = $this->db->get_where('tb_detailgen',['id_header' => $id]);
+            foreach($datadet->result_array() as $datdet){
+                $kondisistok = [
+                    'dept_id' => $this->session->userdata('deptsekarang'),
+                    'periode' => tambahnol($this->session->userdata('blout')).$this->session->userdata('thout'),
+                    'trim(nobontr)' => trim($datdet['nobontr']),
+                    'trim(insno)' => trim($datdet['insno']),
+                    'id_barang' => $datdet['id_barang'],
+                    'trim(po)' => trim($datdet['po']),
+                    'trim(item)' => trim($datdet['item']),
+                    'dis' => $datdet['dis'],
+                    'dln' => $datdet['dln'],
+                    'trim(nobale)' => (($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='FN') || ($this->session->userdata('deptsekarang')=='GW' && $this->session->userdata('tujusekarang')=='FG') || ($this->session->userdata('deptsekarang')=='GW' && $this->session->userdata('tujusekarang')=='GF')) ? trim($datdet['nobale']) : '',
+                    'exnet' => $datdet['exnet'],
+                    'stok' => $datdet['stok'],
+                ];
+                if(in_array($this->session->userdata('deptsekarang'),daftardeptsubkon())){
+                    $this->db->where('trim(nomor_bc)',trim($nomorbc['nomor_bc']));
+                }
+
+                $this->db->where($kondisistok);
+                $stokdept = $this->db->get('stokdept')->row_array();
+
+                $this->db->set('pcs_keluar','pcs_keluar -'.toAngka($datdet['pcs']),false);
+                $this->db->set('kgs_keluar','kgs_keluar -'.toAngka($datdet['kgs']),false);
+                $this->db->where('id',$stokdept['id']);
+                $this->db->update('stokdept');
+
+                $this->db->set('pcs_akhir','(pcs_awal + pcs_masuk + pcs_adj - pcs_keluar)',false);
+                $this->db->set('kgs_akhir','(kgs_awal + kgs_masuk + kgs_adj - kgs_keluar)',false);
+                $this->db->where('id',$stokdept['id']);
+                $this->db->update('stokdept');
+                
+            }
+
+            $this->db->where('id',$data['id']);
+            $this->db->update('tb_header',['data_ok' => 0]);
+
+            return $this->db->trans_complete();
+        }
+    }
     public function getdatagm($idbarang,$periode){
         $kondisi = [
             'stokdept.periode' => $periode,

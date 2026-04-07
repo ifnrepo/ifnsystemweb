@@ -19,6 +19,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
   <div class="container-xl">
     <div class="card">
       <div class="card-body">
+        <input id="errornya" class="hilang" value="<?= $this->session->flashdata('errornya'); ?>">
         <div id="sisipkan" class="sticky-top bg-white">
           <div class="row mb-1 d-flex align-items-between">
             <div class="col-sm-6">
@@ -151,7 +152,8 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     <?php if($que['ok_valid']==0 && $bisakonfirmasi){ ?>
                       <a href="#" data-href="<?= base_url().'in/cekkonfirmasi/'.$que['id'].$insubkn ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Konfirmasi Penerimaan Barang,<br> data tidak dapat dirubah kembali" class="btn btn-sm btn-success <?= cekclosebook() ?>" style="padding: 3px 5px !important;" title="Konfirmasi Data"><i class="fa fa-check mr-1"></i> Konfirmasi</a>
                     <?php }else if($que['ok_valid']==1){ ?>
-                      <a href="<?= base_url().'in/cetakbon/'.$que['id'] ?>" target="_blank" class="btn btn-sm btn-danger" title="Cetak Data"><i class="fa fa-file-pdf-o"></i></a>
+                      <a href="<?= base_url().'in/cetakbon/'.$que['id'] ?>" target="_blank" style="height: 27px;" class="btn btn-sm btn-danger" title="Cetak Data"><i class="fa fa-file-pdf-o"></i></a>
+                      <a href="#" data-href="<?= base_url().'in/batalkandokumen/'.$que['id'] ?>" class="btn btn-sm btn-primary font-kecil" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Dokumen <?= $que['nomor_dok'] ?> akan dibatalkan" id="editdatapengeluaran" title="Return Data" style="height: 27px;">Batalkan Penerimaan</a>
                     <?php } ?>
                   </td>
                 </tr>
