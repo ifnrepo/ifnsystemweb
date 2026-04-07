@@ -873,6 +873,9 @@
                                         } ?>">
                 <div class="dropdown-menu-columns">
                   <div class="dropdown-menu-column">
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('setting'), 2); ?>" href="<?= base_url('header'); ?>">
+                      Header
+                    </a>
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('setting'), 1); ?>" href="<?= base_url('footer'); ?>">
                       Footer
                     </a>

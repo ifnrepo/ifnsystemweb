@@ -1264,4 +1264,20 @@ class Helper_model extends CI_Model
     public function cekdeptinv($dept,$tgl){
         return $this->db->get_where('stokinv',['dept_id' => $dept,'tgl' => $tgl]);
     }
+    public function getdatagreeting(){
+        $data = $this->db->get_where('page_header',['kode' => 'greeting']);
+        $arr_pagi= [];
+        $arr_siang = [];
+        $arr_malam = [];
+        foreach($data->result_array() as $dt){
+            if($dt['mode']=='pagi'){
+                array_push($arr_pagi,$dt['pesan']);
+            }else if($dt['mode']=='siang'){
+                array_push($arr_siang,$dt['pesan']);
+            }else{
+                array_push($arr_malam,$dt['pesan']);
+            }
+        }
+        return array('pagi' => $arr_pagi,'siang' => $arr_siang,'malam' => $arr_malam);
+    }
 }
