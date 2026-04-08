@@ -658,6 +658,17 @@ class Out extends CI_Controller {
             }
         }
     }
+    public function getfromstok($id){
+        $data['data'] = $this->out_model->getdatagentempbyid($id);
+        $data['detail'] = $this->out_model->getdatastokfromgentemp($id);
+        $this->load->view('out/getdetailbom',$data);
+    }
+    public function gantispekdetailtemp(){
+        $idstok = $_POST['idstok'];
+        $idlama = $_POST['idlama'];
+        $hasil = $this->out_model->gantispekdetailtemp($idstok,$idlama);
+        echo $hasil;
+    }
     function setdetailtidaksama($id,$cek){
         $hasil = $this->out_model->setdetailtidaksama($id,$cek);
         if ($hasil) {
