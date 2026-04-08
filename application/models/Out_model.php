@@ -1174,4 +1174,42 @@ class Out_model extends CI_Model{
         $hasil = $this->db->update('tb_header',$data);
         return $hasil;
     }
+    public function getdatagentempbyid($id){
+        $this->db->select('tb_detailgen_temp.*,barang.kode');
+        $this->db->from('tb_detailgen_temp');
+        $this->db->join('barang','barang.id = tb_detailgen_temp.id_barang','left');
+        $this->db->where('tb_detailgen_temp.id',$id);
+        return $this->db->get()->row_array();
+    }
+    public function getdatastokfromgentemp($id){
+        $data = $this->getdatagentempbyid($id);
+        $kondisi = [
+            'po' => $data['po'],
+            'item' => $data['item'],
+            'dis' => $data['dis'],
+            'id_barang' => $data['id_barang'],
+            'dept_id' => $this->session->userdata('deptsekarang'),
+            'periode' => tambahnol($this->session->userdata('blout')).$this->session->userdata('thout')
+        ];
+        $this->db->where($kondisi);
+        return $this->db->get('stokdept');
+    }
+    public function gantispekdetailtemp($idbaru,$idlama){
+        $stokdept = $this->db->get_where('stokdept',['id' => $idbaru])->row_array();
+        $ubah = [
+            'po' => $stokdept['po'],
+            'item' => $stokdept['item'],
+            'dis' => $stokdept['dis'],
+            'id_barang' => $stokdept['id_barang'],
+            'insno' => $stokdept['insno'],
+            'nobontr' => $stokdept['nobontr'],
+            'dln' => $stokdept['dln'],
+            'stok' => $stokdept['stok'],
+            'exnet' => $stokdept['exnet'],
+            'nobale' => $stokdept['nobale']
+        ];
+
+        $this->db->where('id',$idlama);
+        return $this->db->update('tb_detailgen_temp',$ubah);
+    }
 }

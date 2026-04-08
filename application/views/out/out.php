@@ -200,6 +200,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <span class="text-red font-kecil line-12">Menunggu Pembuatan<br>Dokumen Pengeluaran BC</span>
                         <?php }else{ ?>
                           <span class="text-teal font-kecil line-12">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>
+                          <br>
+                          <span><a href="#" data-href="<?= base_url().'out/batalkanout/'.$datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Dokumen <?= $datdet['nomor_dok'] ?> akan dibatalkan">Edit Data</a></span>
                         <?php } ?>
                       <?php }else{  ?>
                         <span class="text-teal font-kecil line-12">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>

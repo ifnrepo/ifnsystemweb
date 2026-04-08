@@ -1198,7 +1198,8 @@ function getdatabomcost($que)
             'harga_sm' => $hamat['hargasm'],
             'price' => $hamat['price'],
             'harga_acct' => $hamat['harga_akt'],
-            'prod_date' => $hamat['tgl']
+            'prod_date' => $hamat['tgl'],
+            'dept_asal' => ''
         ];
         array_push($hass, $hasil);
     } else {
@@ -1241,6 +1242,7 @@ function getdatabomcost($que)
                         'hargasm' => 0,
                         'price' => 0,
                         'prod_date' => NULL,
+                        'dept_asal' => ''
                     ];
                 }
                 $hasil = [

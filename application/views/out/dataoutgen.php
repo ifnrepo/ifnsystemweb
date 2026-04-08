@@ -113,6 +113,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <td class="text-center">
                         <a href="<?= base_url().'out/editgentemp/'.$detgen['idx'] ?>" class='btn btn-sm btn-primary m-0' style='padding: 2px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Edit Data Detail'>Edit</a>
                         <a href='#' data-href="<?= base_url().'out/hapusdatadetailgentemp/'.$detgen['idx'] ?>" data-message='Akan menghapus data barang <br><?= $spek ?>' class='btn btn-sm btn-danger' style='padding: 2px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-danger' data-title='Ubah data Detail'>Hapus</a>
+                        <a href="<?= base_url().'out/getfromstok/'.$detgen['idx'] ?>" class='btn btn-sm btn-success m-0' style='padding: 2px 5px !important;' data-bs-toggle='modal' data-bs-target='#modal-large' data-title='Data Stok'>Cek Stok</a>
                       </td>
                     </tr>
                   <?php endforeach; ?>

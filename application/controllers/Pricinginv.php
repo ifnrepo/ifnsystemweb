@@ -145,6 +145,7 @@ class Pricinginv extends CI_Controller
         }
          if($filter_ctgr!=''){
             $arrayu["LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4)"] = $filter_ctgr;
+            // $arrayu["LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4)"] = $filter_ctgr;
             // $arrayu["id_kategori"] = $filter_ctgr;
         }
         if($filter_art!=''){

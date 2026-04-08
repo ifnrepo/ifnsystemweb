@@ -202,8 +202,8 @@ class Pricinginv_model extends CI_Model
         // ,stokinv.dept_id',stokinv_detail.id_stok
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select * from (Select *,SUM(ROUND(kgs,4)) OVER() as totalkgsdet,SUM(pcs) OVER() as totalpcsdet,SUM(harga_acct*IF(id_satuan=22,kgs,IF(pcs=0,kgs,pcs))) OVER() AS tothargadet from (Select *,LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4) AS id_kategori from (".$query1.") r1 ";
-        // $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')) ";
+        $kolom = "Select *,SUM(kgs) OVER() AS totalkgsdet,SUM(pcs) OVER() AS totalpcsdet from (Select *,SUM(ROUND(kgs,4)) OVER() as totalkgs,SUM(pcs) OVER() as totalpcs,SUM(harga_acct*IF(id_satuan=22,kgs,IF(pcs=0,kgs,pcs))) OVER() AS tothargadet from (Select *,LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4) AS id_kategori from (".$query1.") r1 ";
+        // $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')) ";
         // $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan";
         if($this->session->userdata('milik')!=''){
             $kolom .= "where dln = '".$this->session->userdata('milik')."'";
@@ -405,9 +405,11 @@ class Pricinginv_model extends CI_Model
                     $jmsm = 0;
                     $jmpri = 0;
                     $amont = 0;
+                    $satt = 0;
                     foreach($databom as $dbom){
                         if($ke==0){
                             $tglpr = $dbom['prod_date'];
+                            $satt = $dbom['id_satuan'];
                         }
                         $jmrm += $dbom['harga_rm'];
                         $jmsm += $dbom['harga_sm'];
@@ -476,7 +478,8 @@ class Pricinginv_model extends CI_Model
                             }
                         }
                     }
-                    $pengali = $que['kodesatuan']=='KGS' ? $que['kgs_akhir'] : (($que['pcs_akhir']==0) ? $que['kgs_akhir'] : $que['pcs_akhir']);
+                    // $pengali = $que['kodesatuan']=='KGS' ? $que['kgs_akhir'] : (($que['pcs_akhir']==0) ? $que['kgs_akhir'] : $que['pcs_akhir']);
+                    $pengali = $satt==22 ? $que['kgs_akhir'] : (($que['pcs_akhir']==0) ? $que['kgs_akhir'] : $que['pcs_akhir']);
                     $mnt = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh)*$pengali;
                     $hrg = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh);
                     $datastokinv = [
