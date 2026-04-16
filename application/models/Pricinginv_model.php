@@ -45,7 +45,7 @@ class Pricinginv_model extends CI_Model
         // $this->db->order_by('stokinv.dept_id','stokinv.urut');
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(round(kgs_akhir,2)) over() as totalkgs,sum(amount) over() as totalamount from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
+        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(round(kgs_akhir,6)) over() as totalkgs,sum(amount) over() as totalamount from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
         $kolom .= "LEFT JOIN kategori on kategori.kategori_id = LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) ";
         $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan ";
         if($this->session->userdata('milik')!=''){
@@ -411,8 +411,8 @@ class Pricinginv_model extends CI_Model
                             $tglpr = $dbom['prod_date'];
                             $satt = $dbom['id_satuan'];
                         }
-                        $jmrm += $dbom['harga_rm'];
-                        $jmsm += $dbom['harga_sm'];
+                        $jmrm += (float) $dbom['harga_rm'];
+                        $jmsm += (float) $dbom['harga_sm'];
                         $jmpri += $dbom['price'];
                         $pengali = ($dbom['id_satuan']==22) ? $dbom['kgs'] : (($dbom['pcs']==0) ? $dbom['kgs'] : $dbom['pcs']); // Apabila satuan di Hargamaterial adalah KGS maka dikali KGS selain itu dikali PCS
                         $amont += $dbom['price']*$pengali;
@@ -480,6 +480,21 @@ class Pricinginv_model extends CI_Model
                     }
                     // $pengali = $que['kodesatuan']=='KGS' ? $que['kgs_akhir'] : (($que['pcs_akhir']==0) ? $que['kgs_akhir'] : $que['pcs_akhir']);
                     $pengali = $satt==22 ? $que['kgs_akhir'] : (($que['pcs_akhir']==0) ? $que['kgs_akhir'] : $que['pcs_akhir']);
+
+                    //Hitung lagi Rekap jumlah RM dan SM dari Barang ini 
+                    // $this->db->select('stokinv_detail.*,barang.id_kategori');
+                    // $this->db->select('sum(CASE WHEN barang.id_kategori = "8189" THEN harga_acct*kgs ELSE 0 END) over() as hargarmasli');
+                    // $this->db->select('sum(CASE WHEN barang.id_kategori != "8189" THEN harga_acct*kgs ELSE 0 END) over() as hargasmasli');
+                    // $this->db->from('stokinv_detail');
+                    // $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
+                    // $this->db->where('stokinv_detail.id_stok',$que['id']);
+                    // $this->db->limit(1);
+                    // $gethasil = $this->db->get()->row_array();
+
+                    // $jmrm = $gethasil['hargarmasli']/$pengali;
+                    // $jmsm = $gethasil['hargasmasli']/$pengali;
+
+
                     $mnt = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh)*$pengali;
                     $hrg = ($jmrm+$jmsm+$sp+$rr+$nt+$sn+$h1+$ko+$h2+$pa+$sh);
                     $datastokinv = [
@@ -610,7 +625,7 @@ class Pricinginv_model extends CI_Model
         return $this->db->query($kolom);
     }
     public function getdatabyid($id){
-        $this->db->select('stokinv.*,barang.id_kategori,barang.kode');
+        $this->db->select('stokinv.*,barang.id_kategori,barang.kode,barang.id_satuan');
         $this->db->select("LEFT(CONCAT(IFNULL(tb_po.id_kategori,''),IFNULL(barang.id_kategori,'')),4) AS id_kategori");
         $this->db->from('stokinv');
         $this->db->join('barang','barang.id = stokinv.id_barang','left');

@@ -10,7 +10,7 @@ class Ponet extends CI_Controller
             $url = base_url('Auth');
             redirect($url);
         }
-        $this->load->model('Ponet_model');
+        $this->load->model('Ponet_model','ponetmodel');
         $this->load->model('Helper_model','helpermodel');
         $this->load->helper('ifn_helper');
     }
@@ -18,53 +18,80 @@ class Ponet extends CI_Controller
     public function index()
     {
         $header['header'] = 'other';
-        $po = trim($this->input->post('keyword'));
-        $buy = $this->input->post('kategori');
-        $checked = $this->input->post('checked');
-        if($checked==''){
-            $checked = "2";
-        }
-        $this->session->set_flashdata('msg',$checked);
-        $data['po'] = [];
-
-        // cek key ,kategori,cheked 
-        if($po!=''){
-            if (!empty($po) && !empty($buy) || !empty($checked)) {
-                $results = $this->Ponet_model->cariData($po, $buy, $checked);
-                // print_r($results);
-                if ($results) {
-                    foreach ($results as &$result) {
-                        $result['lim'] = limit_date($result['lim']);
-                    }
-                    $data['po'] = $results;
-                } else {
-                    $data['message'] = 'Data tidak ditemukan.';
-                }
-            }
-        }
+        $data['data'] = $this->ponetmodel->getdata();
+        $data['maxrek'] = $this->ponetmodel->getmaxminidpo();
+        $data['futoito'] = $this->ponetmodel->getfutoito($data['data']['id']);
+        $data['sidemark'] = $this->ponetmodel->getsidemark($data['data']['id']);
+        $data['shipmark'] = $this->ponetmodel->getshipmark($data['data']['id']);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'ponet';
         $this->load->view('layouts/header', $header);
-        $this->load->view('ponet/index', $data);
+        $this->load->view('ponet/index',$data);
         $this->load->view('layouts/footer',$footer);
     }
 
     public function view($id)
     {
-        $header['header'] = 'manajemen';
-        $data['detail'] = $this->Ponet_model->GetDataByid($id);
-
-        if ($data['detail']) {
-            $data['detail']['lim'] = limit_date($data['detail']['lim']);
-        }
-
-        $this->load->view('ponet/detail', $data);
+        $header['header'] = 'other';
+        $data['data'] = $this->ponetmodel->getdata($id);
+        $data['maxrek'] = $this->ponetmodel->getmaxminidpo();
+        $data['futoito'] = $this->ponetmodel->getfutoito($data['data']['id']);
+        $data['sidemark'] = $this->ponetmodel->getsidemark($data['data']['id']);
+        $data['shipmark'] = $this->ponetmodel->getshipmark($data['data']['id']);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'ponet';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('ponet/index',$data);
+        $this->load->view('layouts/footer',$footer);
+    }
+    public function prevrec(){
+        $id = $_POST['id'];
+        $hasil = $this->ponetmodel->prevrec($id);
+        echo $hasil['idpo'];
+    }
+    public function nextrec(){
+        $id = $_POST['id'];
+        $hasil = $this->ponetmodel->nextrec($id);
+        echo $hasil['idpo'];
+    }
+    public function currentrec(){
+        $id = $_POST['id'];
+        $hasil = $this->ponetmodel->currentrec($id);
+        echo $hasil['idpo'];
     }
 
-    public function netinstr($po)
+    public function caripoid($po)
     {
-        $header['header'] = 'manajemen';
-        $data['netinstr'] = $this->Ponet_model->GetDataByPo_id($po);
-        $this->load->view('ponet/netstr', $data);
+        $data['data'] = slashganti($po); 
+        $this->load->view('ponet/caripo', $data);
+    }
+    public function caripo()
+    {
+        $this->load->view('ponet/caripo');
+    }
+    public function caridatapo(){
+        $data = [
+            'po' => trim($_POST['po']),
+            'item' => trim($_POST['item'])
+        ];
+        $hasil = $this->ponetmodel->caridatapo($data);
+        $html = '';
+        if($hasil->num_rows() > 0){
+            foreach($hasil->result_array() as $hsl){
+                $warna = trim($hsl['spek'])=='CANCELED'? 'text-danger' : '';
+                $html .= '<tr>';
+                $html .= '<td>'.viewsku($hsl['po'],$hsl['item'],$hsl['dis']).'</td>';
+                $html .= '<td class="'.$warna.'">'.spekpo($hsl['po'],$hsl['item'],$hsl['dis']).'</td>';
+                $html .= '<td>'.$hsl['nama_customer'].'</td>';
+                $html .= '<td class="text-center">';
+                $html .= '<a href="'.base_url('ponet/view/'.$hsl['id']).'" class="btn btn-sm btn-success font-kecil" style="padding: 0px 2px !important;">Pilih</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+        }else{
+            $html .= '<tr><td colspan="4" class="text-center">Data tidak ditemukan <a href="#" id="resetcari">Cari Ulang ?</a></td></tr>';
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
     }
 }

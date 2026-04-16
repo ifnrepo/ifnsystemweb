@@ -1398,7 +1398,7 @@ class Ib_model extends CI_Model
                     'kode_faktur_pajak' => $header['kode_faktur_pajak'],
                     'nomor_inv' => $header['nomor_inv'],
                     'kurs' => $hasilkurs,
-                    'cif' =>  ($hasil['harga']*$hasil['kgs'])/$xhasilkurs,
+                    'cif' =>  $header['jns_bc']==40 ? 0 : ($hasil['harga']*$hasil['kgs'])/$xhasilkurs,
                     'harga_akt' => $hasil['harga'],
                     'sales_note' => $header['sales_note']
                     // 'kode_negara' => "ID"

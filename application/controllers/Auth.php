@@ -93,6 +93,7 @@ class Auth extends CI_Controller
                     'cekbatalstok' => $user['cekbatalstok'],
                     'cek_so' => $user['cek_so'],
                     'cek_sublok' => $user['cek_sublok'],
+                    'cek_limit' => $user['cek_limit'],
                     'sess_ceksaw' => $user['cek_saw'],
                     'getinifn' => true
                 ];
@@ -173,6 +174,7 @@ class Auth extends CI_Controller
                     'cek_so' => $user['cek_so'],
                     'cekbatalstok' => $user['cekbatalstok'],
                     'cek_sublok' => $user['cek_sublok'],
+                    'cek_limit' => $user['cek_limit'],
                     'sess_ceksaw' => $user['cek_saw'],
                     'rfid' => $user['rfid'],
                     'getinifn' => true

@@ -1750,6 +1750,7 @@ class Akb extends CI_Controller
                 for ($ke = 1; $ke <= 3; $ke++) {
                     $kodepungut = $databahanbaku['jns_bc'] == '40' ? 'PPNLOKAL' : ($ke == 1 ? 'BM' : ($ke == 2 ? 'PPN' : 'PPH'));
                     $tarif = 0;
+                    $jmltarif = 0;
                     switch ($kodepungut) {
                         case 'PPNLOKAL':
                             $tarif = 11;

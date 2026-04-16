@@ -1257,8 +1257,8 @@ function getdatabomcost($que)
                     'jns_bc' => $hamat['jns_bc'],
                     'nomor_bc' => $hamat['nomor_bc'],
                     'tgl_bc' => $hamat['tgl_bc'],
-                    'harga_rm' => $hamat['hargarm'] * ($datadetbom['persen'] / 100),
-                    'harga_sm' => $hamat['hargasm'] * ($datadetbom['persen'] / 100),
+                    'harga_rm' => round($hamat['hargarm'] * ($datadetbom['persen'] / 100),8),
+                    'harga_sm' => round($hamat['hargasm'] * ($datadetbom['persen'] / 100),8),
                     'price' => $hamat['price'],
                     'harga_acct' => $hamat['harga_akt'],
                     'prod_date' => $databom['prod_date'],
@@ -1316,4 +1316,28 @@ function uruthuruf($str){
 
     $nilascii_values = array_map('chr', array($nilascii));
     return $nilascii_values[0];
+}
+function gantislash($str){
+	$cek = trim($str);
+	$hasil = str_replace("/","+",$str);
+	$jadi = str_replace("#","_",$str);
+	return $jadi;
+}
+function slashganti($str){
+	$cek = trim($str);
+	$hasil = str_replace("+","/",$str);
+	$jadi = str_replace("_","#",$str);
+	return $jadi;
+}
+function limitmp($u,$tambah=0){
+    if(is_null($u)){
+        return '';
+    }else{
+        $d = date('Y-m-d',strtotime($u.'+'.(int) $tambah.' days'));
+        $hari = date('d',strtotime($d))==31 ? 30 : date('d',strtotime($d));
+        $bulan = date('M',strtotime($d));
+        $tahun = date('Y',strtotime($d));
+        $kode = array('EAR','MID','END');
+        return $kode[ceil((int) $hari/10)-1].' '.strtoupper($bulan).' '.$tahun;
+    }
 }

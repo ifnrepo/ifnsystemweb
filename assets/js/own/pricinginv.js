@@ -161,7 +161,7 @@ $(document).ready(function(){
                     but += '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="blue" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M12 12m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 19m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /><path d="M12 5m-1 0a1 1 0 1 0 2 0a1 1 0 1 0 -2 0" /></svg>';
                     but += '</a>';
                     but += '<div class="dropdown-menu dropdown-menu-end line-11 font-kecil">';
-                    but += '<a href="'+base_url+'pricinginv/viewdetail/'+row.id+'" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="View Detail" class="dropdown-item py-1">View Detail</a>';
+                    but += '<a href="'+base_url+'pricinginv/viewdetailbom/'+row.id+'" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="View Detail" class="dropdown-item py-1">View Detail</a>';
                     but += '<a href="'+base_url+'pricinginv/edittglprod/'+row.id+'" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl" class="dropdown-item py-1">Edit Tgl Produksi</a>';
                     but += '</div>';
                     but += '</div>';
