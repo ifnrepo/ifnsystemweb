@@ -268,7 +268,7 @@ class In_model extends CI_Model{
                 'stok' => $datdet['stok'],
             ];
             if(in_array($header['dept_tuju'],daftardeptsubkon())){
-                $this->db->where('trim(nomor_bc)',trim($nomorbc['nomor_bc']));
+                $this->db->where('trim(nomor_bc)',trim($header['nomor_bc']));
             }
 
             $this->db->where($kondisistok);

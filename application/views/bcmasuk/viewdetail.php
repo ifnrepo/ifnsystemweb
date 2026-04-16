@@ -189,7 +189,7 @@
                                                 <input type="text" class="form-control font-kecil btn-sm btn-flat" aria-describedby="emailHelp" value="<?= $detail['xmt_uang']; ?>" placeholder="Mt Uang">
                                             </div>
                                             <div class="col-9 mt-1">
-                                                <input type="text" class="form-control font-kecil btn-sm btn-flat text-right" aria-describedby="emailHelp" value="<?= rupiah($detail['nilai_pab'], 2); ?>" placeholder="Enter Nilai PAB">
+                                                <input type="text" class="form-control font-kecil btn-sm btn-flat text-right" aria-describedby="emailHelp" value="<?= rupiah($detail['nilai_pab']+$detail['nilai_additional'], 2); ?>" placeholder="Enter Nilai PAB">
                                             </div>
                                         </div>
                                     </div>
@@ -230,7 +230,7 @@
                                                         <?php $mtuang = $detail['xmt_uang']=='IDR' ? 'Usd' : ucwords(strtolower($detail['xmt_uang'])); ?>
                                                         <div class="text-black font-kecil" role="status"><?=  $mtuang ?></div>
                                                     </span>
-                                                    <?php $bagi= $detail['kurs_usd']==0 ? 1 : $detail['kurs_usd']; $nilaiusd = $detail['xmt_uang'] == 'IDR' ? $detail['nilai_pab'] / $bagi : $detail['nilai_pab']; ?>
+                                                    <?php $bagi= $detail['kurs_usd']==0 ? 1 : $detail['kurs_usd']; $nilaiusd = $detail['xmt_uang'] == 'IDR' ? $detail['nilai_pab'] / $bagi : $detail['nilai_pab']+$detail['nilai_additional']; ?>
                                                     <input type="text" value="<?= rupiah($nilaiusd, 2); ?>" class="form-control font-kecil btn-sm btn-flat text-right" placeholder="Loading…" style="padding-left: 45px !important;">
                                                 </div>
                                             </div>
@@ -339,7 +339,7 @@
                                     $sku = viewsku($datadet['po'], $datadet['item'], $datadet['dis'], $datadet['kode']);
                                     $jmpcs += $datadet['pcs'];
                                     $jmkgs += $datadet['kgs'];
-                                    $jmnilai += $datadet['harga'] * $pengali;
+                                    $jmnilai += ($datadet['harga']+$datadet['additional']) * $pengali;
                                 ?>
                                     <tr>
                                         <td><?= $no++; ?></td>
@@ -349,8 +349,8 @@
                                         <td class="text-right"><?= rupiah($datadet['pcs'], 0); ?></td>
                                         <td class="text-right"><?= rupiah($datadet['kgs'], 2); ?></td>
                                         <td><?= $datadet['nohs']; ?></td>
-                                        <td class="text-right"><?= rupiah($datadet['harga'], 4); ?></td>
-                                        <td class="text-right"><?= rupiah($datadet['harga'] * $pengali, 2); ?></td>
+                                        <td class="text-right"><?= rupiah($datadet['harga']+$datadet['additional'], 4); ?></td>
+                                        <td class="text-right"><?= rupiah(($datadet['harga']+$datadet['additional']) * $pengali, 2); ?></td>
                                     </tr>
                                 <?php } ?>
                                 <tr class='bg-teal-lt'>
