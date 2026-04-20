@@ -17,7 +17,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input type="text" name="maxid" class="hilang" id="maxid" value="<?= $maxrek['maxid'] ?>">
                     <input type="text" name="minid" class="hilang" id="minid" value="<?= $maxrek['minid'] ?>">
                     <div class="col-3 p-2" style="border: 1px solid #eaeaea;border-radius:3px;">
-                        <div>
+                        <div style="position: relative">
                             <div class="mb-1 row">
                                 <label class="col-4 col-form-label form-control-sm font-kecil">Tgl Dok PO</label>
                                 <div class="col">
@@ -36,12 +36,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <input type="text" class="form-control form-control-sm font-kecil btn-flat" id="netto" name="netto" value="<?= tgl_indo($data['tglplan']) ?>" aria-describedby="emailHelp" placeholder="tgl PO" readonly>
                                 </div>
                             </div>
+                            <div class="text-center p-0 <?php if($data['outstand']!=0){ echo "hilang"; } ?>">
+                                <img src="<?= base_url().'assets\image\delivered-stamp.png' ?>" alt="Stempel Closed" class="m-0" style="width:45%; height:auto;">
+                            </div>
                         </div>
                         <hr class="m-1">
                         <div style="position: relative;" class="mb-0">
                             <div class="font-kecil text-secondary d-flex justify-content-between">
                                 <?php $hikiai = $data['stat_po']==1 ? 'PO' : ($data['stat_po']==2 ? 'HIKIAI' : ($data['stat_po']==3 ? 'KARI PO' : ($data['stat_po']==4 ? 'MIKOMI' : 'TEST'))) ?>
                                 <span class="badge bg-secondary text-secondary-fg">Status : <?= $hikiai ?></span>
+                                <span class="badge bg-dark text-black font-bold <?php if(trim($data['revisi'])==''){ echo "hilang"; } ?>" title="Revisi :"><span class="text-white"><?= $data['revisi'] ?></span></span>
                                 <?php $owner = $data['dln']==0 ? 'PT. INDONEPTUNE NET' : 'PT. DEWA LAUTINDO' ?>
                                 <span class="badge bg-yellow text-black"><?= $owner ?></span>
                             </div>
@@ -56,7 +60,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="text-secondary font-kecil font-bold" title="Hikiai Number">Hikiai Number : <?= viewsku($data['ord'],$data['ordno'],$data['ordis']) ?></span></div>
                             <hr class="m-0">
                             <div class="" style="padding:10px 0; text-align: center;">
-                                <img src="<?= base_url().'assets/image/avatars/005f.jpg' ?>" alt="Belum ada Foto" style="height:auto; width:55%;">
+                                <a href="<?= base_url().'ponet/viewfoto/'.urlencode($data['gbrlogo']) ?>" id="viewfoto" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View Foto">
+                                    <?php $gambar = trim($data['gbrlogo'])=='' ? base_url().'assets/image/avatars/005f.jpg' : base_url().'assets/image/label/'.$data['gbrlogo'] ?>
+                                    <img src="<?= $gambar ?>" alt="Belum ada Foto" style="height:auto; width:55%;">
+                                </a>
                             </div>
                             <hr class="m-0">
                             <div class="bg-danger-lt px-2 py-1 font-kecil font-bold text-center"><span class="text-black">Hasil Pengecekan Lab</span></div>
@@ -98,26 +105,44 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                         </div>
                         <hr class="m-0">
-                        <div class="mt-1">
-                            <div class="mb-1 row">
-                                <label class="col-5 col-form-label font-kecil">Factory Limit</label>
-                                <div class="col">
-                                    <input type="text" class="form-control font-kecil btn-flat font-bold text-danger" id="netto" name="netto" value="<?= limitmp($data['lim']) ?>" aria-describedby="emailHelp" placeholder="LIMIT DLV">
-                                </div>
-                            </div>
-                            <div class="mb-1 row <?php if($this->session->userdata('cek_limit')!=1){ echo "hilang"; } ?>">
-                                <label class="col-5 col-form-label font-kecil" title="Delivery time">Dlv Time ( 納期 )</label>
-                                <div class="col">
-                                    <input type="text" class="form-control font-kecil btn-flat font-bold" id="netto" name="netto" value="<?= limitmp($data['lim'],10) ?>" aria-describedby="emailHelp" placeholder="Actual">
-                                </div>
-                            </div>
-                            <div class="mb-1 row <?php if($this->session->userdata('cek_limit')!=1){ echo "hilang"; } ?>">
-                                <label class="col-5 col-form-label font-kecil">Inquiry Limit</label>
-                                <div class="col">
-                                    <input type="text" class="form-control font-kecil btn-flat" id="netto" name="netto" value="<?= limitmp($data['inqulim']) ?>" aria-describedby="emailHelp" placeholder="Inquiry Limit">
-                                </div>
-                            </div>
-                        </div>
+                        <table class="table table-bordered m-0 mt-1 mb-1">
+                            <thead class="bg-primary-lt">
+                                <!-- <tr>
+                                    <th class="text-center text-black" colspan="2"></th>
+                                </tr> -->
+                            </thead>
+                            <tbody class="table-tbody">
+                                <tr>
+                                    <td class="font-kecil">Factory Limit</td>
+                                    <td class="font-bold text-danger font-kecil" style="background-color: #ffff93;"><?= limitmp($data['lim']) ?></td>
+                                </tr>
+                                <tr class="<?php if($this->session->userdata('cek_limit')!=1){ echo "hilang"; } ?>">
+                                    <td class="font-kecil">Dlv Time ( 納期 )</td>
+                                    <td class="font-kecil font-bold"><?= limitmp($data['lim'],10) ?></td>
+                                </tr>
+                                <tr class="<?php if($this->session->userdata('cek_limit')!=1){ echo "hilang"; } ?>">
+                                    <td class="font-kecil">Inquiry Limit</td>
+                                    <td class="font-kecil"><?= limitmp($data['inqulim']) ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <table class="table table-bordered m-0 mt-1 mb-1 <?php if($this->session->userdata('cek_price')!=1){ echo "hilang"; } ?>">
+                            <thead class="bg-primary-lt">
+                                <!-- <tr>
+                                    <th class="text-center text-black" colspan="2"></th>
+                                </tr> -->
+                            </thead>
+                            <tbody class="table-tbody">
+                                <tr>
+                                    <td class="font-kecil">Nilai Pcs</td>
+                                    <td class="font-bold text-black font-kecil" style="background-color: #fad5d5;"><?= $data['mtuang'].' '.rupiah($data['nilaipcs'],2) ?></td>
+                                </tr>
+                                <tr>
+                                    <td class="font-kecil">Total</td>
+                                    <td class="font-kecil font-bold"><?= $data['mtuang'].' '.rupiah($data['piece']*$data['nilaipcs'],2) ?></td>
+                                </tr>
+                            </tbody>
+                        </table>
                         <div class="text-center">
                             <div class="text-center pt-2" style="border-top: 0.5px solid #eaeaea;">
                                 <button class="btn btn-sm btn-primary" id="firstrec">First</button>
@@ -214,19 +239,45 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                 <div class="row">
                                                                     <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-blue-lt"><span class="text-black">Length</span></label>
                                                                     <div class="col">
-                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= rupiah((float) $data['leng'],2).' '.$data['st_length'] ?>" aria-describedby="emailHelp" placeholder="Jml Kakesu" readonly>
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= rupiah((float) $data['leng'],2).' '.$data['st_length'] ?>" aria-describedby="emailHelp" placeholder="Jml Kakesu" readonly>
+                                                                            </div>
+                                                                            <div class="col-4">
+                                                                                <span class="font-kecil text-blue"><?php if($data['st_length']!='MT'){ echo $data['mtr'].' Mtr'; } ?></span>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
                                                                     <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-blue-lt"><span class="text-black">Color</span></label>
                                                                     <div class="col">
-                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= $data['color'] ?>" aria-describedby="emailHelp" placeholder="Warna Jala" readonly>
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= $data['color'] ?>" aria-describedby="emailHelp" placeholder="Warna Jala" readonly>
+                                                                            </div>
+                                                                            <div class="col-4">
+                                                                                <div class="row">
+                                                                                    <div class="col-5 font-kecil mt-1 text-right">Total</div>
+                                                                                    <div class="col-7">
+                                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat text-right" value="<?= rupiah($data['piece']*$data['weight'],2).' Kgs' ?>" aria-describedby="emailHelp" placeholder="Nomor HS" readonly>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
                                                                     <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-blue-lt"><span class="text-black">Qty</span></label>
                                                                     <div class="col">
-                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= rupiah((float) $data['piece'],2).' '.$data['st_piece'] ?>" aria-describedby="emailHelp" placeholder="Qty Order" readonly>
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= rupiah((float) $data['piece'],2).' '.$data['st_piece'] ?>" aria-describedby="emailHelp" placeholder="Qty Order" readonly>
+                                                                            </div>
+                                                                            <div class="col-4">
+                                                                                <span class="font-kecil text-blue <?php if($data['pcshik']==0){ echo "hilang"; } ?>">Hikiai : <?= $data['pcshik'].' '.$data['st_piece'] ?></span>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
@@ -373,10 +424,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                         <a href="#tabs-shipmark" class="nav-link line-11" style="background-color: #FFF2CC" data-bs-toggle="tab"><span>SIDE/SHIP MARK</span></a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a href="#tabs-deliv" class="nav-link line-11" style="background-color: #E2EFDA" data-bs-toggle="tab"><span>DELIVERY INFO</span></a>
+                                                        <a href="#tabs-jushi" class="nav-link line-11" style="background-color: #D9E1F2" data-bs-toggle="tab"><span>JUSHI ( 樹脂 )</span></a>
                                                     </li>
                                                     <li class="nav-item">
-                                                        <a href="#tabs-jushi" class="nav-link line-11" style="background-color: #D9E1F2" data-bs-toggle="tab"><span>JUSHI ( 樹脂 )</span></a>
+                                                        <a href="#tabs-kemasan" class="nav-link line-11" style="background-color: #FFE699" data-bs-toggle="tab"><span>KEMASAN</span></a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#tabs-deliv" class="nav-link line-11" style="background-color: #E2EFDA" data-bs-toggle="tab"><span>DELIVERY INFO</span></a>
                                                     </li>
                                                 </ul>
                                             <hr class="m-0 mb-1">
@@ -591,7 +645,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                             <!-- Ship mark Information is Under Construction ! -->
                                                              <div class="text-left mb-1 font-kecil font-bold text-pink">SHIPPING MARK</div>
                                                             <div style="border: 1px solid #eaeaea; border-radius: .25rem; min-height:120px;" class="p-3">
-                                                                <?php if($sidemark->num_rows() > 0): ?>
+                                                                <?php if($shipmark->num_rows() > 0): ?>
                                                                     <?php $datashipmark = $shipmark->row_array(); ?>
                                                                     <span class="font-bold"><?= $datashipmark['ship1'] ?></span><br>
                                                                     <span class="font-kecil"><?= $datashipmark['ship2'] ?></span><br>
@@ -607,8 +661,62 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="tab-pane" id="tabs-kemasan">
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="row">
+                                                                <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-blue-lt"><span class="text-black">Kemasan</span></label>
+                                                                <div class="col">
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <?php $kemas = $data['plastikpol']==1 ? 'Plastik Polos' : 'Plastik Berlabel'; ?>
+                                                                            <input type="text" class="form-control form-control-sm font-kecil btn-flat font-bold" style="color: #492700 !important" value="<?= $kemas ?>" aria-describedby="emailHelp" placeholder="" readonly>
+                                                                        </div>
+        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-blue-lt"><span class="text-black">Pcs/Bale</span></label>
+                                                                <div class="col">
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= rupiah($data['pcbale'],0) ?>" aria-describedby="emailHelp" placeholder="" readonly>
+                                                                        </div>
+        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                                 <div class="tab-pane" id="tabs-deliv">
-                                                    Delivery Information is Under Construction !
+                                                    <div class="row">
+                                                        <div class="col-12">
+                                                            <div class="row">
+                                                                <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-blue-lt"><span class="text-black">Delivery</span></label>
+                                                                <div class="col">
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <input type="text" class="form-control form-control-sm font-kecil btn-flat" style="color: #492700 !important" value="<?= rupiah($data['deliv'],0) ?>" aria-describedby="emailHelp" placeholder="" readonly>
+                                                                        </div>
+        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="row">
+                                                                <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-blue-lt"><span class="text-black">Outstanding Order</span></label>
+                                                                <div class="col">
+                                                                    <div class="row">
+                                                                        <div class="col-12">
+                                                                            <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= rupiah($data['outstand'],0) ?>" aria-describedby="emailHelp" placeholder="" readonly>
+                                                                        </div>
+        
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                                 <div class="tab-pane" id="tabs-jushi">
                                                     <div class="row">
@@ -617,7 +725,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                 <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-blue-lt"><span class="text-black">Kode Jushi</span></label>
                                                                 <div class="col">
                                                                     <div class="row">
-                                                                        <div class="col-8">
+                                                                        <div class="col-12">
                                                                             <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="" aria-describedby="emailHelp" placeholder="" readonly>
                                                                         </div>
                                                                         <div class="col-4 row">

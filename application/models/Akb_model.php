@@ -1416,7 +1416,7 @@ class Akb_model extends CI_Model
                 }
                 $jmmm = (($cif / $pembagi) * $ndpbm) * $deta['kgs'];
                 $hargaperkilo = round(($cif / $pembagi) * $deta['kgs'], 2) * $ndpbm;
-                $xcif = round(($cif / $pembagi) * $deta['kgs'], 2);
+                $xcif = trim($deta['jns_bc'])=='40' && trim($deta['mt_uang'])=='IDR' ? 0 : round(($cif / $pembagi) * $deta['kgs'], 2);
                 $nilaibm = $cekjenisbc['bm'] > 0 ? ($xcif * $kursusd) * ($cekjenisbc['bm'] / 100) : 0;
                 $data['cif'] = $xcif;
                 $data['ndpbm'] = $kursusd;

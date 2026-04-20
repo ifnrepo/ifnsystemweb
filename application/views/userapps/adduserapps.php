@@ -227,7 +227,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-primary-lt">
+              <div class="mb-0 row bg-primary-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -236,6 +236,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <span class="col-auto">
                         <label class="form-check form-check-single form-switch">
                           <input class="form-check-input" name="cek_limit" id="cek_limit" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
+              <div class="mb-1 row bg-primary-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
+                      <span class="col font-bold">Akses View Price (Ponet)</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="cek_price" id="cek_price" type="checkbox">
                         </label>
                       </span>
                     </label>

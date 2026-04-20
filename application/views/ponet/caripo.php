@@ -49,7 +49,7 @@
         if($("#adaparam").val()==0){
             setTimeout(() => {
                 $("#ponya").focus();
-            }, 500);
+            }, 400);
         }else{
             var kode = $("#adaparam").val();
             getdatapo(kode);
@@ -61,6 +61,16 @@
         $("#tempatcari").removeClass('hilang');
         $("#tempathasil").addClass('hilang');
     })
+    $("#ponya").on("keypress", function(e) {
+        if (e.which === 13) {
+            $("#itemnya").focus();
+        }
+    });
+    $("#itemnya").on("keypress", function(e) {
+        if (e.which === 13) {
+            $("#caripo").click();
+        }
+    });
     $("#caripo").click(function() {
         if($("#ponya").val() == ''){
             pesan('Isi Nomor PO yang akan dicari','info');

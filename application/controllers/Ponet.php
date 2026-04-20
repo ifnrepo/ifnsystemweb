@@ -94,4 +94,9 @@ class Ponet extends CI_Controller
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
+    public function viewfoto($gbr='')
+    {   
+        $data['gbr']= trim($gbr)=='' ? '' : urldecode($gbr);
+        $this->load->view('ponet/viewfoto',$data);
+    }
 }
