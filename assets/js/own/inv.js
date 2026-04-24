@@ -349,7 +349,7 @@ $("#updateinv").click(function () {
 		pesan("Tanggal awal lebih besar dari tanggal akhir - Proses dibatalkan", "info");
 		return false;
 	}
-	$(this).html('<i class="fa fa-spinner fa-spin mr-1"></i> Loading ..');
+	$(this).html('<i class="fa fa-circle-o-notch fa-spin mr-1"></i> Loading ..');
 	$.ajax({
 		dataType: "json",
 		type: "POST",

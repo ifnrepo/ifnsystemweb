@@ -24,7 +24,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="col-sm-6 mb-1">
               <div class="<?php IF(cekclosebook($this->session->userdata('blout'),$this->session->userdata('thout'),$this->session->userdata('deptsekarang'))=='disabled'){ echo "hilang"; } ?>">
                 <?php $disab=''; if($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null || $this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null){ $disab = 'disabled';} ?>
-                <a href="<?= base_url() . 'out/adddata/0'; ?>" class="btn btn-info btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                <?php if(in_array($this->session->userdata('deptsekarang'),daftardeptsubkon())){ ?>
+                  <a href="<?= base_url() . 'out/adddata/0/'.$this->session->userdata('deptsekarang') ?>" class="btn btn-primary btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="adddataout" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Pilih Proses"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                <?php }else{ ?>
+                  <a href="<?= base_url() . 'out/adddata/0' ?>" class="btn btn-info btn-sm <?= cekclosebook(); ?> hilang <?= $disab; ?>" id="adddataout"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                <?php } ?>
                 <div id="tujuanbon" class="hilang"> <?= $this->session->userdata('deptsekarang').' ke '.$this->session->userdata('tujusekarang'); ?></div>
                 <div class="dropdown hilang " id="buttonpilih2">
                     <button class="btn btn-primary btn-sm dropdown-toggle <?= cekclosebook(); ?>" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

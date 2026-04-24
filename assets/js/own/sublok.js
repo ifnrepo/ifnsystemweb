@@ -144,7 +144,7 @@ $("#bersihkan-input-scanner").click(function(){
 });
 $("#simpan-input-manual").click(function(){
 	if($("#inputinsno").val()==''){
-		alert('Instruksi haus di isi !');
+		alert('Instruksi harus di isi !');
 		return false;
 	}
 	if($("#inputlot").val()==''){

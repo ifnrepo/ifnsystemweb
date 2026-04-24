@@ -127,6 +127,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
                     : $detail['kurs_yen'];
 
+                  $kurs_usd = $kurs_usd==0 ? 1 : $kurs_usd;
+                  $kurs_yen = $kurs_yen==0 ? 1 : $kurs_yen;
+
                   // $kurs_yen = $detail['kurs_yen'] ?? 0;
 
                   $pengali = $detail['mtuang'] == 2
