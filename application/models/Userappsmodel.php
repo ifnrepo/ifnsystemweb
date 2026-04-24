@@ -59,6 +59,7 @@ class Userappsmodel extends CI_Model
         $data['cek_saw'] = isset($data['cek_saw']) ? 1 : 0;
         $data['cek_sublok'] = isset($data['cek_sublok']) ? 1 : 0;
         $data['cek_limit'] = isset($data['cek_limit']) ? 1 : 0;
+        $data['cek_price'] = isset($data['cek_price']) ? 1 : 0;
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['cekdowntime_pi'] = isset($data['cekdowntime_pi']) ? 1 : 0;
         $data['cekdowntime_gi'] = isset($data['cekdowntime_gi']) ? 1 : 0;
@@ -215,6 +216,7 @@ class Userappsmodel extends CI_Model
         $data['cek_saw'] = isset($data['cek_saw']) ? 1 : 0;
         $data['cek_sublok'] = isset($data['cek_sublok']) ? 1 : 0;
         $data['cek_limit'] = isset($data['cek_limit']) ? 1 : 0;
+        $data['cek_price'] = isset($data['cek_price']) ? 1 : 0;
         $data['cekdowntime'] = isset($data['cekdowntime']) ? 1 : 0;
         $data['cekdowntime_pi'] = isset($data['cekdowntime_pi']) ? 1 : 0;
         $data['cekdowntime_gi'] = isset($data['cekdowntime_gi']) ? 1 : 0;
@@ -380,6 +382,8 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('viewharga', $cek['view_harga']);
             $this->session->set_userdata('cek_so', $cek['cek_so']);
             $this->session->set_userdata('cek_sublok', $cek['cek_sublok']);
+            $this->session->set_userdata('cek_limit', $cek['cek_limit']);
+            $this->session->set_userdata('cek_price', $cek['cek_price']);
             $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
             $this->session->set_userdata('sess_ceksaw', $cek['cek_saw']);
         }
@@ -410,6 +414,7 @@ class Userappsmodel extends CI_Model
         $this->session->set_userdata('cek_so', $cek['cek_so']);
         $this->session->set_userdata('cek_sublok', $cek['cek_sublok']);
         $this->session->set_userdata('cek_limit', $cek['cek_limit']);
+        $this->session->set_userdata('cek_price', $cek['cek_price']);
         $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
         $this->session->set_userdata('sess_ceksaw', $cek['cek_saw']);
         return 1;
