@@ -78,8 +78,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
         </div>
         <div class="row">
           <div class="col-sm-12 mt-1">
-            <div id="table-default" class="table-responsive">
-              <table class="table table-hover display cell-border datatable6 " style="width: 100% !important; border-collapse: collapse;">
+            <div id="table-default">
+              <table class="table table-hover text-nowrap table-bordered" style="width: 100% !important;" id="cobasisipz">
                 <thead style="background-color: blue !important">
                   <tr>
                     <th>No</th>

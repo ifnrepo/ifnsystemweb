@@ -207,18 +207,32 @@ class Out extends CI_Controller {
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function adddata($jn){
+    public function adddata($jn,$dept=''){
         if(($this->session->userdata('deptsekarang')=='' || $this->session->userdata('deptsekarang')==null) && ($this->session->userdata('tujusekarang')=='' || $this->session->userdata('tujusekarang')==null)){
             $this->session->set_flashdata('errorparam',1);
             $url = base_url().'out';
             redirect($url);
         }else{
-            $hasil = $this->out_model->adddata($jn);
-            if($hasil){
-                $url = base_url().'out/dataout/'.$hasil;
-                redirect($url);
+            if($dept==''){
+                $hasil = $this->out_model->adddata($jn);
+                if($hasil){
+                    $url = base_url().'out/dataout/'.$hasil;
+                    redirect($url);
+                }
+            }else{
+                $data['proses'] = $this->out_model->getmasterproses();
+                $this->load->view('out/addprosesbon',$data);
             }
         }
+    }
+    public function adddatasubkon(){
+        $proses = $_POST['kode'];
+        $hasil = $this->out_model->adddatasubkon($proses);
+        // if($hasil){
+        //     $url = base_url().'out/dataout/'.$hasil;
+        //     redirect($url);
+        // }
+        echo $hasil;
     }
     public function tambahdataout(){
         $arrgo = [
@@ -323,6 +337,149 @@ class Out extends CI_Controller {
     public function addbarangout(){
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
         $this->load->view('out/addbarangout',$data);
+    }
+    public function adddatabarangout($kode){
+        $header['header'] = 'transaksi';
+        $data['data'] = $this->out_model->getdatabyid($kode)->row_array();
+        $data['satuan'] = $this->satuanmodel->getdata()->result_array();
+        $data['detail'] = $this->out_model->getdatatempdetailout($kode);
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'out';
+		$this->load->view('layouts/header',$header);
+		$this->load->view('out/dataouttemp',$data);
+		$this->load->view('layouts/footer',$footer);
+    }
+    public function cekdatabarang(){
+        $po = $_POST['po'];
+        $item = $_POST['no'];
+        $idb = $_POST['idb'];
+        $spek = $_POST['spek'];
+        $jmbarang = 0;
+        $idrek = 0;
+        $stat = 'ERROR';
+        $mode = '';
+        if($idb!=''){
+            $mode = 'brg';
+            $cari = $this->out_model->caridatabarang('brg',$idb);
+            if($cari->num_rows() > 0){
+                foreach($cari->result_array() as $cr){
+                    $jmbarang++;
+                    $idrek = $cr['id'];
+                }
+            }
+        }else{
+            if($po!=''){
+                $mode = 'po';
+                $cari = $this->out_model->caridatabarang('po',$po,$item);
+                if($cari->num_rows() > 0){
+                    foreach($cari->result_array() as $cr){
+                        $jmbarang++;
+                        $idrek = urlencode($cr['po'].$cr['item'].$cr['dis']);
+                    }
+                }
+            }
+        }
+        $data = array('status' => $stat,'mode' => $mode,'idrek' => $idrek,'jml' => $jmbarang);
+        echo json_encode($data);
+    }
+    public function getdatabarangbyid($mode,$id){
+        $data = $this->out_model->getdatabarangbyid($mode,$id)->row_array();
+        echo json_encode($data);
+    }
+    public function simpanbarangoutketemp(){
+        $data = [
+            'id_header' => $_POST['idhead'],
+            'po' => $_POST['po'],
+            'item' => $_POST['item'],
+            'dis' => $_POST['dis'],
+            'id_barang' => $_POST['idb'],
+            'insno' => trim($_POST['insno']).trim($_POST['insnosel']),
+            'nobontr' => $_POST['nobontr'],
+            'pcs' => toAngka($_POST['pcs']),
+            'kgs' => toAngka($_POST['kgs'])
+        ];
+        $data = $this->out_model->simpanbarangoutketemp($data);
+        echo $data;
+    }
+    public function cekdatabarangdobel($mode,$kode,$item='',$dis=''){
+        if($mode=='brg'){
+            $data['mode'] = $mode;
+            $data['data'] = $this->out_model->caridatabarang($mode,$kode);
+        }else{
+            if($mode=='po'){
+                $data['mode'] = $mode;
+                $data['data'] = $this->out_model->caridatapo($mode,$kode,$item,$dis);
+            }
+        }
+        $this->load->view('out/getbarangout',$data);
+    }
+    public function getdatadetailtemp(){
+        $kode = $_POST['id'];
+        $html = '';
+        $data = $this->out_model->getdatatempdetailout($kode);  
+        if($data->num_rows() > 0){
+            $jmpcs=0;$jmkgs=0;
+            foreach($data->result_array() as $dt){
+                $spek = trim($dt['po'])!='' ? spekpo($dt['po'],$dt['item'],$dt['dis']) : namaspekbarang($dt['id_barang']);
+                $ins = trim($dt['insno'])=='' ? '' : ' Ins. '.trim($dt['insno']); 
+                $ib = trim($dt['nobontr'])=='' ? '' : ' IB. '.trim($dt['nobontr']);
+                $html .= '<tr class="font-kecil">';
+                $html .= '<td class="line-11">'.$spek.'<br><span class="text-pink">'.$ins.$ib.'</span></td>';
+                $html .= '<td>'.formatsku($dt['po'],$dt['item'],$dt['dis'],$dt['id_barang']).'</td>';
+                $html .= '<td class="text-right">'.rupiah($dt['pcs'],0).'</td>';
+                $html .= '<td class="text-right">'.rupiah($dt['kgs'],2).'</td>';
+                $html .= '<td class="text-center">';
+                $html .= '<a href="#" class="btn btn-sm btn-info btn-flat m-0" style="padding: 0px 2px !important;"><i class="fa fa-pencil mr-1"></i>Edit</a>';
+                $html .= '<a href="#" data-href="'.base_url().'out/hapusbarangtemp/'.$dt['id'].'/'.$kode.'" class="btn btn-sm btn-danger btn-flat m-0" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data ini"><i class="fa fa-trash-o mr-1"></i>Hapus</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+                $jmpcs += $dt['pcs'];
+                $jmkgs += $dt['kgs'];
+            }
+            $html .= '<tr class="font-kecil bg-primary-lt">';
+            $html .= '<td colspan="2" class="text-right font-bold text-black">TOTAL</td>';
+            $html .= '<td class="text-right font-bold text-black">'.rupiah($jmpcs,0).'</td>';
+            $html .= '<td class="text-right font-bold text-black">'.rupiah($jmkgs,2).'</td>';
+            $html .= '<td></td>';
+            $html .= '</tr>';
+        }else{
+            $html .= '<tr class="font-kecil">';
+            $html .= '<td colspan="5" class="text-center">-- Data Kosong --</td>';
+            $html .= '</tr>';
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function hapusbarangtemp($id,$head){
+        $data = $this->out_model->hapusbarangtemp($id);
+        if($data){
+            $url = base_url().'out/adddatabarangout/'.$head;
+            redirect($url);
+        }
+    }
+    public function caridatainsno(){
+        $idpo = $_POST['id'];
+        $data = $this->out_model->caridatainsno($idpo);
+        $html = '<option value="">-- Pilih Insno --</option>';
+        foreach($data->result_array() as $dt){
+            $html .= '<option value="'.$dt['insno'].'">'.$dt['insno'].'</option>';
+        }
+        $cocok = array('datagroup' => $html);
+        echo json_encode($cocok);
+    }
+    public function resetbarangtemp($id){
+        $data = $this->out_model->resetbarangtemp($id);
+        if($data){
+            $url = base_url().'out/adddatabarangout/'.$id;
+            redirect($url);
+        }
+    }
+    public function addbarangtemp($id){
+        $data = $this->out_model->addbarangtemp($id);
+        if($data){
+            $url = base_url().'out/dataout/'.$id;
+            redirect($url);
+        }
     }
     public function simpanout($id){
         $data = [

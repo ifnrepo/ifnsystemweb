@@ -280,8 +280,13 @@ class Out_model extends CI_Model{
             $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,17,3)) AS maxkode FROM tb_header 
             WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
         }else{
-            $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,14,3)) AS maxkode FROM tb_header 
-            WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
+            if(in_array($asal,daftardeptsubkon()) || in_array($tuju,daftardeptsubkon())){
+                $hasil = $this->db->query("SELECT MAX(SUBSTR(TRIM(nomor_dok),-3)) AS maxkode FROM tb_header 
+                WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND substr(nomor_dok,1,2) = '".$asal."' AND SUBSTR(nomor_dok,4,2) = '".$tuju."' ")->row_array();
+            }else{
+                $hasil = $this->db->query("SELECT MAX(SUBSTR(nomor_dok,14,3)) AS maxkode FROM tb_header 
+                WHERE kode_dok = 'T' AND MONTH(tgl)='".$bl."' AND YEAR(tgl)='".$th."' AND dept_id = '".$asal."' AND dept_tuju = '".$tuju."' ")->row_array();
+            }
         }
         return $hasil;
     }
@@ -297,6 +302,28 @@ class Out_model extends CI_Model{
             'nomor_dok' => $nomordok,
             'tgl' => $date,
             'jn_bbl' => $jn
+        ];
+        $this->db->insert('tb_header',$tambah);
+        $idheader = $this->db->insert_id();
+        $this->helpermodel->isilog($this->db->last_query());
+        $this->db->trans_complete();
+        return $idheader;
+    }
+    public function adddatasubkon($proses){
+        $this->db->trans_start();
+        $date = $this->session->userdata('th').'-'.$this->session->userdata('blout').'-'.date('d');
+        $nomordok = nomorout($date,$this->session->userdata('deptsekarang'),$this->session->userdata('tujusekarang'));
+        $proseso = str_replace(' ','',str_replace(',','',$proses));
+        $nomordoku = substr($nomordok,0,8).$proseso.'/'.substr($nomordok,8,15);
+        $tambah = [
+            'id_perusahaan' => IDPERUSAHAAN,
+            'kode_dok' => 'T',
+            'dept_id' => $this->session->userdata('deptsekarang'),
+            'dept_tuju' => $this->session->userdata('tujusekarang'),
+            'nomor_dok' => $nomordoku,
+            'tgl' => $date,
+            'jn_bbl' => 0,
+            'ketprc' => $proses
         ];
         $this->db->insert('tb_header',$tambah);
         $idheader = $this->db->insert_id();
@@ -385,6 +412,165 @@ class Out_model extends CI_Model{
         // $this->db->order_by('c.nama_barang','asc');
         return $this->db->get();
     }
+    public function getdatatempdetailout($data){
+        $nofilt = "and f.dis=a.dis";
+        // if($this->session->userdata('deptsekarang')=='GF' && $this->session->userdata('tujusekarang')=='CU'){
+        //     $nofilt = '';
+        // }
+        // $ini = $this->session->flashdata('barangerror')=='' ? "''" : $this->session->flashdata('barangerror');
+        $ini = 7184;
+        $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id,e.nomor_dok as nodok,f.spek,g.engklp");
+        $this->db->select($ini.' as baer');
+        $this->db->from('tb_detail_temp a');
+        $this->db->join('satuan b','b.id = a.id_satuan','left');
+        $this->db->join('barang c','c.id = a.id_barang','left');
+        $this->db->join('tb_detail_temp d','a.id = d.id_out','left');
+        $this->db->join('tb_header e','e.id = d.id_header','left');
+        $this->db->join('tb_po f','f.po = a.po and f.item = a.item '.$nofilt,'left');
+        $this->db->join('tb_klppo g','g.id = f.klppo','left');
+        $this->db->where('a.id_header'.$this->session->flashdata('barangerror'),$data);
+        $this->db->order_by('a.id','asc');
+        // $this->db->group_by('po,item,dis,id_barang')
+        // $this->db->order_by('c.nama_barang','asc');
+        return $this->db->get();
+    }
+    public function caridatabarang($mode,$id,$item=''){
+        if($mode=='brg'){
+            $this->db->like('kode',$id);
+            return $this->db->get('barang');
+        }else{
+            if($mode=='po'){
+                $this->db->where('trim(po)',trim($id));
+                if($item!=''){
+                    $this->db->where('trim(item)',trim($item));
+                }
+                return $this->db->get('tb_po');
+            }
+        }
+    }
+    public function caridatapo($mode,$po,$item,$dis){
+        $this->db->order_by('po');
+        $this->db->order_by('item');
+        $this->db->order_by('dis');
+        if($po!='' && $item!='' && $dis!=''){
+            return $this->db->get_where('tb_po',['trim(po)' => trim($po),'trim(item)' => trim($item),'dis' => $dis]);
+        }else{
+            if($po!='' && $item!=''){
+                return $this->db->get_where('tb_po',['trim(po)' => trim($po),'trim(item)' => trim($item)]);
+            }else{
+                return $this->db->get_where('tb_po',['trim(po)' => trim($po)]);
+            }
+        }
+    }
+    public function getdatabarangbyid($mode,$id){
+        if($mode=='brg'){
+            return $this->db->get_where('barang',['id' => $id]);
+        }else{
+            if($mode=='po'){
+                $this->db->select('*');
+                $this->db->select("IF(TRIM(po)!='',CONCAT(TRIM(po),'#',TRIM(item),IF(dis > 0,CONCAT(' dis ',dis),'')),'') AS sku");
+                $this->db->from('tb_po');
+                $this->db->where('ind_po',urldecode($id));
+                return $this->db->get();
+            }
+        }
+    }
+    public function simpanbarangoutketemp($data){
+        $this->db->trans_start();
+        $idbombarang = 0;
+        $cekdln = $this->db->get_where('barang',['id' => $data['id_barang']]);
+        $cekbombarang = $this->db->get_where('bom_barang',['id_barang' => $data['id_barang']]);
+        if($cekdln->num_rows() > 0){
+            $dln = $cekdln->row_array();
+            $data['dln'] = $dln['dln'];
+            $idbombarang = $dln['id'];
+        }else{
+            $data['dln'] = 0;
+        }
+        $this->db->insert('tb_detail_temp',$data);
+        $iddetail = $this->db->insert_id();
+        if($cekbombarang->num_rows() > 0){
+            foreach($cekbombarang->result_array() as $cekbom){
+                $cekbom['id_header'] = $data['id_header'];
+                $cekbom['id_detail'] = $iddetail;
+                $cekbom['id_barang'] = $cekbom['id_barang_bom'];
+                $cekbom['kgs'] = round($data['kgs']*($cekbom['persen']/100),2);
+                unset($cekbom['id_barang_bom']);
+                unset($cekbom['id']);
+                $this->db->insert('tb_detailgen_temp',$cekbom);
+            }
+        }else{
+            $data['id_detail'] = $iddetail;
+            unset($data['id']);
+            $this->db->insert('tb_detailgen_temp',$data);
+        }
+        return $this->db->trans_complete();
+    }
+    public function hapusbarangtemp($id){
+        $this->db->trans_start();
+
+        $this->db->where('id',$id);
+        $this->db->delete('tb_detail_temp');
+
+        $this->db->where('id_detail',$id);
+        $this->db->delete('tb_detailgen_temp');
+
+        return $this->db->trans_complete();
+    }
+    public function caridatainsno($id){
+        return $this->db->get_where('tb_netinstr',['id_po' => $id]);
+    }
+    public function resetbarangtemp($id){
+        $this->db->trans_start();
+
+        $this->db->delete('tb_detailgen_temp',['id_header' => $id]);
+        $this->db->delete('tb_detail_temp',['id_header' => $id]);
+
+        return $this->db->trans_complete();
+    }
+    public function addbarangtemp($id){
+        $this->db->trans_start();
+
+        $seri = 0;
+        $data = $this->db->get_where('tb_detail_temp',['id_header' => $id]);
+        foreach($data->result_array() as $dt){
+            $seri++;
+            $iddet = $dt['id'];
+            unset($dt['id']);
+            $dt['id_header'] = $id;
+            $dt['seri_barang'] = $seri;
+            $this->db->insert('tb_detail',$dt);
+            $detid = $this->db->insert_id();
+            $datadet = $this->db->get_where('tb_detailgen_temp',['id_detail' => $iddet]);
+            foreach($datadet->result_array() as $det){
+                unset($det['id']);
+                $det['seri_barang'] = $seri;
+                $det['id_detail'] = $detid;
+                $det['id_header'] = $id;
+                $this->db->insert('tb_detailgen',$det);
+            }
+        }
+
+        $this->db->delete('tb_detailgen_temp',['id_header' => $id]);
+        $this->db->delete('tb_detail_temp',['id_header' => $id]);
+
+        // Perbaiki seri_barang
+        $seri = 0;
+        $data = $this->db->order_by('id')->get_where('tb_detail',['id_header' => $id]);
+        foreach($data->result_array() as $dt){
+            $seri++;
+            $this->db->where('id', $dt['id']);
+            $this->db->update('tb_detail',['seri_barang' => $seri]);
+            $datadet = $this->db->get_where('tb_detailgen',['id_detail' => $dt['id']]);
+            foreach($datadet->result_array() as $det){
+                $this->db->where('id', $det['id']);
+                $this->db->update('tb_detailgen',['seri_barang' => $seri]);
+            }
+        }
+        // End Perbaiki seri_barang
+
+        return $this->db->trans_complete();
+    }
     public function getdatadetailoutbyid($data){
         $this->db->select("a.*,b.namasatuan,b.kodesatuan,c.kode,c.nama_barang,c.kode as brg_id");
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
@@ -456,7 +642,11 @@ class Out_model extends CI_Model{
                 $this->db->where('id_header',$id);
                 $this->db->delete('tb_detailgen');
                 $this->db->where('id_header',$id);
+                $this->db->delete('tb_detailgen_temp');
+                $this->db->where('id_header',$id);
                 $this->db->delete('tb_detail');
+                $this->db->where('id_header',$id);
+                $this->db->delete('tb_detail_temp');
             }
             $this->db->where('id_keluar',$id);
             $this->db->update('tb_header',['id_keluar' => 0]);
@@ -1140,8 +1330,13 @@ class Out_model extends CI_Model{
         $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
         $exnombc = "";
         if(in_array($header['dept_id'],daftardeptsubkon())){
-            $exnomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($header['keterangan']),'jns_bc' => 261,'trim(keterangan) != ' => '','dept_id' => $header['dept_tuju'],'dept_tuju' => $header['dept_id']])->row_array();
-            $exnombc = trim($exnomorbc['nomor_bc']);
+            $exnomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($header['keterangan']),'jns_bc' => 261,'trim(keterangan) != ' => '','dept_id' => $header['dept_tuju'],'dept_tuju' => $header['dept_id']]);
+            if($exnomorbc->num_rows() > 0){
+                $exnomorbchasil = $exnomorbc->row_array();
+                $exnombc = trim($exnomorbchasil['nomor_bc']);
+            }else{
+                $exnombc = '';
+            }
         }
         $periode = tambahnol($this->session->userdata('blout')).$this->session->userdata('thout');
         $this->db->select('tb_detailgen.*,sum(pcs) as totpcs,sum(kgs) as totkgs,barang.nama_barang,satuan.kodesatuan as kode,"'.$exnombc.'" as nomor_bc,0 as kgsstok,0 as pcsstok,tb_header.dept_id,tb_header.dept_tuju,tb_header.nomor_bc as nomor_bcx');
@@ -1212,5 +1407,8 @@ class Out_model extends CI_Model{
 
         $this->db->where('id',$idlama);
         return $this->db->update('tb_detailgen_temp',$ubah);
+    }
+    public function getmasterproses(){
+        return $this->db->order_by('ket')->get_where('tb_proses',['jenis' => 1]);
     }
 }

@@ -91,7 +91,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <?php if($data['jn_bbl']==1){ ?>
                       <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>
                     <?php }else{ ?>
-                      <a href="<?= base_url().'out/addbarangout'; ?>" class="btn btn-sm btn-success p-0" data-bs-toggle="modal" data-bs-target="#modal-largescroll2" data-title="Add Detail Barang">Input Barang</a>
+                      <a href="<?= base_url().'out/addbarangout'; ?>" class="btn btn-sm btn-success p-0 hilang" data-bs-toggle="modal" data-bs-target="#modal-largescroll2" data-title="Add Detail Barang">Input Barang Lama</a>
+                      <a href="<?= base_url().'out/adddatabarangout/'.$data['id']; ?>" class="btn btn-sm btn-success p-0">Input Barang</a>
                     <?php } ?>
                   </div>
                 </div>
