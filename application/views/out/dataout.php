@@ -165,8 +165,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <?php else: if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']==''){ ?>
                         <td class="text-primary"><a class="text-info" href="<?= base_url().'out/addnobontr/'.$que['id'].'/'.$que['id_barang'] ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Pilih Data Nobontr">Pilih Nobontr</a></td>
                       <?php } endif; ?>
-                      <?php if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && trim($que['insno'])!=''): ?>
-                        <td class="text-primary font-kecil"><?= $que['insno'] ?></td>
+                      <?php if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && (trim($que['insno'])!='' || trim($que['nobontr'])!='') ): ?>
+                        <td class="text-primary font-kecil"><?= $que['insno'].$que['nobontr'] ?></td>
                       <?php else: if(in_array($this->session->userdata('deptsekarang'),$deptinsno) && trim($que['insno'])==''){ ?>
                         <td class="text-primary"><a class="text-danger" href="<?= base_url().'out/addinsno/'.$que['id'].'/'.$modecari.'/'.$kodecari ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Pilih Data insno">Pilih Insno</a></td>
                       <?php } endif; ?>

@@ -29,7 +29,17 @@ class bckeluarmodel extends CI_Model
         $this->db->where("TRIM(nomor_bc) !=", '');
 
         if ($jnsbc != 'Y') {
-            $this->db->where("jns_bc", $jnsbc);
+            if($jnsbc=='301'){
+                $this->db->where("jns_bc", 30);
+                $this->db->where("pjt", 0);
+            }else{
+                if($jnsbc=='302'){
+                $this->db->where("jns_bc", 30);
+                $this->db->where("pjt", 1);
+                }else{
+                    $this->db->where("jns_bc", $jnsbc);
+                }
+            }
         } else {
             $this->db->where_in("jns_bc", [25, 30, 261, 41]);
         }
@@ -150,6 +160,7 @@ class bckeluarmodel extends CI_Model
         $jnsbc = $this->session->userdata('jnsbc');
 
         $this->db->select('tb_detail.*, tb_header.*, barang.nama_barang, barang.nama_alias, barang.kode, satuan.kodesatuan, supplier.nama_supplier, customer.nama_customer, ref_mt_uang.mt_uang as xmtuang, dept.departemen');
+        $this->db->select('(select sum(tb_bombc.cif) as cifusd from tb_bombc where id_header = tb_header.id and seri_barang = tb_detail.seri_barang) as cifusd');
         if ($jnsbc == '261') {
             $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
             $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');

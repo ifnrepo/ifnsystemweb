@@ -22,7 +22,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-body">
                 <div class="row mb-1 d-flex align-items-between">
                     <div class="col-sm-6">
-
                     </div>
                     <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
                         <a href="#" class="btn btn-sm btn-primary" id="setperiode">SET</a>

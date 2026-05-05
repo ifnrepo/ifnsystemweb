@@ -414,7 +414,11 @@ class inv_model extends CI_Model
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
         $kolom .= " left join kategori on kategori.kategori_id = left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4)";
         if($this->session->userdata('currdept') != 'GS'){
-            $kolom .= " where (jns <= 2 OR id_barang IN (".$arrbarangexcludejenis.")) ";
+            if(in_array($this->session->userdata('currdept'),daftardeptsubkon())){
+                $kolom .= " where (jns <= 2 OR id_barang IN (".$arrbarangexcludejenis.")) ";
+            }else{
+                $kolom .= " where (jns <= 2 ) ";
+            }
         }
         if($this->session->userdata('currdept') == 'GF' && $exdo != 'all'){
             $kolom .= " AND exdo = '".$exdo."' ";
@@ -1146,6 +1150,8 @@ class inv_model extends CI_Model
                         $isidata = [
                             'kgs_awal' => $det['sumkgs'],
                             'pcs_awal' => $det['sumpcs'],
+                            'kgs_akhir' => $det['sumkgs']+$existdata['kgs_masuk']+$existdata['kgs_adj']-$existdata['kgs_keluar'],
+                            'pcs_akhir' => $det['sumpcs']+$existdata['pcs_masuk']+$existdata['pcs_adj']-$existdata['pcs_keluar'],
                         ];
                         $this->db->where('id',$existdata['id']);
                         $this->db->update('stokdept',$isidata);
@@ -1183,10 +1189,6 @@ class inv_model extends CI_Model
                     }
                 }
             }
-
-            $this->db->where('periode',cekperiodedaritgl($tglawal,1));
-            $this->db->where('dept_id',$this->session->userdata('currdept'));
-            $this->db->update('stokdept',['pcs_akhir' => '(pcs_awal+pcs_masuk+pcs_adj)-pcs_keluar','kgs_akhir' => '(kgs_awal+kgs_masuk+kgs_adj)-kgs_keluar']);
 
             $lockinv = [
                 'dept_id' => $this->session->userdata('currdept'),

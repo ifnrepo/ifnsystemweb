@@ -239,7 +239,12 @@ class Bckeluar extends CI_Controller
         $sheet->mergeCells('L6:L7')->setCellValue('L6', 'Jumlah');
         $sheet->mergeCells('M6:M7')->setCellValue('M6', 'Kgs');
         $sheet->mergeCells('N6:N7')->setCellValue('N6', 'Nilai Barang (IDR)');
-        $sheet->mergeCells('O6:O7')->setCellValue('O6', 'Nilai Barang (USD)');
+        if($this->session->userdata('jnsbc')=='25'){
+            $sheet->mergeCells('O6:O7')->setCellValue('O6', 'CIF Barang (USD)');
+            $sheet->mergeCells('P6:P7')->setCellValue('P6', 'CIF Barang (IDR)');           
+        }else{
+            $sheet->mergeCells('O6:O7')->setCellValue('O6', 'Nilai Barang (USD)');
+        }
         $sheet->setCellValue('D7', 'Nomor');
         $sheet->setCellValue('E7', 'Tanggal');
         $sheet->setCellValue('F7', 'Nomor');
@@ -261,8 +266,10 @@ class Bckeluar extends CI_Controller
         $sheet->getColumnDimension('M')->setWidth(10);
         $sheet->getColumnDimension('N')->setWidth(12);
         $sheet->getColumnDimension('O')->setWidth(12);
+        $sheet->getColumnDimension('P')->setWidth(12);
 
-        $sheet->getStyle('B6:O7')->applyFromArray([
+        $plu = $this->session->userdata('jnsbc')=='25' ? 'P7' : 'O7';
+        $sheet->getStyle('B6:'.$plu)->applyFromArray([
             'font' => ['bold' => true],
             'alignment' => [
                 'horizontal' => \PhpOffice\PhpSpreadsheet\Style\Alignment::HORIZONTAL_CENTER,
@@ -297,7 +304,7 @@ class Bckeluar extends CI_Controller
                 }
             }
 
-            $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs'];
+            $nilaiqty = $data['pcs'] != 0 ? $data['pcs'] : ($data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs']);
 
             if ($data['nomor_bc'] == $ceknomor_bc) {
                 $sheet->setCellValue('B' . $numrow, '');
@@ -313,22 +320,25 @@ class Bckeluar extends CI_Controller
             }
 
             $kurs_data = getkurssekarang($data['tgl_aju'])->row();
-            $kurs_usd = (empty($data['kurs_usd']) || $data['kurs_usd'] == 0)
-                ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
-                : $data['kurs_usd'];
+            // $kurs_usd = (empty($data['kurs_usd']) || $data['kurs_usd'] == 0)
+            //     ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
+            //     : $data['kurs_usd'];
 
-            $kurs_yen = (empty($data['kurs_yen']) || $data['kurs_yen'] == 0)
-                ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
-                : $data['kurs_yen'];
+            // $kurs_yen = (empty($data['kurs_yen']) || $data['kurs_yen'] == 0)
+            //     ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
+            //     : $data['kurs_yen'];
+
+            $kurs_usd = ($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0;
+            $kurs_yen = ($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0;
 
 
             if ($data['mtuang'] == 1) {
                 $harga_idr = $data['harga'];
                 $harga_usd = $data['harga'] / $kurs_usd;
-            } elseif ($data['mtuang'] == 2) {
-                $harga_usd = $data['harga'];
+            } else if($data['mtuang'] == 2) {
                 $harga_idr = $data['harga'] * $kurs_usd;
-            } elseif ($data['mtuang'] == 3) {
+                $harga_usd = $data['harga'];
+            } else if($data['mtuang'] == 3) {
                 $harga_idr = $data['harga'] * $kurs_yen;
                 $harga_usd = ($data['harga'] * $kurs_yen) / $kurs_usd;
             }
@@ -341,10 +351,12 @@ class Bckeluar extends CI_Controller
             $jmspdiskon   = round($jmspdiskon, 2);
             $jmcashdiskon = round($jmcashdiskon, 2);
 
-            $subtotal_idr = round(
-                $harga_idr - $jmspdiskon - $jmcashdiskon,
-                2
-            );
+            if($data['jns_bc']==41 && $data['bc_makloon']==1){
+                $variabelkali = $data['kgs']/$data['netto'];
+                $subtotal_idr = round($data['nilai_pab']*$variabelkali,2);
+            }else{
+                $subtotal_idr = round($harga_idr - $jmspdiskon - $jmcashdiskon,2);
+            }
             $subtotal_usd = round($subtotal_idr / $kurs_usd, 2);
 
 
@@ -360,13 +372,19 @@ class Bckeluar extends CI_Controller
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
             $sheet->setCellValue('M' . $numrow, $data['kgs']);
             $sheet->setCellValue('N' . $numrow, round($subtotal_idr, 2));
-            $sheet->setCellValue('O' . $numrow, round($subtotal_usd, 2));
+            // $sheet->setCellValue('O' . $numrow, round($subtotal_usd, 2));
+            if($data['jns_bc']==25){
+                $sheet->setCellValue('O' . $numrow, round($data['cifusd'], 2));
+                $sheet->setCellValue('P' . $numrow, round($data['cifusd']*$kurs_usd, 2));
+            }else if($data['jns_bc']==30){
+                $sheet->setCellValue('O' . $numrow, round($data['harga'], 2));
+            }
 
             $ceknomor_bc = $data['nomor_bc'];
             $numrow++;
         }
-
-        $sheet->getStyle('B8:O' . ($numrow - 1))->applyFromArray([
+        $pli = $this->session->userdata('jnsbc')=='25' ? 'P' : 'O';
+        $sheet->getStyle('B8:' .$pli.($numrow - 1))->applyFromArray([
             'borders' => [
                 'allBorders' => [
                     'borderStyle' => \PhpOffice\PhpSpreadsheet\Style\Border::BORDER_THIN,

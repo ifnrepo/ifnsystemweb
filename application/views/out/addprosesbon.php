@@ -86,14 +86,15 @@
     $("#simpanproses").click(function(){
         var isiproses = '';
         var spasi = " ";
-        for(let i=0;i < 100;i++){
+        for(let i=0;i <= 100;i++){
             var btn = $("#cekbok"+i).is(':checked');
             if(btn){
-                var len = $("#cekbok"+i).attr('rel').length;
-                if(i=1){
+                var len = $("#cekbok"+i).attr('rel').trim().length;
+                if(i==1){
                     isiproses += $("#cekbok"+i).attr('rel')+',';
                 }else{
                     isiproses += $("#cekbok"+i).attr('rel').substring(0,3)+spasi.repeat(3-len)+',';
+                    // isiproses += $("#cekbok"+i).attr('rel')+',';
                 }
             }
         }

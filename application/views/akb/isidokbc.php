@@ -417,6 +417,15 @@
                                         </div>
                                     </div>
                                     <hr class="m-0">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $hilangbc41; ?>">
+                                        <label class="col-3 col-form-label font-kecil mx-2">PJT/Courier/LCL</label>
+                                        <div class="col font-kecil">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="pjt" id="pjt" <?= $selectnonaktif; ?>>
+                                                <option value="1" <?php if($datheader['pjt']==1){ echo "selected"; } ?>>Ya</option>
+                                                <option value="0" <?php if($datheader['pjt']==0){ echo "selected"; } ?>>Tidak</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="mb-1 mt-1 row">
                                         <label class="col-3 col-form-label font-kecil mx-2">Angkutan</label>
                                         <div class="col font-kecil">

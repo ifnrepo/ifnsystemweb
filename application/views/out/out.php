@@ -211,6 +211,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <span class="text-teal font-kecil line-12">Tunggu Verifikasi <b>IN</b> <?= $inoleh; ?></span>
                         <br>
                         <span><a href="#" data-href="<?= base_url().'out/batalkanout/'.$datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Dokumen <?= $datdet['nomor_dok'] ?> akan dibatalkan">Edit Data</a></span>
+                        <span class="text-danger"><a href="<?= base_url() . 'out/cetakbon/' . $datdet['id'] ?>" class="text-danger" target='_blank'>Print Dok</a></span>
                     <?php }}} ?>
                   </td>
                 </tr>

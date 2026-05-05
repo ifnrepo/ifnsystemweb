@@ -427,6 +427,16 @@
                                             <input type="text" class="form-control font-kecil btn-flat" id="nomor_kontainer" name="nomor_kontainer" value="<?= $datheader['nomor_kontainer']; ?>" aria-describedby="emailHelp" placeholder="Nomor Kontainer" <?= $nonaktif; ?>>
                                         </div> -->
                                     </div>
+                                    <hr class="m-0 <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                    <div class="mb-1 mt-1 row <?= $hilangbc40; ?> <?= $hilangbc262; ?>">
+                                        <label class="col-3 col-form-label font-kecil">PJT/Courier/LCL</label>
+                                        <div class="col font-kecil">
+                                            <select class="form-select font-kecil font-bold btn-flat" name="pjt" id="pjt" <?= $selectnonaktif; ?>>
+                                                <option value="1" <?php if($datheader['pjt']==1){ echo "selected"; } ?>>Ya</option>
+                                                <option value="0" <?php if($datheader['pjt']==0){ echo "selected"; } ?>>Tidak</option>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="mb-1 mt-1 row">
                                         <label class="col-3 col-form-label font-kecil">Angkutan</label>
                                         <div class="col font-kecil">

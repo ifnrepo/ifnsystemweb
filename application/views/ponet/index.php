@@ -40,7 +40,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <img src="<?= base_url().'assets\image\delivered-stamp.png' ?>" alt="Stempel Closed" class="m-0" style="width:45%; height:auto;">
                             </div>
                         </div>
-                        <hr class="m-1">
+                        <hr class="m-1">    
                         <div style="position: relative;" class="mb-0">
                             <div class="font-kecil text-secondary d-flex justify-content-between">
                                 <?php $hikiai = $data['stat_po']==1 ? 'PO' : ($data['stat_po']==2 ? 'HIKIAI' : ($data['stat_po']==3 ? 'KARI PO' : ($data['stat_po']==4 ? 'MIKOMI' : 'TEST'))) ?>
@@ -134,7 +134,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </thead>
                             <tbody class="table-tbody">
                                 <tr>
-                                    <td class="font-kecil">Nilai Pcs</td>
+                                    <td class="font-kecil">Nilai <?= ucwords(strtolower($data['st_piece'])) ?></td>
                                     <td class="font-bold text-black font-kecil" style="background-color: #fad5d5;"><?= $data['mtuang'].' '.rupiah($data['nilaipcs'],2) ?></td>
                                 </tr>
                                 <tr>
@@ -189,7 +189,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                 <div class="row">
                                                                     <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-yellow-lt"><span class="text-black">Buyer</span></label>
                                                                     <div class="col">
-                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= $data['nama_customer'] ?>" aria-describedby="emailHelp" placeholder="Buyer" readonly>
+                                                                        <?php $port = trim($data['port'])!='' ? ' - '.trim($data['port']) : ''; $customer = trim($data['nama_customer']).$port; ?>
+                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= $customer ?>" aria-describedby="emailHelp" placeholder="Buyer" readonly>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
@@ -431,6 +432,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     </li>
                                                     <li class="nav-item">
                                                         <a href="#tabs-deliv" class="nav-link line-11" style="background-color: #E2EFDA" data-bs-toggle="tab"><span>DELIVERY INFO</span></a>
+                                                    </li>
+                                                    <li class="nav-item">
+                                                        <a href="#tabs-info-ppic" class="nav-link line-11" style="background-color: #f7e6fa" data-bs-toggle="tab"><span>PPIC NOTES</span></a>
                                                     </li>
                                                 </ul>
                                             <hr class="m-0 mb-1">
@@ -747,12 +751,604 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                         </div>
                                                     </div>
                                                 </div>
+                                                <div class="tab-pane" id="tabs-info-ppic">
+                                                    <div class="row">
+                                                        <div class="card">
+                                                            <div class="card-body p-1">
+                                                                <div class="col-12 bg-">
+                                                                    <div class="row">
+                                                                        <label class="col-2 col-form-label form-control-sm font-kecil font-bold"><span class="text-black">Keterangan</span></label>
+                                                                        <div class="col">
+                                                                            <textarea name="ppic_notes" id="ppic_notes" class="form-control form-control-sm font-kecil btn-flat" rows="4"><?= $data['ppic_notes'] ?></textarea>
+                                                                            <div class="mt-1 d-flex justify-content-between">
+                                                                                <div class="font-kecil" id="datafile">
+                                                                                    <?php if(trim($data['file_name'])=='' || $data['file_name']==null){ ?>
+                                                                                        <span class="text-secondary">
+                                                                                            <i>Tidak ada file terlampir</i>
+                                                                                        </span>
+                                                                                    <?php }else{ ?>
+                                                                                        <?php foreach(json_decode($data['file_name']) as $fl => $finame): ?>
+                                                                                            <a href="<?= base_url().'assets/file/dokpo/'.trim($finame) ?>" target="_blank" title="Klik untuk melihat">
+                                                                                                <span class="text-blue">
+                                                                                                    <i><?= $finame ?></i>
+                                                                                                </span>
+                                                                                            </a><br>
+                                                                                        <?php endforeach; ?>
+                                                                                    <?php } ?>
+                                                                                </div>
+                                                                                <a href="<?= base_url().'ponet/isinotes/'.$data['id'] ?>" class="btn btn-sm btn-primary <?php if($this->session->userdata('cek_notes')==0){ echo "hilang"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit PPIC Notes">
+                                                                                    <span>Edit PPIC Notes</span>
+                                                                                </a>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="tab-pane" id="tabs-produksi-7">
-                                        <h4>Produksi Tab</h4>
-                                        <div>Under construction</div>
+                                        <div class="h4 text-center"><u>Production Summary</u></div>
+                                        <ul class="steps steps-counter steps-vertical">
+                                            <li class="step-item steps-orange">
+                                                <div class="h5 m-0">Netting</div>
+                                                <div class="text-secondary mt-1">
+                                                    <div class="card">
+                                                        <div class="card-body p-1 font-kecil">
+                                                            <!-- Under Construction !!  -->
+                                                            <div id="prod-netting">
+                                                                <span class="load-netting">
+                                                                    <!-- Loading Data, Mohon tunggu ! -->
+                                                                    <div class="card">
+                                                                        <div class="card-body placeholder-glow">
+                                                                            <div class="placeholder col-9"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                            <div class="placeholder placeholder-xs col-8"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                                <div class="row">
+                                                                    <div class="col-3 hilang" id="kolom-prod-netting-1">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-netting-1">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-netting-2">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-netting-2">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-netting-3">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-netting-3">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-netting-4">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-netting-4">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="hilang" id="sum-prod-netting">
+                                                                    <table class="table table-bordered m-0 table-hover mt-1">
+                                                                        <thead class="bg-primary-lt">
+                                                                            <tr>
+                                                                                <th class="text-center text-black" style="width: 10%;">Achievement</th>
+                                                                                <th class="text-center text-black" style="border-bottom: 1px soild #eaeaea !important;">Summary Total</th>
+                                                                                <th class="text-center text-black">Pcs</th>
+                                                                                <th class="text-center text-black">Kgs</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody class="table-tbody" id="detail-sum-prod-netting">
+                                                                            <tr>
+                                                                                <td class="text-right font-bold">XX</td>
+                                                                                <td class="text-right font-bold">Total XX Instruksi</td>
+                                                                                <td class="text-right">XX Pcs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="step-item steps-yellow">
+                                                <div class="h5 m-0">Senshoku</div>
+                                                <div class="text-secondary mt-1">
+                                                    <div class="card">
+                                                        <div class="card-body p-1 font-kecil">
+                                                            <!-- Under Construction !! -->
+                                                             <div id="prod-senshoku">
+                                                                <span class="load-senshoku">
+                                                                    <!-- Loading Data, Mohon tunggu ! -->
+                                                                    <div class="card">
+                                                                        <div class="card-body placeholder-glow">
+                                                                            <div class="placeholder col-9"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                            <div class="placeholder placeholder-xs col-8"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                                <div class="row">
+                                                                    <div class="col-3 hilang" id="kolom-prod-senshoku-1">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-senshoku-1">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-senshoku-2">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-senshoku-2">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-senshoku-3">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-senshoku-3">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-senshoku-4">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-senshoku-4">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="hilang" id="sum-prod-senshoku">
+                                                                    <table class="table table-bordered m-0 table-hover mt-1">
+                                                                        <thead class="bg-primary-lt">
+                                                                            <tr>
+                                                                                <th class="text-center text-black" style="width: 10%;">Achievement</th>
+                                                                                <th class="text-center text-black" style="border-bottom: 1px soild #eaeaea !important;">Summary Total</th>
+                                                                                <th class="text-center text-black">Pcs</th>
+                                                                                <th class="text-center text-black">Kgs</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody class="table-tbody" id="detail-sum-prod-senshoku">
+                                                                            <tr>
+                                                                                <td class="text-right font-bold">XX</td>
+                                                                                <td class="text-right font-bold">Total XX Instruksi</td>
+                                                                                <td class="text-right">XX Pcs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="step-item steps-lime">
+                                                <div class="h5 m-0">Shitate</div>
+                                                <div class="text-secondary mt-1">
+                                                    <div class="card">
+                                                        <div class="card-body p-1 font-kecil">
+                                                            <!-- Under Construction !! -->
+                                                             <div id="prod-gaichu">
+                                                                <span class="load-gaichu">
+                                                                    <!-- Loading Data, Mohon tunggu ! -->
+                                                                    <div class="card">
+                                                                        <div class="card-body placeholder-glow">
+                                                                            <div class="placeholder col-9"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                            <div class="placeholder placeholder-xs col-8"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                                <div class="row">
+                                                                    <div class="col-3 hilang" id="kolom-prod-gaichu-1">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-gaichu-1">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-gaichu-2">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-gaichu-2">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-gaichu-3">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-gaichu-3">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-gaichu-4">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">Instruksi</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-gaichu-4">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="hilang" id="sum-prod-gaichu">
+                                                                    <table class="table table-bordered m-0 table-hover mt-1">
+                                                                        <thead class="bg-primary-lt">
+                                                                            <tr>
+                                                                                <th class="text-center text-black" style="width: 10%;">Achievement</th>
+                                                                                <th class="text-center text-black" style="border-bottom: 1px soild #eaeaea !important;">Summary Total</th>
+                                                                                <th class="text-center text-black">Pcs</th>
+                                                                                <th class="text-center text-black">Kgs</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody class="table-tbody" id="detail-sum-prod-gaichu">
+                                                                            <tr>
+                                                                                <td class="text-right font-bold">XX</td>
+                                                                                <td class="text-right font-bold">Total XX Instruksi</td>
+                                                                                <td class="text-right">XX Pcs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="step-item steps-green">
+                                                <div class="h5 m-0">Finishing-Ready Goods</div>
+                                                <div class="text-secondary mt-1">
+                                                    <div class="card">
+                                                        <div class="card-body p-1 font-kecil">
+                                                            <!-- Under Construction !! -->
+                                                             <div id="prod-finishing">
+                                                                <span class="load-finishing">
+                                                                    <!-- Loading Data, Mohon tunggu ! -->
+                                                                    <div class="card">
+                                                                        <div class="card-body placeholder-glow">
+                                                                            <div class="placeholder col-9"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                            <div class="placeholder placeholder-xs col-8"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                                <div class="row">
+                                                                    <div class="col-3 hilang" id="kolom-prod-finishing-1">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">No Bale</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-finishing-1">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-finishing-2">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">No Bale</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-finishing-2">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-finishing-3">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">No Bale</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-finishing-3">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-finishing-4">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">No Bale</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-finishing-4">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="hilang" id="sum-prod-finishing">
+                                                                    <table class="table table-bordered m-0 table-hover mt-1">
+                                                                        <thead class="bg-primary-lt">
+                                                                            <tr>
+                                                                                <th class="text-center text-black" style="width: 10%;">Achievement</th>
+                                                                                <th class="text-center text-black" style="border-bottom: 1px soild #eaeaea !important;">Summary Total</th>
+                                                                                <th class="text-center text-black">Pcs</th>
+                                                                                <th class="text-center text-black">Kgs</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody class="table-tbody" id="detail-sum-prod-finishing">
+                                                                            <tr>
+                                                                                <td class="text-right font-bold">XX</td>
+                                                                                <td class="text-right font-bold">Total XX Instruksi</td>
+                                                                                <td class="text-right">XX Pcs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="step-item steps-teal">
+                                                <div class="h5 m-0">Finished Goods</div>
+                                                <div class="text-secondary mt-1">
+                                                    <div class="card">
+                                                        <div class="card-body p-1 font-kecil">
+                                                            <!-- Under Construction !! -->
+                                                             <div id="prod-fingoods">
+                                                                <span class="load-fingoods">
+                                                                    <!-- Loading Data, Mohon tunggu ! -->
+                                                                    <div class="card">
+                                                                        <div class="card-body placeholder-glow">
+                                                                            <div class="placeholder col-9"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                            <div class="placeholder placeholder-xs col-8"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                                <div class="row">
+                                                                    <div class="col-3 hilang" id="kolom-prod-fingoods-1">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">No Bale</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-fingoods-1">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-fingoods-2">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">No Bale</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-fingoods-2">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-fingoods-3">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">No Bale</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-fingoods-3">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                    <div class="col-3 hilang" id="kolom-prod-fingoods-4">
+                                                                        <table class="table table-bordered m-0 table-hover mt-1">
+                                                                            <thead class="bg-primary-lt">
+                                                                                <tr>
+                                                                                    <th class="text-center text-black">No Bale</th>
+                                                                                    <th class="text-center text-black">Pcs</th>
+                                                                                    <th class="text-center text-black">Kgs</th>
+                                                                                </tr>
+                                                                            </thead>
+                                                                            <tbody class="table-tbody" id="detail-prod-fingoods-4">
+                                                                                
+                                                                            </tbody>
+                                                                        </table>
+                                                                    </div>
+                                                                </div>
+                                                                <div class="hilang" id="sum-prod-fingoods">
+                                                                    <table class="table table-bordered m-0 table-hover mt-1">
+                                                                        <thead class="bg-primary-lt">
+                                                                            <tr>
+                                                                                <th class="text-center text-black" style="width: 10%;">Achievement</th>
+                                                                                <th class="text-center text-black" style="border-bottom: 1px soild #eaeaea !important;">Summary Total</th>
+                                                                                <th class="text-center text-black">Pcs</th>
+                                                                                <th class="text-center text-black">Kgs</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody class="table-tbody" id="detail-sum-prod-fingoods">
+                                                                            <tr>
+                                                                                <td class="text-right font-bold">XX</td>
+                                                                                <td class="text-right font-bold">Total XX Instruksi</td>
+                                                                                <td class="text-right">XX Pcs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </li>
+                                            <li class="step-item steps-cyan">
+                                                <div class="h5 m-0">Shipped</div>
+                                                <div class="text-secondary mt-1">
+                                                    <div class="card">
+                                                        <div class="card-body p-1 font-kecil">
+                                                            <!-- Under Construction !! -->
+                                                             <div id="prod-shipped">
+                                                                <span class="load-shipped">
+                                                                    <!-- Loading Data, Mohon tunggu ! -->
+                                                                    <div class="card">
+                                                                        <div class="card-body placeholder-glow">
+                                                                            <div class="placeholder col-9"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                            <div class="placeholder placeholder-xs col-8"></div>
+                                                                            <div class="placeholder placeholder-xs col-10"></div>
+                                                                        </div>
+                                                                    </div>
+                                                                </span>
+                                                                <div class="hilang" id="sum-prod-shipped">
+                                                                    <table class="table table-bordered m-0 table-hover mt-1">
+                                                                        <thead class="bg-primary-lt">
+                                                                            <tr>
+                                                                                <th class="text-center text-black">No</th>
+                                                                                <th class="text-center text-black">Tgl</th>
+                                                                                <th class="text-center text-black">Nomor PL</th>
+                                                                                <th class="text-center text-black">Tujuan</th>
+                                                                                <th class="text-center text-black">Negara</th>
+                                                                                <th class="text-center text-black">Pcs</th>
+                                                                                <th class="text-center text-black">Kgs</th>
+                                                                                <th class="text-center text-black">Keterangan</th>
+                                                                            </tr>
+                                                                        </thead>
+                                                                        <tbody class="table-tbody" id="detail-sum-prod-shipped">
+                                                                            <tr>
+                                                                                <td class="text-center">XX</td>
+                                                                                <td class="text-right">Total XX Instruksi</td>
+                                                                                <td class="text-right">XX Pcs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                                <td class="text-right">XX Kgs</td>
+                                                                            </tr>
+                                                                        </tbody>
+                                                                    </table>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div></li>
+                                        </ul>
                                     </div>
                                     <div class="tab-pane" id="tabs-activity-7">
                                         <h4>Activity tab</h4>

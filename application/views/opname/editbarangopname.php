@@ -129,7 +129,9 @@
                 // alert(data.jmlrek);
                 // var lokasi = base_url+'out/editdetailgenout/'+$("#id_detail").val()+'/'+$("#id_header").val()+'/1';
                 // window.location.replace(lokasi);
-                window.location.reload();
+                // window.location.reload();
+                $('#modal-large').modal('hide');
+                $("#buttoncari").click();
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

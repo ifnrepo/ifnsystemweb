@@ -152,7 +152,7 @@ class Bcmasuk extends CI_Controller
         foreach ($bcmasuk->result_array() as $data) {
 
             $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
-            $nilaiqty = $data['kodesatuan'] == 'KGS' ? 0 : $data['pcs_total'];
+            $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs_total'] : $data['pcs_total'];
             $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
 
             if ($data['nomor_bc'] == $ceknomor_bc) {
@@ -182,27 +182,36 @@ class Bcmasuk extends CI_Controller
                 : $data['kurs_yen'];
 
             if ($data['mtuang'] == 1) {
-                $harga_idr = $data['harga']+$data['additional'];
-                $harga_usd = ($data['harga']+$data['additional']) / $kurs_usd;
+                $harga_idr = round($data['harga']+$data['additional'],2);
+                $harga_usd = round(($data['harga']+$data['additional']) / $kurs_usd,2);
+                $kursbarang = $kurs_usd;
             } elseif ($data['mtuang'] == 2) {
                 $harga_usd = $data['harga']+$data['additional'];
                 $harga_idr = ($data['harga']+$data['additional']) * $kurs_usd;
+                $kursbarang = $kurs_usd;
             } elseif ($data['mtuang'] == 3) {
                 $harga_idr = ($data['harga']+$data['additional']) * $kurs_yen;
                 $harga_usd = (($data['harga']+$data['additional']) * $kurs_yen) / $kurs_usd;
+                $kursbarang = $kurs_yen;
             }
 
             $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs_total'] : $data['pcs_total'];
-
+            $subtotal_usd = 0;
             if ($data['jns_bc'] == 262) {
-                // $subtotal_idr = $data['exbc_ndpbm'] * $data['exbc_cif'];
-                // $subtotal_usd = $subtotal_idr / $kurs_usd;
-                $pembagi = (float) $data['in_pcs_exbc']==0 ? 1 : (float) $data['in_pcs_exbc'];
-                $subtotal_usd = ($data['exbc_cif']/$pembagi)*$data['kgs_total'];
-                $subtotal_idr = $subtotal_usd*$data['exbc_ndpbm'];
+                $subtotal_idr = $data['exbc_cif']*$data['exbc_ndpbm'];
+                $subtotal_usd = $data['exbc_cif'];
+                // $idrperkilo = $data['nilai_pab']/$data['netto'];
+                // $pembagi = (float) $data['in_pcs_exbc']==0 ? 1 : (float) $data['in_pcs_exbc'];
+                // $subtotal_usd = ($data['exbc_cif']/$pembagi)*$data['kgs_total'];
+                // // $subtotal_idr = round($subtotal_usd,2)*$data['exbc_ndpbm'];
+                // $subtotal_idr = 0;
+                // if($subtotal_usd > 0){
+                //     $subtotal_idr = $data['exbc_ndpbm']*$subtotal_usd;
+                // }
             } else {
-                $subtotal_idr = $harga_idr * $pengali;
-                $subtotal_usd = $harga_usd * $pengali;
+                $subtotal_usd = round($harga_usd * $pengali,2);
+                // $subtotal_idr = $harga_idr * $pengali;
+                $subtotal_idr = $subtotal_usd * $kursbarang;
             };
 
 

@@ -38,7 +38,8 @@
             data: {
                 id: $("#id_header").val(),
                 tgl: $("#tgl").val(), 
-                ket: $("#catatan").val()
+                ket: $("#catatan").val(),
+                nombc: ''
             },
             success: function(data){
                 // alert('berhasil');

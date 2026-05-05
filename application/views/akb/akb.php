@@ -177,10 +177,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 }
                 $nomorbc = $datdet['tanpa_bc'] == 1 ? 'Tanpa BC' : 'XX';
                 $isibc = $nomorbc == 'XX' ? 'AJU. ' . $datdet['nomor_aju'] . '<br>BC. ' . $datdet['nomor_bc'] : $nomorbc;
+                $pjt = $datdet['pjt']==1 ? '<i class="fa fa-plane text-danger" aria-hidden="true"></i>' : '';
               ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
-                  <td class='font-bold'><a href="<?= base_url() . 'akb/viewdetail/' . $datdet['id'] . $tmb; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail OUT (AJU Keluar Barang)"><?= $datdet['nomor_dok'] ?></a></td>
+                  <td class='font-bold'><a href="<?= base_url() . 'akb/viewdetail/' . $datdet['id'] . $tmb; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail OUT (AJU Keluar Barang)"><?= $datdet['nomor_dok'].$pjt ?></a></td>
                   <td><?= $namasup ?></td>
                   <?php if ($this->session->userdata('deptdari') == 'FG') { ?>
                     <td class="text-teal"><?= $datdet['keterangan'] ?></td>

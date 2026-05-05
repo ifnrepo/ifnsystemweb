@@ -326,6 +326,9 @@ $("#currdept").change(function () {
 	}
 });
 
+$("#ifndln").change(function(){
+	$("#updateinv").click();
+})
 $("#updateinv").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();

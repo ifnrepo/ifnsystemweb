@@ -29,7 +29,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                   } ?>>All</option>
                 <option value="23" <?php if ($this->session->userdata('jnsbc') == '23') {
                                       echo "selected";
-                                    } ?>>BC 2.3</option>
+                                    } ?>>BC 2.3 (Semua)</option>
+                <option value="231" <?php if ($this->session->userdata('jnsbc') == '231') {
+                                      echo "selected";
+                                    } ?>>BC 2.3 NON PJT</option>
+                <option value="232" <?php if ($this->session->userdata('jnsbc') == '232') {
+                                      echo "selected";
+                                    } ?>>BC 2.3 PJT</option>
                 <option value="262" <?php if ($this->session->userdata('jnsbc') == '262') {
                                       echo "selected";
                                     } ?>>BC 2.6.2</option>
