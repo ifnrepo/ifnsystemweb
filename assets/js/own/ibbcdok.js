@@ -204,6 +204,9 @@ $("#tgl_aju").change(function () {
 		savedata("tgl_aju", tglmysql($(this).val()));
 	}
 });
+$("#pjt").change(function () {
+	savedata("pjt", $(this).val());
+});
 $("#jns_angkutan").change(function () {
 	savedata("jns_angkutan", $(this).val());
 });

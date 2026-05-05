@@ -35,7 +35,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     } ?>>BC 2.6.1</option>
                 <option value="30" <?php if ($this->session->userdata('jnsbc') == '30') {
                                       echo "selected";
-                                    } ?>>BC 3.0</option>
+                                    } ?>>BC 3.0 (Semua)</option>
+                <option value="301" <?php if ($this->session->userdata('jnsbc') == '301') {
+                                      echo "selected";
+                                    } ?>>BC 3.0 NON PJT</option>
+                <option value="302" <?php if ($this->session->userdata('jnsbc') == '302') {
+                                      echo "selected";
+                                    } ?>>BC 3.0 PJT</option>
                 <option value="41" <?php if ($this->session->userdata('jnsbc') == '41') {
                                       echo "selected";
                                     } ?>>BC 4.1</option>
@@ -124,9 +130,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                   $pengali = $detail['mtuang'] == 2 ? $kurs_usd : ($detail['mtuang'] == 3 ? $kurs_yen : 1);
 
-                  $kondisi_idr = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
-                    ? $detail['nilai_serah']
-                    : $pengali * $detail['nilai_pab'];
+                  if($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41){
+                    if($detail['jns_bc']==41 && $detail['bc_makloon']==1){
+                      $kondisi_idr = $detail['nilai_pab'];
+                    }else{
+                      $kondisi_idr = $detail['nilai_serah'];
+                    }
+                  }else{
+                    $kondisi_idr = $pengali * $detail['nilai_pab'];
+                  }
+
+                  // $kondisi_idr = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
+                  //   ? $detail['nilai_serah']
+                  //   : $pengali * $detail['nilai_pab'];
 
 
                   $nilai = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)

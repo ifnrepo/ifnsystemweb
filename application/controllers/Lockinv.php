@@ -66,7 +66,7 @@ class Lockinv extends CI_Controller
         redirect($url);
     }
     public function setperiode(){
-        $bl = $_POST['bl']=='all' ? 'all' : ($_POST['bl'] < 9 ? '0'.$_POST['bl'] : $_POST['bl']);
+        $bl = $_POST['bl']=='all' ? 'all' : ($_POST['bl'] < 10 ? '0'.$_POST['bl'] : $_POST['bl']);
         $th = $_POST['th'];
         $this->session->set_userdata('bllock',$bl);
         $this->session->set_userdata('thlock',$th);

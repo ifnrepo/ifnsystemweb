@@ -296,7 +296,8 @@ class Out extends CI_Controller {
         $data = [
             'idstok' => $_POST['id'],
             'insno' => $_POST['bon'],
-            'id' => $_POST['idd']
+            'id' => $_POST['idd'],
+            'nobontr' => $_POST['ibn']
         ];
         $hasil = $this->out_model->editinsno($data);
         echo $hasil;
@@ -854,7 +855,7 @@ class Out extends CI_Controller {
         $scale = $logo_width/$logo_qr_width;
         $logo_qr_height = $logo_height/$scale;
     
-        //posisi logo
+        // //posisi logo
         imagecopyresampled($QR, $logo, $QR_width/2.7, $QR_height/2.7, 0, 0, $logo_qr_width, $logo_qr_height, $logo_width, $logo_height);
     
         imagepng($QR,$filepath);
@@ -893,13 +894,14 @@ class Out extends CI_Controller {
         $pdf->Cell(190,1,'',1,0,'',1);
         $pdf->ln(1);
         $header = $this->out_model->getdatabyid($id)->row_array();
-        $isi = 'Nobon '.$header['nomor_dok']."\r\n".'Dikeluarkan Oleh : '.datauser($header['user_ok'],'name').'@'."\r\n".tglmysql2($header['tgl_ok']);
-        $isi .= "\r\n".'Diterima Oleh : '.datauser($header['user_tuju'],'name').'@'."\r\n".tglmysql2($header['tgl_tuju']);
+        $isi = 'Nobon '.$header['nomor_dok']."\r\n".'Dikeluarkan Oleh : '.datauser($header['user_ok'],'name').'@'.tglmysql2($header['tgl_ok']);
+        $isi .= "\r\n".'Diterima Oleh : '.datauser($header['user_valid'],'name').'@'.tglmysql2($header['tgl_valid']);
         $qr = $this->cetakqr2($isi,$header['id']);
         $pdf->Image($qr.".png",177,30,18);
 		$pdf->SetFont('Lato','',10);
         $pdf->Cell(18,5,'Nomor','L',0);
         $pdf->Cell(2,5,':',0,0);
+		$pdf->SetFont('Latob','',10);
         $pdf->Cell(60,5,$header['nomor_dok'],'R',0);
 		$pdf->SetFont('Lato','',9);
         $pdf->Cell(82,5,'Diperiksa & Disetujui Oleh','RB',0);
@@ -914,7 +916,7 @@ class Out extends CI_Controller {
         $pdf->Cell(28,5,'','R',1);
         $pdf->Cell(18,5,'Tanggal','L',0);
         $pdf->Cell(2,5,':',0,0);
-        $pdf->Cell(60,5,tglmysql($header['tgl']),'R',0);
+        $pdf->Cell(60,5,tgl_indo($header['tgl']),'R',0);
 		$pdf->SetFont('Latob','',9);
         $pdf->Cell(82,5,substr(datauser($header['user_tuju'],'jabatan'),0,20),'R',0);
 		$pdf->SetFont('Lato','',9);
@@ -944,16 +946,18 @@ class Out extends CI_Controller {
         $pdf->Cell(16,4,'Kgs','RB',1,'C');
         $detail = $this->out_model->getdatadetailout($id);
         $no=1;
-        foreach ($detail as $det) {
+        foreach ($detail->result_array() as $det) {
             $jumlah = $det['pcs']==null ? $det['kgs'] : $det['pcs'];
             $pdf->Cell(6,6,$no++,'LRB',0);
-            $pdf->Cell(17,6,'','LRB',0);
+            $pdf->SetFont('Lato','',6.5);
+            $pdf->Cell(17,6,trim($det['nobontr']).trim($det['insno']),'LRB',0);
             $pdf->Cell(7,6,'','LRB',0);
             $pdf->Cell(7,6,'','LRB',0);
+            // $pdf->SetFont('Lato','',6.5);
             $pdf->Cell(80,6,$det['nama_barang'],'LBR',0);
             $pdf->Cell(8,6,'','LRB',0);
             $pdf->Cell(16,6,rupiah($det['pcs'],0),'LRB',0,'R');
-            $pdf->Cell(16,6,rupiah($det['kgs'],0),'LBR',0,'R');
+            $pdf->Cell(16,6,rupiah($det['kgs'],2),'LBR',0,'R');
             $pdf->Cell(33,6,$det['keterangan'],'LBR',1);
         }
         $pdf->ln(2);

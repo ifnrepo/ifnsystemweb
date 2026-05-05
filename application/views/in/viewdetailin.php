@@ -32,7 +32,7 @@
                 <hr class='m-1'>
                 <div class="card card-lg">
                     <div class="card-body p-2">
-                        <table class="table datatable6 table-hover" id="cobasisip">
+                        <table class="table table-hover table-bordered" id="cobasisip">
                             <thead style="background-color: blue !important">
                                 <tr>
                                     <!-- <th>No</th> -->
@@ -67,8 +67,8 @@
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= $val['nobale']; ?></td>
                                         <td class="text-center"><?= $stk ?></td>
-                                        <td><?= rupiah($val['pcs'], 0); ?></td>
-                                        <td><?= rupiah($val['kgs'], 2); ?></td>
+                                        <td class="text-right"><?= rupiah($val['pcs'], 0); ?></td>
+                                        <td class="text-right"><?= rupiah($val['kgs'], 2); ?></td>
                                         <td>
                                             <?php if ($val['verif_oleh'] != null) : ?>
                                                 <i class="fa fa-check text-primary"></i>

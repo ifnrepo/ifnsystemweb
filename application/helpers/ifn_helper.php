@@ -8,6 +8,7 @@ define('LOK_UPLOAD_DOKHAMAT', "./assets/image/dokhamat/");
 define('LOK_UPLOAD_MESIN', "./assets/image/dokmesin/foto/");
 define('LOK_UPLOAD_DOK', "./assets/image/dokmesin/dok/");
 define('LOK_UPLOAD_DOK_BC', "./assets/file/dok/");
+define('LOK_UPLOAD_DOK_PO', "./assets/file/dokpo/");
 define('kodeunik', 'concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');
 define('LOK_UPLOAD_PDFRESPON', "./assets/file/");
 define('PREFIXAJU', 'IFN');

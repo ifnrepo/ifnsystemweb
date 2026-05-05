@@ -19,7 +19,7 @@
               <table class="table datatable6" id="cobasisip">
                 <thead style="background-color: blue !important">
                   <tr>
-                    <th>Ins No</th>
+                    <th>Ins No / Nobontr</th>
                     <th>Pcs</th>
                     <th class="text-right">Kgs</th>
                     <th class="text-center">Pilih</th>
@@ -29,10 +29,10 @@
                     <?php if($data->num_rows() > 0){ ?>
                     <?php foreach ($data->result_array() as $detail) { ?>
                         <tr>
-                            <td><?= $detail['insno']; ?></td>
+                            <td><?= $detail['insno'].$detail['nobontr']; ?></td>
                             <td><?= rupiah($detail['pcs_akhir'],2); ?></td>
                             <td class="text-right"><?= rupiah($detail['kgs_akhir'],2); ?></td>
-                            <td class="text-center"><a href='#' class="bg-success btn btn-sm" rel="<?= $detail['id']; ?>" rel2="<?= $detail['insno']; ?>" title="<?= $detail['id']; ?>" id="pilihnobontr">Pilih</a></td>
+                            <td class="text-center"><a href='#' class="bg-success btn btn-sm" rel="<?= $detail['id']; ?>" rel2="<?= $detail['insno']; ?>" rel3="<?= $detail['nobontr'] ?>" title="<?= $detail['id']; ?>" id="pilihnobontr">Pilih</a></td>
                         </tr>
                     <?php } }else{?>
                         <tr>
@@ -61,6 +61,7 @@
             data: {
                 id: $(this).attr('rel'),
                 bon: $(this).attr('rel2'),
+                ibn: $(this).attr('rel3'),
                 idd: $("#iddetail").val()
             },
             success: function (data) {

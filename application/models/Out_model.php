@@ -335,10 +335,13 @@ class Out_model extends CI_Model{
         $this->db->trans_start();
         $dataheader = $this->db->get_where('tb_header',['id'=>$kode['id']])->row_array();
         $jumlah = count($kode['data']);
+        $seri = 0;
         for($x=0;$x<$jumlah;$x++){
+            $seri++;
             $arrdat = $kode['data'];
             $que = $this->db->get_where('tb_detail',['id'=>$arrdat[$x]])->row_array();
             $que['id_minta'] = $que['id']; 
+            $que['seri_barang'] = $seri;
             unset($que['id']);
             $que['id_header'] = $dataheader['id'];
             $this->db->insert('tb_detail',$que);
@@ -1218,7 +1221,8 @@ class Out_model extends CI_Model{
     public function editinsno($data){
         $update = [
             'id_stokdept' => $data['idstok'],
-            'insno' => $data['insno']
+            'insno' => $data['insno'],
+            'nobontr' => $data['nobontr']
         ];
         $this->db->where('id',$data['id']);
         $hasil = $this->db->update('tb_detail',$update);

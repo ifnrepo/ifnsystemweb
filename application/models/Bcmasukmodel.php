@@ -26,16 +26,26 @@ class Bcmasukmodel extends CI_Model
         $this->db->where("tgl_bc between '" . tglmysql($tglawal) . "' AND '" . tglmysql($tglakhir) . "' ");
         $this->db->where('trim(nomor_bc) !=', '');
         if ($jnsbc != 'Y') {
-            $this->db->where("jns_bc", $jnsbc);
-            if($jnsbc==23){
-                $this->db->where('ok_valid',1);
+            if($jnsbc=='231'){
+                $this->db->where("jns_bc", 23);
+                $this->db->where("pjt", 0);
+            }else{
+                if($jnsbc=='232'){
+                    $this->db->where("jns_bc", 23);
+                    $this->db->where("pjt", 1);
+                }else{
+                    $this->db->where("jns_bc", $jnsbc);
+                }
             }
+            // if($jnsbc==23 || $jnsbc==231 || $jnsbc==232){
+            //     $this->db->where('data_ok',1);
+            // }
         } else {
             $this->db->group_start();
                 $this->db->where_in("jns_bc", [262, 40]);
                 $this->db->or_group_start();
                     $this->db->where("jns_bc", 23);
-                    $this->db->where("ok_valid", 1);
+                    // $this->db->where("data_ok", 1);
                 $this->db->group_end();
             $this->db->group_end();
         }
@@ -117,7 +127,18 @@ class Bcmasukmodel extends CI_Model
         $this->db->where('trim(tb_header.nomor_bc) !=', '');
 
         if ($jnsbc != 'Y') {
-            $this->db->where('tb_header.jns_bc', $jnsbc);
+            // $this->db->where('tb_header.jns_bc', $jnsbc);
+            if($jnsbc=='231'){
+                $this->db->where("jns_bc", 23);
+                $this->db->where("pjt", 0);
+            }else{
+                if($jnsbc=='232'){
+                    $this->db->where("jns_bc", 23);
+                    $this->db->where("pjt", 1);
+                }else{
+                    $this->db->where("jns_bc", $jnsbc);
+                }
+            }
         } else {
             $this->db->where_in('tb_header.jns_bc', [23, 262, 40]);
         }
