@@ -137,6 +137,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <th>Insno</th>
                             <th>Nobontr</th>
                             <th>Nobale</th>
+                            <th>Exnet</th>
                             <th class="text-center">Qty</th>
                             <th class="text-center">Kgs</th>
                             <th>Ket</th>

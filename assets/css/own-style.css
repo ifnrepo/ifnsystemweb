@@ -492,3 +492,8 @@
 .separator:not(:empty)::after {
   margin-left: .25em;
 }
+
+#dropdown-avatar > .dropdown-item:hover {
+  color: rgb(255, 255, 255) !important;
+  background-color: #0054A6;
+}

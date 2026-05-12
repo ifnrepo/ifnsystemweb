@@ -37,7 +37,7 @@
                         <span>
                             <?php $hilang = ($datheader['send_ceisa'] == 0 || trim($datheader['nomor_bc']) != '') ? "hilang" : ""; ?>
                             <?php $hilang2 = $datheader['send_ceisa'] == 1 ? "hilang" : ""; ?>
-                            <?php $hilang3 = $datheader['nomor_sppb'] == '' ? "hilang" : ""; ?>
+                            <?php $hilang3 = $datheader['nomor_bc'] == '' ? "hilang" : ""; ?> 
                             <?php $nonaktif = $datheader['send_ceisa'] == 1 ? "readonly" : ""; ?>
                             <?php $hilangbc23 = $datheader['jns_bc'] == 23 ? "hilang" : ""; ?>
                             <?php $hilangbc40 = $datheader['jns_bc'] == 40 ? "hilang" : ""; ?>
@@ -45,7 +45,7 @@
                             <?php $selectnonaktif = $datheader['send_ceisa'] == 1 ? "disabled" : ""; ?>
                             <a href="<?= base_url() . 'ib/ceisa40excel/' . $datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url() . 'ib/getresponhost/' . $datheader['id']; ?>" style="border-right: 1px solid white;" id="responh2h" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow text-black <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url() . 'ib/getresponpdf/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF SPPB</a><a id="kirimkeceisax" href="<?= base_url() . 'ib/getdokbc/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET DOK BC</a>
                             <!-- <a href="<?= base_url() . 'ib/hosttohost/' . $datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
-                            <?php if ($datheader['send_ceisa'] == 0 || $datheader['nomor_sppb'] == '') { ?>
+                            <?php if ($datheader['send_ceisa'] == 0 || $datheader['nomor_bc'] == '') { ?>
                                 <a class="btn btn-sm btn-primary" style="color: white;" id="simpanhakbc">Verifikasi Data</a>
                             <?php } else { ?>
                                 <a class="btn btn-sm btn-yellow" href="<?= base_url() . 'ib/uploaddok/' . $datheader['id']; ?>" style="color: white;" id="uploaddok" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Upload Dokumen"><i class="fa fa-file-o mr-1"></i> Upload Dokumen</a>

@@ -85,7 +85,7 @@ $(document).ready(function(){
 					var spek = row.po.trim() == '' ? row.nama_barang : row.spek ;
 					var idbrg = row.id_barang == null ? 0 : row.id_barang;
 					var ide = 'OME-'+encodeURIComponent(gantislash(row.po.trim()))+'-'+encodeURIComponent(gantislash(row.item.trim()))+'-'+row.dis+'-'+idbrg+'-'+encodeURIComponent(gantislash(row.nobontr.trim()))+'-'+encodeURIComponent(gantislash(row.insno.trim()))+'-'+encodeURIComponent(gantislash(row.nobale.trim()))+'-'+encodeURIComponent(row.nomor_bc.trim())+'-'+row.deptt;
-					return "<span class='hilang'>"+spek+"</span><span class='text-pink font-11'>"+sku+"</span>"+"<br><a href='#' title='View Detail'>"+spek.trim()+"</a>";
+					return "<span class='hilang'>"+spek.trim()+"</span><span class='text-pink font-11'>"+sku.trim()+"</span>"+"<br><a href='#' title='View Detail'>"+spek.trim()+"</a>";
 				}
 			},
 			{ "data": "stok",
@@ -105,6 +105,14 @@ $(document).ready(function(){
 			},
 			{ "data": "nobale",
 				"className": "line-11 font-kecil"
+			},
+			{ "data": "exnet",
+				"className": "line-11 text-center",
+				"render": function(data, type, row, meta){
+					// return rupiah(data,'.',',',2);
+					var exnet = row.exnet==1 ? '<i class="fa fa-check text-success"></i>' : '';
+					return exnet;
+				}
 			},
 			{ "data": "pcs",
 				"className" : "text-right line-12",
@@ -132,7 +140,7 @@ $(document).ready(function(){
 					var spek = row.po.trim() == '' ? row.nama_barang : row.spek ;
 					var idbrg = row.id_barang == null ? 0 : row.id_barang;
 					var ide = 'OME-'+encodeURIComponent(gantislash(row.po.trim()))+'-'+encodeURIComponent(gantislash(row.item.trim()))+'-'+row.dis+'-'+idbrg+'-'+encodeURIComponent(gantislash(row.nobale.trim()))+'-'+row.dept_id;
-					return '<a href="'+base_url+"opname/editrekapopname/"+row.id+'" class="btn btn-sm btn-success mr-1" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a><a href="#" data-href="'+base_url+"opname/hapusrekapopname/"+row.id+'" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data '+spek+' ('+sku+')" style="padding:0 3px !important">Hapus</a>';
+					return '<a href="'+base_url+"opname/editrekapopname/"+row.id+'" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a><a href="#" data-href="'+base_url+"opname/hapusrekapopname/"+row.id+'" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data '+spek.trim()+' ('+sku.trim()+')" style="padding:0 3px !important">Hapus</a>';
 				}
 			},
 		],

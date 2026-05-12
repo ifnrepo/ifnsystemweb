@@ -105,6 +105,8 @@ class Bcmasukmodel extends CI_Model
         dept.departemen,
         tb_rekanan.nama_rekanan,tb_rekanan.alamat_rekanan,tb_rekanan.npwp as npwp_rekanan
          ');
+        $this->db->select('SUM(tb_detail.kgs) OVER(PARTITION BY tb_detail.id_header) AS kgs_perdok');
+        $this->db->select('SUM(tb_detail.pcs) OVER(PARTITION BY tb_detail.id_header) AS pcs_perdok');
 
         if ($jnsbc == '262') {
             $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');

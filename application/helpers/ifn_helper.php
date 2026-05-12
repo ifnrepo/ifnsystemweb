@@ -140,10 +140,14 @@ function nomorpo()
     $urut++;
     return "PO/" . $jnpo . $bl . $thp . "/" . sprintf("%03s", $urut);
 }
-function nomorib()
+function nomorib($xtgl='')
 {
     $CI = &get_instance();
-    $tgl = $CI->session->userdata('thin') . '-' . kodebulan($CI->session->userdata('blin')) . '-01';
+    if($xtgl==''){
+        $tgl = $CI->session->userdata('thin') . '-' . kodebulan($CI->session->userdata('blin')) . '-01';
+    }else{
+        $tgl = $xtgl;
+    }
     $bl = date('m', strtotime($tgl));
     $th = date('Y', strtotime($tgl));
     $thp = date('y', strtotime($tgl));
@@ -582,6 +586,10 @@ function getdevice($str)
         $device = 'APPLE MACINTOSH';
     }
     return $tart . ' on ' . $device;
+}
+function get_public_ip(){
+    $ip = file_get_contents('https://api.ipify.org');
+    return $ip;
 }
 function cekclosebook($bl = 0, $th = 0, $dept = '', $nama = '')
 {
@@ -1341,4 +1349,13 @@ function limitmp($u,$tambah=0){
         $kode = array('EAR','MID','END');
         return $kode[ceil((int) $hari/10)-1].' '.strtoupper($bulan).' '.$tahun;
     }
+}
+function month($tgl){
+    return date('m',strtotime($tgl));
+}
+function year($tgl){
+    return date('Y',strtotime($tgl));
+}
+function getberatshitate($data){
+    return 1000;
 }

@@ -260,20 +260,20 @@ class Inv extends CI_Controller
         $sheet->setCellValue('B3', "KODE BARANG"); // Set kolom B3 dengan tulisan "KODE"    
         $sheet->setCellValue('C3', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
         $sheet->setCellValue('D3', "SATUAN");
-        $sheet->setCellValue('E3', "SALDO AWAL QTY");
-        $sheet->setCellValue('F3', "SALDO AWAL KGS");
-        $sheet->setCellValue('G3', "IN QTY");
-        $sheet->setCellValue('H3', "IN KGS");
-        $sheet->setCellValue('I3', "OUT QTY");
-        $sheet->setCellValue('J3', "OUT KGS");
-        $sheet->setCellValue('K3', "ADJ QTY");
-        $sheet->setCellValue('L3', "ADJ KGS");
-        $sheet->setCellValue('M3', "SALDO AKHIR QTY");
-        $sheet->setCellValue('N3', "SALDO AKHIR KGS");
-        $sheet->setCellValue('O3', "SO QTY");
-        $sheet->setCellValue('P3', "SO KGS");
-        $sheet->setCellValue('Q3', "SELISIH QTY");
-        $sheet->setCellValue('R3', "SELISIH KGS");
+        $sheet->setCellValue('E3', "SAWPCS");
+        $sheet->setCellValue('F3', "SAWKGS");
+        $sheet->setCellValue('G3', "INPCS");
+        $sheet->setCellValue('H3', "INKGS");
+        $sheet->setCellValue('I3', "OUTPCS");
+        $sheet->setCellValue('J3', "OUTKGS");
+        $sheet->setCellValue('K3', "ADJPCS");
+        $sheet->setCellValue('L3', "ADJKGS");
+        $sheet->setCellValue('M3', "SAKPCS");
+        $sheet->setCellValue('N3', "SAKKGS");
+        $sheet->setCellValue('O3', "SOPCS");
+        $sheet->setCellValue('P3', "SOKGS");
+        $sheet->setCellValue('Q3', "SELISIHPCS");
+        $sheet->setCellValue('R3', "SELISIHKGS");
         $sheet->setCellValue('S3', "KETERANGAN");
         $sheet->setCellValue('T3', "NO BALE");
         $sheet->setCellValue('U3', "PO");
@@ -284,6 +284,7 @@ class Inv extends CI_Controller
         $sheet->setCellValue('Z3', "NOBONTR");
         $sheet->setCellValue('AA3', "STOK");
         $sheet->setCellValue('AB3', "NOMOR BC");
+        $sheet->setCellValue('AC3', "DLN");
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->invmodel->toexcel();
@@ -331,6 +332,7 @@ class Inv extends CI_Controller
             $sheet->setCellValue('Z' . $numrow, $data['nobontr']);
             $sheet->setCellValue('AA' . $numrow, $data['stok']);
             $sheet->setCellValue('AB' . $numrow, $data['nomor_bc']);
+            $sheet->setCellValue('AC' . $numrow, $data['sdln']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

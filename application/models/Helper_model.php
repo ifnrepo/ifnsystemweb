@@ -374,6 +374,7 @@ class Helper_model extends CI_Model
     {
         $useragent = $_SERVER['HTTP_USER_AGENT'];
         $dapatkan_ip = get_client_ip();
+        $publicip = get_public_ip();
 
         if ($this->isLocalIP($dapatkan_ip)) {
             $ip = 'Local IP';
@@ -385,7 +386,7 @@ class Helper_model extends CI_Model
             'activitylog' => str_replace('`', '', $isilog),
             'userlog' => datauser($this->session->userdata('id'), 'name'),
             'iduserlog' => $this->session->userdata('id'),
-            'devicelog' => $dapatkan_ip . ' (' . $ip . ') on ' . $useragent,
+            'devicelog' => $dapatkan_ip . ' (' . $ip . ') on ' . $publicip.' '.$useragent,
             'modul' => strtoupper($this->uri->segment(1))
         ];
 
@@ -1279,5 +1280,34 @@ class Helper_model extends CI_Model
             }
         }
         return array('pagi' => $arr_pagi,'siang' => $arr_siang,'malam' => $arr_malam);
+    }
+    public function getberatshitate($data){
+        $item2 = str_replace("-1","-2",$data['item']);
+        $item3 = str_replace("-1","-3",$data['item']);
+
+        $cekitem2 = $this->db->get_where('tb_po',['po' => $data['po'],'trim(item)' => trim($item2)]);
+        $cekitem3 = $this->db->get_where('tb_po',['po' => $data['po'],'trim(item)' => trim($item3)]);
+        $kali = 2;
+        if($cekitem2->num_rows() > 0){
+            $kali = 2;
+        }
+        if($cekitem3->num_rows() > 0){
+            $kali = 1;
+        }
+        if($kali==2){
+            $dataitem2 = $cekitem2->row_array();
+            $beratitem2 = ($dataitem2['jala']+$dataitem2['mimi'])*($data['pcs']*$kali);
+
+            $beratitem = round($beratitem2,2);
+        }else{
+            $dataitem2 = $cekitem2->row_array();
+            $beratitem2 = ($dataitem2['jala']+$dataitem2['mimi'])*($data['pcs']*$kali);
+            $dataitem3 = $cekitem3->row_array();
+            $beratitem3 = ($dataitem3['jala']+$dataitem3['mimi'])*($data['pcs']*$kali);
+
+            $beratitem = round($beratitem2+$beratitem3,2);
+        }
+
+        return $beratitem+$data['kgs'];
     }
 }

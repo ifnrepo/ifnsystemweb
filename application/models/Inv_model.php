@@ -194,6 +194,7 @@ class inv_model extends CI_Model
         $this->db->select('stokdept.user_verif,stokdept.tgl_verif');
         $this->db->select('user.username as username_verif');
         $this->db->select("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') AS skupo");
+        $this->db->select("IF(TRIM(stokdept.po)!='',tb_po.dln,barang.dln) as sdln");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('stokdept.nobale');
         }else{
@@ -234,6 +235,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
         $this->db->select("IF(TRIM(tb_detail.po)!='',CONCAT(TRIM(tb_detail.po),'#',TRIM(tb_detail.item),IF(tb_detail.dis > 0,CONCAT(' dis ',tb_detail.dis),'')),'') AS skupo");
+        $this->db->select("IF(TRIM(tb_detail.po)!='',tb_po.dln,barang.dln) as sdln");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
         }else{
@@ -286,6 +288,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
         $this->db->select("IF(TRIM(tb_detailgen.po)!='',CONCAT(TRIM(tb_detailgen.po),'#',TRIM(tb_detailgen.item),IF(tb_detailgen.dis > 0,CONCAT(' dis ',tb_detailgen.dis),'')),'') AS skupo");
+        $this->db->select("IF(TRIM(tb_detailgen.po)!='',tb_po.dln,barang.dln) as sdln");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detailgen.nobale');
         }else{
@@ -333,6 +336,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
         $this->db->select("IF(TRIM(tb_detail.po)!='',CONCAT(TRIM(tb_detail.po),'#',TRIM(tb_detail.item),IF(tb_detail.dis > 0,CONCAT(' dis ',tb_detail.dis),'')),'') AS skupo");
+        $this->db->select("IF(TRIM(tb_detail.po)!='',tb_po.dln,barang.dln) as sdln");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
         }else{
@@ -379,6 +383,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
         $this->db->select("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') AS skupo");
+        $this->db->select("IF(TRIM(stokopname_detail.po)!='',tb_po.dln,barang.dln) as sdln");
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('stokopname_detail.nobale');
         }else{
@@ -408,7 +413,7 @@ class inv_model extends CI_Model
         $query5 = $this->db->get_compiled_select();
 
         $kolom = " Select *,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldokgs+inkgs-outkgs+adjkgs)) over() as totalkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldopcs+inpcs-outpcs+adjpcs)) over() as totalpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldopcs)) over() as sawalpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldokgs)) over() as sawalkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,inpcs)) over() as totalinpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,outpcs)) over() as totaloutpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,inkgs)) over() as totalinkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,outkgs)) over() as totaloutkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,adjpcs)) over() as totaladjpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,adjkgs)) over() as totaladjkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,pcs_taking)) over() as totalsopcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,kgs_taking)) over() as totalsokgs from (";
-        $kolom .= "Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,skupo ";
+        $kolom .= "Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,trim(xnomor_bc) as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,skupo,sdln ";
         $kolom .= "from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4." union all ".$query5.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
@@ -424,7 +429,7 @@ class inv_model extends CI_Model
             $kolom .= " AND exdo = '".$exdo."' ";
         }
         if($ifndln!='all'){
-            $kolom .= " AND xdln = ".$ifndln;
+            $kolom .= " AND sdln = ".$ifndln;
         }
         $kolom .= " group by po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,stok,exnet order by po,item,dis,nobale,id_barang,insno,nobontr,nomor_bc,stok,exnet) r2";
         $hasil = $this->db->query($kolom);
