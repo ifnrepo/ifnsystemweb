@@ -146,6 +146,24 @@ class In extends CI_Controller {
             redirect($url);
         }
     }
+    public function ceknobon(){
+        $tgl = tglmysql($_POST['tgl']);
+        $id = $_POST['id'];
+        $data['header'] = $this->inmodel->getdatabyid($id);
+        if(month($tgl)==month($data['header']['tgl']) && year($tgl)==year($data['header']['tgl'])){
+            $data['nomorid'] = nomorib();
+        }else{
+            $data['nomorid'] = nomorib($tgl);
+        }
+        echo $data['nomorid'];
+        // $data['tglib'] = $data['header']['tgl'];
+        // if(str_contains($data['header']['nomor_dok'],'PROFORMA')){
+        //     $data['nomorib'] = nomorib();
+        // }else{
+        //     $data['nomorib'] = $data['header']['nomor_dok'];
+        // }
+        // $this->load->view('in/konfirmasinomor',$data);
+    }
     // End In Controller
     public function getdatadetailout(){
         $hasil = '';

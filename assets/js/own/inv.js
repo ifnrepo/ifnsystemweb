@@ -147,8 +147,8 @@ $(document).ready(function () {
 					var pcssaldo = parseFloat(row.saldopcs)+parseFloat(row.inpcs)-parseFloat(row.outpcs)+parseFloat(row.adjpcs);
 					if($("#tglopname").val()!=''){
 						// return 'MOMO';
-						var cekpcs = pcssaldo-pcstaking;
-						var cekkgs = kgssaldo-kgstaking;
+						var cekpcs = pcssaldo.toFixed(2)-pcstaking.toFixed(2);
+						var cekkgs = kgssaldo.toFixed(2)-kgstaking.toFixed(2);
 						var xcekkgs = cekkgs ?? 0;
 						var xcekpcs = cekpcs ?? 0;
 						if(xcekpcs != 0 && xcekkgs != 0){

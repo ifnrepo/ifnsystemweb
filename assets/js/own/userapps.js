@@ -139,3 +139,22 @@ $("#hakprogram4").change(function () {
 		$("#cekeventrahasia").addClass("hilang");
 	}
 });
+
+$("#pilihgambaruser").click(function (e) {
+	e.preventDefault();
+	$("#file").click();
+});
+$("#file").change(function () {
+	$("#file_path").val($(this).val());
+	bacaGambar(this);
+});
+
+function bacaGambar(input) {
+	if (input.files && input.files[0]) {
+		var reader = new FileReader();
+		reader.onload = function (e) {
+			$('#foto').attr('src', e.target.result);
+		}
+		reader.readAsDataURL(input.files[0]);
+	}
+}

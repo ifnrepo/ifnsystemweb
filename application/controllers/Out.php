@@ -258,6 +258,10 @@ class Out extends CI_Controller {
         $data['data'] = $this->out_model->getdatadetailoutbyid($id);
         $this->load->view('out/editdetailout',$data);
     }
+    public function editdetailoutbaru($id){
+        $data['data'] = $this->out_model->getdatadetailoutbyid($id);
+        $this->load->view('out/editdetailoutbaru',$data);
+    }
     public function addnobontr($id,$idbarang){
         $head = $this->out_model->gethead($id)->row_array();
         $periode = date('m',strtotime($head['tgl'])).date('Y',strtotime($head['tgl']));
@@ -311,6 +315,25 @@ class Out extends CI_Controller {
         ];
         $query = $this->out_model->updatedetail($data);
         echo $query;
+    }
+    public function updatedetailbaru(){
+        $data = [
+            'id' => $_POST['id'],
+            'kgs' => $_POST['kgs'],
+            'pcs' => $_POST['pcs'],
+        ];
+        $query = $this->out_model->updatedetailbaru($data);
+        echo $query;
+    }
+    public function getberatshitate(){
+        $data = [
+            'po' => $_POST['po'],
+            'item' => $_POST['item'],
+            'pcs' => $_POST['pcs'],
+            'kgs' => $_POST['kgs'],
+        ];
+        echo $this->helpermodel->getberatshitate($data);
+        // echo getberatshitate($data);
     }
     public function bagi2permintaan(){
         $data = [

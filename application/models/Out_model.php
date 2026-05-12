@@ -598,6 +598,13 @@ class Out_model extends CI_Model{
         $query = $this->db->update('tb_detail',$data);
         return $query;
     }
+    public function updatedetailbaru($data){
+        $id = $data['id'];
+        unset($data['id']);
+        $this->db->where('id',$id);
+        $query = $this->db->update('tb_detail',$data);
+        return $query;
+    }
     public function bagi2permintaan($data){
         $id = $data['id'];
         $isi = [
@@ -720,6 +727,23 @@ class Out_model extends CI_Model{
         $this->session->unset_userdata('barangerror');
         $iniquery = false;
         $this->db->trans_begin();
+        //Pengecekan berat pada detailgen dan detail untuk pengiriman dari Gaichu ke Finishing
+        if($this->session->userdata('deptsekarang')=='FG' && $this->session->userdata('tujusekarang')=='FN'){
+            $this->db->select('SUM(kgs) as kgsdetail,SUM(pcs) as pcsdetail');
+            $this->db->from('tb_detail');
+            $this->db->where('id_header',$id);
+            $sumdetail = $this->db->get()->row_array();
+
+            $this->db->select('SUM(kgs) as kgsdetailgen,SUM(pcs) as pcsdetailgen');
+            $this->db->from('tb_detailgen');
+            $this->db->where('id_header',$id);
+            $sumdetailgen = $this->db->get()->row_array();
+
+            if($sumdetail['kgsdetail']!=$sumdetailgen['kgsdetailgen']){
+                $this->session->set_flashdata('errornya','Berat detail tidak sama, Cek data detail !');
+                return 1;
+            }
+        }
         $datadetail = $this->db->get_where('tb_detailgen',['id_header'=>$id]);
         $no=0;
         if($datadetail->num_rows() > 0){
@@ -1356,7 +1380,7 @@ class Out_model extends CI_Model{
         }else{
             $this->db->group_by('po,item,dis,id_barang,insno,nobontr,dln,nobale,exnet,stok,nomor_bc');
         }
-        $this->db->order_by('po,item,dis,nama_barang,id_barang');
+        $this->db->order_by('po,item,dis,insno,nama_barang,id_barang');
         return $this->db->get();
     }
     public function simpanout2($arr){

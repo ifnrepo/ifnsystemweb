@@ -183,19 +183,20 @@ class Bcmasuk extends CI_Controller
 
             if ($data['mtuang'] == 1) {
                 $harga_idr = round($data['harga']+$data['additional'],2);
-                $harga_usd = round(($data['harga']+$data['additional']) / $kurs_usd,2);
+                $harga_usd = ($data['harga']+$data['additional']) / $kurs_usd;
                 $kursbarang = $kurs_usd;
             } elseif ($data['mtuang'] == 2) {
                 $harga_usd = $data['harga']+$data['additional'];
                 $harga_idr = ($data['harga']+$data['additional']) * $kurs_usd;
                 $kursbarang = $kurs_usd;
             } elseif ($data['mtuang'] == 3) {
-                $harga_idr = ($data['harga']+$data['additional']) * $kurs_yen;
-                $harga_usd = (($data['harga']+$data['additional']) * $kurs_yen) / $kurs_usd;
+                $harga_idr = ($data['harga']+$data['additional'])* $kurs_yen;
+                $harga_usd = ((($data['harga']+$data['additional']) * $kurs_yen) / $kurs_usd);
                 $kursbarang = $kurs_yen;
             }
 
             $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs_total'] : $data['pcs_total'];
+            $pembagi = $data['kodesatuan'] == 'KGS' ? $data['kgs_perdok'] : $data['pcs_perdok'];
             $subtotal_usd = 0;
             if ($data['jns_bc'] == 262) {
                 $subtotal_idr = $data['exbc_cif']*$data['exbc_ndpbm'];
@@ -209,9 +210,19 @@ class Bcmasuk extends CI_Controller
                 //     $subtotal_idr = $data['exbc_ndpbm']*$subtotal_usd;
                 // }
             } else {
-                $subtotal_usd = round($harga_usd * $pengali,2);
-                // $subtotal_idr = $harga_idr * $pengali;
-                $subtotal_idr = $subtotal_usd * $kursbarang;
+                if($data['jns_bc']==40){
+                    $subtotal_idr = round(($harga_idr*$pembagi) * ($pengali/$pembagi),2);
+                    $subtotal_usd = round($harga_usd * $pengali,2);
+                }else{
+                    if($data['jns_bc']==23 && $data['mtuang'] == 3){
+                        $subtotal_idr = $harga_idr * $pengali;
+                        $subtotal_usd = round($harga_usd * $pengali,2);
+                    }else{
+                        $subtotal_usd = round($harga_usd * $pengali,2);
+                        // $subtotal_idr = $harga_idr * $pengali;
+                        $subtotal_idr = $subtotal_usd * $kursbarang;
+                    }
+                }
             };
 
 

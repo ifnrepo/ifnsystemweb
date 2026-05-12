@@ -137,13 +137,14 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                   $jmlkgs += $cekpcskgs['kgs'];
                   $noreke++;
               }
+              $tanpabc = $que['tanpa_bc']==1 ? 'text-info' : '';
               ?>
                 <tr>
                   <td><?= tglmysql($que['tgl']) ?></td>
                   <?php if($que['data_ok']==1){  ?>
-                    <td class="font-bold"><a href="<?= base_url().'in/viewdetailin/'.$que['id'].$insubkn ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail"><?= $que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span>" ?></a></td>
+                    <td class="font-bold"><a class="<?= $tanpabc ?>" href="<?= base_url().'in/viewdetailin/'.$que['id'].$insubkn ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail"><?= $que['nomor_dok'].'<br><span class="font-kecil">'.$que['nodok']."</span>" ?></a></td>
                   <?php }else{ ?>
-                    <td class="font-bold"><?= $que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span>" ?></td>
+                    <td class="font-bold <?= $tanpabc ?>"><?= $que['nomor_dok'].'<br><span class="text-purple" style="font-size: 10px !important">'.$que['nodok']."</span>" ?></td>
                   <?php } ?>
                   <td><?= $jmlrek; ?></td>
                   <td style="line-height: 12px"><?= datauser($que['user_ok'],'name'); ?><br><span style='font-size: 11px;' class='text-secondary'><?= tglmysql2($que['tgl_ok']) ?></span></td>

@@ -602,7 +602,7 @@ function pesan(pesan, jenis) {
 		text: pesan,
 		showHideTransition: "fade", //slide, fade, plain
 		icon: jenis,
-		hideAfter: 4000,
+		hideAfter: 4500,
 		position: "bottom-right",
 		bgColor: bek,
 		textColor: teksColor,

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
   <div class="container-xl">
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
@@ -15,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
   <div class="container-xl">
     <div class="card">
       <div class="card-body">

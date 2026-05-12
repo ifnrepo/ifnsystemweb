@@ -120,12 +120,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                   $kurs_data = getkurssekarang($detail['tgl_aju'])->row();
                   $kurs_usd = (empty($detail['kurs_usd']) || $detail['kurs_usd'] == 0)
-                    ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
+                    ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 1)
                     : $detail['kurs_usd'];
 
                   $kurs_yen = (empty($detail['kurs_yen']) || $detail['kurs_yen'] == 0)
                     ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
                     : $detail['kurs_yen'];
+
+                  
+                  $kurs_usd = $kurs_usd==0 ? 1 : $kurs_usd;
+                  $kurs_yen = $kurs_yen==0 ? 1 : $kurs_yen;
 
 
                   $pengali = $detail['mtuang'] == 2 ? $kurs_usd : ($detail['mtuang'] == 3 ? $kurs_yen : 1);

@@ -36,7 +36,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <input type="text" class="form-control form-control-sm font-kecil btn-flat" id="netto" name="netto" value="<?= tgl_indo($data['tglplan']) ?>" aria-describedby="emailHelp" placeholder="tgl PO" readonly>
                                 </div>
                             </div>
-                            <div class="text-center p-0 <?php if($data['outstand']!=0){ echo "hilang"; } ?>">
+                            <div class="text-center p-0 <?php if($data['outstand']!=0 && $data['dlv']==0){ echo "hilang"; } ?>">
                                 <img src="<?= base_url().'assets\image\delivered-stamp.png' ?>" alt="Stempel Closed" class="m-0" style="width:45%; height:auto;">
                             </div>
                         </div>
@@ -403,12 +403,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <!-- <div class="mb-3">
-                                                    <label class="form-label font-kecil form-control-sm mb-1 pb-0">Keterangan</label>
-                                                    <div class="bg-danger mt-1">
-                                                        <textarea name="remark" id="remark" class="form-control form-control-sm font-kecil btn-flat" rows="3" readonly></textarea>
-                                                    </div>
-                                                </div> -->
+                                                <div class="mt-2 text-center">
+                                                  <a href="<?= base_url().'ponet/netplan/'.$data['id'].'/'.$data['machno'] ?>" class="btn btn-sm btn-info form-control">Netting Planning</a>
+                                                </div>
                                             </div>
                                         </div>
                                         <!-- Tab Baru -->

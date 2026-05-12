@@ -72,6 +72,23 @@ class Userapps extends CI_Controller
 		$this->load->view('userapps/edituserapps', $data);
 		$this->load->view('layouts/footer', $footer);
 	}
+	public function editprofile($id){
+		$header['header'] = 'manajemen';
+		$data['user'] = $this->userappsmodel->getdatabyid(decrypto($id)/121)->row_array();
+		$footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+		$footer['fungsi'] = 'userapps';
+		$this->load->view('layouts/header', $header);
+		$this->load->view('userapps/editprofile',$data);
+		$this->load->view('layouts/footer', $footer);
+	}
+	public function updateprofile(){
+		$hasil = $this->userappsmodel->updateprofile();
+		if($hasil){
+			$kodeuser = $this->session->userdata('id')*121;
+			$uri = base_url().'userapps/editprofile/'.encrypto($kodeuser);
+			redirect($uri);
+		}
+	}
 	public function simpandata()
 	{
 		$query = $this->userappsmodel->simpandata();

@@ -174,7 +174,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <td class="text-primary font-bold"><?= $que['sublok'] ?></td>
                       <?php endif; ?>
                       <td class="text-center">
-                        <a href="<?= base_url().'out/editdetailout/'.$que['id'] ?>" class="btn btn-sm btn-primary" style="padding: 3px 5px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Ubah data Detail">Ubah Qty</a>
+                        <?php if($this->session->userdata('deptsekarang')=='GS'): ?>
+                          <a href="<?= base_url().'out/editdetailout/'.$que['id'] ?>" class="btn btn-sm btn-primary" style="padding: 3px 5px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Ubah data Detail">Ubah Qty</a>
+                        <?php else: ?>
+                          <a href="<?= base_url().'out/editdetailoutbaru/'.$que['id'] ?>" class="btn btn-sm btn-primary" style="padding: 3px 5px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Ubah Pcs Kgs Detail">Edit Qty</a>
+                        <?php endif; ?>
                         <a href="#" data-href="<?= base_url().'out/hapusdetailout/'.$que['id'].'/'.$que['id_header'] ?>" data-message="Akan menghapus data barang <?= $que['nama_barang'] ?>" class="btn btn-sm btn-danger" style="padding: 3px 5px !important;" data-bs-toggle="modal" data-bs-target="#modal-danger" data-title="Ubah data Detail">Hapus</a>
                         <a href="<?= base_url().'out/editdetailgenout/'.$que['id'].'/'.$que['id_header'] ?>" class="btn btn-sm btn-success" style="padding: 3px 5px !important;" title="Ubah data Detailgen">Edit Detail</a>
                       </td>

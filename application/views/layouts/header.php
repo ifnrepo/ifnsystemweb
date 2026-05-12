@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 
-  <link href=<?= base_url() . "assets/css/own-style.css?1764748069" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/own-style.css?1764748073" ?> rel="stylesheet" />
   <style>
     .ui-autocomplete {
       z-index: 99999 !important;
@@ -515,11 +515,6 @@
               <a class="dropdown-item">Status</a>
               <a class="dropdown-item">Profile</a>
               <a href="<?= base_url() . 'userapps/refreshsess/' . $this->session->userdata('id') . '/' . uri_string(); ?>" class="dropdown-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
-                  <path d="M20 4v5h-5" />
-                </svg>
                 Refresh session</a>
               <div class="dropdown-divider"></div>
               <a class="dropdown-item">Settings</a>
@@ -971,25 +966,29 @@
           </div> -->
           <div class="nav-item dropdown">
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-              <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
+              <?php $fotouser = datauser($this->session->userdata('id'),'foto'); ?>
+              <?php 
+                if ($fotouser != null && $fotouser != '') {
+                  $fotonya = base_url().'assets/image/personil/' . $fotouser;
+                } else {
+                  $fotonya = base_url().'assets/image/avatars/005f.jpg';
+              } 
+              ?>
+              <span class="avatar avatar-sm" style="background-image: url(<?= $fotonya; ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
                 <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan') . ' / ' . $this->session->userdata('dept_user'); ?></div>
               </div>
             </a>
-            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
-              <a class="dropdown-item">Status</a>
-              <a class="dropdown-item">Profile</a>
-              <a href="<?= base_url() . 'userapps/refreshsess/' . $this->session->userdata('id') . '/' . uri_string(); ?>" class="dropdown-item">
-                <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-reload text-success mr-1">
-                  <path stroke="none" d="M0 0h24v24H0z" fill="none" />
-                  <path d="M19.933 13.041a8 8 0 1 1 -9.925 -8.788c3.899 -1 7.935 1.007 9.425 4.747" />
-                  <path d="M20 4v5h-5" />
-                </svg>
+            <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow" id="dropdown-avatar">
+              <a class="dropdown-item py-1">Status</a>
+              <?php $kodeuser = $this->session->userdata('id')*121; ?>
+              <a href="<?= base_url().'userapps/editprofile/'.encrypto($kodeuser) ?>" class="dropdown-item py-1" title="Update Profile User">Profile</a>
+              <a href="<?= base_url() . 'userapps/refreshsess/' . $this->session->userdata('id') . '/' . uri_string(); ?>" class="dropdown-item py-1">
                 Refresh session</a>
-              <div class="dropdown-divider"></div>
-              <a class="dropdown-item">Settings</a>
-              <a href="<?= base_url() . 'Auth/logout'; ?>" class="dropdown-item">Logout</a>
+              <div class="dropdown-divider mt-0 mb-0"></div>
+              <!-- <a class="dropdown-item py-1">Settings</a> -->
+              <a href="<?= base_url() . 'Auth/logout'; ?>" class="dropdown-item py-1">Logout</a>
             </div>
           </div>
         </div>

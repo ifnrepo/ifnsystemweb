@@ -12,6 +12,7 @@ class Ponet extends CI_Controller
         }
         $this->load->model('Ponet_model','ponetmodel');
         $this->load->model('Helper_model','helpermodel');
+        $this->load->model('userappsmodel','usermodel');
         $this->load->helper('ifn_helper');
     }
 
@@ -58,6 +59,17 @@ class Ponet extends CI_Controller
         $id = $_POST['id'];
         $hasil = $this->ponetmodel->currentrec($id);
         echo $hasil['idpo'];
+    }
+
+    public function nextrecmesin(){
+        $id = $_POST['id'];
+        $hasil = $this->ponetmodel->nextrecmesin($id);
+        echo $hasil['mach_no'];
+    }
+    public function prevrecmesin(){
+        $id = $_POST['id'];
+        $hasil = $this->ponetmodel->prevrecmesin($id);
+        echo $hasil['mach_no'];
     }
 
     public function caripoid($po)
@@ -112,6 +124,33 @@ class Ponet extends CI_Controller
     {   
         $data['gbr']= trim($gbr)=='' ? '' : urldecode($gbr);
         $this->load->view('ponet/viewfoto',$data);
+    }
+    public function netplan($rekpo=0,$msno=0){
+        $header['header'] = 'other';
+        $data['data'] = $this->ponetmodel->datamesin($msno);
+        $data['maxrek'] = $this->ponetmodel->getmaxminmesin();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'netplan';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('ponet/netplan',$data);
+        $this->load->view('layouts/footer',$footer);
+    }
+    public function getdatainstruksi(){
+        $arrayu = [];
+        $filter_mesin = $_POST['mesin'];
+        // // $filter_exdo = $_POST['exdo'];
+        // $filter_stok = $_POST['stok'];
+        // $filter_buyer = $_POST['buyer'];
+        // $filter_exnet = $_POST['exnet'];
+        // $filter_aneh = $_POST['dataneh'];
+        // $filter_opaneh = $_POST['opaneh'];
+        // $filter_nombc = $_POST['nobc'];
+        // if($filter_kategori!='all'){
+        //     $arrayu['id_kategori'] = $filter_kategori;
+        // }
+        $arrayu['mesin'] = $filter_mesin;
+        $arrayu['filter'] = [];
+        echo $this->ponetmodel->netplan($arrayu);
     }
     public function loadnetting(){
         $id = $_POST['id'];

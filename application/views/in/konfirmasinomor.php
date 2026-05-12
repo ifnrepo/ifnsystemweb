@@ -46,6 +46,28 @@
             todayHighlight: true,
         });
     })
+    $("#tglib").change(function(){
+        // alert($(this).val());
+        $.ajax({
+            // dataType: "json",
+            type: "POST",
+            url: '<?= base_url('in/ceknobon') ?>',
+            data: {
+                id: $("#id_header").val(),
+                tgl: $(this).val(),
+            },
+            success: function(data) {
+                // alert(data);
+                $("#nomorib").val(data);
+                // console.log(data); // Log data yang diterima
+                // location.replace(base_url+'in');
+            },
+            error: function(xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            }
+        });
+    })
     $("#tomboliya").click(function(){
         // var tombolnya = $("nomorib").val();
 

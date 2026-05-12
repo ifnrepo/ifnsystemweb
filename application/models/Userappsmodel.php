@@ -393,6 +393,56 @@ class Userappsmodel extends CI_Model
 
         return $hasil;
     }
+    public function updateprofile(){
+        $data = $_POST;
+        $id = $data['id'];
+        $this->db->where('username',$data['username']);
+        $this->db->where('password',encrypto($data['password']));
+        $this->db->where_not_in('id',$id);
+        $cekuserpass = $this->db->get('user');
+        if($cekuserpass->num_rows() > 0){
+            $this->session->set_flashdata('pesanerror', 'Data tidak bisa disimpan, User+Password tidak valid !');
+            $this->session->set_flashdata('errorsimpan', 1);
+            return 1;
+        }
+
+        $fotodulu = FCPATH . 'assets/image/personil/' . $data['old_foto']; //base_url().$gambar.'.png';
+        $data['foto'] = $this->uploaddok();
+        if ($data['foto'] != 'kosong') {
+            // if ($data['foto'] == 'kosong') {
+            //     if($data['old_foto']==''){
+            //         $data['foto'] = NULL;
+            //     }else{
+            //         $data['foto'] = $data['old_foto'];
+            //     }
+            // }
+
+            if (file_exists($fotodulu)) {
+                unlink($fotodulu);
+            }
+            unset($data['dok']);
+            unset($data['old_logo']);
+            // $query = $this->db->query("update user set foto = '" . $data['foto'] . "' where id = '" . $id . "' ");
+            // if ($query) {
+            //     $this->session->set_flashdata('pesanerror', 'Dokumen Berhasil Diupload');
+            //     $this->session->set_flashdata('errorsimpan', 1);
+            // }
+        }
+        if($data['old_foto']!='' && $data['foto']=='kosong'){
+            $data['foto'] = $data['old_foto'];
+        }
+
+        $data = [
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'telp' => $data['telp'],
+            'username' => $data['username'],
+            'password' => encrypto($data['password']),
+            'foto' => $data['foto']
+        ];
+        $this->db->where('id',$id);
+        return $this->db->update('user',$data);
+    }
     public function getdatalevel()
     {
         $query = $this->db->get('level_user')->result_array();
@@ -426,5 +476,39 @@ class Userappsmodel extends CI_Model
     public function cekusername($data)
     {
         return $this->db->get_where('user', ['username' => $data])->num_rows();
+    }
+
+    public function uploaddok()
+    {
+        $this->load->library('upload');
+        $this->uploadConfig = array(
+            'upload_path' => LOK_UPLOAD_USER,
+            'allowed_types' => 'jpg|jpeg|png|bmp',
+            // 'max_size' => max_upload() * 1024,
+        );
+        // Adakah berkas yang disertakan?
+        $adaBerkas = $_FILES['dok']['name'];
+        if (empty($adaBerkas)) {
+            return 'kosong';
+        }
+        $uploadData = NULL;
+        $this->upload->initialize($this->uploadConfig);
+        if ($this->upload->do_upload('dok')) {
+            $uploadData = $this->upload->data();
+            $namaFileUnik = strtolower($uploadData['file_name']);
+            $fileRenamed = rename(
+                $this->uploadConfig['upload_path'] . $uploadData['file_name'],
+                $this->uploadConfig['upload_path'] . $namaFileUnik
+            );
+            $uploadData['file_name'] = $fileRenamed ? $namaFileUnik : $uploadData['file_name'];
+        } else {
+            $_SESSION['success'] = -1;
+            $ext = pathinfo($adaBerkas, PATHINFO_EXTENSION);
+            $ukuran = $_FILES['file']['size'] / 1000000;
+            $tidakupload = $this->upload->display_errors(NULL, NULL);
+            $this->session->set_flashdata('pesanerror', $tidakupload . ' ' . $ext . ' ukuran ' . round($ukuran, 2) . ' MB');
+            $this->session->set_flashdata('errorsimpan', 1);
+        }
+        return (!empty($uploadData)) ? $uploadData['file_name'] : 'kosong';
     }
 }
