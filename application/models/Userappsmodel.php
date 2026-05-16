@@ -53,6 +53,7 @@ class Userappsmodel extends CI_Model
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['cekpakaibc'] = isset($data['cekpakaibc']) ? 1 : 0;
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
+        $data['rd_master'] = isset($data['rd_master']) ? 1 : 0;
         $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
         $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
         $data['cek_so'] = isset($data['cek_so']) ? 1 : 0;
@@ -211,6 +212,7 @@ class Userappsmodel extends CI_Model
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['cekpakaibc'] = isset($data['cekpakaibc']) ? 1 : 0;
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
+        $data['rd_master'] = isset($data['rd_master']) ? 1 : 0;
         $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
         $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
         $data['cek_so'] = isset($data['cek_so']) ? 1 : 0;
@@ -393,14 +395,15 @@ class Userappsmodel extends CI_Model
 
         return $hasil;
     }
-    public function updateprofile(){
+    public function updateprofile()
+    {
         $data = $_POST;
         $id = $data['id'];
-        $this->db->where('username',$data['username']);
-        $this->db->where('password',encrypto($data['password']));
-        $this->db->where_not_in('id',$id);
+        $this->db->where('username', $data['username']);
+        $this->db->where('password', encrypto($data['password']));
+        $this->db->where_not_in('id', $id);
         $cekuserpass = $this->db->get('user');
-        if($cekuserpass->num_rows() > 0){
+        if ($cekuserpass->num_rows() > 0) {
             $this->session->set_flashdata('pesanerror', 'Data tidak bisa disimpan, User+Password tidak valid !');
             $this->session->set_flashdata('errorsimpan', 1);
             return 1;
@@ -428,7 +431,7 @@ class Userappsmodel extends CI_Model
             //     $this->session->set_flashdata('errorsimpan', 1);
             // }
         }
-        if($data['old_foto']!='' && $data['foto']=='kosong'){
+        if ($data['old_foto'] != '' && $data['foto'] == 'kosong') {
             $data['foto'] = $data['old_foto'];
         }
 
@@ -440,8 +443,8 @@ class Userappsmodel extends CI_Model
             'password' => encrypto($data['password']),
             'foto' => $data['foto']
         ];
-        $this->db->where('id',$id);
-        return $this->db->update('user',$data);
+        $this->db->where('id', $id);
+        return $this->db->update('user', $data);
     }
     public function getdatalevel()
     {
