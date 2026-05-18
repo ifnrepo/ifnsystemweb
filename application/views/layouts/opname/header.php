@@ -509,7 +509,15 @@
           </div>
           <div class="nav-item dropdown mr-2">
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-              <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
+              <?php $fotouser = datauser($this->session->userdata('id'),'foto'); ?>
+              <?php 
+                if ($fotouser != null && $fotouser != '') {
+                  $fotonya = base_url().'assets/image/personil/' . $fotouser;
+                } else {
+                  $fotonya = base_url().'assets/image/avatars/005f.jpg';
+              } 
+              ?>
+              <span class="avatar avatar-sm" style="background-image: url(<?= $fotonya ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
                 <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan') . ' / ' . $this->session->userdata('dept_user') ?></div>
@@ -534,9 +542,7 @@
         <div class="collapse navbar-collapse pb-5" id="sidebar-menu">
           <ul class="navbar-nav pt-lg-3">
             <li class="nav-item">
-              <a class="nav-link <?php if (!isset($header)) {
-                                    echo 'active';
-                                  } ?>" href="<?= base_url().'opname'; ?>">
+              <a class="nav-link <?php if(isset($header) && $header=='master'){ echo "active"; } ?>" href="<?= base_url().'opname'; ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                     <path stroke="none" d="M0 0h24v24H0z" fill="none" />
@@ -551,9 +557,17 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?php if (!isset($header)) {
-                                    echo 'active';
-                                  } ?>" href="<?= base_url().'opname/dataopname'; ?>">
+              <a class="nav-link <?php if(isset($header) && $header=='entri'){ echo "active"; } ?>" href="<?= base_url().'opname/entrydata'; ?>">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-clipboard-data"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M9 5h-2a2 2 0 0 0 -2 2v12a2 2 0 0 0 2 2h10a2 2 0 0 0 2 -2v-12a2 2 0 0 0 -2 -2h-2" /><path d="M9 5a2 2 0 0 1 2 -2h2a2 2 0 0 1 2 2a2 2 0 0 1 -2 2h-2a2 2 0 0 1 -2 -2" /><path d="M9 17v-4" /><path d="M12 17v-1" /><path d="M15 17v-2" /><path d="M12 17v-1" /></svg>
+                </span>
+                <span class="nav-link-title">
+                  Entry Data
+                </span>
+              </a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link <?php if(isset($header) && $header=='rekapopname'){ echo "active"; } ?>" href="<?= base_url().'opname/dataopname'; ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-list-check"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M3.5 5.5l1.5 1.5l2.5 -2.5" /><path d="M3.5 11.5l1.5 1.5l2.5 -2.5" /><path d="M3.5 17.5l1.5 1.5l2.5 -2.5" /><path d="M11 6l9 0" /><path d="M11 12l9 0" /><path d="M11 18l9 0" /></svg>
                 </span>
@@ -563,9 +577,7 @@
               </a>
             </li>
             <li class="nav-item">
-              <a class="nav-link <?php if (!isset($header)) {
-                                    echo 'active';
-                                  } ?>" href="<?= base_url(); ?>">
+              <a class="nav-link <?php if (!isset($header)) { echo 'active'; } ?>" href="<?= base_url(); ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">
                   <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-arrow-left"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M5 12l14 0" /><path d="M5 12l6 6" /><path d="M5 12l6 -6" /></svg>
                 </span>
@@ -602,7 +614,15 @@
           </div> -->
           <div class="nav-item dropdown">
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-              <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
+              <?php $fotouser = datauser($this->session->userdata('id'),'foto'); ?>
+              <?php 
+                if ($fotouser != null && $fotouser != '') {
+                  $fotonya = base_url().'assets/image/personil/' . $fotouser;
+                } else {
+                  $fotonya = base_url().'assets/image/avatars/005f.jpg';
+                } 
+              ?>
+              <span class="avatar avatar-sm" style="background-image: url(<?= $fotonya ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
                 <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan') . ' / ' . $this->session->userdata('dept_user'); ?></div>

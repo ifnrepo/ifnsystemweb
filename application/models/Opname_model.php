@@ -183,6 +183,160 @@ class Opname_model extends CI_Model
         $this->db->where('id',$id);
         return $this->db->delete('stokopname_detail');
     }
+    public function getlokasi(){
+        $periode = $this->session->userdata('periodeopname');
+        $this->db->select('tb_lokasi.*');
+        $this->db->from('tb_lokasi');
+        $this->db->join('stokopname','stokopname.kode_lokasi = tb_lokasi.kode_lokasi','left');
+        $this->db->where('tb_lokasi.dept_id',$this->session->userdata('deptstok'));
+        $this->db->where('tb_lokasi.kode_lokasi not in (SELECT kode_lokasi FROM stokopname WHERE periode = "'.$periode    .'" GROUP BY 1)');
+        return $this->db->get();
+    }
+    public function getdatastok(){
+        $this->db->select('stokopname.*,tb_lokasi.nama_lokasi');
+        $this->db->from('stokopname');
+        $this->db->join('tb_lokasi','tb_lokasi.kode_lokasi = stokopname.kode_lokasi','left');
+        $this->db->where('periode',$this->session->userdata('periodeopname'));
+        if($this->session->userdata('deptstok')!=''){
+            $this->db->where('stokopname.dept_id',$this->session->userdata('deptstok'));
+        }
+        if($this->session->userdata('statusstok')!=''){
+            $this->db->where('stokopname.status',$this->session->userdata('statusstok'));
+        }
+        return $this->db->get();
+    }
+    public function getdatastokbyid($id){
+        $this->db->select('stokopname.*,tb_lokasi.nama_lokasi,dept.departemen');
+        $this->db->from('stokopname');
+        $this->db->join('tb_lokasi','tb_lokasi.kode_lokasi = stokopname.kode_lokasi','left');
+        $this->db->join('dept','dept.dept_id = stokopname.dept_id','left');
+        $this->db->where('stokopname.id',$id);
+        return $this->db->get()->row_array();
+    }
+    public function getdatadetailstok($id){
+        $this->db->select('stokopname_detail.*,barang.nama_barang');
+        $this->db->from('stokopname_detail');
+        $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
+        $this->db->where('id_stokopname',$id);
+        $this->db->order_by('urut');
+        return $this->db->get();
+    }
+    public function simpanstok($data){
+        return $this->db->insert('stokopname',$data);
+    }
+    public function hapusstok($data){
+        $this->db->trans_start();
+        $this->db->where('id_stokopname',$data);
+        $this->db->delete('stokopname_detail');
+
+        $this->db->where('id',$data);
+        $this->db->delete('stokopname');
+
+        return $this->db->trans_complete();
+    }
+    public function getkodelokasi($dept){
+        $this->db->select('MAX(SUBSTR(kode_lokasi,3,3)) as maxkode');
+        $this->db->from('tb_lokasi');
+        $this->db->where('dept_id',$dept);
+        $kode = $this->db->get()->row_array();
+
+        $urut = (int) $kode['maxkode'];
+        $urut++;
+        return $dept . sprintf("%03s", $urut);
+    }
+    public function getdatasublok(){
+        $this->db->select('tb_lokasi.*,dept.departemen,stokopname.dept_id as pakai');
+        $this->db->from('tb_lokasi');
+        $this->db->join('dept','dept.dept_id = tb_lokasi.dept_id','left');
+        $this->db->join('stokopname','stokopname.kode_lokasi = tb_lokasi.kode_lokasi','left');
+        $this->db->where('tb_lokasi.dept_id',$this->session->userdata('deptsublok'));
+        $this->db->order_by('kode_lokasi');
+        return $this->db->get();
+    }
+    public function getdatasublokbyid($id){
+        return $this->db->get_where('tb_lokasi',['id' => $id])->row_array();    
+    }
+    public function simpansublok($data){
+        return $this->db->insert('tb_lokasi',$data);
+    }
+    public function updatesublok($data){
+        $id = $data['id'];
+        unset($data['id']);
+        $this->db->where('id',$id);
+        return $this->db->update('tb_lokasi',$data);
+    }
+    public function hapussublok($data){
+        $this->db->trans_start();
+
+        $this->db->where('id',$data);
+        $this->db->delete('tb_lokasi');
+
+        return $this->db->trans_complete();
+    }
+    public function cariinsnopo($dept,$keyw){
+        $this->db->select('stokdept.*,tb_po.spek,barang.nama_barang,barang.kode,tb_po.color');
+        $this->db->select("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') AS skupo");
+        $this->db->from('stokdept');
+        $this->db->join('tb_po','tb_po.ind_po = concat(stokdept.po,stokdept.item,stokdept.dis)','left');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
+        $this->db->where('stokdept.dept_id',$dept);
+        $this->db->group_start();
+        $this->db->like('stokdept.po',$keyw);
+        $this->db->or_like('stokdept.insno',$keyw);
+        $this->db->group_end();
+        return $this->db->get();
+    }
+    public function cariidbarang($dept,$keyw){
+        $this->db->select('stokdept.*,barang.kode,barang.nama_barang,barang.dln');
+        $this->db->from('stokdept');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
+        $this->db->where('stokdept.dept_id',$dept);
+        $this->db->like('barang.kode',$keyw);
+        return $this->db->get();
+    }
+    public function simpanentristok($data){
+        $this->db->trans_start();
+        $this->db->select('max(urut) as maxkode');
+        $this->db->from('stokopname_detail');
+        $this->db->where('id_stokopname',$data['id_stokopname']);
+        $geturut = $this->db->get()->row_array();
+
+        $urut = (int) $geturut['maxkode'];
+        $urut++;
+        $data['urut'] = $urut;
+        $data['user_add'] = $this->session->userdata('id');
+
+        $this->db->insert('stokopname_detail',$data);
+
+        $this->db->select('SUM(pcs) as pcs,SUM(kgs) as kgs,count(*) as item');
+        $this->db->from('stokopname_detail');
+        $this->db->where('id_stokopname',$data['id_stokopname']);
+        $hasil = $this->db->get()->row_array();
+
+        $header = [
+            'pcs' => $hasil['pcs'],
+            'kgs' => $hasil['kgs'],
+            'item' => $hasil['item'],
+        ];
+        $this->db->where('id',$data['id_stokopname']);
+        $this->db->update('stokopname',$header);
+        return $this->db->trans_complete();
+    }
+    public function caribarang($dept,$id){
+        $this->db->select('stokdept.*,barang.nama_barang,barang.kode');
+        $this->db->from('stokdept');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
+        $this->db->where('stokdept.dept_id',$dept);
+        $this->db->where('stokdept.id_barang',$id);
+        return $this->db->get();
+    }
+    public function cariberatpo($sat,$data){
+        $hasil = $this->db->get_where('tb_po',['ind_po' => $data])->row_array();
+        return $hasil['jala']+$hasil['mimi'];
+    }
 
     // End Func
     public function getdatadept()

@@ -160,7 +160,11 @@ class bckeluarmodel extends CI_Model
         $jnsbc = $this->session->userdata('jnsbc');
 
         $this->db->select('tb_detail.*, tb_header.*, barang.nama_barang, barang.nama_alias, barang.kode, satuan.kodesatuan, supplier.nama_supplier, customer.nama_customer, ref_mt_uang.mt_uang as xmtuang, dept.departemen');
-        $this->db->select('(select sum(tb_bombc.cif) as cifusd from tb_bombc where id_header = tb_header.id and seri_barang = tb_detail.seri_barang) as cifusd');
+        if($jnsbc=='261'){
+            $this->db->select('sum(tb_detail.pcs) as sumpcs,sum(tb_detail.kgs) as sumkgs,0 as cifusd');
+        }else{
+            $this->db->select('(select sum(tb_bombc.cif) as cifusd from tb_bombc where id_header = tb_header.id and seri_barang = tb_detail.seri_barang) as cifusd');
+        }
         if ($jnsbc == '261') {
             $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
             $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
@@ -190,6 +194,10 @@ class bckeluarmodel extends CI_Model
         $this->db->where('tb_header.data_ok', 1);
         $this->db->where('tb_header.ok_tuju', 1);
         // $this->db->where('tb_header.ok_valid', 1);
+
+        if ($jnsbc == '261') {
+            $this->db->group_by('id_header,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_detail.insno');
+        }
 
         return $this->db->get('tb_header');
     }

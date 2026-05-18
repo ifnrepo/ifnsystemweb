@@ -24,6 +24,16 @@ $(document).ready(function () {
 	$(".onprogress").click(function () {
 		pesan("Dalam tahap pembuatan, Tunggu konfirmasi !", "info");
 	});
+	var errosimpan = $("#errorsimpan").val();
+	var xpesan = $("#pesanerror").val();
+	if (errosimpan == 1) {
+		pesan("PESAN : "+xpesan, "info");
+		// alert("PESAN : " + pesan);
+	}
+	if (errosimpan == 2) {
+		pesan("PESAN :"+xpesan, "error");
+		// alert("PESAN : " + xpesan);
+	}
 
 	modalBoxSm();
 	modalBoxLg();
@@ -353,17 +363,6 @@ $(document).ready(function () {
 	// 		scrollY: 500,
 	// 		ordering: false,
 	// 	});
-
-	var errosimpan = $("#errorsimpan").val();
-	var pesan = $("#pesanerror").val();
-	if (errosimpan == 1) {
-		// pesan("PESAN :", "error");
-		alert("PESAN : " + pesan);
-	}
-	if (errosimpan == 2) {
-		// pesan("PESAN :", "error");
-		alert("PESAN : " + pesan);
-	}
 	cekNotif();
 });
 var preloader = $("#preloader");
