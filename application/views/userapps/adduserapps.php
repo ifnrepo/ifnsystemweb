@@ -287,6 +287,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
+              <div class="mb-1 row bg-cyan-lt">
+                <label class="col-3 col-form-label"></label>
+                <div class="col mt-2">
+                  <div class="col-11">
+                    <label class="row" title="Hak Master Project Event">
+                      <span class="col font-bold">Master Project RD</span>
+                      <span class="col-auto">
+                        <label class="form-check form-check-single form-switch">
+                          <input class="form-check-input" name="rd_master" id="rd_master" type="checkbox">
+                        </label>
+                      </span>
+                    </label>
+                  </div>
+                </div>
+              </div>
               <div class="mb-1 row bg-dark-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
