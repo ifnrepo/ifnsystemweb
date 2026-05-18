@@ -296,15 +296,18 @@ class Bckeluar extends CI_Controller
 
         foreach ($bckeluar->result_array() as $data) {
             $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
+            $nilaiqty = $data['pcs'] != 0 ? $data['pcs'] : ($data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs']);
+            
             if ($this->session->userdata('jnsbc') == '30' || $this->session->userdata('jnsbc') == '261') {
                 $spek = trim($data['po']) == '' ? $data['nama_barang'] : spekpo($data['po'], $data['item'], $data['dis']);
+                if($this->session->userdata('jnsbc') == '261'){
+                    $nilaiqty = $data['sumpcs'] != 0 ? $data['sumpcs'] : ($data['kodesatuan'] == 'KGS' ? $data['sumkgs'] : $data['sumpcs']);
+                }
             } else {
                 if ($this->session->userdata('jnsbc') == '25' || $this->session->userdata('jnsbc') == '41') {
                     $spek = trim($data['po']) == '' ? $data['nama_barang'] : spekpo($data['po'], $data['item'], $data['dis']);
                 }
             }
-
-            $nilaiqty = $data['pcs'] != 0 ? $data['pcs'] : ($data['kodesatuan'] == 'KGS' ? $data['kgs'] : $data['pcs']);
 
             if ($data['nomor_bc'] == $ceknomor_bc) {
                 $sheet->setCellValue('B' . $numrow, '');
@@ -328,8 +331,11 @@ class Bckeluar extends CI_Controller
             //     ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
             //     : $data['kurs_yen'];
 
-            $kurs_usd = ($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0;
-            $kurs_yen = ($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0;
+            $kurs_usd = ($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 1;
+            $kurs_yen = ($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 1;
+
+            $kurs_usd = $kurs_usd==0 ? 1 : $kurs_usd;
+            $kurs_yen = $kurs_yen==0 ? 1 : $kurs_yen;
 
 
             if ($data['mtuang'] == 1) {
@@ -358,6 +364,7 @@ class Bckeluar extends CI_Controller
                 $subtotal_idr = round($harga_idr - $jmspdiskon - $jmcashdiskon,2);
             }
             $subtotal_usd = round($subtotal_idr / $kurs_usd, 2);
+            $datakgs = $this->session->userdata('jnsbc') == '261' ? $data['sumkgs'] : $data['kgs'];
 
 
             $sheet->setCellValue('C' . $numrow, "BC " . $data['jns_bc']);
@@ -370,7 +377,7 @@ class Bckeluar extends CI_Controller
             $sheet->setCellValue('J' . $numrow, $spek);
             $sheet->setCellValue('K' . $numrow, $data['kodesatuan']);
             $sheet->setCellValue('L' . $numrow, $nilaiqty);
-            $sheet->setCellValue('M' . $numrow, $data['kgs']);
+            $sheet->setCellValue('M' . $numrow, $datakgs);
             $sheet->setCellValue('N' . $numrow, round($subtotal_idr, 2));
             // $sheet->setCellValue('O' . $numrow, round($subtotal_usd, 2));
             if($data['jns_bc']==25){
@@ -402,6 +409,9 @@ class Bckeluar extends CI_Controller
 
         $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
         $filaname = 'LAPORAN BC KELUAR ('.$this->session->userdata('jnsbc').') # '.date('d-m-Y');
+        if (ob_get_level()) {
+            ob_end_clean();
+        }
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
         header('Content-Disposition: attachment;filename="'.$filaname.'.xlsx"');
         header('Cache-Control: max-age=0');

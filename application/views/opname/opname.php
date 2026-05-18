@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
     <div class="container-xl">
         <div class="row g-0 d-flex align-items-between">
             <div class="col-md-6">
@@ -22,12 +22,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                 </div>
                 <a href="#" style="height: 38px;" class="btn btn-yellow btn-sm ml-1" id="refreshperiode"><i class="fa fa-refresh"></i><span class=""></span></a>
-                <a href="<?= base_url() . 'opname/addperiode'; ?>" style="height: 38px;" class="btn btn-primary btn-sm ml-1" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add periode Stok Opname"><i class="fa fa-plus"></i><span class="ml-1">Tambah Periode </span></a>
+                <a href="<?= base_url() . 'opname/addsublok'; ?>" style="height: 38px;" class="btn btn-primary btn-sm ml-1" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add periode Stok Opname"><i class="fa fa-plus"></i><span class="ml-1">Tambah Periode </span></a>
             </div>
         </div>
     </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
     <div class="container-xl">
         <div class="card">
             <div class="card-body">

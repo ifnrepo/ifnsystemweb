@@ -106,9 +106,6 @@ class Inv extends CI_Controller
         if($filter_kategori!='all'){
             $arrayu['id_kategori'] = $filter_kategori;
         }
-        // if($filter_exdo!="all"){
-        //     $arrayu['exdo'] = $filter_exdo;
-        // }
         if($filter_stok!="all"){
             $arrayu['stok'] = $filter_stok;
         }
@@ -126,6 +123,9 @@ class Inv extends CI_Controller
         }
         if($filter_nombc!='all'){
             $arrayu['nomor_bc'] = $filter_nombc;
+            if($filter_nombc==''){
+                $arrayu['nomor_bc'] = '';
+            }
         }
         echo $this->invmodel->getdatabaru($arrayu,$mode);
     }

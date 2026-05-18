@@ -505,7 +505,15 @@
           </div>
           <div class="nav-item dropdown mr-2">
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
-              <span class="avatar avatar-sm" style="background-image: url(<?= base_url() . "assets/image/avatars/005f.jpg" ?>)"></span>
+              <?php $fotouser = datauser($this->session->userdata('id'),'foto'); ?>
+              <?php 
+                if ($fotouser != null && $fotouser != '') {
+                  $fotonya = base_url().'assets/image/personil/' . $fotouser;
+                } else {
+                  $fotonya = base_url().'assets/image/avatars/005f.jpg';
+              } 
+              ?>
+              <span class="avatar avatar-sm" style="background-image: url(<?= $fotonya ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
                 <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan') . ' / ' . $this->session->userdata('dept_user') ?></div>

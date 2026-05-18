@@ -95,7 +95,7 @@ class Opname extends CI_Controller
 
     public function dataopname()
     {
-        $header['header'] = 'master';
+        $header['header'] = 'rekapopname';
         $data = [
             'dept' => $this->dept_model->getdata(),
             'periode' => $this->opnamemodel->getdataperiode(),
@@ -178,6 +178,196 @@ class Opname extends CI_Controller
         $this->load->view('layouts/opname/header', $header);
         $this->load->view('opname/addopname', $data);
         $this->load->view('layouts/opname/footer', $footer);
+    }
+    public function entrydata(){
+        $header['header'] = 'entri';
+        $data = [
+            'dept' => $this->dept_model->getdata(),
+            'data' => $this->opnamemodel->getdatastok(),
+            'fungsi' => 'opname',
+            'datadept' => $this->opnamemodel->getdatadept()
+        ];
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+
+        $this->load->view('layouts/opname/header', $header);
+        $this->load->view('opname/entryopname',$data);
+        $this->load->view('layouts/opname/footer', $footer);
+    }
+    public function filterstok(){
+        $stat = $_POST['status'];
+        $dept = $_POST['dept'];
+        if($stat != ''){
+            $this->session->set_userdata('statusstok',$stat);
+        }else{
+            $this->session->unset_userdata('statusstok');
+        }
+        if($dept != ''){
+            $this->session->set_userdata('deptstok',$dept);
+        }else{
+            $this->session->unset_userdata('deptstok');
+        }
+        echo 1;
+    }
+    public function addsublok(){
+        $header['header'] = 'entri';
+        $data = [
+            'dept' => $this->dept_model->getdata(),
+            'data' => $this->opnamemodel->getdatasublok(),
+            'fungsi' => 'opname',
+            'datadept' => $this->opnamemodel->getdatadept()
+        ];
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+
+        $this->load->view('layouts/opname/header', $header);
+        $this->load->view('opname/addsublok',$data);
+        $this->load->view('layouts/opname/footer', $footer);
+    }
+    public function addsublokclear(){
+        $this->session->unset_userdata('deptsublok');
+        $url = base_url().'opname/addsublok';
+        redirect($url);
+    }
+    public function getkodelokasi(){
+        $dept = $_POST['dept'];
+        $query = $this->opnamemodel->getkodelokasi($dept);
+        echo $query;
+    }
+    public function setdeptsublok(){
+        $dept = $_POST['dept'];
+        $this->session->set_userdata('deptsublok',$dept);
+        echo 1;
+    }
+    public function simpansublok(){
+        $data = [
+            'kode_lokasi' => $_POST['kode'],
+            'nama_lokasi' => $_POST['nama'],
+            'dept_id' => $_POST['dept']
+        ];
+        $query = $this->opnamemodel->simpansublok($data);
+        if($query){
+            $this->session->set_flashdata('pesanerror','Data tersimpan !');
+            $this->session->set_flashdata('errorsimpan',1);
+            echo $query;
+        }
+    }
+    public function hapussublok($id){
+        $query = $this->opnamemodel->hapussublok($id);
+        if($query){
+            $url = base_url().'opname/addsublok';
+            redirect($url);
+        }
+    }
+    public function editsublok(){
+        $data = $_POST['id'];
+        $query = $this->opnamemodel->getdatasublokbyid($data);
+        echo json_encode($query);
+    }
+    public function updatesublok(){
+        $data = [
+            'id' => $_POST['id'],
+            'nama_lokasi' => $_POST['nama']
+        ];
+        $query = $this->opnamemodel->updatesublok($data);
+        if($query){
+            $this->session->set_flashdata('pesanerror','Data terupdate !');
+            $this->session->set_flashdata('errorsimpan',1);
+            echo $query;
+        }
+    }
+
+    public function addstok(){
+        $data['lokasi'] = $this->opnamemodel->getlokasi();
+        $this->load->view('opname/addstok',$data);
+    }
+    public function simpanstok(){
+        $data = [
+            'kode_lokasi' => $_POST['kodelokasi'],
+            'periode' => $this->session->userdata('periodeopname'),
+            'dept_id' => $this->session->userdata('deptstok'),
+        ];
+        $query = $this->opnamemodel->simpanstok($data);
+        echo $query;
+    }
+    public function hapusstok($id){
+        $query = $this->opnamemodel->hapusstok($id);
+        if($query){
+            $url = base_url().'opname/entrydata';
+            redirect($url);
+        }
+    }
+    public function entristok($page,$id){
+        $header['header'] = 'entri';
+        $data = [
+            'header' => $this->opnamemodel->getdatastokbyid($id),
+            'data' => $this->opnamemodel->getdatadetailstok($id),
+            'fungsi' => 'opname',
+            'datadept' => $this->opnamemodel->getdatadept()
+        ];
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        if($this->session->userdata('sel-cari')==''){
+            $this->session->set_userdata('sel-cari','barang');
+        }
+
+        $this->load->view('layouts/opname/header', $header);
+        $this->load->view('opname/entristok',$data);
+        $this->load->view('layouts/opname/footer', $footer);
+    }
+    public function cari($kode,$dept,$id){
+        if($kode=='caribarang'){
+            $query['data'] = $this->opnamemodel->caribarang($dept,$id);
+            $this->load->view('opname/pilihbarang',$query);
+        }
+    }
+    public function cariidbarang(){
+        $dept = $_POST['dept'];
+        $keyw = $_POST['keyw'];
+        $this->session->set_userdata('sel-cari','barang');
+        $query = $this->opnamemodel->cariidbarang($dept,$keyw);
+        $jmlrek = $query->num_rows();
+        $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
+        echo json_encode($hasil);
+    }
+    public function cariinsnopo(){
+        $dept = $_POST['dept'];
+        $keyw = $_POST['keyw'];
+        $this->session->set_userdata('sel-cari','insnopo');
+        $query = $this->opnamemodel->cariinsnopo($dept,$keyw);
+        $jmlrek = $query->num_rows();
+        $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
+        echo json_encode($hasil);
+    }
+    public function cariberatpo(){
+        $data = $_POST['po'].$_POST['item'].$_POST['dis'];
+        $sat = $_POST['sat'];
+        echo $this->opnamemodel->cariberatpo($sat,$data);
+    }
+    public function simpanentristok(){
+        $id = $_POST['id'];
+        $data = [
+            'tgl' => $this->session->userdata('periodeopname'),
+            'id_stokopname' => $_POST['id'],
+			'dept_id' => $_POST['dept'],
+			'po' => $_POST['po'],
+			'item' => $_POST['item'],
+			'dis' => $_POST['dis'],
+			'id_barang' => $_POST['idb'],
+			'insno' => strtoupper($_POST['insno']),
+			'nobontr' => strtoupper($_POST['nobontr']),
+			'exnet' => $_POST['exnet'],
+			'stok' => $_POST['stok'],
+			'dln' => $_POST['dln'],
+			'nobale' => strtoupper($_POST['nobale']),
+			'satuan' => $_POST['satuan'],
+			'ket' => $_POST['ket'],
+			'pcs' => toAngka($_POST['pcs']),
+			'kgs' => toAngka($_POST['kgs'])
+        ];
+        $query = $this->opnamemodel->simpanentristok($data);
+        if($query){
+            $this->session->set_flashdata('pesanerror','Data berhasil disimpan !');
+            $this->session->set_flashdata('errorsimpan',1);
+            echo $query;
+        }
     }
 
     public function excel()
