@@ -696,6 +696,7 @@ class Out_model extends CI_Model{
         }else{
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror','BON tidak bisa di Hapus, sudah dibuatkan DOKUMEN BC');
+            $hasil = 1;
         }
         return $hasil;
     }

@@ -15,7 +15,8 @@ class Userappsmodel extends CI_Model
     {
         $this->db->select("dept.*");
         $this->db->from('dept');
-        $this->db->where_in('dept_id', ['AM', 'AN', 'AR', 'MD', 'NU', 'GF', 'FN', 'FG', 'GP', 'GM', 'NT', 'DL', 'TN', 'RR', 'ST', 'GS', 'SP', 'GW']);
+        // $this->db->where_in('dept_id', ['AM', 'AN', 'AR', 'MD', 'NU', 'GF', 'FN', 'FG', 'GP', 'GM', 'NT', 'DL', 'TN', 'RR', 'ST', 'GS', 'SP', 'GW']);
+        $this->db->where('stokopname','1');
         $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
@@ -68,6 +69,7 @@ class Userappsmodel extends CI_Model
         $data['cekdowntime_master'] = isset($data['cekdowntime_master']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
+        $data['rolestokopname'] = strtoupper($data['rolestokopname']);
         // Set modul master
         $master = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -227,6 +229,7 @@ class Userappsmodel extends CI_Model
         $data['cekdowntime_master'] = isset($data['cekdowntime_master']) ? 1 : 0;
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
+        $data['rolestokopname'] = strtoupper($data['rolestokopname']);
         // Set modul master
         $master = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -391,6 +394,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('cek_notes', $cek['cek_notes']);
             $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
             $this->session->set_userdata('sess_ceksaw', $cek['cek_saw']);
+            $this->session->set_userdata('rolestokopname', $cek['rolestokopname']);
         }
 
         return $hasil;
@@ -412,24 +416,11 @@ class Userappsmodel extends CI_Model
         $fotodulu = FCPATH . 'assets/image/personil/' . $data['old_foto']; //base_url().$gambar.'.png';
         $data['foto'] = $this->uploaddok();
         if ($data['foto'] != 'kosong') {
-            // if ($data['foto'] == 'kosong') {
-            //     if($data['old_foto']==''){
-            //         $data['foto'] = NULL;
-            //     }else{
-            //         $data['foto'] = $data['old_foto'];
-            //     }
-            // }
-
             if (file_exists($fotodulu)) {
                 unlink($fotodulu);
             }
             unset($data['dok']);
             unset($data['old_logo']);
-            // $query = $this->db->query("update user set foto = '" . $data['foto'] . "' where id = '" . $id . "' ");
-            // if ($query) {
-            //     $this->session->set_flashdata('pesanerror', 'Dokumen Berhasil Diupload');
-            //     $this->session->set_flashdata('errorsimpan', 1);
-            // }
         }
         if ($data['old_foto'] != '' && $data['foto'] == 'kosong') {
             $data['foto'] = $data['old_foto'];
@@ -474,6 +465,7 @@ class Userappsmodel extends CI_Model
         $this->session->set_userdata('cek_notes', $cek['cek_notes']);
         $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
         $this->session->set_userdata('sess_ceksaw', $cek['cek_saw']);
+        $this->session->set_userdata('rolestokopname', $cek['rolestokopname']);
         return 1;
     }
     public function cekusername($data)

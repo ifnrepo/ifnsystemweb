@@ -9,6 +9,7 @@
                         <th class="text-black">Insno/Nobontr</th>
                         <th class="text-black">Stok</th>
                         <th class="text-black">Exnet</th>
+                        <th class="text-black">Nobale</th>
                         <th class="text-black">Aksi</th>
                     </tr>
                 </thead>
@@ -26,6 +27,7 @@
                             <td class="font-kecil"><?= $dt['insno'].$dt['nobontr'] ?></td>
                             <td class="font-kecil"><?= $stok ?></td>
                             <td class="font-kecil"><?= $exnet ?></td>
+                            <td class="font-kecil"><?= $dt['nobale'] ?></td>
                             <td class="font-kecil text-center">
                                 <a href="#" 
                                     id="pilihbarang",
@@ -39,9 +41,10 @@
                                     rel6="<?= $dt['nobontr'] ?>"
                                     rel7="<?= $dt['stok'] ?>"
                                     rel8="<?= $dt['exnet'] ?>"
-                                    rel9="<?= $dt['nama_barang'] ?>"
-                                    rel10="<?= $dt['kode'] ?>"
+                                    rel9="<?= $spek ?>"
+                                    rel10="<?= $sku ?>"
                                     rel11="<?= $dt['dln'] ?>"
+                                    rel12="<?= $dt['nobale'] ?>"
                                 >
                                     Pilih
                                 </a>
@@ -65,19 +68,21 @@
     $(document).on('click','#pilihbarang',function(){
         $("#form-hasilcari").removeClass('hilang');
 	    $("#form-cari").addClass('hilang');
-       $("#po").val($(this).attr('rel1'));
-       $("#item").val($(this).attr('rel2'));
-       $("#dis").val($(this).attr('rel3'));
-       $("#idbarang").val($(this).attr('rel4'));
-       $("#insno").val($(this).attr('rel5'));
-       $("#nobontr").val($(this).attr('rel6'));
-       $("#stok").val($(this).attr('rel7'));
-       $("#exnet").val($(this).attr('rel8'));
-       $("#spek").val($(this).attr('rel9'));
-       $("#sku").val($(this).attr('rel10'));
-       $("#dln").val($(this).attr('rel11'));
-       $("#keywordinputstok").val('');
-       $("#sku").focus();
-       $("#tutup").click();
+        $("#po").val($(this).attr('rel1'));
+        $("#item").val($(this).attr('rel2'));
+        $("#dis").val($(this).attr('rel3'));
+        $("#idbarang").val($(this).attr('rel4'));
+        $("#insno").val($(this).attr('rel5'));
+        $("#nobontr").val($(this).attr('rel6'));
+        $("#stok").val($(this).attr('rel7'));
+        $("#exnet").val($(this).attr('rel8'));
+        $("#spek").val($(this).attr('rel9'));
+        $("#sku").val($(this).attr('rel10'));
+        $("#dln").val($(this).attr('rel11'));
+        $("#nobale").val($(this).attr('rel12'));
+        $("#po").change();
+        $("#keywordinputstok").val('');
+        $("#sku").focus();
+        $("#tutup").click();
     })
 </script>

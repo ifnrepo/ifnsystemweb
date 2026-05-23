@@ -138,9 +138,9 @@
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-        <div class="modal-status bg-warning"></div>
+        <div class="modal-status bg-info"></div>
         <div class="modal-body text-center py-4">
-          <svg class="icon mb-2 text-warning icon-lg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle">
+          <svg class="icon mb-2 text-info icon-lg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-alert-circle">
             <path stroke="none" d="M0 0h24v24H0z" fill="none" />
             <path d="M3 12a9 9 0 1 0 18 0a9 9 0 0 0 -18 0" />
             <path d="M12 8v4" />
@@ -152,7 +152,7 @@
         <div class="modal-footer">
           <div class="w-100">
             <div class="row">
-              <div class="col"><a id="btn-ok" href="#" class="btn btn-warning w-100">
+              <div class="col"><a id="btn-ok" href="#" class="btn btn-info w-100">
                   Ya
                 </a></div>
               <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
@@ -416,7 +416,7 @@
       </div>
     </div>
   </div>
-  <div class="modal modal-blur fade" id="modal-full" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal modal-blur fade" id="modal-full" tabindex="-1" role="dialog" aria-hidden="true" data-bs-backdrop="static" data-bs-keyboard="false">
     <div class="modal-dialog modal-full-width modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header bg-info">
@@ -479,13 +479,8 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <h1 class="navbar-brand d-print-none">
-          <a href="<?= base_url(); ?>">
-            <img src=<?= base_url() . "assets/image/logodepan.png" ?> width="100" height="30" alt="IFN" class="navbar-brand-image">
-          </a>
-        </h1>
-        <h1 class="navbar-brand d-print-none m-0 p-1">
-          <a href="<?= base_url(); ?>" style="text-decoration: none;">
-            STOK OPNAME
+          <a href="<?= base_url().'opname'; ?>">
+            <img src=<?= base_url() . "assets/image/logodepan-so.png" ?> width="100" height="30" alt="IFN" class="navbar-brand-image">
           </a>
         </h1>
         <div class="hr mt-2 mb-0"></div>
@@ -520,7 +515,7 @@
               <span class="avatar avatar-sm" style="background-image: url(<?= $fotonya ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
-                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan') . ' / ' . $this->session->userdata('dept_user') ?></div>
+                <div class="mt-1 small text-secondary"><?= namarolestokopname($this->session->userdata('rolestokopname')) ?></div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">
@@ -625,7 +620,7 @@
               <span class="avatar avatar-sm" style="background-image: url(<?= $fotonya ?>)"></span>
               <div class="d-none d-xl-block ps-2">
                 <div><?= $this->session->userdata('name') . ' [' . $this->session->userdata('level_user') . ']'; ?></div>
-                <div class="mt-1 small text-secondary"><?= $this->session->userdata('jabatan') . ' / ' . $this->session->userdata('dept_user'); ?></div>
+                <div class="mt-1 small text-secondary"><?= namarolestokopname($this->session->userdata('rolestokopname')) ?></div>
               </div>
             </a>
             <div class="dropdown-menu dropdown-menu-end dropdown-menu-arrow">

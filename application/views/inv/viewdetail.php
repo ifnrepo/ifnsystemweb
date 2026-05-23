@@ -97,7 +97,9 @@
                         $saldokgs += $det['saldokgs'] + $det['inkgs'] - $det['outkgs']+ $det['adjkgs'];
                         $pilihtampil = $saldo==0 ? $saldokgs : $saldo;
                         $depnobontr = ['GM','SP'];
-                        $boninsno = in_array($this->session->userdata('currdept'),$depnobontr) ? $det['nobontr'] : $det['insno'];
+                        // $boninsno = in_array($this->session->userdata('currdept'),$depnobontr) ? $det['nobontr'] : $det['insno'];
+                        // $boninsno = $det['id_barang']==0 ? ($det['insno']=='' ? $det['nobontr'] : $det['insno']) : ($det['nobontr']=='' ? $det['insno'] : $det['nobontr']);
+                        $boninsno = $det['nobontr'].$det['insno'];
                         $saldo_akhirkgs += $saldokgs;
                         $saldo_akhirpcs += $saldo;
                         $warnatek = $det['mode']=='ADJ' ? '' : '';

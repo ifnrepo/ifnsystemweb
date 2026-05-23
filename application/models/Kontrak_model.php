@@ -79,9 +79,9 @@ class Kontrak_model extends CI_Model
         if ($kode['thkontrak'] != '') {
             $this->db->where("year(tgl_awal)", $kode['thkontrak']);
         }
-        if (isset($kode['datkecuali'])) {
-            $datkont = $this->db->query("Select id_kontrak from tb_header where id_kontrak is not null")->result_array();
-        }
+        // if (isset($kode['datkecuali'])) {
+        //     $datkont = $this->db->query("Select id_kontrak from tb_header where id_kontrak is not null")->result_array();
+        // }
 
         $this->db->where('id_supplier', $header['id_rekanan']);
         $this->db->order_by('tgl_akhir');

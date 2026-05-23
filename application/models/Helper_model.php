@@ -433,6 +433,10 @@ class Helper_model extends CI_Model
     {
         return $this->db->get_where('customer', ['id' => $kode]);
     }
+    public function getdatakategori($kode)
+    {
+        return $this->db->get_where('kategori', ['kategori_id' => $kode]);
+    }
     public function getdatafooter()
     {
         return $this->db->get('page_footer');

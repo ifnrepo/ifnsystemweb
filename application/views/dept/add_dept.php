@@ -81,6 +81,10 @@
                         <input class="form-check-input" name="akb" id="akb" type="checkbox" >
                         <span class="form-check-label">Aju Keluar Barang / <strong>AKB</strong></span>
                     </label>
+                    <label class="form-check mt-1 mb-1">
+                        <input class="form-check-input" name="stokopname" id="stokopname" type="checkbox" >
+                        <span class="form-check-label">Stok Opname / <strong>SO</strong></span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -98,6 +102,7 @@
         var cekpb = $("#pb").prop('checked') ? '1' : '0';
         var cekbbl = $("#bbl").prop('checked') ? '1' : '0';
         var cekadj = $("#adj").prop('checked') ? '1' : '0';
+        var cekso = $("#stokopname").prop('checked') ? '1' : '0';
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -113,7 +118,8 @@
                 jabatan: $("#jabatan").val(),
                 pb: cekpb,
                 bbl: cekbbl,
-                adj: cekadj
+                adj: cekadj,
+                so: cekso
             },
             success: function(data) {
                 window.location.reload();

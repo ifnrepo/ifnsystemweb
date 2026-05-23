@@ -305,7 +305,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-cyan-lt">
+              <div class="row bg-cyan-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -337,7 +337,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-dark-lt">
+              <div class="row bg-dark-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -353,7 +353,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-dark-lt">
+              <div class="row bg-dark-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -369,7 +369,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <div class="mb-1 row bg-dark-lt">
+              <div class="row bg-dark-lt">
                 <label class="col-3 col-form-label"></label>
                 <div class="col mt-2">
                   <div class="col-11">
@@ -990,6 +990,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                         <div class="tab-pane" id="tabs-stokopname-1">
                           <div class="row">
+                            <div class="col-md-12 col-12">
+                              <div class="mb-1 row">
+                                <label class="col-3 col-form-label font-kecil">Role</label>
+                                <div class="col">
+                                  <select name="rolestokopname" id="rolestokopname" class="form-control form-select btn-flat font-kecil">
+                                    <option value="0" <?php if($user['rolestokopname']==0){ echo "selected"; } ?>>-- Pilih Role --</option>
+                                    <option value="1" <?php if($user['rolestokopname']==1){ echo "selected"; } ?>>User Input</option>
+                                    <option value="2" <?php if($user['rolestokopname']==2){ echo "selected"; } ?>>User Validasi</option>
+                                    <option value="3" <?php if($user['rolestokopname']==3){ echo "selected"; } ?>>User Verifikasi Data</option>
+                                    <option value="4" <?php if($user['rolestokopname']==4){ echo "selected"; } ?>>User Verifikasi 2 (KAP)</option>
+                                    <option value="99" <?php if($user['rolestokopname']==99){ echo "selected"; } ?>>Administrator SO</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <hr class="m-1">
                             <div class="col-6">
                               <?php $no = 0;
                               $nox = 0;
@@ -1001,9 +1017,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <div class="col-6">
                             <?php } ?>
                             <label class="form-check mb-1">
-                              <!-- <input class="form-check-input" id="<?= $dept['dept_id']; ?>" name="<?= $dept['dept_id']; ?>" type="checkbox" <?= cekceklisdep($user['hakstokopname'], $dept['dept_id']); ?>> -->
                               <input class="form-check-input" type="checkbox" name="stokopname[]" value="<?= $dept['dept_id']; ?>" <?= cekceklisdep($user['hakstokopname'], $dept['dept_id']); ?>>
-
                               <span class="form-check-label"><?= $dept['departemen']; ?></span>
                             </label>
                           <?php endforeach; ?>
