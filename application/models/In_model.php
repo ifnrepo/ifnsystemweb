@@ -262,7 +262,7 @@ class In_model extends CI_Model{
                 'trim(item)' => trim($datdet['item']),
                 'dis' => $datdet['dis'],
                 'dln' => $datdet['dln'],
-                'trim(nobale)' => (($header['dept_tuju']=='GF' && $header['dept_id']=='FN') || ($header['dept_id']=='GW' && $header['dept_tuju']=='GF')) ? trim($datdet['nobale']) : '',
+                'trim(nobale)' => (($header['dept_tuju']=='GF' && $header['dept_id']=='FN') || ($header['dept_tuju']=='GW')) ? trim($datdet['nobale']) : '',
                 'exnet' => $datdet['exnet'],
                 'stok' => $datdet['stok'],
             ];

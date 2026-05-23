@@ -126,7 +126,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </div>
                     </div>
                 </div>
-                <table id="tabelnya" class="table order-column table-hover table-bordered mt-2" style="width: 100% !important; border-collapse: collapse;">
+                <table id="tabelnyau" class="table order-column table-hover table-bordered mt-2" style="width: 100% !important; border-collapse: collapse;">
                     <thead>
                         <tr class="text-left">
                             <th class="text-center">No</th>
@@ -134,8 +134,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <th class="text-left">Sku / Spesifikasi</th>
                             <th class="text-center">Grd</th>
                             <th>Sat</th>
-                            <th>Insno</th>
-                            <th>Nobontr</th>
+                            <th class="line-11">Nobontr/Insno</th>
+                            <th>Sublok</th>
                             <th>Nobale</th>
                             <th>Exnet</th>
                             <th class="text-center">Qty</th>

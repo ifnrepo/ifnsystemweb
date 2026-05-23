@@ -943,6 +943,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </div>
                         <div class="tab-pane" id="tabs-stokopname-1">
                           <div class="row">
+                            <div class="col-12 col-md-12">
+                              <div class="mb-1 row">
+                                <label class="col-3 col-form-label font-kecil">Role</label>
+                                <div class="col">
+                                  <select name="rolestokopname" id="rolestokopname" class="form-control form-select btn-flat font-kecil">
+                                    <option value="0">-- Pilih Role --</option>
+                                    <option value="1">User Input</option>
+                                    <option value="2">User Validasi</option>
+                                    <option value="3">User Verifikasi Data</option>
+                                    <option value="4">User Verifikasi 2 (KAP)</option>
+                                    <option value="99">Administrator SO</option>
+                                  </select>
+                                </div>
+                              </div>
+                            </div>
+                            <hr class="m-1">
                             <div class="col-6">
                               <?php $no = 0;
                               $nox = 0;

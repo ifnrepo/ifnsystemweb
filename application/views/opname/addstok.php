@@ -40,11 +40,11 @@
 
 <script>
     $(document).ready(function(){
-        $("#tglperiode").datepicker({
-            autoclose: true,
-            format : "dd-mm-yyyy",
-            todayHighlight: true
-        });
+        // $("#tglperiode").datepicker({
+        //     autoclose: true,
+        //     format : "dd-mm-yyyy",
+        //     todayHighlight: true
+        // });
     })
     $("#simpanstok").click(function(){
             if($("#idlokasi").val()==''){

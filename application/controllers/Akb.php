@@ -87,7 +87,7 @@ class Akb extends CI_Controller
                 redirect($url);
             }
         } else {
-            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('errorsimpan', 2);
             $url = base_url() . 'ib';
             redirect($url);
         }
@@ -269,7 +269,7 @@ class Akb extends CI_Controller
                 redirect($url);
             }
         } else {
-            $this->session->set_flashdata('errorsimpan', 4);
+            $this->session->set_flashdata('errorsimpan', 2);
             $url = base_url() . 'ib/dataib/' . $id;
             redirect($url);
         }
@@ -289,7 +289,7 @@ class Akb extends CI_Controller
                 $url = base_url() . 'ib';
                 redirect($url);
             } else {
-                $this->session->set_flashdata('errorsimpan', 3);
+                $this->session->set_flashdata('errorsimpan', 1);
                 $url = base_url() . 'ib';
                 redirect($url);
             }
@@ -720,7 +720,7 @@ class Akb extends CI_Controller
         } else {
             // $url = base_url().'ib/kosong';
             // redirect($url);
-            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
             if ($id = '') {
                 $url = base_url() . 'ib';
@@ -799,7 +799,7 @@ class Akb extends CI_Controller
                 $hasil = $this->akbmodel->simpanresponbc($data);
                 if ($hasil) {
                     $this->helpermodel->isilog("Berhasil GET RESPON AJU " . $dataaju . " (" . $databalik['dataStatus'][0]['nomorDaftar'] . ")");
-                    $this->session->set_flashdata('errorsimpan', 2);
+                    $this->session->set_flashdata('errorsimpan', 1);
                     $this->session->set_flashdata('pesanerror', 'Respon sudah berhasil di Tarik');
                 }
             } else {
@@ -809,7 +809,7 @@ class Akb extends CI_Controller
             $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
         } else {
-            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
             // $url = base_url().'ib/isidokbc/'.$id;
             $url = base_url() . 'akb/isidokbc/' . $id;
@@ -849,7 +849,7 @@ class Akb extends CI_Controller
             $url = $mode = 0 ? base_url() . 'akb/isidokbc/' . $id : base_url() . 'akb';
             redirect($url);
         } else {
-            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
             // $url = base_url().'ib/isidokbc/'.$id;
             $url = $mode = 0 ? base_url() . 'akb/isidokbc/' . $id : base_url() . 'akb';
@@ -2559,7 +2559,7 @@ class Akb extends CI_Controller
         // print_r($databalik['message']);
         if ($databalik['status'] == 'OK') {
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 BERHASIL" . $data['nomorAju']);
-            $this->session->set_flashdata('errorsimpan', 2);
+            $this->session->set_flashdata('errorsimpan', 1);
             $this->session->set_flashdata('pesanerror', $databalik['message']);
             $this->akbmodel->updatesendceisa($id,$data['nomorAju']);
             $url = base_url() . 'akb/isidokbc/' . $id;
@@ -2575,7 +2575,7 @@ class Akb extends CI_Controller
                 $mess = $databalik['message'];
             }
             echo $mess;
-            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $mess . '[EXCEPTION]');
             $url = base_url() . 'akb/isidokbc/' . $id;
             redirect($url);
@@ -2625,14 +2625,14 @@ class Akb extends CI_Controller
         // print_r($databalik);
         if ($databalik['status'] == 'OK') {
             $this->helpermodel->isilog("Kirim dokumen CEISA 40 - 261 BERHASIL" . $data['nomorAju']);
-            $this->session->set_flashdata('errorsimpan', 2);
+            $this->session->set_flashdata('errorsimpan', 1);
             $this->session->set_flashdata('pesanerror', $databalik['message']);
             $this->akbmodel->updatesendceisa($id,$data['nomorAju']);
             $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             redirect($url);
         } else {
             // print_r($databalik);
-            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message'][0] . '[EXCEPTION]' . $databalik['exception']);
             $url = base_url() . 'akb/isidokbc/' . $id . '/1';
             redirect($url);

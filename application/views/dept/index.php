@@ -26,8 +26,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <a href="<?= base_url() . 'dept/cetakpdf'; ?>" target="_blank" class="btn btn-danger btn-sm"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export To PDF</span></a>
                     </div>
                 </div>
-                <div id="table-default" class="table-responsive">
-                    <table class="table datatable">
+                <div id="table-default" class="table-responsivee">
+                    <table class="table datatable w-100" >
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -35,19 +35,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Nama Departemen</th>
                                 <th>Kategori</th>
                                 <th>Oth</th>
+                                <th>Stok Opn</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
                         <tbody class="table-tbody" style="font-size: 13px !important;">
                             <?php $no = 0;
                             foreach ($dept as $key) : $no++;
-                                $oth = cekoth($key['pb'], $key['bbl'], $key['adj']); ?>
+                                $oth = cekoth($key['pb'], $key['bbl'], $key['adj']);
+                                $so = $key['stokopname']==1 ? 'Y' : ''; ?>
                                 <tr>
-                                    <td><?= $no; ?></td>
-                                    <td><?= $key['dept_id']; ?></td>
-                                    <td><?= $key['departemen']; ?></td>
-                                    <td><?= strtoupper($key['nama']); ?></td>
+                                    <td><?= trim($no); ?></td>
+                                    <td><?= trim($key['dept_id']); ?></td>
+                                    <td><?= trim($key['departemen']); ?></td>
+                                    <td><?= trim(strtoupper($key['nama'])); ?></td>
                                     <td><?= $oth ?></td>
+                                    <td class="text-green font-bold"><?= $so ?></td>
                                     <td>
                                         <a href="<?= base_url() . 'dept/edit_new/' . $key['dept_id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="edituser" rel="<?= $key['dept_id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>

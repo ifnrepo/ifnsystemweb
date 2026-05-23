@@ -389,6 +389,21 @@ function datacustomer($kode, $kolom)
     }
     return $kore;
 }
+function datakategori($kode, $kolom='')
+{
+    $kore = '';
+    if ($kode == '' || $kode == 0) {
+        $kore = '';
+    } else {
+        if($kolom==''){
+            $kolom = 'nama_kategori';
+        }
+        $CI = &get_instance();
+        $kodex = $CI->helpermodel->getdatakategori($kode)->row_array();
+        $kore = $kodex[$kolom];
+    }
+    return $kore;
+}
 function kodebulan($bl)
 {
     $hasil = $bl;
@@ -1358,4 +1373,20 @@ function year($tgl){
 }
 function getberatshitate($data){
     return 1000;
+}
+function namarolestokopname($id){
+    if($id == 1){
+        $hasil = 'User Input';
+    }elseif($id==2){
+        $hasil = 'User Validator';
+    }elseif($id==3){
+        $hasil = 'User Validasi Data';
+    }elseif($id==4){
+        $hasil = 'User Validasi KAP';
+    }elseif($id==99){
+        $hasil = 'Administrator SO';
+    }else{
+        $hasil = 'Belum Ada Role';
+    }
+    return $hasil;
 }

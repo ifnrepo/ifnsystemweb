@@ -285,6 +285,9 @@ class Inv extends CI_Controller
         $sheet->setCellValue('AA3', "STOK");
         $sheet->setCellValue('AB3', "NOMOR BC");
         $sheet->setCellValue('AC3', "DLN");
+        if($this->session->userdata('currdept')=='FN'){
+            $sheet->setCellValue('AD3', "KATEGORI");
+        }
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->invmodel->toexcel();
@@ -301,6 +304,7 @@ class Inv extends CI_Controller
             $pengeluaran = $data['kodesatuan'] == 'KGS' ? $data['outkgs'] : ($data['outpcs'] ?? 0);
             $saldo_akhir = $saldo_awal + $pemasukan - $pengeluaran;
             $sku = viewsku(id: $data['kode'], po: $data['po'], no: $data['item'], dis: $data['dis']);
+            $kateg = datakategori($data['id_kategori']);
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $sku);
@@ -333,6 +337,9 @@ class Inv extends CI_Controller
             $sheet->setCellValue('AA' . $numrow, $data['stok']);
             $sheet->setCellValue('AB' . $numrow, $data['nomor_bc']);
             $sheet->setCellValue('AC' . $numrow, $data['sdln']);
+            if($this->session->userdata('currdept')=='FN'){
+                $sheet->setCellValue('AD' . $numrow, $kateg);
+            }
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

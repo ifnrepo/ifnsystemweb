@@ -96,7 +96,7 @@
                                 <label class="col-3 col-form-label font-kecil">No/Tgl AJU</label>
                                 <div class="col">
                                     <div class="input-group mb-1">
-                                        <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="<?= $datheader['nomor_aju']; ?>" placeholder="Nomor Aju" <?= $nonaktif; ?>>
+                                        <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="<?= $datheader['nomor_aju']; ?>" placeholder="Nomor Aju" <?= $nonaktif; ?> <?php if($datheader['jns_bc'] == 40){ echo "readonly"; } ?>>
                                         <a href="#" class="btn font-kecil font-bold <?= $selectnonaktif; ?>" id="getnomoraju">Get</a>
                                     </div>
                                     <!-- <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="" aria-describedby="emailHelp" placeholder="No AJU"> -->
