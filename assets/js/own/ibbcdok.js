@@ -780,7 +780,7 @@ function hitungdevisa() {
 }
 function loadlampiran() {
 	var id = $("#id_header").val();
-	var ceksend = $("#nomor_aju").attr("readonly") == "readonly" ? 1 : 0;
+	var ceksend = $("#tgl_aju").attr("readonly") == "readonly" ? 1 : 0;
 	$.ajax({
 		dataType: "json",
 		type: "POST",

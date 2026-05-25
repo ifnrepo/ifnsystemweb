@@ -1,5 +1,7 @@
 $(document).ready(function(){
     // $(".loadered").removeClass('hilang');
+	$("#jumlahpcs").html($("#jmlpcs").val());
+	$("#jumlahkgs").html($("#jmlkgs").val());
 	table = $('#tabelnya').DataTable({
 		// "processing": true,
 		// "responsive":true,
@@ -177,15 +179,23 @@ $(document).ready(function(){
 })
 
 $("#updateopname").click(function(){
+	$(this).html('Loading..')
+	$(".loadered").removeClass('hilang');
+	var isi = $("#textcarirekapopname").val().trim();
     $.ajax({
 		dataType: "json",
 		type: "POST",
 		url: base_url + "opname/getdata",
 		data: {
 			dept: $("#currdeptopname").val(),
+			milik: $("#kepemilikan").val(),
+			exdo: $("#exdo").val(),
+			cari: isi,
+			perpage: $("#rekapopname-perpage").val()
 		},
 		success: function (data) {
-			window.location.reload();
+			// window.location.reload();
+			window.location.href = base_url + 'opname/dataopname';
 			// $("#dept_tuju").html(data);
 			// $("#dept_tuju").change();
 		},
@@ -195,6 +205,27 @@ $("#updateopname").click(function(){
 		},
 	});
 	// window.location.reload();
+})
+$("#kepemilikan").change(function(){
+	$("#updateopname").click();
+})
+$("#exdo").change(function(){
+	$("#updateopname").click();
+})
+$("#buttoncarirekapopname").click(function(){
+	$("#updateopname").click();
+})
+$("#buttonresetrekapopname").click(function(){
+	$("#textcarirekapopname").val('');
+	$("#updateopname").click();
+})
+$('#textcarirekapopname').on('keypress', function(e) {
+    if (e.which === 13) {
+		$("#buttoncarirekapopname").click();
+    }
+});
+$("#rekapopname-perpage").change(function(){
+	$("#updateopname").click();
 })
 function gantislash(stri){
 	let cek = stri.trim();
