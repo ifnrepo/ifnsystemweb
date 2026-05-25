@@ -57,7 +57,20 @@ class Opname extends CI_Controller
     public function getdata()
     {
         $this->session->set_userdata('currdeptopname',$_POST['dept']);
+        $this->session->set_userdata('kepemilikanopname',$_POST['milik']);
+        $this->session->set_userdata('exdo',$_POST['exdo']);
+        $this->session->set_userdata('cari-rekapopname',$_POST['cari']);
+        $this->session->set_userdata('perpage-rekapopname',$_POST['perpage']);
         echo 1;
+    }
+    public function clearrekaopname(){
+        $this->session->unset_userdata('currdeptopname');
+        $this->session->unset_userdata('kepemilikanopname');
+        $this->session->unset_userdata('exdo');
+        $this->session->unset_userdata('cari-rekapopname');
+        $this->session->set_userdata('perpage-rekapopname',25);
+        $url = base_url().'opname/dataopname';
+        redirect($url);
     }
 
     public function addperiode(){
@@ -111,13 +124,25 @@ class Opname extends CI_Controller
 
     public function dataopname()
     {
+        $config['base_url'] = base_url().'opname/dataopname/'; // The URL to your controller method
+        $config['total_rows'] = $this->opnamemodel->countdata(); // Total records in your table
+        $config['per_page'] = $this->session->userdata('perpage-rekapopname')=='' ? 25 : $this->session->userdata('perpage-rekapopname'); // Records per page
+        $config['uri_segment'] = 3; // Which URL segment contains the page number
+        $config['attributes'] = array('class' => 'page-link');
+
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
         $header['header'] = 'rekapopname';
         $data = [
             'dept' => $this->dept_model->getdata(),
             'periode' => $this->opnamemodel->getdataperiode(),
             'fungsi' => 'dataopname',
-            'datadept' => $this->opnamemodel->getdatadept()
+            'datadept' => $this->opnamemodel->getdatadept(),
+            'data' => $this->opnamemodel->getdata($config['per_page'],$page),
+            'jumlahrek' => $config['total_rows'] 
         ];
+        $data['links'] = $this->pagination->create_links();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 
         $this->load->view('layouts/opname/header', $header);
@@ -327,26 +352,6 @@ class Opname extends CI_Controller
         $config['suffix'] = '/'.$this->uri->segment(4);
         $config['first_url'] = $config['base_url'] .'0/'. $config['suffix'];
         $config['attributes'] = array('class' => 'page-link');
-
-        
-        $config['full_tag_open'] = '<ul class="pagination">';
-        $config['full_tag_close'] = '</ul>';
-        
-        $config['first_link'] = 'First';
-        $config['last_link'] = 'Last';
-
-        $config['prev_tag_open'] = '<li class="page-item">';
-        $config['prev_tag_close'] = '</li>';
-        $config['prev_link'] = '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M15 6l-6 6l6 6" /></svg>';
-
-        $config['next_tag_open'] = '<li class="page-item">';
-        $config['next_tag_close'] = '</li>';
-        $config['next_link'] = '<svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round"><path stroke="none" d="M0 0h24v24H0z" fill="none"/><path d="M9 6l6 6l-6 6" /></svg>';
-        
-        $config['cur_tag_open'] = '<li class="page-item active"><a class="page-link" href="#">';
-        $config['cur_tag_close'] = '</a></li>';
-        $config['num_tag_open'] = '<li class="page-item">';
-        $config['num_tag_close'] = '</li>';
 
         $this->pagination->initialize($config);
 

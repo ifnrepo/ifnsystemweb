@@ -21,7 +21,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </select>
                     </div>
                 </div>
-                <a href="#" style="height: 38px;" class="btn btn-yellow btn-sm ml-1" id="refreshperiode"><i class="fa fa-refresh"></i><span class=""></span></a>
+                <a href="#" style="height: 38px;" class="btn btn-yellow btn-sm ml-1" id="refreshperiode"><i class="fa fa-refresh text-black"></i><span class="ml-1 text-black">Set </span></a>
+            </div>
+            <div class="col-md-12 col-12 text-right text-md-right mt-1">
                 <a href="<?= base_url() . 'opname/addperiode'; ?>" style="height: 38px;" class="btn btn-primary btn-sm ml-1 <?php if($this->session->userdata('rolestokopname')!=99){ echo "hilang"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add periode Stok Opname"><i class="fa fa-plus"></i><span class="ml-1">Tambah Periode </span></a>
                 <a href="<?= base_url() . 'opname/addpersenstok'; ?>" style="height: 38px;" class="btn btn-info btn-sm ml-1 <?php if($this->session->userdata('rolestokopname')!=99){ echo "hilang"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Persentase Verifikasi"><i class="fa fa-check"></i><span class="ml-1">Persentase Verifikasi </span></a>
             </div>
