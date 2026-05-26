@@ -22,11 +22,21 @@ class Inv extends CI_Controller
         $this->load->model('helper_model', 'helpermodel');
 
         $this->load->library('Pdf');
+        $this->load->library('pagination');
         // $this->load->library('Codeqr');
         include_once APPPATH . '/third_party/phpqrcode/qrlib.php';
     }
     public function index()
     {
+        $config['base_url'] = base_url().'Inv/index'; // The URL to your controller method
+        $config['total_rows'] = $this->invmodel->countgetdataxbaru(); // Total records in your table
+        $config['per_page'] = $this->session->userdata('perpage-rekapinv')=='' ? 25 : $this->session->userdata('perpage-rekapinv'); // Records per page
+        $config['uri_segment'] = 3; // Which URL segment contains the page number
+        $config['attributes'] = array('class' => 'page-link');
+
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
         $header['header'] = 'other';
         $data['level'] = $this->usermodel->getdatalevel();
         $data['hakdep'] = $this->deptmodel->gethakdeptout($this->session->userdata('arrdep'));
@@ -56,7 +66,9 @@ class Inv extends CI_Controller
             //     $data['buyer'] = [];
             // }
         }
-        // $data['data'] = $this->invmodel->getdatabaru();
+        $data['data'] = $this->invmodel->getdataxbaru($config['per_page'],$page);
+        $data['jumlahrek'] = $this->invmodel->countgetdataxbaru();
+        $data['links'] = $this->pagination->create_links();
         $data['kategoricari'] = 'Cari Barang';
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'inv';
@@ -78,6 +90,14 @@ class Inv extends CI_Controller
         $this->session->unset_userdata('nomorbcnya');
         $this->session->unset_userdata('ifndln');
         $this->session->unset_userdata('dataexdo');
+        $this->session->unset_userdata('filterkat');
+        $this->session->unset_userdata('dataneh');
+        $this->session->unset_userdata('opaneh');
+        $this->session->unset_userdata('idbuyer');
+        $this->session->unset_userdata('idstok');
+        $this->session->unset_userdata('idexnet');
+        $this->session->unset_userdata('nombc');
+        $this->session->unset_userdata('cari-spek');
         $url = base_url('Inv');
         redirect($url);
     }
@@ -91,6 +111,49 @@ class Inv extends CI_Controller
         $this->session->set_userdata('currdept', $_POST['dpt']);
         $this->session->set_userdata('ifndln', $_POST['idln']);
         $this->session->set_userdata('dataexdo', $_POST['exdo']);
+        $this->session->set_userdata('filterkat', $_POST['kat']);
+        $this->session->set_userdata('dataneh', $_POST['aneh']);
+        $this->session->set_userdata('opaneh', $_POST['opaneh']);
+        if($this->session->userdata('currdept')=='GF'){
+            $this->session->set_userdata('idbuyer', $_POST['buyer']);
+        }
+        $this->session->set_userdata('idstok', $_POST['stok']);
+        if($this->session->userdata('currdept')=='GP'){
+            $this->session->set_userdata('idexnet', $_POST['exnet']);
+        }
+        if(in_array($this->session->userdata('currdept'),daftardeptsubkon())){
+            $this->session->set_userdata('nombc', $_POST['nombc']);
+        }
+        echo 1;
+    }
+    public function getdatadef()
+    {
+        $monthawal = date('m',strtotime(tglmysql($_POST['tga'])));
+        $tahunawal = date('Y',strtotime(tglmysql($_POST['tga'])));
+        $jaditahun = '01-'.$monthawal.'-'.$tahunawal;
+        $this->session->set_userdata('tglawal', $jaditahun);
+        $this->session->set_userdata('tglakhir', $_POST['tgk']);
+        $this->session->set_userdata('currdept', $_POST['dpt']);
+        $this->session->set_userdata('ifndln', $_POST['idln']);
+        $this->session->set_userdata('dataexdo', $_POST['exdo']);
+        $this->session->unset_userdata('filterkat');
+        $this->session->unset_userdata('dataneh');
+        $this->session->unset_userdata('opaneh');
+        $this->session->unset_userdata('idbuyer');
+        $this->session->unset_userdata('idstok');
+        $this->session->unset_userdata('idexnet');
+        $this->session->unset_userdata('nombc');
+        $this->session->unset_userdata('cari-spek');
+        echo 1;
+    }
+    public function getcari(){
+        $id = $_POST['cari'];
+        $this->session->set_userdata('cari-spek',$id);
+        echo 1;
+    }
+    public function unsetcari(){
+        $id = $_POST['cari'];
+        $this->session->unset_userdata('cari-spek',$id);
         echo 1;
     }
     public function getdatabaru($mode=0){

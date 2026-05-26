@@ -211,6 +211,20 @@ class inv_model extends CI_Model
         $this->db->join('user','user.id = stokdept.user_verif','left');
         $this->db->where('dept_id',$dept);
         $this->db->where('periode',$periode);
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+                $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('stokdept.stok',$this->session->userdata('idstok'));
+            }
+        }
         // $this->db->where('stokdept.po','KI-6391');
         // $this->db->where('stokdept.nobale','58');
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,stokdept.nobale,xnomor_bc,stok,exnet');
@@ -264,6 +278,20 @@ class inv_model extends CI_Model
         if($dept=='NT'){
             $this->db->where('trim(tb_detail.po)','');
         }
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+                $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('tb_detail.stok',$this->session->userdata('idstok'));
+            }
+        }
         // $this->db->where('tb_detail.po','KI-6391');
         // $this->db->where('tb_detail.nobale','58');
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
@@ -312,6 +340,20 @@ class inv_model extends CI_Model
         $this->db->group_end();
         $this->db->where('tb_header.kode_dok','T');
         $this->db->where('tb_header.data_ok',1);
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+                $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('tb_detailgen.stok',$this->session->userdata('idstok'));
+            }
+        }
         // $this->db->where('tb_detailgen.po','KI-6391');
         // $this->db->where('tb_detailgen.nobale','58');
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
@@ -361,6 +403,20 @@ class inv_model extends CI_Model
         $this->db->where('tb_header.ok_valid',1);
         // $this->db->where('tb_detail.po','KI-6391');
         // $this->db->where('tb_detail.nobale','58');
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+                $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('tb_detail.stok',$this->session->userdata('idstok'));
+            }
+        }
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query4 = $this->db->get_compiled_select();
 
@@ -409,6 +465,20 @@ class inv_model extends CI_Model
         // $this->db->where('tb_header.ok_valid',1);
         // $this->db->where('tb_detail.po','KI-6391');
         // $this->db->where('tb_detail.nobale','58');
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+                $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('stokopname_detail.stok',$this->session->userdata('idstok'));
+            }
+        }
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query5 = $this->db->get_compiled_select();
 
@@ -435,6 +505,104 @@ class inv_model extends CI_Model
         $hasil = $this->db->query($kolom);
 
         return $kolom;
+    }
+
+    public function getdataxbaru($limit=0,$start=0){
+        $kondisi = '';
+        $jadikondisi = '';
+        $adakondisi = 0;
+        // if($this->session->userdata('filterkat')!=""){
+        //     $adakondisi = 1;
+        //     $kondisi .= " id_kategori = '".$this->session->userdata('filterkat')."' AND";
+        // }
+        // if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+        //     $adakondisi = 1;
+        //     $kondisi .= " id_buyer = '".$this->session->userdata('idbuyer')."' AND";
+        // }
+        // if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+        //     $adakondisi = 1;
+        //     $kondisi .= " stok = '".$this->session->userdata('idstok')."' AND";
+        // }
+        if($this->session->has_userdata('idexnet') && $this->session->userdata('idexnet')!="all"){
+            $adakondisi = 1;
+            $kondisi .= " exnet = '".$this->session->userdata('idexnet')."' AND";
+        }
+        if($this->session->has_userdata('nombc') && $this->session->userdata('nombc')!="all"){
+            $adakondisi = 1;
+            $kondisi .= " nomor_bc = '".$this->session->userdata('nombc')."' AND";
+        }
+        if($this->session->userdata('dataneh')=='1'){
+            $adakondisi = 1;
+            $kondisi .= " (sumkgs < 0 OR sumpcs < 0) AND";
+        }
+        if($this->session->userdata('opaneh')=='1'){
+            $adakondisi = 1;
+            $kondisi .= " (sumkgs != ifnull(kgs_taking,0) OR sumpcs != ifnull(pcs_taking,0)) AND";
+        }
+        if($this->session->has_userdata('cari-spek') && $this->session->userdata('cari-spek')!=""){
+            $isi = $this->session->userdata('cari-spek');
+            if(str_contains(trim($isi)," ")){
+                $pisah = explode(" ",trim($isi));
+                $hasil = '';
+                foreach($pisah as $ps){
+                    $hasil .= $ps.'%';
+                }
+                $kata = substr($hasil,0,strlen($hasil)-1);
+            }else{
+                $kata = trim($isi);
+            }
+            $adakondisi = 1;
+            $kondisi .= " (po like '%".$kata."%' OR insno like '%".$kata."%' OR nobontr like '%".$kata."%' OR spek like '%".$kata."%' OR nobale like '%".$kata."%' OR id_barang like '%".$kata."%' OR nama_barang like '%".$kata."%' OR kode like '%".$kata."%' OR skupo like '%".$kata."%') AND";
+        }
+        if($adakondisi==1){
+            $jadikondisi = " WHERE".substr($kondisi,0,strlen($kondisi)-3);
+        }
+        $lim = " limit ".$start.",".$limit;
+        $query = $this->db->query($this->getdata(1).$jadikondisi.$lim);
+        return $query;
+    }
+    public function countgetdataxbaru(){
+        $kondisi = '';
+        $jadikondisi = '';
+        $adakondisi = 0;
+    //    if($this->session->userdata('filterkat')!=""){
+    //         $adakondisi = 1;
+    //         $kondisi .= " id_kategori = '".$this->session->userdata('filterkat')."' AND";
+    //     }
+    //     if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+    //         $adakondisi = 1;
+    //         $kondisi .= " id_buyer = '".$this->session->userdata('idbuyer')."' AND";
+    //     }
+    //     if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+    //         $adakondisi = 1;
+    //         $kondisi .= " stok = '".$this->session->userdata('idstok')."' AND";
+    //     }
+        if($this->session->has_userdata('idexnet') && $this->session->userdata('idexnet')!="all"){
+            $adakondisi = 1;
+            $kondisi .= " exnet = '".$this->session->userdata('idexnet')."' AND";
+        }
+        if($this->session->has_userdata('nombc') && $this->session->userdata('nombc')!="all"){
+            $adakondisi = 1;
+            $kondisi .= " nomor_bc = '".$this->session->userdata('nombc')."' AND";
+        }
+        if($this->session->userdata('dataneh')=='1'){
+            $adakondisi = 1;
+            $kondisi .= " (sumkgs < 0 OR sumpcs < 0) AND";
+        }
+        if($this->session->userdata('opaneh')=='1'){
+            $adakondisi = 1;
+            $kondisi .= " (sumkgs != ifnull(kgs_taking,0) OR sumpcs != ifnull(pcs_taking,0)) AND";
+        }
+        if($this->session->has_userdata('cari-spek') && $this->session->userdata('cari-spek')!=""){
+            $kata = $this->session->userdata('cari-spek');
+            $adakondisi = 1;
+            $kondisi .= " (po like '%".$kata."%' OR insno like '%".$kata."%' OR nobontr like '%".$kata."%' OR spek like '%".$kata."%' OR nobale like '%".$kata."%' OR id_barang like '%".$kata."%' OR nama_barang like '%".$kata."%' OR kode like '%".$kata."%' OR skupo like '%".$kata."%') AND";
+        }
+        if($adakondisi==1){
+            $jadikondisi = " WHERE".substr($kondisi,0,strlen($kondisi)-3);
+        }
+        $query = $this->db->query($this->getdata(1).$jadikondisi);
+        return $query->num_rows();
     }
 
     public function getdatabaru($filtkat,$mode=0){

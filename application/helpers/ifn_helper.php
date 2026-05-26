@@ -1347,6 +1347,13 @@ function gantislash($str){
 	$jadi = str_replace("#","_",$str);
 	return $jadi;
 }
+function gantislash2($stri){
+	$cek = trim($stri);
+	$jadi = str_replace("/","+",$cek); //$cek.replaceAll("/", "+");
+	$hasilx = str_replace("-","?",$jadi); //jadi.replaceAll("-", "?");
+	$hasil = str_replace(" ","%20",$hasilx);  //hasilx.replaceAll(" ", "%20");
+	return $hasil;
+}
 function slashganti($str){
 	$cek = trim($str);
 	$hasil = str_replace("+","/",$str);
