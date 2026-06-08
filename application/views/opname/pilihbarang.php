@@ -1,15 +1,15 @@
 <div class="container-xl mb-2">
-    <div class="row">
+    <div class="row overflow-auto">
         <div class="col-12">
             <table class="table table-bordered table-hover m-0">
                 <thead class="bg-primary-lt">
                     <tr>
+                        <th class="text-black">Aksi</th>
                         <th class="text-black">SKU</th>
                         <th class="text-black">Spek Barang</th>
                         <th class="text-black">Insno/Nobontr</th>
                         <th class="text-black">Stok</th>
                         <th class="text-black">Exnet</th>
-                        <th class="text-black">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody">
@@ -21,11 +21,6 @@
                         $exnet = $dt['exnet']==0 ? '' : 'Y';
                      ?>
                         <tr>
-                            <td class="font-kecil"><?= $sku ?></td>
-                            <td class="font-kecil"><?= $spek ?></td>
-                            <td class="font-kecil"><?= $dt['insno'].$dt['nobontr'] ?></td>
-                            <td class="font-kecil"><?= $stok ?></td>
-                            <td class="font-kecil"><?= $exnet ?></td>
                             <td class="font-kecil text-center">
                                 <a href="#" 
                                     id="pilihbarang",
@@ -46,6 +41,11 @@
                                     Pilih
                                 </a>
                             </td>
+                            <td class="font-kecil"><?= $sku ?></td>
+                            <td class="font-kecil"><?= $spek ?></td>
+                            <td class="font-kecil"><?= $dt['insno'].$dt['nobontr'] ?></td>
+                            <td class="font-kecil"><?= $stok ?></td>
+                            <td class="font-kecil"><?= $exnet ?></td>
                         </tr>
                     <?php endforeach; ?>
                 </tbody>

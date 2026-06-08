@@ -120,6 +120,15 @@
                             <label class="col-3 col-form-labels font-bold">Nama</label>
                             <div class="col">
                                 <?php $supp = $detail['nama_supplier'] == '' ? $detail['nama_rekanan'] : $detail['nama_supplier']; ?>
+                                <?php 
+                                    if($detail['nama_supplier']!=''){
+                                        $supp = $detail['nama_supplier'];
+                                    }else if($detail['nama_rekanan']!=''){
+                                        $supp = $detail['nama_supplier'];
+                                    }else{
+                                        $supp = datadepartemen($detail['dept_id'],'departemen');
+                                    }
+                                 ?>
                                 <input type="text" class="form-control font-kecil btn-flat" value="<?= $supp; ?>" aria-describedby="emailHelp" placeholder="Enter Nama Pengirim">
                             </div>
                         </div>
@@ -127,6 +136,15 @@
                             <label class="col-3 col-form-label font-bold">Alamat</label>
                             <div class="col">
                                 <?php $suppalamat = $detail['nama_supplier'] == '' ? $detail['alamat_rekanan'] : $detail['alamat']; ?>
+                                <?php 
+                                    if($detail['nama_supplier']!=''){
+                                        $suppalamat = $detail['alamat'];
+                                    }else if($detail['nama_rekanan']!=''){
+                                        $suppalamat = $detail['alamat_rekanan'];
+                                    }else{
+                                        $suppalamat = datadepartemen($detail['dept_id'],'alamat_subkon');
+                                    }
+                                 ?>
                                 <textarea class="form-control font-kecil font-bold btn-flat"><?= $suppalamat; ?></textarea>
                             </div>
                         </div>
@@ -134,6 +152,15 @@
                             <label class="col-3 col-form-label font-bold">NPWP</label>
                             <div class="col">
                                 <?php $suppnpwp = $detail['nama_supplier'] == '' ? $detail['npwp_rekanan'] : $detail['npwp']; ?>
+                                <?php 
+                                    if($detail['nama_supplier']!=''){
+                                        $suppnpwp = $detail['npwp'];
+                                    }else if($detail['nama_rekanan']!=''){
+                                        $suppnpwp = $detail['npwp_rekanan'];
+                                    }else{
+                                        $suppnpwp = datadepartemen($detail['dept_id'],'npwp');
+                                    }
+                                 ?>
                                 <input type="text" class="form-control font-kecil btn-flat" value="<?= $suppnpwp ?>" aria-describedby="emailHelp" placeholder="Enter Npwp Pengirim">
                             </div>
                         </div>

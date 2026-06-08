@@ -1,8 +1,20 @@
 var table = null;
 $(document).ready(function () {
 	$("#currdept").change();
-	$(".loadered").removeClass('hilang');
-	table = $('#tabelnya').DataTable({
+	// $(".loadered").removeClass('hilang');
+	$("#awalpcs").text($("#sawalpcs").val());
+	$("#awalkgs").text($("#sawalkgs").val());
+	$("#inpcs").text($("#totalinpcs").val());
+	$("#inkgs").text($("#totalinkgs").val());
+	$("#outpcs").text($("#totaloutpcs").val());
+	$("#outkgs").text($("#totaloutkgs").val());
+	$("#adjpcs").text($("#totaladjpcs").val());
+	$("#adjkgs").text($("#totaladjkgs").val());
+	$("#jumlahpcs").text($("#totalpcs").val());
+	$("#jumlahkgs").text($("#totalkgs").val());
+	$("#sopcs").text($("#totalsopcs").val());
+	$("#sokgs").text($("#totalsokgs").val());
+	table = $('#tabelnyau').DataTable({
 		// "processing": true,
 		// "responsive":true,
 		"serverSide": true,
@@ -193,17 +205,6 @@ $(document).ready(function () {
 			 },
 		],
 	});
-
-	$("#katbar").on("change", function () {
-		table.ajax.reload();
-		// $("#loadview").html('<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>');
-		$(".loadered").removeClass('hilang');
-	});
-
-	$("#dataneh").on("change", function () {
-		table.ajax.reload();
-		$(".loadered").removeClass('hilang');
-	});
 	$("#exdonya").on('change',function(){
 		table.ajax.reload();
 		$(".loadered").removeClass('hilang');
@@ -212,18 +213,7 @@ $(document).ready(function () {
 		table.ajax.reload();
 		$(".loadered").removeClass('hilang');
 	})
-	$("#idbuyer").on('change',function(){
-		table.ajax.reload();
-		$(".loadered").removeClass('hilang');
-	})
-	$("#idexnet").on('change',function(){
-		table.ajax.reload();
-		$(".loadered").removeClass('hilang');
-	})
-	$("#opaneh").on("change", function () {
-		table.ajax.reload();
-		$(".loadered").removeClass('hilang');
-	});
+
 	$("#filtnomorbc").on("change", function () {
 		table.ajax.reload();
 		// $("#loadview").html('<div class="spinner-border spinner-border-sm text-secondary" role="status"></div>');
@@ -234,18 +224,18 @@ $(document).ready(function () {
     //     table.search(this.value).draw();
     // });
 
-	$("#buttoncari").click(function(){
-		$(".loadered").removeClass('hilang');
-		var isi = $("#textcari").val();
-		table.search(isi).draw();
-		return false;
-	})
-	$("#buttonreset").click(function(){
-		$(".loadered").removeClass('hilang');
-		$("#textcari").val('');
-		table.search('').draw();
-		return false;
-	})
+	// $("#buttoncari").click(function(){
+	// 	$(".loadered").removeClass('hilang');
+	// 	var isi = $("#textcari").val();
+	// 	table.search(isi).draw();
+	// 	return false;
+	// })
+	// $("#buttonreset").click(function(){
+	// 	$(".loadered").removeClass('hilang');
+	// 	$("#textcari").val('');
+	// 	table.search('').draw();
+	// 	return false;
+	// })
 	// if($("#ifndln").val()=='all'){
 	// 	$("#simpaninv").removeClass('disabled');
 	// }
@@ -256,7 +246,20 @@ $(document).ready(function () {
 		$("#headopname").html('Opname<br>');
 		$("#cekaneh").addClass('hilang');
 	}
+
+	// let timeLeft = 10; // 10 seconds
+
+	// const timer = setInterval(() => {
+	// 	if (timeLeft <= 0) {
+	// 		clearInterval(timer); // Stop the timer
+	// 		console.log("Time's up!");
+	// 	} else {
+	// 		console.log(timeLeft + " seconds remaining");
+	// 		timeLeft -= 1;
+	// 	}
+	// }, 1000); // Run every 1 second
 });
+
 function gantislash(stri){
 	let cek = stri.trim();
 	let jadi = cek.replaceAll("/", "+");
@@ -264,6 +267,54 @@ function gantislash(stri){
 	let hasil = hasilx.replaceAll(" ", "%20");
 	return hasil;
 }
+$("#buttoncariinv").click(function(){
+	$(".loadered").removeClass('hilang');
+	$(this).html('Loading');
+	var isi = $("#textcari").val();
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "inv/getcari",
+		data: {
+			cari: isi,
+		},
+		success: function (data) {
+			// console.log("KONTRAK" + kontrakbcnya);
+			window.location.href = base_url+'inv';
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+})
+$("#buttonresetinv").click(function(){
+	$(".loadered").removeClass('hilang');
+	$("#textcari").val('');
+	$(this).html('Loading');
+	var isi = $("#textcari").val();
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "inv/unsetcari",
+		data: {
+			cari: isi,
+		},
+		success: function (data) {
+			// console.log("KONTRAK" + kontrakbcnya);
+			window.location.href = base_url+'inv';
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+})
+$('#textcari').on('keypress', function(e) {
+    if (e.which == 13) {
+		$("#buttoncariinv").click();
+    }
+});
 $("#textcari").blur(function () {
 	// var isi = $(this).val().trim();
 	// $(this).val(isi);
@@ -329,8 +380,88 @@ $("#currdept").change(function () {
 
 $("#ifndln").change(function(){
 	$("#updateinv").click();
+});
+$("#katbar").on("change", function () {
+	loaddatainv();
+});
+$("#dataneh").on("change", function () {
+	loaddatainv();
+});
+$("#opaneh").on("change", function () {
+	loaddatainv();
+});
+$("#idbuyer").on('change',function(){
+	loaddatainv();
 })
+$("#idexnet").on('change',function(){
+	loaddatainv();
+});
+$("#filtnomorbc").on('change',function(){
+	loaddatainv();
+});
+function loaddatainv(){
+	$(".loadered").removeClass('hilang');
+	var tglawal = $("#tglawal").val();
+	var tglakhir = $("#tglakhir").val();
+	var currdept = $("#currdept").val();
+	var ifndl = $("#ifndln").val();
+	var katbar = $("#katbar").val();
+	var katcari = $("input:radio[name=radios-inline]:checked").val();
+	$("#textcari").val("");
+	var nomorbcnya = $("#nomorbcnya").val();
+	var kontrakbcnya = $("#kontrakbcnya").val();
+	var textcari = $("#textcari").val();
+	var exd = $("#exdo").val();
+	if ($("#gbg").is(":checked")) {
+		var gbg = 1;
+	} else {
+		var gbg = 0;
+	}
+	if ($("#dataneh").is(":checked")) {
+		var dataneh = 1;
+	} else {
+		var dataneh = 0;
+	}
+	if ($("#opaneh").is(":checked")) {
+		var paneh = 1;
+	} else {
+		var paneh = 0;
+	}
+	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
+		pesan("Tanggal awal lebih besar dari tanggal akhir - Proses dibatalkan", "info");
+		return false;
+	}
+	$("#updateinv").html('<i class="fa fa-circle-o-notch fa-spin mr-1"></i> Loading ..');
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "inv/getdata",
+		data: {
+			tga: tglawal,
+			tgk: tglakhir,
+			dpt: currdept,
+			idln: ifndl,
+			exdo: exd,
+			kat: katbar,
+			aneh: dataneh,
+			opaneh: paneh,
+			buyer: $("#idbuyer").val(),
+			stok: $("#idstok").val(),
+			exnet: $("#idexnet").val(),
+			nombc: $("#filtnomorbc").val(),
+		},
+		success: function (data) {
+			console.log("KONTRAK" + kontrakbcnya);
+			window.location.href = base_url+'inv';
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
 $("#updateinv").click(function () {
+	$(".loadered").removeClass('hilang');
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();
 	var currdept = $("#currdept").val();
@@ -348,6 +479,16 @@ $("#updateinv").click(function () {
 	} else {
 		var gbg = 0;
 	}
+	if ($("#dataneh").is(":checked")) {
+		var dataneh = 1;
+	} else {
+		var dataneh = 0;
+	}
+	if ($("#opaneh").is(":checked")) {
+		var paneh = 1;
+	} else {
+		var paneh = 0;
+	}
 	// alert(gbg);
 	if (new Date(tglmysql(tglawal)) > new Date(tglmysql(tglakhir))) {
 		pesan("Tanggal awal lebih besar dari tanggal akhir - Proses dibatalkan", "info");
@@ -357,13 +498,13 @@ $("#updateinv").click(function () {
 	$.ajax({
 		dataType: "json",
 		type: "POST",
-		url: base_url + "inv/getdata",
+		url: base_url + "inv/getdatadef",
 		data: {
 			tga: tglawal,
 			tgk: tglakhir,
 			dpt: currdept,
 			idln: ifndl,
-			exdo: exd
+			exdo: exd,
 			// gbn: gbg,
 			// kat: katbar,
 			// kcari: katcari,
@@ -375,7 +516,7 @@ $("#updateinv").click(function () {
 		success: function (data) {
 			// alert(data);
 			console.log("KONTRAK" + kontrakbcnya);
-			window.location.reload();
+			window.location.href = base_url+'inv';
 			// $("#body-table").html(data.datagroup).show();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {

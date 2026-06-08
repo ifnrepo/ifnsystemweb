@@ -160,25 +160,27 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     ? $nilai
                     : (($detail['mtuang'] == 3)
                       ? ($nilai * $kurs_yen) / $kurs_usd
-                      : ($nilai / $kurs_usd)))
+                      : ($nilai / $kurs_usd)));
 
+                  $aneh = ($detail['tgl_sp'] > $detail['tgl_bc']) ? 'text-red' : '';
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bckeluar/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju'], $detail['prefix_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
-                    <td class="text-left" style="line-height: 12px;"><?= $detail['nomor_sp']; ?><br><?= $detail['tgl_sp']; ?></td>
-                    <td class="text-left line-13">
-                      <?php
-                      if (!empty($detail['nama_customer'])) {
-                        echo ucwords(strtolower(trim($detail['nama_customer'])));
-                        if (!empty($detail['port'])) {
-                          echo ' - ' . ucwords(strtolower($detail['port']));
+                    <td class="text-left" style="line-height: 12px;"><span class="<?= $aneh ?>"><?= $detail['nomor_sp']; ?><br><?= $detail['tgl_sp']; ?></span></td>
+                    <?php 
+                      if($detail['nama_customer']!=''){
+                        $port = !empty($detail['port']) ? ' - ' . ucwords(strtolower($detail['port'])) : '';
+                        $kirimke = ucwords(strtolower(trim($detail['nama_customer']))).$port;
+                      }else{
+                        if($detail['nama_supplier']!=''){
+                          $kirimke = ucwords(strtolower(trim($detail['nama_supplier'])));
+                        }else{
+                          $kirimke =  ucwords(strtolower(trim($detail['departemen'])));
                         }
-                      } else {
-                        echo ucwords(strtolower(trim($detail['departemen'])));                  
                       }
-                      ?>
-                    </td>
+                     ?>
+                    <td class="text-left line-13"><?= $kirimke ?></td>
                     <?php $spanmakloon = $detail['bc_makloon']==1 ? '<span title="Makloon" class="badge badge-outline text-teal ml-1">M</span>' : '' ?>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span><?= $spanmakloon ?></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>

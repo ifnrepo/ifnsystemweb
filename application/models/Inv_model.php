@@ -175,6 +175,67 @@ class inv_model extends CI_Model
         $ada = in_array($dept,daftardeptsubkon());
         $arrbarangexcludejenis = $this->session->userdata('currdept') == 'GS' ? "'XX'" : "'4170','5691','6019','39991','40394','40395','40396'";
 
+        // //Isi dulu po_id pada Stokdept,tb_detailgen,tb_detail, stokopname_detail
+        // //Cek data Stokdept
+        // $datastok = $this->db->get_where('stokdept',['id_tb_po' => 0,'periode'=>$periode,'dept_id'=>$dept,'trim(po) !=' => ""]);
+        // if($datastok->num_rows() > 0){
+        //     foreach($datastok->result_array() as $ds){
+        //         $ids = $ds['id'];
+        //         $formatindpo = buatkanformatindpo($ds['po'],$ds['item'],$ds['dis']);
+        //         $datapo = $this->db->get_where('Xtb_po',['ind_po' => $formatindpo])->row_array();
+
+        //         $this->db->where('id',$ids);
+        //         $this->db->update('stokdept',['id_tb_po' => $datapo['id']]);
+        //     }
+        // }
+
+        // //Cek data tb_detail
+        // $this->db->select('tb_detail.*');
+        // $this->db->from('tb_detail');
+        // $this->db->join('tb_header','tb_header.id = tb_detail.id_header');
+        // $this->db->where('tb_header.dept_tuju',$dept);
+        // $this->db->group_start();
+        // $this->db->where("tb_header.tgl BETWEEN '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
+        // $this->db->group_end();
+        // $this->db->group_start();
+        // $this->db->where('tb_header.kode_dok','IB');
+        // $this->db->or_where('tb_header.kode_dok','T');
+        // $this->db->group_end();
+        // $this->db->where('tb_header.ok_valid',1);
+        // $this->db->where('trim(tb_detail.po) !=',"");
+        // $datadet = $this->db->get();
+        // if($datadet->num_rows() > 0){
+        //     foreach($datadet->result_array() as $ds){
+        //         $ids = $ds['id'];
+        //         $datapo = $this->db->get_where('tb_po',['ind_po' => $ds['po'].$ds['item'].$ds['dis']])->row_array();
+
+        //         $this->db->where('id',$ids);
+        //         $this->db->update('tb_detail',['id_tb_po' => $datapo['id']]);
+        //     }
+        // }
+
+        // //Cek data tb_detailgen
+        // $this->db->select('tb_detailgen.*');
+        // $this->db->from('tb_detailgen');
+        // $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header');
+        // $this->db->where('tb_header.dept_id',$dept);
+        // $this->db->group_start();
+        // $this->db->where("tb_header.tgl BETWEEN '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
+        // $this->db->group_end();
+        // $this->db->where('tb_header.kode_dok','T');
+        // $this->db->where('tb_header.data_ok',1);
+        // $this->db->where('trim(tb_detailgen.po) !=',"");
+        // $datadet = $this->db->get();
+        // if($datadet->num_rows() > 0){
+        //     foreach($datadet->result_array() as $ds){
+        //         $ids = $ds['id'];
+        //         $datapo = $this->db->get_where('tb_po',['ind_po' => $ds['po'].$ds['item'].$ds['dis']])->row_array();
+
+        //         $this->db->where('id',$ids);
+        //         $this->db->update('tb_detailgen',['id_tb_po' => $datapo['id']]);
+        //     }
+        // }
+
         // Query untuk CekSaldobarang
         $this->db->select("0 as kodeinv,stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,stokdept.dln as xdln,barang.id_kategori,stokdept.insno,stokdept.nobontr,barang.kode,stokdept.id as idu");
         $this->db->select('sum(pcs_awal) as saldopcs,sum(kgs_awal) as saldokgs');
@@ -207,10 +268,28 @@ class inv_model extends CI_Model
         }
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        // $this->db->join('tb_po','tb_po.po = stokdept.po AND tb_po.item = stokdept.item AND tb_po.dis = stokdept.dis','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(stokdept.po,stokdept.item,stokdept.dis)','left');
+        // $this->db->join('tb_po','tb_po.id = stokdept.id_tb_po','left');
         $this->db->join('user','user.id = stokdept.user_verif','left');
         $this->db->where('dept_id',$dept);
         $this->db->where('periode',$periode);
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer')){
+                if($this->session->userdata('idbuyer')!="all"){
+                    $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+                }
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('stokdept.stok',$this->session->userdata('idstok'));
+            }
+        }
         // $this->db->where('stokdept.po','KI-6391');
         // $this->db->where('stokdept.nobale','58');
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,stokdept.nobale,xnomor_bc,stok,exnet');
@@ -249,12 +328,14 @@ class inv_model extends CI_Model
         }
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-        // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
+        // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item AND tb_po.dis = tb_detail.dis','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(tb_detail.po,tb_detail.item,tb_detail.dis)','left');
+        // $this->db->join('tb_po','tb_po.id = tb_detail.id_tb_po','left');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->where('dept_tuju',$dept);
         $this->db->group_start();
         $this->db->where("tb_header.tgl BETWEEN '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
+        // $this->db->where("tb_header.tgl >= '".tglmysql($tglawal)."' AND tb_header.tgl <= '".tglmysql($tglakhir)."' ");
         $this->db->group_end();
         $this->db->group_start();
         $this->db->where('tb_header.kode_dok','IB');
@@ -263,6 +344,22 @@ class inv_model extends CI_Model
         $this->db->where('tb_header.ok_valid',1);
         if($dept=='NT'){
             $this->db->where('trim(tb_detail.po)','');
+        }
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer')){
+                if($this->session->userdata('idbuyer')!="all"){
+                    $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+                }
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('tb_detail.stok',$this->session->userdata('idstok'));
+            }
         }
         // $this->db->where('tb_detail.po','KI-6391');
         // $this->db->where('tb_detail.nobale','58');
@@ -302,16 +399,32 @@ class inv_model extends CI_Model
         }
         $this->db->from('tb_detailgen');
         $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
-        // $this->db->join('tb_po','tb_po.po = tb_detailgen.po AND tb_po.item = tb_detailgen.item','left');
+        // $this->db->join('tb_po','tb_po.po = tb_detailgen.po AND tb_po.item = tb_detailgen.item AND tb_po.dis = tb_detailgen.dis','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(tb_detailgen.po,tb_detailgen.item,tb_detailgen.dis)','left');
+        // $this->db->join('tb_po','tb_po.id = tb_detailgen.id_tb_po','left');
         $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header','left');
         $this->db->join('tb_detail','tb_detail.id = tb_detailgen.id_detail','left');
         $this->db->where('dept_id',$dept);
         $this->db->group_start();
         $this->db->where("tb_header.tgl BETWEEN '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
+        // $this->db->where("tb_header.tgl >= '".tglmysql($tglawal)."' AND tb_header.tgl <= '".tglmysql($tglakhir)."' ");
         $this->db->group_end();
         $this->db->where('tb_header.kode_dok','T');
         $this->db->where('tb_header.data_ok',1);
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all")){
+                $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('tb_detailgen.stok',$this->session->userdata('idstok'));
+            }
+        }
         // $this->db->where('tb_detailgen.po','KI-6391');
         // $this->db->where('tb_detailgen.nobale','58');
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
@@ -349,18 +462,34 @@ class inv_model extends CI_Model
         }
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
-        // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
+        // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item AND tb_po.dis = tb_detail.dis','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(tb_detail.po,tb_detail.item,tb_detail.dis)','left');
+        // $this->db->join('tb_po','tb_po.id = tb_detail.id_tb_po','left');
         $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->where('dept_id',$dept);
         $this->db->group_start();
         $this->db->where("tb_header.tgl BETWEEN '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
+        // $this->db->where("tb_header.tgl >= '".tglmysql($tglawal)."' AND tb_header.tgl <= '".tglmysql($tglakhir)."' ");
         $this->db->group_end();
         $this->db->where('tb_header.kode_dok','ADJ');
         $this->db->where('tb_header.data_ok',1);
         $this->db->where('tb_header.ok_valid',1);
         // $this->db->where('tb_detail.po','KI-6391');
         // $this->db->where('tb_detail.nobale','58');
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all")){
+                $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('tb_detail.stok',$this->session->userdata('idstok'));
+            }
+        }
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query4 = $this->db->get_compiled_select();
 
@@ -398,6 +527,7 @@ class inv_model extends CI_Model
         $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
         // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(stokopname_detail.po,stokopname_detail.item,stokopname_detail.dis)','left');
+        // $this->db->join('tb_po','tb_po.id = stokopname_detail.id_tb_po','left');
         // $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->where('stokopname_detail.dept_id',$dept);
         $this->db->where('stokopname_detail.tgl',tglmysql($tglakhir));
@@ -409,12 +539,29 @@ class inv_model extends CI_Model
         // $this->db->where('tb_header.ok_valid',1);
         // $this->db->where('tb_detail.po','KI-6391');
         // $this->db->where('tb_detail.nobale','58');
+        if($mode==1){
+            if($this->session->userdata('filterkat')!=""){
+                $this->db->group_start();
+                $this->db->where('barang.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->or_where('tb_po.id_kategori',$this->session->userdata('filterkat'));
+                $this->db->group_end();
+            }
+            if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all")){
+                $this->db->where('tb_po.id_buyer',$this->session->userdata('idbuyer'));
+            }
+            if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+                $this->db->where('stokopname_detail.stok',$this->session->userdata('idstok'));
+            }
+        }
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query5 = $this->db->get_compiled_select();
 
-        $kolom = " Select *,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldokgs+inkgs-outkgs+adjkgs)) over() as totalkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldopcs+inpcs-outpcs+adjpcs)) over() as totalpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldopcs)) over() as sawalpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldokgs)) over() as sawalkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,inpcs)) over() as totalinpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,outpcs)) over() as totaloutpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,inkgs)) over() as totalinkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,outkgs)) over() as totaloutkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,adjpcs)) over() as totaladjpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,adjkgs)) over() as totaladjkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,pcs_taking)) over() as totalsopcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,kgs_taking)) over() as totalsokgs from (";
+        $kolom = "Select jns,kodeinv,nobale,po,item,dis,id_barang,xdln,id_kategori,nomor_bc,insno,nobontr,kode,idu,stok,exnet,saldopcs,saldokgs,";
+        $kolom .= "inpcs,inkgs,outpcs,outkgs,adjpcs,adjkgs,sumpcs,sumkgs,pcs_taking,kgs_taking,kodesatuan,nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,skupo,sdln,";
+        $kolom .= "sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldokgs+inkgs-outkgs+adjkgs)) over() as totalkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldopcs+inpcs-outpcs+adjpcs)) over() as totalpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldopcs)) over() as sawalpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldokgs)) over() as sawalkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,inpcs)) over() as totalinpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,outpcs)) over() as totaloutpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,inkgs)) over() as totalinkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,outkgs)) over() as totaloutkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,adjpcs)) over() as totaladjpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,adjkgs)) over() as totaladjkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,pcs_taking)) over() as totalsopcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,kgs_taking)) over() as totalsokgs from (";
         $kolom .= "Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,ifnull(trim(xnomor_bc),'') as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,skupo,sdln ";
         $kolom .= "from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4." union all ".$query5.") r1";
+        // $kolom .= "from (".$query1.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
         $kolom .= " left join satuan on barang.id_satuan = satuan.id";
         $kolom .= " left join kategori on kategori.kategori_id = left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4)";
@@ -435,6 +582,104 @@ class inv_model extends CI_Model
         $hasil = $this->db->query($kolom);
 
         return $kolom;
+    }
+
+    public function getdataxbaru($limit=0,$start=0){
+        $kondisi = '';
+        $jadikondisi = '';
+        $adakondisi = 0;
+        // if($this->session->userdata('filterkat')!=""){
+        //     $adakondisi = 1;
+        //     $kondisi .= " id_kategori = '".$this->session->userdata('filterkat')."' AND";
+        // }
+        // if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+        //     $adakondisi = 1;
+        //     $kondisi .= " id_buyer = '".$this->session->userdata('idbuyer')."' AND";
+        // }
+        // if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+        //     $adakondisi = 1;
+        //     $kondisi .= " stok = '".$this->session->userdata('idstok')."' AND";
+        // }
+        if($this->session->has_userdata('idexnet') && $this->session->userdata('idexnet')!="all"){
+            $adakondisi = 1;
+            $kondisi .= " exnet = '".$this->session->userdata('idexnet')."' AND";
+        }
+        if($this->session->has_userdata('nombc') && $this->session->userdata('nombc')!="all"){
+            $adakondisi = 1;
+            $kondisi .= " nomor_bc = '".$this->session->userdata('nombc')."' AND";
+        }
+        if($this->session->userdata('dataneh')==1){
+            $adakondisi = 1;
+            $kondisi .= " (sumkgs < 0 OR sumpcs < 0) AND";
+        }
+        if($this->session->userdata('opaneh')==1){
+            $adakondisi = 1;
+            $kondisi .= " (sumkgs != ifnull(kgs_taking,0) OR sumpcs != ifnull(pcs_taking,0)) AND";
+        }
+        if($this->session->has_userdata('cari-spek') && $this->session->userdata('cari-spek')!=""){
+            $isi = $this->session->userdata('cari-spek');
+            if(str_contains(trim($isi)," ")){
+                $pisah = explode(" ",trim($isi));
+                $hasil = '';
+                foreach($pisah as $ps){
+                    $hasil .= $ps.'%';
+                }
+                $kata = substr($hasil,0,strlen($hasil)-1);
+            }else{
+                $kata = trim($isi);
+            }
+            $adakondisi = 1;
+            $kondisi .= " (po like '%".$kata."%' OR insno like '%".$kata."%' OR nobontr like '%".$kata."%' OR spek like '%".$kata."%' OR nobale like '%".$kata."%' OR id_barang like '%".$kata."%' OR nama_barang like '%".$kata."%' OR kode like '%".$kata."%' OR skupo like '%".$kata."%') AND";
+        }
+        if($adakondisi==1){
+            $jadikondisi = " WHERE".substr($kondisi,0,strlen($kondisi)-3);
+        }
+        $lim = " limit ".$start.",".$limit;
+        $query = $this->db->query($this->getdata(1).$jadikondisi.$lim);
+        return $query;
+    }
+    public function countgetdataxbaru(){
+        $kondisi = '';
+        $jadikondisi = '';
+        $adakondisi = 0;
+    //    if($this->session->userdata('filterkat')!=""){
+    //         $adakondisi = 1;
+    //         $kondisi .= " id_kategori = '".$this->session->userdata('filterkat')."' AND";
+    //     }
+    //     if($this->session->has_userdata('idbuyer') && ($this->session->userdata('idbuyer')!="all" || $this->session->userdata('idbuyer')!="")){
+    //         $adakondisi = 1;
+    //         $kondisi .= " id_buyer = '".$this->session->userdata('idbuyer')."' AND";
+    //     }
+    //     if($this->session->has_userdata('idstok') && $this->session->userdata('idstok')!="all"){
+    //         $adakondisi = 1;
+    //         $kondisi .= " stok = '".$this->session->userdata('idstok')."' AND";
+    //     }
+        if($this->session->has_userdata('idexnet') && $this->session->userdata('idexnet')!="all"){
+            $adakondisi = 1;
+            $kondisi .= " exnet = '".$this->session->userdata('idexnet')."' AND";
+        }
+        if($this->session->has_userdata('nombc') && $this->session->userdata('nombc')!="all"){
+            $adakondisi = 1;
+            $kondisi .= " nomor_bc = '".$this->session->userdata('nombc')."' AND";
+        }
+        if($this->session->userdata('dataneh')=='1'){
+            $adakondisi = 1;
+            $kondisi .= " (sumkgs < 0 OR sumpcs < 0) AND";
+        }
+        if($this->session->userdata('opaneh')=='1'){
+            $adakondisi = 1;
+            $kondisi .= " (sumkgs != ifnull(kgs_taking,0) OR sumpcs != ifnull(pcs_taking,0)) AND";
+        }
+        if($this->session->has_userdata('cari-spek') && $this->session->userdata('cari-spek')!=""){
+            $kata = $this->session->userdata('cari-spek');
+            $adakondisi = 1;
+            $kondisi .= " (po like '%".$kata."%' OR insno like '%".$kata."%' OR nobontr like '%".$kata."%' OR spek like '%".$kata."%' OR nobale like '%".$kata."%' OR id_barang like '%".$kata."%' OR nama_barang like '%".$kata."%' OR kode like '%".$kata."%' OR skupo like '%".$kata."%') AND";
+        }
+        if($adakondisi==1){
+            $jadikondisi = " WHERE".substr($kondisi,0,strlen($kondisi)-3);
+        }
+        $query = $this->db->query($this->getdata(1).$jadikondisi);
+        return $query->num_rows();
     }
 
     public function getdatabaru($filtkat,$mode=0){
@@ -617,6 +862,7 @@ class inv_model extends CI_Model
         $this->db->where('trim(stokdept.nobontr)',trim($array['nobontr']));
         $this->db->where('trim(stokdept.id_barang)',$array['id_barang']);
         $this->db->where('stokdept.stok',$array['stok']);
+        $this->db->where('stokdept.exnet',$array['exnet']);
         if($dept=='GF' || $dept=='GW'){
             $this->db->where('trim(stokdept.nobale)',trim($array['nobale']));
         }else{
@@ -671,6 +917,7 @@ class inv_model extends CI_Model
         $this->db->where('trim(tb_detail.nobontr)',trim($array['nobontr']));
         $this->db->where('trim(tb_detail.id_barang)',$array['id_barang']);
         $this->db->where('tb_detail.stok',$array['stok']);
+        $this->db->where('tb_detail.exnet',$array['exnet']);
         if($dept=='GF' || $dept=='GW'){
             $this->db->where('trim(tb_detail.nobale)',trim($array['nobale']));
         }else{
@@ -722,13 +969,14 @@ class inv_model extends CI_Model
         $this->db->where('trim(tb_detailgen.nobontr)',trim($array['nobontr']));
         $this->db->where('trim(tb_detailgen.id_barang)',$array['id_barang']);
         $this->db->where('tb_detailgen.stok',$array['stok']);
+        $this->db->where('tb_detailgen.exnet',$array['exnet']);
         if($dept=='GF' || $dept=='GW'){
             $this->db->where('trim(tb_detailgen.nobale)',trim($array['nobale']));
         }else{
             // $this->db->where('trim(tb_detailgen.id_barang)',$array['id_barang']);
         }
         if($ada){
-            $this->db->where('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id ) =',trim($array['nomor_bc']));
+            $this->db->where('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(now(),INTERVAL 4 MONTH) ) =',trim($array['nomor_bc']));
         }
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,nomor_dok,stok');
         $query3 = $this->db->get_compiled_select();
@@ -773,6 +1021,7 @@ class inv_model extends CI_Model
         $this->db->where('trim(tb_detail.nobontr)',trim($array['nobontr']));
         $this->db->where('trim(tb_detail.id_barang)',$array['id_barang']);
         $this->db->where('tb_detail.stok',$array['stok']);
+        $this->db->where('tb_detail.exnet',$array['exnet']);
         if($dept=='GF' || $dept=='GW'){
             $this->db->where('trim(tb_detail.nobale)',trim($array['nobale']));
         }else{
@@ -1108,7 +1357,7 @@ class inv_model extends CI_Model
                 $kodebon .= "\r\n &#9679 ".$bon['nomor_dok']." (".tglmysql($bon['tgl']).")";
             }
             $kodebon .= "\r\n Selesaikan dahulu semua Transaksi Penerimaan.";
-            $this->session->set_flashdata('errorsimpan',1);
+            $this->session->set_flashdata('errorsimpan',99);
             $this->session->set_flashdata('pesanerror',"Masih ada ".$cekdatabonin->num_rows()." data transaksi Penerimaan ( IN ), yang belum dikonfirmasi".$kodebon);
             return 1;
         }
@@ -1118,7 +1367,7 @@ class inv_model extends CI_Model
         $query = $this->db->query($data);
         foreach($query->result_array() as $det){
             if($det['sumkgs'] < 0 || $det['sumpcs'] < 0){
-                $this->session->set_flashdata('errorsimpan',1);
+                $this->session->set_flashdata('errorsimpan',99);
                 $this->session->set_flashdata('pesanerror',"Masih ada Minus, Cek data dahulu");
                 return 1;
             }
@@ -1188,6 +1437,7 @@ class inv_model extends CI_Model
                             'kgs_akhir' => $det['sumkgs'],
                             'pcs_akhir' => $det['sumpcs'],
                             'nomor_bc' => $det['nomor_bc'],
+                            'id_tb_po' => $det['id_tb_po'],
                             // 'tgl_bc' => $det['tgl_bc'],
                         ];
                         $this->db->insert('stokdept',$isidata);

@@ -1347,6 +1347,13 @@ function gantislash($str){
 	$jadi = str_replace("#","_",$str);
 	return $jadi;
 }
+function gantislash2($stri){
+	$cek = trim($stri);
+	$jadi = str_replace("/","+",$cek); //$cek.replaceAll("/", "+");
+	$hasilx = str_replace("-","?",$jadi); //jadi.replaceAll("-", "?");
+	$hasil = str_replace(" ","%20",$hasilx);  //hasilx.replaceAll(" ", "%20");
+	return $hasil;
+}
 function slashganti($str){
 	$cek = trim($str);
 	$hasil = str_replace("+","/",$str);
@@ -1389,4 +1396,14 @@ function namarolestokopname($id){
         $hasil = 'Belum Ada Role';
     }
     return $hasil;
+}
+function buatkanformatindpo($po,$item,$dis){
+    $ponya = str_repeat(" ",10 - strlen(trim($po)));
+    $panjangitem = strlen(trim($item));
+    if($panjangitem <= 3){
+        $itemnya = str_repeat(" ",3-strlen(trim($item))).trim($item)."  ";
+    }else{
+        $itemnya = str_repeat(" ",5-strlen(trim($item))).trim($item);
+    }
+    return $ponya.$itemnya.trim($dis);
 }

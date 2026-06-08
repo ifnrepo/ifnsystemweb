@@ -15,7 +15,7 @@
                 <div class="row mb-1">
                     <div class="col-4 text-primary font-bold">
                     <span>Nomor</span>
-                    <h4 class="mb-1"><?= $header['nomor_dok']; ?></h4>
+                    <h4 class="mb-1" style="line-height: 13px;"><?= $header['nomor_dok']; ?><br><span class="text-pink "><?= $header['nomor_pl']; ?></span></h4>
                     </div>
                     <div class="col-4 text-primary font-bold">
                     <span>Tanggal</span>

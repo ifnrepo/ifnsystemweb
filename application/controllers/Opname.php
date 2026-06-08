@@ -397,10 +397,15 @@ class Opname extends CI_Controller
             }else{
                 $query['data'] = $this->opnamemodel->cariinsnomesin($dept,$id);
             }
+            $query['dept'] = $dept;
             $this->load->view('opname/pilihpo',$query);
         }else if($kode=='carispekbarang'){
             $query['data'] = $this->opnamemodel->carispekbarang($dept,$id);
             $this->load->view('opname/pilihspek',$query);
+        }else if($kode=='carinomorbale'){
+            $query['data'] = $this->opnamemodel->carinomorbale($dept,$id);
+            $query['dept'] = $dept;
+            $this->load->view('opname/pilihpo',$query);
         }
     }
     public function cariidbarang(){
@@ -435,6 +440,15 @@ class Opname extends CI_Controller
         $keyw = $_POST['keyw'];
         $this->session->set_userdata('sel-cari','spekbar');
         $query = $this->opnamemodel->carispekbarang($dept,$keyw);
+        $jmlrek = $query->num_rows();
+        $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
+        echo json_encode($hasil);
+    }
+    public function carinomorbale(){
+        $dept = $_POST['dept'];
+        $keyw = $_POST['keyw'];
+        $this->session->set_userdata('sel-cari','nobale');
+        $query = $this->opnamemodel->carinomorbale($dept,$keyw);
         $jmlrek = $query->num_rows();
         $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
         echo json_encode($hasil);
