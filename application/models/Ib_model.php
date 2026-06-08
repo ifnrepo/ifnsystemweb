@@ -165,6 +165,7 @@ class Ib_model extends CI_Model
         $this->db->where('tb_header.kode_dok != ','ADJ');
         $this->db->where('tb_header.kode_dok != ','IB');
         $this->db->where('tb_header.jns_bc','261');
+        $this->db->where('tb_header.tgl >= DATE_SUB(NOW(),INTERVAL 4 MONTH)');
         return $this->db->get()->row_array();
         // return $this->db->get_where('tb_header',['trim(nomor_bc)' => $kode])->row_array();
     }

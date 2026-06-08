@@ -67,7 +67,7 @@
                                         <td><?= $val['namasatuan']; ?></td>
                                         <td><?= $val['nobale']; ?></td>
                                         <td class="text-center"><?= $stk ?></td>
-                                        <td class="text-right"><?= rupiah($val['pcs'], 0); ?></td>
+                                        <td class="text-right"><?= rupiah($val['pcs'], 2); ?></td>
                                         <td class="text-right"><?= rupiah($val['kgs'], 2); ?></td>
                                         <td>
                                             <?php if ($val['verif_oleh'] != null) : ?>
@@ -81,8 +81,8 @@
 
                                 <tr style="font-weight: bold; background: #f2f2f2;">
                                     <td colspan="5" class="text-center">TOTAL</td>
-                                    <td><?= rupiah($totalpcs, 0); ?></td>
-                                    <td><?= rupiah($totalkgs, 2); ?></td>
+                                    <td class="text-right"><?= rupiah($totalpcs, 2); ?></td>
+                                    <td class="text-right"><?= rupiah($totalkgs, 2); ?></td>
                                     <td></td>
                                 </tr>
 

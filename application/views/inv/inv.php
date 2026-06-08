@@ -245,7 +245,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <?php 
                   $sku = trim($dt['po'])=='' ? $dt['kode'] : viewsku($dt['po'],$dt['item'],$dt['dis']);
                   $spek = trim($dt['po'])=='' ? $dt['nama_barang'] : $dt['spek'];
-                  $ide = "OME-".rawurlencode(gantislash2(trim($dt['po']))).'-'.rawurlencode(gantislash2(trim($dt['item']))).'-'.$dt['dis'].'-'.$dt['id_barang'].'-'.rawurlencode(gantislash2(trim($dt['nobontr']))).'-'.rawurlencode(gantislash(trim($dt['insno']))).'-'.rawurlencode(gantislash2(trim($dt['nobale']))).'-'.rawurlencode(trim($dt['nomor_bc'])).'-'.rawurlencode($dt['stok']);
+                  $ide = "OME-".rawurlencode(gantislash2(trim($dt['po']))).'-'.rawurlencode(gantislash2(trim($dt['item']))).'-'.$dt['dis'].'-'.$dt['id_barang'].'-'.rawurlencode(gantislash2(trim($dt['nobontr']))).'-'.rawurlencode(gantislash2(trim($dt['insno']))).'-'.rawurlencode(gantislash2(trim($dt['nobale']))).'-'.rawurlencode(trim($dt['nomor_bc'])).'-'.rawurlencode($dt['stok']).'-'.$dt['exnet'];
                  ?>
                   <tr>
                     <td class="line-11"><span class="text-pink font-11"><?= $sku ?></span><br><a href="<?= base_url().'inv/viewdetail/'.$ide ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail" title="View Detail"><?= $spek ?></a></td>

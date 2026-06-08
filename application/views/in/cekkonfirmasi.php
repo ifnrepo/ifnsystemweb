@@ -93,7 +93,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                 <td class="line-11"><?= $namabar.'<br><span class="text-pink font-11">'.$datdet['insno'].'</span>' ?></td>
                 <td><?= $sku; ?></td>
                 <td><?= $satuan; ?></td>
-                <td><?=rupiah($datdet['pcs'],0) ?></td>
+                <td><?=rupiah($datdet['pcs'],2) ?></td>
                 <td><?=rupiah($datdet['kgs'],2) ?></td>
                 <td class="text-center">
                   <div id="<?= $datdet['id']; ?>">

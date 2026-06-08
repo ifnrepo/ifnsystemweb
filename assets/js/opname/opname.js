@@ -169,7 +169,8 @@ $("#cariinputstok").click(function(){
 	var isikeyword = $("#keywordinputstok").val(); 
 	$("#cariinputstok").html('<span class="font-kecil"><i class="fa fa-circle-o-notch fa-spin mr-1"></i> Loading !</span>');
 	$("#carinputstok").addClass('disabled');
-	if(isikeyword.length > 3){
+	var lentext = selectradio=='carinobale' ? 0 : 3;
+	if(isikeyword.length > lentext){
 		if(selectradio=='cariidbarang'){
 			// Berdasarkan ID Barang
 			$.ajax({
@@ -264,7 +265,7 @@ $("#cariinputstok").click(function(){
 					console.log(thrownError);
 				},
 			});
-		}else{
+		}else if(selectradio=='carispek'){
 			// Berdasarkan Spek Barang
 			$.ajax({
 				dataType: "json",
@@ -307,6 +308,57 @@ $("#cariinputstok").click(function(){
 						// $("#caribarangdouble").attr('rel2',selectradio);
 						var newStr = isikeyword.replace(" ", "-"); 
 						$("#caribarangdouble").attr('href',base_url+'opname/cari/carispekbarang/'+$("#deptid").val()+'/'+newStr);
+						$("#caribarangdouble").click();
+					}
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status);
+					console.log(thrownError);
+				},
+			});
+		}else{
+			// Berdasarkan Nomor Bale
+			$.ajax({
+				dataType: "json",
+				type: "POST",
+				url: base_url + "opname/carinomorbale",
+				data: {
+					keyw: isikeyword,
+					dept: $("#deptid").val()
+				},
+				success: function (data) {
+					$("#cariinputstok").html('Cari !');
+					$("#carinputstok").removeClass('disabled');
+					var jumlah = data.jumlah;
+					if(jumlah==0){
+						pesan('Data Nomor Bale tidak ada pada Saldo Inventory, pastikan penulisan Benar !','error');
+						return false;
+					}else if(jumlah==1){
+						$("#form-hasilcari").removeClass('hilang');
+						$("#form-cari").addClass('hilang');
+						$("#idbarang").val(data.hasil[0]['id_barang']);
+						$("#po").val(data.hasil[0]['po']);
+						$("#item").val(data.hasil[0]['item']);
+						$("#dis").val(data.hasil[0]['dis']);
+						if(data.hasil[0]['po'].trim()==''){
+							$("#sku").val(data.hasil[0]['kode']);
+							$("#spek").val(data.hasil[0]['nama_barang']);
+						}else{
+							$("#sku").val(data.hasil[0]['skupo']);
+							$("#spek").val(data.hasil[0]['spek']);
+							$("#color").val(data.hasil[0]['color']);
+						}
+						$("#insno").val(data.hasil[0]['insno']);
+						$("#nobontr").val(data.hasil[0]['nobontr']);
+						$("#dln").val(data.hasil[0]['dln']);
+						$("#keywordinputstok").val('');
+						$("#sku").focus();
+					}else{
+						// alert('Data ada 2 atau lebih');
+						// $("#caribarangdouble").attr('rel',data.hasil[0].id_barang);
+						// $("#caribarangdouble").attr('rel2',selectradio);
+						var newStr = isikeyword.replace(" ", "-"); 
+						$("#caribarangdouble").attr('href',base_url+'opname/cari/carinomorbale/'+$("#deptid").val()+'/'+newStr);
 						$("#caribarangdouble").click();
 					}
 				},
@@ -553,10 +605,10 @@ $(document).on('click','#editentristok',function(){
 			$("#satuan").val(data.satuan);
 			$("#pcs").val(data.pcsc);
 			$("#kgs").val(data.kgsc);
-			$("#ket").val(data.keterangan);
+			$("#ket").val(data.ket);
 			$("#identristok").val(data.id);
 			$("#urut").val(data.urut);
-			if(data.po!=""){
+			if(data.po.trim()!=""){
 				$("#spek").val(data.spek);
 				$("#sku").val(data.skupo);
 			}else{

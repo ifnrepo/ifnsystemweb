@@ -178,6 +178,8 @@ class Po_model extends CI_Model
     public function getbarangpo($data)
     {
         $this->db->select('tb_detail.*,tb_detail.id as iddetbbl,a.nomor_dok,b.nama_barang,d.nomor_dok as nomorpb,d.pesan_bbl');
+        $this->db->select('(Select SUM(pcs) as xpcs from tb_detail b where id_bbl = tb_detail.id) as xpcs');
+        $this->db->select('(Select SUM(kgs) as xkgs from tb_detail b where id_bbl = tb_detail.id) as xkgs');
         $this->db->from('tb_detail');
         $this->db->join('tb_header a', 'a.id = tb_detail.id_header', 'left');
         $this->db->join('barang b', 'b.id = tb_detail.id_barang', 'left');
@@ -190,7 +192,7 @@ class Po_model extends CI_Model
         $this->db->where('a.ok_pp', 1);
         // $this->db->where('a.ok_pc',1);
         $this->db->where('a.kode_dok', 'BBL');
-        $this->db->where('tb_detail.id_po', 0);
+        // $this->db->where('tb_detail.id_po', 0);
         if ($data != '') {
             $this->db->like('a.nomor_dok', $data);
         }
@@ -210,6 +212,7 @@ class Po_model extends CI_Model
                 'seri_barang' => $x,
                 'id_barang' => $detail['id_barang'],
                 'id_satuan' => $detail['id_satuan'],
+                'id_bbl' => $detail['id'],
                 'kgs' => $detail['kgs'],
                 'pcs' => $detail['pcs']
             ];

@@ -83,21 +83,57 @@
                         <div class="row mb-1 font-kecil">
                             <label class="col-3 col-form-labels font-bold">Nama</label>
                             <div class="col">
-                                <input type="text" class="form-control font-kecil btn-flat" value="<?= $detail['nama_customer']; ?>" aria-describedby="emailHelp" placeholder="Enter Nama Pengirim">
+                                <?php $namcus = $detail['nama_customer']!=NULL ? $detail['nama_customer'] : datadepartemen($detail['dept_tuju'],'departemen'); ?>
+                                <?php 
+                                    if($detail['nama_customer']!=''){
+                                        $port = !empty($detail['port']) ? ' - ' . ucwords(strtolower($detail['port'])) : '';
+                                        $namcus = trim($detail['nama_customer']);
+                                    }else{
+                                        if($detail['nama_supplier']!=''){
+                                        $namcus = trim($detail['nama_supplier']);
+                                        }else{
+                                        $namcus =  trim($detail['departemen']);
+                                        }
+                                    }
+                                ?>
+                                <input type="text" class="form-control font-kecil btn-flat" value="<?= $namcus ?>" aria-describedby="emailHelp" placeholder="Enter Nama Pengirim">
                             </div>
                         </div>
                         <div class="row mb-1 font-kecil">
                             <label class="col-3 col-form-label font-bold">Alamat</label>
                             <div class="col">
-                                <textarea class="form-control font-kecil font-bold btn-flat"><?= trim($detail['alamat']); ?><?php if ($detail['port'] != '') {
-                                                                                                                                echo ' ' . $detail['port'];
-                                                                                                                            } ?></textarea>
+                                <?php $xalamatcus = trim($detail['alamat']).' '.$detail['port']; ?>
+                                <?php $alamcus = $detail['alamat']!=NULL ? $xalamatcus : datadepartemen($detail['dept_tuju'],'alamat_subkon');  ?>
+                                <?php 
+                                    if($detail['nama_customer']!=''){
+                                        $alamcus = $xalamatcus;
+                                    }else{
+                                        if($detail['nama_supplier']!=''){
+                                            $alamcus = datasupplier($detail['id_rekanan'],'alamat');
+                                        }else{
+                                            $alamcus = datadepartemen($detail['dept_tuju'],'alamat_subkon');
+                                        }
+                                    }
+                                ?>
+                                <textarea class="form-control font-kecil font-bold btn-flat"><?= $alamcus; ?></textarea>
                             </div>
                         </div>
                         <div class="row mb-1 font-kecil">
                             <label class="col-3 col-form-label font-bold">NPWP</label>
                             <div class="col">
-                                <input type="text" class="form-control font-kecil btn-flat" value="<?= $detail['npwp'] ?>" aria-describedby="emailHelp" placeholder="Enter Npwp Pengirim">
+                                <?php $npwpcus = $detail['npwp']!=NULL ? $detail['npwp'] : datadepartemen($detail['dept_tuju'],'npwp'); ?>
+                                <?php 
+                                    if($detail['nama_customer']!=''){
+                                        $npwpcus = $detail['npwp'];
+                                    }else{
+                                        if($detail['nama_supplier']!=''){
+                                            $npwpcus = datasupplier($detail['id_rekanan'],'npwp');
+                                        }else{
+                                            $npwpcus = datadepartemen($detail['dept_tuju'],'npwp');
+                                        }
+                                    }
+                                ?>
+                                <input type="text" class="form-control font-kecil btn-flat" value="<?= $npwpcus ?>" aria-describedby="emailHelp" placeholder="Enter Npwp Pengirim">
                             </div>
                         </div>
                     </div>

@@ -121,6 +121,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <input class="form-check-input" type="radio" value="carispek" name="radios-filter" <?php if($this->session->userdata('sel-cari')=='spekbar'){ echo "checked"; } ?>>
                                             <span class="form-check-label font-kecil font-bold">Spek Barang</span>
                                         </label>
+                                        <?php if($header['dept_id']=='GF' || $header['dept_id']=='GW' ):  ?>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" value="carinobale" name="radios-filter" <?php if($this->session->userdata('sel-cari')=='nobale'){ echo "checked"; } ?>>
+                                            <span class="form-check-label font-kecil font-bold">Bale</span>
+                                        </label>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="input-group">
                                         <input type="text" class="form-control font-kecil btn-flat text-uppercase" id="keywordinputstok" placeholder="Search for…">

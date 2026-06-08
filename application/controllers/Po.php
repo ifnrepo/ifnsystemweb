@@ -118,18 +118,25 @@ class Po extends CI_Controller
         $no = 0;
         if($query->num_rows() > 0){
             foreach ($query->result_array() as $que) {
-                $no++;
-                $html .= "<tr class='font-kecil'>";
-                $html .= "<td>" . $que['nomor_dok'] . "</td>";
-                $html .= "<td>" . $que['nomorpb'] . "</td>";
-                $html .= "<td>" . $que['nama_barang'] . "</td>";
-                $html .= "<td>" . $que['pesan_bbl'] . "</td>";
-                $html .= "<td>";
-                $html .= "<label class='form-check'>";
-                $html .= "<input class='form-check-input' name='cekpilihbarang' title='cekbok" . $no . "' id='cekbok" . $no . "' rel='" . $que['iddetbbl'] . "' type='checkbox'>";
-                $html .= "<span class='form-check-label'>Pilih</span>";
-                $html .= "</label>";
-                $html .= "</td>";
+                if(($que['pcs'] > $que['xpcs']) || ($que['kgs'] > $que['xkgs'])){
+                    $no++;
+                    $html .= "<tr class='font-kecil'>";
+                    $html .= "<td>" . $que['nomor_dok'] . "</td>";
+                    $html .= "<td>" . $que['nomorpb'] . "</td>";
+                    $html .= "<td>" . $que['nama_barang'] . "</td>";
+                    $html .= "<td>" . $que['pesan_bbl'] . "</td>";
+                    $html .= "<td>";
+                    $html .= "<label class='form-check'>";
+                    $html .= "<input class='form-check-input' name='cekpilihbarang' title='cekbok" . $no . "' id='cekbok" . $no . "' rel='" . $que['iddetbbl'] . "' type='checkbox'>";
+                    $html .= "<span class='form-check-label'>Pilih</span>";
+                    $html .= "</label>";
+                    $html .= "</td>";
+                    $html .= "</tr>";
+                }
+            }
+            if($no==0){
+                $html .= "<tr>";
+                $html .= "<td class='text-center' colspan='5'>--Data tidak ditemukan, cari dengan Keyword lain--</td>";
                 $html .= "</tr>";
             }
         }else{

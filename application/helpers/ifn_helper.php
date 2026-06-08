@@ -1397,3 +1397,13 @@ function namarolestokopname($id){
     }
     return $hasil;
 }
+function buatkanformatindpo($po,$item,$dis){
+    $ponya = str_repeat(" ",10 - strlen(trim($po)));
+    $panjangitem = strlen(trim($item));
+    if($panjangitem <= 3){
+        $itemnya = str_repeat(" ",3-strlen(trim($item))).trim($item)."  ";
+    }else{
+        $itemnya = str_repeat(" ",5-strlen(trim($item))).trim($item);
+    }
+    return $ponya.$itemnya.trim($dis);
+}

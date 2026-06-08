@@ -34,6 +34,10 @@ $(document).ready(function () {
 		pesan("PESAN :"+xpesan, "error");
 		// alert("PESAN : " + xpesan);
 	}
+	if (errosimpan == 99) {
+		// pesan("PESAN :"+xpesan, "error");
+		alert("PESAN : " + xpesan);
+	}
 
 	modalBoxSm();
 	modalBoxLg();

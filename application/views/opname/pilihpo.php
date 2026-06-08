@@ -1,16 +1,22 @@
 <div class="container-xl mb-2">
-    <div class="row">
+    <div class="row overflow-auto">
         <div class="col-12">
+            <input type="text" class="hilang" id="deptnya" value="<?= $dept ?>">
             <table class="table table-bordered table-hover m-0">
                 <thead class="bg-primary-lt">
                     <tr>
+                        <th class="text-black">Aksi</th>
                         <th class="text-black">SKU</th>
                         <th class="text-black">Spek Barang</th>
-                        <th class="text-black">Insno/Nobontr</th>
                         <th class="text-black">Stok</th>
-                        <th class="text-black">Exnet</th>
+                        <?php if($dept=='GF' || $dept['GW']): ?>
+                            <th class="text-black">Pcs</th>
+                            <th class="text-black">Kgs</th>
+                        <?php else: ?>
+                            <th class="text-black">Insno/Nobontr</th>
+                            <th class="text-black">Exnet</th>
+                        <?php endif; ?>
                         <th class="text-black">Nobale</th>
-                        <th class="text-black">Aksi</th>
                     </tr>
                 </thead>
                 <tbody class="table-tbody">
@@ -22,12 +28,6 @@
                         $exnet = $dt['exnet']==0 ? '' : 'Y';
                      ?>
                         <tr>
-                            <td class="font-kecil"><?= $sku ?></td>
-                            <td class="font-kecil"><?= $spek ?></td>
-                            <td class="font-kecil"><?= $dt['insno'].$dt['nobontr'] ?></td>
-                            <td class="font-kecil"><?= $stok ?></td>
-                            <td class="font-kecil"><?= $exnet ?></td>
-                            <td class="font-kecil"><?= $dt['nobale'] ?></td>
                             <td class="font-kecil text-center">
                                 <a href="#" 
                                     id="pilihbarang",
@@ -45,10 +45,24 @@
                                     rel10="<?= $sku ?>"
                                     rel11="<?= $dt['dln'] ?>"
                                     rel12="<?= $dt['nobale'] ?>"
+                                    rel13="<?= $dt['kgs_akhir'] ?>"
+                                    rel14="<?= $dt['pcs_akhir'] ?>"
                                 >
                                     Pilih
                                 </a>
                             </td>
+                            <td class="font-kecil"><?= $sku ?></td>
+                            <td class="font-kecil"><?= $spek ?></td>
+                            <td class="font-kecil"><?= $stok ?></td>
+                            <?php if($dept=='GF' || $dept['GW']): ?>
+                                <td class="font-kecil text-right"><?= rupiah($dt['pcs_akhir'],2); ?></td>
+                                <td class="font-kecil text-right"><?= rupiah($dt['kgs_akhir'],2); ?></td>
+                            <?php else: ?>
+                                <td class="font-kecil"><?= $exnet ?></td>
+                                <td class="font-kecil"><?= $dt['insno'].$dt['nobontr'] ?></td>
+                            <?php endif; ?>
+                            <td class="font-kecil"><?= $dt['nobale'] ?></td>
+                            
                         </tr>
                     <?php endforeach; ?>
                 </tbody>
@@ -80,6 +94,11 @@
         $("#sku").val($(this).attr('rel10'));
         $("#dln").val($(this).attr('rel11'));
         $("#nobale").val($(this).attr('rel12'));
+        if($("#deptnya").val()=='GF' || $("#deptnya").val()=='GW' ){
+            $("#kgs").val($(this).attr('rel13'));
+            $("#pcs").val($(this).attr('rel14'));
+            $("#satuan").val('PCS');
+        }
         $("#po").change();
         $("#keywordinputstok").val('');
         $("#sku").focus();

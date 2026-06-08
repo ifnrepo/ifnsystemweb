@@ -30,7 +30,7 @@ class Inv extends CI_Controller
     {
         $config['base_url'] = base_url().'Inv/index'; // The URL to your controller method
         $config['total_rows'] = $this->invmodel->countgetdataxbaru(); // Total records in your table
-        $config['per_page'] = $this->session->userdata('perpage-rekapinv')=='' ? 25 : $this->session->userdata('perpage-rekapinv'); // Records per page
+        $config['per_page'] = $this->session->userdata('perpage-rekapinv')=='' ? 15 : $this->session->userdata('perpage-rekapinv'); // Records per page
         $config['uri_segment'] = 3; // Which URL segment contains the page number
         $config['attributes'] = array('class' => 'page-link');
 
@@ -734,6 +734,7 @@ class Inv extends CI_Controller
             'nobale' => str_replace('%20',' ',str_replace('+','/',str_replace('?','-',rawurldecode($split[7])))),
             'nomor_bc' => $split[8],
             'stok' => $split[9],
+            'exnet' => $split[10],
         ];
         $array2 = [
             'id_barang' => $split[4],

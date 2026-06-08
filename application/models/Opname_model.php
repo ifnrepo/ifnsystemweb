@@ -282,7 +282,7 @@ class Opname_model extends CI_Model
         $this->db->from('tb_lokasi');
         $this->db->join('stokopname','stokopname.kode_lokasi = tb_lokasi.kode_lokasi','left');
         $this->db->where('tb_lokasi.dept_id',$this->session->userdata('deptstok'));
-        $this->db->where('tb_lokasi.kode_lokasi not in (SELECT kode_lokasi FROM stokopname WHERE periode = "'.$periode    .'" GROUP BY 1)');
+        $this->db->where('tb_lokasi.kode_lokasi not in (SELECT kode_lokasi FROM stokopname WHERE stokopname.periode = "'.$periode    .'" GROUP BY 1)');
         return $this->db->get();
     }
     public function getdatastok(){
@@ -291,7 +291,7 @@ class Opname_model extends CI_Model
         $this->db->select('stokopname.*,tb_lokasi.nama_lokasi');
         $this->db->from('stokopname');
         $this->db->join('tb_lokasi','tb_lokasi.kode_lokasi = stokopname.kode_lokasi','left');
-        $this->db->where('periode',$this->session->userdata('periodeopname'));
+        $this->db->where('stokopname.periode',$this->session->userdata('periodeopname'));
         if($this->session->userdata('deptstok')!=''){
             $this->db->where('stokopname.dept_id',$this->session->userdata('deptstok'));
         }
@@ -494,6 +494,22 @@ class Opname_model extends CI_Model
         $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
         $this->db->where('stokdept.dept_id',$dept);
         $this->db->like('barang.nama_barang',$keu,'both',FALSE);
+        return $this->db->get();
+    }
+    public function carinomorbale($dept,$keyw){
+        $keyw = str_replace("-"," ",$keyw);
+        $kata = '';
+        $pisah = explode(" ",$keyw);
+        foreach($pisah as $ps){
+            $kata .= $ps.'%';
+        }
+        $keu = substr($kata,0,strlen($kata)-1);
+        $this->db->select('stokdept.*,barang.kode,barang.nama_barang,barang.dln');
+        $this->db->from('stokdept');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
+        $this->db->where('stokdept.dept_id',$dept);
+        $this->db->like('stokdept.nobale',$keu,'both',FALSE);
         return $this->db->get();
     }
     public function simpanentristok($data){
