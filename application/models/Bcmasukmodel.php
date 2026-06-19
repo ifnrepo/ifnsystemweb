@@ -34,7 +34,17 @@ class Bcmasukmodel extends CI_Model
                     $this->db->where("jns_bc", 23);
                     $this->db->where("pjt", 1);
                 }else{
-                    $this->db->where("jns_bc", $jnsbc);
+                    if($jnsbc=='401'){
+                        $this->db->where("jns_bc", 40);
+                        $this->db->where("bc_makloon", 1);
+                    }else{
+                        if($jnsbc=='402'){
+                            $this->db->where("jns_bc", 40);
+                            $this->db->where("bc_makloon", 0);
+                        }else{
+                            $this->db->where("jns_bc", $jnsbc);
+                        }
+                    }
                 }
             }
             // if($jnsbc==23 || $jnsbc==231 || $jnsbc==232){

@@ -198,6 +198,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="row <?php if(!in_array($header['dept_id'],daftardeptsubkon())){ echo "hilang"; } ?>">
+                                        <label class="col-3 col-form-label font-kecil font-bold">Nomor BC</label>
+                                        <div class="col mb-1">
+                                            <input type="text" name="nomor_bc" id="nomor_bc" class="form-control btn-flat font-bold font-kecil" value="">
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <label class="col-3 col-form-label font-kecil font-bold">Satuan</label>
                                         <div class="col mb-1">
@@ -272,11 +278,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         $spek = trim($dt['po'])=='' ? '<span class="text-cyan font-11"> SKU. '.$sku.'</span></br>'.namaspekbarang($dt['id_barang']) : '<span class="text-cyan font-11"> SKU. '.$sku.'</span></br>'.spekpo($dt['po'],$dt['item'],$dt['dis']);
                                         $nobontr = trim($dt['nobontr'])=='' ? '' : '<br><span class="text-pink font-11"> IB. '.$dt['nobontr'].'</span>';
                                         $insno = trim($dt['insno'])=='' ? '' : '<br><span class="text-pink font-11"> INSNO. '.$dt['insno'].'</span>';
+                                        $nobc = trim($dt['nomor_bc'])=='' ? '' : '-<span class="text-cyan font-11"> BC NO. '.$dt['nomor_bc'].'</span>';
                                         $grd = $dt['stok']==1 ? 'A' : ($dt['stok']==2 ? 'B' : '');
                                     ?>
                                         <tr>
                                             <td class="font-kecil"><?= $dt['urut'] ?></td>
-                                            <td class="font-kecil line-11"><?= $spek.$insno.$nobontr ?></td>
+                                            <td class="font-kecil line-11"><?= $spek.$insno.$nobontr.$nobc ?></td>
                                             <td class="font-kecil"><?= $dt['satuan'] ?></td>
                                             <td class="font-kecil text-right"><?= rupiah($dt['pcs'],0) ?></td>
                                             <td class="font-kecil text-right"><?= rupiah($dt['kgs'],2) ?></td>

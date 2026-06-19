@@ -250,6 +250,12 @@ $("#cariinputstok").click(function(){
 						$("#insno").val(data.hasil[0]['insno']);
 						$("#nobontr").val(data.hasil[0]['nobontr']);
 						$("#dln").val(data.hasil[0]['dln']);
+						if($("#deptid").val()=='GF' || $("#deptid").val()=='GW'){
+							$("#kgs").val(data.hasil[0]['kgs_akhir']);
+							$("#pcs").val(data.hasil[0]['pcs_akhir']);
+							$("#nobale").val(data.hasil[0]['nobale']);
+							$("#satuan").val('PCS');
+						}
 						$("#keywordinputstok").val('');
 						$("#sku").focus();
 					}else{
@@ -296,6 +302,12 @@ $("#cariinputstok").click(function(){
 							$("#sku").val(data.hasil[0]['skupo']);
 							$("#spek").val(data.hasil[0]['spek']);
 							$("#color").val(data.hasil[0]['color']);
+						}
+						if($("#deptid").val()=='GF' || $("#deptid").val()=='GW'){
+							$("#kgs").val(data.hasil[0]['kgs_akhir']);
+							$("#pcs").val(data.hasil[0]['pcs_akhir']);
+							$("#nobale").val(data.hasil[0]['nobale']);
+							$("#satuan").val('PCS');
 						}
 						$("#insno").val(data.hasil[0]['insno']);
 						$("#nobontr").val(data.hasil[0]['nobontr']);
@@ -351,6 +363,13 @@ $("#cariinputstok").click(function(){
 						$("#insno").val(data.hasil[0]['insno']);
 						$("#nobontr").val(data.hasil[0]['nobontr']);
 						$("#dln").val(data.hasil[0]['dln']);
+						if($("#deptid").val()=='GF' || $("#deptid").val()=='GW'){
+							$("#kgs").val(data.hasil[0]['kgs_akhir']);
+							$("#pcs").val(data.hasil[0]['pcs_akhir']);
+							$("#nobale").val(data.hasil[0]['nobale']);
+							$("#satuan").val('PCS');
+						}
+						$("#satuan").val('PCS');
 						$("#keywordinputstok").val('');
 						$("#sku").focus();
 					}else{
@@ -515,7 +534,8 @@ $("#simpaninputstok").click(function(){
 			satuan: $("#satuan").val(),
 			pcs: $("#pcs").val(),
 			kgs: $("#kgs").val(),
-			ket: $("#ket").val()
+			ket: $("#ket").val(),
+			nobc: $("#nomor_bc").val()
 		},
 		success: function (data) {
 			window.location.reload();
@@ -560,7 +580,9 @@ $("#updateinputstok").click(function(){
 			pcs: $("#pcs").val(),
 			kgs: $("#kgs").val(),
 			ket: $("#ket").val(),
-			urut: $("#urut").val()
+			urut: $("#urut").val(),
+			nobc: $("#nomor_bc").val(),
+			dept: $("#deptid").val(),
 		},
 		success: function (data) {
 			window.location.reload();
@@ -601,6 +623,7 @@ $(document).on('click','#editentristok',function(){
 			$("#exnet").val(data.exnet)
 			$("#stok").val(data.stok);
 			$("#dln").val(data.dln);
+			$("#nomor_bc").val(data.nomor_bc);
 			$("#nobale").val(data.nobale);
 			$("#satuan").val(data.satuan);
 			$("#pcs").val(data.pcsc);

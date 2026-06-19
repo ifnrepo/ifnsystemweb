@@ -137,7 +137,7 @@ class Ib_model extends CI_Model
         $this->db->select("(select pcs from tb_detail b where b.id = a.id_minta) as pcsminta");
         $this->db->select("(select kgs from tb_detail b where b.id = a.id_minta) as kgsminta");
         if ($mode == 1) {
-            $this->db->select("sum(a.kgs) as kgsx,sum(a.pcs) as pcsx,a.exbc_cif as xcif,a.exbc_ndpbm as xndpbm");
+            $this->db->select("sum(round(a.kgs,2)) as kgsx,sum(a.pcs) as pcsx,a.exbc_cif as xcif,a.exbc_ndpbm as xndpbm");
         }
         $this->db->from('tb_detail a');
         $this->db->join('satuan b', 'b.id = a.id_satuan', 'left');
@@ -145,7 +145,7 @@ class Ib_model extends CI_Model
         $this->db->join('tb_detail d', 'a.id = d.id_ib', 'left');
         $this->db->join('tb_detail e', 'd.id = e.id_bbl', 'left');
         $this->db->join('kategori f', 'f.kategori_id = c.id_kategori', 'left');
-        $this->db->join('tb_po g', 'g.po = a.po AND g.item = a.item AND g.dis = a.dis', 'left');
+        $this->db->join('tb_po g', 'g.ind_po = concat(a.po,a.item,a.dis)', 'left');
         if ($mode == 0) {
             $this->db->where('a.id_header', $data);
             $this->db->order_by('a.seri_barang');
@@ -655,8 +655,23 @@ class Ib_model extends CI_Model
     }
     public function simpanresponbc($data)
     {
+        $this->db->trans_start();
         $this->db->where('id', $data['id']);
         $hasil = $this->db->update('tb_header', $data);
+
+        $jnsbc = $this->db->get_where('tb_header',['id' => $data['id']])->row_array();
+        if($jnsbc['jns_bc'] == '262'){    
+            $this->db->select('id_header,id_akb');
+            $this->db->from('tb_detail');
+            $this->db->where('id_akb',$data['id']);
+            $this->db->group_by('id_header');
+            $isi = $this->db->get();
+            foreach($isi->result_array() as $i){
+                $this->db->where('id',$i['id_header']);
+                $this->db->update('tb_header',['exnomor_bc' => $data['exnomor_bc']]);
+            }
+        }
+        $hasil =  $this->db->trans_complete();
         return $hasil;
     }
     public function gettoken()

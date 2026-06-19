@@ -85,6 +85,12 @@
                     </select>
                 </div>
             </div>
+            <div class="row font-kecil mb-1">
+                <label class="col-2 col-form-label">Nomor BC</label>
+                <div class="col">
+                    <input type="text" class="form-control font-kecil" id="nomor_bc" value="<?= $data['nomor_bc']; ?>" placeholder="Nomor BC">
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -123,15 +129,17 @@
                 nobontr: $("#nobontr").val(),
                 exnet: $("#exnet").val(),
                 nobale: $("#nobale").val(),
+                nobc: $("#nomor_bc").val(),
                 stok: $("#stok").val()
             },
             success: function (data) {
                 // alert(data.jmlrek);
                 // var lokasi = base_url+'out/editdetailgenout/'+$("#id_detail").val()+'/'+$("#id_header").val()+'/1';
                 // window.location.replace(lokasi);
-                // window.location.reload();
                 $('#modal-large').modal('hide');
-                $("#buttoncari").click();
+                // window.location.reload();
+                // $("#buttoncari").click();
+                pesan('Data sudah berhasil disimpan, Refresh halaman untuk Melihat Perubahan !','info');
             },
             error: function (xhr, ajaxOptions, thrownError) {
                 console.log(xhr.status);

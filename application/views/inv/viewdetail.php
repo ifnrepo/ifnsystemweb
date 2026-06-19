@@ -18,7 +18,7 @@
             <h4 class="mb-0 text-teal-green"><?= $header['id_barang'].' # '.$kode . " # " . $spekbarang; ?></h4>
             <h4 class="mb-1" style="color: #723f00;"><?= $nobc; ?><?= $nobcx; ?></h4>
             <hr class="m-0">
-            <span class="font-12 text-red mr-4">KATEGORI : <?= $header['nama_kategori']; ?></span>
+            <span class="font-12 text-red mr-4">KATEGORI : <?= $header['namkat']; ?></span>
             <?php if($header['safety_stock']>0): ?>
             <span class="font-12 text-teal">( SAFETY STOCK : <?= rupiah($header['safety_stock'],0).' '.$header['kodesatuan']; ?> )</span>
             <?php endif; ?>

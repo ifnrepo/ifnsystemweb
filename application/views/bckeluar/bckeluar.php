@@ -44,7 +44,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     } ?>>BC 3.0 PJT</option>
                 <option value="41" <?php if ($this->session->userdata('jnsbc') == '41') {
                                       echo "selected";
-                                    } ?>>BC 4.1</option>
+                                    } ?>>BC 4.1 (Semua)</option>
+                <option value="411" <?php if ($this->session->userdata('jnsbc') == '411') {
+                                      echo "selected";
+                                    } ?>>BC 4.1 (Makloon)</option>
+                <option value="412" <?php if ($this->session->userdata('jnsbc') == '412') {
+                                      echo "selected";
+                                    } ?>>BC 4.1 (Sales)</option>
               </select>
               <input type="text" class="form-control form-sm font-kecil font-bold mr-1 tglpilih" title="Tanggal Awal" id="tglawal" name="tglawal" style="width: 95px;" value="<?= $tglawal; ?>">
               <span class="mt-2 text-blue"> ~ </span>

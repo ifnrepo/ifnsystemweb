@@ -905,6 +905,7 @@ class Out_model extends CI_Model{
                         continue;
                     }
                     $cekbckeluar = $this->db->get_where('tb_header',['id' => $id])->row_array();
+                    $this->db->where('tgl >= DATE_SUB(NOW(),INTERVAL 4 MONTH)');
                     $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($cekbckeluar['keterangan']),'jns_bc' => '261','dept_id' => $cekbckeluar['dept_tuju'],'dept_tuju' => $cekbckeluar['dept_id']])->row_array();
                     $kondisistok = [
                         'dept_id' => $this->session->userdata('deptsekarang'),
@@ -1359,6 +1360,7 @@ class Out_model extends CI_Model{
         $header = $this->db->get_where('tb_header',['id' => $id])->row_array();
         $exnombc = "";
         if(in_array($header['dept_id'],daftardeptsubkon())){
+            $this->db->where('tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)');
             $exnomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($header['keterangan']),'jns_bc' => 261,'trim(keterangan) != ' => '','dept_id' => $header['dept_tuju'],'dept_tuju' => $header['dept_id']]);
             if($exnomorbc->num_rows() > 0){
                 $exnomorbchasil = $exnomorbc->row_array();

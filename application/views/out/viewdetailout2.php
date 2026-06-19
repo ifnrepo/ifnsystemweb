@@ -44,14 +44,14 @@
                         <td><?= $sku ?></td>
                         <td><?= $nmsatuan; ?></td>
                         <td><?= $val['nobale'] ?></td>
-                        <td class="text-end"><?= rupiah($val['pcs'],0); ?></td>
+                        <td class="text-end"><?= rupiah($val['pcs'],2); ?></td>
                         <td class="text-end"><?= rupiah($val['kgs'],2); ?></td>
                         <td><?= $val['nodok']; ?></td>
                     </tr>
                 <?php } ?>
                 <tr class="bg-info-lt">
                     <td colspan="4" class="font-bold text-right">TOTAL</td>
-                    <td class="font-bold text-right"><?= rupiah($pcs,0); ?></td>
+                    <td class="font-bold text-right"><?= rupiah($pcs,2); ?></td>
                     <td class="font-bold text-right"><?= rupiah($kgs,2); ?></td>
                     <td></td>
                 </tr>

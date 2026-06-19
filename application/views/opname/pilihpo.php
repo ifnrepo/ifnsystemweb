@@ -9,11 +9,11 @@
                         <th class="text-black">SKU</th>
                         <th class="text-black">Spek Barang</th>
                         <th class="text-black">Stok</th>
-                        <?php if($dept=='GF' || $dept['GW']): ?>
+                        <?php if($dept=='GF' || $dept=='GW'): ?>
                             <th class="text-black">Pcs</th>
                             <th class="text-black">Kgs</th>
                         <?php else: ?>
-                            <th class="text-black">Insno/Nobontr</th>
+                            <th class="text-black line-11">Insno/Nobontr<br><span class="text-pink">Nomor BC</span></th>
                             <th class="text-black">Exnet</th>
                         <?php endif; ?>
                         <th class="text-black">Nobale</th>
@@ -47,6 +47,7 @@
                                     rel12="<?= $dt['nobale'] ?>"
                                     rel13="<?= $dt['kgs_akhir'] ?>"
                                     rel14="<?= $dt['pcs_akhir'] ?>"
+                                    rel15="<?= $dt['nomor_bc'] ?>"
                                 >
                                     Pilih
                                 </a>
@@ -54,12 +55,13 @@
                             <td class="font-kecil"><?= $sku ?></td>
                             <td class="font-kecil"><?= $spek ?></td>
                             <td class="font-kecil"><?= $stok ?></td>
-                            <?php if($dept=='GF' || $dept['GW']): ?>
+                            <?php if($dept=='GF' || $dept=='GW'): ?>
                                 <td class="font-kecil text-right"><?= rupiah($dt['pcs_akhir'],2); ?></td>
                                 <td class="font-kecil text-right"><?= rupiah($dt['kgs_akhir'],2); ?></td>
                             <?php else: ?>
+                                <?php $nobc = trim($dt['nomor_bc'])!='' ? 'BC No. '.trim($dt['nomor_bc']) : ''; ?>
+                                <td class="font-kecil line-11"><?= $dt['insno'].$dt['nobontr'] ?><br><span class="text-pink"><?= $nobc ?></span></td>
                                 <td class="font-kecil"><?= $exnet ?></td>
-                                <td class="font-kecil"><?= $dt['insno'].$dt['nobontr'] ?></td>
                             <?php endif; ?>
                             <td class="font-kecil"><?= $dt['nobale'] ?></td>
                             
@@ -94,6 +96,7 @@
         $("#sku").val($(this).attr('rel10'));
         $("#dln").val($(this).attr('rel11'));
         $("#nobale").val($(this).attr('rel12'));
+        $("#nomor_bc").val($(this).attr('rel15'));
         if($("#deptnya").val()=='GF' || $("#deptnya").val()=='GW' ){
             $("#kgs").val($(this).attr('rel13'));
             $("#pcs").val($(this).attr('rel14'));

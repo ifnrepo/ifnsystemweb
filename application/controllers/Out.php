@@ -569,7 +569,7 @@ class Out extends CI_Controller {
             $html .= "<td class='text-center'>".$val['nobale']."</td>";
             $html .= "<td class='text-center'>".$xnet."</td>";
             $html .= "<td class='text-center'>".$stk."</td>";
-            $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
+            $html .= "<td class='text-right'>".rupiah($val['pcs'],2)."</td>";
             $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
             $html .= "<td>".$val['nodok']."</td>";
             $html .= "</tr>";
@@ -578,7 +578,7 @@ class Out extends CI_Controller {
         $html .= "<td colspan='4' class='text-end'>TOTAL</td>";
         $html .= "<td></td>";
         $html .= "<td></td>";
-        $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
+        $html .= "<td class='text-right font-bold'>".rupiah($pcs,2)."</td>";
         $html .= "<td class='text-right font-bold'>".rupiah($kgs,4)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";
@@ -603,7 +603,7 @@ class Out extends CI_Controller {
         $html .= "<td>".$val['namasatuan']."</td>";
         $html .= "<td>".$val['nobale']."</td>";
         $html .= "<td class='text-center'>".$stk."</td>";
-        $html .= "<td class='text-right'>".rupiah($val['pcs'],0)."</td>";
+        $html .= "<td class='text-right'>".rupiah($val['pcs'],2)."</td>";
         $html .= "<td class='text-right'>".rupiah($val['kgs'],2)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";
@@ -613,7 +613,7 @@ class Out extends CI_Controller {
        }
         $html .= "<tr>";
         $html .= "<td colspan='5' class='text-end'>TOTAL</td>";
-        $html .= "<td class='text-right font-bold'>".rupiah($pcs,0)."</td>";
+        $html .= "<td class='text-right font-bold'>".rupiah($pcs,2)."</td>";
         $html .= "<td class='text-right font-bold'>".rupiah($kgs,2)."</td>";
         $html .= "<td></td>";
         $html .= "</tr>";

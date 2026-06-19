@@ -45,9 +45,9 @@
                             <td class="text-center font-bold"><?= $stk; ?></td>
                             <td class='text-center'><?= $detail['nobale']; ?></td>
                             <td class='text-center text-success font-bold'><?= $xnet; ?></td>
-                            <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($detail['totpcs'],0); ?></td>
+                            <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($detail['totpcs'],2); ?></td>
                             <td class="text-right <?= $cekkurang; ?>"><?= rupiah($detail['totkgs'],4); ?></td>
-                            <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($pcsstok,0); ?></td>
+                            <td class="text-right <?= $cekkurangpcs; ?>"><?= rupiah($pcsstok,2); ?></td>
                             <td class="text-right <?= $cekkurang; ?>"><?= rupiah($kgsstok,4); ?></td>
                         </tr>
                     <?php endforeach; ?>
@@ -55,7 +55,7 @@
                         <td colspan="3" class="font-black text-center font-bold">TOTAL</td>
                         <td></td>
                         <td></td>
-                        <td class="text-right font-bold"><?= rupiah($totpcs,0); ?></td>
+                        <td class="text-right font-bold"><?= rupiah($totpcs,2); ?></td>
                         <td class="text-right font-bold"><?= rupiah($totkgs,4); ?></td>
                         <td></td>
                         <td></td>

@@ -195,6 +195,7 @@ class Opname extends CI_Controller
             'nobontr' => $_POST['nobontr'],
             'exnet' => $_POST['exnet'],
             'nobale' => $_POST['nobale'],
+            'nomor_bc' => $_POST['nobc'],
             'stok' => $_POST['stok'],
         ];
         echo $this->opnamemodel->updatestokopname($data);
@@ -477,7 +478,8 @@ class Opname extends CI_Controller
 			'satuan' => $_POST['satuan'],
 			'ket' => $_POST['ket'],
 			'pcs' => toAngka($_POST['pcs']),
-			'kgs' => toAngka($_POST['kgs'])
+			'kgs' => toAngka($_POST['kgs']),
+			'nomor_bc' => $_POST['nobc']
         ];
         $query = $this->opnamemodel->simpanentristok($data);
         if($query){
@@ -504,6 +506,8 @@ class Opname extends CI_Controller
 			'kgs' => toAngka($_POST['kgs']),
             'id' => $_POST['id'],
             'urut' => $_POST['urut'],
+            'nomor_bc' => $_POST['nobc'],
+            'dept_id' => $_POST['dept']
         ];
         $query = $this->opnamemodel->updateentristok($data);
         if($query){

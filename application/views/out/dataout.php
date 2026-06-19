@@ -155,10 +155,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       <td id="<?= $que['id'] ?>"><?= trim($que['nobale']) ?></td>
                       <td class="text-center font-bold"><?= $stk ?></td>
                       <?php if($data['jn_bbl']==1): ?>
-                        <td class='text-right'><?= rupiah($que['pcsminta'],0) ?></td>
+                        <td class='text-right'><?= rupiah($que['pcsminta'],2) ?></td>
                         <td class='text-right'><?= rupiah($que['kgsminta'],2) ?></td>
                       <?php endif; ?>
-                      <td class='text-primary text-right'><?= rupiah($que['pcs'],0) ?></td>
+                      <td class='text-primary text-right'><?= rupiah($que['pcs'],2) ?></td>
                       <td class='text-primary text-right'><?= rupiah($que['kgs'],2) ?></td>
                       <?php if($this->session->userdata('deptsekarang')=='GM' && $que['nobontr']!=''): ?>
                         <td class='text-primary'><?= $que['nobontr'] ?></td>

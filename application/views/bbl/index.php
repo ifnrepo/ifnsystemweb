@@ -100,7 +100,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                 </div>
                 <div class="mt-2">
-                    <table id="pbtabel" class="table nowrap order-column datatable11" style="width: 100% !important;">
+                    <table id="pbtabel" class="table nowrap order-column datatable11 table-hover" style="width: 100% !important;">
                         <thead>
                             <tr>
                                 <th>Tgl</th>
@@ -111,7 +111,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th class="text-center">Urgent</th> 
                                 <th>Dept</th> 
                                 <th>Dibuat Oleh</th>
-                                <th>Keterangan</th>
+                                <th style="width: 30px !important;">Keterangan</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -120,7 +120,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             foreach ($data as $datdet) :
                                 $jmlrec = $datdet['jmlrex'] == null ? '' : $datdet['jmlrex'] . ' Item ';
                                 $jnbbl = $datdet['jn_bbl']==0 ? '' : 'text-danger';
-                                $pesanbbl = $datdet['pesan_bbl']=='' ? '' : '<br><span class="text-pink">Noted: '.$datdet['pesan_bbl'].'</span>';
+                                $pesanbbl = $datdet['pesan_bbl']=='' ? '' : '<br><span class="text-pink">Noted: '.trim($datdet['pesan_bbl']).'</span>';
                             ?>
                                 <tr>
                                     <td class="<?= $jnbbl; ?>"><?= tglmysql($datdet['tgl']); ?></td>
@@ -135,12 +135,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php }else{ ?>
                                     <td></td>
                                     <?php } ?>
-                                    <td class="line-12"><?= $datdet['keterangan'].$pesanbbl ?></td>
-                                    <td>
+                                    <?php $panjangpesan = strlen($pesanbbl); if($panjangpesan > 60){ $pesanbbl = substr($pesanbbl,0,60).'...'; } ?>
+                                    <td style="width: 30px !important;"  class="line-12"><?= $datdet['keterangan'].substr($pesanbbl,0,65) ?></td>
+                                    <td class="font-kecil line-12 text-right">
                                         <?php if($datdet['ok_bb']==1 && $datdet['data_ok']==0 && $datdet['ok_valid']==0){ ?>
-                                        Tunggu Validasi Kep Dept
-                                        <a href="#" data-href="<?= base_url() . 'bbl/editbbl/' . $datdet['id']; ?>" class="btn btn-sm btn-info btn-icon btn-flat mr-1" style="padding: 5px !important" id="Edit detail Bbl" data-message="Akan edit data ini" data-bs-toggle='modal' data-bs-target='#modal-info' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
-                                            <i class="fa fa-refresh mr-1"></i> Edit
+                                        Tunggu Validasi Kep Dept<br>
+                                        <a href="#" data-href="<?= base_url() . 'bbl/editbbl/' . $datdet['id']; ?>" id="Edit detail Bbl" data-message="Akan edit data ini" data-bs-toggle='modal' data-bs-target='#modal-info' data-title="Edit detail Bbl" rel="<?= $datdet['id']; ?>" title="Edit data">
+                                            Edit
                                         </a>
                                         <?php }else if($datdet['ok_bb']==0 && $datdet['data_ok']==0 && $datdet['ok_valid']==0){ ?>
                                         <a href="<?= base_url() . 'bbl/editdetail_bbl/' . $datdet['id']; ?>" class="btn btn-sm btn-primary btn-icon text-white">
@@ -152,23 +153,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <?php }else{ 
                                             if($datdet['ok_pp']==0){
                                                 if($datdet['bbl_pp']==1){
-                                                    $tungguvalid = 'Tunggu Validasi Manager PP';
+                                                    $tungguvalid = 'Tunggu Validasi <br>Manager PP';
                                                 }else{
-                                                    $tungguvalid = 'Tunggu Validasi Manager UT';
+                                                    $tungguvalid = 'Tunggu Validasi <br>Manager UT';
                                                 }
                                             }else{
                                                 if($datdet['ok_valid']==0){
-                                                    $tungguvalid = 'Tunggu Validasi Manager '.$datdet['dept_bbl'];
+                                                    $tungguvalid = 'Tunggu Validasi <br>Manager '.$datdet['dept_bbl'];
                                                 }else{
                                                     if($datdet['ok_tuju']==0){
-                                                        $tungguvalid = 'Tunggu Validasi GM '.$datdet['dept_bbl'];
+                                                        $tungguvalid = 'Tunggu Validasi <br>GM '.$datdet['dept_bbl'];
                                                     }else{
-                                                        if($datdet['ok_pc']==0){
-                                                            $tungguvalid = 'Tunggu Validasi GM Purchasing';
-                                                        }else{
-                                                            $tungguvalid = 'Proses PO';
+                                                        // if($datdet['ok_pc']==0){
+                                                        //     $tungguvalid = 'Tunggu Validasi <br>GM Purchasing';
+                                                        // }else{
+                                                            $tungguvalid = 'Validasi Selesai <br><span class="text-green">Proses PO</span>';
                                                         }
-                                                    }
+                                                    // }
                                                 }
                                             }
                                             ?>
