@@ -125,6 +125,15 @@ class Ponet extends CI_Controller
         $data['gbr']= trim($gbr)=='' ? '' : urldecode($gbr);
         $this->load->view('ponet/viewfoto',$data);
     }
+    public function editlabel($id)
+    {   
+        $data['data'] = $this->ponetmodel->getdata($id);
+        $this->load->view('ponet/editlabel',$data);
+    }
+    public function updatefoto()
+    {
+        $this->ponetmodel->updatefoto_baru();
+    }
     public function netplan($rekpo=0,$msno=0){
         $header['header'] = 'other';
         $data['data'] = $this->ponetmodel->datamesin($msno);
