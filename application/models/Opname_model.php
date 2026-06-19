@@ -505,8 +505,11 @@ class Opname_model extends CI_Model
         }
         $keu = substr($kata,0,strlen($kata)-1);
         $this->db->select('stokdept.*,barang.kode,barang.nama_barang,barang.dln');
+        $this->db->select('tb_po.spek,tb_po.color');
+        $this->db->select("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') AS skupo");
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(stokdept.po,stokdept.item,stokdept.dis)','left');
         $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
         $this->db->where('stokdept.dept_id',$dept);
         $this->db->like('stokdept.nobale',$keu,'both',FALSE);
@@ -524,6 +527,9 @@ class Opname_model extends CI_Model
         $data['urut'] = $urut;
         $data['user_add'] = $this->session->userdata('id');
         $data['kgs'] = round($data['kgs'],2);
+        if($data['dept_id']=='GM'){
+            $data['nomor_bc'] = '';
+        }
         $this->db->insert('stokopname_detail',$data);
 
         $this->db->select('SUM(pcs) as pcs,SUM(kgs) as kgs,count(*) as item');
@@ -545,6 +551,10 @@ class Opname_model extends CI_Model
         $this->db->trans_start();
         $id = $data['id'];
         unset($data['id']);
+        if(trim($data['dept_id'])=='GM'){
+            $data['nomor_bc'] = '';
+            unset($data['dept_id']);
+        }
         $xdata = $this->db->get_where('stokopname_detail',['id' => $id])->row_array();
         
         $this->db->where('id',$id);

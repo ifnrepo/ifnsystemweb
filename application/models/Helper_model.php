@@ -1260,6 +1260,7 @@ class Helper_model extends CI_Model
         if($deptid=='' && $depttuju==''){
             return $this->db->get_where('tb_header',['trim(keterangan)' => $id, 'jns_bc'=>261, 'trim(keterangan) != ' => '']);
         }else{
+            $this->db->where('tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)');
             return $this->db->get_where('tb_header',['trim(keterangan)' => $id, 'jns_bc'=>261, 'trim(keterangan) != ' => '','dept_id' => $depttuju,'dept_tuju' => $deptid]);
         }
     }

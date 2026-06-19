@@ -150,7 +150,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <th class="text-left line-11"><span class="text-blue">Sku</span><br>Spesifikasi</th>
                             <th class="text-center">Grd</th>
                             <th>Sat</th>
-                            <th class="line-11">Nobontr<br><span class="text-pink">Insno</span></th>
+                            <th class="line-11">Insno/Nobontr<br><span class="text-pink">Nomor BC</span></th>
                             <th>Sublok</th>
                             <th>Nobale</th>
                             <th>Exnet</th>
@@ -175,7 +175,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <td class="font-kecil line-11"><span class="text-blue"><?= $sku ?></span><br><a title="View Detail"><?= $spek ?></a></td>
                                 <td class="font-kecil"><?= $grade ?></td> 
                                 <td class="font-kecil"><?= $dt['kodesatuan'] ?></td> 
-                                <td class="font-kecil line-11"><?= $dt['nobontr'] ?><br><span class="text-pink"><?= $dt['insno'] ?></span></td>
+                                <?php $nobc = trim($dt['nomor_bc'])!='' ? 'BC No. '.trim($dt['nomor_bc']) : ''; ?>
+                                <td class="font-kecil line-11"><?= $dt['insno'].$dt['nobontr'] ?><br><span class="text-pink"><?= $nobc ?></span></td>
                                 <td class="font-kecil"><?= $dt['kode_lokasi'].'-'.$dt['nama_lokasi'] ?></td> 
                                 <td class="font-kecil"><?= $dt['nobale'] ?></td> 
                                 <td class="font-kecil text-center"><?= $exnet ?></td> 

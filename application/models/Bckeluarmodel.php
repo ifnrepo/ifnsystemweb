@@ -38,11 +38,21 @@ class bckeluarmodel extends CI_Model
                 $this->db->where("jns_bc", 30);
                 $this->db->where("pjt", 1);
                 }else{
-                    $this->db->where("jns_bc", $jnsbc);
+                    if($jnsbc=='411'){  
+                        $this->db->where("jns_bc", 41);
+                        $this->db->where("bc_makloon", 1);
+                    }else{
+                        if($jnsbc=='412'){
+                        $this->db->where("jns_bc", 41);
+                        $this->db->where("bc_makloon", 0);
+                        }else{
+                            $this->db->where("jns_bc", $jnsbc);
+                        }
+                    }
                 }
             }
         } else {
-            $this->db->where_in("jns_bc", [25, 30, 261, 41]);
+            $this->db->where_in("jns_bc", [25, 30, 261]);
         }
 
         if ($this->session->userdata('nopen')) {

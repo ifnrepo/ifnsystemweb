@@ -1606,7 +1606,7 @@ class Ib extends CI_Controller
             "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
             "kodeDokumen" => $data['jns_bc'],
             "kodeKantor" => "050500",
-            "kodeTujuanPemasukan" =>  $data['dept_id'] == 'SU' ? "1" : "2",
+            "kodeTujuanPemasukan" =>  $data['dept_id'] == 'SU' ? "1" : (str_contains($data['nomor_dok'],"MSN") ? "3" : "2"),
             "kodeValuta" => "USD",
             "kotaTtd" => "BANDUNG",
             "namaTtd" => strtoupper($data['tg_jawab']),

@@ -7,7 +7,7 @@
                         <th class="text-black">Aksi</th>
                         <th class="text-black">SKU</th>
                         <th class="text-black">Spek Barang</th>
-                        <th class="text-black">Insno/Nobontr</th>
+                        <th class="text-black line-11">Insno/Nobontr<br><span class="text-pink">Nomor BC</span></th>
                         <th class="text-black">Stok</th>
                         <th class="text-black">Exnet</th>
                     </tr>
@@ -37,13 +37,15 @@
                                     rel9="<?= $dt['nama_barang'] ?>"
                                     rel10="<?= $dt['kode'] ?>"
                                     rel11="<?= $dt['dln'] ?>"
+                                    rel12="<?= $dt['nomor_bc'] ?>"
                                 >
                                     Pilih
                                 </a>
                             </td>
                             <td class="font-kecil"><?= $sku ?></td>
                             <td class="font-kecil"><?= $spek ?></td>
-                            <td class="font-kecil"><?= $dt['insno'].$dt['nobontr'] ?></td>
+                            <?php $nobc = trim($dt['nomor_bc'])!='' ? 'BC No. '.trim($dt['nomor_bc']) : ''; ?>
+                            <td class="font-kecil"><?= $dt['insno'].$dt['nobontr'] ?><br><span class="text-pink"><?= $nobc ?></span></td>
                             <td class="font-kecil"><?= $stok ?></td>
                             <td class="font-kecil"><?= $exnet ?></td>
                             
@@ -77,6 +79,7 @@
        $("#spek").val($(this).attr('rel9'));
        $("#sku").val($(this).attr('rel10'));
        $("#dln").val($(this).attr('rel11'));
+       $("#nomor_bc").val($(this).attr('rel12'));
        $("#keywordinputstok").val('');
        $("#sku").focus();
        $("#tutup").click();

@@ -274,7 +274,8 @@
                                         </div>
                                     </div>
                                     <!-- Ex BC  -->
-                                    <div class="<?= $hilangbc30; ?><?= $hilangbc40; ?><?= $hilangbc261; ?><?= $hilangbc41; ?><?= $hilangbc25; ?>">
+                                     <?php $bc41m = $datheader['jns_bc'] == 41 && $datheader['bc_makloon']==0 ? 'hilang' : ''; ?>
+                                    <div class="<?= $hilangbc30; ?><?= $hilangbc40; ?><?= $hilangbc261; ?><?= $hilangbc25; ?><?= $bc41m; ?>">
                                         <div class="text-center bg-danger-lt mb-1 font-bold">Ex BC</div>
                                         <div class="mb-1 row">
                                             <div class="col">

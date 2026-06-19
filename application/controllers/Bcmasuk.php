@@ -211,8 +211,13 @@ class Bcmasuk extends CI_Controller
                 // }
             } else {
                 if($data['jns_bc']==40){
-                    $subtotal_idr = round(($harga_idr*$pembagi) * ($pengali/$pembagi),2);
-                    $subtotal_usd = round($harga_usd * $pengali,2);
+                    if($data['bc_makloon']==1){
+                        $subtotal_idr = 0;
+                        $subtotal_usd = 0;
+                    }else{
+                        $subtotal_idr = round(($harga_idr*$pembagi) * ($pengali/$pembagi),2);
+                        $subtotal_usd = round($harga_usd * $pengali,2);
+                    }
                 }else{
                     if($data['jns_bc']==23 && $data['mtuang'] == 3){
                         $subtotal_idr = $harga_idr * $pengali;

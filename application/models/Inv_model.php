@@ -175,67 +175,6 @@ class inv_model extends CI_Model
         $ada = in_array($dept,daftardeptsubkon());
         $arrbarangexcludejenis = $this->session->userdata('currdept') == 'GS' ? "'XX'" : "'4170','5691','6019','39991','40394','40395','40396'";
 
-        // //Isi dulu po_id pada Stokdept,tb_detailgen,tb_detail, stokopname_detail
-        // //Cek data Stokdept
-        // $datastok = $this->db->get_where('stokdept',['id_tb_po' => 0,'periode'=>$periode,'dept_id'=>$dept,'trim(po) !=' => ""]);
-        // if($datastok->num_rows() > 0){
-        //     foreach($datastok->result_array() as $ds){
-        //         $ids = $ds['id'];
-        //         $formatindpo = buatkanformatindpo($ds['po'],$ds['item'],$ds['dis']);
-        //         $datapo = $this->db->get_where('Xtb_po',['ind_po' => $formatindpo])->row_array();
-
-        //         $this->db->where('id',$ids);
-        //         $this->db->update('stokdept',['id_tb_po' => $datapo['id']]);
-        //     }
-        // }
-
-        // //Cek data tb_detail
-        // $this->db->select('tb_detail.*');
-        // $this->db->from('tb_detail');
-        // $this->db->join('tb_header','tb_header.id = tb_detail.id_header');
-        // $this->db->where('tb_header.dept_tuju',$dept);
-        // $this->db->group_start();
-        // $this->db->where("tb_header.tgl BETWEEN '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
-        // $this->db->group_end();
-        // $this->db->group_start();
-        // $this->db->where('tb_header.kode_dok','IB');
-        // $this->db->or_where('tb_header.kode_dok','T');
-        // $this->db->group_end();
-        // $this->db->where('tb_header.ok_valid',1);
-        // $this->db->where('trim(tb_detail.po) !=',"");
-        // $datadet = $this->db->get();
-        // if($datadet->num_rows() > 0){
-        //     foreach($datadet->result_array() as $ds){
-        //         $ids = $ds['id'];
-        //         $datapo = $this->db->get_where('tb_po',['ind_po' => $ds['po'].$ds['item'].$ds['dis']])->row_array();
-
-        //         $this->db->where('id',$ids);
-        //         $this->db->update('tb_detail',['id_tb_po' => $datapo['id']]);
-        //     }
-        // }
-
-        // //Cek data tb_detailgen
-        // $this->db->select('tb_detailgen.*');
-        // $this->db->from('tb_detailgen');
-        // $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header');
-        // $this->db->where('tb_header.dept_id',$dept);
-        // $this->db->group_start();
-        // $this->db->where("tb_header.tgl BETWEEN '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
-        // $this->db->group_end();
-        // $this->db->where('tb_header.kode_dok','T');
-        // $this->db->where('tb_header.data_ok',1);
-        // $this->db->where('trim(tb_detailgen.po) !=',"");
-        // $datadet = $this->db->get();
-        // if($datadet->num_rows() > 0){
-        //     foreach($datadet->result_array() as $ds){
-        //         $ids = $ds['id'];
-        //         $datapo = $this->db->get_where('tb_po',['ind_po' => $ds['po'].$ds['item'].$ds['dis']])->row_array();
-
-        //         $this->db->where('id',$ids);
-        //         $this->db->update('tb_detailgen',['id_tb_po' => $datapo['id']]);
-        //     }
-        // }
-
         // Query untuk CekSaldobarang
         $this->db->select("0 as kodeinv,stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,stokdept.dln as xdln,barang.id_kategori,stokdept.insno,stokdept.nobontr,barang.kode,stokdept.id as idu");
         $this->db->select('sum(pcs_awal) as saldopcs,sum(kgs_awal) as saldokgs');
@@ -263,8 +202,10 @@ class inv_model extends CI_Model
         }
         if($ada){
             $this->db->select('trim(stokdept.nomor_bc) as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }else{
             $this->db->select('"" as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
@@ -323,8 +264,10 @@ class inv_model extends CI_Model
         if($ada){
             // $this->db->select('tb_header.nomor_bc as xnomor_bc');
             $this->db->select('(SELECT trim(nomor_bc) FROM tb_header tbhead where id = tb_detail.id_akb ) as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }else{
             $this->db->select('"" as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
@@ -362,7 +305,7 @@ class inv_model extends CI_Model
             }
         }
         // $this->db->where('tb_detail.po','KI-6391');
-        // $this->db->where('tb_detail.nobale','58');
+        $this->db->where('tb_header.no_inv',0);
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query2 = $this->db->get_compiled_select();
 
@@ -393,9 +336,13 @@ class inv_model extends CI_Model
         }
         if($ada){
             // $this->db->select('tb_header.nomor_bc as nomor_bc');
-            $this->db->select('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id ) as xnomor_bc');
+            $this->db->select('TRIM(CONCAT( IFNULL((SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)),"") , IFNULL((SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb),"") )) as xnomor_bc');
+            // $this->db->select('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)) as xnomor_bc');
+            // $this->db->select('(SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb) as xnomor_bc');
+            // $this->db->select('IFNULL((SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)),(SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb)) as nomor_bc2');
         }else{
             $this->db->select('"" as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }
         $this->db->from('tb_detailgen');
         $this->db->join('barang','barang.id = tb_detailgen.id_barang','left');
@@ -426,7 +373,7 @@ class inv_model extends CI_Model
             }
         }
         // $this->db->where('tb_detailgen.po','KI-6391');
-        // $this->db->where('tb_detailgen.nobale','58');
+        $this->db->where('tb_header.no_inv',0);
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query3 = $this->db->get_compiled_select();
 
@@ -457,8 +404,10 @@ class inv_model extends CI_Model
         }
         if($ada){
             $this->db->select('trim(tb_header.nomor_bc) as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }else{
             $this->db->select('"" as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }
         $this->db->from('tb_detail');
         $this->db->join('barang','barang.id = tb_detail.id_barang','left');
@@ -490,6 +439,7 @@ class inv_model extends CI_Model
                 $this->db->where('tb_detail.stok',$this->session->userdata('idstok'));
             }
         }
+        $this->db->where('tb_header.no_inv',0);
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query4 = $this->db->get_compiled_select();
 
@@ -499,7 +449,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
-        $this->db->select('sum(pcs) as pcs_taking,sum(kgs) as kgs_taking');
+        $this->db->select('sum(stokopname_detail.pcs) as pcs_taking,sum(stokopname_detail.kgs) as kgs_taking');
         $this->db->select('tb_po.spek as spek,tb_po.exdo,tb_po.id_buyer');
         $this->db->select('barang.nama_barang as nama_barang');
         $this->db->select('stokopname_detail.stok,stokopname_detail.exnet');
@@ -508,7 +458,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as totalpcsin,0 as totalkgsin');
         $this->db->select('0 as totalpcsout,0 as totalkgsout');
         $this->db->select('0 as totalpcsadj,0 as totalkgsadj');
-        $this->db->select('SUM(sum(pcs)) over() as totalpcsso,SUM(sum(kgs)) over() as totalkgsso');
+        $this->db->select('SUM(sum(stokopname_detail.pcs)) over() as totalpcsso,SUM(sum(stokopname_detail.kgs)) over() as totalkgsso');
         $this->db->select('0 as user_verif,"" as tgl_verif');
         $this->db->select('"" as username_verif');
         $this->db->select("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') AS skupo");
@@ -520,17 +470,20 @@ class inv_model extends CI_Model
         }
         if($ada){
             $this->db->select('trim(stokopname_detail.nomor_bc) as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }else{
             $this->db->select('"" as xnomor_bc');
+            // $this->db->select('"" as nomor_bc2');
         }
         $this->db->from('stokopname_detail');
         $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
         // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(stokopname_detail.po,stokopname_detail.item,stokopname_detail.dis)','left');
-        // $this->db->join('tb_po','tb_po.id = stokopname_detail.id_tb_po','left');
+        $this->db->join('stokopname','stokopname.id = stokopname_detail.id_stokopname','left');
         // $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
         $this->db->where('stokopname_detail.dept_id',$dept);
         $this->db->where('stokopname_detail.tgl',tglmysql($tglakhir));
+        $this->db->where('stokopname.status >= 1');
         // $this->db->group_start();
         // $this->db->where("tb_header.tgl BETWEEN '".tglmysql($tglawal)."' AND '".tglmysql($tglakhir)."' ");
         // $this->db->group_end();
@@ -559,7 +512,7 @@ class inv_model extends CI_Model
         $kolom = "Select jns,kodeinv,nobale,po,item,dis,id_barang,xdln,id_kategori,nomor_bc,insno,nobontr,kode,idu,stok,exnet,saldopcs,saldokgs,";
         $kolom .= "inpcs,inkgs,outpcs,outkgs,adjpcs,adjkgs,sumpcs,sumkgs,pcs_taking,kgs_taking,kodesatuan,nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,skupo,sdln,";
         $kolom .= "sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldokgs+inkgs-outkgs+adjkgs)) over() as totalkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldopcs+inpcs-outpcs+adjpcs)) over() as totalpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldopcs)) over() as sawalpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,saldokgs)) over() as sawalkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,inpcs)) over() as totalinpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,outpcs)) over() as totaloutpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,inkgs)) over() as totalinkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,outkgs)) over() as totaloutkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,adjpcs)) over() as totaladjpcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,adjkgs)) over() as totaladjkgs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,pcs_taking)) over() as totalsopcs,sum(IF(id_barang IN (".$arrbarangexcludejenis."),0,kgs_taking)) over() as totalsokgs from (";
-        $kolom .= "Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,ifnull(trim(xnomor_bc),'') as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,skupo,sdln ";
+        $kolom .= "Select IFNULL(kategori.jns,1) as jns,kodeinv,nobale,po,item,dis,id_barang,xdln,left(concat(ifnull(id_kategori_po,''),ifnull(barang.id_kategori,'')),4) as id_kategori,ifnull(xnomor_bc,'') as nomor_bc,insno,nobontr,barang.kode,idu,stok,exnet,sum(saldopcs) as saldopcs,sum(saldokgs) as saldokgs,sum(inpcs) as inpcs,sum(inkgs) as inkgs,sum(outpcs) as outpcs,sum(outkgs) as outkgs,sum(adjpcs) as adjpcs,sum(adjkgs) as adjkgs,(sum(saldopcs)+sum(inpcs)-sum(outpcs)+sum(adjpcs)) as sumpcs,(sum(saldokgs)+sum(inkgs)-sum(outkgs)+sum(adjkgs)) as sumkgs,sum(pcs_taking) as pcs_taking,sum(kgs_taking) as kgs_taking,satuan.kodesatuan,barang.nama_barang,spek,exdo,id_buyer,user_verif,tgl_verif,username_verif,skupo,sdln ";
         $kolom .= "from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4." union all ".$query5.") r1";
         // $kolom .= "from (".$query1.") r1";
         $kolom .= " left join barang on barang.id = id_barang";
@@ -578,7 +531,8 @@ class inv_model extends CI_Model
         if($ifndln!='all'){
             $kolom .= " AND sdln = ".$ifndln;
         }
-        $kolom .= " group by po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,stok,exnet order by po,item,dis,nobale,id_barang,insno,nobontr,nomor_bc,stok,exnet) r2";
+        $kolom .= " group by po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,stok,exnet ";
+        $kolom .= " order by po,item,dis,nobale,id_barang,insno,nobontr,nomor_bc,stok,exnet) r2";
         $hasil = $this->db->query($kolom);
 
         return $kolom;
@@ -629,7 +583,7 @@ class inv_model extends CI_Model
                 $kata = trim($isi);
             }
             $adakondisi = 1;
-            $kondisi .= " (po like '%".$kata."%' OR insno like '%".$kata."%' OR nobontr like '%".$kata."%' OR spek like '%".$kata."%' OR nobale like '%".$kata."%' OR id_barang like '%".$kata."%' OR nama_barang like '%".$kata."%' OR kode like '%".$kata."%' OR skupo like '%".$kata."%') AND";
+            $kondisi .= " (po like '%".$kata."%' OR insno like '%".$kata."%' OR nobontr like '%".$kata."%' OR spek like '%".$kata."%' OR nobale like '%".$kata."%' OR id_barang like '%".$kata."%' OR nama_barang like '%".$kata."%' OR kode like '%".$kata."%' OR skupo like '%".$kata."%' OR nomor_bc like '%".$kata."%') AND";
         }
         if($adakondisi==1){
             $jadikondisi = " WHERE".substr($kondisi,0,strlen($kondisi)-3);
@@ -834,7 +788,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
-        $this->db->select('tb_po.spek as spek');
+        $this->db->select('tb_po.spek as spek,tb_po.id_kategori as katpo');
         $this->db->select('barang.nama_barang as nama_barang');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('stokdept.nobale');
@@ -881,7 +835,7 @@ class inv_model extends CI_Model
         $this->db->select('sum(pcs) as inpcs,sum(kgs) as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
-        $this->db->select('tb_po.spek as spek');
+        $this->db->select('tb_po.spek as spek,tb_po.id_kategori as katpo');
         $this->db->select('barang.nama_barang as nama_barang');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
@@ -936,7 +890,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('sum(pcs) as outpcs,sum(kgs) as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
-        $this->db->select('tb_po.spek as spek');
+        $this->db->select('tb_po.spek as spek,tb_po.id_kategori as katpo');
         $this->db->select('barang.nama_barang as nama_barang');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detailgen.nobale');
@@ -944,8 +898,8 @@ class inv_model extends CI_Model
             $this->db->select('"" as nobale');
         }
         if($ada){
-            // $this->db->select('tb_header.nomor_bc as nomor_bc');
-            $this->db->select('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id ) as nomor_bc');
+            $this->db->select('tb_header.exnomor_bc as nomor_bc');
+            // $this->db->select('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id ) as nomor_bc');
         }else{
             $this->db->select('"" as nomor_bc');
         }
@@ -976,7 +930,10 @@ class inv_model extends CI_Model
             // $this->db->where('trim(tb_detailgen.id_barang)',$array['id_barang']);
         }
         if($ada){
-            $this->db->where('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(now(),INTERVAL 4 MONTH) ) =',trim($array['nomor_bc']));
+            // $this->db->where('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(now(),INTERVAL 4 MONTH) ) =',trim($array['nomor_bc']));
+            $this->db->where('TRIM(CONCAT( IFNULL((SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)),"") , IFNULL((SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb),"") )) = ',trim($array['nomor_bc']));
+            // $this->db->where('(SELECT trim(exnomor_bc) FROM tb_header where id = tb_detailgen.id_akb) = ',trim($array['nomor_bc']));
+            // $this->db->where('(SELECT CASE WHEN EXISTS(SELECT trim(exnomor_bc) FROM tb_header where id = tb_detailgen.id_akb) then (SELECT trim(exnomor_bc) FROM tb_header where id = tb_detailgen.id_akb) ELSE 0 END) = ',trim($array['nomor_bc']));
         }
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,nomor_dok,stok');
         $query3 = $this->db->get_compiled_select();
@@ -988,7 +945,7 @@ class inv_model extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('sum(pcs) as adjpcs,sum(kgs) as adjkgs');
-        $this->db->select('tb_po.spek as spek');
+        $this->db->select('tb_po.spek as spek,tb_po.id_kategori as katpo');
         $this->db->select('barang.nama_barang as nama_barang');
         if($dept=='GF' || $dept=='GW'){
             $this->db->select('tb_detail.nobale');
@@ -1033,8 +990,8 @@ class inv_model extends CI_Model
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,nomor_dok,stok');
         $query4 = $this->db->get_compiled_select();
 
-        $kolom = "Select * from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
-        // $kolom .= " left join barang on barang.id = id_barang";
+        $kolom = "Select *,CONCAT(IFNULL(id_kategori,''),IFNULL(katpo,'')) as kategori_id,kategori.nama_kategori as namkat from (".$query1." union all ".$query2." union all ".$query3." union all ".$query4.") r1";
+        $kolom .= " left join kategori on kategori.kategori_id = CONCAT(IFNULL(id_kategori,''),IFNULL(katpo,''))";
         // $kolom .= " left join satuan on barang.id_satuan = satuan.id";
         // $kolom .= " group by po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc) r2";
         // $kolom .= " LEFT JOIN tb_po ON CONCAT(tb_po.po,tb_po.item,tb_po.dis) = concat(xpo,xitem,xdis)";

@@ -1499,7 +1499,7 @@ class Akb extends CI_Controller
             "jabatanTtd" => strtoupper($data['jabat_tg_jawab']),
             "jumlahKontainer" => 0,
             "kodeKantor" => "050500",
-            "kodeTujuanPengiriman" => $data['dept_tuju'] == 'SU' ? "1" : "2",
+            "kodeTujuanPengiriman" => $datdet['dept_tuju']=='SU' ? "1" : ($datdet['bc_makloon']==1 ? (substr($datdet['nomor_dok'],0,6)=='IFN-GS' ? "1" : "3") : "2"),
             "kodeValuta" => "USD", //$data['mt_uang'],
             "kotaTtd" => "BANDUNG",
             "namaTtd" => strtoupper($data['tg_jawab']),
