@@ -104,6 +104,30 @@
       </div>
     </div>
   </div>
+  <div class="modal modal-blur fade" id="modal-password" role="dialog" data-bs-backdrop="static" data-bs-keyboard="true" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
+      <div class="modal-content btn-flat">
+        <div class="modal-header bg-info hilang">
+          <h5 class="modal-title">Modal title</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </div>
+        <div class="modal-body p-2">
+          <div class="mb-2">
+              <label class="form-label font-kecil font-bold">Enter Password</label>
+              <input type="password" class="form-control font-kecil btn-flat" name="example-text-input" placeholder="Input Password">
+              <div class="text-right mb-2 mt-1">
+                <button type="button" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Batal</button>
+                <button type="button" class="btn btn-sm btn-primary">Lanjutkan</button>
+              </div>
+            </div>
+        </div>
+        <!-- <div class="modal-footer">
+            <button type="button" class="btn me-auto" data-bs-dismiss="modal">Close</button>
+            <button type="button" class="btn btn-primary" data-bs-dismiss="modal">Save changes</button>
+          </div> -->
+      </div>
+    </div>
+  </div>
   <div class="modal modal-blur fade" id="modal-danger" tabindex="-1" role="dialog" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
