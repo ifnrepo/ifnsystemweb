@@ -207,6 +207,14 @@ class Inv extends CI_Controller
         redirect($url);
         }
     }
+    public function cekstokdept(){
+        $hasil = $this->invmodel->cekstokdept();
+        // echo $hasil;
+        if($hasil){
+            $url = base_url('Inv');
+        redirect($url);
+        }
+    }
     public function getdatawip()
     {
         $this->session->set_userdata('tglawal', $_POST['tga']);

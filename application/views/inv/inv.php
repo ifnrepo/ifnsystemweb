@@ -72,7 +72,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $aktivsavesaw = '';
                 }
               ?>
-              <a href="<?= base_url() . 'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1">Export Excel</span></a>
+              <a href="#" data-href="<?= base_url().'inv/cekstokdept'; ?>" class="btn btn-warning btn-sm btn-flat mr-1" id="cekstokdept" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Refresh data Stok Departemen berdasarkan Inventory'><span class="line-11 font-11 text-black">Refresh<br>Stok Dept</span></a>
+              <a href="<?= base_url() . 'inv/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1" id="toexcel"><i class="fa fa-file-pdf-o"></i><span class="ml-1 line-11 font-11">Export<br>Excel</span></a>
               <a href="#" data-href="<?= base_url().'inv/savesaw'; ?>" class="btn btn-cyan btn-sm btn-flat mr-1 <?= $aktivsavesaw ?> <?php if($this->session->userdata('sess_ceksaw')==0){ echo "hilang"; } ?>" id="simpansaw" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data SAK to SAW <br> data tidak bisa dirubah'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save to<br>SAW</span></a>
               <a href="#" data-href="<?= base_url().'inv/simpandatainv'; ?>" class="btn btn-info btn-sm btn-flat mr-1 <?= $aktiv ?>" id="simpaninv" data-bs-toggle='modal' data-bs-target='#modal-info' data-tombol='Ya' data-message='Akan menyimpan data ke Pricing Inventory'><i class="fa fa-save"></i><span class="ml-2 line-11 font-11">Save Pricing <br>Inventory</span></a>
             </div>
