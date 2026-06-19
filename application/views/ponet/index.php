@@ -65,6 +65,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <img src="<?= $gambar ?>" alt="Belum ada Foto" style="height:auto; width:55%;">
                                 </a>
                             </div>
+                            <div class="text-end <?php if($this->session->userdata('cek_notes')==0){ echo "hilang"; } ?>">
+                                <a href="<?= base_url().'ponet/editlabel/'.$data['id'] ?>" class="btn btn-sm btn-warning mb-1" style="padding: 0px 4px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Label Jala"><span class="text-black">Edit Label Jala</span></a>
+                            </div>
                             <hr class="m-0">
                             <div class="bg-danger-lt px-2 py-1 font-kecil font-bold text-center"><span class="text-black">Hasil Pengecekan Lab</span></div>
                             <div class="mb-0 mt-1 row">
