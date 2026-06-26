@@ -4,6 +4,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\Style\Alignment;
+use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory as Fcword;
+use PhpOffice\PhpWord\Settings;
+
+Settings::setZipClass(Settings::ZIPARCHIVE);
 
 class Kontrak extends CI_Controller
 {
@@ -1522,5 +1528,152 @@ class Kontrak extends CI_Controller
         ];
         $hasil = $this->kontrakmodel->simpankontrakbaru($data);
         echo $hasil;
+    }
+    public function generateword($id) {
+        $datakontrak = $this->kontrakmodel->getdata($id)->row_array();
+        $filename = substr($datakontrak['nomor'],0,3)."_Kontrak_".trim($datakontrak['dept_id']).'_'.year($datakontrak['tgl']).'_'.$id.".docx";
+        $templatePath = APPPATH . 'third_party/docs/template_kontrak.docx'; 
+        $outputPath = FCPATH . 'temp/generated_doc.docx';
+        try {
+            // 2. Initialize the TemplateProcessor
+            $templateProcessor = new TemplateProcessor($templatePath);
+
+            // 3. Replace text placeholders
+            $templateProcessor->setValue('nomorkontrak', $datakontrak['nomor']);
+            $templateProcessor->setValue('namapimpinan', trim($datakontrak['pic']));
+            $templateProcessor->setValue('posisipimpinan', trim($datakontrak['jabatan']).' '.trim($datakontrak['nama_subkon']));
+            $templateProcessor->setValue('alamatsubkon', trim($datakontrak['alamat_subkon']));
+            $templateProcessor->setValue('nomornpwp', formatnpwp(trim($datakontrak['npwp'])));
+            $templateProcessor->setValue('jangkawaktu', tgl_indo($datakontrak['tgl_awal'],0,1).' sampai dengan tanggal '.tgl_indo($datakontrak['tgl_akhir'],0,1));
+            $templateProcessor->setValue('tglakhir', tgl_indo($datakontrak['tgl_akhir'],0,1));
+            $templateProcessor->setValue('tglkontrak', tgl_indo($datakontrak['tgl'],0,1));
+            $proses = trim($datakontrak['proses']);
+            if($proses=='HOSMET'){
+                $proses = 'HOSMET (Penarikan Pinggiran Jala)';
+            }
+            $templateProcessor->setValue('kerjaan', $proses);
+            $templateProcessor->setValue('hasilkerjaan', trim($datakontrak['proses']));
+
+            // 4. Save the manipulated file to your server
+            $templateProcessor->saveAs($outputPath);
+
+            // 5. Force the file to download in the browser
+            if (file_exists($outputPath)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                header('Content-Disposition: attachment; filename="'.$filename.'"');
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($outputPath));
+                
+                // Clear output buffer to avoid corrupt files
+                ob_clean();
+                flush();
+                
+                readfile($outputPath);
+                
+                // Optional: Delete the temporary file from the server after download
+                unlink($outputPath);
+                exit;
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'PHPWord Error: ' . $e->getMessage());
+            show_error('An error occurred while generating the document: ' . $e->getMessage());
+        }
+    }
+    public function generatemohon($id) {
+        $datakontrak = $this->kontrakmodel->getdata($id)->row_array();
+        $filename = substr($datakontrak['nomor'],0,3)."_Permohonan_".trim($datakontrak['dept_id']).'_'.year($datakontrak['tgl']).'_'.$id.".docx";
+        $templatePath = APPPATH . 'third_party/docs/template_permohonan.docx'; 
+        $outputPath = FCPATH . 'temp/generated_doc.docx';
+        try {
+            // 2. Initialize the TemplateProcessor
+            $templateProcessor = new TemplateProcessor($templatePath);
+
+            // 3. Replace text placeholders
+            $templateProcessor->setValue('nomorkontrak', $datakontrak['nomor']);
+            $templateProcessor->setValue('tglkontrak', tgl_indo($datakontrak['tgl'],0,1));
+            $templateProcessor->setValue('namasubkon', trim($datakontrak['nama_subkon']));
+            $templateProcessor->setValue('nomornpwp', trim($datakontrak['npwp']));
+            $templateProcessor->setValue('alamatsubkon', trim($datakontrak['alamat_subkon']));
+            $templateProcessor->setValue('tgl', $datakontrak['tgl']);
+            $templateProcessor->setValue('kerjaan', trim($datakontrak['proses']));
+
+            // 4. Save the manipulated file to your server
+            $templateProcessor->saveAs($outputPath);
+
+            // 5. Force the file to download in the browser
+            if (file_exists($outputPath)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                header('Content-Disposition: attachment; filename="'.$filename.'"');
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($outputPath));
+                
+                // Clear output buffer to avoid corrupt files
+                ob_clean();
+                flush();
+                
+                readfile($outputPath);
+                
+                // Optional: Delete the temporary file from the server after download
+                unlink($outputPath);
+                exit;
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'PHPWord Error: ' . $e->getMessage());
+            show_error('An error occurred while generating the document: ' . $e->getMessage());
+        }
+    }
+    public function generatepernyataan($id) {
+        $datakontrak = $this->kontrakmodel->getdata($id)->row_array();
+        $filename = substr($datakontrak['nomor'],0,3)."_Pernyataan_".trim($datakontrak['dept_id']).'_'.year($datakontrak['tgl']).'_'.$id.".docx";
+        $templatePath = APPPATH . 'third_party/docs/template_pernyataan.docx'; 
+        $outputPath = FCPATH . 'temp/generated_doc.docx';
+        try {
+            // 2. Initialize the TemplateProcessor
+            $templateProcessor = new TemplateProcessor($templatePath);
+
+            // 3. Replace text placeholders
+            $templateProcessor->setValue('nomorkontrak', $datakontrak['nomor']);
+            $templateProcessor->setValue('namapimpinan', trim($datakontrak['pic']));
+            $templateProcessor->setValue('posisipimpinan', trim($datakontrak['jabatan']).' '.trim($datakontrak['nama_subkon']));
+            $templateProcessor->setValue('alamatsubkon', trim($datakontrak['alamat_subkon']));
+            $templateProcessor->setValue('nomornpwp', formatnpwp(trim($datakontrak['npwp'])));
+            $templateProcessor->setValue('tglkontrak', tgl_indo($datakontrak['tgl'],0,1));
+
+            // 4. Save the manipulated file to your server
+            $templateProcessor->saveAs($outputPath);
+
+            // 5. Force the file to download in the browser
+            if (file_exists($outputPath)) {
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                header('Content-Disposition: attachment; filename="'.$filename.'"');
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($outputPath));
+                
+                // Clear output buffer to avoid corrupt files
+                ob_clean();
+                flush();
+                
+                readfile($outputPath);
+                
+                // Optional: Delete the temporary file from the server after download
+                unlink($outputPath);
+                exit;
+            }
+        } catch (\Exception $e) {
+            log_message('error', 'PHPWord Error: ' . $e->getMessage());
+            show_error('An error occurred while generating the document: ' . $e->getMessage());
+        }
     }
 }

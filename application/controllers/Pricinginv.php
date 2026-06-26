@@ -97,6 +97,7 @@ class Pricinginv extends CI_Controller
         $filter_ctgr = $_POST['ctgr'];
         $filter_tgkosong = $_POST['tgkosong'];
         $filter_art = $_POST['arty'];
+        $filter_missed = $_POST['missbom'];
         // $filter_exnet = $_POST['exnet'];
         // if($filter_dept!=''){
         //     $arrayu['dept_id'] = $filter_dept;
@@ -118,6 +119,9 @@ class Pricinginv extends CI_Controller
         if($filter_tgkosong=='true'){
             $arrayu['tgkosong'] = 1;
         }
+        if($filter_missed=='true'){
+            $arrayu['missed'] = 1;
+        }
         // if($filter_exnet!='all'){
         //     $arrayu['exnet'] = $filter_exnet;
         // }
@@ -131,6 +135,7 @@ class Pricinginv extends CI_Controller
         $filter_ctgr = $_POST['ctgr'];
         $filter_bcnotfound = $_POST['bcnotfound'];
         $filter_art = $_POST['arty'];
+        $filter_missed = $_POST['missbom'];
         // $filter_exnet = $_POST['exnet'];
         // if($filter_dept!=''){
         //     $arrayu['dept_id'] = $filter_dept;
@@ -153,6 +158,9 @@ class Pricinginv extends CI_Controller
         }
         if($filter_bcnotfound=='true'){
             $arrayu['bcaneh'] = 1;
+        }
+        if($filter_missed=='true'){
+            $arrayu['missed'] = 1;
         }
         // if($filter_exnet!='all'){
         //     $arrayu['exnet'] = $filter_exnet;

@@ -413,8 +413,9 @@ class Opname_model extends CI_Model
         $this->db->select('tb_lokasi.*,dept.departemen,stokopname.dept_id as pakai');
         $this->db->from('tb_lokasi');
         $this->db->join('dept','dept.dept_id = tb_lokasi.dept_id','left');
-        $this->db->join('stokopname','stokopname.kode_lokasi = tb_lokasi.kode_lokasi','left');
+        $this->db->join('stokopname','stokopname.kode_lokasi = tb_lokasi.kode_lokasi and stokopname.periode = "'.$this->session->userdata('periodeopname').'"','left');
         $this->db->where('tb_lokasi.dept_id',$this->session->userdata('deptsublok'));
+        // $this->db->where('stokopname.periode',$this->session->userdata('periodeopname'));
         $this->db->order_by('kode_lokasi');
         return $this->db->get();
     }
@@ -460,7 +461,7 @@ class Opname_model extends CI_Model
             $kata .= $ps.'%';
         }
         $keu = substr($kata,0,strlen($kata)-1);
-        $this->db->select('tb_netinstr.*,tb_po.spek,"" as nama_barang,"" as kode,tb_po.dln,tb_po.color,0 as exnet,0 as stok,"" as nobontr,"" as nobale,0 as id_barang');
+        $this->db->select('tb_netinstr.*,tb_po.spek,"" as nama_barang,"" as kode,tb_po.dln,tb_po.color,0 as exnet,0 as stok,"" as nobontr,"" as nobale,"" as nomor_bc,0 as kgs_akhir,0 as pcs_akhir,0 as id_barang');
         $this->db->select("IF(TRIM(tb_netinstr.po)!='',CONCAT(TRIM(tb_netinstr.po),'#',TRIM(tb_netinstr.item),IF(tb_netinstr.dis > 0,CONCAT(' dis ',tb_netinstr.dis),'')),'') AS skupo");
         $this->db->from('tb_netinstr');
         $this->db->join('tb_po','tb_po.ind_po = concat(tb_netinstr.po,tb_netinstr.item,tb_netinstr.dis)','left');
@@ -513,6 +514,25 @@ class Opname_model extends CI_Model
         $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
         $this->db->where('stokdept.dept_id',$dept);
         $this->db->like('stokdept.nobale',$keu,'both',FALSE);
+        return $this->db->get();
+    }
+    public function carinomorbc($dept,$keyw){
+        $keyw = str_replace("-"," ",$keyw);
+        $kata = '';
+        $pisah = explode(" ",$keyw);
+        foreach($pisah as $ps){
+            $kata .= $ps.'%';
+        }
+        $keu = substr($kata,0,strlen($kata)-1);
+        $this->db->select('stokdept.*,barang.kode,barang.nama_barang,barang.dln');
+        $this->db->select('tb_po.spek,tb_po.color');
+        $this->db->select("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') AS skupo");
+        $this->db->from('stokdept');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(stokdept.po,stokdept.item,stokdept.dis)','left');
+        $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
+        $this->db->where('stokdept.dept_id',$dept);
+        $this->db->like('stokdept.nomor_bc',$keu,'both',FALSE);
         return $this->db->get();
     }
     public function simpanentristok($data){
@@ -808,7 +828,7 @@ class Opname_model extends CI_Model
             $this->db->select('stokopname.id');
             $this->db->from('stokopname');
             $this->db->join('tb_lokasi','tb_lokasi.kode_lokasi = stokopname.kode_lokasi','left');
-            $this->db->where('periode',$this->session->userdata('periodeopname'));
+            $this->db->where('stokopname.periode',$this->session->userdata('periodeopname'));
             $this->db->where('trim(nama_lokasi)','ON MACHINE');
             $datastok = $this->db->get();
             $isi = array();
@@ -823,8 +843,9 @@ class Opname_model extends CI_Model
             foreach($datamss->result_array() as $ds){
                 array_push($mss,$ds['machno']);
             }
-
-            $this->db->where_not_in('mach_no',$mss);
+            if(count($mss)>0){
+                $this->db->where_not_in('mach_no',$mss);
+            }
             return $this->db->order_by('mach_no')->get('tb_msn_netting');
         }
     }

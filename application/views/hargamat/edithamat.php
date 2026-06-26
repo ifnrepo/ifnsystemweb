@@ -71,13 +71,13 @@
                     <div class="col-5">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Kurs</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" name="kurs" placeholder="Input Kurs" value="<?= rupiah($data['kurs'], 2); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" id="kurs" name="kurs" placeholder="Input Kurs" value="<?= rupiah($data['kurs'], 2); ?>">
                         </div>
                     </div>
                     <div class="col-5">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">CIF Barang</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" name="cif" placeholder="Input CIF" value="<?= rupiah($data['cif'], 2); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" name="cif" id="cif" placeholder="Input CIF" value="<?= rupiah($data['cif'], 2); ?>">
                         </div>
                     </div>
                 </div>
@@ -85,13 +85,13 @@
                     <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Qty</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" name="qty" placeholder="Input Qty" value="<?= rupiah($data['qty'], 0); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" name="qty" id="qty" placeholder="Input Qty" value="<?= rupiah($data['qty'], 0); ?>">
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Kgs</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" name="weight" placeholder="Input KGS" value="<?= rupiah($data['weight'], 2); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" name="weight" id="weight" placeholder="Input KGS" value="<?= rupiah($data['weight'], 2); ?>">
                         </div>
                     </div>
                 </div>
@@ -105,7 +105,7 @@
                     <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Harga (<?= $data['mt_uang']  ?>/Unit)</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" name="oth_amount" placeholder="Input Amount" value="<?= rupiah($data['oth_amount'], 3); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangka" name="oth_amount" id="oth_amount" placeholder="Input Amount" value="<?= rupiah($data['oth_amount'], 3); ?>">
                         </div>
                     </div>
                 </div>
@@ -301,6 +301,15 @@
                 .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
         });
     });
+    $("#kurs").on("change",function(){
+        var kurs = $(this).val();
+        var cif = $("#cif").val();
+        var kgs = $("#weight").val();
+        var asli = (parseFloat(kurs)*parseFloat(toAngka(cif)))/parseFloat(toAngka(kgs));
+        $("#price").val(rupiah(asli,'.',',',8));
+        $("#landing_ch").val('0');
+        $("#landing_ch").change();
+    })
     $("#landing_ch").on("change click keyup input paste", function() {
         var hgbaru;
         var price = $("#price").val();

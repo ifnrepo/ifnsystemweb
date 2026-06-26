@@ -59,7 +59,7 @@
                             <?php } else { ?>
                                 <a class="btn btn-sm btn-yellow" href="<?= base_url() . 'akb/uploaddok/' . $datheader['id']; ?>" style="color: white;" id="uploaddok" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Upload Dokumen"><i class="fa fa-file-o mr-1"></i> Upload Dokumen</a>
                             <?php } ?>
-                            <a href="<?= base_url() . 'akb'; ?>" class="btn btn-sm btn-primary"><i class="fa fa-arrow-left mr-1"></i> Kembali</a></span>
+                            <a href="<?= base_url() . 'akb'; ?>" class="btn btn-sm btn-primary"><i class="fa fa-arrow-left mr-1"></i> Kembali</a>
                     </div>
                     <input type="hidden" name="id_header" id="id_header" value="<?= $datheader['id']; ?>">
                     <input type="hidden" name="tgl" id="tgl" value="<?= $datheader['tgl']; ?>">

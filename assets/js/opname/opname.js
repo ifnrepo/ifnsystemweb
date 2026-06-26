@@ -328,7 +328,7 @@ $("#cariinputstok").click(function(){
 					console.log(thrownError);
 				},
 			});
-		}else{
+		}else if(selectradio=='carinobale'){
 			// Berdasarkan Nomor Bale
 			$.ajax({
 				dataType: "json",
@@ -363,6 +363,60 @@ $("#cariinputstok").click(function(){
 						$("#insno").val(data.hasil[0]['insno']);
 						$("#nobontr").val(data.hasil[0]['nobontr']);
 						$("#dln").val(data.hasil[0]['dln']);
+						$("#nomor_bc").val(data.hasil[0]['nomor_bc']);
+						$("#satuan").val('PCS');
+						$("#keywordinputstok").val('');
+						$("#sku").focus();
+					}else{
+						// alert('Data ada 2 atau lebih');
+						// $("#caribarangdouble").attr('rel',data.hasil[0].id_barang);
+						// $("#caribarangdouble").attr('rel2',selectradio);
+						var newStr = isikeyword.replace(" ", "-"); 
+						$("#caribarangdouble").attr('href',base_url+'opname/cari/carinomorbale/'+$("#deptid").val()+'/'+newStr);
+						$("#caribarangdouble").click();
+					}
+				},
+				error: function (xhr, ajaxOptions, thrownError) {
+					console.log(xhr.status);
+					console.log(thrownError);
+				},
+			});
+		}else{
+			// Berdasarkan Nomor BC
+			$.ajax({
+				dataType: "json",
+				type: "POST",
+				url: base_url + "opname/carinomorbc",
+				data: {
+					keyw: isikeyword,
+					dept: $("#deptid").val()
+				},
+				success: function (data) {
+					$("#cariinputstok").html('Cari !');
+					$("#carinputstok").removeClass('disabled');
+					console.log(data.jumlah);
+					var jumlah = data.jumlah;
+					if(jumlah==0){
+						pesan('Data Nomor BC tidak ada pada Saldo Inventory, pastikan penulisan Benar !','error');
+						return false;
+					}else if(jumlah==1){
+						$("#form-hasilcari").removeClass('hilang');
+						$("#form-cari").addClass('hilang');
+						$("#idbarang").val(data.hasil[0]['id_barang']);
+						$("#po").val(data.hasil[0]['po']);
+						$("#item").val(data.hasil[0]['item']);
+						$("#dis").val(data.hasil[0]['dis']);
+						if(data.hasil[0]['po'].trim()==''){
+							$("#sku").val(data.hasil[0]['kode']);
+							$("#spek").val(data.hasil[0]['nama_barang']);
+						}else{
+							$("#sku").val(data.hasil[0]['skupo']);
+							$("#spek").val(data.hasil[0]['spek']);
+							$("#color").val(data.hasil[0]['color']);
+						}
+						$("#insno").val(data.hasil[0]['insno']);
+						$("#nobontr").val(data.hasil[0]['nobontr']);
+						$("#dln").val(data.hasil[0]['dln']);
 						if($("#deptid").val()=='GF' || $("#deptid").val()=='GW'){
 							$("#kgs").val(data.hasil[0]['kgs_akhir']);
 							$("#pcs").val(data.hasil[0]['pcs_akhir']);
@@ -376,8 +430,9 @@ $("#cariinputstok").click(function(){
 						// alert('Data ada 2 atau lebih');
 						// $("#caribarangdouble").attr('rel',data.hasil[0].id_barang);
 						// $("#caribarangdouble").attr('rel2',selectradio);
+						console.log('Kesini !');
 						var newStr = isikeyword.replace(" ", "-"); 
-						$("#caribarangdouble").attr('href',base_url+'opname/cari/carinomorbale/'+$("#deptid").val()+'/'+newStr);
+						$("#caribarangdouble").attr('href',base_url+'opname/cari/carinomorbc/'+$("#deptid").val()+'/'+newStr);
 						$("#caribarangdouble").click();
 					}
 				},
