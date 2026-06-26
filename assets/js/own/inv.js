@@ -399,6 +399,9 @@ $("#idexnet").on('change',function(){
 $("#filtnomorbc").on('change',function(){
 	loaddatainv();
 });
+$("#perpageinv").on('change',function(){
+	loaddatainv();
+});
 function loaddatainv(){
 	$(".loadered").removeClass('hilang');
 	var tglawal = $("#tglawal").val();
@@ -449,6 +452,7 @@ function loaddatainv(){
 			stok: $("#idstok").val(),
 			exnet: $("#idexnet").val(),
 			nombc: $("#filtnomorbc").val(),
+			hlm: $("#perpageinv").val(),
 		},
 		success: function (data) {
 			console.log("KONTRAK" + kontrakbcnya);

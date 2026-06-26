@@ -316,6 +316,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" style="padding: 3px 5px !important;" class="btn btn-sm btn-success btn-icon p-0">View</a>
                     <a href="<?= base_url() . 'kontrak/editdata/' . $datdet['id']; ?>" class="onprogress btn btn-sm btn-primary btn-icon p-0" style="padding: 3px 5px !important;">Edit</a>
                     <a href="#" class="btn btn-sm btn-danger btn-icon p-0" data-href="<?= base_url() . 'kontrak/hapuskontrak/' . $datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Kontrak <br><?= $datdet['nomor']; ?>" style="padding: 3px 5px !important;">Delete</a>
+                    <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="dropdown"><i class="fa fa-file-word-o" aria-hidden="true"></i></a></span>
+                    <div class="dropdown-menu dropdown-menu-end">
+                      <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generateword/'.$datdet['id']; ?>">
+                        Kontrak
+                      </a>
+                      <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generatemohon/'.$datdet['id']; ?>">
+                        Permohonan
+                      </a>
+                      <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generatepernyataan/'.$datdet['id']; ?>">
+                        Pernyataan
+                      </a>
+                    </div>
                   </td>
                 </tr>
               <?php endforeach; ?>

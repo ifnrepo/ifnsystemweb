@@ -127,6 +127,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <span class="form-check-label font-kecil font-bold">Bale</span>
                                         </label>
                                         <?php endif; ?>
+                                        <?php if(in_array($header['dept_id'],daftardeptsubkon())):  ?>
+                                        <label class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" value="carinobc" name="radios-filter" <?php if($this->session->userdata('sel-cari')=='nomorbc'){ echo "checked"; } ?>>
+                                            <span class="form-check-label font-kecil font-bold">Nomor BC</span>
+                                        </label>
+                                        <?php endif; ?>
                                     </div>
                                     <div class="input-group">
                                         <input type="text" class="form-control font-kecil btn-flat text-uppercase" id="keywordinputstok" placeholder="Search for…">

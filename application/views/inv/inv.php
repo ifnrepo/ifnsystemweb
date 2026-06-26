@@ -223,6 +223,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div>
           <?php $cektglopname = $getopname['tgl']=='' ? '' : tglmysql($getopname['tgl']); ?>
           <input type="text" name="tglopname" id="tglopname" value="<?= $cektglopname ?>" class="hilang">
+          <div class="my-1 row">
+            <div class="col-sm-1">
+              <div class="row font-kecil">
+                <!-- <label class="col-6 col-form-label text-center">Record Per Page</label> -->
+                <div class="col">
+                  <select class="form-select font-kecil btn-flat" id="perpageinv">
+                    <option value="15" <?php if($this->session->userdata('perpage-rekapinv')==15){ echo "selected"; } ?>>15</option>
+                    <option value="25" <?php if($this->session->userdata('perpage-rekapinv')==25){ echo "selected"; } ?>>25</option>
+                    <option value="50" <?php if($this->session->userdata('perpage-rekapinv')==50){ echo "selected"; } ?>>50</option>
+                    <option value="75" <?php if($this->session->userdata('perpage-rekapinv')==75){ echo "selected"; } ?>>75</option>
+                    <option value="100" <?php if($this->session->userdata('perpage-rekapinv')==100){ echo "selected"; } ?>>100</option>
+                  </select>
+                </div>
+              </div>
+            </div>
+          </div>
           <table id="tabelnya" class="table table-hover table-bordered cell-border mt-1" style="width: 100% !important; border-collapse: collapse;"> <!-- table order-column table-hover table-bordered cell-border -->
             <thead>
               <tr>

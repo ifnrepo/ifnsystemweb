@@ -244,7 +244,46 @@ function rupiah($nomor, $dec)
     }
     return $hasil;
 }
-function tgl_indo($tanggal, $kode = 0)
+function namabulan($id)
+{
+    $bulan = array(
+        1 =>   'Januari',
+        'Februari',
+        'Maret',
+        'April',
+        'Mei',
+        'Juni',
+        'Juli',
+        'Agustus',
+        'September',
+        'Oktober',
+        'November',
+        'Desember'
+    );
+    if ($id == null) {
+        return '';
+    }
+    return $bulan[(int)$id];
+}
+function namabulanpendek($id)
+{
+    $bulan = array(
+        1 =>   'Jan',
+        'Feb',
+        'Mar',
+        'Apr',
+        'Mei',
+        'Jun',
+        'Jul',
+        'Agt',
+        'Sep',
+        'Okt',
+        'Nov',
+        'Des'
+    );
+    return $bulan[(int)$id];
+}
+function tgl_indo($tanggal, $kode = 0, $pjg=0)
 {
     $namahari = '';
     $tanggal = is_null($tanggal) ? '0000-00-00' : $tanggal;
@@ -292,19 +331,7 @@ function tgl_indo($tanggal, $kode = 0)
             'Nop',
             'Des'
         );
-        $pecahkan = explode('-', $tanggal);
-        if ($kode == 0) {
-            return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
-        } else {
-            return $namahari . ', ' . $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
-        }
-    } else {
-        return '';
-    }
-}
-function namabulan($id)
-{
-    $bulan = array(
+        $bulanx = array(
         1 =>   'Januari',
         'Februari',
         'Maret',
@@ -318,29 +345,21 @@ function namabulan($id)
         'November',
         'Desember'
     );
-    if ($id == null) {
+        $pecahkan = explode('-', $tanggal);
+        if ($kode == 0) {
+            if($pjg=0){
+                return $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+            }else{
+                return $pecahkan[2] . ' ' . $bulanx[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+            }
+        } else {
+            return $namahari . ', ' . $pecahkan[2] . ' ' . $bulan[(int)$pecahkan[1]] . ' ' . $pecahkan[0];
+        }
+    } else {
         return '';
     }
-    return $bulan[(int)$id];
 }
-function namabulanpendek($id)
-{
-    $bulan = array(
-        1 =>   'Jan',
-        'Feb',
-        'Mar',
-        'Apr',
-        'Mei',
-        'Jun',
-        'Jul',
-        'Agt',
-        'Sep',
-        'Okt',
-        'Nov',
-        'Des'
-    );
-    return $bulan[(int)$id];
-}
+
 function datauser($kode, $kolom)
 {
     $kore = '';

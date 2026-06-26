@@ -70,6 +70,7 @@ $(document).ready(function(){
 				d.ctgr = $('#filterctgr').val();
 				d.arty = $('#filterart').val();
 				d.tgkosong = $('#ceklistgprodkosong').is(':checked');
+				d.missbom = $('#ceklistmissedbom').is(':checked');
 				// d.exnet = $('#idexnet').val();
 				// d.dataneh = $('#dataneh').is(':checked');
 			// 	d.filtinv = $('#filterinv').val();
@@ -230,6 +231,7 @@ $(document).ready(function(){
 				d.ctgr = $('#filterctgr').val();
 				d.arty = $('#filterart').val();
 				d.bcnotfound = $('#ceklisbcnotfoundcek').is(':checked');
+				d.missbom = $('#ceklistmissedbom').is(':checked');
 				// d.buyer = $('#idbuyer').val();
 				// d.exnet = $('#idexnet').val();
 				// d.dataneh = $('#dataneh').is(':checked');
@@ -341,6 +343,13 @@ $(document).ready(function(){
 	$("#ceklistgprodkosong").on('change',function(){
 		jadi = 1;
 		table.ajax.reload();
+		$(".loadered").removeClass('hilang');
+	})
+	$("#ceklistmissedbom").on('change',function(){
+		jadi = 0;
+		table.ajax.reload();
+		tabledet.ajax.reload();
+		// $("#tabeldetailnya").DataTable().ajax.reload()
 		$(".loadered").removeClass('hilang');
 	})
 })

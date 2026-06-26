@@ -235,7 +235,8 @@ class Hargamat extends CI_Controller
             $total += $tampil * $field->price;
             $pcs = $field->jmqty;
             $kgs = $field->jmkgs;
-            $totakt = $field->jmakt;
+            // $totakt = $field->jmakt;
+            $totakt += $tampil * $idrprice;
         }
         $output = array(
             "draw" => $_POST['draw'],

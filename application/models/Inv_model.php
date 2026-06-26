@@ -336,7 +336,7 @@ class inv_model extends CI_Model
         }
         if($ada){
             // $this->db->select('tb_header.nomor_bc as nomor_bc');
-            $this->db->select('TRIM(CONCAT( IFNULL((SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)),"") , IFNULL((SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb),"") )) as xnomor_bc');
+            $this->db->select('LEFT(TRIM(CONCAT( IFNULL((SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)),"") , IFNULL((SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb),""))),6) as xnomor_bc');
             // $this->db->select('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)) as xnomor_bc');
             // $this->db->select('(SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb) as xnomor_bc');
             // $this->db->select('IFNULL((SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)),(SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb)) as nomor_bc2');
@@ -1009,6 +1009,12 @@ class inv_model extends CI_Model
     }
     public function simpandatainv(){
         //Cek data yang IN yang masih belum keterima 
+        if($this->session->userdata('tglawal')==null){
+            $tglawal = '01-01-1970';
+        }else{
+            $tglawal = $this->session->userdata('tglawal');
+        }
+        $periode = cekperiodedaritgl($tglawal);
         $this->db->select("*");
         $this->db->where('dept_tuju',$this->session->userdata('currdept'));
         $this->db->where('month(tgl)',substr($periode,0,2));
@@ -1028,6 +1034,15 @@ class inv_model extends CI_Model
             $this->session->set_flashdata('errorsimpan',1);
             $this->session->set_flashdata('pesanerror',"Masih ada ".$cekdatabonin->num_rows()." data transaksi Penerimaan ( IN ), yang belum dikonfirmasi".$kodebon);
             return 1;
+        }
+        $xdata = $this->getdata();
+        $queryy = $this->db->query($xdata);
+        foreach($queryy->result_array() as $deto){
+            if($deto['sumkgs'] < 0 || $deto['sumpcs'] < 0){
+                $this->session->set_flashdata('errorsimpan',99);
+                $this->session->set_flashdata('pesanerror',"Masih ada Minus, Cek data dahulu");
+                return 1;
+            }
         }
         $cekdata = $this->db->get_where('stokinv',['dept_id' => $this->session->userdata('currdept'),'tgl' => tglmysql($this->session->userdata('tglakhir')),'kunci' => 1]);
         if(count($cekdata->result_array()) > 0){
@@ -1060,8 +1075,14 @@ class inv_model extends CI_Model
                 $query = $this->db->query($data);
                 if(count($query->result_array()) > 0){
                     $tglnya = date('Y-m-d H:i:s');
+                    $arrbarangexcludejenis = $this->session->userdata('currdept') == 'GS' ? ['XX'] : ['4170','5691','6019','39991','40394','40395','40396'];
                     $no=0;
                     foreach($query->result_array() as $det){
+                        if(in_array($this->session->userdata('currdept'),daftardeptsubkon())){
+                            if(in_array($det['id_barang'],$arrbarangexcludejenis)){
+                                continue;
+                            }
+                        }
                         if(($det['sumpcs']+$det['sumkgs']) != 0){
                             $no++;
                             // Apabila departemen Finishing 
@@ -1083,15 +1104,16 @@ class inv_model extends CI_Model
                                     while ($kgsnya > 0) {
                                         $ke++;
                                         $sbl = '';
+                                        $kgspo = $datafinrow['kgs_po'] == 0 ? 1 : $datafinrow['kgs_po'];
                                         switch ($ke) {
                                             case 1:
                                                 if($datafinrow['kgs_packing'] > 0){
                                                     if($kgsnya > $datafinrow['kgs_packing']){
                                                         $sbl = 'PA';
                                                         $kgsnya -= $datafinrow['kgs_packing'];
-                                                        $pcsnya -= round($datafinrow['kgs_packing']/$datafinrow['kgs_po'],2);
+                                                        $pcsnya -= round($datafinrow['kgs_packing']/$kgspo,2);
                                                         $jadikgs = $datafinrow['kgs_packing'];
-                                                        $jadipcs = round($datafinrow['kgs_packing']/$datafinrow['kgs_po'],2);
+                                                        $jadipcs = round($datafinrow['kgs_packing']/$kgspo,2);
                                                     }else{
                                                         $sbl = 'PA';
                                                         $jadikgs = $kgsnya;
@@ -1105,9 +1127,9 @@ class inv_model extends CI_Model
                                                     if($kgsnya > $datafinrow['kgs_hoshu2']){
                                                         $sbl = 'H2';
                                                         $kgsnya -= $datafinrow['kgs_hoshu2'];
-                                                        $pcsnya -= round($datafinrow['kgs_hoshu2']/$datafinrow['kgs_po'],2);
+                                                        $pcsnya -= round($datafinrow['kgs_hoshu2']/$kgspo,2);
                                                         $jadikgs = $datafinrow['kgs_hoshu2'];
-                                                        $jadipcs = round($datafinrow['kgs_hoshu2']/$datafinrow['kgs_po'],2);
+                                                        $jadipcs = round($datafinrow['kgs_hoshu2']/$kgspo,2);
                                                     }else{
                                                         $sbl = 'H2';
                                                         $jadikgs = $kgsnya;
@@ -1121,9 +1143,9 @@ class inv_model extends CI_Model
                                                     if($kgsnya > $datafinrow['kgs_koatsu']){
                                                         $sbl = 'KO';
                                                         $kgsnya -= $datafinrow['kgs_koatsu'];
-                                                        $pcsnya -= round($datafinrow['kgs_koatsu']/$datafinrow['kgs_po'],2);
+                                                        $pcsnya -= round($datafinrow['kgs_koatsu']/$kgspo,2);
                                                         $jadikgs = $datafinrow['kgs_koatsu'];
-                                                        $jadipcs = round($datafinrow['kgs_koatsu']/$datafinrow['kgs_po'],2);
+                                                        $jadipcs = round($datafinrow['kgs_koatsu']/$kgspo,2);
                                                     }else{
                                                         $sbl = 'KO';
                                                         $jadikgs = $kgsnya;
@@ -1137,9 +1159,9 @@ class inv_model extends CI_Model
                                                     if($kgsnya > $datafinrow['kgs_hoshu1'] && $datafinrow['kgs_hoshu1'] > 0){
                                                         $sbl = 'H1';
                                                         $kgsnya -= $datafinrow['kgs_hoshu1'];
-                                                        $pcsnya -= round($datafinrow['kgs_hoshu1']/$datafinrow['kgs_po'],2);
+                                                        $pcsnya -= round($datafinrow['kgs_hoshu1']/$kgspo,2);
                                                         $jadikgs = $datafinrow['kgs_hoshu1'];
-                                                        $jadipcs = round($datafinrow['kgs_hoshu1']/$datafinrow['kgs_po'],2);
+                                                        $jadipcs = round($datafinrow['kgs_hoshu1']/$kgspo,2);
                                                     }else{
                                                         $sbl = 'H1';
                                                         $jadikgs = $kgsnya;
@@ -1261,7 +1283,7 @@ class inv_model extends CI_Model
                                     'id_barang' => $det['id_barang'],
                                     'insno' => $det['insno'],
                                     'nobontr' => $det['nobontr'],
-                                    'dln' => $det['xdln'],
+                                    'dln' => $det['sdln'],
                                     'nobale' => $det['nobale'],
                                     'nomor_bc' => $det['nomor_bc'],
                                     'exnet' => $det['exnet'],
@@ -1306,6 +1328,7 @@ class inv_model extends CI_Model
         $this->db->where('data_ok',1);
         $this->db->where('ok_valid',0);
         $this->db->where('left(nomor_dok,3) !=','IFN');
+        $this->db->where('no_inv',0);
         $this->db->order_by('dept_id','tgl');
         $cekdatabonin = $this->db->get('tb_header');
         if($cekdatabonin->num_rows() > 0){

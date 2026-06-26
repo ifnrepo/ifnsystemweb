@@ -1303,18 +1303,18 @@ class Akb_model extends CI_Model
                         $datasimpan['ndpbm'] = $kursusd;
                         $datasimpan['jns_bc'] = $cekjenisbc['jns_bc'];
                         if($cekjenisbc['jns_bc']=='40'){
-                            $datasimpan['ppn'] = 11;
-                            $datasimpan['pph'] = 2.5;
+                            $datasimpan['ppn'] = $cekjenisbc['ppn'];
+                            $datasimpan['pph'] = $cekjenisbc['pph'];
                         }
                         if ($cekjenisbc['jns_bc'] == '23') {
                             // if($cekjenisbc['co']==0){
                             $datasimpan['bm'] = $cekjenisbc['bm'];
                             // }
-                            $datasimpan['ppn'] = 11;
-                            $datasimpan['pph'] = 2.5;
+                            $datasimpan['ppn'] = $cekjenisbc['ppn'];
+                            $datasimpan['pph'] = $cekjenisbc['pph'];
                             $datasimpan['bm_rupiah'] = round($nilaibm, 0);
-                            $datasimpan['ppn_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * 0.11, 0);
-                            $datasimpan['pph_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * 0.025, 0);
+                            $datasimpan['ppn_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * ($cekjenisbc['ppn'] / 100), 0);
+                            $datasimpan['pph_rupiah'] = round(($nilaibm + ($xcif * $kursusd)) * ($cekjenisbc['pph'] / 100), 0);
                         } else {
                             if (($header['jns_bc'] == '25' || $header['jns_bc'] == '41') && $cekjenisbc['jns_bc'] == '40') {
                                 if ($header['jns_bc'] == '25') {
@@ -1323,8 +1323,8 @@ class Akb_model extends CI_Model
                                     $hargaperolehan = $hasilshowbom['harga_satuan'] * $hasilshowbom['kgs_asli'];
                                 }
                                 $datasimpan['hargaperolehan'] = round($hargaperolehan, 0);
-                                $datasimpan['ppn'] = 11;
-                                $datasimpan['ppn_rupiah'] = round($hargaperolehan * 0.11, 0);
+                                $datasimpan['ppn'] = $cekjenisbc['ppn'];
+                                $datasimpan['ppn_rupiah'] = round($hargaperolehan * ($cekjenisbc['ppn'] / 100), 0);
                             }
                         }
                     }

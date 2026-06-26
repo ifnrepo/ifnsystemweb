@@ -6,6 +6,12 @@ require 'vendor/autoload.php';
 use PhpOffice\PhpSpreadsheet\Spreadsheet;
 use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 use PhpOffice\PhpSpreadsheet\IOFactory;
+use PhpOffice\PhpWord\TemplateProcessor;
+use PhpOffice\PhpWord\PhpWord;
+use PhpOffice\PhpWord\IOFactory as Fcword;
+use PhpOffice\PhpWord\Settings;
+
+Settings::setZipClass(Settings::ZIPARCHIVE);
 // use PhpOffice\PhpSpreadsheet\Reader\Xlsx;
 
 class Akb extends CI_Controller
@@ -5362,6 +5368,49 @@ class Akb extends CI_Controller
         if ($hasil) {
             $url = base_url('akb/isidokbc/' . $idh);
             redirect($url);
+        }
+    }
+    public function generateword($id) {
+        // 1. Define paths for the template and output file
+        $templatePath = APPPATH . 'third_party/docs/template_kontrak_nurinda.docx'; 
+        $outputPath = FCPATH . 'temp/generated_doc.docx';
+        try {
+            // 2. Initialize the TemplateProcessor
+            $templateProcessor = new TemplateProcessor($templatePath);
+
+            // 3. Replace text placeholders
+            $templateProcessor->setValue('nomorkontrak', 'John Doe');
+            // $templateProcessor->setValue('event_name', 'Annual Tech Conference 2026');
+
+            // 4. Save the manipulated file to your server
+            $templateProcessor->saveAs($outputPath);
+
+            // 5. Force the file to download in the browser
+            if (file_exists($outputPath)) {
+                $filename = "Kontrak_".$id.".docx";
+                header('Content-Description: File Transfer');
+                header('Content-Type: application/vnd.openxmlformats-officedocument.wordprocessingml.document');
+                header('Content-Disposition: attachment; filename="'.$filename.'"');
+                header('Content-Transfer-Encoding: binary');
+                header('Expires: 0');
+                header('Cache-Control: must-revalidate');
+                header('Pragma: public');
+                header('Content-Length: ' . filesize($outputPath));
+                
+                // Clear output buffer to avoid corrupt files
+                ob_clean();
+                flush();
+                
+                readfile($outputPath);
+                
+                // Optional: Delete the temporary file from the server after download
+                unlink($outputPath);
+                exit;
+            }
+
+        } catch (\Exception $e) {
+            log_message('error', 'PHPWord Error: ' . $e->getMessage());
+            show_error('An error occurred while generating the document: ' . $e->getMessage());
         }
     }
 }

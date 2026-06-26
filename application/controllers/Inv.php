@@ -98,6 +98,7 @@ class Inv extends CI_Controller
         $this->session->unset_userdata('idexnet');
         $this->session->unset_userdata('nombc');
         $this->session->unset_userdata('cari-spek');
+        $this->session->unset_userdata('perpage-rekapinv');
         $url = base_url('Inv');
         redirect($url);
     }
@@ -114,6 +115,7 @@ class Inv extends CI_Controller
         $this->session->set_userdata('filterkat', $_POST['kat']);
         $this->session->set_userdata('dataneh', $_POST['aneh']);
         $this->session->set_userdata('opaneh', $_POST['opaneh']);
+        $this->session->set_userdata('perpage-rekapinv',$_POST['hlm']);
         if($this->session->userdata('currdept')=='GF'){
             $this->session->set_userdata('idbuyer', $_POST['buyer']);
         }

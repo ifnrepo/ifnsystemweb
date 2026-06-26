@@ -75,7 +75,11 @@ class Pricinginv_model extends CI_Model
                 if($key=='tgkosong'){
                     $setWhere[] = "prod_date is null";
                 }else{
-                    $setWhere[] = $key."='".$value."'";
+                    if($key=='missed'){
+                        $setWhere[] = "pcs_bom = 0 AND kgs_bom = 0";
+                    }else{
+                        $setWhere[] = $key."='".$value."'";
+                    }
                 }
             }
             $fwhere = implode(' AND ', $setWhere);
@@ -232,7 +236,11 @@ class Pricinginv_model extends CI_Model
                 if($key=='bcaneh'){
                     $setWhere[] = '(trim(nomor_bc) = "" OR nomor_bc is null)';
                 }else{
-                    $setWhere[] = $key."='".$value."'";
+                    if($key=='missed'){
+                        $setWhere[] = 'miss_bom = 1';
+                    }else{
+                        $setWhere[] = $key."='".$value."'";
+                    }
                 }
             }
             $fwhere = implode(' AND ', $setWhere);
@@ -395,8 +403,11 @@ class Pricinginv_model extends CI_Model
                 ];
                 $this->db->insert('stokinv_detail',$hasil);
 
+                $this->db->set('prod_date','"'.$prod.'"',FALSE);
+                $this->db->set('pcs_bom','pcs_bom + '.$que['pcs_akhir'],FALSE);
+                $this->db->set('kgs_bom','kgs_bom + '.$que['kgs_akhir'],FALSE);
                 $this->db->where('id',$que['id']);
-                $this->db->update('stokinv',['prod_date' => $prod]);
+                $this->db->update('stokinv');
             }else{
                 $databom = getdatabomcost($que);
                 if(count($databom) > 0){
@@ -406,6 +417,8 @@ class Pricinginv_model extends CI_Model
                     $jmpri = 0;
                     $amont = 0;
                     $satt = 0;
+                    $jmpcdbom = 0;
+                    $jmkgdbom = 0;
                     foreach($databom as $dbom){
                         if($ke==0){
                             $tglpr = $dbom['prod_date'];
@@ -416,6 +429,8 @@ class Pricinginv_model extends CI_Model
                         $jmpri += $dbom['price'];
                         $pengali = ($dbom['id_satuan']==22) ? $dbom['kgs'] : (($dbom['pcs']==0) ? $dbom['kgs'] : $dbom['pcs']); // Apabila satuan di Hargamaterial adalah KGS maka dikali KGS selain itu dikali PCS
                         $amont += $dbom['price']*$pengali;
+                        $jmpcdbom += $dbom['pcs'];
+                        $jmkgdbom += $dbom['kgs'];
                         unset($dbom['harga_rm']);
                         unset($dbom['harga_sm']);
                         unset($dbom['price']);
@@ -515,9 +530,14 @@ class Pricinginv_model extends CI_Model
                         'art_type' => $artipe,
                         'asal_waste' => $que['dept_id']=='GW' ? $que['asal_waste'] : ''
                     ];
-
                     $this->db->where('id',$que['id']);
                     $this->db->update('stokinv',$datastokinv);
+
+                    // $this->db->set('prod_date',$prod,FALSE);
+                    $this->db->set('pcs_bom','pcs_bom + '.$jmpcdbom,FALSE);
+                    $this->db->set('kgs_bom','kgs_bom + '.$jmkgdbom,FALSE);
+                    $this->db->where('id',$que['id']);
+                    $this->db->update('stokinv');
                 }else{
                     $dbom = [
                         'id_stok' => $que['id'],
@@ -547,7 +567,23 @@ class Pricinginv_model extends CI_Model
                     $this->db->update('stokinv',['art_type' => $artipe]);
                 }
             }
-        }       
+        }     
+        
+        // Update Bom Kosong 
+        $tglpricing = $this->session->userdata('tglpricinginv');
+        $this->db->where('stokinv.tgl',$tglpricing);
+        if($this->session->userdata('deptpricinginv')!=''){
+            $this->db->where('stokinv.dept_id',$this->session->userdata('deptpricinginv'));
+        }
+        $this->db->where('stokinv.pcs_bom <= ',0);
+        $this->db->where('stokinv.kgs_bom <= ',0);
+        $tmpdata = $this->db->get('stokinv');
+
+        foreach($tmpdata->result_array() as $tmm){
+            $this->db->where('id_stok',$tmm['id']);
+            $this->db->update('stokinv_detail',['miss_bom' => 1]);
+        }
+
         return $this->db->trans_complete();
     }
     public function usersaveinv(){
