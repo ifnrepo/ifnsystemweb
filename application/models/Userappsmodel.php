@@ -16,7 +16,7 @@ class Userappsmodel extends CI_Model
         $this->db->select("dept.*");
         $this->db->from('dept');
         // $this->db->where_in('dept_id', ['AM', 'AN', 'AR', 'MD', 'NU', 'GF', 'FN', 'FG', 'GP', 'GM', 'NT', 'DL', 'TN', 'RR', 'ST', 'GS', 'SP', 'GW']);
-        $this->db->where('stokopname','1');
+        $this->db->where('stokopname', '1');
         $this->db->order_by('departemen', 'ASC');
         return $this->db->get()->result_array();
     }
@@ -36,7 +36,7 @@ class Userappsmodel extends CI_Model
     {
         $this->db->where('id', $id);
         $query = $this->db->delete('user');
-        // $query = $this->db->query("Delete from user where id = " . $id);
+
         $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
@@ -54,6 +54,8 @@ class Userappsmodel extends CI_Model
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['cekpakaibc'] = isset($data['cekpakaibc']) ? 1 : 0;
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
+        $data['cekqc'] = isset($data['cekqc']) ? 1 : 0;
+        $data['cekjala'] = isset($data['cekjala']) ? 1 : 0;
         $data['rd_master'] = isset($data['rd_master']) ? 1 : 0;
         $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
         $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
@@ -214,6 +216,8 @@ class Userappsmodel extends CI_Model
         $data['view_harga'] = isset($data['view_harga']) ? 1 : 0;
         $data['cekpakaibc'] = isset($data['cekpakaibc']) ? 1 : 0;
         $data['cekrd'] = isset($data['cekrd']) ? 1 : 0;
+        $data['cekqc'] = isset($data['cekqc']) ? 1 : 0;
+        $data['cekjala'] = isset($data['cekjala']) ? 1 : 0;
         $data['rd_master'] = isset($data['rd_master']) ? 1 : 0;
         $data['cekenv'] = isset($data['cekenv']) ? 1 : 0;
         $data['hakveri_env'] = isset($data['hakveri_env']) ? 1 : 0;
