@@ -124,10 +124,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </span>
                         <span class="px-1 mt-1" id="ceknotfound">
                           <!-- <label class="form-label font-kecil mb-0" style="color: #F5F8FC">.</label> -->
-                            <div class="mx-auto mt-3">
+                          <div class="mx-auto mt-3">
                             <label class="form-check mb-1 bg-cyan-lt"  id="missedbom">
                               <input class="form-check-input" type="checkbox" id="ceklistmissedbom">
-                              <span class="form-check-label font-bold">Missed BOM</span>
+                              <span class="form-check-label font-bold">Missed BOM (-)</span>
+                            </label>
+                          </div>
+                          <div class="mx-auto">
+                            <label class="form-check mb-1 bg-cyan-lt"  id="missedbomplus">
+                              <input class="form-check-input" type="checkbox" id="ceklistmissedbomplus">
+                              <span class="form-check-label font-bold">Missed BOM (+)</span>
                             </label>
                           </div>
                         </span>

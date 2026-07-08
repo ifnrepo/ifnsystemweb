@@ -360,7 +360,7 @@ function tgl_indo($tanggal, $kode = 0, $pjg=0)
     }
 }
 
-function datauser($kode, $kolom)
+function datauser($kode, $kolom='name')
 {
     $kore = '';
     if ($kode == '' || $kode == 0) {

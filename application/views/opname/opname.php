@@ -10,7 +10,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </h2>
             </div>
             <div class="col-md-6 col-12 d-flex justify-content-end" style="text-align: right;">
-                <div class="row">
+                <div class="row hilang">
                     <label class="col-4 col-form-label font-kecil">Periode</label>
                     <div class="col">
                         <select name="tgl_so" id="tgl_so" class="form-control form-select font-kecil btn-flat font-bold">
@@ -21,11 +21,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </select>
                     </div>
                 </div>
-                <a href="#" style="height: 38px;" class="btn btn-yellow btn-sm ml-1" id="refreshperiode"><i class="fa fa-refresh text-black"></i><span class="ml-1 text-black">Set </span></a>
+                <a href="#" style="height: 38px;" class="btn btn-yellow btn-sm ml-1 hilang" id="refreshperiode"><i class="fa fa-refresh text-black"></i><span class="ml-1 text-black">Set </span></a>
+                <a href="<?= base_url() . 'opname/addperiode'; ?>" style="height: 38px;" class="btn btn-primary btn-sm ml-1 <?php if($this->session->userdata('rolestokopname')!=99){ echo "hilang"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add periode Stok Opname">Tambah & Set Aktif Periode SO</a>
+                <a href="<?= base_url() . 'opname/addpersenstok'; ?>" style="height: 38px;" class="btn btn-info btn-sm ml-1 <?php if($this->session->userdata('rolestokopname')!=99){ echo "hilang"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Persentase Verifikasi"><i class="fa fa-check"></i><span class="ml-1">Persentase Verifikasi </span></a>
             </div>
             <div class="col-md-12 col-12 text-right text-md-right mt-1">
-                <a href="<?= base_url() . 'opname/addperiode'; ?>" style="height: 38px;" class="btn btn-primary btn-sm ml-1 <?php if($this->session->userdata('rolestokopname')!=99){ echo "hilang"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add periode Stok Opname"><i class="fa fa-plus"></i><span class="ml-1">Tambah Periode </span></a>
-                <a href="<?= base_url() . 'opname/addpersenstok'; ?>" style="height: 38px;" class="btn btn-info btn-sm ml-1 <?php if($this->session->userdata('rolestokopname')!=99){ echo "hilang"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Persentase Verifikasi"><i class="fa fa-check"></i><span class="ml-1">Persentase Verifikasi </span></a>
+                
             </div>
         </div>
     </div>

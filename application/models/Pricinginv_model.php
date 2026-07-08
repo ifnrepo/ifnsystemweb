@@ -35,6 +35,7 @@ class Pricinginv_model extends CI_Model
         $tgl = $this->session->userdata('tglpricinginv');
 
         $this->db->select("stokinv.*,barang.nama_barang,tb_po.spek,barang.kode,barang.id_kategori as yidkategori,tb_po.id_kategori as xidkategori,IFNULL(barang.id_satuan,22) as id_satuan,barang.dln as xdln,tb_po.dln as ydln,CONCAT(trim(stokinv.po),'#',trim(stokinv.item),stokinv.dis) as sku");
+        $this->db->select('(select sum(kgs) as kgsdet from stokinv_detail where id_stok = stokinv.id) as kgsdet');
         $this->db->from('stokinv');
         $this->db->join('barang','barang.id = stokinv.id_barang','left');
         $this->db->join('tb_po','tb_po.ind_po = concat(stokinv.po,stokinv.item,stokinv.dis)','left');
@@ -78,7 +79,11 @@ class Pricinginv_model extends CI_Model
                     if($key=='missed'){
                         $setWhere[] = "pcs_bom = 0 AND kgs_bom = 0";
                     }else{
-                        $setWhere[] = $key."='".$value."'";
+                        if($key=='missedplus'){
+                            $setWhere[] = "(round(kgsdet,2)-round(kgs_akhir,2)) > 0.02 ";
+                        }else{
+                            $setWhere[] = $key."='".$value."'";
+                        }
                     }
                 }
             }
@@ -192,6 +197,7 @@ class Pricinginv_model extends CI_Model
         $this->db->select("ubrg.id_kategori as xid_kategori,tb_po.id_kategori as yid_kategori");
         $this->db->select("LEFT(CONCAT(IFNULL(headbarang.dln,''),IFNULL(tb_po.dln,'')),1) as mdln");
         $this->db->select('sum(round(stokinv_detail.kgs,2)) OVER(partition by stokinv_detail.id_stok) as xkgs');
+        $this->db->select('stokinv.kgs_akhir as akhirkgs');
         $this->db->from('stokinv_detail');
         $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
         $this->db->join('stokinv','stokinv ON stokinv.id = stokinv_detail.id_stok ','left');
@@ -239,7 +245,11 @@ class Pricinginv_model extends CI_Model
                     if($key=='missed'){
                         $setWhere[] = 'miss_bom = 1';
                     }else{
-                        $setWhere[] = $key."='".$value."'";
+                        if($key=='missedplus'){
+                            $setWhere[] = '(round(xkgs,2)-round(akhirkgs,2)) > 0.02';
+                        }else{
+                            $setWhere[] = $key."='".$value."'";
+                        }
                     }
                 }
             }
