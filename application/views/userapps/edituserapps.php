@@ -955,7 +955,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </label>
                           </div>
                         </div>
-
                         <div class="tab-pane" id="tabs-hakdowntime-1">
                           <div class="row">
                             <div class="col">
@@ -990,7 +989,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                           </div>
                         </div>
-
                         <div class="tab-pane" id="tabs-stokopname-1">
                           <div class="row">
                             <div class="col-md-12 col-12">
@@ -1052,12 +1050,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <input class="form-check-input" id="cekjala" name="cekjala" type="checkbox" <?= $pcaktif; ?>>
                                 <span class="form-check-label">KEKUATAN TEST CEK JALA</span>
                               </label>
-
                             </div>
-
                           </div>
                         </div>
-
                       </div>
                     </div>
                   </div>

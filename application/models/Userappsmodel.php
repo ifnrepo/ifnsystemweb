@@ -36,7 +36,7 @@ class Userappsmodel extends CI_Model
     {
         $this->db->where('id', $id);
         $query = $this->db->delete('user');
-        // $query = $this->db->query("Delete from user where id = " . $id);
+
         $this->helpermodel->isilog($this->db->last_query());
         return $query;
     }
