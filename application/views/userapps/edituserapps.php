@@ -506,6 +506,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <li class="nav-item">
                           <a href="#tabs-stokopname-1" class="nav-link text-blue mb-1" data-bs-toggle="tab">Hak Stokopname</a>
                         </li>
+                        <li class="nav-item">
+                          <a href="#tabs-cekkekuatan" class="nav-link text-blue mb-1" data-bs-toggle="tab">Cek Kekuatan</a>
+                        </li>
                       </ul>
                     </div>
                     <div class="card-body">
@@ -995,12 +998,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <label class="col-3 col-form-label font-kecil">Role</label>
                                 <div class="col">
                                   <select name="rolestokopname" id="rolestokopname" class="form-control form-select btn-flat font-kecil">
-                                    <option value="0" <?php if($user['rolestokopname']==0){ echo "selected"; } ?>>-- Pilih Role --</option>
-                                    <option value="1" <?php if($user['rolestokopname']==1){ echo "selected"; } ?>>User Input</option>
-                                    <option value="2" <?php if($user['rolestokopname']==2){ echo "selected"; } ?>>User Validasi</option>
-                                    <option value="3" <?php if($user['rolestokopname']==3){ echo "selected"; } ?>>User Verifikasi Data</option>
-                                    <option value="4" <?php if($user['rolestokopname']==4){ echo "selected"; } ?>>User Verifikasi 2 (KAP)</option>
-                                    <option value="99" <?php if($user['rolestokopname']==99){ echo "selected"; } ?>>Administrator SO</option>
+                                    <option value="0" <?php if ($user['rolestokopname'] == 0) {
+                                                        echo "selected";
+                                                      } ?>>-- Pilih Role --</option>
+                                    <option value="1" <?php if ($user['rolestokopname'] == 1) {
+                                                        echo "selected";
+                                                      } ?>>User Input</option>
+                                    <option value="2" <?php if ($user['rolestokopname'] == 2) {
+                                                        echo "selected";
+                                                      } ?>>User Validasi</option>
+                                    <option value="3" <?php if ($user['rolestokopname'] == 3) {
+                                                        echo "selected";
+                                                      } ?>>User Verifikasi Data</option>
+                                    <option value="4" <?php if ($user['rolestokopname'] == 4) {
+                                                        echo "selected";
+                                                      } ?>>User Verifikasi 2 (KAP)</option>
+                                    <option value="99" <?php if ($user['rolestokopname'] == 99) {
+                                                          echo "selected";
+                                                        } ?>>Administrator SO</option>
                                   </select>
                                 </div>
                               </div>
@@ -1022,6 +1037,24 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </label>
                           <?php endforeach; ?>
                             </div>
+                          </div>
+                        </div>
+                        <div class="tab-pane" id="tabs-cekkekuatan">
+                          <div class="row">
+                            <div class="col">
+                              <label class="form-check mb-1">
+                                <?php $pcaktif = $user['cekqc'] == 1 ? 'checked' : ''; ?>
+                                <input class="form-check-input" id="cekqc" name="cekqc" type="checkbox" <?= $pcaktif; ?>>
+                                <span class="form-check-label">INPUT DATA JALA KIRIM KE LAB ( QC )</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <?php $pcaktif = $user['cekjala'] == 1 ? 'checked' : ''; ?>
+                                <input class="form-check-input" id="cekjala" name="cekjala" type="checkbox" <?= $pcaktif; ?>>
+                                <span class="form-check-label">KEKUATAN TEST CEK JALA</span>
+                              </label>
+
+                            </div>
+
                           </div>
                         </div>
 
