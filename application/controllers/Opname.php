@@ -28,6 +28,9 @@ class Opname extends CI_Controller
     public function index()
     {
         $header['header'] = 'master';
+        if($this->session->userdata('periodeopname')==''){
+            $this->opnamemodel->isiperiode();
+        }
         $data = [
             'dept' => $this->dept_model->getdata(),
             'periode' => $this->opnamemodel->getdataperiode(),
@@ -773,6 +776,10 @@ class Opname extends CI_Controller
         $isi = $_POST['cari'];
         $this->session->set_userdata('cari-entri',$isi);
         echo 1;
+    }
+    public function updateaktif(){
+        $id = $_POST['id'];
+        echo $this->opnamemodel->updateaktif($id);
     }
 
     public function excel()

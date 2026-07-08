@@ -5,6 +5,7 @@
             <table class="table table-bordered table-hover m-0">
                 <thead class="bg-primary-lt">
                     <tr>
+                        <th class="text-black">Aktif</th>
                         <th class="text-black">No</th>
                         <th class="text-black">Tgl</th>
                         <th class="text-black">Keterangan</th>
@@ -15,13 +16,19 @@
                 <tbody class="table-tbody">
                     <?php $no=1; if($data->num_rows() > 0){ foreach($data->result_array() as $d): ?>
                         <tr>
+                            <td class="text-center text-green font-bold"><?php if($d['aktif']==1){ echo "Aktif"; } ?></td>
                             <td><?= $no++ ?></td>
                             <td class="font-bold"><?= tglmysql($d['tgl']) ?></td>
                             <td><?= $d['keterangan'] ?></td>
                             <td class="line-12"><?= datauser($d['user_add'],'name') ?><br>On. <?= tglmysql2($d['tgl_add']) ?></td>
                             <td class="text-center">
-                                <a href="#" id="kuncidata" rel="<?= $d['id'] ?>" rel2="<?= tglmysql($d['tgl']) ?>" class="btn btn-sm btn-danger"><i class="fa fa-trash-o"></i></a>
-                                <a href="#" id="editdata" rel="<?= $d['id'] ?>" rel2="<?= tglmysql($d['tgl']) ?>" rel3="<?= $d['keterangan'] ?>" class="btn btn-sm btn-primary"><i class="fa fa-pencil"></i></a>
+                                <a href="#" id="kuncidata" rel="<?= $d['id'] ?>" rel2="<?= tglmysql($d['tgl']) ?>" class="btn btn-sm btn-danger <?php if($d['idopname']>0){ echo "disabled"; } ?>"><i class="fa fa-trash-o"></i></a>
+                                <a href="#" id="editdata" rel="<?= $d['id'] ?>" rel2="<?= tglmysql($d['tgl']) ?>" rel3="<?= $d['keterangan'] ?>" class="btn btn-sm btn-primary <?php if($d['idopname']>0){ echo "disabled"; } ?>"><i class="fa fa-pencil"></i></a>
+                                <?php if($d['aktif']==1){ ?>
+                                    <a href="#" rel="<?= $d['id'] ?>" rel2="<?= tglmysql($d['tgl']) ?>" rel3="<?= $d['keterangan'] ?>" class="btn btn-sm btn-warning" title="Diaktivasi pada <?= $d['tgl_aktif'] ?>&#13;Oleh : <?= datauser($d['aktif_oleh']) ?>"><i class="fa fa-minus"></i></a>
+                                <?php }else{ ?>
+                                    <a href="#" id="aktifdata" rel="<?= $d['id'] ?>" rel2="<?= tglmysql($d['tgl']) ?>" rel3="<?= $d['keterangan'] ?>" class="btn btn-sm font-kecil btn-success"><i class="fa fa-check"></i></a>
+                                <?php } ?>
                             </td>
                         </tr>
                     <?php endforeach; }else{ ?>
@@ -109,6 +116,25 @@
         $("#simpanperiode").html('Update');
         $("#tglperiode").val($(this).attr('rel2'));
         $("#keterangan").val($(this).attr('rel3'));
+    })
+    $(document).on('click','#aktifdata',function(){
+        var rel = $(this).attr('rel');
+        $.ajax({
+            dataType: "json",
+            type: "POST",
+            url: base_url + "opname/updateaktif",
+            data: {
+                id: rel,
+            },
+            success: function (data) {
+                alert('Data Berhasil disimpan !');
+                window.location.reload();
+            },
+            error: function (xhr, ajaxOptions, thrownError) {
+                console.log(xhr.status);
+                console.log(thrownError);
+            },
+        });
     })
     $("#tambah-periode").click(function(){
         $("#tombolfootkeluar").addClass('hilang');

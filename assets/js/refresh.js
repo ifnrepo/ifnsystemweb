@@ -2,10 +2,10 @@
 Let's say we refresh the page every minute unless someone presses a key or moves the mouse. 
 This uses jQuery for event binding: */
 
-var time = new Date().getTime();
-$(document.body).bind("mousemove keypress", function (e) {
-	time = new Date().getTime();
-});
+// var time = new Date().getTime();
+// $(document.body).bind("mousemove keypress", function (e) {
+// 	time = new Date().getTime();
+// });
 
 // function refresh() {
 // 	//7200000 = 2 Jam
@@ -29,3 +29,23 @@ $(document.body).bind("mousemove keypress", function (e) {
 // 		},
 // 	});
 // }
+
+let idleTimer;
+const maxIdleTime = 900000; // 15 minutes in milliseconds
+
+function resetTimer() {
+    clearTimeout(idleTimer);
+    idleTimer = setTimeout(logoutUser, maxIdleTime);
+}
+
+function logoutUser() {
+    // Redirect to your CodeIgniter logout URL
+    window.location.href = "<?php echo base_url('auth/logout'); ?>";
+}
+
+// Track user interactions to reset the timer
+window.onload = resetTimer;
+window.onmousemove = resetTimer;
+window.onkeypress = resetTimer;
+window.onclick = resetTimer;
+window.onscroll = resetTimer;

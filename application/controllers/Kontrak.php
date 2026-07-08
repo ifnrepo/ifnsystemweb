@@ -1593,6 +1593,7 @@ class Kontrak extends CI_Controller
             $templateProcessor = new TemplateProcessor($templatePath);
 
             // 3. Replace text placeholders
+            $templateProcessor->setValue('nomorsurat', $datakontrak['nomor_surat']);
             $templateProcessor->setValue('nomorkontrak', $datakontrak['nomor']);
             $templateProcessor->setValue('tglkontrak', tgl_indo($datakontrak['tgl'],0,1));
             $templateProcessor->setValue('namasubkon', trim($datakontrak['nama_subkon']));

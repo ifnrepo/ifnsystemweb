@@ -332,35 +332,33 @@ class Inv extends CI_Controller
         $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"    
         $sheet->setCellValue('B3', "KODE BARANG"); // Set kolom B3 dengan tulisan "KODE"    
         $sheet->setCellValue('C3', "NAMA BARANG"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
-        $sheet->setCellValue('D3', "SATUAN");
-        $sheet->setCellValue('E3', "SAWPCS");
-        $sheet->setCellValue('F3', "SAWKGS");
-        $sheet->setCellValue('G3', "INPCS");
-        $sheet->setCellValue('H3', "INKGS");
-        $sheet->setCellValue('I3', "OUTPCS");
-        $sheet->setCellValue('J3', "OUTKGS");
-        $sheet->setCellValue('K3', "ADJPCS");
-        $sheet->setCellValue('L3', "ADJKGS");
-        $sheet->setCellValue('M3', "SAKPCS");
-        $sheet->setCellValue('N3', "SAKKGS");
-        $sheet->setCellValue('O3', "SOPCS");
-        $sheet->setCellValue('P3', "SOKGS");
-        $sheet->setCellValue('Q3', "SELISIHPCS");
-        $sheet->setCellValue('R3', "SELISIHKGS");
-        $sheet->setCellValue('S3', "KETERANGAN");
-        $sheet->setCellValue('T3', "NO BALE");
-        $sheet->setCellValue('U3', "PO");
-        $sheet->setCellValue('V3', "ITEM");
-        $sheet->setCellValue('W3', "DIS");
-        $sheet->setCellValue('X3', "ID BARANG");
-        $sheet->setCellValue('Y3', "INSNO");
-        $sheet->setCellValue('Z3', "NOBONTR");
-        $sheet->setCellValue('AA3', "STOK");
-        $sheet->setCellValue('AB3', "NOMOR BC");
-        $sheet->setCellValue('AC3', "DLN");
-        if($this->session->userdata('currdept')=='FN'){
-            $sheet->setCellValue('AD3', "KATEGORI");
-        }
+        $sheet->setCellValue('D3', "KATEGORI");
+        $sheet->setCellValue('E3', "SATUAN");
+        $sheet->setCellValue('F3', "SAWPCS");
+        $sheet->setCellValue('G3', "SAWKGS");
+        $sheet->setCellValue('H3', "INPCS");
+        $sheet->setCellValue('I3', "INKGS");
+        $sheet->setCellValue('J3', "OUTPCS");
+        $sheet->setCellValue('K3', "OUTKGS");
+        $sheet->setCellValue('L3', "ADJPCS");
+        $sheet->setCellValue('M3', "ADJKGS");
+        $sheet->setCellValue('N3', "SAKPCS");
+        $sheet->setCellValue('O3', "SAKKGS");
+        $sheet->setCellValue('P3', "SOPCS");
+        $sheet->setCellValue('Q3', "SOKGS");
+        $sheet->setCellValue('R3', "SELISIHPCS");
+        $sheet->setCellValue('S3', "SELISIHKGS");
+        $sheet->setCellValue('T3', "KETERANGAN");
+        $sheet->setCellValue('U3', "NO BALE");
+        $sheet->setCellValue('V3', "PO");
+        $sheet->setCellValue('W3', "ITEM");
+        $sheet->setCellValue('X3', "DIS");
+        $sheet->setCellValue('Y3', "ID BARANG");
+        $sheet->setCellValue('Z3', "INSNO");
+        $sheet->setCellValue('AA3', "NOBONTR");
+        $sheet->setCellValue('AB3', "STOK");
+        $sheet->setCellValue('AC3', "NOMOR BC");
+        $sheet->setCellValue('AD3', "DLN");
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->invmodel->toexcel();
@@ -382,37 +380,35 @@ class Inv extends CI_Controller
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $sku);
             $sheet->setCellValue('C' . $numrow, $spekbarang);
-            $sheet->setCellValue('D' . $numrow, $data['kodesatuan']);
-            $sheet->setCellValue('E' . $numrow, $data['saldopcs']);
-            $sheet->setCellValue('F' . $numrow, $data['saldokgs']);
-            $sheet->setCellValue('G' . $numrow, $data['inpcs']);
-            $sheet->setCellValue('H' . $numrow, $data['inkgs']);
-            $sheet->setCellValue('I' . $numrow, $data['outpcs']);
-            $sheet->setCellValue('J' . $numrow, $data['outkgs']);
-            $sheet->setCellValue('K' . $numrow, $data['adjpcs']);
-            $sheet->setCellValue('L' . $numrow, $data['adjkgs']);
-            $sheet->setCellValue('M' . $numrow, $data['saldopcs']+$data['inpcs']-$data['outpcs']+$data['adjpcs']);
-            $sheet->setCellValue('N' . $numrow, $data['saldokgs']+$data['inkgs']-$data['outkgs']+$data['adjkgs']);
-            $sheet->setCellValue('O' . $numrow, $data['pcs_taking']);
-            $sheet->setCellValue('P' . $numrow, $data['kgs_taking']);
+            $sheet->setCellValue('D' . $numrow, $kateg);
+            $sheet->setCellValue('E' . $numrow, $data['kodesatuan']);
+            $sheet->setCellValue('F' . $numrow, $data['saldopcs']);
+            $sheet->setCellValue('G' . $numrow, $data['saldokgs']);
+            $sheet->setCellValue('H' . $numrow, $data['inpcs']);
+            $sheet->setCellValue('I' . $numrow, $data['inkgs']);
+            $sheet->setCellValue('J' . $numrow, $data['outpcs']);
+            $sheet->setCellValue('K' . $numrow, $data['outkgs']);
+            $sheet->setCellValue('L' . $numrow, $data['adjpcs']);
+            $sheet->setCellValue('M' . $numrow, $data['adjkgs']);
+            $sheet->setCellValue('N' . $numrow, $data['saldopcs']+$data['inpcs']-$data['outpcs']+$data['adjpcs']);
+            $sheet->setCellValue('O' . $numrow, $data['saldokgs']+$data['inkgs']-$data['outkgs']+$data['adjkgs']);
+            $sheet->setCellValue('P' . $numrow, $data['pcs_taking']);
+            $sheet->setCellValue('Q' . $numrow, $data['kgs_taking']);
             $selisihpcstaking = ($data['saldopcs']+$data['inpcs']-$data['outpcs']+$data['adjpcs'])-$data['pcs_taking'];
             $selisihkgstaking = ($data['saldokgs']+$data['inkgs']-$data['outkgs']+$data['adjkgs'])-$data['kgs_taking'];
-            $sheet->setCellValue('Q' . $numrow, $selisihpcstaking);
-            $sheet->setCellValue('R' . $numrow, $selisihkgstaking);
-            $sheet->setCellValue('S' . $numrow, '-');
-            $sheet->setCellValue('T' . $numrow, $data['nobale']);
-            $sheet->setCellValue('U' . $numrow, $data['po']);
-            $sheet->setCellValue('V' . $numrow, $data['item']);
-            $sheet->setCellValue('W' . $numrow, $data['dis']);
-            $sheet->setCellValue('X' . $numrow, $data['kode']);
-            $sheet->setCellValue('Y' . $numrow, $data['insno']);
-            $sheet->setCellValue('Z' . $numrow, $data['nobontr']);
-            $sheet->setCellValue('AA' . $numrow, $data['stok']);
-            $sheet->setCellValue('AB' . $numrow, $data['nomor_bc']);
-            $sheet->setCellValue('AC' . $numrow, $data['sdln']);
-            if($this->session->userdata('currdept')=='FN'){
-                $sheet->setCellValue('AD' . $numrow, $kateg);
-            }
+            $sheet->setCellValue('R' . $numrow, $selisihpcstaking);
+            $sheet->setCellValue('S' . $numrow, $selisihkgstaking);
+            $sheet->setCellValue('T' . $numrow, '-');
+            $sheet->setCellValue('U' . $numrow, $data['nobale']);
+            $sheet->setCellValue('V' . $numrow, $data['po']);
+            $sheet->setCellValue('W' . $numrow, $data['item']);
+            $sheet->setCellValue('X' . $numrow, $data['dis']);
+            $sheet->setCellValue('Y' . $numrow, $data['kode']);
+            $sheet->setCellValue('Z' . $numrow, $data['insno']);
+            $sheet->setCellValue('AA' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('AB' . $numrow, $data['stok']);
+            $sheet->setCellValue('AC' . $numrow, $data['nomor_bc']);
+            $sheet->setCellValue('AD' . $numrow, $data['sdln']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

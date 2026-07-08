@@ -20,7 +20,7 @@
                                 $sku = trim($data['po'])=='' ? $data['kode'] : viewsku($data['po'],$data['item'],$data['dis']); 
                                 $namabarang = trim($data['po'])=='' ? namaspekbarang($data['id_barang']) : spekpo($data['po'],$data['item'],$data['dis']); 
                             ?>
-                            <input type="text" class="form-control font-kecil text-black" name="kategori_id" id="kategori_id" value="<?= $data['kode']; ?>" disabled>
+                            <input type="text" class="form-control font-kecil text-black" name="kategori_id" id="kategori_id" value="<?= $sku; ?>" disabled>
                         </div>
                     </div>
                     <div class="mb-1 row font-kecil text-right">
@@ -50,7 +50,8 @@
                 </div>
                 <div class="col-12">
                     <span class="font-kecil font-bold">Pricing Cost Dept</span>
-                    <?php $pengaliatas = $data['id_satuan']==22 ? $data['kgs_akhir'] : ($data['pcs_akhir']==0 ? $data['kgs_akhir'] : $data['pcs_akhir']); ?>
+                    <?php $pengaliatase = $data['id_satuan']==22 ? $data['kgs_akhir'] : ($data['pcs_akhir']==0 ? $data['kgs_akhir'] : $data['pcs_akhir']); ?>
+                    <?php $pengaliatas = $data['kgs_akhir']==0 ? $data['pcs_akhir'] : $data['kgs_akhir']; ?>
                     <table class="table table-bordered m-0">
                         <thead class="bg-primary-lt">
                         <tr>
@@ -133,9 +134,10 @@
                             <?php $pengali = $det['id_satuan']==22 ? $det['kgs'] : ($det['pcs']==0 ? $det['kgs'] : $det['pcs']); ?>
                             <?php $jumlahrm += $det['id_kategori']=='8189' ? round($det['harga_acct']*$pengali,10) : 0; ?>
                             <?php $jumlahsm += $det['id_kategori']!='8189' ? round($det['harga_acct']*$pengali,10) : 0; ?>
+                            <?php $rawmat = $det['id_kategori']=='8189' ? 'text-pink' : 'text-teal'; ?>
                                 <tr>
-                                    <td><?= $no ?><span class="badge bg-orange ml-1 <?php if($det['id_kategori']!='8189'){ echo 'hilang'; } ?>"></span></td>
-                                    <td class="line-11"><?= '<span class="text-teal font-kecil">'.$det['kode'].'</span><br>'.namaspekbarang($det['id_barang']) ?></td>
+                                    <td><?= $no ?></td>
+                                    <td class="line-11"><?= '<span class="'.$rawmat.' font-kecil">'.$det['kode'].'</span><br>'.namaspekbarang($det['id_barang']) ?></td>
                                     <td><?= $det['nobontr'] ?></td>
                                     <td class="text-right"><?= rupiah($det['kgs'],6) ?></td>
                                     <td class="text-right"><?= rupiah($det['pcs'],0) ?></td>
@@ -144,7 +146,7 @@
                                 </tr>
                             <?php endforeach; ?>
                             <tr>
-                                <td colspan="2" ><span class="badge bg-orange mr-1"></span> Raw Material</td>
+                                <td colspan="2" ><span class="badge bg-pink mr-1"></span> Raw Material</td>
                                 <td class="font-bold">TOTAL</td>
                                 <td class="text-right font-bold"><?= rupiah($jmlkgs,2) ?></td>
                                 <td class="text-right font-bold"><?= rupiah($jmlpcs,0) ?></td>

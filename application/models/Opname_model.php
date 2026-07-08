@@ -211,6 +211,8 @@ class Opname_model extends CI_Model
     }
     public function getdataperiode()
     {
+        $this->db->select('tb_periode_stokopname.*');
+        $this->db->select('IFNULL((SELECT id FROM stokopname WHERE stokopname.periode = tb_periode_stokopname.tgl LIMIT 1),0) AS idopname');
         return $this->db->get('tb_periode_stokopname');
     }
     public function getdatapersentase(){
@@ -296,7 +298,14 @@ class Opname_model extends CI_Model
             $this->db->where('stokopname.dept_id',$this->session->userdata('deptstok'));
         }
         if($this->session->userdata('statusstok')!=''){
-            $this->db->where('stokopname.status',$this->session->userdata('statusstok'));
+            if($this->session->userdata('statusstok')>=1){
+                $this->db->group_start();
+                $this->db->where('stokopname.status',$this->session->userdata('statusstok'));
+                $this->db->or_where('stokopname.status',$this->session->userdata('statusstok')+1);
+                $this->db->group_end();
+            }else{
+                $this->db->where('stokopname.status',$this->session->userdata('statusstok'));
+            }
         }
         $this->db->where_in('stokopname.dept_id',$akses_so);
         if($this->session->userdata('cari-sublok')!=''){
@@ -924,6 +933,27 @@ class Opname_model extends CI_Model
         $this->db->join('tb_po','tb_po.ind_po = concat(stokopname_onmachine.po,stokopname_onmachine.item,stokopname_onmachine.dis)','left');
         $this->db->where('stokopname_onmachine.id',$id);
         return $this->db->get()->row_array();
+    }
+    public function updateaktif($id){
+        $this->db->trans_start();
+        $this->db->where('aktif',1);
+        $this->db->update('tb_periode_stokopname',['aktif' => 0]);
+
+        $this->db->where('id',$id);
+        $this->db->update('tb_periode_stokopname',['aktif' => 1,'aktif_oleh' => $this->session->userdata('id'),'tgl_aktif' => date('Y-m-d H:i:s')]);
+
+        $this->db->where('aktif',1);
+        $hasil = $this->db->get('tb_periode_stokopname')->row_array();
+
+        $this->session->set_userdata('periodeopname',$hasil['tgl']);
+        return $this->db->trans_complete();
+    }
+    public function isiperiode(){
+        $this->db->where('aktif',1);
+        $hasil = $this->db->get('tb_periode_stokopname')->row_array();
+
+        $this->session->set_userdata('periodeopname',$hasil['tgl']);
+        return 1;
     }
 
     // End Func
