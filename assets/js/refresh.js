@@ -31,7 +31,7 @@ This uses jQuery for event binding: */
 // }
 
 let idleTimer;
-const maxIdleTime = 900000; // 15 minutes in milliseconds
+const maxIdleTime = 3600000; // 1 Hour in milliseconds
 
 function resetTimer() {
     clearTimeout(idleTimer);
@@ -40,7 +40,7 @@ function resetTimer() {
 
 function logoutUser() {
     // Redirect to your CodeIgniter logout URL
-    window.location.href = "<?php echo base_url('auth/logout'); ?>";
+    window.location.href = base_url + "Auth/logout";
 }
 
 // Track user interactions to reset the timer

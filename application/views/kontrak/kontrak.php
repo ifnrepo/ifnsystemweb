@@ -252,6 +252,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <table id="pbtabel" class="table nowrap datatable11 order-column mt-1" style="width: 100% !important;">
             <thead>
               <tr>
+                <th></th>
                 <th>Nomor</th>
                 <th>Proses</th>
                 <!-- <th class="text-start">Nomor<br>AJU</th> -->
@@ -267,8 +268,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </thead>
             <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
               <?php
-
-
               foreach ($data->result_array() as $datdet) :
 
                 $tgl_sekarang = new DateTime();
@@ -299,8 +298,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $warnahuruf = ($datdet['kgs'] < $datdet['total_kgs']) ? 'text-pink' : 'text-primary';
                 $saldo = $datdet['total_kgs'] - $jumlahbcmasuk;
                 $tahap = $datdet['tipe'] == 0 ? '' : ($datdet['tipe'] == 1 ? 'TIPE 1' : 'TIPE 2');
+                $nomer = 0;
               ?>
                 <tr>
+                  <td><?= $nomer++; ?></td>
                   <td class="line-12"><?= $datdet['nomor']; ?><br><span class="text-pink" style="font-size: 11px"><?= $datdet['nama_supplier']; ?></span></td>
                   <td class="line-12"><?= $datdet['proses']; ?><br><span class="text-primary" style="font-size: 11px"><?= $tahap ?></span></td>
                   <td><?= tglmysql($datdet['tgl_awal']); ?></td>

@@ -832,6 +832,7 @@ class Opname_model extends CI_Model
     }
     public function getmesinnetting($id=''){
         if($id==''){
+            $this->db->where('idle',0);
             return $this->db->order_by('mach_no')->get('tb_msn_netting');
         }else{
             $this->db->select('stokopname.id');
@@ -855,6 +856,7 @@ class Opname_model extends CI_Model
             if(count($mss)>0){
                 $this->db->where_not_in('mach_no',$mss);
             }
+            $this->db->where('idle',0);
             return $this->db->order_by('mach_no')->get('tb_msn_netting');
         }
     }
