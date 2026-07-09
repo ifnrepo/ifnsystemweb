@@ -213,7 +213,7 @@ class Ib_model extends CI_Model
             $countadd = 0;
             $arrdet = [];
             foreach($detail as $dt){
-                $nilaiadd = round(($dt['harga']/$header['nilai_pab'])*$header['nilai_additional'],2);
+                $nilaiadd = round(($dt['harga']/$header['nilai_pab'])*$header['nilai_additional'],4);
                 $this->db->where('id',$dt['id']);
                 $this->db->update('tb_detail',['additional' => $nilaiadd]);
                 $arrdet[] = $dt['id'];

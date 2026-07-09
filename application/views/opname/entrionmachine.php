@@ -80,7 +80,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="text-right">
                             <?php $disableverifikasi = $header['persen_verif'] > (round($header['item_verif']/$pembagi,2)*100) ? 'disabled' : ''; ?>
                             <?php $disablerilis = $header['persen_rilis'] > (round($header['item_rilis']/$pembagi,2)*100) ? 'disabled' : ''; ?>
-                            <?php if($header['status']==0 && ($this->session->userdata('rolestokopname')==2 || $this->session->userdata('rolestokopname')==99)): ?>
+                            <?php if($header['status']==0): ?>
                                 <a href="<?= base_url().'opname/tambahdataonmachine/'.$this->uri->segment(3).'/'.$header['id'] ?>" class="btn btn-sm btn-primary btn-flat mt-1" data-message="Akan menyelesaikan input stok opname ini, Data tidak bisa diedit kembali">Tambah Data on Machine</a>
                                 <a href="#" data-href="<?= base_url().'opname/selesaiinput/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/'.$header['id'] ?>" class="btn btn-sm btn-warning btn-flat mt-1" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyelesaikan input stok opname ini, Data tidak bisa diedit kembali"><span class="text-black">Input Data Selesai</span></a>
                             <?php elseif($header['status']==1): ?>

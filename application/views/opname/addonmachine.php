@@ -146,7 +146,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                 </div>
                                             </div>
                                             <div class="row">
-                                                <label class="col-7 col-form-label font-kecil line-11">Berat Bunsen di Mesin (4)<br><span class="text-lime font-10">Berat rata-rata 1 pcs Bunsen di Mesin</span></label>
+                                                <label class="col-7 col-form-label font-kecil line-11">Berat Bunsen di Mesin (5)<br><span class="text-lime font-10">Berat rata-rata 1 pcs Bunsen di Mesin</span></label>
                                                 <div class="col mb-1">
                                                     <input type="text" name="bunbrtmsn" id="bunbrtmsn" class="form-control btn-flat font-kecil text-right inputangka" value="">
                                                 </div>
