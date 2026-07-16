@@ -31,8 +31,9 @@ class Adj_model extends CI_Model
     }
     public function getdataadj()
     {
-        $this->db->select('tb_header.*,user.name,(select count(*) from tb_detail where id_header = tb_header.id) as jmlrex');
+        $this->db->select('tb_header.*,user.name,(select count(*) from tb_detail where id_header = tb_header.id) as jmlrex,ref_reason_adj.ket as ketadj');
         $this->db->join('user', 'user.id=tb_header.user_ok', 'left');
+        $this->db->join('ref_reason_adj', 'ref_reason_adj.kode=tb_header.kode_adj', 'left');
         $this->db->where('kode_dok','ADJ');
         $this->db->where('dept_id',$this->session->userdata('currdept'));
         $this->db->where('month(tgl)', $this->session->userdata('bl'));
@@ -257,6 +258,14 @@ class Adj_model extends CI_Model
         $query = $this->db->update('tb_header', $data);
         $this->helpermodel->isilog($this->db->last_query());
         return $query;
+    }
+    public function getalasanadj(){
+        $this->db->order_by('ket','asc');
+        return $this->db->get('ref_reason_adj');
+    }
+    public function updatealasan($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_header',['kode_adj' => $data['alasan_adj']]);
     }
     //End Adj Model
 

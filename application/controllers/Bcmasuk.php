@@ -109,6 +109,7 @@ class Bcmasuk extends CI_Controller
         $sheet->setCellValue('F7', 'Nomor');
         $sheet->setCellValue('G7', 'Tanggal');
 
+        $sheet->getColumnDimension('A')->setWidth(6);
         $sheet->getColumnDimension('B')->setWidth(6);
         $sheet->getColumnDimension('C')->setWidth(10);
         $sheet->getColumnDimension('D')->setWidth(12);
@@ -122,7 +123,7 @@ class Bcmasuk extends CI_Controller
         $sheet->getColumnDimension('L')->setWidth(10);
         $sheet->getColumnDimension('M')->setWidth(10);
         $sheet->getColumnDimension('N')->setWidth(17);
-        $sheet->getColumnDimension('O')->setWidth(15);
+        $sheet->getColumnDimension('O')->setWidth(17);
 
         $sheet->getStyle('B6:O7')->applyFromArray([
             'font' => ['bold' => true],
@@ -152,7 +153,7 @@ class Bcmasuk extends CI_Controller
         foreach ($bcmasuk->result_array() as $data) {
 
             $sku = trim($data['po']) == '' ? $data['kode'] : viewsku($data['po'], $data['item'], $data['dis']);
-            $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs_total'] : $data['pcs_total'];
+            $nilaiqty = $data['kodesatuan'] == 'KGS' ? $data['kgs_total'] : ($data['pcs_total']==0 ? $data['kgs_total'] : $data['pcs_total']);
             $spekbarang = trim($data['po']) == '' ? namaspekbarang($data['id_barang']) : spekpo($data['po'], $data['item'], $data['dis']);
 
             if ($data['nomor_bc'] == $ceknomor_bc) {
@@ -221,7 +222,7 @@ class Bcmasuk extends CI_Controller
                 }else{
                     if($data['jns_bc']==23 && $data['mtuang'] == 3){
                         $subtotal_idr = $harga_idr * $pengali;
-                        $subtotal_usd = round($harga_usd * $pengali,2);
+                        $subtotal_usd = $subtotal_idr/$kurs_yen; //round($harga_usd * $pengali,2);
                     }else{
                         $subtotal_usd = round($harga_usd * $pengali,2);
                         // $subtotal_idr = $harga_idr * $pengali;

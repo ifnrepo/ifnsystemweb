@@ -930,9 +930,10 @@ class Out_model extends CI_Model{
                         $iniquery = true;
                         $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
                         $namabr = trim($datdet['po'])=='' ? $hasilnya['nama_barang'] : spekpo($datdet['po'],$datdet['item'],$datdet['dis']);
+                        $sku = trim($datdet['po'])=='' ? $hasilnya['kode'] : viewsku($datdet['po'],$datdet['item'],$datdet['dis']);
                         $insno = trim($datdet['insno'])=='' ? '' : 'Insno. '.$datdet['insno'];
                         $nobontr = trim($datdet['nobontr'])=='' ? '' : ' IB. '.$datdet['nobontr'];
-                        $this->session->set_flashdata('errornya',$namabr.'<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
+                        $this->session->set_flashdata('errornya',$namabr.' ('.$sku.')<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
                         $this->session->set_userdata('barangerror',$datdet['id_barang']);
                         $this->session->set_userdata('serierror',$datdet['seri_barang']);
                         break;
@@ -952,10 +953,11 @@ class Out_model extends CI_Model{
                             $iniquery = true;
                             $hasilnya = $this->db->get_where('barang',['id'=>$datdet['id_barang']])->row_array();
                             $namabr = trim($datdet['po'])=='' ? $hasilnya['nama_barang'] : spekpo($datdet['po'],$datdet['item'],$datdet['dis']);
-                            $insno = trim($datdet['insno'])=='' ? '' : ' Insno. '.$datdet['insno'];
+                            $sku = trim($datdet['po'])=='' ? $hasilnya['kode'] : viewsku($datdet['po'],$datdet['item'],$datdet['dis']);
+                            $insno = trim($datdet['insno'])=='' ? '' : ' InsnoY. '.$datdet['insno'];
                             $nobontr = trim($datdet['nobontr'])=='' ? '' : ' IB. '.$datdet['nobontr'];
                             // $this->session->set_flashdata('errornya',$hasilnya['nama_barang'].' '.$insno. ' ('.$hasilnya['kode'].')');
-                            $this->session->set_flashdata('errornya',$namabr.'<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
+                            $this->session->set_flashdata('errornya',$namabr.' ('.$sku.')<br> '.$insno.$nobontr. '<br> ID. '.$hasilnya['kode']);
                             $this->session->set_userdata('barangerror',$datdet['id_barang']);
                             $this->session->set_userdata('serierror',$datdet['seri_barang']);
                             break;

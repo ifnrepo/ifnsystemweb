@@ -34,6 +34,9 @@ $(document).ready(function () {
 	if (errosimpan == 4) {
 		pesan("Data keterangan/catatan ADJ harus di isi !", "info");
 	}
+	if (errosimpan == 5) {
+		pesan("Alasan ADJ harus di isi !", "info");
+	}
 });
 // $("#tglpb").datepicker();
 
@@ -233,6 +236,24 @@ $("#bl").change(function () {
 });
 $("#th").change(function () {
 	$("#bl").change();
+});
+$("#alasan_adj").change(function(){
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "adj/updatealasan",
+		data: {
+			id_header: $("#id_header").val(),
+			alasan : $("#alasan_adj").val()
+		},
+		success: function (data) {
+			$("#nama_barang").focus();
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
 });
 function getdataadj() {
 	// alert($("#level").val());

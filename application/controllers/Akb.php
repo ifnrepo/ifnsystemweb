@@ -1851,8 +1851,8 @@ class Akb extends CI_Controller
         $arrayheader['barang'] = $arraybarang;
         $arrayheader['pungutan'] = $arraypungutan;
         $arrayheader['jaminan'] = $arrayjaminan;
-        echo '<pre>'.json_encode($arrayheader)."</pre>";
-        // $this->kirim261($arrayheader, $id);
+        // echo '<pre>'.json_encode($arrayheader)."</pre>";
+        $this->kirim261($arrayheader, $id);
     }
     function kirimdatakeceisa25($id)
     {

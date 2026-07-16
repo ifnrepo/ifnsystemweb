@@ -12,7 +12,7 @@
             <li class="nav-item">
                 <a href="#tabs-barang-8" class="nav-link bg-cyan-lt btn-flat font-bold" data-bs-toggle="tab">Detail Barang</a>
             </li>
-            <?php $navhilang = ($datheader['jns_bc'] == 261 || $datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41)  ?  "" : "hilang"; ?>
+            <?php $navhilang = ($datheader['jns_bc'] == 261 || $datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41 || $datheader['jns_bc'] == 27)  ?  "" : "hilang"; ?>
             <li class="nav-item <?= $navhilang; ?>">
                 <a href="#tabs-barangdet-8" class="nav-link bg-purple-lt btn-flat font-bold" data-bs-toggle="tab">Detail Ver. BC </a>
             </li>
@@ -51,7 +51,7 @@
                             <?php $hilangbc41 = $datheader['jns_bc'] == 41 ? "hilang " : ""; ?>
                             <?php $hilangbcmakloon = $datheader['bc_makloon'] == 0 ? "hilang " : ""; ?>
                             <?php $selectnonaktif = $datheader['send_ceisa'] == 1 ? "disabled " : ""; ?>
-                            <?php $tmb = ($datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41) ? '' : '/1'; ?>
+                            <?php $tmb = ($datheader['jns_bc'] == 25 || $datheader['jns_bc'] == 41 || $datheader['jns_bc'] == 27) ? '' : '/1'; ?>
                             <a href="<?= base_url() . 'akb/ceisa40excel/' . $datheader['id']; ?>" id="keexcel" style="border-right: 1px solid black;" class="btn btn-sm btn-success mr-0"><i class="fa fa-file-excel-o mr-1"></i> Excel CEISA 4.0</a><a href="<?= base_url() . 'akb/getresponhost/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-info <?= $hilang; ?>"><i class="fa fa-cloud mr-1"></i>Respon H2H</a><a href="#" id="cekdata" class="btn btn-sm btn-yellow text-black <?= $hilang2; ?>"><i class="fa fa-cloud mr-1"></i>Kirim H2H</a><a id="kirimkeceisax" href="<?= base_url() . 'akb/getresponpdf/' . $datheader['id']; ?>" style="border-right: 1px solid white;" class="btn btn-sm btn-danger <?= $hilang3; ?>"><i class="fa fa-file-pdf-o mr-1"></i>GET PDF</a>
                             <!-- <a href="<?= base_url() . 'akb/hosttohost/' . $datheader['id']; ?>" style="border-left: 1px solid black;" class="btn btn-sm btn-yellow"><i class="fa fa-cloud mr-1"></i> H2H Token</a> -->
                             <?php if ($datheader['send_ceisa'] == 0 || $datheader['nomor_sppb'] == '') { ?>
@@ -737,7 +737,7 @@
                                         <td class="text-left"><?= formatsku($data['po'], $data['item'], $data['dis'], $data['id_barang']); ?></td>
                                         <td class="text-left"><?= $hs; ?></td>
                                         <td><?= $data['kodesatuan']; ?></td>
-                                        <td class="text-right"><?= rupiah($data['pcs'], 0); ?></td>
+                                        <td class="text-right"><?= rupiah($data['pcs'], 2); ?></td>
                                         <td class="text-right"><?= rupiah($data['kgs'], 2); ?></td>
                                         <td class="text-right"><?= rupiah($data['harga'] / $jumlah, 2); ?></td>
                                         <td class="text-right"><?= rupiah($data['harga'], 2); ?></td>
@@ -746,7 +746,7 @@
                                 <tr class="bg-primary-lt">
                                     <?php $jmcolspan = $mode == 1 ? 5 : 4; ?>
                                     <td class="text-black text-center font-bold" colspan="<?= $jmcolspan; ?>">TOTAL</td>
-                                    <td class="text-black text-right font-bold" id="pcssum"><?= rupiah($sumpcs, 0); ?></td>
+                                    <td class="text-black text-right font-bold" id="pcssum"><?= rupiah($sumpcs, 2); ?></td>
                                     <td class="text-black text-right font-bold" id="txtsum"><?= rupiah($sumkgs, 2); ?></td>
                                     <td></td>
                                     <td class="text-black text-right font-bold"><?= rupiah($sumdetail, 2); ?></td>
@@ -922,7 +922,7 @@
                                         <td><?= $detbom['kode']; ?></td>
                                         <td><?= $detbom['nohs']; ?></td>
                                         <td class="text-teal"><?= $detbom['negarahamat']; ?></td>
-                                        <td class="text-right"><?= rupiah($detbom['pcs'], 0); ?></td>
+                                        <td class="text-right"><?= rupiah($detbom['pcs'], 2); ?></td>
                                         <td class="text-right"><?= rupiah($detbom['kgs'], 5); ?></td>
                                         <td><?= $detbom['kodesatuan']; ?></td>
                                         <td><?= $nomor_bc ?></td>

@@ -3,19 +3,19 @@
     <!-- <div class="card-header"> -->
     <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
         <li class="nav-item">
-            <a href="#tabs-profile-8" class="nav-link active font-bold bg-primary-lt btn-flat" data-bs-toggle="tab">Header</a>
+            <a href="#tabs-profile-8" class="nav-link active font-bold bg-primary-lt btn-flat font-kecil" data-bs-toggle="tab">Header</a>
         </li>
         <li class="nav-item">
-            <a href="#tabs-header-8" class="nav-link font-bold bg-success-lt btn-flat" data-bs-toggle="tab">Detail Barang</a>
+            <a href="#tabs-header-8" class="nav-link font-bold bg-success-lt btn-flat font-kecil" data-bs-toggle="tab">Detail Barang</a>
         </li>
         <li class="nav-item">
-            <a href="#tabs-detail-8" class="nav-link bg-red-lt btn-flat" data-bs-toggle="tab">Detail Dokumen</a>
+            <a href="#tabs-detail-8" class="nav-link bg-red-lt btn-flat font-kecil" data-bs-toggle="tab">Detail Dokumen</a>
         </li>
         <li class="nav-item">
-            <a href="#tabs-home-8" class="nav-link font-bold bg-warning-lt btn-flat" data-bs-toggle="tab">Riwayat Dokumen</a>
+            <a href="#tabs-home-8" class="nav-link font-bold bg-warning-lt btn-flat font-kecil" data-bs-toggle="tab">Riwayat Dokumen</a>
         </li>
         <li class="nav-item">
-            <a href="#tabs-poto-8" class="nav-link bg-grey-lt btn-flat font-bold" data-bs-toggle="tab">Lampiran Foto & Video</a>
+            <a href="#tabs-poto-8" class="nav-link bg-grey-lt btn-flat font-bold font-kecil" data-bs-toggle="tab">Lampiran Foto & Video</a>
         </li>
     </ul>
     <!-- </div> -->

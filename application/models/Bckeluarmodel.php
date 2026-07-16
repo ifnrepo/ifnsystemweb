@@ -8,6 +8,7 @@ class bckeluarmodel extends CI_Model
         $jnsbc = $this->session->userdata('jnsbc');
 
         $this->db->select('tb_header.*,customer.*,supplier.nama_supplier,SUM(tb_detail.pcs) AS pcs,SUM(tb_detail.kgs) AS kgs,tb_header.id AS idx,ref_kemas.kemasan,tb_header.mtuang AS mt_uang, dept.departemen');
+        $this->db->select('(select sum(tb_bombc.cif) as cifusd from tb_bombc where id_header = tb_header.id) as cifusd');
         $this->db->from('tb_header');
         $this->db->join('customer', 'customer.id = tb_header.id_buyer', 'left');
 
@@ -22,6 +23,7 @@ class bckeluarmodel extends CI_Model
             $this->db->join('tb_detail', 'tb_detail.id_header = tb_header.id', 'left');
             $this->db->join('dept', 'dept.dept_id = tb_header.dept_tuju', 'left');
         }
+
 
         $this->db->join('ref_kemas', 'ref_kemas.kdkem = tb_header.kd_kemasan', 'left');
         $this->db->join('supplier', 'supplier.id = tb_header.id_rekanan', 'left');
@@ -52,7 +54,7 @@ class bckeluarmodel extends CI_Model
                 }
             }
         } else {
-            $this->db->where_in("jns_bc", [25, 30, 261]);
+            $this->db->where_in("jns_bc", [25, 30, 261, 27]);
         }
 
         if ($this->session->userdata('nopen')) {
