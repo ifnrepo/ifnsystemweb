@@ -57,7 +57,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-3">
-                  <h4 class="mb-1 font-kecil">.</h4>
+                  <h4 class="mb-1 font-kecil text-white">.</h4>
                   <span class="font-kecil">
                     <a href="#" class="btn btn-sm btn-primary" style="height: 38px;min-width:45px;" id="butgo">Go</a>
                   </span>
@@ -122,7 +122,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td><?= $jmlrec; ?></td>
                   <td style="line-height: 14px;"><?= substr(datauser($datdet['user_ok'], 'name'), 0, 35) . "<br><span class='text-teal' style='font-size: 10px;'>" . tglmysql2($datdet['tgl_ok']) . "</span>" ?></td>
                   <td style="line-height: 14px;"><?= $usersetuju . "<br><span class='text-teal' style='font-size: 10px;'>" . $tglsetuju . "</span>" ?></td>
-                  <td><?= $tunggukonfirmasi . $tungguoke . $cancel ?></td>
+                  <td class="font-kecil line-11"><?= $tunggukonfirmasi . $tungguoke . $cancel ?><br><span class="text-indigo"><?= $datdet['ketadj'] ?></span></td>
                   <td class="text-right">
                     <?php
                     if ($datdet['data_ok'] == 0) {

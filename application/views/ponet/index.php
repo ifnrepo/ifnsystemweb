@@ -60,7 +60,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <span class="text-secondary font-kecil font-bold" title="Hikiai Number">Hikiai Number : <?= viewsku($data['ord'],$data['ordno'],$data['ordis']) ?></span></div>
                             <hr class="m-0">
                             <div class="" style="padding:10px 0; text-align: center;">
-                                <a href="<?= base_url().'ponet/viewfoto/'.urlencode($data['gbrlogo']) ?>" id="viewfoto" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View Foto">
+                                <a href="<?= base_url().'ponet/viewfoto/'.$data['gbrlogo'] ?>" id="viewfoto" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="View Foto">
                                     <?php $gambar = trim($data['gbrlogo'])=='' ? base_url().'assets/image/avatars/005f.jpg' : base_url().'assets/image/label/'.$data['gbrlogo'] ?>
                                     <img src="<?= $gambar ?>" alt="Belum ada Foto" style="height:auto; width:55%;">
                                 </a>
@@ -193,7 +193,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                     <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-yellow-lt"><span class="text-black">Buyer</span></label>
                                                                     <div class="col">
                                                                         <?php $port = trim($data['port'])!='' ? ' - '.trim($data['port']) : ''; $customer = trim($data['nama_customer']).$port; ?>
-                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= $customer ?>" aria-describedby="emailHelp" placeholder="Buyer" readonly>
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= $customer ?>" aria-describedby="emailHelp" placeholder="Kelompok PO" readonly>
+                                                                            </div>
+                                                                            <div class="col-4">
+                                                                                <div class="row">
+                                                                                    <div class="col-5 font-kecil mt-1 text-right">Country</div>
+                                                                                    <div class="col-7">
+                                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= $data['country'] ?>" aria-describedby="emailHelp" placeholder="Nomor HS" readonly>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">
@@ -225,7 +237,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                 <div class="mb-1 row">
                                                                     <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-secondary-lt"><span class="text-black">Type</span></label>
                                                                     <div class="col">
-                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= trim($data['ways']).' - '.trim($data['knot']).' - '.$data['jenis'] ?>" aria-describedby="emailHelp" placeholder="Type" readonly>
+                                                                        <div class="row">
+                                                                            <div class="col-8">
+                                                                                <input type="text" class="form-control form-control-sm font-kecil btn-flat" value="<?= trim($data['ways']).' - '.trim($data['knot']).' - '.$data['jenis'] ?>" aria-describedby="emailHelp" placeholder="Kelompok PO" readonly>
+                                                                            </div>
+                                                                            <div class="col-4">
+                                                                                <div class="row">
+                                                                                    <div class="col-5 font-kecil mt-1 text-right">Exdo</div>
+                                                                                    <div class="col-7">
+                                                                                        <input type="text" class="form-control form-control-sm font-kecil btn-flat font-bold text-center" value="<?= $data['exdo'] ?>" aria-describedby="emailHelp" placeholder="Nomor HS" readonly>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
                                                                     </div>
                                                                 </div>
                                                                 <div class="row">

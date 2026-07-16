@@ -1085,7 +1085,7 @@ class Akb_model extends CI_Model
                     'trim(tb_detail.item)' => trim($hsl['item']),
                     'tb_detail.dis' => $hsl['dis'],
                     'trim(tb_detail.insno)' => trim($hsl['insno']),
-                    'trim(barang.kode)' => trim($hsl['kode'])
+                    // 'trim(barang.kode)' => is_null(trim($hsl['kode'])) ? 'NULL' : trim($hsl['kode'])
                 ];
             }
             $this->db->select("tb_detail.id");
@@ -1093,6 +1093,10 @@ class Akb_model extends CI_Model
             $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
             $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
             $this->db->where($kondisi);
+            if(!is_null($hsl['kode'])){
+                // $this->db->where('trim(barang.kode) IS NULL');
+                $this->db->where('trim(barang.kode)',trim($hsl['kode']));
+            }
             $dataex = $this->db->get();
             $xhasil = [];
             foreach ($dataex->result_array() as $x) {

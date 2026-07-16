@@ -37,15 +37,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </span>
                 </div>
                 <div class="col-4">
-                  <h4 class="mb-0 font-kecil">Catatan</h4>
-                  <input type="text" id="catat" class="hilang" value="<?= $data['keterangan']; ?>">
-                  <span class="font-bold" style="font-size:15px;">
-                    <?= $data['keterangan']; ?>
-                    <a href="<?= base_url() . 'adj/edittgl'; ?>" title="Edit Catatan" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
-                      <i class="fa fa-edit"></i>
-                    </a>
-                    <input type="hidden" id="ketbon" value="<?= $data['keterangan']; ?>">
-                  </span>
+                  <div>
+                    <h4 class="mb-0 font-kecil">Alasan ADJ</h4>
+                    <span class="font-bold" style="font-size:15px;">
+                      <select name="alasan_adj" id="alasan_adj" class="form-control form-select font-kecil btn-flat font-bold text-blue">
+                        <option value="">-- Pilih --</option>
+                        <?php foreach($alasan->result_array() as $als): ?>
+                          <option value="<?= $als['kode'] ?>" <?php if($data['kode_adj']==$als['kode']){ echo "selected"; } ?>><?= $als['ket'] ?></option>
+                        <?php endforeach; ?>
+                      </select>
+                    </span>
+                  </div>
+                  <div>
+                    <h4 class="mb-0 font-kecil">Catatan</h4>
+                    <input type="text" id="catat" class="hilang" value="<?= $data['keterangan']; ?>">
+                    <span class="font-bold" style="font-size:15px;">
+                      <?= $data['keterangan']; ?>
+                      <a href="<?= base_url() . 'adj/edittgl'; ?>" title="Edit Catatan" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
+                        <i class="fa fa-edit"></i>
+                      </a>
+                      <input type="hidden" id="ketbon" value="<?= $data['keterangan']; ?>">
+                    </span>
+                  </div>
                 </div>
                 <div class="col-3">
                   <?php if(in_array($data['dept_id'],daftardeptsubkon())){ ?>
@@ -149,6 +162,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <input type="text" class="form-control font-kecil" style="text-transform: uppercase;" id="insno" name="insno" autocomplete="off" aria-describedby="emailHelp" placeholder="Ins No">
                 </div>
               </div>
+              <div class="row font-kecil mb-1 <?php if(!in_array($data['dept_id'],['GF','GW'])){ echo 'hilang'; } ?>">
+                <label class="col-2 col-form-label">No Bale</label>
+                <div class="col">
+                  <input type="text" class="form-control font-kecil" style="text-transform: uppercase;" id="nobale" name="nobale" autocomplete="off" aria-describedby="emailHelp" placeholder="Nomor Bale">
+                </div>
+              </div>
               <div class="row font-kecil mb-1">
                 <label class="col-2 col-form-label">Ket</label>
                 <div class="col">
@@ -166,14 +185,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
             </div>
           </div>
           <div class="col-sm-8">
-            <div id="table-default" class="table-responsive">
-              <table class="table datatable6 table-hover" id="cobasisip">
+            <div id="table-default" class="table-responsiv mt-2">
+              <table class="table table-hover table-bordered" id="cobasisip">
                 <thead style="background-color: blue !important">
-                  <tr>
+                  <tr class="bg-danger">
                     <!-- <th>No</th> -->
                     <th>Specific</th>
                     <th>SKU</th>
                     <th>Satuan</th>
+                    <th>Bale</th>
                     <th>Qty</th>
                     <th>Kgs</th>
                     <th>Ket</th>

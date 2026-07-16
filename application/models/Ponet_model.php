@@ -2,7 +2,7 @@
 class Ponet_model extends CI_Model
 {
     public function getdata($idpo=''){
-        $this->db->select('tb_po.*,customer.port,customer.nama_customer,tb_klppo.engklp,tb_klppo.hs,nettype.name_nettype,kategori.nama_kategori');
+        $this->db->select('tb_po.*,customer.port,customer.nama_customer,customer.country,tb_klppo.engklp,tb_klppo.hs,nettype.name_nettype,kategori.nama_kategori');
         $this->db->from('tb_po');
         $this->db->join('customer','customer.id = tb_po.id_buyer','left');
         $this->db->join('tb_klppo','tb_klppo.id = tb_po.klppo','left');

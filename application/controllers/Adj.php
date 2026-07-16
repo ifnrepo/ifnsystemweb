@@ -56,15 +56,21 @@ class Adj extends CI_Controller
         $jml = count($data);
         $jmlkgs = 0;
         $jmlpcs = 0;
+        if(count($data)==0){
+            $hasil .= "<tr>";
+            $hasil .= "<td colspan='8' class='text-center font-kecil'>-- Data Kosong --</td>";
+            $hasil .= "</tr>";
+        }
         foreach ($data as $dt) {
             $kode = formatsku($dt['po'],$dt['item'],$dt['dis'],$dt['id_barang']);
             $spek = $dt['po'] == '' ? $dt['nama_barang'] : spekpo($dt['po'],$dt['item'],$dt['dis']);
             $hasil .= "<tr>";
             $hasil .= "<td class='line-12 font-kecil' style='white-space: nowrap;'>" . $spek . "<br><span class='text-primary font-kecil'>" . $dt['insno'] . ' ' . $dt['nobontr'] . "</span></td>";
-            $hasil .= "<td>" . $kode . "</td>";
-            $hasil .= "<td>" . $dt['kodesatuan'] . "</td>";
-            $hasil .= "<td class='text-center'>" . rupiah($dt['pcs'], 0) . "</td>";
-            $hasil .= "<td>" . rupiah($dt['kgs'], 2) . "</td>";
+            $hasil .= "<td class='font-kecil'>" . $kode . "</td>";
+            $hasil .= "<td class='font-kecil'>" . $dt['kodesatuan'] . "</td>";
+            $hasil .= "<td class='font-kecil'>" . $dt['nobale'] . "</td>";
+            $hasil .= "<td class='text-right'>" . rupiah($dt['pcs'], 0) . "</td>";
+            $hasil .= "<td class='text-right'>" . rupiah($dt['kgs'], 2) . "</td>";
             $hasil .= "<td class='line-12 font-kecil'>" . $dt['keterangan'] . "</td>";
             $hasil .= "<td class='text-center'>";
             $hasil .= "<a href='#' id='editdetailadj' rel='" . $dt['id'] . "' class='btn btn-sm btn-primary mr-1' title='Edit data'><i class='fa fa-edit'></i></a>";
@@ -189,24 +195,31 @@ class Adj extends CI_Controller
     }
     public function simpanadj($id)
     {
-        $cek = $this->adjmodel->cekfield($id, 'keterangan', '');
-        if ($cek->num_rows() > 0) {
-            $this->session->set_flashdata('errorparam', 4);
-            $url = base_url() . 'adj/dataadj/' . $id;
-            redirect($url);
-        } else {
-            $data = [
-                'data_ok' => 1,
-                'tgl_ok' => date('Y-m-d H:i:s'),
-                'user_ok' => $this->session->userdata('id'),
-                'id' => $id
-            ];
-            $simpan = $this->adjmodel->simpanadj($data);
-            if ($simpan) {
-                $url = base_url() . 'adj';
+        // $cek = $this->adjmodel->cekfield($id, 'keterangan', '');
+        $cek2 = $this->adjmodel->cekfield($id, 'trim(kode_adj)', '');
+        // if ($cek2->num_rows() > 0) {
+        //     $this->session->set_flashdata('errorparam', 5);
+        //     $url = base_url() . 'adj/dataadj/' . $id;
+        //     redirect($url);
+        // }else{
+            if ($cek2->num_rows() > 0) {
+                $this->session->set_flashdata('errorparam', 5);
+                $url = base_url() . 'adj/dataadj/' . $id;
                 redirect($url);
+            } else {
+                $data = [
+                    'data_ok' => 1,
+                    'tgl_ok' => date('Y-m-d H:i:s'),
+                    'user_ok' => $this->session->userdata('id'),
+                    'id' => $id
+                ];
+                $simpan = $this->adjmodel->simpanadj($data);
+                if ($simpan) {
+                    $url = base_url() . 'adj';
+                    redirect($url);
+                }
             }
-        }
+        // }
     }
     public function editokadj($id)
     {
@@ -320,12 +333,21 @@ class Adj extends CI_Controller
     {
         $header['header'] = 'transaksi';
         $data['data'] = $this->adjmodel->getdatabyid($id);
+        $data['alasan'] = $this->adjmodel->getalasanadj();
         $data['satuan'] = $this->satuanmodel->getdata()->result_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'adj';
         $this->load->view('layouts/header', $header);
         $this->load->view('adj/dataadj', $data);
         $this->load->view('layouts/footer', $footer);
+    }
+    public function updatealasan(){
+        $data = [
+            'id' => $_POST['id_header'],
+            'alasan_adj' => $_POST['alasan']
+        ];
+        $xdata = $this->adjmodel->updatealasan($data);
+        echo $xdata;
     }
 
 

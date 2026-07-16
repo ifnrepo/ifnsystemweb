@@ -30,6 +30,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <option value="25" <?php if ($this->session->userdata('jnsbc') == '25') {
                                       echo "selected";
                                     } ?>>BC 2.5</option>
+                <option value="27" <?php if ($this->session->userdata('jnsbc') == '27') {
+                                      echo "selected";
+                                    } ?>>BC 2.7</option>
                 <option value="261" <?php if ($this->session->userdata('jnsbc') == '261') {
                                       echo "selected";
                                     } ?>>BC 2.6.1</option>
@@ -144,7 +147,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     if($detail['jns_bc']==41 && $detail['bc_makloon']==1){
                       $kondisi_idr = $detail['nilai_pab'];
                     }else{
-                      $kondisi_idr = $detail['nilai_serah'];
+                      if($detail['jns_bc']==25){
+                        $kondisi_idr = $detail['cifusd']*$kurs_usd;
+                      }else{
+                        $kondisi_idr = $detail['nilai_serah'];
+                      }
                     }
                   }else{
                     $kondisi_idr = $pengali * $detail['nilai_pab'];
@@ -169,6 +176,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       : ($nilai / $kurs_usd)));
 
                   $aneh = ($detail['tgl_sp'] > $detail['tgl_bc']) ? 'text-red' : '';
+                  $jadinilai = $detail['jns_bc']==25 ? $kondisi_idr/$kurs_usd : $xpengali;
               ?>
                   <tr>
                     <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
@@ -191,15 +199,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span><?= $spanmakloon ?></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
                     <td class="text-right font-kecil"><?= rupiah($kondisi_idr, 2); ?></td>
-                    <td class="text-right font-kecil"><?= rupiah($xpengali, 2); ?></td>
-                    <!-- <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab'] * $pengali, 2); ?></td>
-                    <td class="text-right font-kecil"><?= rupiah($detail['nilai_pab'] * $xpengali, 2); ?></td> -->
+                    <td class="text-right font-kecil"><?= rupiah($jadinilai, 2); ?></td>
                   </tr>
               <?php $cntbrg++;
                   $jmpcs += $detail['pcs'];
                   $jmkgs += $detail['kgs'];
                   $jmidr += $kondisi_idr;
-                  $jmusd += $xpengali;
+                  $jmusd += $jadinilai;
                 }
               endif; ?>
             </tbody>

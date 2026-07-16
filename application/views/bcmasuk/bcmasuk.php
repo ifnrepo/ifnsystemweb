@@ -158,7 +158,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bcmasuk/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju'], $detail['prefix_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl']; ?></td>
                     <td class="text-left line-12"><?= ucwords(strtolower($suppl)); ?></td>
-                    <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span></td>
+                    <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span><span class="badge badge-outline text-cyan ml-1 <?php if($detail['jns_bc']!='23'){ echo 'hilang'; } ?>"><?= $detail['mt_uang'] ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>
                     <td class="text-right font-kecil "><?= rupiah($pengali, 2); ?></td>
                     <td class="text-right font-kecil"><?= rupiah($xpengali, 2); ?></td>

@@ -21,6 +21,21 @@ document.getElementById("textcari").addEventListener("keypress", function (e) {
 		$("#buttoncaribckeluar").click();
 	}
 });
+$("#tglawal").on('change',function(){
+	// alert($(this).val());
+	var datestr = $(this).val();
+	const split = datestr.split('-');
+	const today = new Date(split[2],split[1],split[0]);	
+
+	const hasil = new Date(today.getFullYear(),today.getMonth(),0);
+	var m = hasil.getMonth()+1;
+	m = m > 9 ? m : "0"+m;
+
+	var cok = hasil.getDate()+'-'+m+'-'+hasil.getFullYear();
+    console.log(cok);
+	$("#tglakhir").val(cok);
+	$("#tglakhir").change();
+})
 $("#updatebckeluar").click(function () {
 	var tglawal = $("#tglawal").val();
 	var tglakhir = $("#tglakhir").val();
