@@ -904,6 +904,7 @@ class inv_model extends CI_Model
         }
         if($ada){
             $this->db->select('tb_header.exnomor_bc as nomor_bc');
+            // $this->db->select('IFNULL((SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb),(SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_header)) as nomor_bc');
             // $this->db->select('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id ) as nomor_bc');
         }else{
             $this->db->select('"" as nomor_bc');
@@ -938,7 +939,7 @@ class inv_model extends CI_Model
         if($ada){
             // $this->db->where('(SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(now(),INTERVAL 4 MONTH) ) =',trim($array['nomor_bc']));
             // $this->db->where('TRIM(CONCAT( IFNULL((SELECT trim(nomor_bc) FROM tb_header tbhead where jns_bc = "261" AND TRIM(tbhead.keterangan) = trim(tb_header.keterangan) AND tbhead.dept_id = tb_header.dept_tuju AND tbhead.dept_tuju = tb_header.dept_id AND tbhead.tgl >= DATE_SUB(NOW(), INTERVAL 4 MONTH)),"") , IFNULL((SELECT trim(exnomor_bc) FROM tb_header tbhead where id = tb_detailgen.id_akb),"") )) = ',trim($array['nomor_bc']));
-            $this->db->where('(SELECT trim(exnomor_bc) FROM tb_header where id = tb_detailgen.id_akb) = ',trim($array['nomor_bc']));
+            $this->db->where('(SELECT trim(exnomor_bc) FROM tb_header where id = tb_detailgen.id_header) = ',trim($array['nomor_bc']));
             // $this->db->where('(SELECT CASE WHEN EXISTS(SELECT trim(exnomor_bc) FROM tb_header where id = tb_detailgen.id_akb) then (SELECT trim(exnomor_bc) FROM tb_header where id = tb_detailgen.id_akb) ELSE 0 END) = ',trim($array['nomor_bc']));
         }
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,nomor_dok,stok');

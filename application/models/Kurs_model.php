@@ -288,15 +288,74 @@ class Kurs_model extends CI_Model
         return $this->db->query($query);
    }
    public function tambah($data){
-    return $this->db->insert('tb_kurs_bi',$data);
+    $this->db->trans_start();
+    $this->db->insert('tb_kurs_bi',$data);
+    $id = $this->db->insert_id();
+
+    // Update data Kurs Harga Material
+    $row = $this->db->get_where('tb_kurs_bi',['id' => $id])->row_array();
+    $bulan = date('m',strtotime($row['period']));
+    $tahun = date('Y',strtotime($row['period']));
+
+    $this->db->where('mt_uang !=','IDR');
+    $this->db->where('month(tgl)',$bulan);
+    $this->db->where('year(tgl)',$tahun);
+    $rowhamat = $this->db->get('tb_hargamaterial');
+    foreach($rowhamat->result_array() as $dathamat){
+        if($dathamat['mt_uang']=='USD'){
+            $ganti['kurs'] = $row['usd'];
+            $ganti['price'] = ($row['usd']*$dathamat['cif'])/$dathamat['weight'];
+            $ganti['harga_akt'] = $ganti['price']+$dathamat['landing_ch'];
+            $ganti['oth_amount'] = $dathamat['cif']/$dathamat['weight'];
+            $this->db->where('id',$dathamat['id']);
+            $this->db->update('tb_hargamaterial',$ganti);
+        }elseif($dathamat['mt_uang']=='JPY'){
+            $ganti['kurs'] = $row['jpy'];
+            $ganti['price'] = ($row['jpy']*$dathamat['cif'])/$dathamat['weight'];
+            $ganti['harga_akt'] = $ganti['price']+$dathamat['landing_ch'];
+            $ganti['oth_amount'] = $dathamat['cif']/$dathamat['weight'];
+            $this->db->where('id',$dathamat['id']);
+            $this->db->update('tb_hargamaterial',$ganti);
+        }
+    }
+    return $this->db->trans_complete();
    }
    public function getdatabyid($id){
         return $this->db->get_where('tb_kurs_bi',['id' => $id])->row_array();
    }
    public function edit($data){
+    $this->db->trans_start();
     $id = $data['id'];
     unset($data['id']);
     $this->db->where('id',$id);
-    return $this->db->update('tb_kurs_bi',$data);
+    $this->db->update('tb_kurs_bi',$data);
+
+    // Update data Kurs Harga Material
+    $row = $this->db->get_where('tb_kurs_bi',['id' => $id])->row_array();
+    $bulan = date('m',strtotime($row['period']));
+    $tahun = date('Y',strtotime($row['period']));
+
+    $this->db->where('mt_uang !=','IDR');
+    $this->db->where('month(tgl)',$bulan);
+    $this->db->where('year(tgl)',$tahun);
+    $rowhamat = $this->db->get('tb_hargamaterial');
+    foreach($rowhamat->result_array() as $dathamat){
+        if($dathamat['mt_uang']=='USD'){
+            $ganti['kurs'] = $row['usd'];
+            $ganti['price'] = ($row['usd']*$dathamat['cif'])/$dathamat['weight'];
+            $ganti['harga_akt'] = $ganti['price']+$dathamat['landing_ch'];
+            $ganti['oth_amount'] = $dathamat['cif']/$dathamat['weight'];
+            $this->db->where('id',$dathamat['id']);
+            $this->db->update('tb_hargamaterial',$ganti);
+        }elseif($dathamat['mt_uang']=='JPY'){
+            $ganti['kurs'] = $row['jpy'];
+            $ganti['price'] = ($row['jpy']*$dathamat['cif'])/$dathamat['weight'];
+            $ganti['harga_akt'] = $ganti['price']+$dathamat['landing_ch'];
+            $ganti['oth_amount'] = $dathamat['cif']/$dathamat['weight'];
+            $this->db->where('id',$dathamat['id']);
+            $this->db->update('tb_hargamaterial',$ganti);
+        }
+    }
+    return $this->db->trans_complete();
    }
 }

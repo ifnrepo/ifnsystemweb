@@ -181,7 +181,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       </tr>
                       <tr>
                         <td class="font-bold" colspan="2">Pricing (Rp)</td>
-                        <td class="text-right font-bold" colspan="2" id="totalhargadet">Loading..</td>
+                        <td class="text-right font-bold bg-black text-white" colspan="2" id="totalhargadet">Loading..</td>
                       </tr>
                     </tbody>
                   </table>
@@ -212,10 +212,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="card-header font-kecil">
               <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs" style="background-color: #F6F8F8"> <!-- #F6F8FB -->
                 <li class="nav-item">
-                  <a href="#tabs-home-1" class="nav-link active bg-cyan btn-flat font-13 font-bold text-black tbl-inv" data-bs-toggle="tab">Inventory</a>
+                  <a href="#tabs-home-1" class="nav-link active btn-flat font-13 font-bold tbl-inv" data-bs-toggle="tab">Inventory</a>
                 </li>
                 <li class="nav-item">
-                  <a href="#tabs-profile-1" class="nav-link bg-orange btn-flat font-13 font-bold text-black tbl-bom" data-bs-toggle="tab">BOM Inventory</a>
+                  <a href="#tabs-profile-1" class="nav-link btn-flat font-13 font-bold tbl-bom" data-bs-toggle="tab">B.O.M Inventory</a>
                 </li>
                 <li class="nav-item  ms-auto">
                   <!-- <a href="#tabs-settings-1" class="nav-link" title="Settings" data-bs-toggle="tab">BOM Inventory Job</a> -->
@@ -282,12 +282,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
                 <div class="tab-pane p-0 m-1" id="tabs-profile-1">
-                  <div class="row d-flex align-item-between mb-1">
-                    <div class="col-6 mx-auto">
-                      <h3>BOM Inventory</h3>
+                  <div class="row d-flex align-item-between mb-0">
+                    <div class="col-6 mx-auto mb-0">
+                      <h3 class="mb-0">B.O.M Inventory</h3>
                     </div>
-                    <div class="col-6 text-right">
-                      <a href="<?= base_url().'pricinginv/breakdownbom' ?>" data-bs-toggle="modal" data-bs-target="#veriftask" data-message="Break down Data ke Bill Of Material" data-title="Breakdown BOM" class="btn btn-sm btn-primary <?= $diskuncitgl ?>" id="buthitungbom"><i class="fa fa-calculator mr-1"></i> Hitung BOM</a>
+                    <div class="col-6 text-right mb-0">
+                      <a href="<?= base_url().'pricinginv/breakdownbom' ?>" data-bs-toggle="modal" data-bs-target="#veriftask" data-message="Break down Data ke Bill Of Material" data-title="Breakdown BOM" class="btn btn-sm btn-primary mb-0 <?= $diskuncitgl ?>" id="buthitungbom"><i class="fa fa-calculator mr-1"></i> Hitung BOM</a>
                     </div>
                   </div>
                   <hr class="m-0">

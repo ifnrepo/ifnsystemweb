@@ -683,7 +683,8 @@ class Ib extends CI_Controller
                     'nomor_bc' => $databalik['dataStatus'][0]['nomorDaftar'],
                     'tgl_bc' => tglmysql($databalik['dataStatus'][0]['tanggalDaftar']),
                     'nomor_sppb' => $databalik['dataRespon'][0]['nomorRespon'],
-                    'tgl_sppb' => $databalik['dataRespon'][0]['tanggalRespon']
+                    'tgl_sppb' => $databalik['dataRespon'][0]['tanggalRespon'],
+                    'exnomor_bc' => $headerib['exnomor_bc']
                 ];
                 $hasil = $this->ibmodel->simpanresponbc($data);
                 if ($hasil) {
