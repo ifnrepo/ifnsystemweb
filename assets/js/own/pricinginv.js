@@ -196,6 +196,7 @@ $(document).ready(function(){
 			// $("#loadview").html('');
 			// $(".loaderedblue").addClass('hilang');
 			jadi++;
+			$(".loadered").addClass('hilang');
 			// // alert(api2.recordsFiltered);
 			// // alert(api2'.recordsFiltered);
             if(api2det.recordsFiltered > 0){
@@ -311,12 +312,14 @@ $(document).ready(function(){
     });
 
 	$("#buttoncari").click(function(){
+		$(".loadered").removeClass('hilang');
 		var isi = $("#textcari").val();
 		table.search(isi).draw();
 		tabledet.search(isi).draw();
 		return false;
 	})
 	$("#buttonreset").click(function(){
+		$(".loadered").removeClass('hilang');
 		$("#textcari").val('');
 		table.search('').draw();
 		tabledet.search('').draw();

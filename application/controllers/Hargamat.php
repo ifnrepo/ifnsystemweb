@@ -46,6 +46,10 @@ class Hargamat extends CI_Controller
     {
         $this->session->unset_userdata('blhargamat');
         $this->session->userdata('thhargamat', date('Y'));
+        $this->session->unset_userdata('kate');
+        $this->session->unset_userdata('bchargamat');
+        $this->session->unset_userdata('artihargamat');
+        $this->session->unset_userdata('miliknya');
         $url = base_url() . 'hargamat';
         redirect($url);
     }
@@ -174,7 +178,8 @@ class Hargamat extends CI_Controller
         $kgs = 0;
         $pcs = 0;
         foreach ($list as $field) {
-            $tampil = $field->weight == 0 ? $field->qty : $field->weight;
+            // $tampil = $field->weight == 0 ? $field->qty : $field->weight;
+            $tampil = $field->id_satuan == 22 ? $field->weight : $field->qty;
             $barang = $field->id_barang == 0 ? $field->remark . ' (ID not found)' : $field->nama_barang;
             $nobc = '';
             if (trim($field->nomor_bc) !=  '') {
@@ -236,7 +241,8 @@ class Hargamat extends CI_Controller
             $pcs = $field->jmqty;
             $kgs = $field->jmkgs;
             // $totakt = $field->jmakt;
-            $totakt += $tampil * $idrprice;
+            // $totakt += $tampil * $idrprice;
+            $totakt = $field->jmakt;
         }
         $output = array(
             "draw" => $_POST['draw'],
@@ -272,6 +278,26 @@ class Hargamat extends CI_Controller
     {
         $this->session->set_userdata('blhargamat', $_POST['bl']);
         $this->session->set_userdata('thhargamat', $_POST['th']);
+        if($_POST['kat']!='all'){
+            $this->session->set_userdata('kate', $_POST['kat']);
+        }else{
+            $this->session->unset_userdata('kate');
+        }
+        if($_POST['bece']!='all'){
+            $this->session->set_userdata('bchargamat', $_POST['bece']);
+        }else{
+            $this->session->unset_userdata('bchargamat');
+        }
+        if($_POST['inv']!='all'){
+            $this->session->set_userdata('artihargamat', $_POST['inv']);
+        }else{
+            $this->session->unset_userdata('artihargamat');
+        }
+        if($_POST['milik']!='all'){
+            $this->session->set_userdata('miliknya', $_POST['milik']);
+        }else{
+            $this->session->unset_userdata('miliknya');
+        }
         echo 1;
     }
     //End Controller
@@ -557,7 +583,9 @@ class Hargamat extends CI_Controller
         $filter_kategori = $this->input->get('filter');
         $filter_inv = $this->input->get('filterinv');
         $filter_milik = $this->input->get('filtermilik');
-        $harga = $this->hargamatmodel->getdata_export($filter_kategori, $filter_inv, $filter_milik);
+        $filter_tahun = $this->input->get('filtertahun');
+        $filter_bulan = $this->input->get('filterbulan');
+        $harga = $this->hargamatmodel->getdata_export($filter_kategori, $filter_inv, $filter_milik, $filter_tahun, $filter_bulan);
 
         $no = 1;
         $numrow = 3;
@@ -569,13 +597,13 @@ class Hargamat extends CI_Controller
             $sheet->setCellValue('B' . $numrow, $barang);
             $sheet->setCellValue('C' . $numrow, tglmysql($data['tgl']));
             $sheet->setCellValue('D' . $numrow, $data['nobontr']);
-            $sheet->setCellValue('E' . $numrow, rupiah($data['qty'], 0));
-            $sheet->setCellValue('F' . $numrow, rupiah($data['weight'], 2));
-            $sheet->setCellValue('G' . $numrow, rupiah($data['price'], 2));
-            $sheet->setCellValue('H' . $numrow, rupiah($tampil * $data['price'], 2));
+            $sheet->setCellValue('E' . $numrow, $data['qty']);
+            $sheet->setCellValue('F' . $numrow, $data['weight']);
+            $sheet->setCellValue('G' . $numrow, $data['harga_akt']);
+            $sheet->setCellValue('H' . $numrow, $tampil * $data['harga_akt']);
             $sheet->setCellValue('J' . $numrow, $data['mt_uang']);
-            $sheet->setCellValue('K' . $numrow, rupiah($data['oth_amount'], 2));
-            $sheet->setCellValue('L' . $numrow, rupiah($data['kurs'], 2));
+            $sheet->setCellValue('K' . $numrow, $data['oth_amount']);
+            $sheet->setCellValue('L' . $numrow, $data['kurs']);
             $no++;
             $numrow++;
         }

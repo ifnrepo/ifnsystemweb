@@ -657,6 +657,8 @@ class Ib_model extends CI_Model
     {
         $this->db->trans_start();
         $this->db->where('id', $data['id']);
+        $exnomorbc = $data['exnomor_bc'];
+        unset($data['exnomor_bc']);
         $hasil = $this->db->update('tb_header', $data);
 
         $jnsbc = $this->db->get_where('tb_header',['id' => $data['id']])->row_array();
@@ -668,7 +670,7 @@ class Ib_model extends CI_Model
             $isi = $this->db->get();
             foreach($isi->result_array() as $i){
                 $this->db->where('id',$i['id_header']);
-                $this->db->update('tb_header',['exnomor_bc' => $data['exnomor_bc']]);
+                $this->db->update('tb_header',['exnomor_bc' => $exnomorbc]);
             }
         }
         $hasil =  $this->db->trans_complete();

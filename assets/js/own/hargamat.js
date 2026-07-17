@@ -1,5 +1,7 @@
 $(document).ready(function () {
 	// alert("SIAP");
+	$(".loadered").removeClass('hilang');
+	isibutton();
 	var table = $("#tabelnya").DataTable({
 		processing: true,
 		serverSide: true,
@@ -84,12 +86,14 @@ $(document).ready(function () {
 			$("#reko3").html(rupiah(response.json.jumlahPcs, ".", ",", 0));
 			$("#reko4").html(rupiah(response.json.jumlahTotal, ".", ",", 2));
 			$("#reko5").html(rupiah(response.json.jumlahAkt, ".", ",", 8));
+			$(".loadered").addClass('hilang');
 		},
 		pageLength: 50,
 		dom: '<"pull-left"l><"pull-right"f>t<"bottom-left"i><"bottom-right"p>',
 	});
 
 	$("#blperiode, #thperiode").on("change", function () {
+		$(".loadered").removeClass('hilang');
 		$.ajax({
 			dataType: "json",
 			type: "POST",
@@ -97,9 +101,14 @@ $(document).ready(function () {
 			data: {
 				bl: $("#blperiode").val(),
 				th: $("#thperiode").val(),
+				kat: $("#filter").val(),
+				bece: $("#filter_bc").val(),
+				inv: $("#filterinv").val(),
+				milik: $("#filter_milik").val(),
 			},
 			success: function (data) {
 				table.ajax.reload();
+				isibutton();
 				// alert('berhasil');
 				// window.location.href = base_url + "bbl/databbl/" + $("#id_header").val();
 				// $("#butbatal").click();
@@ -110,13 +119,25 @@ $(document).ready(function () {
 			},
 		});
 	});
-	$("#filter, #filterinv,#filter_bc,#filter_milik").on("change", function () {
-		table.ajax.reload();
+	$("#filter_milik").on("change", function () {
+		// table.ajax.reload();
+		$("#blperiode").change();
 	});
-	$("#filter, #filterinv,#filter_milik").on("change", function () {
+	$("#filter").change(function(){
+		$("#blperiode").change();
+	});
+	$("#filter_bc").change(function(){
+		$("#blperiode").change();
+	});
+	$("#filterinv").change(function(){
+		$("#blperiode").change();
+	});
+	function isibutton(){
 		var filter_kategori = $("#filter").val();
 		var filter_inv = $("#filterinv").val();
 		var filter_milik = $("#filter_milik").val();
+		var filter_tahun = $("#thperiode").val();
+		var filter_bulan = $("#blperiode").val();
 
 		var exportUrlExcel =
 			base_url +
@@ -125,7 +146,11 @@ $(document).ready(function () {
 			"&filterinv=" +
 			filter_inv +
 			"&filtermilik=" +
-			filter_milik;
+			filter_milik +
+			"&filtertahun=" +
+			filter_tahun +
+			"&filterbulan=" +
+			filter_bulan;
 		$(".btn-export-excel").attr("href", exportUrlExcel);
 
 		var exportUrlPdf =
@@ -133,12 +158,44 @@ $(document).ready(function () {
 			"hargamat/pdf?filter=" +
 			filter_kategori +
 			"&filterinv=" +
-			filter_inv;
+			filter_inv+
+			"&filtermilik=" +
+			filter_milik +
+			"&filtertahun=" +
+			filter_tahun +
+			"&filterbulan=" +
+			filter_bulan;
 		$(".btn-export-pdf").attr("href", exportUrlPdf);
 
 		console.log("Export Excel URL:", exportUrlExcel);
 		console.log("Export PDF URL:", exportUrlPdf);
-	});
+	}
+	// $("#filter, #filterinv,#filter_milik").on("change", function () {
+	// 	var filter_kategori = $("#filter").val();
+	// 	var filter_inv = $("#filterinv").val();
+	// 	var filter_milik = $("#filter_milik").val();
+
+	// 	var exportUrlExcel =
+	// 		base_url +
+	// 		"hargamat/excel?filter=" +
+	// 		filter_kategori +
+	// 		"&filterinv=" +
+	// 		filter_inv +
+	// 		"&filtermilik=" +
+	// 		filter_milik;
+	// 	$(".btn-export-excel").attr("href", exportUrlExcel);
+
+	// 	var exportUrlPdf =
+	// 		base_url +
+	// 		"hargamat/pdf?filter=" +
+	// 		filter_kategori +
+	// 		"&filterinv=" +
+	// 		filter_inv;
+	// 	$(".btn-export-pdf").attr("href", exportUrlPdf);
+
+	// 	console.log("Export Excel URL:", exportUrlExcel);
+	// 	console.log("Export PDF URL:", exportUrlPdf);
+	// });
 	$(document).on('click','#modaledit',function(){
 
 	})

@@ -1,7 +1,7 @@
 <?php
 defined('BASEPATH') or exit('No direct script access allowed');
 ?>
-<div class="page-header d-print-none">
+<div class="page-header d-print-none m-2">
   <div class="container-xl">
     <div class="row g-0 d-flex align-items-between">
       <div class="col-md-6">
@@ -15,7 +15,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
     </div>
   </div>
 </div>
-<div class="page-body">
+<div class="page-body mt-0">
   <div class="container-xl">
     <div class="card">
       <?= $this->session->flashdata('message'); ?>
@@ -52,7 +52,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <select name="filter" id="filter" class="form-select font-kecil mt-0">
             <option value="all">Semua Kategori</option>
             <?php foreach ($kategori->result_array() as $kate) {
-              $selek = $this->session->flashdata('katehargamat') == $kate['kategori_id'] ? 'selected' : ''; ?>
+              $selek = $this->session->userdata('kate') == $kate['kategori_id'] ? 'selected' : ''; ?>
               <option value="<?= $kate['kategori_id']; ?>" <?= $selek; ?>><?= $kate['nama_kategori']; ?></option>
             <?php } ?>
             <option value="kosong" class="text-danger">KOSONG</option>
@@ -62,8 +62,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <option value="all">Semua Bc</option>
             <?php foreach ($bc_option->result_array() as $bc) {
               if (empty($bc['jns_bc'])) continue;
-
-              $selek = $this->session->flashdata('bchargamat') == $bc['jns_bc'] ? 'selected' : '';
+              $selek = $this->session->userdata('bchargamat') == $bc['jns_bc'] ? 'selected' : '';
             ?>
               <option value="<?= $bc['jns_bc']; ?>" <?= $selek; ?>><?= $bc['ket_bc']; ?></option>
             <?php } ?>
@@ -73,8 +72,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="col">
               <select name="filter_milik" id="filter_milik" class="form-select font-kecil mt-0">
                 <option value="all">Semua</option>
-                <option value="ifn">IFN</option>
-                <option value="dln">DLN</option>
+                <option value="ifn" <?php if($this->session->userdata('miliknya')=='ifn'){ echo "selected"; } ?>>IFN</option>
+                <option value="dln" <?php if($this->session->userdata('miliknya')=='dln'){ echo "selected"; } ?>>DLN</option>
               </select>
             </div>
           </div>
@@ -85,7 +84,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
           <select name="filterinv" id="filterinv" class="form-select font-kecil mt-0">
             <option value="all">Semua</option>
             <?php foreach ($artikel->result_array() as $artik) {
-              $selek = $this->session->flashdata('artihargamat') == $artik['id_barang'] ? 'selected' : ''; ?>
+              $selek = $this->session->userdata('artihargamat') == $artik['id_barang'] ? 'selected' : ''; ?>
               <option value="<?= $artik['id_barang']; ?>" <?= $selek; ?>><?= $artik['nama_barang']; ?></option>
             <?php } ?>
           </select>
@@ -112,23 +111,33 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
         </div>
         <div class="col-md-7 bg-cyan-lt">
-          <div style="line-height: 10px !important">
-            <label class="font-kecil font-bold mt-1">Qty : <span id="reko3" style="font-size: 14px !important"></span></label><br>
-            <label class="font-kecil font-bold">Weight : <span id="reko2" style="font-size: 14px !important"></span></label><br>
-            <label class="font-kecil font-bold">Rp : <span id="reko4" style="font-size: 14px !important"></span></label><br>
-          </div>
-          <div style="line-height: 10px !important" class="mt-2">
-            <label class="font-kecil font-bold">Jumlah Record : <span id="reko1" style="font-size: 14px !important"></span></label><br>
-            <label class="font-kecil font-bold font-hitam">Jumlah Harga Akt : <span id="reko5" style="font-size: 13px !important"></span></label><br>
-          </div>
           <!-- <a href="<?= base_url() . 'hargamat/getbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Get data IB" class="btn btn-success btn-sm" style="position: absolute; bottom:5px; right:5px;"><i class="fa fa-plus"></i><span class="ml-1">Get Barang</span></a> -->
           <!-- <a id="tambahdata" class="btn btn-primary text-white" style="position: absolute; bottom:5px; right:5px;" data-title="Get data IB" role="button">
             <i class="fa fa-plus"></i><span class="ml-1">Get Barang</span>
           </a> -->
-          <a href="#" id="tambahdata" style="position: absolute; bottom:5px; right:5px;" class="btn btn-success" data-bs-toggle="modal" data-bs-target="#modal-large-tambah">
+          <a href="#" id="tambahdata" style="position: absolute; bottom:5px; right:5px;" class="btn btn-sm btn-success btn-flat" data-bs-toggle="modal" data-bs-target="#modal-large-tambah">
             <i class="fa fa-plus"></i><span class="ml-1"> Get Barang </a>
-
-
+        <div class="text-black font-bold font-kecil bg-orange-lt mt-1"><span class="text-black p-2">Summary</span></div>
+        <table class="table table-bordered m-0">
+          <thead class="bg-primary-lt">
+          <tr>
+            <th class="text-center text-black">Qty</th>
+            <th class="text-center text-black">Weight</th>
+            <th class="text-center text-black">Rp</th>
+            <th class="text-center text-black">Jml Record</th>
+            <th class="text-center text-black">Jml Harga Akt</th>
+          </tr>
+          </thead>
+          <tbody class="table-tbody">
+            <tr>
+              <td id="reko3" class="text-black font-kecil text-right" style="background-color: #F5F8FC !important">0</td>
+              <td id="reko2" class="text-black font-kecil text-right" style="background-color: #F5F8FC !important">0</td>
+              <td id="reko4" class="text-black font-kecil text-right" style="background-color: #F5F8FC !important">0</td>
+              <td id="reko1" class="text-black font-kecil text-right" style="background-color: #F5F8FC !important">0</td>
+              <td id="reko5" class="text-black font-kecil text-right font-bold text-white bg-blacky">0</td>
+            </tr>
+          </tbody>
+        </table>
         </div>
       </div>
       <!-- </div> -->

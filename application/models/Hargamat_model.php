@@ -7,10 +7,10 @@ class Hargamat_model extends CI_Model
     // var $table = 'barang';
     public function getdata($filter_kategori, $filter_inv,  $filter_bc, $filter_milik)
     {
-        $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang,tb_hargamaterial.id_satuan as idsat,barang.dln,tb_hargamaterial.qty as xqty');
+        $this->db->select('tb_hargamaterial.*,tb_hargamaterial.id as idx,barang.kode as kodebarang,barang.nama_barang,tb_hargamaterial.id_satuan as idsat,satuan.kodesatuan,barang.dln,tb_hargamaterial.qty as xqty');
         $this->db->select("sum(tb_hargamaterial.qty) over() as jmqty");
         $this->db->select("sum(tb_hargamaterial.weight) over() as jmkgs");
-        $this->db->select("SUM(IFNULL(harga_akt,0)*IF(tb_hargamaterial.id_satuan=22,weight,qty)) OVER() AS jmakt");
+        $this->db->select("SUM((tb_hargamaterial.price+tb_hargamaterial.landing_ch)*IF(tb_hargamaterial.id_satuan=22,weight,qty)) OVER() AS jmakt");
         $this->db->from('tb_hargamaterial');
         $this->db->join('barang', 'barang.id = tb_hargamaterial.id_barang', 'left');
         $this->db->join('ref_dok_bc', 'ref_dok_bc.jns_bc = tb_hargamaterial.jns_bc', 'left');
@@ -493,7 +493,7 @@ class Hargamat_model extends CI_Model
     {
         return $this->db->order_by('kodesatuan')->get('satuan');
     }
-    public function getdata_export($filter_kategori, $filter_inv, $filter_milik)
+    public function getdata_export($filter_kategori, $filter_inv, $filter_milik, $filter_tahun, $filter_bulan)
     {
         $this->db->select('*,tb_hargamaterial.id as idx,barang.kode as kodebarang,barang.dln');
         $this->db->from('tb_hargamaterial');
@@ -525,7 +525,12 @@ class Hargamat_model extends CI_Model
         if ($filter_inv && $filter_inv != 'all') {
             $this->db->where('barang.id', $filter_inv);
         }
-
+        if ($filter_tahun && $filter_tahun != '') {
+            $this->db->where('year(tgl)', $this->session->userdata('thhargamat'));
+        }
+        if ($filter_bulan && $filter_bulan != '') {
+            $this->db->where('month(tgl)', $this->session->userdata('blhargamat'));
+        }
         $query = $this->db->get();
         return $query->result_array();
     }
