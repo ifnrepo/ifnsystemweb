@@ -285,6 +285,7 @@ class Opname_model extends CI_Model
         $this->db->join('stokopname','stokopname.kode_lokasi = tb_lokasi.kode_lokasi','left');
         $this->db->where('tb_lokasi.dept_id',$this->session->userdata('deptstok'));
         $this->db->where('tb_lokasi.kode_lokasi not in (SELECT kode_lokasi FROM stokopname WHERE stokopname.periode = "'.$periode    .'" GROUP BY 1)');
+        $this->db->group_by('kode_lokasi');
         return $this->db->get();
     }
     public function getdatastok(){
@@ -382,6 +383,7 @@ class Opname_model extends CI_Model
                 $this->db->or_like('stokopname_detail.insno',$isi,'both',FALSE);
                 $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
                 $this->db->or_like('barang.kode',$isi,'both',FALSE);
+                $this->db->or_like('stokopname_detail.ket',$isi,'both',FALSE);
             }
             $this->db->group_end();
         }
@@ -393,6 +395,36 @@ class Opname_model extends CI_Model
         $this->db->from('stokopname_detail');
         $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
         $this->db->where('id_stokopname',$id);
+        // $cekdata = $this->db->get()->row_array();
+
+        if($this->session->userdata('cari-entri')!=''){
+            $isi = $this->session->userdata('cari-entri');
+            if(str_contains(trim($isi)," ")){
+                $pisah = explode(" ",trim($isi));
+                $hasil = '';
+                foreach($pisah as $ps){
+                    $hasil .= $ps.'%';
+                }
+                $kata = substr($hasil,0,strlen($hasil)-1);
+            }else{
+                $kata = trim($isi);
+            }
+            $this->db->group_start();
+            // if(strtoupper(trim($cekdata['nama_lokasi']))=='ON MACHINE'){
+                // $this->db->like('stokopname_onmachine.po',$isi,'both',FALSE);
+                // $this->db->or_like('stokopname_onmachine.insno',$isi,'both',FALSE);
+                // $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
+                // $this->db->or_like('barang.kode',$isi,'both',FALSE);
+                // $this->db->where('stokopname_onmachine.machno',$isi);
+            // }else{
+                $this->db->like('stokopname_detail.po',$isi,'both',FALSE);
+                $this->db->or_like('stokopname_detail.insno',$isi,'both',FALSE);
+                $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
+                $this->db->or_like('barang.kode',$isi,'both',FALSE);
+                $this->db->or_like('stokopname_detail.ket',$isi,'both',FALSE);
+            // }
+            $this->db->group_end();
+        }
         return $this->db->get()->num_rows();
     }
     public function simpanstok($data){
