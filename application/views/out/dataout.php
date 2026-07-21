@@ -59,6 +59,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <a href="<?= base_url() . 'out/edit_tgl'; ?>" title="Edit tanggal" id="catatan" name="catatan" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl / Catatan">
                       <i class="fa fa-edit"></i>
                     </a>
+                    <?= $data['nomorpb'] ?>
                   </span>
                 </div>
                 <div class="col-4">
@@ -89,7 +90,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <div class="text-right"><h4><?= $this->session->userdata('deptsekarang'); ?> to <?= $this->session->userdata('tujusekarang'); ?></h4></div>
                   <div style="position:absolute;bottom:0px;right:10px;">
                     <?php if($data['jn_bbl']==1){ ?>
-                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success">Get Barang</a>
+                      <a data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="Add Data" href="<?= base_url() . 'out/tambahdata/1' ?>" class="btn btn-sm btn-success <?php if($data['id_pb']!=0){ echo "hilang"; } ?>">Get Barang</a>
                     <?php }else{ ?>
                       <a href="<?= base_url().'out/addbarangout'; ?>" class="btn btn-sm btn-success p-0 hilang" data-bs-toggle="modal" data-bs-target="#modal-largescroll2" data-title="Add Detail Barang">Input Barang Lama</a>
                       <a href="<?= base_url().'out/adddatabarangout/'.$data['id']; ?>" class="btn btn-sm btn-success p-0">Input Barang</a>

@@ -1,13 +1,13 @@
 $(document).ready(function(){
-    // alert('XXXX');
-	var isi = $("#deptstok").val();
-	var peri = $("#periode").val();
-	if(isi=='' || peri==''){
-		$("#tambahstok").addClass('disabled');
-	}else{
-		$("#tambahstok").removeClass('disabled');
-	}
-	$("#keywordinputstok").focus();
+    alert('XXXX');
+	// var isi = $("#deptstok").val();
+	// var peri = $("#periode").val();
+	// if(isi=='' || peri==''){
+	// 	$("#tambahstok").addClass('disabled');
+	// }else{
+	// 	$("#tambahstok").removeClass('disabled');
+	// }
+	$("#textcarirekapopname").focus();
 })
 
 $("#refreshperiode").click(function(){

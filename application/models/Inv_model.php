@@ -450,7 +450,11 @@ class inv_model extends CI_Model
         $this->db->select('0 as inpcs,0 as inkgs');
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
-        $this->db->select('sum(stokopname_detail.pcs) as pcs_taking,sum(stokopname_detail.kgs) as kgs_taking');
+        if($dept=='GP'){
+            $this->db->select('0 as pcs_taking,sum(stokopname_detail.kgs) as kgs_taking');
+        }else{
+            $this->db->select('sum(stokopname_detail.pcs) as pcs_taking,sum(stokopname_detail.kgs) as kgs_taking');
+        }
         $this->db->select('tb_po.spek as spek,tb_po.exdo,tb_po.id_buyer');
         $this->db->select('barang.nama_barang as nama_barang');
         $this->db->select('stokopname_detail.stok,stokopname_detail.exnet');

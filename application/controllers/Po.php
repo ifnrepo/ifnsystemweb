@@ -113,12 +113,12 @@ class Po extends CI_Controller
     public function getdetailbarangpo()
     {
         $data = strtoupper($_POST['data']);
-        $query = $this->pomodel->getbarangpo($data);
+        $query = $this->pomodel->getbarangpo(urlencode($data));
         $html  = '';
         $no = 0;
         if($query->num_rows() > 0){
             foreach ($query->result_array() as $que) {
-                if(($que['pcs'] > $que['xpcs']) || ($que['kgs'] > $que['xkgs'])){
+                // if(($que['pcs'] > $que['xpcs']) || ($que['kgs'] > $que['xkgs'])){
                     $no++;
                     $html .= "<tr class='font-kecil'>";
                     $html .= "<td>" . $que['nomor_dok'] . "</td>";
@@ -132,7 +132,7 @@ class Po extends CI_Controller
                     $html .= "</label>";
                     $html .= "</td>";
                     $html .= "</tr>";
-                }
+                // }
             }
             if($no==0){
                 $html .= "<tr>";
