@@ -102,9 +102,10 @@ class Out_model extends CI_Model{
         return $hasil->row_array();
     }
     public function getdatabyid($kode){
-        $this->db->select('tb_header.*,dept.*,customer.nama_customer,customer.alamat,customer.kontak,tb_header.id as idx');
+        $this->db->select('tb_header.*,dept.*,customer.nama_customer,customer.alamat,customer.kontak,tb_header.id as idx,b.nomor_dok as nomorpb');
         $this->db->join('dept','dept.dept_id=tb_header.dept_id','left');
-        $this->db->join('customer','customer.id=tb_header.id_buyer','left');
+        $this->db->join('customer','customer.id=tb_header.id_buyer','left'); 
+        $this->db->join('tb_header b','b.id=tb_header.id_pb','left'); 
         $query = $this->db->get_where('tb_header',['tb_header.id'=>$kode]);
         return $query;
     }
@@ -336,10 +337,14 @@ class Out_model extends CI_Model{
         $dataheader = $this->db->get_where('tb_header',['id'=>$kode['id']])->row_array();
         $jumlah = count($kode['data']);
         $seri = 0;
+        $idpb = 0;
         for($x=0;$x<$jumlah;$x++){
             $seri++;
             $arrdat = $kode['data'];
             $que = $this->db->get_where('tb_detail',['id'=>$arrdat[$x]])->row_array();
+            if($idpb==0){
+                $idpb = $que['id_header'];
+            }
             $que['id_minta'] = $que['id']; 
             $que['seri_barang'] = $seri;
             unset($que['id']);
@@ -354,7 +359,7 @@ class Out_model extends CI_Model{
             $this->db->update('tb_detail',['id_out'=>$idnya]);
         }
         $this->db->where('id',$kode['id']);
-        $this->db->update('tb_header',['jumlah_barang'=>$jumlah]);
+        $this->db->update('tb_header',['jumlah_barang'=>$jumlah,'id_pb' => $idpb]);
         $this->db->trans_complete();
         return $dataheader['id'];
     }
@@ -690,8 +695,8 @@ class Out_model extends CI_Model{
                 $this->db->where('id_header',$id);
                 $this->db->delete('tb_detailgen');
             }
-            $this->db->where('id_keluar',$id);
-            $this->db->update('tb_header',['id_keluar' => 0]);
+            $this->db->where('id',$id);
+            $this->db->update('tb_header',['id_pb' => 0]);
             $hasil = $this->db->trans_complete();
         }else{
             $this->session->set_flashdata('errorsimpan',1);
@@ -970,63 +975,149 @@ class Out_model extends CI_Model{
             $iniquery = true;
             $this->session->set_flashdata('errornya','Data detail atau detailgen kosong, HUBUNGI PPIC !');
         }
-        // Cek data temp yang akan dibuat BBL
-        $datacekbbl = $this->db->get_where('tb_detail',['id_header'=>$id,'tempbbl'=>1]);
-        if($datacekbbl->num_rows() > 0 && !$iniquery){
-            $ceknomordok = '';
-            foreach ($datacekbbl->result_array() as $bbl) {
-                $this->db->select('id_perusahaan,kode_dok,dept_id,dept_tuju,nomor_dok,tgl,data_ok,ok_tuju,ok_valid,tgl_ok,tgl_tuju,user_ok,user_tuju');
-                $this->db->from('tb_header');
-                $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
-                $this->db->where('tb_detail.id',$bbl['id_minta']);  
-                $isiheader = $this->db->get();
-                $xisiheader = $isiheader->row_array();
-                if($ceknomordok != $xisiheader['nomor_dok']){
-                    $hasilheader = $this->db->insert_batch('tb_header',$isiheader->result_array());
+        if($this->session->userdata('deptsekarang')!='GS'){
+            // Cek data temp yang akan dibuat BBL
+            $datacekbbl = $this->db->get_where('tb_detail',['id_header'=>$id,'tempbbl'=>1]);
+            if($datacekbbl->num_rows() > 0 && !$iniquery){
+                $ceknomordok = '';
+                foreach ($datacekbbl->result_array() as $bbl) {
+                    $this->db->select('id_perusahaan,kode_dok,dept_id,dept_tuju,nomor_dok,tgl,data_ok,ok_tuju,ok_valid,tgl_ok,tgl_tuju,user_ok,user_tuju');
+                    $this->db->from('tb_header');
+                    $this->db->join('tb_detail','tb_detail.id_header = tb_header.id','left');
+                    $this->db->where('tb_detail.id',$bbl['id_minta']);  
+                    $isiheader = $this->db->get();
+                    $xisiheader = $isiheader->row_array();
+                    if($ceknomordok != $xisiheader['nomor_dok']){
+                        $hasilheader = $this->db->insert_batch('tb_header',$isiheader->result_array());
+                        $idheader = $this->db->insert_id();
+
+                        $cekhuruf = substr(trim($xisiheader['nomor_dok']),-2);
+                        if(substr($cekhuruf,0,1)=='-'){
+                            $kodehuruf = '-'.uruthuruf(substr($cekhuruf,1,1));
+                            $kodedok = substr(trim($xisiheader['nomor_dok']),0,strlen(trim($xisiheader['nomor_dok']))-2);
+                        }else{
+                            $kodehuruf = '-A';
+                            $kodedok = trim($xisiheader['nomor_dok']);
+                        }
+                        $this->db->where('id',$idheader);
+                        $this->db->update('tb_header',['nomor_dok' => $kodedok.$kodehuruf]);
+                        $ceknomordok = $xisiheader['nomor_dok'];
+                    }else{
+                        $idheader = $xisiheader['id'];
+                    }
+
+                    $isidetail = $this->db->get_where('tb_detail',['id' => $bbl['id_minta']])->row_array();
+                    $bbl['id'] = null;
+                    $this->db->insert('tb_detail',$bbl);
+                    $iddetail = $this->db->insert_id();
+                    $bbl['id_detail'] = $iddetail;
+                    $this->db->insert('tb_detailgen',$bbl);
+                    $iddetail2 = $this->db->insert_id();
+
+                    $this->db->set('id_header',$idheader);
+                    $this->db->set('pcs',$isidetail['pcs'].'- pcs',FALSE);
+                    $this->db->set('kgs',$isidetail['kgs'].'- kgs',FALSE);
+                    $this->db->where('id',$iddetail);
+                    $this->db->update('tb_detail');
+
+                    $this->db->set('id_header',$idheader);
+                    $this->db->set('pcs',$isidetail['pcs'].'- pcs',FALSE);
+                    $this->db->set('kgs',$isidetail['kgs'].'- kgs',FALSE);
+                    $this->db->where('id',$iddetail2);
+                    $this->db->update('tb_detailgen');
+                }
+            }
+            //Hapus data detail awal yang pcs nya 0 dan masuk ke A
+            $this->db->where('id_header',$id);
+            $this->db->where('pcs',0);
+            $this->db->where('kgs',0);
+            $this->db->delete('tb_detail');
+        }else{
+            // Apabila yang pindah dept GS
+            if(!$iniquery){
+                $this->db->select('tb_detail.*,tb_header.id_pb');
+                $this->db->from('tb_detail');
+                $this->db->join('tb_header','tb_header.id = tb_detail.id_header');
+                $this->db->where('id_header',$id);
+                $dataminta = $this->db->get();
+                $iddataminta = $dataminta->row_array();
+
+                $datapb = $this->db->get_where('tb_detail',['id_header' => $iddataminta['id_pb']]);
+                $arr_contoh = [];
+                foreach($datapb->result_array() as &$datpb){
+                    array_push($arr_contoh,$datpb);
+                }
+                foreach($dataminta->result_array() as &$datmin){
+                    foreach($arr_contoh as &$xcontoh){
+                        if($xcontoh['id']==$datmin['id_minta']){
+                            $xcontoh['pcs'] = $xcontoh['pcs']-$datmin['pcs'];
+                            $xcontoh['kgs'] = $xcontoh['kgs']-$datmin['kgs'];
+                        }
+                    }
+                }
+                // Cek apakah masih ada data yang belum beres (selesai)
+                $arr_belumselesai = [];
+                foreach($arr_contoh as &$xcontoh){
+                    if(((float) $xcontoh['pcs']+ (float) $xcontoh['kgs']) != 0){
+                        array_push($arr_belumselesai,array('id' => $xcontoh['id'],'pcs' => $xcontoh['pcs'],'kgs' => $xcontoh['kgs']));
+                    }
+                }
+                if(count($arr_belumselesai) > 0){
+                    $fields = $this->db->list_fields('tb_header');
+                    $allowed_fields = array_diff($fields, array('id'));
+                    $this->db->select(implode(', ', $allowed_fields));
+                    $headerpb = $this->db->get_where('tb_header',['id' => $iddataminta['id_pb']]);
+                    $this->db->insert_batch('tb_header',$headerpb->result_array());
                     $idheader = $this->db->insert_id();
 
-                    $cekhuruf = substr(trim($xisiheader['nomor_dok']),-2);
+                    $rowheaderpb = $headerpb->row_array();
+
+                    $cekhuruf = substr(trim($rowheaderpb['nomor_dok']),-2);
                     if(substr($cekhuruf,0,1)=='-'){
                         $kodehuruf = '-'.uruthuruf(substr($cekhuruf,1,1));
-                        $kodedok = substr(trim($xisiheader['nomor_dok']),0,strlen(trim($xisiheader['nomor_dok']))-2);
+                        $kodedok = substr(trim($rowheaderpb['nomor_dok']),0,strlen(trim($rowheaderpb['nomor_dok']))-2);
                     }else{
                         $kodehuruf = '-A';
-                        $kodedok = trim($xisiheader['nomor_dok']);
+                        $kodedok = trim($rowheaderpb['nomor_dok']);
                     }
                     $this->db->where('id',$idheader);
                     $this->db->update('tb_header',['nomor_dok' => $kodedok.$kodehuruf]);
-                    $ceknomordok = $xisiheader['nomor_dok'];
-                }else{
-                    $idheader = $xisiheader['id'];
+
+                    foreach($arr_belumselesai as $blm){
+                            $datadetail = $this->db->get_where('tb_detail',['id' => $blm['id']])->row_array();
+                            if($blm['pcs']!=$datadetail['pcs'] || $blm['kgs']!=$datadetail['kgs']){
+                                $datadetail['id_header'] = $idheader;
+                                $datadetail['pcs'] = $blm['pcs'];
+                                $datadetail['kgs'] = $blm['kgs'];
+                                $datadetail['id_out'] = 0;
+                                unset($datadetail['id']);
+                                $this->db->insert('tb_detail',$datadetail);
+                                $this->db->insert('tb_detailgen',$datadetail);
+
+                                $this->db->set('pcs','pcs-'.$datadetail['pcs'],FALSE);
+                                $this->db->set('kgs','kgs-'.$datadetail['kgs'],FALSE);
+                                $this->db->where('id',$blm['id']);
+                                $this->db->update('tb_detail');
+
+                                $this->db->set('pcs','pcs-'.$datadetail['pcs'],FALSE);
+                                $this->db->set('kgs','kgs-'.$datadetail['kgs'],FALSE);
+                                $this->db->where('id_detail',$blm['id']);
+                                $this->db->update('tb_detailgen');
+                            }else{
+                                $this->db->where('id',$blm['id']);
+                                $this->db->update('tb_detail',['id_header' => $idheader]);
+
+                                $this->db->where('id_detail',$blm['id']);
+                                $this->db->update('tb_detailgen',['id_header' => $idheader]);
+                            }
+                    }
                 }
-
-                $isidetail = $this->db->get_where('tb_detail',['id' => $bbl['id_minta']])->row_array();
-                $bbl['id'] = null;
-                $this->db->insert('tb_detail',$bbl);
-                $iddetail = $this->db->insert_id();
-                $bbl['id_detail'] = $iddetail;
-                $this->db->insert('tb_detailgen',$bbl);
-                $iddetail2 = $this->db->insert_id();
-
-                $this->db->set('id_header',$idheader);
-                $this->db->set('pcs',$isidetail['pcs'].'- pcs',FALSE);
-                $this->db->set('kgs',$isidetail['kgs'].'- kgs',FALSE);
-                $this->db->where('id',$iddetail);
-                $this->db->update('tb_detail');
-
-                $this->db->set('id_header',$idheader);
-                $this->db->set('pcs',$isidetail['pcs'].'- pcs',FALSE);
-                $this->db->set('kgs',$isidetail['kgs'].'- kgs',FALSE);
-                $this->db->where('id',$iddetail2);
-                $this->db->update('tb_detailgen');
+                // print_r($arr_belumselesai);
+                // // echo $kodedok.$kodehuruf;
+                // print_r($arr_contoh);
+                // $iniquery = true;
             }
         }
-        //Hapus data detail awal yang pcs nya 0 dan masuk ke A
-        $this->db->where('id_header',$id);
-        $this->db->where('pcs',0);
-        $this->db->where('kgs',0);
-        $this->db->delete('tb_detail');
-
         if ($this->db->trans_status() === FALSE || $iniquery){
             $this->db->trans_rollback();
         }else{

@@ -194,7 +194,7 @@ class Po_model extends CI_Model
         $this->db->where('a.kode_dok', 'BBL');
         // $this->db->where('tb_detail.id_po', 0);
         if ($data != '') {
-            $this->db->like('a.nomor_dok', $data);
+            $this->db->like('a.nomor_dok', urldecode($data));
         }
         return $this->db->get();
     }

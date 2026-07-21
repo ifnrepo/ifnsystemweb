@@ -75,6 +75,15 @@ class Opname extends CI_Controller
         $url = base_url().'opname/dataopname';
         redirect($url);
     }
+    public function clearlacakpo(){
+        $this->session->unset_userdata('currdeptopname');
+        $this->session->unset_userdata('kepemilikanopname');
+        $this->session->unset_userdata('exdo');
+        $this->session->unset_userdata('cari-rekapopname');
+        $this->session->set_userdata('perpage-lacakpo',25);
+        $url = base_url().'opname/lacakpo';
+        redirect($url);
+    }
 
     public function addperiode(){
         $data['data'] = $this->opnamemodel->getdataperiode();
@@ -368,6 +377,7 @@ class Opname extends CI_Controller
             'datadept' => $this->opnamemodel->getdatadept(),
             'detailperiode' => $this->opnamemodel->getdetailperiode(),
             'jumlahrek' => $this->opnamemodel->countdatadetailstok($id),
+            'databobin' => $this->opnamemodel->getdatabobin()
         ];
         $data['links'] = $this->pagination->create_links();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
@@ -495,7 +505,9 @@ class Opname extends CI_Controller
 			'ket' => $_POST['ket'],
 			'pcs' => toAngka($_POST['pcs']),
 			'kgs' => toAngka($_POST['kgs']),
-			'nomor_bc' => $_POST['nobc']
+			'nomor_bc' => $_POST['nobc'],
+			'kodebob' => $_POST['bob'],
+            'urut' => $_POST['urut'],
         ];
         $query = $this->opnamemodel->simpanentristok($data);
         if($query){
@@ -523,7 +535,8 @@ class Opname extends CI_Controller
             'id' => $_POST['id'],
             'urut' => $_POST['urut'],
             'nomor_bc' => $_POST['nobc'],
-            'dept_id' => $_POST['dept']
+            'dept_id' => $_POST['dept'],
+            'kodebob' => $_POST['bob'],
         ];
         $query = $this->opnamemodel->updateentristok($data);
         if($query){
@@ -541,6 +554,33 @@ class Opname extends CI_Controller
             $url = base_url().'opname/entristok/'.$page.'/'.$kode;
             redirect($url);
         }
+    }
+    public function lacakpo()
+    {
+        $config['base_url'] = base_url().'opname/lacakpo/'; // The URL to your controller method
+        $config['total_rows'] = $this->opnamemodel->countdatalacakpo(); // Total records in your table
+        $config['per_page'] = $this->session->userdata('perpage-lacakpo')=='' ? 25 : $this->session->userdata('perpage-lacakpo'); // Records per page
+        $config['uri_segment'] = 3; // Which URL segment contains the page number
+        $config['attributes'] = array('class' => 'page-link');
+
+        $this->pagination->initialize($config);
+        $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
+
+        $header['header'] = 'lacakpo';
+        $data = [
+            'dept' => $this->dept_model->getdata(),
+            'periode' => $this->opnamemodel->getdataperiode(),
+            'fungsi' => 'lacakpo',
+            'datadept' => $this->opnamemodel->getdatadept(),
+            'data' => $this->opnamemodel->getlacakpo($config['per_page'],$page),
+            'jumlahrek' => $config['total_rows'] 
+        ];
+        $data['links'] = $this->pagination->create_links();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+
+        $this->load->view('layouts/opname/header', $header);
+        $this->load->view('opname/lacakpo', $data);
+        $this->load->view('layouts/opname/footer', $footer);
     }
     public function selesaiinput($page,$kode,$id){
         $query = $this->opnamemodel->selesaiinput($id);

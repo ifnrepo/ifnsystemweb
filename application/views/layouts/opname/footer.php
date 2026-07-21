@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1768377836'; ?>
+<?php $updatejs = '1768377838'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -77,8 +77,8 @@
 <?php if (isset($fungsi) && $fungsi == 'dataopname') { ?>
 	<script src="<?= base_url(); ?>assets/js/opname/dataopname.js?<?= $updatejs; ?>"></script>
 <?php } ?>
-<?php if (isset($fungsi) && $fungsi == 'dept') { ?>
-	<script src="<?= base_url(); ?>assets/js/own/dept.js?<?= $updatejs; ?>"></script>
+<?php if (isset($fungsi) && $fungsi == 'lacakpo') { ?>
+	<script src="<?= base_url(); ?>assets/js/opname/lacakpo.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'pb') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/pb.js?<?= $updatejs; ?>"></script>

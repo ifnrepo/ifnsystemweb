@@ -7,16 +7,16 @@
                 <button type="button" class="btn btn-primary btn-sm font-kecil mt-1" style="height: 35px !important;" id="simpanout">Simpan Barang</button>
             </div>
             <hr class="m-1">
-            <div class="mb-1 input-group">
+            <!-- <div class="mb-1 input-group"> -->
                 <!-- <label class="form-label mb-0 font-kecil">Departemen</label> -->
-                <input type="text" class="form-control font-kecil mt-1 mr-2 font-bold mb-1 text-uppercase" id="nobbon" placeholder="Cari Nomor Bon">
+                <!-- <input type="text" class="form-control font-kecil mt-1 mr-2 font-bold mb-1 text-uppercase" id="nobbon" placeholder="Cari Nomor Bon">
                 <button type="button" class="btn btn-yellow btn-sm font-kecil mt-1 text-black" style="height: 35px !important;" id="carinobon">Cari</button>
-            </div>
-            <div class="text-center">
+            </div> -->
+            <!-- <div class="text-center">
                 <label class="form-label font-kecil font-bold mb-2">- Atau -</label>
-            </div>
+            </div> -->
             <div class="mb-1 input-group">
-                <select class="form-control font-kecil form-select bg-primary-lt btn-flat mr-2 mb-1" id="bonpb">
+                <select class="form-control font-kecil form-select bg-primary-lt btn-flat mr-2 mb-1 font-bold" id="bonpb">
                     <option value="">Pilih BON</option>
                     <?php foreach ($bonpb->result_array() as $bonpb) { ?>
                         <option value="<?= $bonpb['nomor_dok']; ?>"><?= $bonpb['nomor_dok'].' Tgl. '.tglmysql($bonpb['tgl']); ?></option>
@@ -24,10 +24,10 @@
                 </select>
                 <button type="button" class="btn btn-success btn-sm font-kecil" style="height: 35px !important;" id="caribarangpb">Cari</button>
             </div>
-            <div class="mb-1 input-group">
-                <input type="text" class="form-control font-kecil mb-1 mr-2" id="namabarang" placeholder="Cari Nama Barang">
-                <button type="button" class="btn btn-success btn-sm font-kecil" style="height: 35px !important;" id="caribarangpb2">Cari</button>
-            </div>
+            <!-- <div class="mb-1 input-group"> -->
+                <input type="text" class="form-control font-kecil mb-1 mr-2 hilang" id="namabarang" placeholder="Cari Nama Barang">
+                <!-- <button type="button" class="btn btn-success btn-sm font-kecil" style="height: 35px !important;" id="caribarangpb2">Cari</button>
+            </div> -->
             <hr class="m-1">
             <table class="table datatable6 nowrap">
                 <thead>
@@ -112,6 +112,11 @@
         $("#caribarang").click();
     })
     $("#caribarangpb").click(function(){
+        var bonpb = $("#bonpb").val();
+        if(bonpb==''){
+            pesan('Pilih dahulu bon Permintaan','info');
+            return false;
+        }
         $.ajax({
             dataType: "json",
             type: "POST",

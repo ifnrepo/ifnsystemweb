@@ -571,6 +571,16 @@
                 </span>
               </a>
             </li>
+            <li class="nav-item hilang">
+              <a class="nav-link" href="<?= base_url().'opname/lacakpo'; ?>">
+                <span class="nav-link-icon d-md-none d-lg-inline-block">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search text-yellow"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
+                </span>
+                <span class="nav-link-title">
+                  Lacak Barang/PO
+                </span>
+              </a>
+            </li>
             <li class="nav-item">
               <a class="nav-link <?php if (!isset($header)) { echo 'active'; } ?>" href="<?= base_url(); ?>">
                 <span class="nav-link-icon d-md-none d-lg-inline-block">

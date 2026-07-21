@@ -221,6 +221,17 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             </select>
                                         </div>
                                     </div>
+                                    <div class="row <?php if($header['dept_id']!='GP'){ echo "hilang"; } ?>">
+                                        <label class="col-3 col-form-label font-kecil font-bold">Jns Bobbin</label>
+                                        <div class="col mb-1">
+                                            <select name="kodebob" id="kodebob" class="form-control form-select btn-flat font-kecil">
+                                                <option value="">Pilih Bobbin</option>
+                                                <?php foreach($databobin->result_array() as $bob): ?>
+                                                    <option value="<?= $bob['kodebob'] ?>"><?= $bob['namabob'] ?></option>
+                                                <?php endforeach; ?>
+                                            </select>
+                                        </div>
+                                    </div>
                                     <div class="row">
                                         <label class="col-3 col-form-label font-kecil font-bold">Pcs</label>
                                         <div class="col mb-1">
@@ -239,8 +250,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <input type="text" name="ket" id="ket" class="form-control btn-flat font-bold font-kecil" value="">
                                         </div>
                                     </div>
-                                    <div class="row hilang" id="urutdata">
-                                        <label class="col-3 col-form-label font-kecil font-bold">Urut Data</label>
+                                    <div class="row" id="urutdata">
+                                        <label class="col-3 col-form-label font-kecil font-bold">No Urut</label>
                                         <div class="col mb-1">
                                             <input type="text" name="urut" id="urut" class="form-control btn-flat font-bold font-kecil" value="">
                                         </div>
@@ -286,6 +297,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         $insno = trim($dt['insno'])=='' ? '' : '<br><span class="text-pink font-11"> INSNO. '.$dt['insno'].'</span>';
                                         $nobc = trim($dt['nomor_bc'])=='' ? '' : '-<span class="text-cyan font-11"> BC NO. '.$dt['nomor_bc'].'</span>';
                                         $grd = $dt['stok']==1 ? 'A' : ($dt['stok']==2 ? 'B' : '');
+                                        $bob = $header['dept_id']=='GP' ? '<br><span class="text-pink">'.$dt['kodebob'].'</span>' : '';
                                     ?>
                                         <tr>
                                             <td class="font-kecil"><?= $dt['urut'] ?></td>
@@ -295,7 +307,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <td class="font-kecil text-right"><?= rupiah($dt['kgs'],2) ?></td>
                                             <td class="font-kecil"><?= $dt['nobale'] ?></td>
                                             <td class="font-kecil text-center"><?= $grd ?></td>
-                                            <td class="font-kecil"><?= $dt['ket'] ?></td>
+                                            <td class="font-kecil line-11"><?= $dt['ket'].$bob ?></td>
                                             <?php if($header['status'] == 0): ?>
                                             <td class="font-kecil text-center">
                                                 <a href="#" id="editentristok" rel="<?= $dt['id'] ?>" rel2="<?= $this->uri->segment(3) ?>" rel3="<?= $this->uri->segment(4) ?>" class="btn btn-sm btn-flat btn-info" style="padding: 2px 6px !important;">Edit</a>
