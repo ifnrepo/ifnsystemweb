@@ -494,6 +494,13 @@ class Opname_model extends CI_Model
         $this->db->group_end();
         return $this->db->get();
     }
+    public function cariinsnoporeg($dept,$keyw){
+        $this->db->select('tb_po.*');
+        $this->db->select("CONCAT(TRIM(tb_po.po),'#',TRIM(tb_po.item),IF(tb_po.dis > 0,CONCAT(' dis ',tb_po.dis),'')) AS skupo");
+        $this->db->from('tb_po');
+        $this->db->like('tb_po.po',$keyw);
+        return $this->db->get();
+    }
     public function cariinsnomesin($dept,$keyw){
         $keyw = str_replace("-"," ",$keyw);
         $kata = '';
@@ -519,6 +526,12 @@ class Opname_model extends CI_Model
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
         $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
         $this->db->where('stokdept.dept_id',$dept);
+        $this->db->like('barang.kode',$keyw);
+        return $this->db->get();
+    }
+    public function cariidbarangreg($dept,$keyw){
+        $this->db->select('barang.*');
+        $this->db->from('barang');
         $this->db->like('barang.kode',$keyw);
         return $this->db->get();
     }
@@ -681,6 +694,13 @@ class Opname_model extends CI_Model
         $this->db->order_by('barang.kode');
         return $this->db->get();
     }
+    public function caribarangreg($dept,$id){
+        $this->db->select('barang.*');
+        $this->db->from('barang');
+        $this->db->like('barang.kode',$id);
+        $this->db->order_by('barang.kode');
+        return $this->db->get();
+    }
     public function caripo($dept,$id){
         $this->db->select('stokdept.*,barang.nama_barang,barang.kode');
         $this->db->from('stokdept');
@@ -694,6 +714,15 @@ class Opname_model extends CI_Model
         $this->db->order_by('stokdept.po,stokdept.item,stokdept.insno,stokdept.nobale');
         return $this->db->get();
     }
+    public function cariporeg($dept,$id){
+        $this->db->select('tb_po.*');
+        $this->db->select("CONCAT(TRIM(tb_po.po),'#',TRIM(tb_po.item),IF(tb_po.dis > 0,CONCAT(' dis ',tb_po.dis),'')) AS skupo");
+        $this->db->from('tb_po');
+        $this->db->like('tb_po.po',$id);
+        $this->db->order_by('tb_po.po');
+        return $this->db->get();
+    }
+    
     public function cariberatpo($sat,$data){
         $hasil = $this->db->get_where('tb_po',['ind_po' => $data])->row_array();
         return $hasil['jala']+$hasil['mimi'];
@@ -1168,37 +1197,35 @@ class Opname_model extends CI_Model
         $this->db->order_by('dept.departemen');
         return $this->db->get();
     }
-    public function getlacakpo($limit=0, $start=0)
+    public function getregbarang($limit=0, $start=0)
     {
         $periode = $this->session->userdata('periodeopname');
 
-        $this->db->select('stokopname_detail.*,barang.kode,tb_po.spek,barang.nama_barang,barang.imdo,IFNULL(satuan.kodesatuan,"PCS") as kodesatuan');
+        $this->db->select('stokdept.*,stokdept.pcs_awal as pcs,stokdept.kgs_awal as kgs,barang.kode,tb_po.spek,barang.nama_barang,barang.imdo,IFNULL(satuan.kodesatuan,"PCS") as kodesatuan');
         // $this->db->select('sum(pcs) as sumpcs,sum(kgs) as sumkgs');
-        $this->db->select("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') AS skupo");
-        $this->db->select("tb_lokasi.nama_lokasi,tb_lokasi.kode_lokasi");
-        $this->db->select("IF(TRIM(stokopname_detail.po)='',barang.imdo,IF(tb_po.exdo='EXPORT',1,0)) AS expdom");
-        $this->db->from('stokopname_detail');
-        $this->db->join('tb_po', 'tb_po.ind_po = CONCAT(stokopname_detail.po,stokopname_detail.item,stokopname_detail.dis)', 'left');
-        $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
+        $this->db->select("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') AS skupo");
+        $this->db->select("IF(TRIM(stokdept.po)='',barang.imdo,IF(tb_po.exdo='EXPORT',1,0)) AS expdom");
+        $this->db->from('stokdept');
+        $this->db->join('tb_po', 'tb_po.ind_po = CONCAT(stokdept.po,stokdept.item,stokdept.dis)', 'left');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id','left');
-        $this->db->join('stokopname','stokopname.id = stokopname_detail.id_stokopname','left');
-        $this->db->join('tb_lokasi','tb_lokasi.kode_lokasi = stokopname.kode_lokasi','left');
-        $this->db->where('stokopname_detail.tgl',$periode);
-        // if($this->session->userdata('currdeptopname')!==''){
-        //     $this->db->where('stokopname_detail.dept_id',$this->session->userdata('currdeptopname'));
-        // }
-        // if($this->session->userdata('kepemilikanopname')!='' && $this->session->userdata('kepemilikanopname')!='all'){
-        //     $this->db->where('stokopname_detail.dln',$this->session->userdata('kepemilikanopname'));
-        // }
-        // if($this->session->userdata('exdo')!='' && $this->session->userdata('exdo')!='all'){
-        //     $this->db->where('IF(TRIM(stokopname_detail.po)="",barang.imdo,IF(tb_po.exdo="EXPORT",1,0)) = '.$this->session->userdata('exdo'));
-        // }
-        if($this->session->userdata('cari-rekapopname')!=''){
+        $this->db->where('stokdept.periode_so',$periode);
+        $this->db->where('stokdept.input_so',1);
+        if($this->session->userdata('currdeptreg')!==''){
+            $this->db->where('stokdept.dept_id',$this->session->userdata('currdeptreg'));
+        }
+        if($this->session->userdata('kepemilikanreg')!='' && $this->session->userdata('kepemilikanreg')!='all'){
+            $this->db->where('stokdept.dln',$this->session->userdata('kepemilikanreg'));
+        }
+        if($this->session->userdata('exdoreg')!='' && $this->session->userdata('exdoreg')!='all'){
+            $this->db->where('IF(TRIM(stokdept.po)="",barang.imdo,IF(tb_po.exdo="EXPORT",1,0)) = '.$this->session->userdata('exdoreg'));
+        }
+        if($this->session->userdata('cari-rekapreg')!=''){
             $this->db->group_start();
-                $this->db->like("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') ",$this->session->userdata('cari-rekapopname'));
-                $this->db->or_like("barang.kode",$this->session->userdata('cari-rekapopname'));
-                $this->db->or_like("stokopname_detail.insno",$this->session->userdata('cari-rekapopname'));
-                $this->db->or_like("barang.nama_barang",$this->session->userdata('cari-rekapopname'));
+                $this->db->like("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') ",$this->session->userdata('cari-rekapreg'));
+                $this->db->or_like("barang.kode",$this->session->userdata('cari-rekapreg'));
+                $this->db->or_like("stokdept.insno",$this->session->userdata('cari-rekapreg'));
+                $this->db->or_like("barang.nama_barang",$this->session->userdata('cari-rekapreg'));
             $this->db->group_end();
         }
         // $this->db->group_by('po,item,dis,id_barang,insno,nobontr,stok,exnet,nobale');
@@ -1209,32 +1236,34 @@ class Opname_model extends CI_Model
         $hasil = $this->db->query($kolom);
         return $hasil;
     }
-    public function countdatalacakpo(){
+    public function countregbarang(){
         $periode = $this->session->userdata('periodeopname');
 
-        $this->db->select('stokopname_detail.*,barang.kode,tb_po.spek,barang.nama_barang,barang.imdo,IFNULL(satuan.kodesatuan,"PCS") as kodesatuan');
+        $this->db->select('stokdept.*,stokdept.pcs_awal as pcs,stokdept.kgs_awal as kgs,barang.kode,tb_po.spek,barang.nama_barang,barang.imdo,IFNULL(satuan.kodesatuan,"PCS") as kodesatuan');
         // $this->db->select('sum(pcs) as sumpcs,sum(kgs) as sumkgs');
-        $this->db->select("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') AS skupo");
-        $this->db->from('stokopname_detail');
-        $this->db->join('tb_po', 'tb_po.ind_po = CONCAT(stokopname_detail.po,stokopname_detail.item,stokopname_detail.dis)', 'left');
-        $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
+        $this->db->select("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') AS skupo");
+        $this->db->select("IF(TRIM(stokdept.po)='',barang.imdo,IF(tb_po.exdo='EXPORT',1,0)) AS expdom");
+        $this->db->from('stokdept');
+        $this->db->join('tb_po', 'tb_po.ind_po = CONCAT(stokdept.po,stokdept.item,stokdept.dis)', 'left');
+        $this->db->join('barang','barang.id = stokdept.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id','left');
-        $this->db->where('stokopname_detail.tgl',$periode);
-        // if($this->session->userdata('currdeptopname')!==''){
-        //     $this->db->where('stokopname_detail.dept_id',$this->session->userdata('currdeptopname'));
-        // }
-        // if($this->session->userdata('kepemilikanopname')!='' && $this->session->userdata('kepemilikanopname')!='all'){
-        //     $this->db->where('stokopname_detail.dln',$this->session->userdata('kepemilikanopname'));
-        // }
-        // if($this->session->userdata('exdo')!='' && $this->session->userdata('exdo')!='all'){
-        //     $this->db->where('IF(TRIM(stokopname_detail.po)="",barang.imdo,IF(tb_po.exdo="EXPORT",1,0)) = '.$this->session->userdata('exdo'));
-        // }
-        if($this->session->userdata('cari-rekapopname')!=''){
+        $this->db->where('stokdept.periode_so',$periode);
+        $this->db->where('stokdept.input_so',1);
+        if($this->session->userdata('currdeptreg')!==''){
+            $this->db->where('stokdept.dept_id',$this->session->userdata('currdeptreg'));
+        }
+        if($this->session->userdata('kepemilikanreg')!='' && $this->session->userdata('kepemilikanreg')!='all'){
+            $this->db->where('stokdept.dln',$this->session->userdata('kepemilikanreg'));
+        }
+        if($this->session->userdata('exdoreg')!='' && $this->session->userdata('exdoreg')!='all'){
+            $this->db->where('IF(TRIM(stokdept.po)="",barang.imdo,IF(tb_po.exdo="EXPORT",1,0)) = '.$this->session->userdata('exdoreg'));
+        }
+        if($this->session->userdata('cari-rekapreg')!=''){
             $this->db->group_start();
-                $this->db->like("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') ",$this->session->userdata('cari-rekapopname'));
-                $this->db->or_like("barang.kode",$this->session->userdata('cari-rekapopname'));
-                $this->db->or_like("stokopname_detail.insno",$this->session->userdata('cari-rekapopname'));
-                $this->db->or_like("barang.nama_barang",$this->session->userdata('cari-rekapopname'));
+                $this->db->like("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') ",$this->session->userdata('cari-rekapreg'));
+                $this->db->or_like("barang.kode",$this->session->userdata('cari-rekapreg'));
+                $this->db->or_like("stokdept.insno",$this->session->userdata('cari-rekapreg'));
+                $this->db->or_like("barang.nama_barang",$this->session->userdata('cari-rekapreg'));
             $this->db->group_end();
         }
         // $this->db->group_by('po,item,dis,id_barang,insno,nobontr,stok,exnet,nobale');
@@ -1244,5 +1273,8 @@ class Opname_model extends CI_Model
         $kolom = "Select *,sum(pcs) over() as totalpcs,sum(kgs) over() as totalkgs from (".$query.") r1";
         $hasil = $this->db->query($kolom);
         return $hasil->num_rows();
+    }
+    public function simpanbarangkestokdariopname($data){
+        return $this->db->insert('stokdept',$data);
     }
 }

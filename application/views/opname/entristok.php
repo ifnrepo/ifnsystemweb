@@ -189,7 +189,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             </select>
                                         </div>
                                     </div>
-                                    <div class="row <?php if($header['dept_id']!='GF'){ echo "hilang"; } ?>">
+                                    <div class="row <?php if(!in_array($header['dept_id'],array('GF','GW'))){ echo "hilang"; } ?>">
                                         <label class="col-3 col-form-label font-kecil font-bold">No Bale</label>
                                         <div class="col mb-1">
                                             <input type="text" name="nobale" id="nobale" class="form-control btn-flat font-kecil" value="">
@@ -242,6 +242,15 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <label class="col-3 col-form-label font-kecil font-bold">Kgs</label>
                                         <div class="col mb-1">
                                             <input type="text" name="kgs" id="kgs" class="form-control btn-flat font-bold font-kecil inputangka text-right" value="">
+                                        </div>
+                                    </div>
+                                    <div class="row bg-danger-lt pt-1">
+                                        <label class="col-3 col-form-label font-kecil font-bold text-black">Breakdown</label>
+                                        <div class="col mb-1">
+                                            <select name="urai" id="urai" class="form-control form-select btn-flat font-kecil">
+                                                <option value="0">Tidak</option>
+                                                <option value="1">Ya</option>
+                                            </select>
                                         </div>
                                     </div>
                                     <div class="row">
@@ -298,9 +307,10 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         $nobc = trim($dt['nomor_bc'])=='' ? '' : '-<span class="text-cyan font-11"> BC NO. '.$dt['nomor_bc'].'</span>';
                                         $grd = $dt['stok']==1 ? 'A' : ($dt['stok']==2 ? 'B' : '');
                                         $bob = $header['dept_id']=='GP' ? '<br><span class="text-pink">'.$dt['kodebob'].'</span>' : '';
+                                        $urai = $dt['urai']==1 ? 'bg-danger-lt' : '';
                                     ?>
                                         <tr>
-                                            <td class="font-kecil"><?= $dt['urut'] ?></td>
+                                            <td class="font-kecil <?= $urai ?>"><span class="text-black"><?= $dt['urut'] ?></span></td>
                                             <td class="font-kecil line-11"><?= $spek.$insno.$nobontr.$nobc ?></td>
                                             <td class="font-kecil"><?= $dt['satuan'] ?></td>
                                             <td class="font-kecil text-right"><?= rupiah($dt['pcs'],0) ?></td>
@@ -345,13 +355,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php endforeach; ?>
                                 <?php else: ?>
                                     <tr>
-                                        <td colspan="9" class="text-center">-- Data Kosong --</td>
+                                        <td colspan="9" class="text-center font-kecil">-- Data Kosong --</td>
                                     </tr>
                                 <?php endif; ?>
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-between mt-1">
-                            <div class="mt-1">
+                            <div class="mt-1 font-kecil">
                                 Jumlah Record <?= rupiah($jumlahrek,0) ?>
                             </div>
                             <div>

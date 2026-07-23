@@ -75,16 +75,28 @@ class Opname extends CI_Controller
         $url = base_url().'opname/dataopname';
         redirect($url);
     }
-    public function clearlacakpo(){
-        $this->session->unset_userdata('currdeptopname');
-        $this->session->unset_userdata('kepemilikanopname');
-        $this->session->unset_userdata('exdo');
-        $this->session->unset_userdata('cari-rekapopname');
-        $this->session->set_userdata('perpage-lacakpo',25);
-        $url = base_url().'opname/lacakpo';
+    public function getdatareg()
+    {
+        $this->session->set_userdata('currdeptreg',$_POST['dept']);
+        $this->session->set_userdata('kepemilikanreg',$_POST['milik']);
+        $this->session->set_userdata('exdoreg',$_POST['exdo']);
+        $this->session->set_userdata('cari-rekapreg',$_POST['cari']);
+        $this->session->set_userdata('perpage-rekapreg',$_POST['perpage']);
+        echo 1;
+    }
+    public function clearregbarang(){
+        $this->session->unset_userdata('currdeptreg');
+        $this->session->unset_userdata('kepemilikanreg');
+        $this->session->unset_userdata('exdoreg');
+        $this->session->unset_userdata('cari-rekapreg');
+        $this->session->set_userdata('perpage-rekapreg',25);
+        $url = base_url().'opname/regbarang';
         redirect($url);
     }
-
+    public function inputregbarang(){
+        $data['data'] = $this->opnamemodel->getdataperiode();
+        $this->load->view('opname/inputregbarang',$data);
+    }
     public function addperiode(){
         $data['data'] = $this->opnamemodel->getdataperiode();
         $this->load->view('opname/addperiode',$data);
@@ -426,6 +438,59 @@ class Opname extends CI_Controller
             $this->load->view('opname/pilihpo',$query);
         }
     }
+    public function carireg($kode){
+        $dept = $_POST['dept'];
+        $id = $_POST['keyw'];
+        if($kode=='caribarang'){
+            $query = $this->opnamemodel->caribarangreg($dept,$id);
+            $jmlrek = $query->num_rows();
+            $html = '';
+            $no = 1;
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td class="font-kecil">' . $que['kode'] . '</td>';
+                $html .= '<td class="font-kecil">' . $que['nama_barang'] . '</td>';
+                $html .= '<td>';
+                $html .= '<a href="#" id="pilihbarang" rel1="'.$que['id'].'" rel2="'.$que['nama_barang'].'" rel3="'.$que['kode'].'" rel4="" rel5="" rel6="0" rel7="'.$que['dln'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-success mr-1" data-message="Hapus IB" data-title="Pilih Data">Pilih</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $hasil = array('jumlah' => $jmlrek,'hasil' => $html);
+            echo json_encode($hasil);
+        }else if($kode=='caripo' || $kode=='cariinsnomesin' ){
+            if($kode=='caripo'){
+                $query = $this->opnamemodel->cariporeg($dept,$id);
+            }else{
+                $query['data'] = $this->opnamemodel->cariinsnomesin($dept,$id);
+            }
+            // $query['dept'] = $dept;
+            $jmlrek = $query->num_rows();
+            $html = '';
+            $no = 1;
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td class="font-kecil">' . $que['skupo'] . '</td>';
+                $html .= '<td class="font-kecil">' . $que['spek'] . '</td>';
+                $html .= '<td>';
+                $html .= '<a href="#" id="pilihbarang" rel1="0" rel2="'.$que['spek'].'" rel3="'.$que['skupo'].'" rel4="'.$que['po'].'" rel5="'.$que['item'].'" rel6="'.$que['dis'].'" rel7="'.$que['dln'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-success mr-1" data-message="Hapus IB" data-title="Pilih Data">Pilih</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $hasil = array('jumlah' => $jmlrek,'hasil' => $html);
+            echo json_encode($hasil);
+        }else if($kode=='carispekbarang'){
+            $query['data'] = $this->opnamemodel->carispekbarang($dept,$id);
+            $this->load->view('opname/pilihspek',$query);
+        }else if($kode=='carinomorbale'){
+            $query['data'] = $this->opnamemodel->carinomorbale($dept,$id);
+            $query['dept'] = $dept;
+            $this->load->view('opname/pilihpo',$query);
+        }else if($kode=='carinomorbc'){
+            $query['data'] = $this->opnamemodel->carinomorbc($dept,$id);
+            $query['dept'] = $dept;
+            $this->load->view('opname/pilihpo',$query);
+        }
+    }
     public function cariidbarang(){
         $dept = $_POST['dept'];
         $keyw = $_POST['keyw'];
@@ -435,11 +500,29 @@ class Opname extends CI_Controller
         $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
         echo json_encode($hasil);
     }
+    public function cariidbarangreg(){
+        $dept = $_POST['dept'];
+        $keyw = $_POST['keyw'];
+        $this->session->set_userdata('sel-cari','barang');
+        $query = $this->opnamemodel->cariidbarangreg($dept,$keyw);
+        $jmlrek = $query->num_rows();
+        $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
+        echo json_encode($hasil);
+    }
     public function cariinsnopo(){
         $dept = $_POST['dept'];
         $keyw = $_POST['keyw'];
         $this->session->set_userdata('sel-cari','insnopo');
         $query = $this->opnamemodel->cariinsnopo($dept,$keyw);
+        $jmlrek = $query->num_rows();
+        $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
+        echo json_encode($hasil);
+    }
+    public function cariinsnoporeg(){
+        $dept = $_POST['dept'];
+        $keyw = $_POST['keyw'];
+        $this->session->set_userdata('sel-cari','insnopo');
+        $query = $this->opnamemodel->cariinsnoporeg($dept,$keyw);
         $jmlrek = $query->num_rows();
         $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
         echo json_encode($hasil);
@@ -508,6 +591,7 @@ class Opname extends CI_Controller
 			'nomor_bc' => $_POST['nobc'],
 			'kodebob' => $_POST['bob'],
             'urut' => $_POST['urut'],
+            'urai' => $_POST['urai'],
         ];
         $query = $this->opnamemodel->simpanentristok($data);
         if($query){
@@ -537,6 +621,7 @@ class Opname extends CI_Controller
             'nomor_bc' => $_POST['nobc'],
             'dept_id' => $_POST['dept'],
             'kodebob' => $_POST['bob'],
+            'urai' => $_POST['urai'],
         ];
         $query = $this->opnamemodel->updateentristok($data);
         if($query){
@@ -555,31 +640,31 @@ class Opname extends CI_Controller
             redirect($url);
         }
     }
-    public function lacakpo()
+    public function regbarang()
     {
-        $config['base_url'] = base_url().'opname/lacakpo/'; // The URL to your controller method
-        $config['total_rows'] = $this->opnamemodel->countdatalacakpo(); // Total records in your table
-        $config['per_page'] = $this->session->userdata('perpage-lacakpo')=='' ? 25 : $this->session->userdata('perpage-lacakpo'); // Records per page
+        $config['base_url'] = base_url().'opname/regbarang/'; // The URL to your controller method
+        $config['total_rows'] = $this->opnamemodel->countregbarang(); // Total records in your table
+        $config['per_page'] = $this->session->userdata('perpage-rekapreg')=='' ? 25 : $this->session->userdata('perpage-rekapreg'); // Records per page
         $config['uri_segment'] = 3; // Which URL segment contains the page number
         $config['attributes'] = array('class' => 'page-link');
 
         $this->pagination->initialize($config);
         $page = ($this->uri->segment(3)) ? $this->uri->segment(3) : 0;
 
-        $header['header'] = 'lacakpo';
+        $header['header'] = 'regbarang';
         $data = [
             'dept' => $this->dept_model->getdata(),
             'periode' => $this->opnamemodel->getdataperiode(),
-            'fungsi' => 'lacakpo',
+            'fungsi' => 'regbarang',
             'datadept' => $this->opnamemodel->getdatadept(),
-            'data' => $this->opnamemodel->getlacakpo($config['per_page'],$page),
+            'data' => $this->opnamemodel->getregbarang($config['per_page'],$page),
             'jumlahrek' => $config['total_rows'] 
         ];
         $data['links'] = $this->pagination->create_links();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 
         $this->load->view('layouts/opname/header', $header);
-        $this->load->view('opname/lacakpo', $data);
+        $this->load->view('opname/regbarang', $data);
         $this->load->view('layouts/opname/footer', $footer);
     }
     public function selesaiinput($page,$kode,$id){
@@ -820,6 +905,25 @@ class Opname extends CI_Controller
     public function updateaktif(){
         $id = $_POST['id'];
         echo $this->opnamemodel->updateaktif($id);
+    }
+    public function simpanbarangkestokdariopname(){
+        $data = [
+            'dept_id' => $_POST['dept'],
+            'id_barang' => $_POST['idb'],
+            'po' => $_POST['po'],
+            'item' => $_POST['item'],
+            'dis' => $_POST['dis'],
+            'dln' => $_POST['dln'],
+            'insno' => trim($_POST['insno']),
+            'nobontr' => trim($_POST['nobontr']),
+            'nobale' => trim($_POST['nobale']),
+            'exnet' => $_POST['exnet'],
+            'input_so' => 1,
+            'periode_so' => $this->session->userdata('periodeopname'),
+            'periode' => cekperiodedaritgl($this->session->userdata('periodeopname'))
+        ];
+        $hasil = $this->opnamemodel->simpanbarangkestokdariopname($data);
+        echo $hasil;
     }
 
     public function excel()

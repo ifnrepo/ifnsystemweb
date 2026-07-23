@@ -141,6 +141,9 @@ $("#simpandetailbarang").click(function () {
 		if (nobontr.includes("DLN-IFN") && !cek) {
 			cek = true;
 		}
+		if (nobontr.includes("AK-") && !cek) {
+			cek = true;
+		}
 		if (!cek) {
 			pesan(
 				"Cek kembali nomor IB, (Sepertinya Nomor Instruksi yang di input)",
