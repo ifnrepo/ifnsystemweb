@@ -6,7 +6,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <div class="row g-0 d-flex align-items-between">
             <div class="col-md-6 line-12">
                 <h2 class="page-title p-2">
-                    Rekap Data Stok Opname
+                    Register Barang (Tidak ada pada Perbook)
                 </h2>
                 <small class="pl-2">Periode <?= tglmysql($this->session->userdata('periodeopname')) ?></small>
             </div>
@@ -30,7 +30,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                     echo "selected";
                                                 } ?>>PCS</option>
                         </select>
-                        <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" title="Departemen" id="currdeptopname" name="currdeptopname">
+                        <select class="form-control form-sm font-kecil font-bold mr-1 bg-teal text-white" title="Departemen" id="currdeptreg" name="currdeptreg">
                             <?php
                             $dep = $this->session->userdata('hakstokopname');
                             $akses_so = str_split($dep, 2);
@@ -40,7 +40,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
 
                             <?php foreach ($datadept->result_array() as $dep) : ?>
                                 <?php if (in_array($dep['dept_id'], $akses_so)) : ?>
-                                    <option value="<?= $dep['dept_id'] ?>" <?= ($this->session->userdata('currdeptopname') == $dep['dept_id']) ? 'selected' : ''; ?>>
+                                    <option value="<?= $dep['dept_id'] ?>" <?= ($this->session->userdata('currdeptreg') == $dep['dept_id']) ? 'selected' : ''; ?>>
                                         <?= $dep['departemen'] ?>
                                     </option>
                                 <?php endif; ?>
@@ -55,10 +55,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                             } ?>" id="updateopname"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
                     </div>
                     <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
-                        <a href="<?= base_url() . 'opname/toexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1 <?php if ($this->session->userdata('currdeptopname') == '') {
+                        <!-- <a href="<?= base_url() . 'opname/regbarangtoexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1 <?php if ($this->session->userdata('currdeptreg') == '') {
                                                                                                                                 echo "disabled";
                                                                                                                             } ?>" id="toexcel">
-                                                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-xls"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M4 15l4 6" /><path d="M4 21l4 -6" /><path d="M17 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75" /><path d="M11 15v6h3" /></svg><span class="ml-1">Excel</span></a>
+                                                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-xls"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M4 15l4 6" /><path d="M4 21l4 -6" /><path d="M17 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75" /><path d="M11 15v6h3" /></svg><span class="ml-1">Excel</span></a> -->
+                        <a href="<?= base_url() . 'opname/inputregbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Input Data" class="btn btn-primary btn-sm font-bold mr-1 <?php if ($this->session->userdata('currdeptreg') == '') {
+                                                                                                                                echo "disabled";
+                                                                                                                            } ?>" id="addbarang">
+                                                                                                                            <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span class="ml-1">Tambah</span></a>
                     </div>
                 </div>
                 <div class="card card-active mb-2">
@@ -68,12 +72,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <div class="row" id="div-exdo">
                                     <label class="col-3 col-form-label font-kecil font-bold">IFN/DLN</label>
                                     <div class="col mb-1">
-                                        <select name="kepemilikan" id="kepemilikan" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1">
+                                        <select name="kepemilikanreg" id="kepemilikanreg" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1">
                                             <option value="all">All</option>
-                                            <option value="0" <?php if ($this->session->userdata('kepemilikanopname') == '0') {
+                                            <option value="0" <?php if ($this->session->userdata('kepemilikanreg') == '0') {
                                                                     echo "selected";
                                                                 } ?>>IFN</option>
-                                            <option value="1" <?php if ($this->session->userdata('kepemilikanopname') == '1') {
+                                            <option value="1" <?php if ($this->session->userdata('kepemilikanreg') == '1') {
                                                                     echo "selected";
                                                                 } ?>>DLN</option>
                                         </select>
@@ -82,12 +86,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <div class="row" id="div-exdo">
                                     <label class="col-3 col-form-label font-kecil font-bold">Exdo</label>
                                     <div class="col mb-1">
-                                        <select name="exdo" id="exdo" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1">
+                                        <select name="exdoreg" id="exdoreg" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1">
                                             <option value="all">All</option>
-                                            <option value="1" <?php if ($this->session->userdata('exdo') == '1') {
+                                            <option value="1" <?php if ($this->session->userdata('exdoreg') == '1') {
                                                                         echo "selected";
                                                                     } ?>>Export</option>
-                                            <option value="0" <?php if ($this->session->userdata('exdo') == '0') {
+                                            <option value="0" <?php if ($this->session->userdata('exdoreg') == '0') {
                                                                             echo "selected";
                                                                         } ?>>Domestic</option>
                                         </select>
@@ -99,19 +103,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 </label> -->
                             </div>
                             <div class="col-6">
-                                <!-- <div class="text-blue font-bold mt-2 ">Jumlah Dok : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div> -->
-                                <div class="text-blue font-bold">Jumlah Qty : <span id="jumlahpcs" style="font-weight: normal;">0</span></div>
-                                <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">0</span></div>
-                                <div class="font-kecil">
-                                    <?php if ($this->session->userdata('periodeopname') == '') { ?>
-                                        <span class="text-pink">Pilih periode Stok Taking dahulu (Halaman dashboard)</span>
-                                    <?php } ?>
-                                </div>
+                                
                             </div>
                             <div class="col-3">
                                 <div class="">
                                     <div class="">
-                                        <textarea class="form form-control p-2 m-0 font-kecil" id='textcarirekapopname' style="text-transform: uppercase;" placeholder="Cari PO, Insno, Kode Barang.."><?= $this->session->userdata('cari-rekapopname') ?></textarea>
+                                        <textarea class="form form-control p-2 m-0 font-kecil" id='textcarirekapopname' style="text-transform: uppercase;" placeholder="Cari PO, Insno, Kode Barang.."><?= $this->session->userdata('cari-rekapreg') ?></textarea>
                                     </div>
                                     <div class="d-flex justify-content-between">
                                         <button type="button" id="buttoncarirekapopname" class="btn btn-sm btn-success btn-flat w-100 mt-1">Cari</button>
@@ -146,11 +143,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <th class="text-center">Grd</th>
                             <th>Sat</th>
                             <th class="line-11">Insno/Nobontr<br><span class="text-pink">Nomor BC</span></th>
-                            <th>Sublok</th>
                             <th>Nobale</th>
                             <th>Exnet</th>
-                            <th class="text-center">Qty</th>
-                            <th class="text-center">Kgs</th>
                             <th>Ket</th>
                         </tr>
                     </thead>
@@ -173,20 +167,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <td class="font-kecil"><?= $dt['kodesatuan'] ?></td> 
                                 <?php $nobc = trim($dt['nomor_bc'])!='' ? 'BC No. '.trim($dt['nomor_bc']) : ''; ?>
                                 <td class="font-kecil line-11"><?= $dt['insno'].$dt['nobontr'] ?><br><span class="text-pink"><?= $nobc ?></span></td>
-                                <td class="font-kecil"><?= $dt['kode_lokasi'].'-'.$dt['nama_lokasi'] ?></td> 
                                 <td class="font-kecil"><?= $dt['nobale'] ?></td> 
                                 <td class="font-kecil text-center"><?= $exnet ?></td> 
-                                <td class="font-kecil text-right"><?= rupiah($dt['pcs'],0) ?></td> 
-                                <td class="font-kecil text-right"><?= rupiah($dt['kgs'],2) ?></td> 
-                                <td class="font-kecil text-right">
-                                    <a href="<?= base_url().'opname/editrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a>
-                                    <a href="#" data-href="<?= base_url().'opname/hapusrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data '+spec+' ('+sku.trim()+')" style="padding:0 3px !important">Hapus</a>
-                                </td> 
+                                <td class="text-center text-green font-bold">OK</td> 
                             </tr>
                         <?php endforeach; ?>
                         <?php else: ?>
                             <tr>
-                                <td colspan="12" class="text-center">Cari data Barang / PO</td>
+                                <td colspan="12" class="text-center">Klik Tombol Update</td>
                             </tr>
                         <?php endif; ?>
                     </tbody>

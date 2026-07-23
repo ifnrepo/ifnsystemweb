@@ -593,6 +593,7 @@ $("#simpaninputstok").click(function(){
 			urut: $("#urut").val(),
 			nobc: $("#nomor_bc").val(),
 			bob: $("#kodebob").val(),
+			urai: $("#urai").val(),
 		},
 		success: function (data) {
 			window.location.reload();
@@ -641,6 +642,7 @@ $("#updateinputstok").click(function(){
 			nobc: $("#nomor_bc").val(),
 			dept: $("#deptid").val(),
 			bob: $("#kodebob").val(),
+			urai: $("#urai").val(),
 		},
 		success: function (data) {
 			window.location.reload();
@@ -690,6 +692,7 @@ $(document).on('click','#editentristok',function(){
 			$("#ket").val(data.ket);
 			$("#identristok").val(data.id);
 			$("#urut").val(data.urut);
+			$("#urai").val(data.urai);
 			if(data.po.trim()!=""){
 				$("#spek").val(data.spek);
 				$("#sku").val(data.skupo);

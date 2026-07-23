@@ -215,6 +215,7 @@ class inv_model extends CI_Model
         $this->db->join('user','user.id = stokdept.user_verif','left');
         $this->db->where('dept_id',$dept);
         $this->db->where('periode',$periode);
+        $this->db->where('input_so',0);
         if($mode==1){
             if($this->session->userdata('filterkat')!=""){
                 $this->db->group_start();
@@ -817,6 +818,7 @@ class inv_model extends CI_Model
         $this->db->join('tb_hargamaterial','stokdept.id_barang = tb_hargamaterial.id_barang AND stokdept.nobontr = tb_hargamaterial.nobontr  AND trim(tb_hargamaterial.nobontr) != "" ','left');
         $this->db->where('dept_id',$dept);
         $this->db->where('periode',$periode);
+        $this->db->where('input_so',0);
         $this->db->where('trim(stokdept.po)',trim($array['po']));
         $this->db->where('trim(stokdept.item)',trim($array['item']));
         $this->db->where('trim(stokdept.dis)',$array['dis']);
