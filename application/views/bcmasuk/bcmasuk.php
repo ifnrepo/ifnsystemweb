@@ -102,8 +102,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
               <tr class="text-left">
                 <!-- <th>Tgl</th> -->
                 <th class="text-center">Dok</th>
-                <th class="text-left">No Pendaftaran / Tgl</th>
-                <th class="text-left">No Dokumen / Tgl</th>
+                <th class="text-left line-11">No Pendaftaran<br>Tgl</th>
+                <th class="text-left line-11">No Dokumen<br>Tgl</th>
                 <th class="text-left">Pengirim</th>
                 <th class="text-left">Info</th>
                 <th class="text-left">Nomor/Tgl SPPB</th>
@@ -143,20 +143,30 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $kurs_yen = $kurs_yen==0 ? 1 : $kurs_yen;
 
                   // $kurs_yen = $detail['kurs_yen'] ?? 0;
-
-                  $pengali = $detail['mtuang'] == 2
-                    ? ($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_usd
-                    : ($detail['mtuang'] == 3
-                      ? ($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_yen
-                      : ($detail['nilai_pab']+$detail['nilai_additional']));
+                  if(round(($detail['nilai_pab']+$detail['nilai_additional']),0)==round($detail['jmldet'],0)){
+                    $pengali = $detail['mtuang'] == 2
+                      ? ($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_usd
+                      : ($detail['mtuang'] == 3
+                        ? ($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_yen
+                        : ($detail['nilai_pab']+$detail['nilai_additional']));
+                    $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab']+$detail['nilai_additional'] : ($detail['mtuang'] == 3 ? (($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_yen) / $kurs_usd : ($detail['nilai_pab']+$detail['nilai_additional']) / $kurs_usd);
+                  }else{
+                    $pengali = $detail['mtuang'] == 2
+                      ? ($detail['jmldet']) * $kurs_usd
+                      : ($detail['mtuang'] == 3
+                        ? ($detail['jmldet']) * $kurs_yen
+                        : ($detail['jmldet']));
+                    $xpengali = $detail['mtuang'] == 2 ? $detail['jmldet'] : ($detail['mtuang'] == 3 ? (($detail['jmldet']) * $kurs_yen) / $kurs_usd : ($detail['jmldet']) / $kurs_usd);
+                  }
 
                   $usd = $detail['kurs_usd'] == 0 ? 1 : $detail['kurs_usd'];
-                  $xpengali = $detail['mtuang'] == 2 ? $detail['nilai_pab']+$detail['nilai_additional'] : ($detail['mtuang'] == 3 ? (($detail['nilai_pab']+$detail['nilai_additional']) * $kurs_yen) / $kurs_usd : ($detail['nilai_pab']+$detail['nilai_additional']) / $kurs_usd);
+
+                  $dhl = $detail['jns_bc']==23 ? ($detail['pjt']==1 ? '<span class="badge bg-red text-red-fg ml-1 font-kecil">PJT</span>' : '') : '';
               ?>
                   <tr>
-                    <td class="text-center align-middle"><?= 'BC. ' . $detail['jns_bc']; ?></td>
+                    <td class="text-center align-middle line-11"><?= 'BC. ' . $detail['jns_bc']; ?></td>
                     <td class="text-left font-bold font-roboto" style="line-height: 14px;"><a href="<?= base_url() . 'bcmasuk/viewdetail/' . $detail['idx']; ?>" data-bs-toggle='offcanvas' data-bs-target='#canvasdet' data-title='Nomor AJU <?= generatekodebc($detail['jns_bc'], $detail['tgl_aju'], $detail['nomor_aju'], $detail['prefix_aju']); ?>' title='Detail dokumen'><?= $detail['nomor_bc']; ?><br><?= $detail['tgl_bc']; ?></a></td>
-                    <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl']; ?></td>
+                    <td class="text-left" style="line-height: 14px;"><?= $detail['nomor_dok']; ?><br><?= $detail['tgl']; ?><?= $dhl ?></td>
                     <td class="text-left line-12"><?= ucwords(strtolower($suppl)); ?></td>
                     <td class="text-left" style="line-height: 14px;"><?= $detail['jml_kemasan'] . ' ' . $detail['kemasan']; ?><br><span class="badge badge-outline text-pink"><?= rupiah($detail['netto'], 2) . ' Kgs'; ?></span><span class="badge badge-outline text-cyan ml-1 <?php if($detail['jns_bc']!='23'){ echo 'hilang'; } ?>"><?= $detail['mt_uang'] ?></span></td>
                     <td class="text-left line-12"><?= $detail['nomor_sppb']; ?><br><?= $detail['tgl_sppb']; ?></td>

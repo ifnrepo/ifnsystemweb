@@ -174,13 +174,9 @@ class Bcmasuk extends CI_Controller
 
             $kurs_data = getkurssekarang($data['tgl_aju'])->row();
 
-            $kurs_usd = (empty($data['kurs_usd']) || $data['kurs_usd'] == 0)
-                ? (($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 0)
-                : $data['kurs_usd'];
+            $kurs_usd = ($kurs_data && isset($kurs_data->usd)) ? $kurs_data->usd : 1;
 
-            $kurs_yen = (empty($data['kurs_yen']) || $data['kurs_yen'] == 0)
-                ? (($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 0)
-                : $data['kurs_yen'];
+            $kurs_yen = ($kurs_data && isset($kurs_data->jpy)) ? $kurs_data->jpy : 1;
 
             if ($data['mtuang'] == 1) {
                 $harga_idr = round($data['harga']+$data['additional'],2);
@@ -222,7 +218,7 @@ class Bcmasuk extends CI_Controller
                 }else{
                     if($data['jns_bc']==23 && $data['mtuang'] == 3){
                         $subtotal_idr = $harga_idr * $pengali;
-                        $subtotal_usd = $subtotal_idr/$kurs_yen; //round($harga_usd * $pengali,2);
+                        $subtotal_usd = $subtotal_idr/$kurs_usd; //round($harga_usd * $pengali,2);
                     }else{
                         $subtotal_usd = round($harga_usd * $pengali,2);
                         // $subtotal_idr = $harga_idr * $pengali;
