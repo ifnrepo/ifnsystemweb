@@ -478,9 +478,22 @@ class Opname extends CI_Controller
             }
             $hasil = array('jumlah' => $jmlrek,'hasil' => $html);
             echo json_encode($hasil);
-        }else if($kode=='carispekbarang'){
-            $query['data'] = $this->opnamemodel->carispekbarang($dept,$id);
-            $this->load->view('opname/pilihspek',$query);
+        }else if($kode=='carispek'){
+            $query = $this->opnamemodel->carispekbarangreg($dept,$id);
+            $jmlrek = $query->num_rows();
+            $html = '';
+            $no = 1;
+            foreach ($query->result_array() as $que) {
+                $html .= '<tr>';
+                $html .= '<td class="font-kecil">' . $que['kode'] . '</td>';
+                $html .= '<td class="font-kecil">' . $que['nama_barang'] . '</td>';
+                $html .= '<td>';
+                $html .= '<a href="#" id="pilihbarang" rel1="'.$que['id'].'" rel2="'.$que['nama_barang'].'" rel3="'.$que['kode'].'" rel4="" rel5="" rel6="0" rel7="'.$que['dln'].'" style="padding: 2px 3px !important;" class="btn btn-sm btn-success mr-1" data-message="Hapus IB" data-title="Pilih Data">Pilih</a>';
+                $html .= '</td>';
+                $html .= '</tr>';
+            }
+            $hasil = array('jumlah' => $jmlrek,'hasil' => $html);
+            echo json_encode($hasil);
         }else if($kode=='carinomorbale'){
             $query['data'] = $this->opnamemodel->carinomorbale($dept,$id);
             $query['dept'] = $dept;
@@ -541,6 +554,15 @@ class Opname extends CI_Controller
         $keyw = $_POST['keyw'];
         $this->session->set_userdata('sel-cari','spekbar');
         $query = $this->opnamemodel->carispekbarang($dept,$keyw);
+        $jmlrek = $query->num_rows();
+        $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
+        echo json_encode($hasil);
+    }
+    public function carispekbarangreg(){
+        $dept = $_POST['dept'];
+        $keyw = $_POST['keyw'];
+        $this->session->set_userdata('sel-cari','spekbar');
+        $query = $this->opnamemodel->carispekbarangreg($dept,$keyw);
         $jmlrek = $query->num_rows();
         $hasil = array('jumlah' => $jmlrek,'hasil' => $query->result());
         echo json_encode($hasil);

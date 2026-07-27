@@ -13,7 +13,7 @@
                         <input class="form-check-input" type="radio" value="caripo" name="radios-filter" <?php if($this->session->userdata('sel-cari')=='insnopo'){ echo "checked"; } ?>>
                         <span class="form-check-label font-kecil font-bold">PO</span>
                     </label>
-                    <label class="form-check form-check-inline hilang">
+                    <label class="form-check form-check-inline">
                         <input class="form-check-input" type="radio" value="carispek" name="radios-filter" <?php if($this->session->userdata('sel-cari')=='spekbar'){ echo "checked"; } ?>>
                         <span class="form-check-label font-kecil font-bold">Spek Barang</span>
                     </label>
@@ -211,7 +211,7 @@
                             $("#keywordinputstok").val('');
                             $("#sku").focus();
                         }else{
-                            alert('Data ada 2 atau lebih');
+                            // alert('Data ada 2 atau lebih');
                             // $("#caribarangdouble").attr('rel',data.hasil[0].id_barang);
                             // $("#caribarangdouble").attr('rel2',selectradio);
                             // $("#caribarangdouble").attr('href',base_url+'opname/cari/cariinsnopo/'+$("#deptid").val()+'/'+isikeyword.trim());
@@ -229,13 +229,13 @@
                 $.ajax({
                     dataType: "json",
                     type: "POST",
-                    url: base_url + "opname/carispekbarang",
+                    url: base_url + "opname/carispekbarangreg",
                     data: {
                         keyw: isikeyword,
                         dept: $("#currdeptreg").val()
                     },
                     success: function (data) {
-                        $("#cariinputstok").html('Cari !');
+                        $("#cariinputreg").html('Cari !');
                         $("#carinputstok").removeClass('disabled');
                         var jumlah = data.jumlah;
                         if(jumlah==0){
@@ -244,36 +244,23 @@
                         }else if(jumlah==1){
                             $("#form-hasilcari").removeClass('hilang');
                             $("#form-cari").addClass('hilang');
-                            $("#idbarang").val(data.hasil[0]['id_barang']);
-                            $("#po").val(data.hasil[0]['po']);
-                            $("#item").val(data.hasil[0]['item']);
-                            $("#dis").val(data.hasil[0]['dis']);
-                            if(data.hasil[0]['po'].trim()==''){
-                                $("#sku").val(data.hasil[0]['kode']);
-                                $("#spek").val(data.hasil[0]['nama_barang']);
-                            }else{
-                                $("#sku").val(data.hasil[0]['skupo']);
-                                $("#spek").val(data.hasil[0]['spek']);
-                                $("#color").val(data.hasil[0]['color']);
-                            }
-                            if($("#deptid").val()=='GF' || $("#deptid").val()=='GW'){
-                                $("#kgs").val(data.hasil[0]['kgs_akhir']);
-                                $("#pcs").val(data.hasil[0]['pcs_akhir']);
-                                $("#nobale").val(data.hasil[0]['nobale']);
-                                $("#satuan").val('PCS');
-                            }
-                            $("#insno").val(data.hasil[0]['insno']);
-                            $("#nobontr").val(data.hasil[0]['nobontr']);
+                            $("#idbarang").val(data.hasil[0]['id']);
+                            $("#po").val('');
+                            $("#item").val('');
+                            $("#dis").val('0');
                             $("#dln").val(data.hasil[0]['dln']);
+                            $("#sku").val(data.hasil[0]['kode']);
+                            $("#spek").val(data.hasil[0]['nama_barang']);
                             $("#keywordinputstok").val('');
                             $("#sku").focus();
                         }else{
                             // alert('Data ada 2 atau lebih');
                             // $("#caribarangdouble").attr('rel',data.hasil[0].id_barang);
                             // $("#caribarangdouble").attr('rel2',selectradio);
-                            var newStr = isikeyword.replace(" ", "-"); 
-                            $("#caribarangdouble").attr('href',base_url+'opname/cari/carispekbarang/'+$("#deptid").val()+'/'+newStr);
-                            $("#caribarangdouble").click();
+                            // var newStr = isikeyword.replace(" ", "-"); 
+                            // $("#caribarangdouble").attr('href',base_url+'opname/cari/carispekbarang/'+$("#deptid").val()+'/'+newStr);
+                            // $("#caribarangdouble").click();
+                            caridouble('carispek',isikeyword);
                         }
                     },
                     error: function (xhr, ajaxOptions, thrownError) {

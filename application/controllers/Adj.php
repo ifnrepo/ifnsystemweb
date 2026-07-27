@@ -64,11 +64,12 @@ class Adj extends CI_Controller
         foreach ($data as $dt) {
             $kode = formatsku($dt['po'],$dt['item'],$dt['dis'],$dt['id_barang']);
             $spek = $dt['po'] == '' ? $dt['nama_barang'] : spekpo($dt['po'],$dt['item'],$dt['dis']);
+            $exnet = $dt['exnet']==0 ? '' : 'Y';
             $hasil .= "<tr>";
             $hasil .= "<td class='line-12 font-kecil' style='white-space: nowrap;'>" . $spek . "<br><span class='text-primary font-kecil'>" . $dt['insno'] . ' ' . $dt['nobontr'] . "</span></td>";
             $hasil .= "<td class='font-kecil'>" . $kode . "</td>";
             $hasil .= "<td class='font-kecil'>" . $dt['kodesatuan'] . "</td>";
-            $hasil .= "<td class='font-kecil'>" . $dt['nobale'] . "</td>";
+            $hasil .= "<td class='font-kecil line-11'>" . $dt['nobale'] . "<br><span class='text-green'>".$exnet."</span></td>";
             $hasil .= "<td class='text-right'>" . rupiah($dt['pcs'], 0) . "</td>";
             $hasil .= "<td class='text-right'>" . rupiah($dt['kgs'], 2) . "</td>";
             $hasil .= "<td class='line-12 font-kecil'>" . $dt['keterangan'] . "</td>";

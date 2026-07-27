@@ -124,7 +124,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
               if($katedept==3){
                   $insubkn = '/1';
               }
-              $kete = $que['ok_valid']==0 ? 'Menunggu konfirmasi Dept '.$this->session->userdata('curdeptin') : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
+              $kete = $que['ok_valid']==0 ? (($que['nomor_aju']!='' && $que['nomor_bc']=='') ? 'Menunggu Respon Dok BC '.$que['jns_bc'] :'Menunggu konfirmasi Dept '.$this->session->userdata('curdeptin')) : 'DiKonfirmasi : '.datauser($que['user_valid'],'name').'<br><span style="font-size: 11px;">@'.tglmysql2($que['tgl_valid']."</span>");
               $bisakonfirmasi = 1;
               if($que['dept_id']=='SU' || $que['dept_id']=='CU'){
                 if($que['tanpa_bc']==0){
