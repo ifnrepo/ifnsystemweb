@@ -9,6 +9,7 @@ class Bcmasukmodel extends CI_Model
 
         $this->db->select('tb_header.*,supplier.*,sum(tb_detail.pcs) as pcs,sum(tb_detail.kgs) as kgs,tb_header.id as idx,ref_kemas.kemasan,tb_rekanan.nama_rekanan,tb_rekanan.alamat_rekanan,tb_rekanan.npwp as npwp_rekanan, dept.departemen');
         $this->db->select('ref_mt_uang.mt_uang');
+        $this->db->select('(SELECT round(SUM((harga+additional)*IF(id_satuan=22,kgs,pcs)),2) AS hrgx FROM tb_detail WHERE id_header = tb_header.id) AS jmldet');
         if ($jnsbc == '262') {
             $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
             $this->db->join('dept', 'dept.dept_id = tb_header.dept_id', 'left');
@@ -68,6 +69,7 @@ class Bcmasukmodel extends CI_Model
         $this->db->where('ok_tuju', 1);
         // $this->db->where('ok_valid', 1);
         $this->db->group_by('nomor_bc');
+        $this->db->order_by('tgl_bc');
         return $this->db->get('tb_header');
     }
     public function getdatabyid($id)
@@ -159,8 +161,11 @@ class Bcmasukmodel extends CI_Model
 
         $this->db->where('tb_header.data_ok', 1);
         $this->db->where('tb_header.ok_tuju', 1);
+        if($jnsbc==262){
+            $this->db->where('tb_header.kode_dok', 'T');
+        }
         $this->db->group_by('jns_bc,nomor_aju,nomor_bc,po,item,dis,id_barang,insno,nobontr');
-
+        $this->db->order_by('tgl_bc,nomor_bc');
         return $this->db->get('tb_header');
     }
 

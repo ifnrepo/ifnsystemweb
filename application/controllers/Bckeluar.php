@@ -319,7 +319,11 @@ class Bckeluar extends CI_Controller
             if (!empty($data['nama_customer'])) {
                 $cus = $data['nama_customer'];
             } else {
-                $cus = $data['departemen'];
+                if (!empty($data['nama_supplier'])) {
+                    $cus = $data['nama_supplier'];
+                } else {
+                    $cus = $data['departemen'];
+                }
             }
 
             $kurs_data = getkurssekarang($data['tgl_aju'])->row();
