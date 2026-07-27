@@ -116,7 +116,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="row font-kecil mb-0">
-                <label class="col-2 col-form-label font-kecil required">Specific</label>
+                <label class="col-3 col-form-label font-kecil required">Specific</label>
                 <div class="col input-group mb-1">
                   <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $data['id']; ?>">
                   <input type="text" id="id_barang" name="id_barang" class="hilang">
@@ -128,7 +128,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Satuan</label>
+                <label class="col-3 col-form-label">Satuan</label>
                 <div class="col">
                   <select name="id_satuan" id="id_satuan" class="form-control font-kecil form-select">
                     <option value="">Pilih Satuan</option>
@@ -139,37 +139,46 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
               <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Qty</label>
+                <label class="col-3 col-form-label">Qty</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil text-right" id="pcs" name="pcs" autocomplete="off" aria-describedby="emailHelp" placeholder="Qty">
                 </div>
               </div>
               <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Kgs</label>
+                <label class="col-3 col-form-label">Kgs</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil text-right" id="kgs" name="kgs" autocomplete="off" aria-describedby="emailHelp" placeholder="Kgs">
                 </div>
               </div>
               <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Nomor IB</label>
+                <label class="col-3 col-form-label">Nomor IB</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil" style="text-transform: uppercase;" id="nobontr" name="nobontr" autocomplete="off" aria-describedby="emailHelp" placeholder="Nomor IB">
                 </div>
               </div>
               <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Ins No</label>
+                <label class="col-3 col-form-label">Ins No</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil" style="text-transform: uppercase;" id="insno" name="insno" autocomplete="off" aria-describedby="emailHelp" placeholder="Ins No">
                 </div>
               </div>
+              <div class="row font-kecil mb-1">
+                <label class="col-3 col-form-label">Ex Netting</label>
+                <div class="col">
+                  <select name="exnet" id="exnet" class="form-control font-kecil form-select">
+                    <option value="0">Tidak</option>
+                    <option value="1">Ya</option>
+                  </select>
+                </div>
+              </div>
               <div class="row font-kecil mb-1 <?php if(!in_array($data['dept_id'],['GF','GW'])){ echo 'hilang'; } ?>">
-                <label class="col-2 col-form-label">No Bale</label>
+                <label class="col-3 col-form-label">No Bale</label>
                 <div class="col">
                   <input type="text" class="form-control font-kecil" style="text-transform: uppercase;" id="nobale" name="nobale" autocomplete="off" aria-describedby="emailHelp" placeholder="Nomor Bale">
                 </div>
               </div>
               <div class="row font-kecil mb-1">
-                <label class="col-2 col-form-label">Ket</label>
+                <label class="col-3 col-form-label">Ket</label>
                 <div class="col">
                   <textarea class="form-control font-kecil" id="keterangan" name="keterangan"></textarea>
                 </div>
@@ -193,7 +202,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <th>Specific</th>
                     <th>SKU</th>
                     <th>Satuan</th>
-                    <th>Bale</th>
+                    <th class="line-11">Bale<br><span class="text-green">EX Net</span></th>
                     <th>Qty</th>
                     <th>Kgs</th>
                     <th>Ket</th>

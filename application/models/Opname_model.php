@@ -551,6 +551,19 @@ class Opname_model extends CI_Model
         $this->db->like('barang.nama_barang',$keu,'both',FALSE);
         return $this->db->get();
     }
+    public function carispekbarangreg($dept,$keyw){
+        $keyw = str_replace("-"," ",$keyw);
+        $kata = '';
+        $pisah = explode(" ",$keyw);
+        foreach($pisah as $ps){
+            $kata .= $ps.'%';
+        }
+        $keu = substr($kata,0,strlen($kata)-1);
+        $this->db->select('barang.*');
+        $this->db->from('barang');
+        $this->db->like('barang.nama_barang',$keu,'both',FALSE);
+        return $this->db->get();
+    }
     public function carinomorbale($dept,$keyw){
         $keyw = str_replace("-"," ",$keyw);
         $kata = '';

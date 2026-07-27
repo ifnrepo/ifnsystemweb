@@ -1103,6 +1103,38 @@ function getkurs_bi($date = '')
     $getkode = $CI->helpermodel->getkurs_bi($date);
     return $getkode;
 }
+function getkurs($date = '',$mode=0){
+    $hasil = 0;
+    if ($date == '0000-00-00' || $date == '') {
+        $date = date('Y-m-d');
+    }
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->getkurssekarang($date);
+    if($getkode->num_rows() > 0){
+        $jml = $getkode->row_array(); 
+        if($mode!=0){
+            switch ($mode) {
+                case 1:
+                    // IDR
+                    $hasil = 1;
+                break;
+                case 2:
+                    // USD
+                    $hasil = $jml['usd'];
+                break;
+                case 3:
+                    // IDR
+                    $hasil = $jml['yen'];
+                break;
+            }
+        }else{
+            $hasil = 0;
+        }
+    }else{
+        $hasil = 0;
+    }
+    return $hasil;
+}
 
 function getcurrentperiode()
 {

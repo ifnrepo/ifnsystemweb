@@ -116,6 +116,7 @@ class In_model extends CI_Model{
         $arraynobontr = ['SP','GM'];
         if($cek==1){
             $this->db->select('tb_detail.*,tb_header.dept_tuju,tb_header.tgl,tb_header.dept_id,barang.id_kategori');
+            $this->db->select('tb_header.mtuang,tb_header.tgl');
             $this->db->join('tb_header','tb_detail.id_header=tb_header.id','left');
             $this->db->join('barang','tb_detail.id_barang=barang.id','left');
             $this->db->where('id_header',$id);
@@ -125,7 +126,7 @@ class In_model extends CI_Model{
                     // 'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
                     'periode' => tambahnol($this->session->userdata('blin')).$this->session->userdata('thin'),
-                    'trim(nobontr)' => trim($det['nobontr']),
+                    'trim(nobontr)' => count($ibnya)==0 ? trim($det['nobontr']) : $ibnya['nomor_dok'],
                     'trim(insno)' => trim($det['insno']),
                     'id_barang' => $det['id_barang'],
                     'trim(po)' => trim($det['po']),
@@ -142,11 +143,12 @@ class In_model extends CI_Model{
                 $this->db->where($kondisistok);
                 $adaisi = $this->db->get('stokdept');
                 if($adaisi->num_rows()==0){
+                    $kurs = getkurs($det['tgl'],$det['mtuang']);
                     $kondisi = [
                     'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
                     'periode' => tambahnol($this->session->userdata('blin')).$this->session->userdata('thin'),
-                    'nobontr' => $det['nobontr'],
+                    'nobontr' => count($ibnya)==0 ? $det['nobontr'] : $ibnya['nomor_dok'],
                     'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],
                     'po' => $det['po'],
@@ -156,7 +158,7 @@ class In_model extends CI_Model{
                     'nobale' => ($det['dept_tuju']=='GW' || $det['dept_tuju']=='GF') ? trim($det['nobale']) : '',
                     'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : '',
                     'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bcmasuk']) : '',
-                    // 'harga' => $det['harga'],
+                    'harga' => $det['harga']*$kurs,
                     'exnet' => $det['exnet'],
                     'pcs_masuk' => $det['pcs'],
                     'pcs_akhir' => $det['pcs'],
