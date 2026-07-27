@@ -1290,4 +1290,8 @@ class Opname_model extends CI_Model
     public function simpanbarangkestokdariopname($data){
         return $this->db->insert('stokdept',$data);
     }
+    public function hapusreg($id){
+        $this->db->where('id',$id);
+        return $this->db->delete('stokdept');
+    }
 }

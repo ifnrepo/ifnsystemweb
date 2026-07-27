@@ -169,7 +169,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <td class="font-kecil line-11"><?= $dt['insno'].$dt['nobontr'] ?><br><span class="text-pink"><?= $nobc ?></span></td>
                                 <td class="font-kecil"><?= $dt['nobale'] ?></td> 
                                 <td class="font-kecil text-center"><?= $exnet ?></td> 
-                                <td class="text-center text-green font-bold">OK</td> 
+                                <td class="text-center text-green font-bold">
+                                    <a href="#" data-href="<?= base_url().'opname/hapusreg/'.$dt['id'] ?>" class="btn btn-sm btn-danger" style="padding: 1px !important" data-bs-target="#modal-danger" data-bs-toggle="modal" data-message="Akan menghapus data ini">Hapus</a>
+                                </td> 
                             </tr>
                         <?php endforeach; ?>
                         <?php else: ?>

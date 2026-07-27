@@ -947,6 +947,13 @@ class Opname extends CI_Controller
         $hasil = $this->opnamemodel->simpanbarangkestokdariopname($data);
         echo $hasil;
     }
+    public function hapusreg($id){
+        $hasil = $this->opnamemodel->hapusreg($id);
+        if($hasil){
+            $url = base_url().'opname/regbarang';
+            redirect($url);
+        }
+    }
 
     public function excel()
     {
