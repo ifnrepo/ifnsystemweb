@@ -261,6 +261,7 @@ class Opname extends CI_Controller
             'detailperiode' => $this->opnamemodel->getdetailperiode(),
             'rekapsublok' => $this->opnamemodel->getrekapsublok()
         ];
+        $this->session->unset_userdata('cari-entri');
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
 
         $this->load->view('layouts/opname/header', $header);

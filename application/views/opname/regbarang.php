@@ -54,12 +54,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                                                 echo "disabled";
                                                                             } ?>" id="updateopname"><i class="fa fa-refresh"></i><span class="ml-1">UPDATE</span></a>
                     </div>
-                    <div class="col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
+                    <div class="col-12 col-sm-6 d-flex flex-row-reverse" style="text-align: right;">
                         <!-- <a href="<?= base_url() . 'opname/regbarangtoexcel'; ?>" class="btn btn-success btn-sm font-bold mr-1 <?php if ($this->session->userdata('currdeptreg') == '') {
                                                                                                                                 echo "disabled";
                                                                                                                             } ?>" id="toexcel">
                                                                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-type-xls"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M5 12v-7a2 2 0 0 1 2 -2h7l5 5v4" /><path d="M4 15l4 6" /><path d="M4 21l4 -6" /><path d="M17 20.25c0 .414 .336 .75 .75 .75h1.25a1 1 0 0 0 1 -1v-1a1 1 0 0 0 -1 -1h-1a1 1 0 0 1 -1 -1v-1a1 1 0 0 1 1 -1h1.25a.75 .75 0 0 1 .75 .75" /><path d="M11 15v6h3" /></svg><span class="ml-1">Excel</span></a> -->
-                        <a href="<?= base_url() . 'opname/inputregbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Input Data" class="btn btn-primary btn-sm font-bold mr-1 <?php if ($this->session->userdata('currdeptreg') == '') {
+                        <a href="<?= base_url() . 'opname/inputregbarang'; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Input Data" class="btn btn-primary btn-sm font-bold <?php if ($this->session->userdata('currdeptreg') == '') {
                                                                                                                                 echo "disabled";
                                                                                                                             } ?>" id="addbarang">
                                                                                                                             <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-plus"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M12 5l0 14" /><path d="M5 12l14 0" /></svg><span class="ml-1">Tambah</span></a>
@@ -68,7 +68,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 <div class="card card-active mb-2">
                     <div class="card-body p-2 font-kecil">
                         <div class="row">
-                            <div class="col-3 ">
+                            <div class="col-12 col-md-3">
                                 <div class="row" id="div-exdo">
                                     <label class="col-3 col-form-label font-kecil font-bold">IFN/DLN</label>
                                     <div class="col mb-1">
@@ -105,7 +105,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <div class="col-6">
                                 
                             </div>
-                            <div class="col-3">
+                            <div class="col-12 col-md-3">
                                 <div class="">
                                     <div class="">
                                         <textarea class="form form-control p-2 m-0 font-kecil" id='textcarirekapopname' style="text-transform: uppercase;" placeholder="Cari PO, Insno, Kode Barang.."><?= $this->session->userdata('cari-rekapreg') ?></textarea>
@@ -119,76 +119,78 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </div>
                     </div>
                 </div>
-                <div class="row mb-1" id="div-page">
-                    <div class="col-md-3 col-12">
-                        <div class="row">
-                        <label class="col-3 col-form-label font-kecil">Per Page</label>
-                        <div class="col mb-1">
-                            <select name="rekapopname-perpage" id="rekapopname-perpage" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1 w-50">
-                                <option value="10" <?php if($this->session->userdata('perpage-rekapopname')==10){ echo "selected"; } ?>>10</option>
-                                <option value="25" <?php if($this->session->userdata('perpage-rekapopname')==25){ echo "selected"; } ?>>25</option>
-                                <option value="50" <?php if($this->session->userdata('perpage-rekapopname')==50){ echo "selected"; } ?>>50</option>
-                                <option value="100" <?php if($this->session->userdata('perpage-rekapopname')==100){ echo "selected"; } ?>>100</option>
-                            </select>
-                        </div>
+                <div class="col-12 overflow-auto">
+                    <div class="row mb-1" id="div-page">
+                        <div class="col-md-3 col-12">
+                            <div class="row">
+                                <label class="col-3 col-form-label font-kecil">Per Page</label>
+                                <div class="col mb-1">
+                                    <select name="rekapopname-perpage" id="rekapopname-perpage" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1 w-50">
+                                        <option value="10" <?php if($this->session->userdata('perpage-rekapreg')==10){ echo "selected"; } ?>>10</option>
+                                        <option value="25" <?php if($this->session->userdata('perpage-rekapreg')==25){ echo "selected"; } ?>>25</option>
+                                        <option value="50" <?php if($this->session->userdata('perpage-rekapreg')==50){ echo "selected"; } ?>>50</option>
+                                        <option value="100" <?php if($this->session->userdata('perpage-rekapreg')==100){ echo "selected"; } ?>>100</option>
+                                    </select>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-                <table id="tabelnyau" class="table order-column table-hover table-bordered mt-1" style="width: 100% !important; border-collapse: collapse;">
-                    <thead>
-                        <tr class="text-left">
-                            <th class="text-center">No</th>
-                            <th class="text-center">Dept</th>
-                            <th class="text-left line-11"><span class="text-blue">Sku</span><br>Spesifikasi</th>
-                            <th class="text-center">Grd</th>
-                            <th>Sat</th>
-                            <th class="line-11">Insno/Nobontr<br><span class="text-pink">Nomor BC</span></th>
-                            <th>Nobale</th>
-                            <th>Exnet</th>
-                            <th>Ket</th>
-                        </tr>
-                    </thead>
-                    <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
-                        <?php $jmlpcs=0; $jmlkgs=0; if($data->num_rows() > 0): ?>
-                        <?php  $no= (int) $this->uri->segment(3) + 1; foreach($data->result_array() as $dt): ?>
-                        <?php 
-                            $spek = trim($dt['po'])=='' ? $dt['nama_barang'] : $dt['spek'];
-                            $sku = trim($dt['po'])=='' ? $dt['kode'] : $dt['skupo'];
-                            $grade = $dt['stok']==1 ? 'Grd A' : ($dt['stok']==2 ? 'Grd B' : '');
-                            $exnet = $dt['exnet']==1 ? 'Y' : '';
-                            $jmlpcs = $dt['totalpcs'];
-                            $jmlkgs = $dt['totalkgs'];
-                        ?>
-                            <tr>
-                                <td><?= $no++ ?></td>
-                                <td class="font-kecil"><?= $dt['dept_id'] ?></td> 
-                                <td class="font-kecil line-11"><span class="text-blue"><?= $sku ?></span><br><a title="View Detail"><?= $spek ?></a></td>
-                                <td class="font-kecil"><?= $grade ?></td> 
-                                <td class="font-kecil"><?= $dt['kodesatuan'] ?></td> 
-                                <?php $nobc = trim($dt['nomor_bc'])!='' ? 'BC No. '.trim($dt['nomor_bc']) : ''; ?>
-                                <td class="font-kecil line-11"><?= $dt['insno'].$dt['nobontr'] ?><br><span class="text-pink"><?= $nobc ?></span></td>
-                                <td class="font-kecil"><?= $dt['nobale'] ?></td> 
-                                <td class="font-kecil text-center"><?= $exnet ?></td> 
-                                <td class="text-center text-green font-bold">
-                                    <a href="#" data-href="<?= base_url().'opname/hapusreg/'.$dt['id'] ?>" class="btn btn-sm btn-danger" style="padding: 1px !important" data-bs-target="#modal-danger" data-bs-toggle="modal" data-message="Akan menghapus data ini">Hapus</a>
-                                </td> 
+                    <table id="tabelnyau" class="table order-column table-hover table-bordered mt-1" style="width: 100% !important; border-collapse: collapse;">
+                        <thead>
+                            <tr class="text-left">
+                                <th class="text-center">No</th>
+                                <th class="text-center">Dept</th>
+                                <th class="text-left line-11"><span class="text-blue">Sku</span><br>Spesifikasi</th>
+                                <th class="text-center">Grd</th>
+                                <th>Sat</th>
+                                <th class="line-11">Insno/Nobontr<br><span class="text-pink">Nomor BC</span></th>
+                                <th>Nobale</th>
+                                <th>Exnet</th>
+                                <th>Ket</th>
                             </tr>
-                        <?php endforeach; ?>
-                        <?php else: ?>
-                            <tr>
-                                <td colspan="12" class="text-center">Klik Tombol Update</td>
-                            </tr>
-                        <?php endif; ?>
-                    </tbody>
-                </table>
-                <div class="d-flex justify-content-between mt-1">
-                    <div class="mt-1 font-kecil text-blue">
-                        Jumlah Record : <?= rupiah($jumlahrek,0) ?>
-                        <input type="text" class="hilang" id="jmlpcs" name="jmlpcs" value="<?= rupiah($jmlpcs,0) ?>">
-                        <input type="text" class="hilang" id="jmlkgs" name="jmlkgs" value="<?= rupiah($jmlkgs,2) ?>">
-                    </div>
-                    <div>
-                        <?= $links; ?>
+                        </thead>
+                        <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
+                            <?php $jmlpcs=0; $jmlkgs=0; if($data->num_rows() > 0): ?>
+                            <?php  $no= (int) $this->uri->segment(3) + 1; foreach($data->result_array() as $dt): ?>
+                            <?php 
+                                $spek = trim($dt['po'])=='' ? $dt['nama_barang'] : $dt['spek'];
+                                $sku = trim($dt['po'])=='' ? $dt['kode'] : $dt['skupo'];
+                                $grade = $dt['stok']==1 ? 'Grd A' : ($dt['stok']==2 ? 'Grd B' : '');
+                                $exnet = $dt['exnet']==1 ? 'Y' : '';
+                                $jmlpcs = $dt['totalpcs'];
+                                $jmlkgs = $dt['totalkgs'];
+                            ?>
+                                <tr>
+                                    <td><?= $no++ ?></td>
+                                    <td class="font-kecil"><?= $dt['dept_id'] ?></td> 
+                                    <td class="font-kecil line-11"><span class="text-blue"><?= $sku ?></span><br><a title="View Detail"><?= $spek ?></a></td>
+                                    <td class="font-kecil"><?= $grade ?></td> 
+                                    <td class="font-kecil"><?= $dt['kodesatuan'] ?></td> 
+                                    <?php $nobc = trim($dt['nomor_bc'])!='' ? 'BC No. '.trim($dt['nomor_bc']) : ''; ?>
+                                    <td class="font-kecil line-11"><?= $dt['insno'].$dt['nobontr'] ?><br><span class="text-pink"><?= $nobc ?></span></td>
+                                    <td class="font-kecil"><?= $dt['nobale'] ?></td> 
+                                    <td class="font-kecil text-center"><?= $exnet ?></td> 
+                                    <td class="text-center text-green font-bold">
+                                        <a href="#" data-href="<?= base_url().'opname/hapusreg/'.$dt['id'] ?>" class="btn btn-sm btn-danger" style="padding: 1px !important" data-bs-target="#modal-danger" data-bs-toggle="modal" data-message="Akan menghapus data ini">Hapus</a>
+                                    </td> 
+                                </tr>
+                            <?php endforeach; ?>
+                            <?php else: ?>
+                                <tr>
+                                    <td colspan="12" class="text-center">Klik Tombol Update</td>
+                                </tr>
+                            <?php endif; ?>
+                        </tbody>
+                    </table>
+                    <div class="d-flex justify-content-between mt-1">
+                        <div class="mt-1 font-kecil text-blue">
+                            Jumlah Record : <?= rupiah($jumlahrek,0) ?>
+                            <input type="text" class="hilang" id="jmlpcs" name="jmlpcs" value="<?= rupiah($jmlpcs,0) ?>">
+                            <input type="text" class="hilang" id="jmlkgs" name="jmlkgs" value="<?= rupiah($jmlkgs,2) ?>">
+                        </div>
+                        <div>
+                            <?= $links; ?>
+                        </div>
                     </div>
                 </div>
             </div>
