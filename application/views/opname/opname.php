@@ -60,7 +60,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <th class="text-black p-1 bg-yellow-lt text-center align-middle line-11" rowspan="2"><span class="text-black">Jumlah<br>Record<br>ter-Verifikasi Data<br>(8)</span></th>
                                         <th class="text-black p-1 bg-yellow-lt text-center align-middle line-11" rowspan="2"><span class="text-black">Jumlah<br>Record<br>ter-Verifikasi KAP<br>(9)</span></th>
                                         <th class="text-black p-1 bg-yellow-lt text-center align-middle line-11" rowspan="2"><span class="text-black">%<br>(8/7)</span></th>
-                                        <th class="text-black p-1 bg-yellow-lt text-center align-middle line-11" rowspan="2"><span class="text-black">STATUS</span></th>
+                                        <th class="text-black p-1 bg-yellow-lt text-center align-middle line-11" rowspan="2"><span class="text-black">RECORD %<br>(9/8)</span></th>
+                                        <th class="text-black p-1 bg-yellow-lt text-center align-middle line-11" rowspan="2"><span class="text-black">SUBLOK<br>(10)</th>
                                     </tr>
                                     <tr>
                                         <th class="text-black p-1 bg-yellow-lt text-center align-middle line-11"><span class="text-black">Jml<br>(3)</span></th>
@@ -80,7 +81,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         $jmlkgsrek = 0;
                                         $jmlkgsverif = 0;
                                         $jmlkgsrilis = 0;
-                                    ?>
+                                        $persenselesai = 0;
+                                        ?>
                                     <?php $no=0; foreach($datarekap->result_array() as $rekap): $no++; ?>
                                     <?php 
                                         $jmlsublok += $rekap['jml'];
@@ -93,13 +95,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         $jmlkgsrek += $rekap['jmlkgs'];
                                         $jmlkgsverif += $rekap['jmlverifkgs'];
                                         $jmlkgsrilis += $rekap['jmlriliskgs'];
+                                        $persenselesai = $rekap['jmlselesai']/$rekap['jmlinput'];
+                                        $warna = $persenselesai < 0.5 ? 'text-pink' : ($persenselesai < 0.75 ? 'text-orange' : 'text-primary'); 
+                                        $persenkap = $this->opnamemodel->getpersenkap($rekap['dept_id']);
                                     ?>
                                         <tr>
                                             <td><?= $no ?></td>
                                             <td class="font-kecil"><?= $rekap['departemen'] ?></td>
                                             <td class="text-right font-kecil"><?= rupiah($rekap['jml'],0) ?></td>
                                             <td class="text-right font-kecil"><?= rupiah($rekap['jmlinput'],0) ?></td>
-                                            <td class="text-right font-kecil"><?= rupiah($rekap['jmlselesai'],0) ?></td>
+                                            <td class="text-right font-kecil line-11"><?= rupiah($rekap['jmlselesai'],0) ?><br><span class="<?= $warna ?> font-10"><?= rupiah($persenselesai*100 ,1).' %' ?></span></td>
                                             <td class="text-right font-kecil"><?= rupiah($rekap['jmlverifikasi'],0) ?></td>
                                             <?php $input = $rekap['jmlinput']==0 ? 1 : $rekap['jmlinput']; ?>
                                             <?php $po = ($rekap['jmlverifikasi']/$input)==0 ? '' : (($rekap['jmlverifikasi']/$input) <= 0.35 ? 'bg-red-lt' : (($rekap['jmlverifikasi']/$input) <= 0.75 ? 'bg-yellow-lt' : 'bg-green-lt'));  ?>
@@ -111,18 +116,23 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <td class="text-right font-kecil line-11"><?= rupiah($rekap['jmlverif'],0) ?><br><span class="text-primary"><?= rupiah($rekap['jmlverifkgs'],2).$captverif ?></span></td>
                                             <td class="text-right font-kecil line-11"><?= rupiah($rekap['jmlrilis'],0) ?><br><span class="text-primary"><?= rupiah($rekap['jmlriliskgs'],2).$captrilis ?></span></td>
                                             <?php $inputx = $rekap['jmlrek']==0 ? 1 : $rekap['jmlrek']; ?>
+                                            <?php $inputy = $rekap['jmlverif']==0 ? 1 : $rekap['jmlverif']; ?>
                                             <?php $pox = ($rekap['jmlverif']/$inputx)==0 ? '' : (($rekap['jmlverif']/$inputx) <= 0.35 ? 'bg-red-lt' : (($rekap['jmlverif']/$inputx) <= 0.75 ? 'bg-yellow-lt' : 'bg-green-lt'));  ?>
+                                            <?php $poy = ($rekap['jmlrilis']/$inputx)==0 ? '' : (($rekap['jmlrilis']/$inputx) <= 0.35 ? 'bg-red-lt' : (($rekap['jmlrilis']/$inputx) <= 0.75 ? 'bg-yellow-lt' : 'bg-green-lt'));  ?>
                                             <td class="text-right font-kecil <?= $pox ?>"><span class="text-black"><?= rupiah(($rekap['jmlverif']/$inputx)*100,2) ?></span></td>
-                                            <td class="text-right font-kecil"><span class="text-black"></span></td>
+                                            <td class="text-right font-kecil line-11 bg-green-lt"><span class="text-primary"><?= rupiah(($rekap['jmlrilis']/$inputy)*100,2).' / <span class="font-bold text-black">'.rupiah($persenkap,2).'</span>' ?></span></td>
+                                            <?php $selesai = ($rekap['jmlrilisz']==$rekap['jmlselesai']) ? '<br><span class="badge bg-primary text-white font-10">SELESAI</span>' : ''; ?>
+                                            <?php $poa = ($rekap['jmlrilisz']!=$rekap['jmlselesai']) ? 'bg-red-lt' : '';  ?>
+                                            <td class="text-right font-kecil line-11 <?= $poa ?>"><span class="text-black"><?= $rekap['jmlrilisz'].' / '.$rekap['jmlselesai'] ?></span><?= $selesai ?></td>
                                         </tr>
                                     <?php endforeach; ?>
                                     <tr>
                                         <td class="bg-orange-lt align-middle font-kecil text-right font-bold" colspan="2" ><span class="text-black">TOTAL</span></td>
                                         <td class="bg-orange-lt align-middle font-kecil text-right font-bold"><span class="text-black"><?= rupiah($jmlsublok,0) ?></span></td>
                                         <td class="bg-orange-lt align-middle font-kecil text-right font-bold"><span class="text-black"><?= rupiah($jmlinput,0) ?></span></td>
-                                        <td class="bg-orange-lt align-middle font-kecil text-right font-bold"><span class="text-black"><?= rupiah($jmlselesai,0) ?></span></td>
-                                        <td class="bg-orange-lt align-middle font-kecil text-right font-bold"><span class="text-black"><?= rupiah($jmlverifikasi,0) ?></span></td>
                                         <?php $pembagi = $jmlinput==0 ? 1 : $jmlinput; ?>
+                                        <td class="bg-orange-lt align-middle font-kecil text-right font-bold line-11"><span class="text-black"><?= rupiah($jmlselesai,0) ?><br><span class="text-primary"><?= rupiah(($jmlselesai/$pembagi)*100,1).' %' ?></span></span></td>
+                                        <td class="bg-orange-lt align-middle font-kecil text-right font-bold"><span class="text-black"><?= rupiah($jmlverifikasi,0) ?></span></td>
                                         <td class="bg-orange-lt align-middle font-kecil text-right font-bold"><span class="text-black"><?= rupiah(($jmlverifikasi/$pembagi)*100,2) ?></span></td>
                                         <?php $capt1 = $jmlkgsrek > 0 ? ' Kgs' : ''; ?>
                                         <?php $capt2 = $jmlkgsverif > 0 ? ' Kgs' : ''; ?>
@@ -132,7 +142,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <td class="bg-orange-lt align-middle font-kecil text-right font-bold line-11"><span class="text-black"><?= rupiah($jmlrilis,0) ?><br><?= rupiah($jmlkgsrilis,2).$capt3 ?></span></td>
                                         <?php $pembagi2 = $jmlrek==0 ? 1 : $jmlrek; ?>
                                         <td class="bg-orange-lt align-middle font-kecil text-right font-bold line-11"><span class="text-black"><?= rupiah(($jmlverif/$pembagi2)*100,2) ?></span></td>
-                                        <td class="bg-orange-lt align-middle font-kecil text-right font-bold line-11"></td>
+                                        <td class="bg-orange-lt align-middle font-10 text-center text-black line-11" colspan="2"><span class="text-black">Update :<br><?= date('d-m-Y H:i:s') ?></span></td>
                                     </tr>
                                 </tbody>
                             </table>

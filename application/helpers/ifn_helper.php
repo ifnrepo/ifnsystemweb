@@ -1458,3 +1458,8 @@ function buatkanformatindpo($po,$item,$dis){
     }
     return $ponya.$itemnya.trim($dis);
 }
+function uraidataopname($id){
+    $CI = &get_instance();
+    $kodex = $CI->helpermodel->uraidataopname($id);
+    return $kodex;
+}

@@ -313,19 +313,21 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <td class="font-kecil <?= $urai ?>"><span class="text-black"><?= $dt['urut'] ?></span></td>
                                             <td class="font-kecil line-11"><?= $spek.$insno.$nobontr.$nobc ?></td>
                                             <td class="font-kecil"><?= $dt['satuan'] ?></td>
-                                            <td class="font-kecil text-right"><?= rupiah($dt['pcs'],0) ?></td>
+                                            <td class="font-kecil text-right"><?= rupiah($dt['pcs'],1) ?></td>
                                             <td class="font-kecil text-right"><?= rupiah($dt['kgs'],2) ?></td>
                                             <td class="font-kecil"><?= $dt['nobale'] ?></td>
                                             <td class="font-kecil text-center"><?= $grd ?></td>
                                             <td class="font-kecil line-11"><?= $dt['ket'].$bob ?></td>
                                             <?php if($header['status'] == 0): ?>
-                                            <td class="font-kecil text-center">
+                                            <td style="white-space: nowrap;" class="font-kecil text-center line-11">
                                                 <a href="#" id="editentristok" rel="<?= $dt['id'] ?>" rel2="<?= $this->uri->segment(3) ?>" rel3="<?= $this->uri->segment(4) ?>" class="btn btn-sm btn-flat btn-info" style="padding: 2px 6px !important;">Edit</a>
                                                 <a href="#" data-href="<?= base_url().'opname/hapusentristok/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/'.$dt['id'] ?>" data-bs-target="#modal-danger" data-bs-toggle="modal" data-message="Akan menghapus data ini" class="btn btn-sm btn-flat btn-danger" style="padding: 2px 6px !important;">Hapus</a>
+                                                <br>
+                                                <span class="font-10 text-primary"><?= datauser($dt['user_add']) ?></span>
                                             </td>
                                             <?php endif; ?>
                                             <?php if($header['status'] > 0): ?>
-                                                <td class="font-kecil text-center" id="kolomverif<?= $dt['id'] ?>">
+                                                <td class="font-kecil text-center line-11" id="kolomverif<?= $dt['id'] ?>">
                                                     <?php if($header['status']==1 && ($this->session->userdata('rolestokopname')==3 || $this->session->userdata('rolestokopname')==99)): ?> <!-- Status Selesai -->
                                                         <?php if($dt['user_verif']!=0): ?>
                                                             <div class="font-kecil line-11 text-blue"><a href="#" data-href="<?= base_url().'opname/batalkanverifstok/'.$this->uri->segment(3).'/'.$dt['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Batalkan Verifikasi">Verified<br><?= strtoupper(datauser($dt['user_verif'],'username')) ?> <span class="font-10"><?= tglmysql2($dt['tgl_verif']) ?></span></a></div>
@@ -349,6 +351,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                             <div class="font-kecil line-11"><a href="#" class="text-info">Verified KAP<br><?= strtoupper(datauser($dt['user_rilis'],'username')) ?> <span class="font-10"><?= tglmysql2($dt['tgl_rilis']) ?></span></div>
                                                         <?php endif; ?>
                                                     <?php endif; ?>
+                                                    <br>
+                                                    <span class="text-primary font-10"><?= datauser($dt['user_add']) ?></span>
                                                 </td>
                                             <?php endif; ?>
                                         </tr>

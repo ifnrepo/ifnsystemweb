@@ -8,9 +8,12 @@ class Out_model extends CI_Model{
             'kode_dok' => 'T',
             'month(tgl)' => $this->session->userdata('blout'),
             'year(tgl)' => $this->session->userdata('thout'),
+            'no_inv' => 0
         ];
-        if(($kode['dept_id']!='GF' && $kode['dept_tuju']!='CU') || ($kode['dept_id']=='FG')){ // && $kode['dept_tuju']!='DL'
-            $arrkondisi['left(nomor_dok,3) != '] = 'IFN';
+        if(($kode['dept_id']!='GM' && $kode['dept_tuju']!='SU')){
+            if(($kode['dept_id']!='GF' && $kode['dept_tuju']!='CU') || ($kode['dept_id']=='FG')){ // && $kode['dept_tuju']!='DL'
+                $arrkondisi['left(nomor_dok,3) != '] = 'IFN';
+            }
         }
         if($kode['filterbon']==1){
             $arrkondisi['data_ok'] = 0;
@@ -855,7 +858,7 @@ class Out_model extends CI_Model{
                                     $idinsertx = $this->db->insert_id();
 
                                     $this->db->set('id_stokdept',$stokid);
-                                    if($this->session->userdata('deptsekarang')=='GM'){
+                                    if($this->session->userdata('deptsekarang')=='GM' || $this->session->userdata('deptsekarang')=='GS'){
                                         $this->db->set('nobontr',$nobontr);
                                     }
 
@@ -877,7 +880,7 @@ class Out_model extends CI_Model{
                                     $this->db->update('tb_detailgen');
 
                                     $this->db->set('id_stokdept',$stokid);
-                                    if($this->session->userdata('deptsekarang')=='GM'){
+                                    if($this->session->userdata('deptsekarang')=='GM' || $this->session->userdata('deptsekarang')=='GS'){
                                         $this->db->set('nobontr',$nobontr);
                                     }
                                     // $this->db->set('pcs',$kurangpcs);

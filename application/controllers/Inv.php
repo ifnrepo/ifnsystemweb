@@ -116,6 +116,11 @@ class Inv extends CI_Controller
         $this->session->set_userdata('dataneh', $_POST['aneh']);
         $this->session->set_userdata('opaneh', $_POST['opaneh']);
         $this->session->set_userdata('perpage-rekapinv',$_POST['hlm']);
+        if(trim($_POST['cari'])!=''){
+            $this->session->set_userdata('cari-spek',$_POST['cari']);
+        }else{
+            $this->session->unset_userdata('cari-spek');
+        }
         if($this->session->userdata('currdept')=='GF'){
             $this->session->set_userdata('idbuyer', $_POST['buyer']);
         }

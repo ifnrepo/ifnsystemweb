@@ -191,7 +191,9 @@ $("#updateopname").click(function(){
 			milik: $("#kepemilikan").val(),
 			exdo: $("#exdo").val(),
 			cari: isi,
-			perpage: $("#rekapopname-perpage").val()
+			perpage: $("#rekapopname-perpage").val(),
+			selurai: $("#selurai").val(),
+			sublok: $("#datasublok").val()
 		},
 		success: function (data) {
 			// window.location.reload();
@@ -206,10 +208,16 @@ $("#updateopname").click(function(){
 	});
 	// window.location.reload();
 })
+$("#datasublok").change(function(){
+	$("#updateopname").click();
+})
 $("#kepemilikan").change(function(){
 	$("#updateopname").click();
 })
 $("#exdo").change(function(){
+	$("#updateopname").click();
+})
+$("#selurai").change(function(){
 	$("#updateopname").click();
 })
 $("#buttoncarirekapopname").click(function(){

@@ -132,8 +132,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <div class="m-0"><?= rupiah($dt['item'],0) ?> Item</div>
                                         <div class="line-12">
                                             <div style="font-size: 0.625rem;"><?= 'Last Edit: '.tglmysql2($dt['tgl_edit']) ?></div>
-                                            <?php if($dt['user_rilis']!=0): ?>
-                                                <div style="font-size: 0.625rem;"><?= 'Verifikasi Data: '.strtoupper(datauser($dt['user_verif'],'username')).' '.tglmysql2($dt['tgl_verif']) ?></div>
+                                            <?php if($dt['user_verif']!=0): ?>
+                                                <div style="font-size: 0.625rem;"><?= 'Verifikasi 1: '.strtoupper(datauser($dt['user_verif'],'username')).' '.tglmysql2($dt['tgl_verif']) ?></div>
                                             <?php else: ?>
                                                 <span>-</span>
                                             <?php endif; ?>

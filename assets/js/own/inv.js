@@ -14,6 +14,7 @@ $(document).ready(function () {
 	$("#jumlahkgs").text($("#totalkgs").val());
 	$("#sopcs").text($("#totalsopcs").val());
 	$("#sokgs").text($("#totalsokgs").val());
+	$("#selisokgs").text($("#xselisokgs").val());
 	table = $('#tabelnyau').DataTable({
 		// "processing": true,
 		// "responsive":true,
@@ -410,7 +411,8 @@ function loaddatainv(){
 	var ifndl = $("#ifndln").val();
 	var katbar = $("#katbar").val();
 	var katcari = $("input:radio[name=radios-inline]:checked").val();
-	$("#textcari").val("");
+	// $("#textcari").val("");
+	var isi = $("#textcari").val();
 	var nomorbcnya = $("#nomorbcnya").val();
 	var kontrakbcnya = $("#kontrakbcnya").val();
 	var textcari = $("#textcari").val();
@@ -453,6 +455,7 @@ function loaddatainv(){
 			exnet: $("#idexnet").val(),
 			nombc: $("#filtnomorbc").val(),
 			hlm: $("#perpageinv").val(),
+			cari: isi,
 		},
 		success: function (data) {
 			console.log("KONTRAK" + kontrakbcnya);
