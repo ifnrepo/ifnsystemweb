@@ -10,8 +10,8 @@ class In_model extends CI_Model{
             'month(tb_header.tgl)' => $this->session->userdata('blin'),
             'year(tb_header.tgl)' => $this->session->userdata('thin'),
             'tb_header.data_ok' => 1,
-            'tb_header.ok_tuju' => 1
-            // 'ok_valid' => 0,
+            'tb_header.ok_tuju' => 1,
+            'tb_header.no_inv' => 0,
         ];
         // $kondisi = " (kode_dok='T' OR (kode_dok = 'IB' AND (nomor_bc != '' OR tanpa_bc = 1)))";
         $kondisi = " (tb_header.kode_dok='T' OR tb_header.kode_dok = 'IB')";

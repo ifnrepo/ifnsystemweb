@@ -7,6 +7,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
             <div class="col-md-6 line-12">
                 <h2 class="page-title p-2">
                     Rekap Data Stok Opname
+                    <?= $this->session->userdata('currdeptopname') ?>
                 </h2>
                 <small class="pl-2">Periode <?= tglmysql($this->session->userdata('periodeopname')) ?></small>
             </div>
@@ -93,12 +94,46 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         </select>
                                     </div>
                                 </div>
+                                <div class="row" id="div-urai">
+                                    <label class="col-3 col-form-label font-kecil font-bold">Urai</label>
+                                    <div class="col mb-1">
+                                        <select name="selurai" id="selurai" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1" title="Pilih data yang di urai">
+                                            <option value="all">All</option>
+                                            <option value="1" <?php if ($this->session->userdata('selurai') == '1') {
+                                                                        echo "selected";
+                                                                    } ?>>Iya</option>
+                                            <option value="0" <?php if ($this->session->userdata('selurai') == '0') {
+                                                                            echo "selected";
+                                                                        } ?>>Tidak</option>
+                                        </select>
+                                    </div>
+                                    <div class="col-4">
+                                        <?php $uraidisable = trim($this->session->userdata('currdeptopname'))!='' && $this->session->userdata('selurai')=='1' ? '' : 'disabled'; ?>
+                                        <a href="#" data-href="<?= base_url().'opname/uraidata' ?>" style="height: 32px !important" class="btn btn-sm btn-info w-100 <?= $uraidisable ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Yakin akan Urai data ini" data-title="Urai data SO" ><span class="text-black">Urai Data</span></a>
+                                    </div>
+                                </div>
                                 <!-- <label class="form-check mt-1 mb-1 bg-danger-lt" id="cekaneh">
                                     <input class="form-check-input" type="checkbox" id="dataneh">
                                     <span class="form-check-label font-bold">View Data Tidak Sesuai</span>
                                 </label> -->
                             </div>
                             <div class="col-6">
+                                <div class="row">
+                                    <div class="col-6">
+                                        <div class="row" id="div-sublok">
+                                            <label class="col-3 col-form-label font-kecil font-bold">Sublok</label>
+                                            <div class="col mb-1">
+                                                <?php $sublokdisable = $this->session->userdata('currdeptopname')=='' ? 'disabled' : ''; ?>
+                                                <select name="datasublok" id="datasublok" style="height: 32px;" class="form-control form-select form-sm font-kecil py-1" <?= $sublokdisable ?>>
+                                                    <option value="all">All</option>
+                                                    <?php foreach($sublok->result_array() as $sbl): $selek = $this->session->userdata('sublokasi-rekapopname')==$sbl['kode_lokasi'] ? 'selected' : ''; ?>
+                                                        <option value="<?= $sbl['kode_lokasi'] ?>" <?= $selek ?>><?= $sbl['kode_lokasi'].' -'.$sbl['nama_lokasi'] ?></option>
+                                                    <?php endforeach; ?>
+                                                </select>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
                                 <!-- <div class="text-blue font-bold mt-2 ">Jumlah Dok : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div> -->
                                 <div class="text-blue font-bold">Jumlah Qty : <span id="jumlahpcs" style="font-weight: normal;">0</span></div>
                                 <div class="text-blue font-bold">Jumlah Kgs : <span id="jumlahkgs" style="font-weight: normal;">0</span></div>
@@ -164,23 +199,29 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             $exnet = $dt['exnet']==1 ? 'Y' : '';
                             $jmlpcs = $dt['totalpcs'];
                             $jmlkgs = $dt['totalkgs'];
+                            $urai = $dt['urai']==1 ? 'bg-danger-lt' : '';
+                            $err_urai = $dt['err_urai']==1 ? 'text-pink' : 'text-black';
+                            $view_urai = $dt['urai']==1 ? '<a class="'.$err_urai.'" href="'.base_url('opname/viewuraidata/'.$dt['id']).'" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View Urai Data" title="View Detail">'.$spek.'</a>'  : '<a title="View Detail">'.$spek.'</a>' ;
+                            $datainsno = trim($dt['insno'])!='' ? $dt['insno'] : $dt['nobontr'];
+                            $machno = $dt['machno']==0 ? '' : '<br><span class="font-10 text-pink">Mach No.'.$dt['machno'].'</span>';
                         ?>
                             <tr>
-                                <td><?= $no++ ?></td>
-                                <td class="font-kecil"><?= $dt['dept_id'] ?></td> 
-                                <td class="font-kecil line-11"><span class="text-blue"><?= $sku ?></span><br><a title="View Detail"><?= $spek ?></a></td>
+                                <!-- style="background: linear-gradient(135deg, #ff0000 50%, #0000ff 50%);" -->
+                                <td class="text-center <?= $urai ?>"><span class="text-black"><?= $no++ ?></span></td>
+                                <td class="font-kecil line-11"><?= $dt['dept_id'].$machno ?></td> 
+                                <td class="font-kecil line-11"><span class="text-blue"><?= $sku ?></span><br><?= $view_urai ?></td>
                                 <td class="font-kecil"><?= $grade ?></td> 
                                 <td class="font-kecil"><?= $dt['kodesatuan'] ?></td> 
                                 <?php $nobc = trim($dt['nomor_bc'])!='' ? 'BC No. '.trim($dt['nomor_bc']) : ''; ?>
-                                <td class="font-kecil line-11"><?= $dt['insno'].$dt['nobontr'] ?><br><span class="text-pink"><?= $nobc ?></span></td>
+                                <td class="font-kecil line-11"><?= $datainsno ?><br><span class="text-pink"><?= $nobc ?></span></td>
                                 <td class="font-kecil"><?= $dt['kode_lokasi'].'-'.$dt['nama_lokasi'] ?></td> 
                                 <td class="font-kecil"><?= $dt['nobale'] ?></td> 
                                 <td class="font-kecil text-center"><?= $exnet ?></td> 
                                 <td class="font-kecil text-right"><?= rupiah($dt['pcs'],0) ?></td> 
                                 <td class="font-kecil text-right"><?= rupiah($dt['kgs'],2) ?></td> 
-                                <td class="font-kecil text-right">
-                                    <a href="<?= base_url().'opname/editrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-success" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a>
-                                    <a href="#" data-href="<?= base_url().'opname/hapusrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-danger" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data '+spec+' ('+sku.trim()+')" style="padding:0 3px !important">Hapus</a>
+                                <td class="font-kecil text-center" style="white-space: nowrap;">
+                                    <a href="<?= base_url().'opname/editrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-success <?php if($dt['user_selesai']!=0){echo "disabled"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a>
+                                    <a href="#" data-href="<?= base_url().'opname/hapusrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-danger <?php if($dt['user_selesai']!=0){echo "disabled"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data '+spec+' ('+sku.trim()+')" style="padding:0 3px !important">Hapus</a>
                                 </td> 
                             </tr>
                         <?php endforeach; ?>

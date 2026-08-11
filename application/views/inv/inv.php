@@ -160,6 +160,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     <input type="text" id="paramload" class="hilang" value="">
                     <div class="text-black font-bold">Jumlah Rec : <span id="jumlahrekod" style="font-weight: normal;"><?= rupiah($jumlahrek,0) ?></span></div>
                 </div>
+                <?php $cektglopname = $getopname['tgl']=='' ? '' : tglmysql($getopname['tgl']); ?>
                 <div class="col-6 ">
                   <label class="bg-red-lt my-0 py-1 px-2 font-bold w-100"><span class="text-black">Rekap Data</span></label>
                   <table class="table table-bordered m-0">
@@ -193,6 +194,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <td class="text-right" id="jumlahkgs">Loading..</td>
                         <td class="text-right text-cyan" id="sokgs">Loading..</td>
                       </tr>
+                      <?php if($cektglopname!=''): ?>
+                        <tr>
+                          <td class="font-bold text-right" colspan="6">Selisih SO</td>
+                          <td class="text-right text-danger font-bold" id="selisokgs">Loading..</td>
+                        </tr>
+                      <?php endif;  ?>
                     </tbody>
                   </table>
                 </div>
@@ -221,7 +228,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
           </div>
         </div>
         <div>
-          <?php $cektglopname = $getopname['tgl']=='' ? '' : tglmysql($getopname['tgl']); ?>
           <input type="text" name="tglopname" id="tglopname" value="<?= $cektglopname ?>" class="hilang">
           <div class="my-1 row">
             <div class="col-sm-1">
@@ -328,6 +334,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <input type="text" class="hilang" id="totalsokgs" value="<?= isset($dt['totalsokgs']) ? rupiah($dt['totalsokgs'],2) : 0; ?>" >
         <input type="text" class="hilang" id="totalpcs" value="<?= isset($dt['totalpcs']) ? rupiah($dt['totalpcs'],0) : 0; ?>" >
         <input type="text" class="hilang" id="totalkgs" value="<?= isset($dt['totalkgs']) ? rupiah($dt['totalkgs'],2) : 0; ?>" >
+        <input type="text" class="hilang" id="xselisokgs" value="<?= isset($dt['totalsokgs']) ? rupiah($dt['totalsokgs']-$dt['totalkgs'],2) : 0; ?>" >
         <input type="text" id="jumlahrek" class="hilang" value="0">
         <input type="text" id="jumlahpc" class="hilang" value="0">
         <input type="text" id="jumlahkg" class="hilang" value="0">

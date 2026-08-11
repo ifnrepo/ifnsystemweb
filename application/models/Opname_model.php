@@ -10,6 +10,7 @@ class Opname_model extends CI_Model
         $this->db->select("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') AS skupo");
         $this->db->select("tb_lokasi.nama_lokasi,tb_lokasi.kode_lokasi");
         $this->db->select("IF(TRIM(stokopname_detail.po)='',barang.imdo,IF(tb_po.exdo='EXPORT',1,0)) AS expdom");
+        $this->db->select("stokopname.user_selesai");
         $this->db->from('stokopname_detail');
         $this->db->join('tb_po', 'tb_po.ind_po = CONCAT(stokopname_detail.po,stokopname_detail.item,stokopname_detail.dis)', 'left');
         $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
@@ -25,6 +26,12 @@ class Opname_model extends CI_Model
         }
         if($this->session->userdata('exdo')!='' && $this->session->userdata('exdo')!='all'){
             $this->db->where('IF(TRIM(stokopname_detail.po)="",barang.imdo,IF(tb_po.exdo="EXPORT",1,0)) = '.$this->session->userdata('exdo'));
+        }
+        if($this->session->userdata('selurai')!='' && $this->session->userdata('selurai')!='all'){
+            $this->db->where('stokopname_detail.urai = '.$this->session->userdata('selurai'));
+        }
+        if($this->session->userdata('sublokasi-rekapopname')!='' && $this->session->userdata('sublokasi-rekapopname')!='all'){
+            $this->db->where('stokopname.kode_lokasi',$this->session->userdata('sublokasi-rekapopname'));
         }
         if($this->session->userdata('cari-rekapopname')!=''){
             $this->db->group_start();
@@ -52,6 +59,7 @@ class Opname_model extends CI_Model
         $this->db->join('tb_po', 'tb_po.ind_po = CONCAT(stokopname_detail.po,stokopname_detail.item,stokopname_detail.dis)', 'left');
         $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
         $this->db->join('satuan','satuan.id = barang.id','left');
+        $this->db->join('stokopname','stokopname.id = stokopname_detail.id_stokopname','left');
         $this->db->where('stokopname_detail.tgl',$periode);
         if($this->session->userdata('currdeptopname')!==''){
             $this->db->where('stokopname_detail.dept_id',$this->session->userdata('currdeptopname'));
@@ -61,6 +69,12 @@ class Opname_model extends CI_Model
         }
         if($this->session->userdata('exdo')!='' && $this->session->userdata('exdo')!='all'){
             $this->db->where('IF(TRIM(stokopname_detail.po)="",barang.imdo,IF(tb_po.exdo="EXPORT",1,0)) = '.$this->session->userdata('exdo'));
+        }
+        if($this->session->userdata('selurai')!='' && $this->session->userdata('selurai')!='all'){
+            $this->db->where('stokopname_detail.urai = '.$this->session->userdata('selurai'));
+        }
+        if($this->session->userdata('sublokasi-rekapopname')!='' && $this->session->userdata('sublokasi-rekapopname')!='all'){
+            $this->db->where('stokopname.kode_lokasi',$this->session->userdata('sublokasi-rekapopname'));
         }
         if($this->session->userdata('cari-rekapopname')!=''){
             $this->db->group_start();
@@ -373,11 +387,11 @@ class Opname_model extends CI_Model
             }
             $this->db->group_start();
             if(strtoupper(trim($cekdata['nama_lokasi']))=='ON MACHINE'){
-                // $this->db->like('stokopname_onmachine.po',$isi,'both',FALSE);
-                // $this->db->or_like('stokopname_onmachine.insno',$isi,'both',FALSE);
-                // $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
-                // $this->db->or_like('barang.kode',$isi,'both',FALSE);
-                $this->db->where('stokopname_onmachine.machno',$isi);
+                $this->db->like('stokopname_onmachine.po',$kata,'both',FALSE);
+                $this->db->or_like('stokopname_onmachine.insno',$kata,'both',FALSE);
+                // $this->db->or_like('barang.nama_barang',$kata,'both',FALSE);
+                // $this->db->or_like('barang.kode',$kata,'both',FALSE);
+                $this->db->or_like('stokopname_onmachine.machno',$kata);
             }else{
                 $this->db->like('stokopname_detail.po',$isi,'both',FALSE);
                 $this->db->or_like('stokopname_detail.insno',$isi,'both',FALSE);
@@ -390,40 +404,75 @@ class Opname_model extends CI_Model
         $this->db->limit($limit, $start);
         return $this->db->get();
     }
-    public function countdatadetailstok($id){
-        $this->db->select('stokopname_detail.*,barang.nama_barang');
-        $this->db->from('stokopname_detail');
-        $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
-        $this->db->where('id_stokopname',$id);
-        // $cekdata = $this->db->get()->row_array();
+    public function countdatadetailstok($id,$mode=false){
+        if(!$mode){
+            $this->db->select('stokopname_detail.*,barang.nama_barang');
+            $this->db->from('stokopname_detail');
+            $this->db->join('barang','barang.id = stokopname_detail.id_barang','left');
+            $this->db->where('id_stokopname',$id);
 
-        if($this->session->userdata('cari-entri')!=''){
-            $isi = $this->session->userdata('cari-entri');
-            if(str_contains(trim($isi)," ")){
-                $pisah = explode(" ",trim($isi));
-                $hasil = '';
-                foreach($pisah as $ps){
-                    $hasil .= $ps.'%';
+            if($this->session->userdata('cari-entri')!=''){
+                $isi = $this->session->userdata('cari-entri');
+                if(str_contains(trim($isi)," ")){
+                    $pisah = explode(" ",trim($isi));
+                    $hasil = '';
+                    foreach($pisah as $ps){
+                        $hasil .= $ps.'%';
+                    }
+                    $kata = substr($hasil,0,strlen($hasil)-1);
+                }else{
+                    $kata = trim($isi);
                 }
-                $kata = substr($hasil,0,strlen($hasil)-1);
-            }else{
-                $kata = trim($isi);
+                $this->db->group_start();
+                // if(strtoupper(trim($cekdata['nama_lokasi']))=='ON MACHINE'){
+                    // $this->db->like('stokopname_onmachine.po',$isi,'both',FALSE);
+                    // $this->db->or_like('stokopname_onmachine.insno',$isi,'both',FALSE);
+                    // $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
+                    // $this->db->or_like('barang.kode',$isi,'both',FALSE);
+                    // $this->db->where('stokopname_onmachine.machno',$isi);
+                // }else{
+                    $this->db->like('stokopname_detail.po',$isi,'both',FALSE);
+                    $this->db->or_like('stokopname_detail.insno',$isi,'both',FALSE);
+                    $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
+                    $this->db->or_like('barang.kode',$isi,'both',FALSE);
+                    $this->db->or_like('stokopname_detail.ket',$isi,'both',FALSE);
+                // }
+                $this->db->group_end();
             }
-            $this->db->group_start();
-            // if(strtoupper(trim($cekdata['nama_lokasi']))=='ON MACHINE'){
-                // $this->db->like('stokopname_onmachine.po',$isi,'both',FALSE);
-                // $this->db->or_like('stokopname_onmachine.insno',$isi,'both',FALSE);
-                // $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
-                // $this->db->or_like('barang.kode',$isi,'both',FALSE);
-                // $this->db->where('stokopname_onmachine.machno',$isi);
-            // }else{
-                $this->db->like('stokopname_detail.po',$isi,'both',FALSE);
-                $this->db->or_like('stokopname_detail.insno',$isi,'both',FALSE);
-                $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
-                $this->db->or_like('barang.kode',$isi,'both',FALSE);
-                $this->db->or_like('stokopname_detail.ket',$isi,'both',FALSE);
-            // }
-            $this->db->group_end();
+        }else{
+            $this->db->select('stokopname_onmachine.*,barang.nama_barang');
+            $this->db->from('stokopname_onmachine');
+            $this->db->join('barang','barang.id = stokopname_onmachine.id_barang','left');
+            $this->db->where('id_stokopname',$id);
+
+            if($this->session->userdata('cari-entri')!=''){
+                $isi = $this->session->userdata('cari-entri');
+                if(str_contains(trim($isi)," ")){
+                    $pisah = explode(" ",trim($isi));
+                    $hasil = '';
+                    foreach($pisah as $ps){
+                        $hasil .= $ps.'%';
+                    }
+                    $kata = substr($hasil,0,strlen($hasil)-1);
+                }else{
+                    $kata = trim($isi);
+                }
+                $this->db->group_start();
+                // if(strtoupper(trim($cekdata['nama_lokasi']))=='ON MACHINE'){
+                    // $this->db->like('stokopname_onmachine.po',$isi,'both',FALSE);
+                    // $this->db->or_like('stokopname_onmachine.insno',$isi,'both',FALSE);
+                    // $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
+                    // $this->db->or_like('barang.kode',$isi,'both',FALSE);
+                    // $this->db->where('stokopname_onmachine.machno',$isi);
+                // }else{
+                    $this->db->like('stokopname_onmachine.po',$isi,'both',FALSE);
+                    $this->db->or_like('stokopname_onmachine.insno',$isi,'both',FALSE);
+                    $this->db->or_like('barang.nama_barang',$isi,'both',FALSE);
+                    $this->db->or_like('barang.kode',$isi,'both',FALSE);
+                    // $this->db->or_like('stokopname_onmachine.ket',$isi,'both',FALSE);
+                // }
+                $this->db->group_end();
+            }
         }
         return $this->db->get()->num_rows();
     }
@@ -481,7 +530,8 @@ class Opname_model extends CI_Model
         return $this->db->trans_complete();
     }
     public function cariinsnopo($dept,$keyw){
-        $this->db->select('stokdept.*,tb_po.spek,barang.nama_barang,barang.kode,tb_po.color');
+        $this->db->select('stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,stokdept.insno,stokdept.nobontr,tb_po.spek,barang.nama_barang,barang.kode,tb_po.color');
+        $this->db->select('stokdept.exnet,stokdept.stok,stokdept.dln,stokdept.nobale,stokdept.nomor_bc,stokdept.kgs_akhir,stokdept.pcs_akhir');
         $this->db->select("IF(TRIM(stokdept.po)!='',CONCAT(TRIM(stokdept.po),'#',TRIM(stokdept.item),IF(stokdept.dis > 0,CONCAT(' dis ',stokdept.dis),'')),'') AS skupo");
         $this->db->from('stokdept');
         $this->db->join('tb_po','tb_po.ind_po = concat(stokdept.po,stokdept.item,stokdept.dis)','left');
@@ -492,7 +542,24 @@ class Opname_model extends CI_Model
         $this->db->like('stokdept.po',$keyw);
         $this->db->or_like('stokdept.insno',$keyw);
         $this->db->group_end();
-        return $this->db->get();
+        $q1 = $this->db->get_compiled_select();
+
+        if(in_array($dept,daftardeptsubkon())){
+            $this->db->select('tb_po.po,tb_po.item,tb_po.dis,0 as id_barang,"" as insno,"" as nobontr,tb_po.spek,"" as nama_barang,"" as kode,tb_po.color');
+            $this->db->select('0 as exnet,0 as stok,tb_po.dln,"" as nobale,"" as nomor_bc,0 as kgs_akhir,0 as pcs_akhir');
+            $this->db->select("IF(TRIM(tb_po.po)!='',CONCAT(TRIM(tb_po.po),'#',TRIM(tb_po.item),IF(tb_po.dis > 0,CONCAT(' dis ',tb_po.dis),'')),'') AS skupo");
+            $this->db->from('tb_po');
+            $this->db->like('tb_po.po','DL');
+            $this->db->like('tb_po.po',$keyw);
+            // $this->db->order_by('tb_po.po,tb_po.item');
+            $q2 =  $this->db->get_compiled_select();
+        }
+
+        if(in_array($dept,daftardeptsubkon())){
+            return $this->db->query("(".$q1.") UNION (".$q2.")");
+        }else{
+            return $this->db->query($q1);
+        }
     }
     public function cariinsnoporeg($dept,$keyw){
         $this->db->select('tb_po.*');
@@ -715,7 +782,9 @@ class Opname_model extends CI_Model
         return $this->db->get();
     }
     public function caripo($dept,$id){
-        $this->db->select('stokdept.*,barang.nama_barang,barang.kode');
+        $this->db->select('stokdept.po,stokdept.item,stokdept.dis,stokdept.id_barang,stokdept.insno,stokdept.nobontr');
+        $this->db->select('stokdept.exnet,stokdept.stok,stokdept.dln,stokdept.nobale,stokdept.nomor_bc,stokdept.kgs_akhir,stokdept.pcs_akhir');
+        $this->db->select('barang.nama_barang,barang.kode');
         $this->db->from('stokdept');
         $this->db->join('barang','barang.id = stokdept.id_barang','left');
         $this->db->where('stokdept.periode',cekperiodedaritgl($this->session->userdata('periodeopname')));
@@ -725,7 +794,23 @@ class Opname_model extends CI_Model
         $this->db->or_like('stokdept.insno',$id);
         $this->db->group_end();
         $this->db->order_by('stokdept.po,stokdept.item,stokdept.insno,stokdept.nobale');
-        return $this->db->get();
+        $q1 =  $this->db->get_compiled_select();
+
+        if(in_array($dept,daftardeptsubkon())){
+            $this->db->select('tb_po.po,tb_po.item,tb_po.dis,0 as id_barang,"" as insno,"" as nobontr');
+            $this->db->select('0 as exnet,0 as stok,tb_po.dln,"" as nobale,"" as nomor_bc,0 as kgs_akhir,0 as pcs_akhir');
+            $this->db->select('"" as nama_barang,"" as kode');
+            $this->db->from('tb_po');
+            $this->db->like('tb_po.po','DL');
+            $this->db->like('tb_po.po',$id);
+            $this->db->order_by('tb_po.po,tb_po.item');
+            $q2 =  $this->db->get_compiled_select();
+        }
+        if(in_array($dept,daftardeptsubkon())){
+            return $this->db->query("(".$q1.") union (".$q2.")");
+        }else{
+            return $this->db->query($q1);
+        }
     }
     public function cariporeg($dept,$id){
         $this->db->select('tb_po.*');
@@ -841,6 +926,24 @@ class Opname_model extends CI_Model
 
         $this->db->select('count(*) as jml');
         $this->db->from('stokopname_detail');
+        $this->db->where('id_stokopname',$data['id_stokopname']);
+        $this->db->where('user_verif !=',0);
+        $jumlah = $this->db->get()->row_array();
+
+        $this->db->where('id',$data['id_stokopname']);
+        $this->db->update('stokopname',['item_verif' => $jumlah['jml']]);
+
+        return $data;
+    }
+    public function batalkanverifmesin($id){
+
+        $this->db->where('id',$id);
+        $this->db->update('stokopname_onmachine',['user_verif' => 0,'tgl_verif' => date('Y-m-d H:i:s')]);
+
+        $data = $this->db->get_where('stokopname_onmachine',['id' => $id])->row_array();
+
+        $this->db->select('count(*) as jml');
+        $this->db->from('stokopname_onmachine');
         $this->db->where('id_stokopname',$data['id_stokopname']);
         $this->db->where('user_verif !=',0);
         $jumlah = $this->db->get()->row_array();
@@ -1199,12 +1302,13 @@ class Opname_model extends CI_Model
         $this->db->select('(select count(*) from stokopname where dept_id = dept.dept_id and periode = "'.$periode.'") as jmlinput');
         $this->db->select('(select count(*) from stokopname where dept_id = dept.dept_id and periode = "'.$periode.'" and status >= 1) as jmlselesai');
         $this->db->select('(select count(*) from stokopname where dept_id = dept.dept_id and periode = "'.$periode.'" and status > 1) as jmlverifikasi');
+        $this->db->select('(select count(*) from stokopname where dept_id = dept.dept_id and periode = "'.$periode.'" and status = 3) as jmlrilisz');
         $this->db->select('(SELECT COUNT(*) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'") AS jmlrek');
         $this->db->select('(SELECT SUM(stokopname_detail.kgs) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'") AS jmlkgs');
-        $this->db->select('(SELECT COUNT(*) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'" AND stokopname.status > 1) AS jmlverif');
-        $this->db->select('(SELECT SUM(stokopname_detail.kgs) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'" AND stokopname.status > 1) AS jmlverifkgs');
-        $this->db->select('(SELECT COUNT(*) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'" AND stokopname.status > 2) AS jmlrilis');
-        $this->db->select('(SELECT SUM(stokopname_detail.kgs) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'" AND stokopname.status > 2) AS jmlriliskgs');
+        $this->db->select('(SELECT COUNT(*) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'" AND stokopname_detail.user_verif > 0) AS jmlverif');
+        $this->db->select('(SELECT SUM(stokopname_detail.kgs) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'" AND stokopname_detail.user_verif > 0) AS jmlverifkgs');
+        $this->db->select('(SELECT COUNT(*) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'" AND stokopname_detail.user_rilis > 0) AS jmlrilis');
+        $this->db->select('(SELECT SUM(stokopname_detail.kgs) FROM stokopname_detail LEFT JOIN stokopname ON stokopname.id = stokopname_detail.id_stokopname where stokopname.dept_id = dept.dept_id and periode = "'.$periode.'" AND stokopname_detail.user_rilis > 0) AS jmlriliskgs');
         $this->db->from('dept');
         $this->db->where('dept.stokopname','1');
         $this->db->order_by('dept.departemen');
@@ -1293,5 +1397,278 @@ class Opname_model extends CI_Model
     public function hapusreg($id){
         $this->db->where('id',$id);
         return $this->db->delete('stokdept');
+    }
+    public function getpersenkap($id){
+        $query = $this->db->get_where('stokopname_config',['dept_id' => $id])->row_array();
+        return $query['persen_rilis'];
+    }
+    public function uraidata(){
+        $this->db->trans_start();
+        $this->db->where('tgl',$this->session->userdata('periodeopname'));
+        if($this->session->userdata('currdeptopname')!=''){
+            $this->db->where('dept_id',$this->session->userdata('currdeptopname'));
+        }
+        $this->db->delete('stokopname_detail_urai');
+
+        $this->db->select("stokopname_detail.*");
+        $this->db->from('stokopname_detail');
+        $this->db->join('stokopname','stokopname.id = stokopname_detail.id_stokopname','left');
+        $this->db->where('stokopname_detail.tgl',$this->session->userdata('periodeopname'));
+        $this->db->where('stokopname_detail.urai',1);
+        if($this->session->userdata('currdeptopname')!=''){
+            $this->db->where('stokopname_detail.dept_id',$this->session->userdata('currdeptopname'));
+        }
+        $data = $this->db->get();
+        foreach($data->result_array() as $dt){
+            if($dt['po']!=''){
+                if($this->session->userdata('currdeptopname')=='NT' || $this->session->userdata('currdeptopname')=='AR'){
+                    $this->uraidataopnamejala($dt['id']);
+                }else{
+                    $this->uraidataopname($dt['id']);
+                }
+            }else{
+                $this->uraidataopname($dt['id']);
+            }
+        }
+        return $this->db->trans_complete();
+    }
+    private function uraidataopname($id){
+        // Cari data yang akan diurai 
+        $tempurai = $this->db->get_where('stokopname_detail',['id' => $id])->row_array();
+        $datinsno = trim($tempurai['insno'])=='' ? 'XXXXXX' : $tempurai['insno']; // Insno tidak boleh kosong
+
+        // Cari data bahan urai 
+        $this->db->select('tb_detailgen.*,tb_detail.kgs AS kgstotal,tb_detail.id as idx');
+        $this->db->from('tb_detailgen');
+        $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header');
+        $this->db->join('tb_detail','tb_detail.id = tb_detailgen.id_detail');
+        $this->db->where('tb_header.dept_id',$tempurai['dept_id']);
+        $this->db->where('tb_detail.insno',$datinsno);
+        $this->db->where('tb_header.kode_dok','T');
+        $this->db->order_by('tb_detailgen.id_detail DESC');
+        $datai = $this->db->get();
+        if($datai->num_rows() > 0){
+            $datab = $datai->row_array();
+
+            // Cari data bahan urai 2
+            $this->db->select('tb_detailgen.*,tb_detail.kgs AS kgstotal,tb_detail.id as idx');
+            $this->db->from('tb_detailgen');
+            $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header');
+            $this->db->join('tb_detail','tb_detail.id = tb_detailgen.id_detail');
+            $this->db->where('tb_header.dept_id',$tempurai['dept_id']);
+            $this->db->where('tb_detail.insno',$tempurai['insno']);
+            $this->db->where('tb_header.kode_dok','T');
+            $this->db->where('tb_detail.id',$datab['idx']);
+            $databom = $this->db->get();
+            if($databom->num_rows() > 0){
+                foreach($databom->result_array() as $dbom){
+                    $data = $tempurai;
+                    unset($data['id']);
+                    $data['id_detail'] = $tempurai['id'];
+                    $data['id_barang'] = $dbom['id_barang'];
+                    $data['insno'] = $dbom['insno'];
+                    $data['nobontr'] = $dbom['nobontr'];
+                    $data['exnet'] = $dbom['exnet'];
+                    $data['stok'] = $dbom['stok'];
+                    $data['dln'] = $dbom['dln'];
+                    $data['nobale'] = $dbom['nobale'];
+                    $data['kgs'] = ($dbom['kgs']/$dbom['kgstotal'])*$tempurai['kgs'];
+                    $data['user_add'] = $this->session->userdata('id');
+                    $data['tgl_add'] = date('Y-m-d H:i:s');
+                    unset($data['user_verif']);
+                    unset($data['user_rilis']);
+                    unset($data['tgl_verif']);
+                    unset($data['tgl_rilis']);
+
+                    $this->db->insert('stokopname_detail_urai',$data);
+                }
+                $this->db->where('id',$tempurai['id']);
+                $this->db->update('stokopname_detail',['err_urai' => 0]);
+            }else{
+                $data = $tempurai;
+                unset($data['id']);
+                $data['id_detail'] = $tempurai['id'];
+                $data['user_add'] = $this->session->userdata('id');
+                $data['tgl_add'] = date('Y-m-d H:i:s');
+                unset($data['user_verif']);
+                unset($data['user_rilis']);
+                unset($data['tgl_verif']);
+                unset($data['tgl_rilis']);
+
+                $this->db->insert('stokopname_detail_urai',$data);
+
+                $this->db->where('id',$tempurai['id']);
+                $this->db->update('stokopname_detail',['err_urai' => 1]);
+            }
+        }else{
+            $data = $tempurai;
+            unset($data['id']);
+            $data['id_detail'] = $tempurai['id'];
+            $data['user_add'] = $this->session->userdata('id');
+            $data['tgl_add'] = date('Y-m-d H:i:s');
+            unset($data['user_verif']);
+            unset($data['user_rilis']);
+            unset($data['tgl_verif']);
+            unset($data['tgl_rilis']);
+
+            $this->db->insert('stokopname_detail_urai',$data);
+
+            $this->db->where('id',$tempurai['id']);
+            $this->db->update('stokopname_detail',['err_urai' => 1]);
+        }
+    }
+    private function uraidataopnamejala($id){
+        $tempurai = $this->db->get_where('stokopname_detail',['id' => $id])->row_array();
+        $datinsno = trim($tempurai['insno'])=='' ? 'XXXXXX' : $tempurai['insno']; // Insno tidak boleh kosong
+
+        //Cari instruksi Netting
+        $this->db->where('tb_netinstr.po',$tempurai['po']);
+        $this->db->where('tb_netinstr.item',$tempurai['item']);
+        $this->db->where('tb_netinstr.insno',$tempurai['insno']);
+        $datai = $this->db->get('tb_netinstr');
+
+        if($datai->num_rows() > 0){
+            $datab = $datai->row_array();
+
+            // Cari Bahan Net
+            $this->db->select('tb_bahannet.*,sum(weight) over() as jmlkilo');
+            $this->db->from('tb_bahannet');
+            $this->db->where('id_instr',$datab['id']);
+            $databom = $this->db->get();
+            if($databom->num_rows() > 0){
+                foreach($databom->result_array() as $dbom){
+                    $xkali = $tempurai['pcs']==0 ? 1 : $tempurai['pcs'];
+                    $kali = $tempurai['kgs']/$dbom['jmlkilo'];
+                    $data = $tempurai;
+                    unset($data['id']);
+                    $data['id_detail'] = $tempurai['id'];
+                    $data['id_barang'] = $dbom['id_barang'];
+                    $data['insno'] = $dbom['spno'];
+                    $data['po'] = '';
+                    $data['item'] = '';
+                    $data['dis'] = 0;
+                    $data['nobontr'] = '';
+                    $data['exnet'] = '';
+                    $data['stok'] = '';
+                    $data['dln'] = 0;
+                    $data['nobale'] = 0;
+                    $data['kgs'] = $dbom['weight']*$kali;
+                    $data['user_add'] = $this->session->userdata('id');
+                    $data['tgl_add'] = date('Y-m-d H:i:s');
+                    unset($data['user_verif']);
+                    unset($data['user_rilis']);
+                    unset($data['tgl_verif']);
+                    unset($data['tgl_rilis']);
+
+                    $this->db->insert('stokopname_detail_urai',$data);
+                }
+                $this->db->where('id',$tempurai['id']);
+                $this->db->update('stokopname_detail',['err_urai' => 0]);
+            }else{
+                $data = $tempurai;
+                unset($data['id']);
+                $data['id_detail'] = $tempurai['id'];
+                $data['user_add'] = $this->session->userdata('id');
+                $data['tgl_add'] = date('Y-m-d H:i:s');
+                unset($data['user_verif']);
+                unset($data['user_rilis']);
+                unset($data['tgl_verif']);
+                unset($data['tgl_rilis']);
+
+                $this->db->insert('stokopname_detail_urai',$data);
+
+                $this->db->where('id',$tempurai['id']);
+                $this->db->update('stokopname_detail',['err_urai' => 1]);
+            }
+        }else{
+            $data = $tempurai;
+            unset($data['id']);
+            $data['id_detail'] = $tempurai['id'];
+            $data['user_add'] = $this->session->userdata('id');
+            $data['tgl_add'] = date('Y-m-d H:i:s');
+            unset($data['user_verif']);
+            unset($data['user_rilis']);
+            unset($data['tgl_verif']);
+            unset($data['tgl_rilis']);
+
+            $this->db->insert('stokopname_detail_urai',$data);
+
+            $this->db->where('id',$tempurai['id']);
+            $this->db->update('stokopname_detail',['err_urai' => 1]);
+        }
+    }
+    public function getdatauraibyid($id){
+        $this->db->select('stokopname_detail_urai.*,barang.nama_barang,barang.kode');
+        $this->db->from('stokopname_detail_urai');
+        $this->db->join('barang','barang.id = stokopname_detail_urai.id_barang','left');
+        $this->db->where('stokopname_detail_urai.id_detail',$id);
+        return $this->db->get();
+    }
+    public function hitungonmachine($id){
+        $this->db->trans_start();
+        //Hapus data yang ada di stokopname_detail dan stokopname_detail_urai
+        $this->db->where('id_stokopname',$id);
+        $this->db->delete('stokopname_detail_urai');
+
+        $this->db->where('id_stokopname',$id);
+        $this->db->delete('stokopname_detail');
+
+        //Hotung penggunaan estimasi bahan di Mesin 
+        $headersublok = $this->db->get_where('stokopname',['id' => $id])->row_array();
+        $this->db->where('id_stokopname',$id);
+        $datamesin = $this->db->get('stokopname_onmachine');
+        if($datamesin->num_rows() > 0){
+            foreach($datamesin->result_array() as $dtm){
+                $jmbobspl = $dtm['jmbobspl']==0 ? 1 : $dtm['jmbobspl'];
+                $totbun = ($dtm['bunbrtbox']*$dtm['bunjmlbox'])+($dtm['bunbrtmsn']*$dtm['bunjmlmsn']);
+                $totbob = ($dtm['bobisi']/$jmbobspl)*$dtm['bobjmlmsn'];
+                $jmlot =  1 + (int)$dtm['lot_sampai'] - (int)$dtm['lot_dari'];
+
+                $cekinstr = $this->db->get_where('tb_netinstr',['po' => $dtm['po'],'item' => $dtm['item'],'dis' => $dtm['dis'],'insno' => $dtm['insno']]);
+                if($cekinstr->num_rows() > 0){
+                    $datinstr = $cekinstr->row_array();
+                }
+                $cekpo = $this->db->get_where('tb_po',['po' => $dtm['po'],'item' => $dtm['item'],'dis' => $dtm['dis']]);
+                if($cekpo->num_rows() > 0){
+                    $datpo = $cekpo->row_array();
+                }
+                $totroll = ($jmlot * $datinstr['kap'])*$datinstr['weight'];
+                $netrev = $datpo['netrev']==0 ? 1 : $datpo['netrev'];
+                $rrpm = $dtm['rpm']==0 ? 0 : round(($dtm['rpm']/$netrev)*$datinstr['kap'],2);
+                $totrpm = $rrpm*$datinstr['weight'];
+
+                $beratbahan = (float) $totbun + (float) $totbob + (float) $totroll + (float) $totrpm;
+
+                $this->db->where('id',$dtm['id']);
+                $this->db->update('stokopname_onmachine',['totbun' => $totbun,'totbob' => $totbob,'totroll' => $totroll,'totrpm' => $totrpm]); 
+
+                $data = [
+                    'id_stokopname' => $id,
+                    'tgl' => $this->session->userdata('periodeopname'),
+                    'dept_id' => $headersublok['dept_id'],
+                    'po' => $dtm['po'],
+                    'item' => $dtm['item'],
+                    'dis' => $dtm['dis'],
+                    'insno' => $dtm['insno'],
+                    'id_barang' => $dtm['id_barang'],
+                    'satuan' => 'PCS',
+                    'kgs' => $beratbahan,
+                    'pcs' => 0,
+                    'user_add' => $this->session->userdata('id'),
+                    'urai' => 1,
+                    'machno' => $dtm['machno']
+                ];
+                $this->db->insert('stokopname_detail',$data);
+            }
+        }else{
+            $this->session->set_flashdata('errorsimpan',2);
+            $this->sessio->set_flashdata('pesanerror','Record ON MESIN tidak ada !');
+        }
+        return $this->db->trans_complete();
+    }
+    public function getsublok(){
+        $dept = $this->session->userdata('currdeptopname');
+        $this->db->where('dept_id',$dept);
+        return $this->db->order_by('kode_lokasi')->get('tb_lokasi');
     }
 }

@@ -72,7 +72,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <textarea name="carientri" id="carientri" class="form-control font-kecil" placeholder="Cari nomor Mesin.."><?= $this->session->userdata('cari-entri') ?></textarea>
                                 <div class="d-flex">
                                 <a href="#" class="btn btn-sm btn-success form-control mt-1" id="caridataentry">Cari</a>
-                                <a href="#" class="btn btn-sm btn-danger form-control mt-1 w-25" id="resetdataentry">Cari</a>
+                                <a href="#" class="btn btn-sm btn-danger form-control mt-1 w-25" id="resetdataentry">Reset</a>
                                 </div>
                             </div>
                         </div>
@@ -80,6 +80,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <div class="text-right">
                             <?php $disableverifikasi = $header['persen_verif'] > (round($header['item_verif']/$pembagi,2)*100) ? 'disabled' : ''; ?>
                             <?php $disablerilis = $header['persen_rilis'] > (round($header['item_rilis']/$pembagi,2)*100) ? 'disabled' : ''; ?>
+                            <?php if($header['status']==3): ?>
+                                <a href="#" data-href="<?= base_url().'opname/hitungonmachine/'.$this->uri->segment(3).'/'.$header['id'] ?>" class="btn btn-sm btn-primary btn-flat mt-1" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Anda akan hitung Rekap Data"><span class="">Hitung/Rekap Data</span></a>
+                            <?php endif; ?>
                             <?php if($header['status']==0): ?>
                                 <a href="<?= base_url().'opname/tambahdataonmachine/'.$this->uri->segment(3).'/'.$header['id'] ?>" class="btn btn-sm btn-primary btn-flat mt-1" data-message="Akan menyelesaikan input stok opname ini, Data tidak bisa diedit kembali">Tambah Data on Machine</a>
                                 <a href="#" data-href="<?= base_url().'opname/selesaiinput/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/'.$header['id'] ?>" class="btn btn-sm btn-warning btn-flat mt-1" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan menyelesaikan input stok opname ini, Data tidak bisa diedit kembali"><span class="text-black">Input Data Selesai</span></a>
@@ -151,16 +154,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                             <td class="font-kecil text-right"><?= rupiah($dt['bobjmlmsn'],0) ?></td>
                                             <td class="font-kecil line-11"><?= 'Lot '.$dt['lot_dari'].'~'.$dt['lot_sampai'].'<br>Rpm '.rupiah($dt['rpm'],0) ?></td>
                                             <?php if($header['status'] == 0): ?>
-                                            <td class="font-kecil text-center">
+                                            <td style="white-space: nowrap;" class="font-kecil text-center line-11">
                                                 <a href="<?= base_url().'opname/editentrionmesin/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/'.$dt['id'] ?>" id="editentristok" rel="<?= $dt['id'] ?>" rel2="<?= $this->uri->segment(3) ?>" rel3="<?= $this->uri->segment(4) ?>" class="btn btn-sm btn-flat btn-info" style="padding: 2px 6px !important;">Edit</a>
                                                 <a href="#" data-href="<?= base_url().'opname/hapusentrionmesin/'.$this->uri->segment(3).'/'.$this->uri->segment(4).'/'.$dt['id'] ?>" data-bs-target="#modal-danger" data-bs-toggle="modal" data-message="Akan menghapus data ini" class="btn btn-sm btn-flat btn-danger" style="padding: 2px 6px !important;">Hapus</a>
+                                                <br>
+                                                <span class="font-10 text-primary"><?= datauser($dt['user_add']) ?></span>
                                             </td>
                                             <?php endif; ?>
                                             <?php if($header['status'] > 0): ?>
-                                                <td class="font-kecil text-center" id="kolomverif<?= $dt['id'] ?>">
+                                                <td class="font-kecil text-center line-11" id="kolomverif<?= $dt['id'] ?>">
                                                     <?php if($header['status']==1 && ($this->session->userdata('rolestokopname')==3 || $this->session->userdata('rolestokopname')==99)): ?> <!-- Status Selesai -->
                                                         <?php if($dt['user_verif']!=0): ?>
-                                                            <div class="font-kecil line-11 text-blue"><a href="#" data-href="<?= base_url().'opname/batalkanverifstok/'.$this->uri->segment(3).'/'.$dt['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Batalkan Verifikasi">Verified<br><?= strtoupper(datauser($dt['user_verif'],'username')) ?> <span class="font-10"><?= tglmysql2($dt['tgl_verif']) ?></span></a></div>
+                                                            <div class="font-kecil line-11 text-blue"><a href="#" data-href="<?= base_url().'opname/batalkanverifmesin/'.$this->uri->segment(3).'/'.$dt['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Batalkan Verifikasi">Verified<br><?= strtoupper(datauser($dt['user_verif'],'username')) ?> <span class="font-10"><?= tglmysql2($dt['tgl_verif']) ?></span></a></div>
                                                         <?php else: ?>
                                                             <a href="#" id="verifentrimesin" rel="<?= $dt['id'] ?>" rel2="<?= $this->uri->segment(3) ?>" rel3="<?= $this->uri->segment(4) ?>" class="btn btn-sm btn-flat btn-info" style="padding: 2px 6px !important;">Verify</a>
                                                         <?php endif; ?>
@@ -181,6 +186,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                             <div class="font-kecil line-11"><a href="#" class="text-info">Verified KAP<br><?= strtoupper(datauser($dt['user_rilis'],'username')) ?> <span class="font-10"><?= tglmysql2($dt['tgl_rilis']) ?></span></div>
                                                         <?php endif; ?>
                                                     <?php endif; ?>
+                                                    <br>
+                                                    <span class="text-primary font-10"><?= datauser($dt['user_add']) ?></span>
                                                 </td>
                                             <?php endif; ?>
                                         </tr>
@@ -193,7 +200,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </tbody>
                         </table>
                         <div class="d-flex justify-content-between mt-1">
-                            <div class="mt-1">
+                            <div class="mt-1 font-kecil text-primary">
                                 Jumlah Record <?= rupiah($jumlahrek,0) ?>
                             </div>
                             <div>

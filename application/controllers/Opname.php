@@ -59,17 +59,29 @@ class Opname extends CI_Controller
     }
     public function getdata()
     {
+        $currdept = $this->session->userdata('currdeptopname');
         $this->session->set_userdata('currdeptopname',$_POST['dept']);
         $this->session->set_userdata('kepemilikanopname',$_POST['milik']);
         $this->session->set_userdata('exdo',$_POST['exdo']);
+        $this->session->set_userdata('selurai',$_POST['selurai']);
         $this->session->set_userdata('cari-rekapopname',$_POST['cari']);
         $this->session->set_userdata('perpage-rekapopname',$_POST['perpage']);
+        if($_POST['dept']=="" || $currdept != $this->session->userdata('currdeptopname')){
+            $this->session->unset_userdata('sublokasi-rekapopname');
+        }else{
+            if($_POST['sublok']=="all"){
+                $this->session->unset_userdata('sublokasi-rekapopname');
+            }else{
+            $this->session->set_userdata('sublokasi-rekapopname',$_POST['sublok']);
+            }
+        }
         echo 1;
     }
     public function clearrekaopname(){
         $this->session->unset_userdata('currdeptopname');
         $this->session->unset_userdata('kepemilikanopname');
         $this->session->unset_userdata('exdo');
+        $this->session->unset_userdata('selurai');
         $this->session->unset_userdata('cari-rekapopname');
         $this->session->set_userdata('perpage-rekapopname',25);
         $url = base_url().'opname/dataopname';
@@ -164,6 +176,7 @@ class Opname extends CI_Controller
             'fungsi' => 'dataopname',
             'datadept' => $this->opnamemodel->getdatadept(),
             'data' => $this->opnamemodel->getdata($config['per_page'],$page),
+            'sublok' => $this->opnamemodel->getsublok(),
             'jumlahrek' => $config['total_rows'] 
         ];
         $data['links'] = $this->pagination->create_links();
@@ -371,8 +384,11 @@ class Opname extends CI_Controller
         }
     }
     public function entristok($page,$id){
+        $cekonmachine = $this->opnamemodel->getdatastokbyid($id);
+        $isonmachine = trim(strtoupper($cekonmachine['nama_lokasi']))=='ON MACHINE' ? true : false;
+
         $config['base_url'] = base_url().'opname/entristok/'; // The URL to your controller method
-        $config['total_rows'] = $this->opnamemodel->countdatadetailstok($id); // Total records in your table
+        $config['total_rows'] = $this->opnamemodel->countdatadetailstok($id,$isonmachine); // Total records in your table
         $config['per_page'] = 15; // Records per page
         $config['uri_segment'] = 3; // Which URL segment contains the page number
         $config['suffix'] = '/'.$this->uri->segment(4);
@@ -389,7 +405,7 @@ class Opname extends CI_Controller
             'fungsi' => 'opname',
             'datadept' => $this->opnamemodel->getdatadept(),
             'detailperiode' => $this->opnamemodel->getdetailperiode(),
-            'jumlahrek' => $this->opnamemodel->countdatadetailstok($id),
+            'jumlahrek' => $this->opnamemodel->countdatadetailstok($id,$isonmachine),
             'databobin' => $this->opnamemodel->getdatabobin()
         ];
         $data['links'] = $this->pagination->create_links();
@@ -397,10 +413,9 @@ class Opname extends CI_Controller
         if($this->session->userdata('sel-cari')==''){
             $this->session->set_userdata('sel-cari','barang');
         }
-        $cekonmachine = $this->opnamemodel->getdatastokbyid($id);
 
         $this->load->view('layouts/opname/header', $header);
-        if(trim(strtoupper($cekonmachine['nama_lokasi']))=='ON MACHINE'){
+        if($isonmachine){
             $this->load->view('opname/entrionmachine',$data);
         }else{
             $this->load->view('opname/entristok',$data);
@@ -786,6 +801,14 @@ class Opname extends CI_Controller
             redirect($url);
         }
     }
+    public function batalkanverifmesin($page,$id){
+        $query = $this->opnamemodel->batalkanverifmesin($id,true);
+        if($query){
+            $kode = $query['id_stokopname'];
+            $url = base_url().'opname/entristok/'.$page.'/'.$kode;
+            redirect($url);
+        }
+    }
     public function batalkanrilisstok($page,$id){
         $query = $this->opnamemodel->batalkanrilisstok($id);
         if($query){
@@ -1046,5 +1069,24 @@ class Opname extends CI_Controller
         $pdf->Cell(190, 6, 'Tgl Cetak : ' . date('d-m-Y H:i:s') . ' oleh ' . datauser($this->session->userdata('id'), 'name'), 0, 0, 'R');
         $pdf->Output('I', 'Data Departemen.pdf');
         $this->helpermodel->isilog('Download PDF DATA DEPARTEMEN');
+    }
+    public function viewuraidata($id){
+        $data['header'] = $this->opnamemodel->getdataentristokbyid($id);
+        $data['detail'] = $this->opnamemodel->getdatauraibyid($id);
+        $this->load->view('opname/viewurai',$data);
+    }
+    public function uraidata(){
+        $hasil = $this->opnamemodel->uraidata();
+        if ($hasil){
+            $url = base_url().'opname/dataopname';
+            redirect($url);
+        }
+    }
+    public function hitungonmachine($page,$id){
+        $hasil = $this->opnamemodel->hitungonmachine($id);
+        if ($hasil){
+            $url = base_url().'opname/entristok/'.$page.'/'.$id;
+            redirect($url);
+        }
     }
 }
