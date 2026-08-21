@@ -99,7 +99,7 @@
                         <h3 class="mb-1">List Instruksi</h3>
                         <hr class="m-0">
                         <div class="overflow-auto">
-                            <table id="tabelnya" class="table order-column table-hover table-bordered mt-2" style="width: 100% !important; border-collapse: collapse;">
+                            <table id="tabelnya" class="table order-column table-hover table-bordered mt-2 nowrap" style="width: 100% !important; border-collapse: collapse;">
                                 <thead>
                                     <tr class="text-left">
                                         <th class="text-center">Urut</th>

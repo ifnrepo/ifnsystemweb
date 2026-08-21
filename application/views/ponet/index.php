@@ -69,13 +69,41 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <a href="<?= base_url().'ponet/editlabel/'.$data['id'] ?>" class="btn btn-sm btn-warning mb-1" style="padding: 0px 4px !important;" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Label Jala"><span class="text-black">Edit Label Jala</span></a>
                             </div>
                             <hr class="m-0">
-                            <div class="bg-danger-lt px-2 py-1 font-kecil font-bold text-center"><span class="text-black">Hasil Pengecekan Lab</span></div>
+                            <?php
+                                $hasilkiusi = '';
+                                $warna = 'text-teal-green'; 
+                                $stddry=0;$stdwet=0;
+                                $dry=0;$wet=0;
+                                if($kiusi->num_rows() > 0){
+                                    $datakiusi = $kiusi->row_array();
+                                    $stddry = $datakiusi['std_dry'];
+                                    $stdwet = $datakiusi['std_wet'];
+                                    $dry = $datakiusi['dts_dry'];
+                                    $wet = $datakiusi['dts_wet'];
+                                    if($datakiusi['status_cek']==1){
+                                        $hasilkiusi = 'BOLEH KIRIM';
+                                        $warna = 'text-green';
+                                    }else{
+                                        if(is_null($datakiusi['tgl_terima'])){
+                                            $hasilkiusi = 'BELUM DITERIMA LAB';
+                                        }else if(is_null($datakiusi['tgl_cek'])){
+                                            $hasilkiusi = 'BELUM DICEK LAB';
+                                        }else if($datakiusi['status_lab']==2){
+                                            $hasilkiusi = 'TUNGGU KONFIRMASI';
+                                        }else if($datakiusi['status_lab']==3){
+                                            $hasilkiusi = 'KUALITAS JELEK';
+                                        }
+                                    }
+                                }
+                             ?>
+                            <div class="bg-danger-lt px-2 py-1 font-kecil font-bold text-center"><a href="<?= base_url().'ponet/viewdatalab/'.$data['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="Data Pengecekan QC + R&D" style="text-decoration: none;"><span class="text-black">- Hasil Pengecekan Lab -</span></a><br><span class="<?= $warna ?>"><?= $hasilkiusi ?></span></div>
                             <div class="mb-0 mt-1 row">
                                 <div class="col">
                                     <div class="mb-1 row">
                                         <label class="col-4 col-form-label font-kecil form-control-sm text-right">Dry</label>
                                         <div class="col">
-                                            <input type="text" class="form-control form-control-sm  font-kecil btn-flat text-right" id="bruto" name="bruto" value="" aria-describedby="emailHelp" placeholder="Dry Value" readonly>
+                                            <?php $dry = $dry==0 ? '' : rupiah($dry,2) ?>
+                                            <input type="text" class="form-control form-control-sm  font-kecil btn-flat text-right" id="bruto" name="bruto" value="<?= $dry ?>" aria-describedby="emailHelp" placeholder="Dry Value" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -83,7 +111,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <div class="mb-1 row">
                                         <label class="col-4 col-form-label form-control-sm font-kecil text-right">Std</label>
                                         <div class="col">
-                                            <input type="text" class="form-control form-control-sm font-kecil btn-flat text-right" id="netto" name="netto" value="" aria-describedby="emailHelp" placeholder="Std Dry" readonly>
+                                            <?php $stddry = $stddry==0 ? '' : rupiah($stddry,2) ?>
+                                            <input type="text" class="form-control form-control-sm font-kecil btn-flat text-right" id="netto" name="netto" value="<?= $stddry ?>" aria-describedby="emailHelp" placeholder="Std Dry" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -93,7 +122,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <div class="mb-1 row">
                                         <label class="col-4 col-form-label form-control-sm font-kecil text-right">Wet</label>
                                         <div class="col">
-                                            <input type="text" class="form-control form-control-sm font-kecil btn-flat text-right" id="bruto" name="bruto" value="" aria-describedby="emailHelp" placeholder="Wet Value" readonly>
+                                            <?php $wet = $wet==0 ? '' : rupiah($wet,2) ?>
+                                            <input type="text" class="form-control form-control-sm font-kecil btn-flat text-right" id="bruto" name="bruto" value="<?= $wet ?>" aria-describedby="emailHelp" placeholder="Wet Value" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -101,7 +131,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <div class="mb-1 row">
                                         <label class="col-4 col-form-label form-control-sm  font-kecil text-right">Std</label>
                                         <div class="col">
-                                            <input type="text" class="form-control form-control-sm  font-kecil btn-flat text-right" id="netto" name="netto" value="" aria-describedby="emailHelp" placeholder="Std Wet" readonly>
+                                            <?php $stdwet = $stdwet==0 ? '' : rupiah($stdwet,2) ?>
+                                            <input type="text" class="form-control form-control-sm  font-kecil btn-flat text-right" id="netto" name="netto" value="<?= $stdwet ?>" aria-describedby="emailHelp" placeholder="Std Wet" readonly>
                                         </div>
                                     </div>
                                 </div>
@@ -148,11 +179,11 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         </table>
                         <div class="text-center">
                             <div class="text-center pt-2" style="border-top: 0.5px solid #eaeaea;">
-                                <button class="btn btn-sm btn-primary" id="firstrec">First</button>
-                                <button class="btn btn-sm btn-primary" id="prevrec">Prev</button>
-                                <button class="btn btn-sm btn-primary" id="nextrec">Next</button>
-                                <button class="btn btn-sm btn-primary" id="lastrec">Last</button>
-                                <a href="<?= base_url().'ponet/caripo' ?>" class="btn btn-sm btn-teal text-white" id="caridatapo" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Cari Data PO">
+                                <button class="btn btn-sm btn-primary mb-1" id="firstrec">First</button>
+                                <button class="btn btn-sm btn-primary mb-1" id="prevrec">Prev</button>
+                                <button class="btn btn-sm btn-primary mb-1" id="nextrec">Next</button>
+                                <button class="btn btn-sm btn-primary mb-1" id="lastrec">Last</button>
+                                <a href="<?= base_url().'ponet/caripo' ?>" class="btn btn-sm btn-teal text-white mb-1" id="caridatapo" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Cari Data PO">
                                     <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
                                     Cari Data
                                 </a>
@@ -346,6 +377,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                             <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-secondary-lt"><span class="text-black">Label Pack</span></label>
                                                             <div class="col">
                                                                 <input type="text" class="form-control form-control-sm  font-kecil btn-flat" style="color: #54300c !important;" value="<?= $data['labdom'] ?>" aria-describedby="emailHelp" placeholder="Type" readonly>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                     <div class="col-12">
+                                                        <div class="mb-1 row">
+                                                            <label class="col-2 col-form-label form-control-sm font-kecil font-bold bg-secondary-lt"><span class="text-black">Ecoloop Type</span></label>
+                                                            <div class="col">
+                                                                <input type="text" class="form-control form-control-sm  font-kecil btn-flat" style="color: #54300c !important;" value="<?= $data['ecoloop'] ?>" aria-describedby="emailHelp" placeholder="-" readonly>
                                                             </div>
                                                         </div>
                                                     </div>

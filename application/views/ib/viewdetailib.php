@@ -198,8 +198,8 @@
                                 $Jmltotal = 0;
                                 foreach ($detail as $val) {
                                     $jumlah = $val['kodesatuan'] == 'KGS' ? $val['kgs'] : $val['pcs'];
-                                    $jmlpcs += $val['pcs'];
-                                    $jmlkgs += $val['kgs'];
+                                    $jmlpcs += $val['pcsx'];
+                                    $jmlkgs += $val['kgsx'];
                                     $Jmltotal += $val['harga'] * $jumlah;
                                     $spekbarang = trim($val['po']) == '' ? namaspekbarang($val['id_barang']) : spekpo($val['po'], $val['item'], $val['dis']);
                                     $sku = trim($val['po']) == '' ? $val['brg_id'] : viewsku($val['po'], $val['item'], $val['dis']);
@@ -208,8 +208,8 @@
                                         <td><?= $spekbarang; ?></td>
                                         <td><?= $sku; ?></td>
                                         <td><?= $val['namasatuan']; ?></td>
-                                        <td><?= rupiah($val['pcs'], 0); ?></td>
-                                        <td><?= rupiah($val['kgs'], 2); ?></td>
+                                        <td><?= rupiah($val['pcsx'], 0); ?></td>
+                                        <td><?= rupiah($val['kgsx'], 2); ?></td>
                                         <td><?= rupiah($val['harga'], 2); ?></td>
                                         <td><?= rupiah($val['harga'] * $jumlah, 2); ?></td>
                                         <td><?= $val['keter']; ?></td>

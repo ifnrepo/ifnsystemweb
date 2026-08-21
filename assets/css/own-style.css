@@ -105,6 +105,9 @@
 .text-hitam {
 	color: black !important;
 }
+.text-hijau {
+  color: rgb(0, 84, 0) !important;
+}
 .pull-left {
 	float: left !important;
 }
@@ -500,3 +503,30 @@
   color: rgb(255, 255, 255) !important;
   background-color: #0054A6;
 }
+
+.kolomproduksi {
+  text-decoration: none !important;
+}
+
+/* .kolomproduksi .card {
+  z-index: 99;
+  background-color: red;
+}
+.kolomproduksi:hover .card {
+  background-color: blue;
+} */
+
+.kolomproduksi {
+  transition: background-color 0.3s ease-in-out;
+}
+.kolomproduksi:hover {
+  background-color: #f2f2f2 !important;
+}
+/*
+.kolomproduksi .card #kolomkondisi {
+  z-index: 999;
+  transition: display 0.3s ease-in-out;
+}
+.kolomproduksi:hover .card #kolomkondisi {
+  display: none;
+} */

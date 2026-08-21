@@ -112,10 +112,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <a href="#" data-href="<?= base_url().'opname/uraidata' ?>" style="height: 32px !important" class="btn btn-sm btn-info w-100 <?= $uraidisable ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Yakin akan Urai data ini" data-title="Urai data SO" ><span class="text-black">Urai Data</span></a>
                                     </div>
                                 </div>
-                                <!-- <label class="form-check mt-1 mb-1 bg-danger-lt" id="cekaneh">
-                                    <input class="form-check-input" type="checkbox" id="dataneh">
-                                    <span class="form-check-label font-bold">View Data Tidak Sesuai</span>
-                                </label> -->
                             </div>
                             <div class="col-6">
                                 <div class="row">
@@ -132,6 +128,14 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                                 </select>
                                             </div>
                                         </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-6">
+                                        <label class="form-check mt-1 mb-1 bg-danger-lt">
+                                            <input class="form-check-input" type="checkbox" id="uraianeh" <?php if($this->session->userdata('uraianeh')==1){ echo "checked"; } ?>>
+                                            <span class="form-check-label font-bold">View Urai Tidak Sesuai</span>
+                                        </label>
                                     </div>
                                 </div>
                                 <!-- <div class="text-blue font-bold mt-2 ">Jumlah Dok : <span id="jumlahrekod" style="font-weight: normal;">Loading ..</span></div> -->
@@ -220,7 +224,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <td class="font-kecil text-right"><?= rupiah($dt['pcs'],0) ?></td> 
                                 <td class="font-kecil text-right"><?= rupiah($dt['kgs'],2) ?></td> 
                                 <td class="font-kecil text-center" style="white-space: nowrap;">
-                                    <a href="<?= base_url().'opname/editrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-success <?php if($dt['user_selesai']!=0){echo "disabled"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a>
+                                    <a href="<?= base_url().'opname/editrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-success <?php if($dt['user_selesai']!=0 && $this->session->userdata('rolestokopname')!=99){echo "disabled"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Data Stok Opname" style="padding:0 3px !important">Edit</a>
                                     <a href="#" data-href="<?= base_url().'opname/hapusrekapopname/'.$dt['id'] ?>" class="btn btn-sm btn-danger <?php if($dt['user_selesai']!=0){echo "disabled"; } ?>" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Akan menghapus data '+spec+' ('+sku.trim()+')" style="padding:0 3px !important">Hapus</a>
                                 </td> 
                             </tr>

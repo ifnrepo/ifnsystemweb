@@ -15,6 +15,12 @@ class Ponet_model extends CI_Model
         $this->db->limit(1);
         return $this->db->get()->row_array();
     }
+    public function getdatalab($po,$item,$dis){
+        $this->db->where('trim(po)',trim($po));
+        $this->db->where('trim(item)',trim($item));
+        $this->db->where('dis',$dis);
+        return $this->db->get('rd_cek');
+    }
     public function getmaxminidpo(){
         $this->db->select('max(tb_po.id) as maxid,min(tb_po.id) as minid');
         $this->db->from('tb_po');
@@ -300,6 +306,17 @@ class Ponet_model extends CI_Model
         $this->db->where('downtime_spekmesin.mach_no',$msno);
         $this->db->where('left(downtime_spekmesin.mach_id,2)','NT');
         return $this->db->get()->row_array();
+    }
+    public function getlab($id){
+        //cari po dari tb_po
+        $this->db->where('id',$id);
+        $datapo = $this->db->get('tb_po')->row_array();
+
+        //get data dari pengecekan (rd_cek)
+        $this->db->where('po',$datapo['po']);
+        $this->db->where('item',$datapo['item']);
+        $this->db->where('dis',$datapo['dis']);
+        return $this->db->get('rd_cek');
     }
     public function getnetplan($msno){
         $this->db->select('tb_netinstr.insno,tb_netinstr.dateplan,tb_netinstr.tgnet,tb_netinstr.descx,tb_netinstr.descn,tb_netinstr.noprd,tb_netinstr.desc2,tb_po.*');

@@ -20,6 +20,7 @@ class Ponet extends CI_Controller
     {
         $header['header'] = 'other';
         $data['data'] = $this->ponetmodel->getdata();
+        $data['kiusi'] = $this->ponetmodel->getdatalab($data['data']['po'],$data['data']['item'],$data['data']['dis']);
         $data['maxrek'] = $this->ponetmodel->getmaxminidpo();
         $data['futoito'] = $this->ponetmodel->getfutoito($data['data']['id']);
         $data['sidemark'] = $this->ponetmodel->getsidemark($data['data']['id']);
@@ -35,6 +36,7 @@ class Ponet extends CI_Controller
     {
         $header['header'] = 'other';
         $data['data'] = $this->ponetmodel->getdata($id);
+        $data['kiusi'] = $this->ponetmodel->getdatalab($data['data']['po'],$data['data']['item'],$data['data']['dis']);
         $data['maxrek'] = $this->ponetmodel->getmaxminidpo();
         $data['futoito'] = $this->ponetmodel->getfutoito($data['data']['id']);
         $data['sidemark'] = $this->ponetmodel->getsidemark($data['data']['id']);
@@ -147,19 +149,13 @@ class Ponet extends CI_Controller
     public function getdatainstruksi(){
         $arrayu = [];
         $filter_mesin = $_POST['mesin'];
-        // // $filter_exdo = $_POST['exdo'];
-        // $filter_stok = $_POST['stok'];
-        // $filter_buyer = $_POST['buyer'];
-        // $filter_exnet = $_POST['exnet'];
-        // $filter_aneh = $_POST['dataneh'];
-        // $filter_opaneh = $_POST['opaneh'];
-        // $filter_nombc = $_POST['nobc'];
-        // if($filter_kategori!='all'){
-        //     $arrayu['id_kategori'] = $filter_kategori;
-        // }
         $arrayu['mesin'] = $filter_mesin;
         $arrayu['filter'] = [];
         echo $this->ponetmodel->netplan($arrayu);
+    }
+    public function viewdatalab($id){
+        $data['ceklab'] = $this->ponetmodel->getlab($id);   
+        $this->load->view('ponet/viewlab',$data);
     }
     public function loadnetting(){
         $id = $_POST['id'];

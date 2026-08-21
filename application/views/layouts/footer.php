@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1775880120'; ?>
+<?php $updatejs = '1775880125'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -182,6 +182,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'kurs') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/kurs.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'produksi') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/produksi.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') {
 	if ($this->session->flashdata('errortanggalbcmon') != '') {

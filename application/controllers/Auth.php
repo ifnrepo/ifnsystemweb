@@ -180,6 +180,7 @@ class Auth extends CI_Controller
                     'cek_notes' => $user['cek_notes'],
                     'sess_ceksaw' => $user['cek_saw'],
                     'rolestokopname' => $user['rolestokopname'],
+                    'hak_modulproduksi' => $user['cek_modulproduksi'],
                     'rfid' => $user['rfid'],
                     'getinifn' => true
                 ];

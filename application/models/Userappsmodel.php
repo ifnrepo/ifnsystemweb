@@ -72,6 +72,7 @@ class Userappsmodel extends CI_Model
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         $data['rolestokopname'] = strtoupper($data['rolestokopname']);
+        $data['cek_modulproduksi'] = isset($data['cek_modulproduksi']) ? 1 : 0;
         // Set modul master
         $master = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -234,6 +235,7 @@ class Userappsmodel extends CI_Model
         $data['password'] = encrypto(trim($data['password']));
         $data['bagian'] = strtoupper($data['bagian']);
         $data['rolestokopname'] = strtoupper($data['rolestokopname']);
+        $data['cek_modulproduksi'] = isset($data['cek_modulproduksi']) ? 1 : 0;
         // Set modul master
         $master = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -399,6 +401,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
             $this->session->set_userdata('sess_ceksaw', $cek['cek_saw']);
             $this->session->set_userdata('rolestokopname', $cek['rolestokopname']);
+            $this->session->set_userdata('hak_modulproduksi', $cek['cek_modulproduksi']);
         }
 
         return $hasil;
@@ -470,6 +473,7 @@ class Userappsmodel extends CI_Model
         $this->session->set_userdata('sess_cekbbl', $cek['cekbbl']);
         $this->session->set_userdata('sess_ceksaw', $cek['cek_saw']);
         $this->session->set_userdata('rolestokopname', $cek['rolestokopname']);
+        $this->session->set_userdata('hak_modulproduksi', $cek['cek_modulproduksi']);
         return 1;
     }
     public function cekusername($data)

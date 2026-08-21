@@ -1,7 +1,7 @@
 <?php
 class Opname_model extends CI_Model
 {
-    public function getdata($limit=0, $start=0)
+    public function getdata($limit=0, $start=0, $mode=0)
     {
         $periode = $this->session->userdata('periodeopname');
 
@@ -33,6 +33,9 @@ class Opname_model extends CI_Model
         if($this->session->userdata('sublokasi-rekapopname')!='' && $this->session->userdata('sublokasi-rekapopname')!='all'){
             $this->db->where('stokopname.kode_lokasi',$this->session->userdata('sublokasi-rekapopname'));
         }
+        if($this->session->userdata('uraianeh')==1){
+            $this->db->where('stokopname_detail.err_urai',1);
+        }
         if($this->session->userdata('cari-rekapopname')!=''){
             $this->db->group_start();
                 $this->db->like("IF(TRIM(stokopname_detail.po)!='',CONCAT(TRIM(stokopname_detail.po),'#',TRIM(stokopname_detail.item),IF(stokopname_detail.dis > 0,CONCAT(' dis ',stokopname_detail.dis),'')),'') ",$this->session->userdata('cari-rekapopname'));
@@ -44,8 +47,11 @@ class Opname_model extends CI_Model
         // $this->db->group_by('po,item,dis,id_barang,insno,nobontr,stok,exnet,nobale');
 
         $query = $this->db->get_compiled_select();
-
-        $kolom = "Select *,sum(pcs) over() as totalpcs,sum(kgs) over() as totalkgs from (".$query.") r1 limit ".$start.",".$limit;
+        if($mode==0){
+            $kolom = "Select *,sum(pcs) over() as totalpcs,sum(kgs) over() as totalkgs from (".$query.") r1 limit ".$start.",".$limit;
+        }else{
+            $kolom = "Select *,sum(pcs) over() as totalpcs,sum(kgs) over() as totalkgs from (".$query.") r1";
+        }
         $hasil = $this->db->query($kolom);
         return $hasil;
     }
@@ -75,6 +81,9 @@ class Opname_model extends CI_Model
         }
         if($this->session->userdata('sublokasi-rekapopname')!='' && $this->session->userdata('sublokasi-rekapopname')!='all'){
             $this->db->where('stokopname.kode_lokasi',$this->session->userdata('sublokasi-rekapopname'));
+        }
+        if($this->session->userdata('uraianeh')==1){
+            $this->db->where('stokopname_detail.err_urai',1);
         }
         if($this->session->userdata('cari-rekapopname')!=''){
             $this->db->group_start();
@@ -1437,42 +1446,94 @@ class Opname_model extends CI_Model
         $tempurai = $this->db->get_where('stokopname_detail',['id' => $id])->row_array();
         $datinsno = trim($tempurai['insno'])=='' ? 'XXXXXX' : $tempurai['insno']; // Insno tidak boleh kosong
 
-        // Cari data bahan urai 
-        $this->db->select('tb_detailgen.*,tb_detail.kgs AS kgstotal,tb_detail.id as idx');
-        $this->db->from('tb_detailgen');
-        $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header');
-        $this->db->join('tb_detail','tb_detail.id = tb_detailgen.id_detail');
-        $this->db->where('tb_header.dept_id',$tempurai['dept_id']);
-        $this->db->where('tb_detail.insno',$datinsno);
-        $this->db->where('tb_header.kode_dok','T');
-        $this->db->order_by('tb_detailgen.id_detail DESC');
-        $datai = $this->db->get();
-        if($datai->num_rows() > 0){
-            $datab = $datai->row_array();
+        //Cari pada tabel BOM
+        $kondisibom = [
+            'trim(po)' => trim($tempurai['po']),
+            'trim(item)' => trim($tempurai['item']),
+            'dis' => $tempurai['dis'],
+            'trim(insno)' => $datinsno,
+            'trim(nobale)' => trim($tempurai['nobale']),
+            'id_barang' => $tempurai['id_barang'],
+        ];
+        $databom = $this->db->get_where('ref_bom',$kondisibom);
+        if($databom->num_rows() > 0){
+            $hasildatabom = $databom->row_array();
+            $detaildatabom = $this->db->get_where('ref_bom_detail',['id_bom' => $hasildatabom['id']]);
+            foreach($detaildatabom->result_array() as $dtbom){
+                $data = $tempurai;
+                unset($data['id']);
+                $data['id_detail'] = $tempurai['id'];
+                $data['id_barang'] = $dtbom['id_barang'];
+                $data['insno'] = '';
+                $data['nobontr'] = $dtbom['nobontr'];
+                $data['exnet'] = 0;
+                $data['stok'] = 0;
+                $data['dln'] = $hasildatabom['dl'];
+                $data['nobale'] = '';
+                $data['kgs'] = $tempurai['kgs']*($dtbom['persen']/100);
+                $data['user_add'] = $this->session->userdata('id');
+                $data['tgl_add'] = date('Y-m-d H:i:s');
+                unset($data['user_verif']);
+                unset($data['user_rilis']);
+                unset($data['tgl_verif']);
+                unset($data['tgl_rilis']);
 
-            // Cari data bahan urai 2
+                $this->db->insert('stokopname_detail_urai',$data);
+            }
+            $this->db->where('id',$tempurai['id']);
+            $this->db->update('stokopname_detail',['err_urai' => 0]);
+        }else{
+            // Cari data bahan urai pada Transaksi pengeluaran
             $this->db->select('tb_detailgen.*,tb_detail.kgs AS kgstotal,tb_detail.id as idx');
             $this->db->from('tb_detailgen');
             $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header');
-            $this->db->join('tb_detail','tb_detail.id = tb_detailgen.id_detail');
+            $this->db->join('tb_detail','tb_detail.id_header = tb_header.id');
             $this->db->where('tb_header.dept_id',$tempurai['dept_id']);
-            $this->db->where('tb_detail.insno',$tempurai['insno']);
+            $this->db->where('tb_detail.insno',$datinsno);
             $this->db->where('tb_header.kode_dok','T');
-            $this->db->where('tb_detail.id',$datab['idx']);
-            $databom = $this->db->get();
-            if($databom->num_rows() > 0){
-                foreach($databom->result_array() as $dbom){
+            $this->db->order_by('tb_detailgen.id_detail');
+            $datai = $this->db->get();
+            if($datai->num_rows() > 0){
+                $datab = $datai->row_array();
+
+                // Cari data bahan urai 2
+                $this->db->select('tb_detailgen.*,tb_detail.kgs AS kgstotal,tb_detail.id as idx');
+                $this->db->from('tb_detailgen');
+                $this->db->join('tb_header','tb_header.id = tb_detailgen.id_header');
+                $this->db->join('tb_detail','tb_detail.id_header = tb_header.id');
+                $this->db->where('tb_header.dept_id',$tempurai['dept_id']);
+                $this->db->where('tb_detail.insno',$tempurai['insno']);
+                $this->db->where('tb_header.kode_dok','T');
+                $this->db->where('tb_detail.id',$datab['idx']);
+                $databom = $this->db->get();
+                if($databom->num_rows() > 0){
+                    foreach($databom->result_array() as $dbom){
+                        $data = $tempurai;
+                        unset($data['id']);
+                        $data['id_detail'] = $tempurai['id'];
+                        $data['id_barang'] = $dbom['id_barang'];
+                        $data['insno'] = $dbom['insno'];
+                        $data['nobontr'] = $dbom['nobontr'];
+                        $data['exnet'] = $dbom['exnet'];
+                        $data['stok'] = $dbom['stok'];
+                        $data['dln'] = $dbom['dln'];
+                        $data['nobale'] = $dbom['nobale'];
+                        $data['kgs'] = ($dbom['kgs']/$dbom['kgstotal'])*$tempurai['kgs'];
+                        $data['user_add'] = $this->session->userdata('id');
+                        $data['tgl_add'] = date('Y-m-d H:i:s');
+                        unset($data['user_verif']);
+                        unset($data['user_rilis']);
+                        unset($data['tgl_verif']);
+                        unset($data['tgl_rilis']);
+
+                        $this->db->insert('stokopname_detail_urai',$data);
+                    }
+                    $this->db->where('id',$tempurai['id']);
+                    $this->db->update('stokopname_detail',['err_urai' => 0]);
+                }else{
                     $data = $tempurai;
                     unset($data['id']);
                     $data['id_detail'] = $tempurai['id'];
-                    $data['id_barang'] = $dbom['id_barang'];
-                    $data['insno'] = $dbom['insno'];
-                    $data['nobontr'] = $dbom['nobontr'];
-                    $data['exnet'] = $dbom['exnet'];
-                    $data['stok'] = $dbom['stok'];
-                    $data['dln'] = $dbom['dln'];
-                    $data['nobale'] = $dbom['nobale'];
-                    $data['kgs'] = ($dbom['kgs']/$dbom['kgstotal'])*$tempurai['kgs'];
                     $data['user_add'] = $this->session->userdata('id');
                     $data['tgl_add'] = date('Y-m-d H:i:s');
                     unset($data['user_verif']);
@@ -1481,9 +1542,10 @@ class Opname_model extends CI_Model
                     unset($data['tgl_rilis']);
 
                     $this->db->insert('stokopname_detail_urai',$data);
+
+                    $this->db->where('id',$tempurai['id']);
+                    $this->db->update('stokopname_detail',['err_urai' => 1]);
                 }
-                $this->db->where('id',$tempurai['id']);
-                $this->db->update('stokopname_detail',['err_urai' => 0]);
             }else{
                 $data = $tempurai;
                 unset($data['id']);
@@ -1500,21 +1562,6 @@ class Opname_model extends CI_Model
                 $this->db->where('id',$tempurai['id']);
                 $this->db->update('stokopname_detail',['err_urai' => 1]);
             }
-        }else{
-            $data = $tempurai;
-            unset($data['id']);
-            $data['id_detail'] = $tempurai['id'];
-            $data['user_add'] = $this->session->userdata('id');
-            $data['tgl_add'] = date('Y-m-d H:i:s');
-            unset($data['user_verif']);
-            unset($data['user_rilis']);
-            unset($data['tgl_verif']);
-            unset($data['tgl_rilis']);
-
-            $this->db->insert('stokopname_detail_urai',$data);
-
-            $this->db->where('id',$tempurai['id']);
-            $this->db->update('stokopname_detail',['err_urai' => 1]);
         }
     }
     private function uraidataopnamejala($id){
