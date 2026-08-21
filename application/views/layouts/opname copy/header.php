@@ -152,7 +152,7 @@
         <div class="modal-footer">
           <div class="w-100">
             <div class="row">
-              <div class="col"><a id="btn-oke" href="#" class="btn btn-info w-100">
+              <div class="col"><a id="btn-ok" href="#" class="btn btn-info w-100">
                   Ya
                 </a></div>
               <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">

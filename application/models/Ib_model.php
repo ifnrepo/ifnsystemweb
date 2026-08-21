@@ -22,6 +22,7 @@ class Ib_model extends CI_Model
             ];
         }
         $this->db->select('tb_header.*,supplier.nama_supplier as namasupplier');
+        $this->db->select('(Select sum(tb_detail.kgs) from tb_detail where id_akb = tb_header.id) as jmlkgstot');
         $this->db->join('supplier', 'supplier.id = tb_header.id_pemasok', 'left');
         $this->db->where($arrkondisi);
         // Lanjutan #kodeib1

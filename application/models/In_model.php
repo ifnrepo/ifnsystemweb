@@ -207,8 +207,8 @@ class In_model extends CI_Model{
             // Add Data to Harga Material 
             if($dataheader['dept_id']=='SU' && $dataheader['dept_tuju']=='GS'){
                 foreach($detail as $dtl){
-                    $arraykateg = ['7470','7460'];
-                    if(in_array($dtl['id_kategori'],$arraykateg)){
+                    $arraykateg = ['7470','7460','3265','7032','6909','7032','9272'];
+                    if(in_array($dtl['id_kategori'],$arraykateg) && !is_null($dataheader['jns_bc'])){
                         $datacekrekod = [
                             'id_barang' => $dtl['id_barang'],
                             'nobontr' => $dataheader['nomor_dok']

@@ -64,6 +64,7 @@ class Opname extends CI_Controller
         $this->session->set_userdata('kepemilikanopname',$_POST['milik']);
         $this->session->set_userdata('exdo',$_POST['exdo']);
         $this->session->set_userdata('selurai',$_POST['selurai']);
+        $this->session->set_userdata('uraianeh',$_POST['uraneh']);
         $this->session->set_userdata('cari-rekapopname',$_POST['cari']);
         $this->session->set_userdata('perpage-rekapopname',$_POST['perpage']);
         if($_POST['dept']=="" || $currdept != $this->session->userdata('currdeptopname')){
@@ -82,6 +83,7 @@ class Opname extends CI_Controller
         $this->session->unset_userdata('kepemilikanopname');
         $this->session->unset_userdata('exdo');
         $this->session->unset_userdata('selurai');
+        $this->session->unset_userdata('uraianeh');
         $this->session->unset_userdata('cari-rekapopname');
         $this->session->set_userdata('perpage-rekapopname',25);
         $url = base_url().'opname/dataopname';
@@ -1029,6 +1031,80 @@ class Opname extends CI_Controller
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');
         $this->helpermodel->isilog('Download Excel DATA DEPARTEMEN');
+    }
+    public function toexcel()
+    {
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+        // $sheet->setCellValue('A1', "INVENTORY " . datadepartemen($this->session->userdata('currdept'),'departemen')); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        // $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('A2', "Periode " . tgl_indo(tglmysql($this->session->userdata('tglawal')))." s/d ".tgl_indo(tglmysql($this->session->userdata('tglakhir')))); // Set kolom A1 dengan tulisan "DATA SISWA"    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A1', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B1', "KODE BARANG"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C1', "PO"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('D1', "NO");
+        $sheet->setCellValue('E1', "DIS");
+        $sheet->setCellValue('F1', "SPEK");
+        $sheet->setCellValue('G1', "NOBONTR");
+        $sheet->setCellValue('H1', "INSNO");
+        $sheet->setCellValue('I1', "SUBLOK");
+        $sheet->setCellValue('J1', "EXNET");
+        $sheet->setCellValue('K1', "STOK");
+        $sheet->setCellValue('L1', "NOBALE");
+        $sheet->setCellValue('M1', "PCS");
+        $sheet->setCellValue('N1', "KGS");
+        // Panggil model Get Data   
+        $arrayu = [];
+        $inv = $this->opnamemodel->getdata(0,0,1);
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 2;
+
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        foreach ($inv->result_array() as $data) {
+            $spekbarang = trim($data['po'])=='' ? $data['nama_barang'] : $data['spek'];
+            $grade = $data['stok']==1 ? 'Grd A' : ($data['stok']==2 ? 'Grd B' : '');
+            $exnet = $data['exnet']==1 ? 'Y' : '';
+            // Lakukan looping pada variabel      
+            $sheet->setCellValue('A' . $numrow, $no);
+            $sheet->setCellValue('B' . $numrow, $data['kode']);
+            $sheet->setCellValue('C' . $numrow, $data['po']);
+            $sheet->setCellValue('D' . $numrow, $data['item']);
+            $sheet->setCellValue('E' . $numrow, $data['dis']);
+            $sheet->setCellValue('F' . $numrow, $spekbarang);
+            $sheet->setCellValue('G' . $numrow, $data['nobontr']);
+            $sheet->setCellValue('H' . $numrow, $data['insno']);
+            $sheet->setCellValue('I' . $numrow, $data['kode_lokasi'].'-'.$data['nama_lokasi']);
+            $sheet->setCellValue('J' . $numrow, $exnet);
+            $sheet->setCellValue('K' . $numrow, $grade);
+            $sheet->setCellValue('L' . $numrow, $data['nobale']);
+            $sheet->setCellValue('M' . $numrow, $data['pcs']);
+            $sheet->setCellValue('N' . $numrow, $data['kgs']);
+            $no++;
+            // Tambah 1 setiap kali looping      
+            $numrow++; // Tambah 1 setiap kali looping    
+        }
+
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle(" DATA OPNAME");
+
+        // Proses file excel    
+        $filename = 'DATA OPNAME '.str_replace('.','',datadepartemen($this->session->userdata('currdept'),'departemen'));
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel DATA SO');
     }
     public function cetakpdf()
     {

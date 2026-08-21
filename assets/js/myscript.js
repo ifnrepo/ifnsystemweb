@@ -71,7 +71,10 @@ $(document).ready(function () {
 	// })
 	$("#btn-ok").click(function(){
 		$(this).html('<i class="fa fa-circle-o-notch fa-spin fa-fw mr-2"></i> Loading ..');
-	})
+	});
+	$("#btn-oke").click(function(){
+		$(this).html('<i class="fa fa-circle-o-notch fa-spin fa-fw mr-2"></i> Loading ..');
+	});
 	$(".datatableasli").DataTable({
 		language: {
 			paginate: {
@@ -298,7 +301,7 @@ $(document).ready(function () {
 		document.getElementById("message-info").innerHTML = $(e.relatedTarget).data(
 			"message",
 		);
-		$(this).find("#btn-ok").attr("href", $(e.relatedTarget).data("href"));
+		$(this).find("#btn-oke").attr("href", $(e.relatedTarget).data("href"));
 	});
 	$("#modal-pilihan").on("show.bs.modal", function (e) {
 		document.getElementById("isipesan").innerHTML = $(e.relatedTarget).data(

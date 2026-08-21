@@ -140,12 +140,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   $namasup = $datdet['namasupplier'] != null ? $datdet['namasupplier']  : 'Not Set';
                 }
                 $pjt = $datdet['pjt']==1 ? '<i class="fa fa-plane text-danger" aria-hidden="true"></i>' : '';
+                $jmlkgstot = '<span class="text-pink font-kecil">'.rupiah($datdet['jmlkgstot'],2).' Kgs</span>';
               ?>
                 <tr>
                   <td><?= tglmysql($datdet['tgl']); ?></td>
                   <td class='font-bold'><a href="<?= base_url() . 'ib/viewdetail/' . $datdet['id'] . $tmb; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View detail IB (AJU Masuk Barang)"><?= $datdet['nomor_dok'].$pjt ?></a></td>
                   <td><?= $namasup ?></td>
-                  <td><?= $jmlrek ?></td>
+                  <td class="line-11"><?= $jmlrek ?><br><?= $jmlkgstot ?></td>
                   <td class="line-12"><?= datauser($datdet['user_ok'], 'name') ?> <br><span style='font-size: 11px;'><?= tglmysql2($datdet['tgl_ok']) ?></span></td>
                   <?php if ($datdet['tanpa_bc'] == 0) {
                     $ketmakloon = $datdet['bc_makloon'] == 1 ? 'MAKLOON' : $datdet['keterangan']; ?>

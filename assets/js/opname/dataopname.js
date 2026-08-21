@@ -182,6 +182,11 @@ $("#updateopname").click(function(){
 	$(this).html('Loading..')
 	$(".loadered").removeClass('hilang');
 	var isi = $("#textcarirekapopname").val().trim();
+	if ($("#uraianeh").is(":checked")) {
+		var uraianeh = 1;
+	} else {
+		var uraianeh = 0;
+	}
     $.ajax({
 		dataType: "json",
 		type: "POST",
@@ -193,7 +198,8 @@ $("#updateopname").click(function(){
 			cari: isi,
 			perpage: $("#rekapopname-perpage").val(),
 			selurai: $("#selurai").val(),
-			sublok: $("#datasublok").val()
+			sublok: $("#datasublok").val(),
+			uraneh: uraianeh
 		},
 		success: function (data) {
 			// window.location.reload();
@@ -207,6 +213,9 @@ $("#updateopname").click(function(){
 		},
 	});
 	// window.location.reload();
+})
+$("#uraianeh").click(function(){
+	$("#updateopname").click();
 })
 $("#datasublok").change(function(){
 	$("#updateopname").click();

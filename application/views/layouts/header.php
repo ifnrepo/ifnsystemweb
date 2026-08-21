@@ -30,7 +30,7 @@
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/toast/jquery.toast.min.css">
   <link rel="stylesheet" href="<?= base_url(); ?>assets/vendor/nprogress/nprogress.css">
 
-  <link href=<?= base_url() . "assets/css/own-style.css?1764748074" ?> rel="stylesheet" />
+  <link href=<?= base_url() . "assets/css/own-style.css?1764748075" ?> rel="stylesheet" />
   <style>
     .ui-autocomplete {
       z-index: 99999 !important;
@@ -176,7 +176,7 @@
         <div class="modal-footer">
           <div class="w-100">
             <div class="row">
-              <div class="col"><a id="btn-ok" href="#" class="btn btn-info w-100">
+              <div class="col"><a id="btn-oke" href="#" class="btn btn-info w-100">
                   Ya
                 </a></div>
               <div class="col"><a href="#" class="btn w-100" data-bs-dismiss="modal">
@@ -472,7 +472,8 @@
           <div class="spinner-border spinner-border text-teal text-center" role="status"></div> LOADING...
         </div>
       </div>
-      <div class="mt-3">
+      <hr class="m-0">
+      <div class="mt-3 text-right">
         <button class="btn btn-primary btn-sm btn-flat" type="button" data-bs-dismiss="offcanvas">
           Close
         </button>
@@ -953,6 +954,29 @@
               </li>
             <?php endif; ?>
 
+            <?php if ($this->session->userdata('hak_modulproduksi') == '1') : ?>
+              <li class="nav-item <?php if (isset($header) && $header == 'produksi') {
+                                                    echo 'active';
+                                                  } ?>">
+                <a class="nav-link" href="<?= base_url() . 'produksi/clear'; ?>">
+                  <span class="nav-link-icon d-md-none d-lg-inline-block">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-books text-yellow">
+                      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+                      <path d="M5 5a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -14" />
+                      <path d="M9 5a1 1 0 0 1 1 -1h2a1 1 0 0 1 1 1v14a1 1 0 0 1 -1 1h-2a1 1 0 0 1 -1 -1l0 -14" />
+                      <path d="M5 8h4" /><path d="M9 16h4" />
+                      <path d="M13.803 4.56l2.184 -.53c.562 -.135 1.133 .19 1.282 .732l3.695 13.418a1.02 1.02 0 0 1 -.634 1.219l-.133 .041l-2.184 .53c-.562 .135 -1.133 -.19 -1.282 -.732l-3.695 -13.418a1.02 1.02 0 0 1 .634 -1.219l.133 -.041" />
+                      <path d="M14 9l4 -1" />
+                      <path d="M16 16l3.923 -.98" />
+                    </svg>
+                  </span>
+                  <span class="nav-link-title">
+                    Produksi
+                  </span>
+                </a>
+              </li>
+            <?php endif; ?>
+
             <!-- <li class="nav-item">
               <a class="nav-link <?php if (isset($header) && $header == 'inventory') {
                                     echo 'active';
@@ -981,8 +1005,8 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-nav flex-row order-md-last">
-          <!-- <div class="d-none d-md-flex">
-            <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
+          <div class="d-none d-md-flex">
+            <!-- <a href="?theme=dark" class="nav-link px-0 hide-theme-dark" title="Enable dark mode" data-bs-toggle="tooltip" data-bs-placement="bottom">
               <svg xmlns="http://www.w3.org/2000/svg" class="icon" width="24" height="24" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                 <path stroke="none" d="M0 0h24v24H0z" fill="none" />
                 <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
@@ -994,8 +1018,8 @@
                 <path d="M12 12m-4 0a4 4 0 1 0 8 0a4 4 0 1 0 -8 0" />
                 <path d="M3 12h1m8 -9v1m8 8h1m-9 8v1m-6.4 -15.4l.7 .7m12.1 -.7l-.7 .7m0 11.4l.7 .7m-12.1 -.7l-.7 .7" />
               </svg>
-            </a>
-          </div> -->
+            </a> -->
+          </div>
           <div class="nav-item dropdown">
             <a href="#" class="nav-link d-flex lh-1 text-reset p-0" data-bs-toggle="dropdown" aria-label="Open user menu">
               <?php $fotouser = datauser($this->session->userdata('id'),'foto'); ?>
