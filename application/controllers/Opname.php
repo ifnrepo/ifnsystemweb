@@ -1054,8 +1054,9 @@ class Opname extends CI_Controller
         $sheet->setCellValue('J1', "EXNET");
         $sheet->setCellValue('K1', "STOK");
         $sheet->setCellValue('L1', "NOBALE");
-        $sheet->setCellValue('M1', "PCS");
-        $sheet->setCellValue('N1', "KGS");
+        $sheet->setCellValue('M1', "DLN");
+        $sheet->setCellValue('N1', "PCS");
+        $sheet->setCellValue('O1', "KGS");
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->opnamemodel->getdata(0,0,1);
@@ -1082,8 +1083,9 @@ class Opname extends CI_Controller
             $sheet->setCellValue('J' . $numrow, $exnet);
             $sheet->setCellValue('K' . $numrow, $grade);
             $sheet->setCellValue('L' . $numrow, $data['nobale']);
-            $sheet->setCellValue('M' . $numrow, $data['pcs']);
-            $sheet->setCellValue('N' . $numrow, $data['kgs']);
+            $sheet->setCellValue('M' . $numrow, $data['dln']);
+            $sheet->setCellValue('N' . $numrow, $data['pcs']);
+            $sheet->setCellValue('O' . $numrow, $data['kgs']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    

@@ -164,7 +164,7 @@ class Bcmasukmodel extends CI_Model
         if($jnsbc==262){
             $this->db->where('tb_header.kode_dok', 'T');
         }
-        $this->db->group_by('jns_bc,nomor_aju,nomor_bc,po,item,dis,id_barang,insno,nobontr');
+        $this->db->group_by('id_header,jns_bc,nomor_aju,nomor_bc,po,item,dis,id_barang,insno,nobontr');
         $this->db->order_by('tgl_bc,nomor_bc');
         return $this->db->get('tb_header');
     }

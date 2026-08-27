@@ -346,8 +346,13 @@ class Bckeluar extends CI_Controller
                 $harga_idr = $data['harga'];
                 $harga_usd = $data['harga'] / $kurs_usd;
             } else if($data['mtuang'] == 2) {
-                $harga_idr = $data['harga'] * $kurs_usd;
-                $harga_usd = $data['harga'];
+                if($data['jns_bc']=='41'){
+                    $harga_idr = $data['harga'];
+                    $harga_usd = $data['harga'] / $kurs_usd;
+                }else{
+                    $harga_idr = $data['harga'] * $kurs_usd;
+                    $harga_usd = $data['harga'];
+                }
             } else if($data['mtuang'] == 3) {
                 $harga_idr = $data['harga'] * $kurs_yen;
                 $harga_usd = ($data['harga'] * $kurs_yen) / $kurs_usd;
@@ -361,11 +366,16 @@ class Bckeluar extends CI_Controller
             $jmspdiskon   = round($jmspdiskon, 2);
             $jmcashdiskon = round($jmcashdiskon, 2);
 
-            if($data['jns_bc']==41 && $data['bc_makloon']==1){
+            if($data['jns_bc']=='41' && $data['bc_makloon']==1){
                 $variabelkali = $data['kgs']/$data['netto'];
                 $subtotal_idr = round($data['nilai_pab']*$variabelkali,2);
+                $xx = 1;
+                if($data['harga']!=0){
+                    $subtotal_idr = $data['harga'];
+                }
             }else{
-                $subtotal_idr = round($harga_idr - $jmspdiskon - $jmcashdiskon,2);
+                $subtotal_idr = round($harga_idr - ($jmspdiskon + $jmcashdiskon),2);
+                $xx = 0;
             }
             $subtotal_usd = round($subtotal_idr / $kurs_usd, 2);
             $datakgs = $this->session->userdata('jnsbc') == '261' ? $data['sumkgs'] : $data['kgs'];

@@ -1275,7 +1275,7 @@ class Ib_model extends CI_Model
     }
     public function getdatabahanbakuasal($id)
     {
-        $this->db->select('tb_detail.*,tb_header.nomor_bc,tb_header.nomor_aju,tb_header.tgl_aju,tb_header.tgl_bc,barang.nama_barang');
+        $this->db->select('tb_detail.*,tb_header.nomor_bc,tb_header.nomor_aju,tb_header.tgl_aju,tb_header.tgl_bc,tb_header.prefix_aju,barang.nama_barang');
         $this->db->from('tb_detail');
         $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
         $this->db->join('tb_header', 'tb_header.id = tb_detail.id_akb', 'left');

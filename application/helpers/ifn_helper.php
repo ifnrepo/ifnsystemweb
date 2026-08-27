@@ -244,6 +244,25 @@ function rupiah($nomor, $dec)
     }
     return $hasil;
 }
+function rupiah2($nomor, $dec)
+{
+    if ($nomor == '0' || $nomor == '-6.821210263297E-13' || $nomor == '' || $nomor == NULL || is_null($nomor)) {
+        $hasil = '';
+    } else {
+        if ($nomor >= 0) {
+            $hasil = number_format($nomor, $dec, '.', ',');
+        } else {
+            if ($nomor != '0.00') {
+                $nomor = $nomor * -1;
+                $hasil = number_format($nomor, $dec, '.', ',');
+                $hasil = '-' . $hasil;
+            } else {
+                $hasil = '';
+            }
+        }
+    }
+    return $hasil;
+}
 function namabulan($id)
 {
     $bulan = array(

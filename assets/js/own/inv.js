@@ -210,10 +210,10 @@ $(document).ready(function () {
 		table.ajax.reload();
 		$(".loadered").removeClass('hilang');
 	})
-	$("#idstok").on('change',function(){
-		table.ajax.reload();
-		$(".loadered").removeClass('hilang');
-	})
+	// $("#idstok").on('change',function(){
+	// 	table.ajax.reload();
+	// 	$(".loadered").removeClass('hilang');
+	// })
 
 	$("#filtnomorbc").on("change", function () {
 		table.ajax.reload();
@@ -403,6 +403,9 @@ $("#filtnomorbc").on('change',function(){
 $("#perpageinv").on('change',function(){
 	loaddatainv();
 });
+$("#idstok").on('change',function(){
+	loaddatainv();
+})
 function loaddatainv(){
 	$(".loadered").removeClass('hilang');
 	var tglawal = $("#tglawal").val();
