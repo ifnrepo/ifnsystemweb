@@ -691,6 +691,9 @@
                     <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 27); ?>" href="<?= base_url('kurs'); ?>">
                       Kurs
                     </a>
+                    <a class="dropdown-item <?= cekmenudetail($this->session->userdata('master'), 28); ?>" href="<?= base_url('warna/clear'); ?>">
+                      Warna
+                    </a>
                   </div>
                 </div>
               </div>

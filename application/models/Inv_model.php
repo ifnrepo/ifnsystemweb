@@ -445,7 +445,7 @@ class inv_model extends CI_Model
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query4 = $this->db->get_compiled_select();
 
-        // Query untuk SO (Stok Opname)
+        // Query untuk SO (Stok Opname) Non Urai
         $this->db->select("4 as kodeinv,stokopname_detail.po,stokopname_detail.item,stokopname_detail.dis,stokopname_detail.id_barang,stokopname_detail.dln as xdln,barang.id_kategori,stokopname_detail.insno,stokopname_detail.nobontr,barang.kode,0 as idu");
         $this->db->select('0 as saldopcs,0 as saldokgs');
         $this->db->select('0 as inpcs,0 as inkgs');
@@ -486,11 +486,14 @@ class inv_model extends CI_Model
         // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(stokopname_detail.po,stokopname_detail.item,stokopname_detail.dis)','left');
         $this->db->join('stokopname','stokopname.id = stokopname_detail.id_stokopname','left');
-        // $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->join('tb_lokasi','tb_lokasi.kode_lokasi = stokopname.kode_lokasi','left');
         $this->db->where('stokopname_detail.dept_id',$dept);
         $this->db->where('stokopname_detail.tgl',tglmysql($tglakhir));
         $this->db->where('stokopname.status >= 1');
         $this->db->where('stokopname_detail.urai',0);
+        if($ada){ // Jika Departemen adalah subkon
+            $this->db->where('right(trim(tb_lokasi.nama_lokasi),3) != "DLN" ');
+        }
         if($mode==1){
             if($this->session->userdata('filterkat')!=""){
                 $this->db->group_start();
@@ -508,7 +511,7 @@ class inv_model extends CI_Model
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,xnomor_bc,stok,exnet');
         $query5 = $this->db->get_compiled_select();
 
-         // Query untuk SO (Stok Opname)
+         // Query untuk SO (Stok Opname) Yang di Urai
         $this->db->select("4 as kodeinv,stokopname_detail_urai.po,stokopname_detail_urai.item,stokopname_detail_urai.dis,stokopname_detail_urai.id_barang,stokopname_detail_urai.dln as xdln,barang.id_kategori,stokopname_detail_urai.insno,stokopname_detail_urai.nobontr,barang.kode,0 as idu");
         $this->db->select('0 as saldopcs,0 as saldokgs');
         $this->db->select('0 as inpcs,0 as inkgs');
@@ -549,10 +552,13 @@ class inv_model extends CI_Model
         // $this->db->join('tb_po','tb_po.po = tb_detail.po AND tb_po.item = tb_detail.item','left');
         $this->db->join('tb_po','tb_po.ind_po = CONCAT(stokopname_detail_urai.po,stokopname_detail_urai.item,stokopname_detail_urai.dis)','left');
         $this->db->join('stokopname','stokopname.id = stokopname_detail_urai.id_stokopname','left');
-        // $this->db->join('tb_header','tb_header.id = tb_detail.id_header','left');
+        $this->db->join('tb_lokasi','tb_lokasi.kode_lokasi = stokopname.kode_lokasi','left');
         $this->db->where('stokopname_detail_urai.dept_id',$dept);
         $this->db->where('stokopname_detail_urai.tgl',tglmysql($tglakhir));
         $this->db->where('stokopname.status >= 1');
+        if($ada){ // Jika Departemen adalah subkon
+            $this->db->where('right(trim(tb_lokasi.nama_lokasi),3) != "DLN" ');
+        }
         if($mode==1){
             if($this->session->userdata('filterkat')!=""){
                 $this->db->group_start();

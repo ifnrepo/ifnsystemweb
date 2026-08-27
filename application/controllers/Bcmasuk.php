@@ -180,7 +180,9 @@ class Bcmasuk extends CI_Controller
 
             if ($data['mtuang'] == 1) {
                 $harga_idr = round($data['harga']+$data['additional'],2);
+                // $harga_idr = round($data['totalharga'],2);
                 $harga_usd = ($data['harga']+$data['additional']) / $kurs_usd;
+                // $harga_usd = $data['totalharga'] / $kurs_usd;
                 $kursbarang = $kurs_usd;
             } elseif ($data['mtuang'] == 2) {
                 $harga_usd = $data['harga']+$data['additional'];
@@ -193,6 +195,7 @@ class Bcmasuk extends CI_Controller
             }
 
             $pengali = $data['kodesatuan'] == 'KGS' ? $data['kgs_total'] : $data['pcs_total'];
+            // $pembagi = $data['kodesatuan'] == 'KGS' ? $data['kgs_total'] : $data['pcs_total'];
             $pembagi = $data['kodesatuan'] == 'KGS' ? $data['kgs_perdok'] : $data['pcs_perdok'];
             $subtotal_usd = 0;
             if ($data['jns_bc'] == 262) {
@@ -212,8 +215,17 @@ class Bcmasuk extends CI_Controller
                         $subtotal_idr = 0;
                         $subtotal_usd = 0;
                     }else{
-                        $subtotal_idr = round(($harga_idr*$pembagi) * ($pengali/$pembagi),2);
-                        $subtotal_usd = round($harga_usd * $pengali,2);
+                        // if($data['mtuang']==1){
+                        //     $subtotal_idr = $harga_idr;
+                        //     $subtotal_usd = $harga_usd;
+                        // }else{
+                        if(trim($data['nomor_bc'])=='087545'){
+                            $subtotal_idr = 352439;
+                            $subtotal_usd = 19.75;   
+                        }else{
+                            $subtotal_idr = round(($harga_idr*$pembagi) * ($pengali/$pembagi),2);
+                            $subtotal_usd = round($harga_usd * $pengali,2);
+                        }
                     }
                 }else{
                     if($data['jns_bc']==23 && $data['mtuang'] == 3){

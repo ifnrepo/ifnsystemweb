@@ -1774,6 +1774,7 @@ class Ib extends CI_Controller
             $arraybahanbaku = [];
             $pisahbahanbaku = explode(',', $detx['arr_seri_exbc']);
             $databahbak = $this->ibmodel->getdatabahanbakuasal($pisahbahanbaku[0]);
+            $prefixaju = $databahbak['prefix_aju']=='IFN' ? 'IFN' : '000';
             $arraybah = [
                 'cif' => (float) $detx['xcif'],
                 "cifRupiah" => 0,
@@ -1790,7 +1791,7 @@ class Ib extends CI_Controller
                 "ndpbm" => (float) $data['kurs_usd'],
                 "netto" => (float) $detx['kgsx'],
                 "nilaiJasa" => 0,
-                "nomorAjuDokAsal" => '000261010017' . str_replace('-', '', $databahbak['tgl_aju']) . $databahbak['nomor_aju'],
+                "nomorAjuDokAsal" => $prefixaju.'261010017' . str_replace('-', '', $databahbak['tgl_aju']) . $databahbak['nomor_aju'],
                 "nomorDaftarDokAsal" => $databahbak['nomor_bc'],
                 "posTarif" => trim($detx['nohs']) == '' ? trim($detx['hsx']) : trim($detx['nohs']),
                 "seriBahanBaku" => $no,
