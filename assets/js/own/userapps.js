@@ -7,6 +7,7 @@ $(document).ready(function () {
 	$("#cekmng").change();
 	$("#ceksgm").change();
 	$("#hakprogram4").change();
+	$("#hakprogram6").change();
 });
 $("#tambahuser").click(function () {
 	if ($("#name").val() == "") {
@@ -137,6 +138,14 @@ $("#hakprogram4").change(function () {
 		$("#cekeventrahasia").removeClass("hilang");
 	} else {
 		$("#cekeventrahasia").addClass("hilang");
+	}
+});
+$("#hakprogram6").change(function () {
+	if ($(this).is(":checked")) {
+		$("#divrolecrm").removeClass("hilang");
+	} else {
+		$("#rolecrm").val('0');
+		$("#divrolecrm").addClass("hilang");
 	}
 });
 

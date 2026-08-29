@@ -104,380 +104,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   </div>
                 </div>
               </div>
-              <!-- <div class="mb-1 row">
-                <label class="col-3 col-form-label required">Password</label>
-                <div class=" input-group input-group-flat">
-                  <input type="password" class="form-control" value="ultrastrongpassword" autocomplete="off">
-                  <span class="input-group-text">
-                    <a href="#" class="input-group-link">Show password</a>
-                  </span>
-                </div>
-              </div> -->
-              <div class="row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="User Aktif/Tidak">
-                      <span class="col font-bold">User Aktif</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $stsaktif = $user['aktif'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="aktif" id="aktif" type="checkbox" <?= $stsaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak View Harga terakhir Pembelian">
-                      <span class="col font-bold">View Harga</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $hargaaktif = $user['view_harga'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="view_harga" id="view_harga" type="checkbox" <?= $hargaaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak Validasi Adjustment">
-                      <span class="col font-bold">Validator ADJ</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekadj'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekadj" id="cekadj" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Validasi PO">
-                      <span class="col font-bold">Validator Purchase Order (PO)</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $poaktif = $user['cekpo'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekpo" id="cekpo" type="checkbox" <?= $poaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Verifikasi BON BBL">
-                      <span class="col font-bold">GM Purchasing</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <input class="form-check-input" name="cekpc" id="cekpc" type="checkbox">
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak Membatalkan Verifikasi Stock di Modul Inventory">
-                      <span class="col font-bold">Batalkan Verifikasi Stock</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekbatalstok'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekbatalstok" id="cekbatalstok" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Menentukan Dokumen Masuk/Keluar Harus Memakai Dokumen BC Atau Tidak">
-                      <span class="col font-bold">Konfirmasi Hanggar</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekpakaibc'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekpakaibc" id="cekpakaibc" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-0 row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak ke Modul Stokopname">
-                      <span class="col font-bold">Akses Modul Stokopname</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cek_so'] == 1 ? 'checked' : ''; ?>
-                          <!-- <?php var_dump($user['cek_so']) ?> -->
-                          <input class="form-check-input" name="cek_so" id="cek_so" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-0 row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
-                      <span class="col font-bold">Akses Fitur Sak to Saw</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cek_saw'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cek_saw" id="cek_saw" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-0 row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
-                      <span class="col font-bold">Akses View Limit (Ponet)</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cek_limit'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cek_limit" id="cek_limit" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-0 row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
-                      <span class="col font-bold">Akses View Price (Ponet)</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cek_price'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cek_price" id="cek_price" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-0 row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
-                      <span class="col font-bold">Akses PPIC Notes (Ponet)</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cek_notes'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cek_notes" id="cek_notes" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row bg-primary-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak Ke Modul Produksi">
-                      <span class="col font-bold">Modul Produksi</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cek_modulproduksi'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cek_modulproduksi" id="cek_modulproduksi" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-cyan-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Kunci dan Edit Data Project RND">
-                      <span class="col font-bold">Close/Open Project RD</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekrd'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekrd" id="cekrd" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row bg-cyan-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Hak Master Project Event">
-                      <span class="col font-bold">Master Project RD</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['rd_master'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="rd_master" id="rd_master" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-dark-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Kunci dan Edit Data Downtime Mesin">
-                      <span class="col font-bold">Close/Open Downtime Mesin</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekdowntime'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekdowntime" id="cekdowntime" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-dark-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Downtime Perbaikan Mesin">
-                      <span class="col font-bold">Downtime Perbaikan Mesin</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekdowntime_pi'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekdowntime_pi" id="cekdowntime_pi" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="row bg-dark-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Kunci dan Edit Data Project Downtime">
-                      <span class="col font-bold">Downtime Ganti Instruksi Mesin</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekdowntime_gi'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekdowntime_gi" id="cekdowntime_gi" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row bg-dark-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Master Data">
-                      <span class="col font-bold">Downtime Master Data</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekdowntime_master'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekdowntime_master" id="cekdowntime_master" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-0 row bg-warning-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Master Data Project Environmental">
-                      <span class="col font-bold">Master Environmental</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cekenv'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cekenv" id="cekenv" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row bg-warning-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Verifikasi Environmental">
-                      <span class="col font-bold">Hak Verifikasi Environmental</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['hakveri_env'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="hakveri_env" id="hakveri_env" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="mb-1 row bg-pink-lt">
-                <label class="col-3 col-form-label"></label>
-                <div class="col mt-2">
-                  <div class="col-11">
-                    <label class="row" title="Akses Sub Lokasi">
-                      <span class="col font-bold">Akses Sub Lokasi</span>
-                      <span class="col-auto">
-                        <label class="form-check form-check-single form-switch">
-                          <?php $pcaktif = $user['cek_sublok'] == 1 ? 'checked' : ''; ?>
-                          <input class="form-check-input" name="cek_sublok" id="cek_sublok" type="checkbox" <?= $pcaktif; ?>>
-                        </label>
-                      </span>
-                    </label>
-                  </div>
-                </div>
-              </div>
-              <div class="hr mt-2 mb-1"></div>
-              <div class="card-body pt-2">
-                <div class="row">
-                  <div class="col"><a href="<?= base_url() . 'userapps/editdata/' . $user['id']; ?>" class="btn btn-danger btn-sm w-100">
-                      <i class="fa fa-refresh mr-1"></i>
-                      Reset
-                    </a></div>
-                  <div class="col"><a class="btn btn-primary btn-sm w-100 text-white" id="edituser">
-                      <i class="fa fa-save mr-1"></i>
-                      Update
-                    </a></div>
-                </div>
-              </div>
             </div>
             <div class="col-sm-7">
               <h4>Akses Modul</h4>
@@ -685,6 +311,36 @@ defined('BASEPATH') or exit('No direct script access allowed');
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="hakprogram5" name="hakprogram5" type="checkbox" <?= cekceklis($user['hakprogram'], 5); ?>>
                                 <span class="form-check-label">Downtime Mesin</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakprogram6" name="hakprogram6" type="checkbox" <?= cekceklis($user['hakprogram'], 6); ?>>
+                                <span class="form-check-label">Customer Relation Management</span>
+                              </label>
+                              <label class="row hilang" title="Role CRM" id="divrolecrm">
+                                <span class="col">
+                                  <div class="mb-1 row">
+                                    <label class="col-3 col-form-label font-kecil"></label>
+                                    <div class="col">
+                                      <select name="rolecrm" id="rolecrm" class="form-control form-select btn-flat font-kecil">
+                                        <option value="0" <?php if ($user['rolecrm'] == 0) {
+                                                            echo "selected";
+                                                          } ?>>-- Pilih Role --</option>
+                                        <option value="1" <?php if ($user['rolecrm'] == 1) {
+                                                            echo "selected";
+                                                          } ?>>User Domestik</option>
+                                        <option value="2" <?php if ($user['rolecrm'] == 2) {
+                                                            echo "selected";
+                                                          } ?>>User Export</option>
+                                        <option value="3" <?php if ($user['rolecrm'] == 3) {
+                                                            echo "selected";
+                                                          } ?>>User Export Domestik</option>
+                                        <option value="99" <?php if ($user['rolecrm'] == 99) {
+                                                            echo "selected";
+                                                          } ?>>Administrator CRM</option>
+                                      </select>
+                                    </div>
+                                  </div>
+                                </span>
                               </label>
                             </div>
                           </div>
@@ -1079,8 +735,389 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </div>
               </div>
             </div>
+            <div class="row mt-1">
+              <hr class="m-1">
+              <div class="col-4">
+                <div class="row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="User Aktif/Tidak">
+                        <span class="col font-bold">User Aktif</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $stsaktif = $user['aktif'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="aktif" id="aktif" type="checkbox" <?= $stsaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak View Harga terakhir Pembelian">
+                        <span class="col font-bold">View Harga</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $hargaaktif = $user['view_harga'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="view_harga" id="view_harga" type="checkbox" <?= $hargaaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Validasi Adjustment">
+                        <span class="col font-bold">Validator ADJ</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekadj'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekadj" id="cekadj" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Validasi PO">
+                        <span class="col font-bold">Validator Purchase Order (PO)</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $poaktif = $user['cekpo'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekpo" id="cekpo" type="checkbox" <?= $poaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Verifikasi BON BBL">
+                        <span class="col font-bold">GM Purchasing</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <input class="form-check-input" name="cekpc" id="cekpc" type="checkbox">
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Membatalkan Verifikasi Stock di Modul Inventory">
+                        <span class="col font-bold">Batalkan Verifikasi Stock</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekbatalstok'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekbatalstok" id="cekbatalstok" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Menentukan Dokumen Masuk/Keluar Harus Memakai Dokumen BC Atau Tidak">
+                        <span class="col font-bold">Konfirmasi Hanggar</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekpakaibc'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekpakaibc" id="cekpakaibc" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-0 row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak ke Modul Stokopname">
+                        <span class="col font-bold">Akses Modul Stokopname</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cek_so'] == 1 ? 'checked' : ''; ?>
+                            <!-- <?php var_dump($user['cek_so']) ?> -->
+                            <input class="form-check-input" name="cek_so" id="cek_so" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-0 row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
+                        <span class="col font-bold">Akses Fitur Sak to Saw</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cek_saw'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cek_saw" id="cek_saw" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-0 row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
+                        <span class="col font-bold">Akses View Limit (Ponet)</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cek_limit'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cek_limit" id="cek_limit" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-0 row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
+                        <span class="col font-bold">Akses View Price (Ponet)</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cek_price'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cek_price" id="cek_price" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-0 row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Untuk Memindahkan saldo Akhir menjadi saldo Awal pada Modul Report - Inventory">
+                        <span class="col font-bold">Akses PPIC Notes (Ponet)</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cek_notes'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cek_notes" id="cek_notes" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-1 row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Ke Modul Produksi">
+                        <span class="col font-bold">Modul Produksi</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cek_modulproduksi'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cek_modulproduksi" id="cek_modulproduksi" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <div class="row bg-cyan-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Kunci dan Edit Data Project RND">
+                        <span class="col font-bold">Close/Open Project RD</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekrd'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekrd" id="cekrd" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-1 row bg-cyan-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Master Project Event">
+                        <span class="col font-bold">Master Project RD</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['rd_master'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="rd_master" id="rd_master" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-dark-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Kunci dan Edit Data Downtime Mesin">
+                        <span class="col font-bold">Close/Open Downtime Mesin</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekdowntime'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekdowntime" id="cekdowntime" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-dark-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Downtime Perbaikan Mesin">
+                        <span class="col font-bold">Downtime Perbaikan Mesin</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekdowntime_pi'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekdowntime_pi" id="cekdowntime_pi" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="row bg-dark-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Kunci dan Edit Data Project Downtime">
+                        <span class="col font-bold">Downtime Ganti Instruksi Mesin</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekdowntime_gi'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekdowntime_gi" id="cekdowntime_gi" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-1 row bg-dark-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Master Data">
+                        <span class="col font-bold">Downtime Master Data</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekdowntime_master'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekdowntime_master" id="cekdowntime_master" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-0 row bg-warning-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Master Data Project Environmental">
+                        <span class="col font-bold">Master Environmental</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekenv'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekenv" id="cekenv" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-1 row bg-warning-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Verifikasi Environmental">
+                        <span class="col font-bold">Hak Verifikasi Environmental</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['hakveri_env'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="hakveri_env" id="hakveri_env" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-1 row bg-pink-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Akses Sub Lokasi">
+                        <span class="col font-bold">Akses Sub Lokasi</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cek_sublok'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cek_sublok" id="cek_sublok" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-4">
+                <!-- Kosong -->
+              </div>
+            </div>
           </div>
-      </div>
+          <hr class="m-1">
+          <div class="card-body pt-2">
+            <div class="row">
+              <div class="col-4"></div>
+              <div class="col-4"></div>
+              <div class="col-4">
+                <div class="row">
+                  <div class="col"><a href="<?= base_url() . 'userapps/editdata/' . $user['id']; ?>" class="btn btn-danger btn-sm w-100">
+                      <i class="fa fa-refresh mr-1"></i>
+                      Reset
+                    </a></div>
+                  <div class="col"><a class="btn btn-primary btn-sm w-100 text-white" id="edituser">
+                      <i class="fa fa-save mr-1"></i>
+                      Update
+                    </a></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </form>
     </div>
   </div>

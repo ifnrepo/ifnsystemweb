@@ -98,6 +98,9 @@ class Userappsmodel extends CI_Model
                 if ($x == 4) {
                     $data['hakeventrahasia'] = isset($data['hakeventrahasia']) ? 1 : 0;
                 }
+                if ($x == 6) {
+                    $data['rolecrm'] = isset($data['rolecrm']) ? $data['rolecrm'] : 0;
+                }
             }
         }
         // Set Modul Other
@@ -261,6 +264,9 @@ class Userappsmodel extends CI_Model
                 unset($data['hakprogram' . $x]);
                 if ($x == 4) {
                     $data['hakeventrahasia'] = isset($data['hakeventrahasia']) ? 1 : 0;
+                }
+                if ($x == 4) {
+                    $data['rolecrm'] = isset($data['rolecrm']) ? $data['rolecrm'] : 0;
                 }
             }
         }
