@@ -935,6 +935,13 @@ function barangtidakcekstok()
     $getkode = $CI->helpermodel->barangtidakcekstok();
     return $getkode;
 }
+function barangpackexpen($id)
+{
+    // $xkode = trim($kode);
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->barangpackexpen($id);
+    return $getkode;
+}
 
 function nomor_dokumen($dept_id, $dept_tuju, $tb_header, $db, $tgl_input)
 {
