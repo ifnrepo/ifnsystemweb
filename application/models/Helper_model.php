@@ -1315,4 +1315,10 @@ class Helper_model extends CI_Model
 
         return $beratitem+$data['kgs'];
     }
+    public function barangpackexpen($id){
+        // $this->db->select('barang.*');
+        $this->db->where('id',$id);
+        $databr = $this->db->get('barang')->row_array();
+        return $databr['id_kategori'];
+    }
 }

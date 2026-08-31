@@ -805,11 +805,8 @@ class Out_model extends CI_Model{
                     $this->db->join('barang','barang.id = stokdept.id_barang','left');
                     $this->db->where($kondisi);
                     $cekdata = $this->db->get();
-                    // $cekdata = $this->db->get_where('stokdept',$kondisi);
                     $jmll = $cekdata->num_rows();
                     $deta = $cekdata->row_array();
-                    // echo $deta['xpcs_akhir'];
-                    // echo $datdet['pcs'];
                     if($datdet['pcs'] > 0 || $datdet['kgs'] > 0){
                         if((($deta['xpcs_akhir'] >= $datdet['pcs']) && ($deta['xkgs_akhir'] >= $datdet['kgs'])) && $jmll > 0){
                             $pcsnya = $datdet['pcs'] > 0 ? $datdet['pcs'] : $datdet['kgs'];
@@ -910,6 +907,9 @@ class Out_model extends CI_Model{
                     // Apabila Departemen pengirim Gaichu dan barang ada pada data diabaikan maka Stokdept untuk Karung, Besi, Rapia diabaikan
                     // in_array($this->session->userdata('tujusekarang'),daftardeptsubkon()) &&
                     if($this->session->userdata('deptsekarang')=='FG' && in_array($datdet['id_barang'],barangtidakcekstok())){
+                        continue;
+                    }
+                    if($this->session->userdata('deptsekarang')=='FG' && trim(barangpackexpen($datdet['id_barang']))=='7471'){
                         continue;
                     }
                     $cekbckeluar = $this->db->get_where('tb_header',['id' => $id])->row_array();
