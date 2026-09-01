@@ -199,10 +199,12 @@ class Bcmasuk extends CI_Controller
             $pembagi = $data['kodesatuan'] == 'KGS' ? $data['kgs_perdok'] : $data['pcs_perdok'];
             $subtotal_usd = 0;
             if ($data['jns_bc'] == 262) {
-                $subtotal_idr = $data['exbc_cif']*$data['exbc_ndpbm'];
-                $subtotal_usd = $data['exbc_cif'];
+                // $subtotal_idr = $data['exbc_cif']*$data['exbc_ndpbm'];
+                $pembagi = (float) $data['kgs_total']==0 ? 1 : (float) $data['kgs_total'];
+                $pengali = $pembagi/$data['netto'];
+                $subtotal_usd = $data['devisa_usd']*$pengali;
+                $subtotal_idr = $subtotal_usd*$data['exbc_ndpbm'];
                 // $idrperkilo = $data['nilai_pab']/$data['netto'];
-                // $pembagi = (float) $data['in_pcs_exbc']==0 ? 1 : (float) $data['in_pcs_exbc'];
                 // $subtotal_usd = ($data['exbc_cif']/$pembagi)*$data['kgs_total'];
                 // // $subtotal_idr = round($subtotal_usd,2)*$data['exbc_ndpbm'];
                 // $subtotal_idr = 0;
