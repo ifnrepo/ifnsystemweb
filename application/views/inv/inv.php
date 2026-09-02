@@ -305,7 +305,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       if($dt['user_verif']==0){
                         $btn = '<a href="'.base_url().'inv/confirmverifikasidata/'.$dt['idu'].'" class="btn btn-success btn-sm font-bold" data-bs-toggle="modal" data-bs-target="#veriftask" data-tombol="Ya" data-message="Akan memverifikasi data" title="Verifikasi Saldo" style="padding: 2px 3px !important">Verify</a>';
                       }else{
-                        $btn = '<a href="#" data-bs-toggle="modal" data-bs-target="#canceltask" data-tombol="Ya" data-message="Akan membatalkan verifikasi data" style="padding: 2px 3px !important" id="verifrek"'.$dt['idu'].'" rel="'.$dt['idu'].'" title="'.$dt['idu'].'">Verified :'.datauser($dt['user_verif'],'username').'<br><span class="font-10">'.$dt['tgl_verif'].'</span></a>';
+                        $btn = '<a href="'.base_url().'inv/batalverifikasidata/'.$dt['idu'].'" data-bs-toggle="modal" data-bs-target="#canceltask" data-tombol="Ya" data-message="Akan membatalkan verifikasi data" style="padding: 2px 3px !important" id="verifrek"'.$dt['idu'].'" rel="'.$dt['idu'].'" title="'.$dt['idu'].'">Verified :'.datauser($dt['user_verif'],'username').'<br><span class="font-10">'.$dt['tgl_verif'].'</span></a>';
                       }
                     ?>
                     <td class="text-center line-11" id="row<?= $dt['idu'] ?>"><?= $btn ?></td>
