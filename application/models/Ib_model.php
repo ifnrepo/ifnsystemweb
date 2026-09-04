@@ -1383,7 +1383,8 @@ class Ib_model extends CI_Model
         $header = $this->getdatabyid($id);
         $this->db->where('id_header', $id);
         $hasil = $this->db->get('tb_detail');
-        $kurs = is_array(getkurs_bi($header['tgl_aju'])) ? getkurs_bi($header['tgl_aju'])->row_array() : "data kosong";
+        $tglkurs = is_null($header['tgl_aju']) ? $header['tgl'] : $header['tgl_aju'];
+        $kurs = is_array(getkurs_bi($tglkurs)) ? getkurs_bi($header['tgl_aju'])->row_array() : "data kosong";
         if(is_array($kurs)){
             $hasilkurs = 0;
             $xhasilkurs =  $header['mtuang']==2 ? $kurs['usd'] : ($header['mtuang']==3 ? $kurs['jpy'] : 1);
