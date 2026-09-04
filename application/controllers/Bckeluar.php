@@ -341,7 +341,6 @@ class Bckeluar extends CI_Controller
             $kurs_usd = $kurs_usd==0 ? 1 : $kurs_usd;
             $kurs_yen = $kurs_yen==0 ? 1 : $kurs_yen;
 
-
             if ($data['mtuang'] == 1) {
                 $harga_idr = $data['harga'];
                 $harga_usd = $data['harga'] / $kurs_usd;

@@ -70,7 +70,7 @@
     })
     $("#tomboliya").click(function(){
         // var tombolnya = $("nomorib").val();
-
+        $(this).html('Loading...');
         $.ajax({
             dataType: "json",
             type: "POST",
