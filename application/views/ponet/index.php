@@ -6,6 +6,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
         <h2 class="page-title p-2">
             PO NET
         </h2>
+        <div class="ms-auto">
+            <a href="<?= base_url().'ponet/jawabhikiai/' ?>" class="hilang btn btn-sm btn-outline-primary position-relative mb-1 <?php if($this->session->userdata('cek_notes')==0){ echo "hilang"; } ?>" title="Jawab Request Hikiai">Jawab Hikiai <span class="badge bg-pink badge-notification badge-blink"></span></a>
+        </div>
     </div>
 </div>
 <div class="page-body mt-0">

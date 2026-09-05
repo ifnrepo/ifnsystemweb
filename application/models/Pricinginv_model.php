@@ -55,18 +55,28 @@ class Pricinginv_model extends CI_Model
         $kolom .= ") r2";
         return $kolom;
     }
-    public function getdatainv($filtkat){
+    public function getdatainv($filtkat,$excel=0){
         $query = $this->getdata();
         // $cari = array('barang.kode','nama_barang','nama_kategori');
         $cari = array('po','nobontr','insno','spek','nama_barang','kode','sku');
         $where = $filtkat;
         $isWhere = null;
         // Ambil data yang di ketik user pada textbox pencarian
-        $search = htmlspecialchars($_POST['search']['value']);
-        // Ambil data limit per page
-        $limit = preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST['length']}");
-        // Ambil data start
-        $start =preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST['start']}"); 
+        if($excel==0){
+            if(isset($_POST['search'])){
+                $search = htmlspecialchars($_POST['search']['value']);
+            }
+            if(isset($_POST['length'])){
+                // Ambil data limit per page
+                $limit = preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST['length']}");
+            }
+            if(isset($_POST['start'])){
+                // Ambil data start
+                $start =preg_replace("/[^a-zA-Z0-9.]/", '', "{$_POST['start']}"); 
+            }
+        }else{
+            $search = '';
+        }
 
         if($where != null)
         {
@@ -99,18 +109,28 @@ class Pricinginv_model extends CI_Model
 
             $cari = implode(" LIKE '%".$search."%' OR ", $cari)." LIKE '%".$search."%'";
             
-            // Untuk mengambil nama field yg menjadi acuan untuk sorting
-            $order_field = $_POST['order'][0]['column']; 
-
-            // Untuk menentukan order by "ASC" atau "DESC"
-            $order_ascdesc = $_POST['order'][0]['dir']; 
-            $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+            if($excel==0){
+                if(isset($_POST['order'])){
+                    // Untuk mengambil nama field yg menjadi acuan untuk sorting
+                    $order_field = $_POST['order'][0]['column']; 
+                    
+                    // Untuk menentukan order by "ASC" atau "DESC"
+                    $order_ascdesc = $_POST['order'][0]['dir']; 
+                }
+                $order = " ORDER BY ".$_POST['columns'][$order_field]['data']." ".$order_ascdesc;
+            }else{
+                $order = '';
+            }
 
             if(!empty($iswhere))
             {
                 $sql_data = $this->db->query($query." WHERE $iswhere AND ".$fwhere." AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
             }else{
-                $sql_data = $this->db->query($query." WHERE ".$fwhere." AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+                if($excel==0){
+                    $sql_data = $this->db->query($query." WHERE ".$fwhere." AND (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start);
+                }else{
+                    $sql_data = $this->db->query($query." WHERE ".$fwhere." AND (".$cari.")".$order);
+                }
             }
             if(isset($search))
             {
@@ -177,14 +197,21 @@ class Pricinginv_model extends CI_Model
             }
             $data = $sql_data->result_array();
         }
-        $callback = array(    
-            'draw' => $_POST['draw'], // Ini dari datatablenya    
-            'recordsTotal' => $sql_count,    
-            'recordsFiltered'=>$sql_filter_count,    
-            'data'=>$data,
-            'totalkgs' => 100
-        );
-        return json_encode($callback); // Convert array $callback ke json
+        if($excel==0){
+            $callback = array(    
+                'draw' => $_POST['draw'], // Ini dari datatablenya    
+                'recordsTotal' => $sql_count,    
+                'recordsFiltered'=>$sql_filter_count,    
+                'data'=>$data,
+                'totalkgs' => 100
+            );
+            return json_encode($callback); // Convert array $callback ke json
+        }else{
+            $callback = array(
+                'data' => $data
+            );
+            return json_encode($callback);
+        }
     }
     public function getdatadet(){
         $tglawal = '01-'.$this->session->userdata('blpricing').'-'.$this->session->userdata('thpricing');
@@ -396,6 +423,20 @@ class Pricinginv_model extends CI_Model
                     $depas = $dbom['dept_asal'];
                     $prod = $dbom['prod_date'];
                 }
+                $artipe = '';
+                if($que['id_kategori']=='8189'){
+                    $artipe = 'RM';
+                }else{
+                    if($que['id_kategori']=='6319'){
+                        $artipe = 'SM';
+                    }else{
+                        if($que['dept_id']=='GF' || $que['dept_id']=='GW'){
+                            $artipe = 'FG';
+                        }else{
+                            $artipe = 'GP';
+                        }
+                    }
+                }
                 $hasil = [
                     'id_stok' => $que['id'],
                     'urut' => $que['urut'],
@@ -416,6 +457,7 @@ class Pricinginv_model extends CI_Model
                 $this->db->set('prod_date','"'.$prod.'"',FALSE);
                 $this->db->set('pcs_bom','pcs_bom + '.$que['pcs_akhir'],FALSE);
                 $this->db->set('kgs_bom','kgs_bom + '.$que['kgs_akhir'],FALSE);
+                $this->db->set('art_type',$artipe);
                 $this->db->where('id',$que['id']);
                 $this->db->update('stokinv');
             }else{
@@ -526,7 +568,7 @@ class Pricinginv_model extends CI_Model
                         'harga' => $hrg,
                         'rm' => $jmrm,
                         'sm' => $jmsm,
-                        'amount' => $mnt,
+                        'amount' => round($mnt,2),
                         'prod_date' => $tglpr,
                         'spinning' => $sp,
                         'ringrope' => $rr,
