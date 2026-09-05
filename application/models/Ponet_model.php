@@ -565,4 +565,30 @@ class Ponet_model extends CI_Model
         }
         return (!empty($uploadData)) ? $uploadData['file_name'] : NULL;
     }
+    public function getdatahikiai(){
+        $this->db->select('tb_hikiai.*,customer.nama_customer');
+        $this->db->join('customer','customer.id = tb_hikiai.id_customer','left');
+        $this->db->where('tb_hikiai.status_hikiai >= ',2);
+        $this->db->order_by('tb_hikiai.id');
+        return $this->db->get('tb_hikiai');
+    }
+    public function getdatahikiaibyid($id){
+        $this->db->select('tb_hikiai.*,customer.id as idcustomer,customer.nama_customer,customer.alamat');
+        $this->db->join('customer','customer.id = tb_hikiai.id_customer','left');
+        $this->db->where('tb_hikiai.id',$id);
+        return $this->db->get('tb_hikiai')->row_array();
+    }
+    public function getdatadetailhikiai($id){
+        $this->db->select('tb_hikiai_detail.*,tb_produk.spesifikasi,tb_produk.kode,satuan.kodesatuan');
+        $this->db->join('tb_produk','tb_produk.id = tb_hikiai_detail.id_produk','left');
+        $this->db->join('satuan','satuan.id = tb_hikiai_detail.id_satuan','left');
+        $this->db->where('tb_hikiai_detail.id_hikiai',$id);
+        $this->db->order_by('tb_hikiai_detail.item');
+        return $this->db->get('tb_hikiai_detail');
+    }
+    public function terimahikiai($id){
+        $this->db->where('id',$id);
+        $qry =  $this->db->update('tb_hikiai',['diterima_oleh' => $this->session->userdata('id'),'diterima_pada' => date('Y-m-d H:i:s'),'status_hikiai' => 3]);
+        return $qry;
+    }
 }

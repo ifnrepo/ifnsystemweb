@@ -99,7 +99,7 @@
                     <div class="col-6">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Harga (IDR/Unit)</label>
-                            <input type="text" class="form-control font-kecil text-end inputangka" id="price" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'], 8); ?>">
+                            <input type="text" class="form-control font-kecil text-end inputangkad" id="price" name="price" placeholder="Input Harga" value="<?= rupiah($data['price'], 8); ?>">
                         </div>
                     </div>
                     <div class="col-6">
@@ -114,6 +114,12 @@
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Landing Ch (IDR/Unit)</label>
                             <input type="text" class="form-control font-kecil text-end inputangkad" id="landing_ch" name="landing_ch" placeholder="Input Harga" value="<?= rupiah($data['landing_ch'], 8); ?>">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="mb-1">
+                            <label class="form-label font-kecil mb-0 font-bold text-white">-</label>
+                            <a href="#" class="btn btn-sm btn-success mt-1" id="refhargakt">Refresh Harga Akt</a>
                         </div>
                     </div>
                 </div>
@@ -310,19 +316,53 @@
         $("#landing_ch").val('0');
         $("#landing_ch").change();
     })
-    $("#landing_ch").on("change click keyup input paste", function() {
-        var hgbaru;
-        var price = $("#price").val();
-        var hgakt = $("#harga_akt").val();
-        var isi = $(this).val();
-        if(price.trim() != '-' && isi.trim() != ''){
-            var hgbr = parseFloat(toAngka(price));
-            hgbaru = hgbr + parseFloat(toAngka(isi));
-
-            $("#harga_akt").val(rupiah(hgbaru,'.',',',8));
+    $("#id_satuan").change(function(){
+        var kurs = $("#kurs").val();
+        var cif = $("#cif").val();
+        var pcs = $("#qty").val();
+        var kgs = $("#weight").val();
+        var nilai = $(this).val();
+        if(nilai==22){
+            var kali = parseFloat(toAngka(kurs))*parseFloat(toAngka(cif));
+            var hgbr = kali/parseFloat(toAngka(kgs));
         }else{
-            $("#harga_akt").val(hgakt);
+            var kali = parseFloat(toAngka(kurs))*parseFloat(toAngka(cif));
+            var hgbr = kali / parseFloat(toAngka(pcs));
         }
+        $("#price").val(rupiah(hgbr,'.',',',8));
+        $("#refhargakt").click();
+    })
+    $("#landing_ch").on("change click keyup input paste", function() {
+        // var hgbaru;
+        // var price = $("#price").val();
+        // var hgakt = $("#harga_akt").val();
+        // var isi = $(this).val();
+        // if(price.trim() != '-' && isi.trim() != ''){
+        //     alert(price);
+        //     var hgbr = parseFloat(toAngka(price));
+        //     hgbaru = hgbr + parseFloat(toAngka(isi));
+
+        //     $("#harga_akt").val(rupiah(hgbaru,'.',',',8));
+        // }else{
+        //     $("#harga_akt").val(hgakt);
+        // }
+        $("#refhargakt").click();
+    });
+    $("#price").on("change click keyup input paste", function() {
+        // var hgbaru;
+        // var price = $("#price").val();
+        // var hgakt = $("#harga_akt").val();
+        // var isi = $(this).val();
+        // if(price.trim() != '-' && isi.trim() != ''){
+        //     alert(price);
+        //     var hgbr = parseFloat(toAngka(price));
+        //     hgbaru = hgbr + parseFloat(toAngka(isi));
+
+        //     $("#harga_akt").val(rupiah(hgbaru,'.',',',8));
+        // }else{
+        //     $("#harga_akt").val(hgakt);
+        // }
+        $("#refhargakt").click();
     });
     $("#nomor_bc").blur(function() {
         var nobc = $("#nomor_bc").val();
@@ -344,6 +384,21 @@
 
         document.formhamat.submit();
     });
+    $("#refhargakt").click(function(){
+        var hgbaru;
+        var price = $("#price").val();
+        var hgakt = $("#harga_akt").val();
+        var isi = $("#landing_ch").val();
+        // if(price.trim() != '-' && isi.trim() != ''){
+            // alert(price);
+            var hgbr = parseFloat(toAngka(price));
+            hgbaru = hgbr + parseFloat(toAngka(isi));
+
+            $("#harga_akt").val(rupiah(hgbaru,'.',',',8));
+        // }else{
+        //     $("#harga_akt").val(hgakt);
+        // }
+    })
 
 
 

@@ -42,7 +42,7 @@ $(document).ready(function(){
 				$("#jumlahrek").text(rupiah(api2.recordsFiltered,'.',',',0));
 				$("#buthitungbom").removeClass('disabled');
 				var jmlharga = data[0]['totalamount']==null ? 0 : data[0]['totalamount'];
-				$("#totalhargadet").text(rupiah(jmlharga,'.',',',8));
+				$("#totalhargadet").text(rupiah(jmlharga,'.',',',2));
 
 				var jmlkgs = toAngka($("#jumlahkgsdet").text());
 				$("#selisihkgs").text(rupiah(parseFloat(jmlkgs) - parseFloat(data[0]['totalkgs']).toFixed(2),'.',',',2));
@@ -69,6 +69,7 @@ $(document).ready(function(){
                 d.periode = $("#periode").val();
 				d.ctgr = $('#filterctgr').val();
 				d.arty = $('#filterart').val();
+				d.milik = $('#filterdln').val();
 				d.tgkosong = $('#ceklistgprodkosong').is(':checked');
 				d.missbom = $('#ceklistmissedbom').is(':checked');
 				d.missbomplus = $('#ceklistmissedbomplus').is(':checked');
@@ -232,6 +233,7 @@ $(document).ready(function(){
                 d.periode = $("#periode").val();
 				d.ctgr = $('#filterctgr').val();
 				d.arty = $('#filterart').val();
+				d.milik = $('#filterdln').val();
 				d.bcnotfound = $('#ceklisbcnotfoundcek').is(':checked');
 				d.missbom = $('#ceklistmissedbom').is(':checked');
 				d.missbomplus = $('#ceklistmissedbomplus').is(':checked');
@@ -298,7 +300,7 @@ $(document).ready(function(){
 				"render" : function(data, type, row, meta){
 					var s = (row.harga_akt === null) ? 0 : row.harga_akt;
 					var k = (row.id_satuan == 22) ? row.kgs : row.pcs;
-					return rupiah(s*(parseFloat(k)),'.',',',8);
+					return rupiah(s*(parseFloat(k)),'.',',',2);
 				}
 			 },
 			{ "data": "urut",
@@ -364,6 +366,13 @@ $(document).ready(function(){
 		// $("#tabeldetailnya").DataTable().ajax.reload()
 		$(".loadered").removeClass('hilang');
 	})
+	$("#filterdln").on('change',function(){
+		jadi = 0;
+		table.ajax.reload();
+		tabledet.ajax.reload();
+		// $("#tabeldetailnya").DataTable().ajax.reload()
+		$(".loadered").removeClass('hilang');
+	})
 })
 setInterval(() => {
 	if(jadi == 2){
@@ -388,6 +397,56 @@ $("#deptpricing").on('change',function(){
         $("#butgo").addClass('disabled');
     }
 })
+$("#kirimexcel").on('click',function(){
+	alert('data kirim EXCEL !');
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "pricinginv/getexcel",
+		data: {
+			dept : $('#deptcut').val(),
+			tgl : $('#tglcut').val(),
+			periode : $("#periode").val(),
+			ctgr : $('#filterctgr').val(),
+			arty : $('#filterart').val(),
+			milik : $('#filterdln').val(),
+			bcnotfound : $('#ceklisbcnotfoundcek').is(':checked'),
+			missbom : $('#ceklistmissedbom').is(':checked'),
+			missbomplus : $('#ceklistmissedbomplus').is(':checked'),
+			tgkosong : $('#ceklistgprodkosong').is(':checked')
+		},
+		success: function (data) {
+			alert('Well');
+			// window.location.href = base_url+'pricinginv/getexcel';
+			// var kode = JSON.stringify(data.data);
+			// alert(kode);
+			// buatexcel(kode);
+		},
+		
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+})
+function buatexcel(isi){
+	$.ajax({
+		dataType: "json",
+		type: "POST",
+		url: base_url + "pricinginv/getexcel",
+		data: {
+			// qry : isi
+		},
+		success: function (data) {
+			window.location.href = base_url+'pricinginv/getexcel';
+		},
+		
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+}
 $("#tglcutoff").on('change',function(){
 	if($(this).val()!=''){
 		$("#datakategori").removeClass('hilang');

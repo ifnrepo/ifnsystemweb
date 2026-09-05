@@ -76,7 +76,8 @@ class Pricinginv extends CI_Controller
     public function getdatacutoff(){
         $this->session->set_userdata('tglpricinginv',$_POST['tglcutoff']);
         $this->session->set_userdata('deptpricinginv',$_POST['deptcutoff']);
-        $this->session->set_userdata('milik',$_POST['milik']);
+        // $this->session->set_userdata('milik',$_POST['milik']);
+        $this->session->unset_userdata('milik');
         echo 1;
     }
     public function gettglcutoff(){
@@ -89,7 +90,7 @@ class Pricinginv extends CI_Controller
         $cocok = array('datagroup' => $html);
         echo json_encode($cocok);
     }
-    public function getdatainv(){
+    public function getdatainv($excel=0){
         $arrayu = [];
         $filter_dept = $_POST['dept'];
         $filter_tgl = $_POST['tgl'];
@@ -99,20 +100,15 @@ class Pricinginv extends CI_Controller
         $filter_art = $_POST['arty'];
         $filter_missed = $_POST['missbom'];
         $filter_missedplus = $_POST['missbomplus'];
-        // $filter_exnet = $_POST['exnet'];
-        // if($filter_dept!=''){
-        //     $arrayu['dept_id'] = $filter_dept;
-        // }
-        // if($filter_tgl!=""){
-        //     $arrayu['tgl'] = $filter_tgl;
-        // }else{
-        //     $arrayu['tgl'] = '1970-01-01';
-        // }
+        $filter_milik = $_POST['milik'];
         if($filter_periode!="all"){
             $arrayu['periode'] = $filter_periode;
         }
         if($filter_ctgr!=''){
             $arrayu["LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4)"] = $filter_ctgr;
+        }
+        if($filter_milik!=''){
+            $arrayu["dln"] = $filter_milik;
         }
         if($filter_art!=''){
             $arrayu["art_type"] = $filter_art;
@@ -126,10 +122,11 @@ class Pricinginv extends CI_Controller
         if($filter_missedplus=='true'){
             $arrayu['missedplus'] = 1;
         }
-        // if($filter_exnet!='all'){
-        //     $arrayu['exnet'] = $filter_exnet;
+        // if($excel==1){
+            echo $this->pricingmodel->getdatainv($arrayu,$excel);
+        // }else{
+        //     echo $this->pricingmodel->getdatainv($arrayu,$excel);
         // }
-        echo $this->pricingmodel->getdatainv($arrayu);
     }
     public function getdatainvdet(){
         $arrayu = [];
@@ -141,22 +138,12 @@ class Pricinginv extends CI_Controller
         $filter_art = $_POST['arty'];
         $filter_missed = $_POST['missbom'];
         $filter_missedplus = $_POST['missbomplus'];
-        // $filter_exnet = $_POST['exnet'];
-        // if($filter_dept!=''){
-        //     $arrayu['dept_id'] = $filter_dept;
-        // }
-        // if($filter_tgl!=""){
-        //     $arrayu['tgl'] = $filter_tgl;
-        // }else{
-        //     $arrayu['tgl'] = '1970-01-01';
-        // }
+        $filter_milik = $_POST['milik'];
         if($filter_periode!="all"){
             $arrayu['periode'] = $filter_periode;
         }
          if($filter_ctgr!=''){
             $arrayu["LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4)"] = $filter_ctgr;
-            // $arrayu["LEFT(CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')),4)"] = $filter_ctgr;
-            // $arrayu["id_kategori"] = $filter_ctgr;
         }
         if($filter_art!=''){
             $arrayu["art_type"] = $filter_art;
@@ -170,9 +157,9 @@ class Pricinginv extends CI_Controller
         if($filter_missedplus=='true'){
             $arrayu['missedplus'] = 1;
         }
-        // if($filter_exnet!='all'){
-        //     $arrayu['exnet'] = $filter_exnet;
-        // }
+        if($filter_milik!=''){
+            $arrayu["dln"] = $filter_milik;
+        }
         echo $this->pricingmodel->getdatainvdet($arrayu);
     }
     public function addcutoff(){
@@ -283,6 +270,7 @@ class Pricinginv extends CI_Controller
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->pricingmodel->toexcel();
+        // $inv = $this->getdatainv(1);
         $no = 1;
 
         // Untuk penomoran tabel, di awal set dengan 1    
@@ -314,6 +302,122 @@ class Pricinginv extends CI_Controller
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    
         }
+
+
+        // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    
+        $sheet->getDefaultRowDimension()->setRowHeight(-1);
+        // Set orientasi kertas jadi LANDSCAPE    
+        $sheet->getPageSetup()->setOrientation(\PhpOffice\PhpSpreadsheet\Worksheet\PageSetup::ORIENTATION_LANDSCAPE);
+        // Set judul file excel nya    
+        $sheet->setTitle(" DATA INV");
+
+        // Proses file excel    
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment; filename="RM-Pricing.xlsx"'); // Set nama file excel nya    
+        header('Cache-Control: max-age=0');
+        $writer = new Xlsx($spreadsheet);
+        $writer->save('php://output');
+        $this->helpermodel->isilog('Download Excel Pricing');
+    }
+    public function getexcel(){
+        // $xdata = $_POST['qry'];
+        $arrayu = [];
+        $filter_dept = $_POST['dept'];
+        $filter_tgl = $_POST['tgl'];
+        $filter_periode = $_POST['periode'];
+        $filter_ctgr = $_POST['ctgr'];
+        $filter_tgkosong = $_POST['tgkosong'];
+        $filter_art = $_POST['arty'];
+        $filter_missed = $_POST['missbom'];
+        $filter_missedplus = $_POST['missbomplus'];
+        $filter_milik = $_POST['milik'];
+        if($filter_periode!="all"){
+            $arrayu['periode'] = $filter_periode;
+        }
+        if($filter_ctgr!=''){
+            $arrayu["LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4)"] = $filter_ctgr;
+        }
+        if($filter_milik!=''){
+            $arrayu["dln"] = $filter_milik;
+        }
+        if($filter_art!=''){
+            $arrayu["art_type"] = $filter_art;
+        }
+        if($filter_tgkosong=='true'){
+            $arrayu['tgkosong'] = 1;
+        }
+        if($filter_missed=='true'){
+            $arrayu['missed'] = 1;
+        }
+        if($filter_missedplus=='true'){
+            $arrayu['missedplus'] = 1;
+        }
+        // if($excel==1){
+            $xdata = $this->pricingmodel->getdatainv($arrayu,1);
+        // }else{
+        //     echo $this->pricingmodel->getdatainv($arrayu,$excel);
+        // }
+
+        $spreadsheet = new Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();    // Buat sebuah variabel untuk menampung pengaturan style dari header tabel    
+
+        $sheet->setCellValue('A1', "PRICING INVENTORY " . $this->session->userdata('deptpricinginv')); // Set kolom A1 dengan tulisan "DATA SISWA"    
+        $sheet->getStyle('A1')->getFont()->setBold(true); // Set bold kolom A1    
+        // $sheet->setCellValue('A2', "Periode " . tgl_indo(tglmysql($this->session->userdata('tglawal')))." s/d ".tgl_indo(tglmysql($this->session->userdata('tglakhir')))); // Set kolom A1 dengan tulisan "DATA SISWA"    
+
+        // Buat header tabel nya pada baris ke 3    
+        $sheet->setCellValue('A3', "NO"); // Set kolom A3 dengan tulisan "NO"    
+        $sheet->setCellValue('B3', "DEPT"); // Set kolom B3 dengan tulisan "KODE"    
+        $sheet->setCellValue('C3', "ART TYPE");
+        $sheet->setCellValue('D3', "PROD_DATE"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('E3', "KATEGORI"); // Set kolom C3 dengan tulisan "NAMA SATUAN"      
+        $sheet->setCellValue('F3', "SKU");
+        $sheet->setCellValue('G3', "NAMA BARANG");
+        $sheet->setCellValue('H3', "SAT");
+        $sheet->setCellValue('I3', "PCS");
+        $sheet->setCellValue('J3', "KGS");
+        $sheet->setCellValue('K3', "MATERIAL COST");
+        $sheet->setCellValue('L3', "JOB COST");
+        $sheet->setCellValue('M3', "TOTAL");
+        $sheet->setCellValue('N3', "NOBONTR");
+        $sheet->setCellValue('O3', "DLN");
+        $sheet->setCellValue('P3', "ASAL WASTE");
+        $sheet->setCellValue('Q3', "NO BALE");
+        // Panggil model Get Data   
+        $arrayu = [];
+        // $inv = $this->pricingmodel->toexcel();
+        $inv = $xdata;
+        $no = 1;
+
+        // Untuk penomoran tabel, di awal set dengan 1    
+        $numrow = 4;
+
+        // Set baris pertama untuk isi tabel adalah baris ke 3    
+        // foreach ($inv as  $data) {
+        //     $sku = trim($data['po'])!='' ? viewsku($data['po'], $data['item'], $data['dis']) : namaspekbarang($data['id_barang'],'kode');
+        //     $spekbarang = trim($data['po'])!='' ? spekpo($data['po'], $data['item'], $data['dis']) : namaspekbarang($data['id_barang']);
+        //     // Lakukan looping pada variabel      
+        //     $sheet->setCellValue('A' . $numrow, $no);
+        //     $sheet->setCellValue('B' . $numrow, $data['dept_id']);
+        //     $sheet->setCellValue('C' . $numrow, $data['art_type']);
+        //     $sheet->setCellValue('D' . $numrow, $data['prod_date']);
+        //     $sheet->setCellValue('E' . $numrow, $data['nama_kategori']);
+        //     $sheet->setCellValue('F' . $numrow, $sku);
+        //     $sheet->setCellValue('G' . $numrow, $spekbarang);
+        //     $sheet->setCellValue('H' . $numrow, $data['kodesatuan']);
+        //     $sheet->setCellValue('I' . $numrow, $data['pcs_akhir']);
+        //     $sheet->setCellValue('J' . $numrow, $data['kgs_akhir']);
+        //     $sheet->setCellValue('K' . $numrow, $data['rm']+$data['sm']);
+        //     $sheet->setCellValue('L' . $numrow, $data['spinning']+$data['netting']+$data['ringrope']+$data['senshoku']+$data['hoshu1']+$data['koatsu']+$data['hoshu2']+$data['packing']+$data['shitate']);
+        //     $sheet->setCellValue('M' . $numrow, $data['amount']);
+        //     $sheet->setCellValue('N' . $numrow, $data['nobontr']);
+        //     $sheet->setCellValue('O' . $numrow, $data['dln']);
+        //     $sheet->setCellValue('P' . $numrow, $data['asal_waste']);
+        //     $sheet->setCellValue('Q' . $numrow, $data['nobale']);
+        //     $no++;
+        //     // Tambah 1 setiap kali looping      
+        //     $numrow++; // Tambah 1 setiap kali looping    
+        // }
 
 
         // Set height semua kolom menjadi auto (mengikuti height isi dari kolommnya, jadi otomatis)    

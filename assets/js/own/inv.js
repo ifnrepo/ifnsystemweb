@@ -406,6 +406,9 @@ $("#perpageinv").on('change',function(){
 $("#idstok").on('change',function(){
 	loaddatainv();
 })
+// $("#ifndln").on('change',function(){
+// 	loaddatainv();
+// })
 function loaddatainv(){
 	$(".loadered").removeClass('hilang');
 	var tglawal = $("#tglawal").val();

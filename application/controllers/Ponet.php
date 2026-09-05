@@ -460,4 +460,27 @@ class Ponet extends CI_Controller
         $cocok = array('jml' => $jml,'datagroup' => $html);
         echo json_encode($cocok);
     }
+    public function terimahikiai($id){
+        $qry = $this->ponetmodel->terimahikiai($id);
+        if($qry){
+            $url = base_url().'ponet/jawabhikiai';
+            redirect($url);
+        }
+    }
+    public function jawabhikiai(){
+        $header['header'] = 'other';
+        $data['data'] = $this->ponetmodel->getdatahikiai();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'ponet';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('ponet/jawabhikiai',$data);
+        $this->load->view('layouts/footer',$footer);
+    }
+    	public function viewdetailhikiai($id){
+		$data = [
+			'data' => $this->ponetmodel->getdatahikiaibyid($id),
+			'datadetail' => $this->ponetmodel->getdatadetailhikiai($id)
+		];
+		$this->load->view('ponet\viewdetailhikiai',$data);
+	}
 }
