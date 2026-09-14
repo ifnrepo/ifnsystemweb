@@ -650,10 +650,24 @@ class Helper_model extends CI_Model
         $arr = [];
         $this->db->select('id_barang');
         $this->db->from('tb_barangtidakstok');
+        $this->db->where('id_barang !=',0);
         $this->db->order_by('id');
         $cek = $this->db->get();
         foreach ($cek->result_array() as $value) {
             array_push($arr, $value['id_barang']);
+        }
+        return $arr;
+    }
+    public function barangtidakcekstoksubkon()
+    {
+        $arr = [];
+        $this->db->select('id_barang_subkon');
+        $this->db->from('tb_barangtidakstok');
+        $this->db->where('id_barang_subkon !=',0);
+        $this->db->order_by('id');
+        $cek = $this->db->get();
+        foreach ($cek->result_array() as $value) {
+            array_push($arr, $value['id_barang_subkon']);
         }
         return $arr;
     }

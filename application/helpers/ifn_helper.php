@@ -935,6 +935,13 @@ function barangtidakcekstok()
     $getkode = $CI->helpermodel->barangtidakcekstok();
     return $getkode;
 }
+function barangtidakcekstoksubkon()
+{
+    // $xkode = trim($kode);
+    $CI = &get_instance();
+    $getkode = $CI->helpermodel->barangtidakcekstoksubkon();
+    return $getkode;
+}
 function barangpackexpen($id)
 {
     // $xkode = trim($kode);
