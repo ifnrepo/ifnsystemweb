@@ -1040,6 +1040,7 @@ class Akb_model extends CI_Model
         if ($mode == 1) {
             if ($qu == 1) {
                 $this->db->select("tb_detail.*,round(sum(tb_detail.pcs),2) as pcs,round(sum(tb_detail.kgs),2) as kgs,tb_header.nomor_dok,tb_header.ketprc,barang.kode");
+                $this->db->select("0 as sp_disc_sat,0 as cash_disc_sat");
                 $this->db->from('tb_detail');
                 $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
                 $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
@@ -1049,6 +1050,7 @@ class Akb_model extends CI_Model
                 $this->db->order_by('po,item,dis,insno,barang.kode');
             } else {
                 $this->db->select("tb_detail.*,tb_header.nomor_dok,tb_header.ketprc,barang.kode");
+                $this->db->select("0 as sp_disc_sat,0 as cash_disc_sat");
                 $this->db->from('tb_detail');
                 $this->db->join('tb_header', 'tb_header.id = tb_detail.id_header', 'left');
                 $this->db->join('barang', 'barang.id = tb_detail.id_barang', 'left');
