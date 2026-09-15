@@ -915,6 +915,9 @@ class Out_model extends CI_Model{
                     if(in_array($this->session->userdata('deptsekarang'),daftardeptsubkon()) && in_array($datdet['id_barang'],barangtidakcekstoksubkon())){
                         continue;
                     }
+                    if(in_array($this->session->userdata('deptsekarang'),daftardeptsubkon()) && trim(barangpackexpen($datdet['id_barang']))=='7471'){
+                        continue;
+                    }
                     $cekbckeluar = $this->db->get_where('tb_header',['id' => $id])->row_array();
                     $this->db->where('tgl >= DATE_SUB(NOW(),INTERVAL 4 MONTH)');
                     $nomorbc = $this->db->get_where('tb_header',['trim(keterangan)' => trim($cekbckeluar['keterangan']),'jns_bc' => '261','dept_id' => $cekbckeluar['dept_tuju'],'dept_tuju' => $cekbckeluar['dept_id']])->row_array();

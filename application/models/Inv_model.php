@@ -1515,45 +1515,87 @@ class inv_model extends CI_Model
     public function cekstokdept(){
         $this->db->trans_start();
         $tglawal = $this->session->userdata('tglakhir');
-        $data = $this->getdata();
-        $query = $this->db->query($data);
-        foreach($query->result_array() as $det){
-            if($det['sumkgs'] < 0 || $det['sumpcs'] < 0){
-                continue;
-            }
-            $kondisi = [
-                'dept_id' => $this->session->userdata('currdept'),
-                'periode' => cekperiodedaritgl($tglawal),
-                'trim(nobontr)' => trim($det['nobontr']),
-                'trim(insno)' => trim($det['insno']),
-                'id_barang' => $det['id_barang'],
-                'trim(po)' => trim($det['po']),
-                'trim(item)' => trim($det['item']),
-                'dis' => $det['dis'],
-                'dln' => $det['xdln'],
-                'trim(nobale)' => trim($det['nobale']),
-                'exnet' => $det['exnet'],
-                'stok' => $det['stok'],
-            ];
-            if(in_array($this->session->userdata('currdept'),daftardeptsubkon())){
-                $kondisi['trim(nomor_bc)'] = trim($det['nomor_bc']);
-            }
-            $cekexistdata = $this->db->get_where('stokdept',$kondisi);
-            if($cekexistdata->num_rows() > 0){
-                //Edit data Stokdept
-                $existdata = $cekexistdata->row_array();
-                $isidata = [
-                    'kgs_masuk' => $det['inkgs'],
-                    'pcs_masuk' => $det['inpcs'],
-                    'kgs_keluar' => $det['outkgs'],
-                    'pcs_keluar' => $det['outpcs'],
-                    'kgs_adj' => $det['adjkgs'],
-                    'pcs_adj' => $det['adjpcs'],
-                    'kgs_akhir' => $det['sumkgs'],
-                    'pcs_akhir' => $det['sumpcs'],
+
+        //Cek dulu saldoawal stokdept sudah diupload atau belum
+        $kondisistokdept = [
+            'periode' => cekperiodedaritgl($tglawal),
+            'dept_id' => $this->session->userdata('currdept'),
+        ];
+        $this->db->where($kondisistokdept);
+        $this->db->group_start();
+        $this->db->where('kgs_awal > ',0);
+        $this->db->or_where('pcs_awal > ',0);
+        $this->db->group_end();
+        $ceksaldoawal = $this->db->get('stokdept');
+        if($ceksaldoawal->num_rows() > 0){
+            $data = $this->getdata();
+            $query = $this->db->query($data);
+            foreach($query->result_array() as $det){
+                if($det['sumkgs'] < 0 || $det['sumpcs'] < 0){
+                    continue;
+                }
+                $kondisi = [
+                    'dept_id' => $this->session->userdata('currdept'),
+                    'periode' => cekperiodedaritgl($tglawal),
+                    'trim(nobontr)' => trim($det['nobontr']),
+                    'trim(insno)' => trim($det['insno']),
+                    'id_barang' => $det['id_barang'],
+                    'trim(po)' => trim($det['po']),
+                    'trim(item)' => trim($det['item']),
+                    'dis' => $det['dis'],
+                    'dln' => $det['xdln'],
+                    'trim(nobale)' => trim($det['nobale']),
+                    'exnet' => $det['exnet'],
+                    'stok' => $det['stok'],
                 ];
-                $this->db->where('id',$existdata['id']);
-                $this->db->update('stokdept',$isidata);
+                if(in_array($this->session->userdata('currdept'),daftardeptsubkon())){
+                    $kondisi['trim(nomor_bc)'] = trim($det['nomor_bc']);
+                }
+                $cekexistdata = $this->db->get_where('stokdept',$kondisi);
+                if($cekexistdata->num_rows() > 0){
+                    //Edit data Stokdept
+                    $existdata = $cekexistdata->row_array();
+                    $isidata = [
+                        'kgs_masuk' => $det['inkgs'],
+                        'pcs_masuk' => $det['inpcs'],
+                        'kgs_keluar' => $det['outkgs'],
+                        'pcs_keluar' => $det['outpcs'],
+                        'kgs_adj' => $det['adjkgs'],
+                        'pcs_adj' => $det['adjpcs'],
+                        'kgs_akhir' => $det['sumkgs'],
+                        'pcs_akhir' => $det['sumpcs'],
+                    ];
+                    $this->db->where('id',$existdata['id']);
+                    $this->db->update('stokdept',$isidata);
+                }else{
+                    //Insert data ke Stokdept
+                    $isidata = [
+                        'dept_id' => $this->session->userdata('currdept'),
+                        'periode' => cekperiodedaritgl($tglawal),
+                        'nobontr' => trim($det['nobontr']),
+                        'insno' => trim($det['insno']),
+                        'id_barang' => $det['id_barang'],
+                        'po' => trim($det['po']),
+                        'item' => trim($det['item']),
+                        'dis' => $det['dis'],
+                        'dln' => $det['xdln'],
+                        'nobale' => trim($det['nobale']),
+                        'exnet' => $det['exnet'],
+                        'stok' => $det['stok'],
+                        'kgs_masuk' => $det['inkgs'],
+                        'pcs_masuk' => $det['inpcs'],
+                        'kgs_keluar' => $det['outkgs'],
+                        'pcs_keluar' => $det['outpcs'],
+                        'kgs_adj' => $det['adjkgs'],
+                        'pcs_adj' => $det['adjpcs'],
+                        'kgs_akhir' => $det['sumkgs'],
+                        'pcs_akhir' => $det['sumpcs'],
+                    ];
+                    if(in_array($this->session->userdata('currdept'),daftardeptsubkon())){
+                        $isidata['nomor_bc'] = trim($det['nomor_bc']);
+                    }
+                    $this->db->insert('stokdept',$isidata);
+                }
             }
         }
         $this->helpermodel->isilog("Refresh data Stok Dept - " . $this->session->userdata('currdept'));
