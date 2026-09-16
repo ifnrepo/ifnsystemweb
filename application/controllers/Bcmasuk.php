@@ -199,28 +199,16 @@ class Bcmasuk extends CI_Controller
             $pembagi = $data['kodesatuan'] == 'KGS' ? $data['kgs_perdok'] : $data['pcs_perdok'];
             $subtotal_usd = 0;
             if ($data['jns_bc'] == 262) {
-                // $subtotal_idr = $data['exbc_cif']*$data['exbc_ndpbm'];
                 $pembagi = (float) $data['kgs_total']==0 ? 1 : (float) $data['kgs_total'];
                 $pengali = $pembagi/$data['netto'];
                 $subtotal_usd = $data['devisa_usd']*$pengali;
                 $subtotal_idr = $subtotal_usd*$data['exbc_ndpbm'];
-                // $idrperkilo = $data['nilai_pab']/$data['netto'];
-                // $subtotal_usd = ($data['exbc_cif']/$pembagi)*$data['kgs_total'];
-                // // $subtotal_idr = round($subtotal_usd,2)*$data['exbc_ndpbm'];
-                // $subtotal_idr = 0;
-                // if($subtotal_usd > 0){
-                //     $subtotal_idr = $data['exbc_ndpbm']*$subtotal_usd;
-                // }
             } else {
                 if($data['jns_bc']==40){
                     if($data['bc_makloon']==1){
                         $subtotal_idr = 0;
                         $subtotal_usd = 0;
                     }else{
-                        // if($data['mtuang']==1){
-                        //     $subtotal_idr = $harga_idr;
-                        //     $subtotal_usd = $harga_usd;
-                        // }else{
                         if(trim($data['nomor_bc'])=='087545'){
                             $subtotal_idr = 352439;
                             $subtotal_usd = 19.75;   
