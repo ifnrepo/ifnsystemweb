@@ -965,51 +965,76 @@ class Helper_model extends CI_Model
     public function showbomjf($po, $item, $dis, $idbarang, $insno, $nobontr, $kgs, $noe, $pcs)
     {
         $data = [];
-        $datakondisi = [
-            'trim(po)' => trim($po),
-            'trim(item)' => trim($item),
-            'dis' => $dis,
-            'id_barang' => $idbarang,
-            'trim(insno)' => trim($insno),
-            'trim(nobontr)' => trim($nobontr)
-        ];
-        $this->db->where($datakondisi);
-        $hasil = $this->db->get('ref_bom');
-        if ($hasil->num_rows() > 0) {
-            $cekhasil = $hasil->row_array();
-            $this->db->select("id_barang,nobontr,persen");
-            $this->db->from('ref_bom_detail');
-            $this->db->where('id_bom', $cekhasil['id']);
-            $this->db->where('persen >', 0);
-            $databom = $this->db->get();
-            $jmlrekdet = $databom->num_rows();
-            $nor = 0;
-            $jmlkgsdet = 0;
-            foreach ($databom->result_array() as $detbom) {
-                $nor++;
-                $jmlkgsdet += $kgs * ($detbom['persen'] / 100);
-                $tambahnya = 0;
-                if ($nor == $jmlrekdet) {
-                    $tambahnya = $kgs - $jmlkgsdet;
-                }
-                $dataxspin['po'] = $po;
-                $dataxspin['item'] = $item;
-                $dataxspin['dis'] = $dis;
-                $dataxspin['id_barang'] =  $detbom['id_barang'];
-                $dataxspin['insno'] = $insno;
-                $dataxspin['nobontr'] = $detbom['nobontr'];
-                $dataxspin['persen'] = $detbom['persen'];
-                $dataxspin['kgs_asli'] = ($kgs * ($detbom['persen'] / 100)) + $tambahnya;
-                $dataxspin['xinsno'] = $insno;
-                $dataxspin['xinsnox'] = $insno;
-                $dataxspin['cuy'] = formatsku($po, $item, $dis, $idbarang);
-                $dataxspin['noe'] = $noe;
-                $dataxspin['kgs'] = $kgs;
-                $dataxspin['kunci'] = $dataxspin['id_barang'] . trim($dataxspin['nobontr']);
-                $dataxspin['pcs_asli'] = 0;
+        $cekkatbarang['id_kategori'] = '!@@#';
+        if($idbarang!=0){
+            $cekkatbarang = $this->db->get_where('barang',['id' => $idbarang])->row_array();
+            //Mengecek kategori barang RAW MATERIAL atau SUB MATERIAL
+        }
+        if(trim($cekkatbarang['id_kategori'])!='8189' || trim($cekkatbarang['id_kategori'])!='6319'){
+            $datakondisi = [
+                'trim(po)' => trim($po),
+                'trim(item)' => trim($item),
+                'dis' => $dis,
+                'id_barang' => $idbarang,
+                'trim(insno)' => trim($insno),
+                'trim(nobontr)' => trim($nobontr)
+            ];
+            $this->db->where($datakondisi);
+            $hasil = $this->db->get('ref_bom');
+            if ($hasil->num_rows() > 0) {
+                $cekhasil = $hasil->row_array();
+                $this->db->select("id_barang,nobontr,persen");
+                $this->db->from('ref_bom_detail');
+                $this->db->where('id_bom', $cekhasil['id']);
+                $this->db->where('persen >', 0);
+                $databom = $this->db->get();
+                $jmlrekdet = $databom->num_rows();
+                $nor = 0;
+                $jmlkgsdet = 0;
+                foreach ($databom->result_array() as $detbom) {
+                    $nor++;
+                    $jmlkgsdet += $kgs * ($detbom['persen'] / 100);
+                    $tambahnya = 0;
+                    if ($nor == $jmlrekdet) {
+                        $tambahnya = $kgs - $jmlkgsdet;
+                    }
+                    $dataxspin['po'] = $po;
+                    $dataxspin['item'] = $item;
+                    $dataxspin['dis'] = $dis;
+                    $dataxspin['id_barang'] =  $detbom['id_barang'];
+                    $dataxspin['insno'] = $insno;
+                    $dataxspin['nobontr'] = $detbom['nobontr'];
+                    $dataxspin['persen'] = $detbom['persen'];
+                    $dataxspin['kgs_asli'] = ($kgs * ($detbom['persen'] / 100)) + $tambahnya;
+                    $dataxspin['xinsno'] = $insno;
+                    $dataxspin['xinsnox'] = $insno;
+                    $dataxspin['cuy'] = formatsku($po, $item, $dis, $idbarang);
+                    $dataxspin['noe'] = $noe;
+                    $dataxspin['kgs'] = $kgs;
+                    $dataxspin['kunci'] = $dataxspin['id_barang'] . trim($dataxspin['nobontr']);
+                    $dataxspin['pcs_asli'] = 0;
 
-                array_push($data, $dataxspin);
+                    array_push($data, $dataxspin);
+                }
             }
+        }else{
+            $dataxspin['po'] = $po;
+            $dataxspin['item'] = $item;
+            $dataxspin['dis'] = $dis;
+            $dataxspin['id_barang'] =  $idbarang;
+            $dataxspin['insno'] = $insno;
+            $dataxspin['nobontr'] = $nobontr;
+            $dataxspin['persen'] = 100;
+            $dataxspin['kgs_asli'] = $kgs;
+            $dataxspin['xinsno'] = $insno;
+            $dataxspin['xinsnox'] = $insno;
+            $dataxspin['cuy'] = formatsku($po, $item, $dis, $idbarang);
+            $dataxspin['noe'] = $noe;
+            $dataxspin['kgs'] = $kgs;
+            $dataxspin['kunci'] = $idbarang . trim($nobontr);
+            $dataxspin['pcs_asli'] = 0;
+
+            array_push($data, $dataxspin);
         }
         return $data;
     }

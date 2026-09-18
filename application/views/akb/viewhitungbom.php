@@ -15,7 +15,7 @@
                                 $sku = viewsku($notbreak['po'],$notbreak['item'],$notbreak['dis'],$notbreak['id_barang']);
                                 $nambar = trim($notbreak['po'])=='' ? namaspekbarang($notbreak['id_barang']) : spekpo($notbreak['po'],$notbreak['item'],$notbreak['dis']);
                             ?>
-                            <li>Seri Barang Ke <b class="text-danger"><?= $notbreak['seri_barang'] ?></b><?=' . '.$sku ?><?= ' '.$nambar ?></li>
+                            <li>Seri Barang Ke <b class="text-danger"><?= $notbreak['seri_barang'] ?></b><?=' . '.$sku ?><?= ' '.$nambar.' ('.trim($notbreak['nobontr']).')' ?></li>
                             <?php } endif; ?>
                             </ul>
                         </div>
