@@ -89,8 +89,19 @@ class Bbl_model extends CI_Model
         $this->db->from('barang');
         $this->db->join('satuan', 'satuan.id = barang.id_satuan', 'left');
         if($spec!=''){
-            $this->db->like('barang.nama_barang', $spec);
+            if(str_contains(trim($spec)," ")){
+                $pisah = explode(" ",trim($spec));
+                $hasil = '';
+                foreach($pisah as $ps){
+                    $hasil .= $ps.'%';
+                }
+                $kata = substr($hasil,0,strlen($hasil)-1);
+            }else{
+                $kata = trim($spec);
+            }
+            $this->db->like('barang.nama_barang', $kata, 'both', FALSE);
         }
+        $this->db->where('barang.act',1);
         $this->db->order_by('barang.nama_barang', 'ASC');
         $query = $this->db->get()->result_array();
 
