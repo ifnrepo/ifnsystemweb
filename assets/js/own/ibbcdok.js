@@ -300,6 +300,9 @@ $("#exnomor_bc").blur(function () {
 });
 $("#extgl_bc").change(function () {
 	savedata("extgl_bc", tglmysql($(this).val()));
+	if($("#jns_bc").val()=='262'){
+		carikurs261($(this).val());
+	}
 });
 $("#ket_kemasan").blur(function () {
 	savedata("ket_kemasan", $(this).val());
@@ -641,6 +644,10 @@ function cekkolom(mode) {
 			pesan("Nomor Ex BC harus di isi", "error");
 			return false;
 		}
+		if($("#txtsum").html() != $("#bruto").val()){
+			pesan("Berat Bruto dan Berat detail tidak sama, cek Data !", "error");
+			return false;
+		}
 	}
 	// Untuk cek BC 40
 	if ($("#jns_bc").val() == "40" && $("#cirimakloon").text() != '') {
@@ -843,6 +850,27 @@ function ceklampiranbc23() {
 		data: { id: ide, bc: $("#jns_bc").val() },
 		success: function (data) {
 			$("#pesanerror").val(data);
+			// alert(data);
+			// return false;
+		},
+		error: function (xhr, ajaxOptions, thrownError) {
+			console.log(xhr.status);
+			console.log(thrownError);
+		},
+	});
+	// return callbak;
+}
+function carikurs261(tgl) {
+	var ide = $("#id_header").val();
+	$("#pesanerror").val("");
+	$.ajax({
+		// dataType: "json",
+		type: "POST",
+		url: base_url + "ib/carikurs261",
+		data: { tg: tgl },
+		success: function (data) {
+			$("#kurs_usd").val(data);
+			hitungdevisa();
 			// alert(data);
 			// return false;
 		},
