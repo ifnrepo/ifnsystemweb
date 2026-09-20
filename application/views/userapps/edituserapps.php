@@ -151,6 +151,9 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <li class="nav-item">
                           <a href="#tabs-cekkekuatan" class="nav-link text-blue mb-1" data-bs-toggle="tab">Cek Kekuatan</a>
                         </li>
+                        <li class="nav-item">
+                          <a href="#tabs-cekterima" class="nav-link text-blue mb-1" data-bs-toggle="tab">Konfirm Jastek</a>
+                        </li>
                       </ul>
                     </div>
                     <div class="card-body">
@@ -342,11 +345,19 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                   </div>
                                 </span>
                               </label>
+
+                            </div>
+                            <div class="col-6">
                               <label class="form-check mb-1">
                                 <input class="form-check-input" id="hakprogram7" name="hakprogram7" type="checkbox" <?= cekceklis($user['hakprogram'], 7); ?>>
                                 <span class="form-check-label">Utility</span>
                               </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakprogram8" name="hakprogram8" type="checkbox" <?= cekceklis($user['hakprogram'], 8); ?>>
+                                <span class="form-check-label">Jasa Teknik</span>
+                              </label>
                             </div>
+
                           </div>
                         </div>
 
@@ -733,6 +744,28 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </div>
                           </div>
                         </div>
+                        <div class="tab-pane" id="tabs-cekterima">
+                          <div class="row">
+                            <div class="col">
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakjastek1" name="hakjastek1" type="checkbox" <?= cekceklis($user['hakjastek'], 1); ?>>
+                                <span class="form-check-label">INFORMATION TECHNOLOGY</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakjastek2" name="hakjastek2" type="checkbox" <?= cekceklis($user['hakjastek'], 2); ?>>
+                                <span class="form-check-label">PERSONALIA & GENERAL AFFAIR</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakjastek3" name="hakjastek3" type="checkbox" <?= cekceklis($user['hakjastek'], 3); ?>>
+                                <span class="form-check-label">RESEARCH & DEVELOPMENT</span>
+                              </label>
+                              <label class="form-check mb-1">
+                                <input class="form-check-input" id="hakjastek4" name="hakjastek4" type="checkbox" <?= cekceklis($user['hakjastek'], 4); ?>>
+                                <span class="form-check-label">UTILITY</span>
+                              </label>
+                            </div>
+                          </div>
+                        </div>
                       </div>
                     </div>
                   </div>
@@ -1090,6 +1123,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <label class="form-check form-check-single form-switch">
                             <?php $pcaktif = $user['cek_sublok'] == 1 ? 'checked' : ''; ?>
                             <input class="form-check-input" name="cek_sublok" id="cek_sublok" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-1 row bg-success-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Akses Sub Lokasi">
+                        <span class="col font-bold">Master Utility</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekjastek'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekjastek" id="cekjastek" type="checkbox" <?= $pcaktif; ?>>
                           </label>
                         </span>
                       </label>

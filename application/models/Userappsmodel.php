@@ -228,6 +228,7 @@ class Userappsmodel extends CI_Model
         $data['cek_so'] = isset($data['cek_so']) ? 1 : 0;
         $data['cek_saw'] = isset($data['cek_saw']) ? 1 : 0;
         $data['cek_sublok'] = isset($data['cek_sublok']) ? 1 : 0;
+        $data['cekjastek'] = isset($data['cekjastek']) ? 1 : 0;
         $data['cek_limit'] = isset($data['cek_limit']) ? 1 : 0;
         $data['cek_price'] = isset($data['cek_price']) ? 1 : 0;
         $data['cek_notes'] = isset($data['cek_notes']) ? 1 : 0;
@@ -340,6 +341,13 @@ class Userappsmodel extends CI_Model
                 unset($data['hakdowntime' . $x]);
             }
         }
+        $hakjastek = str_repeat('0', 100);
+        for ($x = 1; $x <= 50; $x++) {
+            if (isset($data['hakjastek' . $x])) {
+                $hakjastek = substr_replace($hakjastek, '10', ($x * 2) - 2, 2);
+                unset($data['hakjastek' . $x]);
+            }
+        }
         // if(str_contains($rfid,'10')){
         //     $rfid = '10'.$rfid;
         // }
@@ -352,6 +360,7 @@ class Userappsmodel extends CI_Model
         $data['setting'] = $setting;
         $data['rfid'] = $rfid;
         $data['hakdowntime'] = $hakdowntime;
+        $data['hakjastek'] = $hakjastek;
         $data['hakdepartemen'] = $hakdepartemen;
         $data['hakstokopname'] = $hakstokopname;
         $data['cekpb'] = $cekpb;
@@ -393,6 +402,7 @@ class Userappsmodel extends CI_Model
             $this->session->set_userdata('setting', $cek['setting']);
             $this->session->set_userdata('rfid', $cek['rfid']);
             $this->session->set_userdata('hakdowntime', $cek['hakdowntime']);
+            $this->session->set_userdata('hakjastek', $cek['hakjastek']);
             $this->session->set_userdata('hakdepartemen', $cek['hakdepartemen']);
             $this->session->set_userdata('hakstokopname', $cek['hakstokopname']);
             $this->session->set_userdata('arrdep', arrdep($cek['hakdepartemen']));
