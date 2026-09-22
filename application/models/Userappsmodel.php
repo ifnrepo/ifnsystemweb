@@ -332,7 +332,6 @@ class Userappsmodel extends CI_Model
                 unset($data['rfid' . $x]);
             }
         }
-
         // Set modul hakdowntime
         $hakdowntime = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {

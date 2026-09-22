@@ -345,7 +345,6 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                   </div>
                                 </span>
                               </label>
-
                             </div>
                             <div class="col-6">
                               <label class="form-check mb-1">
