@@ -1458,4 +1458,13 @@ class Ib_model extends CI_Model
         $this->db->where('id', $id);
         return $this->db->update('tb_header', $data);
     }
+    public function carikurs261($tgl){
+        $hasil = 0;
+        $datakurs = $this->db->get_where('tb_kurs',['tgl' => $tgl]);
+        if($datakurs->num_rows() > 0){
+            $hasilkurs = $datakurs->row_array();
+            $hasil = $hasilkurs['usd'];
+        }
+        return $hasil;
+    }
 }

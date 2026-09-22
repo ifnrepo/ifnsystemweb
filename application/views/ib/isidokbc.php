@@ -102,7 +102,7 @@
                                     <!-- <input type="text" class="form-control font-kecil" id="nomor_aju" name="nomor_aju" value="" aria-describedby="emailHelp" placeholder="No AJU"> -->
                                 </div>
                                 <div class="col">
-                                    <input type="text" class="form-control font-kecil tgl" id="tgl_aju" name="tgl_aju" value="<?= tglmysql($datheader['tgl_aju']); ?>" aria-describedby="emailHelp" placeholder="Tgl AJU" <?= $nonaktif; ?>>
+                                    <input type="text" class="form-control font-kecil <?php if($datheader['send_ceisa']==0){ echo "tgl"; } ?>" id="tgl_aju" name="tgl_aju" value="<?= tglmysql($datheader['tgl_aju']); ?>" aria-describedby="emailHelp" placeholder="Tgl AJU" <?= $nonaktif; ?>>
                                 </div>
                             </div>
                             <div class="mb-1 row">
@@ -168,7 +168,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_sj" name="tgl_sj" value="<?= tglmysql($datheader['tgl_sj']); ?>" aria-describedby="emailHelp" placeholder="Tgl Surat Jalan" <?= $nonaktif; ?>>
+                                                    <input type="text" class="form-control font-kecil btn-flat <?php if($datheader['send_ceisa']==0){ echo "tgl"; } ?>" id="tgl_sj" name="tgl_sj" value="<?= tglmysql($datheader['tgl_sj']); ?>" aria-describedby="emailHelp" placeholder="Tgl Surat Jalan" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -208,7 +208,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_po" name="tgl_po" value="<?= tglmysql($datheader['tgl_po']); ?>" aria-describedby="emailHelp" placeholder="Tgl PO" <?= $nonaktif; ?>>
+                                                    <input type="text" class="form-control font-kecil btn-flat <?php if($datheader['send_ceisa']==0){ echo "tgl"; } ?>" id="tgl_po" name="tgl_po" value="<?= tglmysql($datheader['tgl_po']); ?>" aria-describedby="emailHelp" placeholder="Tgl PO" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -228,7 +228,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_inv" name="tgl_inv" value="<?= tglmysql($datheader['tgl_inv']); ?>" aria-describedby="emailHelp" placeholder="Tgl Invoice" <?= $nonaktif; ?>>
+                                                    <input type="text" class="form-control font-kecil btn-flat <?php if($datheader['send_ceisa']==0){ echo "tgl"; } ?>" id="tgl_inv" name="tgl_inv" value="<?= tglmysql($datheader['tgl_inv']); ?>" aria-describedby="emailHelp" placeholder="Tgl Invoice" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -248,7 +248,7 @@
                                             <div class="row">
                                                 <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                 <div class="col">
-                                                    <input type="text" class="form-control font-kecil btn-flat tgl" id="tgl_pl" name="tgl_pl" value="<?= tglmysql($datheader['tgl_pl']); ?>" aria-describedby="emailHelp" placeholder="Tanggal Packing List" <?= $nonaktif; ?>>
+                                                    <input type="text" class="form-control font-kecil btn-flat <?php if($datheader['send_ceisa']==0){ echo "tgl"; } ?>" id="tgl_pl" name="tgl_pl" value="<?= tglmysql($datheader['tgl_pl']); ?>" aria-describedby="emailHelp" placeholder="Tanggal Packing List" <?= $nonaktif; ?>>
                                                 </div>
                                             </div>
                                         </div>
@@ -283,7 +283,7 @@
                                                 <div class="row">
                                                     <label class="col-3 col-form-label font-kecil">Tgl</label>
                                                     <div class="col">
-                                                        <input type="text" class="form-control font-kecil btn-flat tgl" id="extgl_bc" name="extgl_bc" value="<?= tglmysql($datheader['extgl_bc']); ?>" aria-describedby="emailHelp" placeholder="Tgl Ex BC" <?= $nonaktif; ?>>
+                                                        <input type="text" class="form-control font-kecil btn-flat <?php if($datheader['send_ceisa']==0){ echo "tgl"; } ?>" id="extgl_bc" name="extgl_bc" value="<?= tglmysql($datheader['extgl_bc']); ?>" aria-describedby="emailHelp" placeholder="Tgl Ex BC" <?= $nonaktif; ?>>
                                                     </div>
                                                 </div>
                                             </div>

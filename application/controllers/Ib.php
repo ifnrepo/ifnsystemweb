@@ -2098,6 +2098,10 @@ class Ib extends CI_Controller
             redirect($url);
         }
     }
+    public function carikurs261(){
+        $tgl = tglmysql($_POST['tg']);
+        echo $this->ibmodel->carikurs261($tgl);
+    }
     //End IB Controller
 
     function cetakqr2($isi, $id)
