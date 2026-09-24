@@ -1271,7 +1271,8 @@ function getdatabomcost($que)
     $hass = [];
     $rawsub = ['8189', '6319'];
     if (in_array($que['id_kategori'], $rawsub)) {
-        $datahamat = $CI->db->get_where('tb_hargamaterial', ['id_barang' => $que['id_barang'], 'trim(nobontr)' => trim($que['nobontr']), 'trim(nobontr) != ' => "", 'trim(nomor_bc) != ' => ""]);
+        // $datahamat = $CI->db->get_where('tb_hargamaterial', ['id_barang' => $que['id_barang'], 'trim(nobontr)' => trim($que['nobontr']), 'trim(nobontr) != ' => "", 'trim(nomor_bc) != ' => ""]);
+        $datahamat = $CI->db->get_where('tb_hargamaterial', ['id_barang' => $que['id_barang'], 'trim(nobontr)' => trim($que['nobontr']), 'trim(nobontr) != ' => ""]);
         if ($datahamat->num_rows() > 0) {
             $hamat = $datahamat->row_array();
             $hamat['hargarm'] = $que['id_kategori'] == '8189' ? $hamat['harga_akt'] : 0;
