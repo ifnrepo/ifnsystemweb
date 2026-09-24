@@ -4,7 +4,7 @@
             <div class="mb-1 row">
                 <label class="col-3 col-form-label required">Tanggal Produksi</label>
                 <div class="col"> 
-                    <input type="text" id="id" value="<?= $data['id'] ?>" class="hilang">
+                    <input type="text" id="id" value="<?= $data['id'] ?>" class="">
                     <input type="text" class="form-control font-kecil" name="tglprod" id="tglprod" placeholder="Tanggal Produksi" value="<?= tglmysql($data['prod_date']) ?>">
                 </div>
             </div>

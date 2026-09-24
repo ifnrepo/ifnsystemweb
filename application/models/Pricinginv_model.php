@@ -84,7 +84,7 @@ class Pricinginv_model extends CI_Model
             foreach ($where as $key => $value)
             {
                 if($key=='tgkosong'){
-                    $setWhere[] = "prod_date is null OR prod_date = '0000-00-00' ";
+                    $setWhere[] = "(prod_date is null OR prod_date = '0000-00-00') ";
                 }else{
                     if($key=='missed'){
                         $setWhere[] = "pcs_bom = 0 AND kgs_bom = 0";
@@ -243,7 +243,7 @@ class Pricinginv_model extends CI_Model
         // $kolom .= "LEFT JOIN kategori on kategori.kategori_id = CONCAT(IFNULL(yid_kategori,''),IFNULL(xid_kategori,'')) ";
         // $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan";
         if($this->session->userdata('milik')!=''){
-            $kolom .= "where dln = '".$this->session->userdata('milik')."'";
+            $kolom .= "where stokinv.dln = '".$this->session->userdata('milik')."'";
         }
         $kolom .= " ) r2 order by urut) r3";
         return $kolom;
@@ -267,7 +267,7 @@ class Pricinginv_model extends CI_Model
             foreach ($where as $key => $value)
             {
                 if($key=='tgkosong'){
-                    $setWhere[] = "dateprod is NULL OR dateprod = '0000-00-00' ";
+                    $setWhere[] = "(dateprod is NULL OR dateprod = '0000-00-00') ";
                 }else{
                     if($key=='bcaneh'){
                         $setWhere[] = '(trim(nomor_bc) = "" OR nomor_bc is null)';
