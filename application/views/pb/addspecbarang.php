@@ -57,6 +57,7 @@
         }
     })
     $("#getbarang").click(function(){
+        $("#getbarang").html('Loading..');
         if($("#keyw").val() == ''){
             pesan('Isi dahulu keyword pencarian barang','info');
             return;
@@ -70,26 +71,40 @@
                 data: $("#keyw").val(),
             },
             success: function(data){
+                $("#getbarang").html('Get!');
                 $("#body-table").html(data.datagroup).show();
             },
             error: function (xhr, ajaxOptions, thrownError) {
+                $("#getbarang").html('Get!');
                 console.log(xhr.status);
                 console.log(thrownError);
             }
         })
     })
     $(document).on('click','.pilihbarang',function(){
+        var mode = $("#cari_by").val();
         var x = $(this).attr('rel1');
         var y = $(this).attr('rel2');
         var z = $(this).attr('rel3');
         var w = $(this).attr('rel4');
+        var y1 = $(this).attr('rel5');
+        var z2 = $(this).attr('rel6');
+        var w3 = $(this).attr('rel7');
         // $("#nama_barang").val(x);
         var spn = w==1 ? " - DLN" : "";
-        $("#spekbarangnya").text(x+spn);
-        $("#nama_barang").val(x);
-        $("#id_barang").val(y);
-        $("#id_satuan").val(z);
-        $("#dln").val(w);
+        if(mode==2){
+            $("#nama_barang").val(x);
+            $("#spekbarangnya").text(x);
+            $("#po").val(y1);
+            $("#item").val(z2);
+            $("#dis").val(w3);
+        }else{
+            $("#spekbarangnya").text(x+spn);
+            $("#nama_barang").val(x);
+            $("#id_barang").val(y);
+            $("#id_satuan").val(z);
+            $("#dln").val(w);
+        }
         $("#modal-scroll").modal('hide');
         $("#cont-spek").removeClass('hilang');
     })

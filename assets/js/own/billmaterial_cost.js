@@ -17,6 +17,11 @@ $(document).ready(function () {
 	// $("#dept_kirim").change();
 	// alert('OKEE');
 });
+$('#textcari').on('keypress', function(e) {
+    if (e.which == 13) {
+		$("#buttoncari").click();
+    }
+});
 $("#prod_dateedit").change(function(){
 	$(".loadered").removeClass('hilang');
 	$.ajax({
@@ -62,6 +67,7 @@ $("#dept_asal").change(function(){
 	});
 })
 $("#buttoncari").click(function(){
+	$("#buttoncari").html('Loading..');
 	var inputcari = $("#textcari").val();
 	$.ajax({
 		// dataType: "json",
@@ -77,6 +83,7 @@ $("#buttoncari").click(function(){
 			// $("#dept_tuju").change();
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
+			$("#buttoncari").html('Cari Data');
 			console.log(xhr.status);
 			console.log(thrownError);
 		},
