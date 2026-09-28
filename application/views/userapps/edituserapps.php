@@ -1128,16 +1128,32 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                   </div>
                 </div>
+                <div class="row bg-success-lt ml-1">
+                  <label class="col-2 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Akses Sub Lokasi">
+                        <span class="col font-bold">Master Jastek</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['cekjastek'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekjastek" id="cekjastek" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
                 <div class="mb-1 row bg-success-lt ml-1">
                   <label class="col-2 col-form-label"></label>
                   <div class="col mt-2">
                     <div class="col-11">
                       <label class="row" title="Akses Sub Lokasi">
-                        <span class="col font-bold">Master Utility</span>
+                        <span class="col font-bold">Verifikasi Jastek</span>
                         <span class="col-auto">
                           <label class="form-check form-check-single form-switch">
-                            <?php $pcaktif = $user['cekjastek'] == 1 ? 'checked' : ''; ?>
-                            <input class="form-check-input" name="cekjastek" id="cekjastek" type="checkbox" <?= $pcaktif; ?>>
+                            <?php $pcaktif = $user['cekjastek_verifikasi'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="cekjastek_verifikasi" id="cekjastek_verifikasi" type="checkbox" <?= $pcaktif; ?>>
                           </label>
                         </span>
                       </label>
