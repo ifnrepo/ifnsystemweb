@@ -229,6 +229,7 @@ class Userappsmodel extends CI_Model
         $data['cek_saw'] = isset($data['cek_saw']) ? 1 : 0;
         $data['cek_sublok'] = isset($data['cek_sublok']) ? 1 : 0;
         $data['cekjastek'] = isset($data['cekjastek']) ? 1 : 0;
+        $data['cekjastek_verifikasi'] = isset($data['cekjastek_verifikasi']) ? 1 : 0;
         $data['cek_limit'] = isset($data['cek_limit']) ? 1 : 0;
         $data['cek_price'] = isset($data['cek_price']) ? 1 : 0;
         $data['cek_notes'] = isset($data['cek_notes']) ? 1 : 0;
