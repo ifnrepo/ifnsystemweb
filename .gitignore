@@ -24,6 +24,7 @@ user_guide_src/cilexer/pycilexer.egg-info/*
 /assets/image/flags/*
 /assets/image/personil/*
 /assets/file/dok/*
+/assets/docs/*
 
 # IDE Files
 #-------------------------

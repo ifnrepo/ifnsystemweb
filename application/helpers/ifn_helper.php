@@ -12,6 +12,7 @@ define('LOK_UPLOAD_DOK_PO', "./assets/file/dokpo/");
 define('kodeunik', 'concat(tb_header.data_ok,tb_header.ok_valid,tb_header.ok_tuju,tb_header.ok_pp,tb_header.ok_pc) as kodeunik');
 define('LOK_UPLOAD_PDFRESPON', "./assets/file/");
 define('PREFIXAJU', 'IFN');
+define('LOK_UPLOAD_DOK_RD', "./assets/docs/pdf-jala/");
 
 function visibpass($kata)
 {

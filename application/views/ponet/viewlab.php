@@ -33,7 +33,7 @@
                 $kirim = $cklab['status_cek']==1 ? 'OK' : '';
             ?>
                 <tr>
-                    <td class="text-center font-bold"><a href="#" id="kolom" rel="<?= $cklab['id'] ?>" style="text-decoration: none;" class="btn btn-sm btn-danger" title="View Report"><i class="fa fa-file"></i></a></td>
+                    <td class="text-center font-bold"><a href="#" id="kolom" rel="<?= $cklab['id'] ?>" rel2="<?= $cklab['pdf_dry'] ?>" rel3="<?= $cklab['pdf_wet'] ?>" style="text-decoration: none;" class="btn btn-sm btn-danger" title="View Report"><i class="fa fa-file"></i></a></td>
                     <td><?= tglmysql2($cklab['tgl_terima']) ?></td>
                     <td><?= tglmysql2($cklab['tgl']) ?></td>
                     <td><?= tglmysql2($cklab['tgl_cek']) ?></td>
@@ -70,9 +70,42 @@
             </div>
         </div>
         <hr class="m-0">
-        <div class="text-center d-flex flex-column align-items-center justify-content-center" style="min-height: 400px !important;">
+        <!-- <div class="text-center d-flex flex-column align-items-center justify-content-center" style="min-height: 400px !important;">
             <div><h1>We Are Building Something New</h1></div>
             <div>Our page is under construction. Please check back soon!</div>
+        </div> -->
+        <div class="m-1" style="min-height: 400px !important;">
+            <div class="bg-blue w-100">
+                <div class="card">
+                    <div class="card-header">
+                        <ul class="nav nav-tabs card-header-tabs" data-bs-toggle="tabs">
+                            <li class="nav-item">
+                            <a href="#tabs-home-8" class="nav-link font-bold text-blue bg-primary-lt active" data-bs-toggle="tab">Dokumen Dry</a>
+                            </li>
+                            <li class="nav-item">
+                            <a href="#tabs-profile-8" class="nav-link font-bold text-red bg-yellow-lt" data-bs-toggle="tab">Dokumen Wet</a>
+                            </li>
+                            <li class="nav-item hilang">
+                            <a href="#tabs-activity-8" class="nav-link" data-bs-toggle="tab">Activity</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="card-body" style="overflow: auto;">
+                        <div class="tab-content w-100">
+                            <div class="tab-pane fade active show" id="tabs-home-8">
+                                <iframe id="iframedry" src="" style="width:100%;min-height:700px;" alt="Tidak ditemukan"></iframe>
+                            </div>
+                            <div class="tab-pane fade" id="tabs-profile-8">
+                                <iframe id="iframewet" src="" style="width:100%;min-height:700px;" alt="Tidak ditemukan"></iframe>
+                            </div>
+                            <div class="tab-pane fade hilang" id="tabs-activity-8">
+                                <h4>Activity tab</h4>
+                                <div>Donec ac vitae diam amet vel leo egestas consequat rhoncus in luctus amet, facilisi sit mauris accumsan nibh habitant senectus</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
@@ -80,7 +113,20 @@
 <script>
     $(document).on('click','#kolom',function(){
         if($("#dokhasil").hasClass('hilang')){
+            var pdfdry = $(this).attr('rel2');
+            var pdfwet = $(this).attr('rel3');
+            if(pdfdry.trim() == ''){
+                pdfdry = 'dokumenkosong.PDF';
+            }
+            if(pdfwet.trim() == ''){
+                pdfwet = 'dokumenkosong.PDF';
+            }
             $("#dokhasil").removeClass('hilang');
+            // Select the iframe using its ID
+            const iframedry = document.getElementById('iframedry');
+            iframedry.src = base_url+'assets/docs/pdf-jala/'+pdfdry;
+            const iframewet = document.getElementById('iframewet');
+            iframewet.src = base_url+'assets/docs/pdf-jala/'+pdfwet;
         }
     })
     $(document).on('click','#hidedok',function(){
