@@ -541,8 +541,21 @@
                                 <div class="card-body p-1">
                                     <div class="row">
                                         <div class="col-sm-6">
+                                            <div class="mb-1 mt-1 row <?= $hilangbc40.' '.$hilangbc262 ?>">
+                                                <label class="col-3 col-form-label font-kecil">Incoterm</label>
+                                                <div class="col">
+                                                    <select class="form-select font-kecil font-bold btn-flat" name="kode_incoterm" id="kode_incoterm" <?= $selectnonaktif; ?>>
+                                                        <option value="">Pilih</option>
+                                                        <?php foreach ($refincoterm->result_array() as $incoterm) { ?>
+                                                            <option value="<?= $incoterm['kode_incoterm']; ?>" <?php if ($incoterm['kode_incoterm'] == $datheader['kode_incoterm']) {
+                                                                                                        echo "selected";
+                                                                                                    } ?>><?= $incoterm['kode_incoterm'].' - '.$incoterm['uraian_incoterm']; ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="mb-1 mt-1 row">
-                                                <label class="col-3 col-form-label font-kecil">Nilai Pabean / CIF</label>
+                                                <label class="col-3 col-form-label font-kecil">Nilai Pabean</label>
                                                 <div class="col">
                                                     <!-- <input type="text" class="form-control font-kecil" id="netto" name="netto" aria-describedby="emailHelp" placeholder="Netto Kgs"> -->
                                                     <select class="form-select font-kecil font-bold btn-flat" name="mtuang" id="mtuang" <?= $selectnonaktif; ?>>
