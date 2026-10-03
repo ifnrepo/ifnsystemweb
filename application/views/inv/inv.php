@@ -322,17 +322,18 @@ defined('BASEPATH') or exit('No direct script access allowed');
               </div>
           </div>
         </div>
-        <input type="text" class="hilang" id="sawalpcs" value="<?= isset($dt['sawalpcs']) ? rupiah($dt['sawalpcs'],0) : 0; ?>" >
+        <?php $koma = $this->session->userdata('currdept')=='GS' ? 2 : 0; ?>
+        <input type="text" class="hilang" id="sawalpcs" value="<?= isset($dt['sawalpcs']) ? rupiah($dt['sawalpcs'],$koma) : 0; ?>" >
         <input type="text" class="hilang" id="sawalkgs" value="<?= isset($dt['sawalkgs']) ? rupiah($dt['sawalkgs'],2) : 0; ?>" >
-        <input type="text" class="hilang" id="totalinpcs" value="<?= isset($dt['totalinpcs']) ? rupiah($dt['totalinpcs'],0) : 0; ?>" >
+        <input type="text" class="hilang" id="totalinpcs" value="<?= isset($dt['totalinpcs']) ? rupiah($dt['totalinpcs'],$koma) : 0; ?>" >
         <input type="text" class="hilang" id="totalinkgs" value="<?= isset($dt['totalinkgs']) ? rupiah($dt['totalinkgs'],2) : 0; ?>" >
-        <input type="text" class="hilang" id="totaloutpcs" value="<?= isset($dt['totaloutpcs']) ? rupiah($dt['totaloutpcs'],0) : 0; ?>" >
+        <input type="text" class="hilang" id="totaloutpcs" value="<?= isset($dt['totaloutpcs']) ? rupiah($dt['totaloutpcs'],$koma) : 0; ?>" >
         <input type="text" class="hilang" id="totaloutkgs" value="<?= isset($dt['totaloutkgs']) ? rupiah($dt['totaloutkgs'],2) : 0; ?>" >
-        <input type="text" class="hilang" id="totaladjpcs" value="<?= isset($dt['totaladjpcs']) ? rupiah($dt['totaladjpcs'],0) : 0; ?>" >
+        <input type="text" class="hilang" id="totaladjpcs" value="<?= isset($dt['totaladjpcs']) ? rupiah($dt['totaladjpcs'],$koma) : 0; ?>" >
         <input type="text" class="hilang" id="totaladjkgs" value="<?= isset($dt['totaladjkgs']) ? rupiah($dt['totaladjkgs'],2) : 0; ?>" >
-        <input type="text" class="hilang" id="totalsopcs" value="<?= isset($dt['totalsopcs']) ? rupiah($dt['totalsopcs'],0) : 0; ?>" >
+        <input type="text" class="hilang" id="totalsopcs" value="<?= isset($dt['totalsopcs']) ? rupiah($dt['totalsopcs'],$koma) : 0; ?>" >
         <input type="text" class="hilang" id="totalsokgs" value="<?= isset($dt['totalsokgs']) ? rupiah($dt['totalsokgs'],2) : 0; ?>" >
-        <input type="text" class="hilang" id="totalpcs" value="<?= isset($dt['totalpcs']) ? rupiah($dt['totalpcs'],0) : 0; ?>" >
+        <input type="text" class="hilang" id="totalpcs" value="<?= isset($dt['totalpcs']) ? rupiah($dt['totalpcs'],$koma) : 0; ?>" >
         <input type="text" class="hilang" id="totalkgs" value="<?= isset($dt['totalkgs']) ? rupiah($dt['totalkgs'],2) : 0; ?>" >
         <input type="text" class="hilang" id="xselisokgs" value="<?= isset($dt['totalsokgs']) ? rupiah($dt['totalsokgs']-$dt['totalkgs'],2) : 0; ?>" >
         <input type="text" id="jumlahrek" class="hilang" value="0">

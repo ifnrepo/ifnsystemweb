@@ -321,6 +321,7 @@ class Ib extends CI_Controller
         $data['refkemas'] = $this->ibmodel->refkemas();
         $data['refmtuang'] = $this->ibmodel->refmtuang();
         $data['refbendera'] = $this->ibmodel->refbendera();
+        $data['refincoterm'] = $this->ibmodel->refincoterm();
         // $data['refpelabuhan'] = $this->ibmodel->refpelabuhan();
         $data['datatoken'] = $this->ibmodel->gettokenbc()->row_array();
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
@@ -689,20 +690,20 @@ class Ib extends CI_Controller
                 $hasil = $this->ibmodel->simpanresponbc($data);
                 if ($hasil) {
                     $this->helpermodel->isilog("Berhasil GET RESPON AJU " . $dataaju . " (" . $databalik['dataStatus'][0]['nomorDaftar'] . ")");
-                    $this->session->set_flashdata('errorsimpan', 2);
+                    $this->session->set_flashdata('errorsimpan', 1);
                     $this->session->set_flashdata('pesanerror', 'Respon sudah berhasil di Tarik');
                 }
                 if ($headerib['jns_bc'] == '40') {
                     $simpankehargamaterial = $this->ibmodel->simpankehargamaterial($id);
                 }
             } else {
-                $this->session->set_flashdata('errorsimpan', 1);
+                $this->session->set_flashdata('errorsimpan', 2);
                 $this->session->set_flashdata('pesanerror', 'Nomor Pendaftaran Masih kosong, ' . $databalik['dataStatus'][0]['keterangan']);
             }
             $url = base_url() . 'ib/isidokbc/' . $id;
             redirect($url);
         } else {
-            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
             // $url = base_url().'ib/isidokbc/'.$id;
             $url = base_url() . 'ib/isidokbc/' . $id;
@@ -743,13 +744,13 @@ class Ib extends CI_Controller
                 }
             }
             if ($cekada==0) {
-                $this->session->set_flashdata('errorsimpan', 1);
+                $this->session->set_flashdata('errorsimpan', 2);
                 $this->session->set_flashdata('pesanerror', 'PDF Belum ada');
             }
             $url = $mode = 0 ? base_url() . 'ib/isidokbc/' . $id : base_url() . 'ib';
             redirect($url);
         } else {
-            $this->session->set_flashdata('errorsimpan', 1);
+            $this->session->set_flashdata('errorsimpan', 2);
             $this->session->set_flashdata('pesanerror', $databalik['message'] . '[EXCEPTION]' . $databalik['Exception']);
             // $url = base_url().'ib/isidokbc/'.$id;
             $url = $mode = 0 ? base_url() . 'ib/isidokbc/' . $id : base_url() . 'ib';
@@ -1372,7 +1373,7 @@ class Ib extends CI_Controller
             "jumlahKontainer" => 0,
             "kodeAsuransi" => "LN",
             "kodeDokumen" => $data['jns_bc'],
-            "kodeIncoterm" => "CIF",
+            "kodeIncoterm" => $data['kode_incoterm']=='' ? 'CIF' : $data['kode_incoterm'],
             "kodeKantor" => "050500",
             "kodeKantorBongkar" => "040300",
             "kodePelBongkar" => $data['pelabuhan_bongkar'],

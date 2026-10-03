@@ -575,6 +575,10 @@ class Ib_model extends CI_Model
     {
         return $this->db->order_by('kode_pelabuhan')->get('ref_pelabuhan');
     }
+    public function refincoterm()
+    {
+        return $this->db->order_by('id')->get('ref_incoterm');
+    }
     public function getpelabuhanbykode($kode)
     {
         $this->db->like('kode_pelabuhan', $kode);

@@ -38,17 +38,17 @@ $(document).ready(function () {
 			// alert(api2.recordsFiltered);
             if(api2.recordsFiltered > 0){
 				$("#jumlahkgs").text(rupiah(data[0]['totalkgs'],'.',',',2));
-				$("#jumlahpcs").text(rupiah(data[0]['totalpcs'],'.',',',0));
-				$("#sawalpcs").text(rupiah(data[0]['sawalpcs'],'.',',',0));
+				$("#jumlahpcs").text(rupiah(data[0]['totalpcs'],'.',',',2));
+				$("#sawalpcs").text(rupiah(data[0]['sawalpcs'],'.',',',2));
 				$("#sawalkgs").text(rupiah(data[0]['sawalkgs'],'.',',',2));
 				$("#inkgs").text(rupiah(data[0]['totalinkgs'],'.',',',2));
 				$("#outkgs").text(rupiah(data[0]['totaloutkgs'],'.',',',2));
 				$("#adjkgs").text(rupiah(data[0]['totaladjkgs'],'.',',',2));
 				$("#sokgs").text(rupiah(data[0]['totalsokgs'],'.',',',2));
-				$("#inpcs").text(rupiah(data[0]['totalinpcs'],'.',',',0));
-				$("#outpcs").text(rupiah(data[0]['totaloutpcs'],'.',',',0));
-				$("#adjpcs").text(rupiah(data[0]['totaladjpcs'],'.',',',0));
-				$("#sopcs").text(rupiah(data[0]['totalsopcs'],'.',',',0));
+				$("#inpcs").text(rupiah(data[0]['totalinpcs'],'.',',',2));
+				$("#outpcs").text(rupiah(data[0]['totaloutpcs'],'.',',',2));
+				$("#adjpcs").text(rupiah(data[0]['totaladjpcs'],'.',',',2));
+				$("#sopcs").text(rupiah(data[0]['totalsopcs'],'.',',',2));
 				$("#jumlahrekod").text(rupiah(api2.recordsFiltered,'.',',',0));
 			}else{
 				$("#jumlahkgs").text('0');

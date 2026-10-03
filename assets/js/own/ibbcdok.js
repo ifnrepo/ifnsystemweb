@@ -589,6 +589,10 @@ function cekkolom(mode) {
 			pesan("Nomor Sales Note harus di isi", "error");
 			return false;
 		}
+		if ($("#kode_incoterm").val() == "") {
+			pesan("Incoterm harus di isi", "error");
+			return false;
+		}
 	}
 	// Untuk cek BC 30
 	if ($("#jns_bc").val() == "30") {

@@ -240,7 +240,11 @@ class inv_model extends CI_Model
         // Query untuk In Barang
         $this->db->select("1 as kodeinv,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_detail.dln as xdln,barang.id_kategori,tb_detail.insno,tb_detail.nobontr,barang.kode,0 as idu");
         $this->db->select('0 as saldopcs,0 as saldokgs');
-        $this->db->select('sum(pcs) as inpcs,sum(kgs) as inkgs');
+        if($dept=='GS'){
+            $this->db->select('sum(IF(tb_detail.id_satuan!=22,pcs,0)) as inpcs,sum(IF(tb_detail.id_satuan!=22,0,kgs)) as inkgs');
+        }else{
+            $this->db->select('sum(pcs) as inpcs,sum(kgs) as inkgs');
+        }
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
         $this->db->select('0 as pcs_taking,0 as kgs_taking');
@@ -249,7 +253,11 @@ class inv_model extends CI_Model
         $this->db->select('tb_detail.stok,tb_detail.exnet');
         $this->db->select('tb_po.id_kategori as id_kategori_po');
         $this->db->select('0 as totalpcssaldo, 0 as totalkgssaldo');
-        $this->db->select('SUM(sum(pcs)) over() as totalpcsin,SUM(sum(kgs)) over() as totalkgsin');
+        if($dept=='GS"'){
+            $this->db->select('SUM(sum(IF(tb_detail.id_satuan!=22,pcs,0))) over() as totalpcsin,SUM(sum(IF(tb_detail.id_satuan!=22,0,kgs))) over() as totalkgsin');
+        }else{
+            $this->db->select('SUM(sum(pcs)) over() as totalpcsin,SUM(sum(kgs)) over() as totalkgsin');
+        }
         $this->db->select('0 as totalpcsout,0 as totalkgsout');
         $this->db->select('0 as totalpcsadj,0 as totalkgsadj');
         $this->db->select('0 as totalpcsso,0 as totalkgsso');
@@ -262,7 +270,7 @@ class inv_model extends CI_Model
         }else{
             $this->db->select('"" as nobale');
         }
-        if($ada){
+        if($ada){ //Apabila departemen IN adalah subkon
             // $this->db->select('tb_header.nomor_bc as xnomor_bc');
             $this->db->select('(SELECT trim(nomor_bc) FROM tb_header tbhead where id = tb_detail.id_akb) as xnomor_bc');
             // $this->db->select('"" as nomor_bc2');
@@ -286,9 +294,10 @@ class inv_model extends CI_Model
         $this->db->or_where('tb_header.kode_dok','T');
         $this->db->group_end();
         $this->db->where('tb_header.ok_valid',1);
-        // if($dept=='NT'){
-        //     $this->db->where('trim(tb_detail.po)','');
-        // }
+        if($dept=='GS'){
+            $arrgs = ['7032','6909','7460','7471','3265','7470','9272'];
+            $this->db->where_in('barang.id_kategori',$arrgs);
+        }
         if($mode==1){
             if($this->session->userdata('filterkat')!=""){
                 $this->db->group_start();
@@ -903,7 +912,12 @@ class inv_model extends CI_Model
         $this->db->select("'IN' as mode,tb_header.tgl,tb_detail.po,tb_detail.item,tb_detail.dis,tb_detail.id_barang,tb_detail.dln as xdln,barang.id_kategori,tb_detail.insno,tb_detail.nobontr,barang.kode,0 as idu,tb_detail.stok");
         $this->db->select("kategori.nama_kategori,barang.safety_stock,tb_header.nomor_dok,satuan.kodesatuan");
         $this->db->select('0 as saldopcs,0 as saldokgs,tb_hargamaterial.jns_bc,tb_hargamaterial.tgl_bc');
-        $this->db->select('sum(pcs) as inpcs,sum(kgs) as inkgs');
+        // $this->db->select('sum(pcs) as inpcs,sum(kgs) as inkgs');
+        if($dept=='GS'){
+            $this->db->select('sum(IF(tb_detail.id_satuan!=22,pcs,0)) as inpcs,sum(IF(tb_detail.id_satuan!=22,0,kgs)) as inkgs');
+        }else{
+            $this->db->select('sum(pcs) as inpcs,sum(kgs) as inkgs');
+        }
         $this->db->select('0 as outpcs,0 as outkgs');
         $this->db->select('0 as adjpcs,0 as adjkgs');
         $this->db->select('tb_po.spek as spek,tb_po.id_kategori as katpo');
@@ -951,6 +965,10 @@ class inv_model extends CI_Model
         }
         if($ada){
             $this->db->where('(SELECT trim(nomor_bc) FROM tb_header tbhead where id = tb_detail.id_akb) = ',trim($array['nomor_bc']));
+        }
+        if($dept=='GS'){
+            $arrgs = ['7032','6909','7460','7471','3265','7470','9272'];
+            $this->db->where_in('barang.id_kategori',$arrgs);
         }
         $this->db->group_by('po,item,dis,id_barang,insno,nobontr,nobale,nomor_bc,nomor_dok,stok');
         $query2 = $this->db->get_compiled_select();

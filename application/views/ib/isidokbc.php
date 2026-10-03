@@ -541,8 +541,21 @@
                                 <div class="card-body p-1">
                                     <div class="row">
                                         <div class="col-sm-6">
+                                            <div class="mb-1 mt-1 row <?= $hilangbc40.' '.$hilangbc262 ?>">
+                                                <label class="col-3 col-form-label font-kecil">Incoterm</label>
+                                                <div class="col">
+                                                    <select class="form-select font-kecil font-bold btn-flat" name="kode_incoterm" id="kode_incoterm" <?= $selectnonaktif; ?>>
+                                                        <option value="">Pilih</option>
+                                                        <?php foreach ($refincoterm->result_array() as $incoterm) { ?>
+                                                            <option value="<?= $incoterm['kode_incoterm']; ?>" <?php if ($incoterm['kode_incoterm'] == $datheader['kode_incoterm']) {
+                                                                                                        echo "selected";
+                                                                                                    } ?>><?= $incoterm['kode_incoterm'].' - '.$incoterm['uraian_incoterm']; ?></option>
+                                                        <?php } ?>
+                                                    </select>
+                                                </div>
+                                            </div>
                                             <div class="mb-1 mt-1 row">
-                                                <label class="col-3 col-form-label font-kecil">Nilai Pabean / CIF</label>
+                                                <label class="col-3 col-form-label font-kecil">Nilai Pabean</label>
                                                 <div class="col">
                                                     <!-- <input type="text" class="form-control font-kecil" id="netto" name="netto" aria-describedby="emailHelp" placeholder="Netto Kgs"> -->
                                                     <select class="form-select font-kecil font-bold btn-flat" name="mtuang" id="mtuang" <?= $selectnonaktif; ?>>
@@ -742,7 +755,8 @@
                                         <?php } ?>
                                         <?php if ($mode == 1){ ?>
                                             <td class="text-center">
-                                                <a href="<?= base_url() . 'ib/editbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261">EDIT</a>
+                                                <?php $warnatombol = $data['id_seri_exbc'] != 0 ? 'btn-primary' : 'btn-success'; ?>
+                                                <a href="<?= base_url() . 'ib/editbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" id="tomboleditbcasal<?= $data['id'] ?>" class="btn btn-sm <?= $warnatombol ?> font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261">EDIT</a>
                                                 <a href="#" data-href="<?= base_url() . 'ib/resetbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-danger font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Me-reset BC ASAL 261">RESET</a>
                                                 <a href="<?= base_url() . 'ib/editkgsbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-info font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC KGS ASAL 261">EDIT KGS</a>
                                             </td>
