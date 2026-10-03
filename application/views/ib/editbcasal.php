@@ -125,7 +125,7 @@
                 <label class="col-3 col-form-label font-kecil">Kgs Dipilih</label>
                 <div class="col">
                     <input type="text" name="pcsasli" id="pcsasli" class="hilang">
-                    <input type="text" class="form-control font-kecil btn-flat text-right" id="inipcs" value="" aria-describedby="emailHelp" placeholder="Kgs Dipilih">
+                    <input type="text" class="form-control font-kecil btn-flat text-right" id="inipcs" value="" aria-describedby="emailHelp" placeholder="Kgs Dipilih" readonly>
                 </div>
             </div>
         </div>
@@ -199,8 +199,8 @@
             pesan('Pilih Salah satu BC ASAL','error');
             return false;
         }
-        var pcsterima = parseFloat($("#kgs").val());
-        var pcs = parseFloat($("#inipcs").val());
+        var pcsterima = parseFloat($("#kgs").val()).toFixed(2);
+        var pcs = parseFloat($("#inipcs").val()).toFixed(2);
         if(pcs != pcsterima){
             pesan('Jumlah Penerimaan harus sama dengan BC ASAL','info');
             return false;
@@ -229,6 +229,8 @@
                 success: function (data) {
                     $('#modal-large-loading').modal('hide');
                     $("#jumlahcif"+iddetail).text(data['cif']);
+                    $("#tomboleditbcasal"+iddetail).removeClass('btn-success');
+                    $("#tomboleditbcasal"+iddetail).addClass('btn-primary');
                     // window.location.reload();
                 },
                 error: function (xhr, ajaxOptions, thrownError) {

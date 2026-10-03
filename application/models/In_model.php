@@ -158,10 +158,10 @@ class In_model extends CI_Model{
                     'tgl_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['tgl_bcmasuk']) : '',
                     'harga' => $det['harga']*$kurs,
                     'exnet' => $det['exnet'],
-                    'pcs_masuk' => $det['pcs'],
-                    'pcs_akhir' => $det['pcs'],
-                    'kgs_masuk' => $det['kgs'],
-                    'kgs_akhir' => $det['kgs'],
+                    'pcs_masuk' => in_array($dataheader['dept_tuju'],['GM','GS']) ? ($det['id_satuan']==22 ? 0 : $det['pcs']) : $det['pcs'],
+                    'pcs_akhir' => in_array($dataheader['dept_tuju'],['GM','GS']) ? ($det['id_satuan']==22 ? 0 : $det['pcs']) : $det['pcs'],
+                    'kgs_masuk' => $dataheader['dept_tuju']=='GS' ? ($det['id_satuan']==22 ? $det['kgs'] : 0) : $det['kgs'],
+                    'kgs_akhir' => $dataheader['dept_tuju']=='GS' ? ($det['id_satuan']==22 ? $det['kgs'] : 0) : $det['kgs'],
                     'asal_waste' => $det['dept_tuju']=='GW' ? $det['dept_id'] : '',
                     ];
                     $this->db->insert('stokdept',$kondisi);

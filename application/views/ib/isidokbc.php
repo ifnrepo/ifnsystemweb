@@ -755,7 +755,8 @@
                                         <?php } ?>
                                         <?php if ($mode == 1){ ?>
                                             <td class="text-center">
-                                                <a href="<?= base_url() . 'ib/editbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-success font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261">EDIT</a>
+                                                <?php $warnatombol = $data['id_seri_exbc'] != 0 ? 'btn-primary' : 'btn-success'; ?>
+                                                <a href="<?= base_url() . 'ib/editbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" id="tomboleditbcasal<?= $data['id'] ?>" class="btn btn-sm <?= $warnatombol ?> font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261">EDIT</a>
                                                 <a href="#" data-href="<?= base_url() . 'ib/resetbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-danger font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Me-reset BC ASAL 261">RESET</a>
                                                 <a href="<?= base_url() . 'ib/editkgsbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-info font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC KGS ASAL 261">EDIT KGS</a>
                                             </td>
