@@ -753,14 +753,14 @@
                                             <td id="jumlahcif<?= $data['id'] ?>" class="text-right line-12"><?= rupiah(($data['xcif'] / $datkgs) * $data['xndpbm'], 2); ?><br><span class="font-11 text-pink"><?= rupiah($data['xcif'], 2) ?></span></td>
                                             <td class="text-right"><?= rupiah($data['xcif'] * $data['xndpbm'], 2); ?></td>
                                         <?php } ?>
-                                        <?php if ($mode == 1){ ?>
+                                        <?php if ($mode == 1){ if($datheader['send_ceisa']==0){ ?>
                                             <td class="text-center">
                                                 <?php $warnatombol = $data['id_seri_exbc'] != 0 ? 'btn-primary' : 'btn-success'; ?>
                                                 <a href="<?= base_url() . 'ib/editbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" id="tomboleditbcasal<?= $data['id'] ?>" class="btn btn-sm <?= $warnatombol ?> font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC ASAL 261">EDIT</a>
                                                 <a href="#" data-href="<?= base_url() . 'ib/resetbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-danger font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Me-reset BC ASAL 261">RESET</a>
                                                 <a href="<?= base_url() . 'ib/editkgsbcasal/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-info font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data BC KGS ASAL 261">EDIT KGS</a>
                                             </td>
-                                            <?php }else{ ?>
+                                            <?php }else{ echo "<td></td>"; } }else{ ?>
                                             <td>
                                                 <a href="<?= base_url() . 'ib/editkgspo/' . $datheader['id'] . '/' . $data['id']; ?>" class="btn btn-sm btn-info font-bold" style="padding: 0px 2px !important;" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Edit Data KGS/PCS">EDIT KGS/PCS</a>
                                             </td>
@@ -788,8 +788,8 @@
             <div class="tab-pane fade p-2 bg-red-lt" id="tabs-profile-8">
                 <div class="m-2 font-bold d-flex justify-content-between">Lampiran Dokumen
                     <span>
-                        <a href="#" data-href="<?= base_url() . 'ib/autolampiran/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengisi lampiran secara otomatis" data-title="Lampiran" class="btn btn-sm btn-yellow text-black"><i class="fa fa-plus mr-1 <?= $hilangbc23 . ' ' . $hilangbc40 ?>"></i> Auto</a>
-                        <a href="<?= base_url() . 'ib/addlampiran/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary"><i class="fa fa-plus mr-1"></i> Tambah Data</a>
+                        <a href="#" data-href="<?= base_url() . 'ib/autolampiran/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" data-message="Akan mengisi lampiran secara otomatis" data-title="Lampiran" class="btn btn-sm btn-yellow text-black <?= $hilang2 ?>"><i class="fa fa-plus mr-1 <?= $hilangbc23 . ' ' . $hilangbc40 ?>"></i> Auto</a>
+                        <a href="<?= base_url() . 'ib/addlampiran/' . $datheader['id']; ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Hapus IB" data-title="Isi Data Lampiran" id="keexcel" class="btn btn-sm btn-primary <?= $hilang2 ?>"><i class="fa fa-plus mr-1"></i> Tambah Data</a>
                         <span>
                 </div>
                 <div class="card card-lg font-kecil">
