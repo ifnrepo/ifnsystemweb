@@ -791,7 +791,12 @@ function hitungdevisa() {
 }
 function loadlampiran() {
 	var id = $("#id_header").val();
-	var ceksend = $("#tgl_aju").attr("readonly") == "readonly" ? 1 : 0;
+	// var ceksend = $("#tgl_aju").attr("readonly") == "readonly" ? 1 : 0;
+	var ceksend = 0;
+	var attr = $("#tgl_aju").attr('readonly');
+	if(attr !== 'undefined' && attr !== false){
+		ceksend = 1;
+	}
 	$.ajax({
 		dataType: "json",
 		type: "POST",
