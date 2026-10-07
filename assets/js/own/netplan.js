@@ -180,6 +180,33 @@ $("#firstrec").on('click',function(){
 	// 	},
 	// });
 })
+$("#captnomormesin").on('blur',function(){
+	if($("#captnomormesin").val() !=''){
+		$.ajax({
+			type: "POST",
+			url: base_url + "ponet/prevrecmesin",
+			data: {
+				id: parseFloat($("#captnomormesin").val())+1,
+			},
+			success: function (data) {
+				window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+data;
+			},
+			error: function (xhr, ajaxOptions, thrownError) {
+				console.log(xhr.status);
+				console.log(thrownError);
+			},
+		});
+	}else{
+		alert('Nomor mesin harus di isi !');
+		$("#captnomormesin").val($("#nomormesin").val());
+		return false;
+	}
+})
+$("#captnomormesin").on("keypress", function (e) {
+	if (e.keyCode == 13) {
+		$("#captnomormesin").blur();
+	}
+});
 $("#prevrec").on('click',function(){
 	$.ajax({
 		type: "POST",

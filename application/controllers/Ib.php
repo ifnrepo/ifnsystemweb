@@ -887,7 +887,7 @@ class Ib extends CI_Controller
             $html .= '<td>' . $que['tgl_dokumen'] . '</td>';
             $html .= '<td>' . $que['keterangan'] . '</td>';
             $html .= '<td>';
-            if ($sendceisa == 0) {
+            if ($que['send_ceisa'] == 0) {
                 $html .= '<a href="' . base_url() . 'ib/hapuslampiran/' . $que['idx'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-danger mr-1" data-bs-toggle="modal" data-bs-target="#canceltask" data-message="Hapus IB" data-title="Hapus Lampiran">Hapus</a>';
                 $html .= '<a href="' . base_url() . 'ib/editlampiran/' . $que['id'] . '/' . $que['id_header'] . '" style="padding: 2px 3px !important;" class="btn btn-sm btn-primary" data-bs-toggle="modal" data-bs-target="#modal-large" data-message="Edit IB" data-title="Edit Data Lampiran">Edit</a>';
             }

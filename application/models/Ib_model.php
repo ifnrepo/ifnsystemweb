@@ -587,9 +587,10 @@ class Ib_model extends CI_Model
     }
     public function getdatalampiran($id)
     {
-        $this->db->select('lampiran.*,lampiran.id as idx,ref_jns_dokumen.nama_dokumen');
+        $this->db->select('lampiran.*,lampiran.id as idx,ref_jns_dokumen.nama_dokumen,tb_header.send_ceisa');
         $this->db->from('lampiran');
         $this->db->join('ref_jns_dokumen', 'ref_jns_dokumen.kode = lampiran.kode_dokumen', 'left');
+        $this->db->join('tb_header','tb_header.id = lampiran.id_header','left');
         $this->db->where('id_header', $id);
         return $this->db->get();
     }

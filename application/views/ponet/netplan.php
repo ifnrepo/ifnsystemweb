@@ -25,7 +25,10 @@
                                     <input type="text" class="hilang" id="minid" name="minid" value="<?= $maxrek['minid'] ?>">
                                     <input type="text" class="hilang" id="maxid" name="maxid" value="<?= $maxrek['maxid'] ?>">
                                     <?php $lokasi = isset($data['lokasi']) ? substr($data['lokasi'],0,3) : '';  ?>
-                                    <div class="col-3 text-center"><div class="bg-red-lt mb-1 mt-1"><?= $lokasi ?></div><h1 class="mb-1"><?= $this->uri->segment(4) ?></h1></div>
+                                    <div class="col-3 text-center">
+                                        <div class="bg-red-lt mb-1 mt-1"><?= $lokasi ?></div>
+                                        <input type="text" id="captnomormesin" class="form-control text-center font-bold" style="font-size: 17px;" value="<?= $this->uri->segment(4) ?>">
+                                    </div>
                                     <div class="col-9">
                                         <table class="table table-bordered m-0 mt-1 mb-1">
                                             <thead class="bg-primary-lt">
