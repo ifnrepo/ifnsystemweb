@@ -169,6 +169,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         $namasup = datasupplier($datdet['id_rekanan'], 'nama_supplier');
                       }else{
                         $namasup = datadepartemen($datdet['dept_tuju'], 'nama_subkon');
+                        // $tmb = '/1';
                       }
                     }
                   } else {
