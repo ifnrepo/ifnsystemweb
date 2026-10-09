@@ -567,7 +567,8 @@ $(".inputangka").on("change click keyup input paste", function (event) {
 			.replace(/(?!\.)\D/g, "")
 			.replace(/(?<=\..*)\./g, "")
 			.replace(/(?<=\.\d\d\d\d\d\d\d).*/g, "")
-			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+			.replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+			.replace(/(?<=\..*)\,/g, "");
 	});
 });
 
@@ -576,7 +577,7 @@ $(".inputangkad").on("change click keyup input paste", function (event) {
 		return value
 			.replace(/(?!\.)\D/g, "")
 			.replace(/(?<=\..*)\./g, "")
-			.replace(/(?<=\.\d\d\d\d\d\d\d).*/g, "")
+			.replace(/(?<=\.\d\d\d).*/g, "")
 			.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
 	});
 });

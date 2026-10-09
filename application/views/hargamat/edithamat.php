@@ -304,7 +304,8 @@
                 .replace(/(?!\.)\D/g, "")
                 .replace(/(?<=\..*)\./g, "")
                 .replace(/(?<=\.\d\d\d\d\d\d\d\d).*/g, "")
-                .replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+                .replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+                .replace(/(?<=\..*)\,/g, "");
         });
     });
     $("#kurs").on("change",function(){
