@@ -122,6 +122,9 @@ class In_model extends CI_Model{
             $this->db->where('id_header',$id);
             $detail = $this->db->get('tb_detail')->result_array();
             foreach($detail as $det){
+                $po = ceklengpo($det['po'],$det['item'],$det['dis'],'po');
+                $item = ceklengpo($det['po'],$det['item'],$det['dis'],'item');
+                $dis = ceklengpo($det['po'],$det['item'],$det['dis'],'dis');
                 $kondisistok = [
                     // 'tgl' => $det['tgl'],
                     'dept_id' => $det['dept_tuju'],
@@ -149,9 +152,9 @@ class In_model extends CI_Model{
                     'nobontr' => count($ibnya)==0 ? $det['nobontr'] : $ibnya['nomor_dok'],
                     'insno' => $det['insno'],
                     'id_barang' => $det['id_barang'],
-                    'po' => $det['po'],
-                    'item' => $det['item'],
-                    'dis' => $det['dis'],
+                    'po' => $po, //$det['po'],
+                    'item' => $item, //$det['item'],
+                    'dis' => $dis, //$det['dis'],
                     'dln' => $det['dln'],
                     'nobale' => ($det['dept_tuju']=='GW' || $det['dept_tuju']=='GF') ? trim($det['nobale']) : '',
                     'nomor_bc' => in_array($det['dept_tuju'],daftardeptsubkon()) ? trim($dataheader['nomor_bcmasuk']) : '',
