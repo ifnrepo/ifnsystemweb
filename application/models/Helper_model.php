@@ -1360,4 +1360,13 @@ class Helper_model extends CI_Model
         $databr = $this->db->get('barang')->row_array();
         return $databr['id_kategori'];
     }
+    public function ceklengpo($po,$item,$dis){
+        $kondisi = [
+            'trim(po)' => trim($po),
+            'trim(item)' => trim($item),
+            'dis' => $dis
+        ];
+        $data = $this->db->get_where('tb_po',$kondisi);
+        return $data;
+    }
 }

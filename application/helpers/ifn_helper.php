@@ -1498,3 +1498,14 @@ function uraidataopname($id){
     $kodex = $CI->helpermodel->uraidataopname($id);
     return $kodex;
 }
+function ceklengpo($po,$item,$dis,$field = 'po'){
+    $CI = &get_instance();
+    $hasil = $CI->helpermodel->ceklengpo($po,$item,$dis);
+    if (count($hasil->result()) == 0) {
+        $datahasil = '';
+    } else {
+        $xhasil = $hasil->row_array();
+        $datahasil = $xhasil[$field];
+    }
+    return $datahasil;
+}
