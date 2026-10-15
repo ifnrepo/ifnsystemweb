@@ -154,7 +154,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                       }
                     }
                   }else{
-                    $kondisi_idr = $pengali * $detail['nilai_pab'];
+                      $kondisi_idr = $pengali * $detail['nilai_pab'];
                   }
 
                   // $kondisi_idr = ($detail['jns_bc'] == 25 || $detail['jns_bc'] == 41)
