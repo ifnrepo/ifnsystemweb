@@ -120,9 +120,10 @@ class Taskmodel extends CI_Model
                 $this->db->where('ok_pc', 0);
             }
         }
+        $this->db->where('year(tgl)',2026);
         $this->db->order_by('tgl','DESC');
         $query = $this->db->get('tb_header');
-        $this->session->set_flashdata('cekquery',$this->db->get_compiled_select('tb_header',FALSE));
+        // $this->session->set_flashdata('cekquery',$this->db->get_compiled_select('tb_header',FALSE));
         return $query;
     }
     public function getdata($mode)

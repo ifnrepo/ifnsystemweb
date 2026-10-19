@@ -489,7 +489,6 @@ $("#butgo").click(function(){
             // $("#deptpricing").html(data.datagroup);
             // $("#deptpricing").change();
 		},
-		
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
 			console.log(thrownError);
