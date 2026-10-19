@@ -46,7 +46,7 @@ class Pricinginv_model extends CI_Model
         // $this->db->order_by('stokinv.dept_id','stokinv.urut');
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(round(kgs_akhir,6)) over() as totalkgs,sum(amount) over() as totalamount,kgs_akhir-kgsdet as selisih from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
+        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(round(kgs_akhir,6)) over() as totalkgs,sum(harga*kgs_akhir) over() as totalamount,kgs_akhir-kgsdet as selisih from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
         $kolom .= "LEFT JOIN kategori on kategori.kategori_id = LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) ";
         $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan ";
         if($this->session->userdata('milik')!=''){
@@ -445,6 +445,9 @@ class Pricinginv_model extends CI_Model
                 $hasil = [
                     'id_stok' => $que['id'],
                     'urut' => $que['urut'],
+                    'det_po' => $que['po'],
+                    'det_item' => $que['item'],
+                    'det_dis' => $que['dis'],
                     'id_barang' => $que['id_barang'],
                     'nobontr' => $que['nobontr'],
                     'pcs' => $que['pcs_akhir'],
@@ -791,9 +794,10 @@ class Pricinginv_model extends CI_Model
         return $this->db->get();
     }
     public function getdatabombyid($id){
-        $this->db->select('stokinv_detail.*,barang.id_kategori,barang.kode');
+        $this->db->select('stokinv_detail.*,barang.id_kategori,barang.kode,tb_po.spek as speki');
         $this->db->from('stokinv_detail');
         $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
+        $this->db->join('tb_po','tb_po.ind_po = concat(stokinv_detail.det_po,stokinv_detail.det_item,stokinv_detail.det_dis)','left');
         $this->db->where('stokinv_detail.id_stok',$id);
         return $this->db->get();
     }

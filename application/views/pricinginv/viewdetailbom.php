@@ -135,9 +135,11 @@
                             <?php $jumlahrm += $det['id_kategori']=='8189' ? round($det['harga_acct']*$pengali,10) : 0; ?>
                             <?php $jumlahsm += $det['id_kategori']!='8189' ? round($det['harga_acct']*$pengali,10) : 0; ?>
                             <?php $rawmat = $det['id_kategori']=='8189' ? 'text-pink' : 'text-teal'; ?>
+                            <?php $namspek = $det['det_po']!='' ? $det['speki'] : namaspekbarang($det['id_barang']); ?>
+                            <?php $xsku = $det['det_po']!='' ? viewsku($det['det_po'],$det['det_item'],$det['det_dis']) : $det['kode']; ?>
                                 <tr>
                                     <td><?= $no ?></td>
-                                    <td class="line-11"><?= '<span class="'.$rawmat.' font-kecil">'.$det['kode'].'</span><br>'.namaspekbarang($det['id_barang']) ?></td>
+                                    <td class="line-11"><?= '<span class="'.$rawmat.' font-kecil">'.$xsku.'</span><br>'.$namspek ?></td>
                                     <td><?= $det['nobontr'] ?></td>
                                     <td class="text-right"><?= rupiah($det['kgs'],6) ?></td>
                                     <td class="text-right"><?= rupiah($det['pcs'],0) ?></td>

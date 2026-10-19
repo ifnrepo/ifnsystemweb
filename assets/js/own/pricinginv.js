@@ -261,7 +261,9 @@ $(document).ready(function(){
 			{ "data": "nama_barang",
 				"className": "line-11",
 				"render" : function(data, type, row, meta){
-					return "<span class='text-pink font-11'>"+row.kode+"</span>"+"<br><span class='text-primary'>"+data+"</span>";
+					var xkodex = row.det_po != '' ? viewsku(row.det_po,row.det_item,row.det_dis) : row.kode;
+					var xspekx = row.det_po != '' ? row.xspek : data ;
+					return "<span class='text-pink font-11'>"+xkodex+"</span>"+"<br><span class='text-primary'>"+xspekx+"</span>";
 				}
 			 },
 			{ "data": "nobontr",
@@ -395,15 +397,14 @@ $("#deptpricing").on('change',function(){
 	var isi = $("#tglcutoff").val();
     if(isi!=''){
         $("#butgo").removeClass('disabled');
-		if($("#deptpricing").val()!=''){
-			$("#butgo").click();
-		}
+		    if($("#deptpricing").val()!=''){
+			    $("#butgo").click();
+		    }
     }else{
         $("#butgo").addClass('disabled');
     }
 })
 $("#kirimexcel").on('click',function(){
-	alert('data kirim EXCEL !');
 	$.ajax({
 		dataType: "json",
 		type: "POST",
@@ -493,7 +494,6 @@ $("#butgo").click(function(){
             // $("#deptpricing").html(data.datagroup);
             // $("#deptpricing").change();
 		},
-		
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
 			console.log(thrownError);
