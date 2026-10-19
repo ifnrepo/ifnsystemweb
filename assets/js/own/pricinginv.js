@@ -397,7 +397,9 @@ $("#deptpricing").on('change',function(){
 	var isi = $("#tglcutoff").val();
     if(isi!=''){
         $("#butgo").removeClass('disabled');
-		$("#butgo").click();
+		    if($("#deptpricing").val()!=''){
+			    $("#butgo").click();
+		    }
     }else{
         $("#butgo").addClass('disabled');
     }
@@ -477,7 +479,7 @@ $("#tglcutoff").on('change',function(){
 	});
 })
 $("#butgo").click(function(){
-	$("#butgo").html('<i class="fa fa-circle-o-notch fa-spin" aria-hidden="true"></i>');
+	$("#butgo").html('<i class="fa fa-circle-o-notch fa-spin"></i>');
     $.ajax({
 		dataType: "json",
 		type: "POST",
