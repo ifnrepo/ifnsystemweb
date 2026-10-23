@@ -1372,6 +1372,16 @@ class inv_model extends CI_Model
                                         $prddate = $prdcekk['tgl'];
                                     }
                                 }
+
+                                // Pengecekan asal Waste untuk Dept GW
+                                $deptasalwaste = '';
+                                if($this->session->userdata('currdept')=='GW'){
+                                    $asalx = substr($det['nobale'],0,2);
+                                    $cektabeldept = $this->db->get_where('dept',['dept_id'=>$asalx])->result();
+                                    if(count($cektabeldept) > 0){
+                                        $deptasalwaste = $asalx;
+                                    }
+                                }
                                 $data = [
                                     'urut' => $no,
                                     'dept_id' => $this->session->userdata('currdept'),
@@ -1395,11 +1405,12 @@ class inv_model extends CI_Model
                                     'kgs_keluar' => $det['outkgs'],
                                     'pcs_adj' => $det['adjpcs'],
                                     'kgs_adj' => $det['adjkgs'],
+                                    'asal_waste' => $deptasalwaste,
                                     'pcs_akhir' => $det['saldopcs']+$det['inpcs']-$det['outpcs']+$det['adjpcs'],
                                     'kgs_akhir' => $det['saldokgs']+$det['inkgs']-$det['outkgs']+$det['adjkgs'],
                                     'user_verif' => $this->session->userdata('id'),
                                     'tgl_verif' => $tglnya,
-                                    'harga' => $harga,
+                                    'harga' => 0,  //$harga,
                                     'prod_date' => $prddate
                                 ];
                                 $this->db->insert('stokinv',$data);

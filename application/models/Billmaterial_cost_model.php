@@ -3,7 +3,7 @@ class Billmaterial_cost_model extends CI_Model
 {
     public function getdata()
     {
-        $this->db->select('ref_bom_cost.*,barang.nama_barang,barang.kode');
+        $this->db->select('ref_bom_cost.*,barang.nama_barang,barang.kode,barang.id_kategori');
         $this->db->select("IF(TRIM(ref_bom_cost.po)!='',CONCAT(TRIM(ref_bom_cost.po),'#',TRIM(ref_bom_cost.item),IF(ref_bom_cost.dis > 0,CONCAT(' dis ',ref_bom_cost.dis),'')),'') AS skupo");
         $this->db->from('ref_bom_cost');
         $this->db->join('barang', 'barang.id = ref_bom_cost.id_barang', 'left');
@@ -23,7 +23,7 @@ class Billmaterial_cost_model extends CI_Model
     }
     public function getdatabyid($id)
     {
-        $this->db->select('ref_bom_cost.*,barang.nama_barang,barang.kode');
+        $this->db->select('ref_bom_cost.*,barang.nama_barang,barang.kode,barang.id_kategori');
         $this->db->from('ref_bom_cost');
         $this->db->join('barang', 'barang.id = ref_bom_cost.id_barang', 'left');
         $this->db->where('ref_bom_cost.id', $id);
@@ -31,11 +31,11 @@ class Billmaterial_cost_model extends CI_Model
     }
     public function getdatadetailbyid($id)
     {
-        $this->db->select('ref_bom_detail_cost.*,barang.nama_barang,barang.kode');
+        $this->db->select('ref_bom_detail_cost.*,barang.nama_barang,barang.kode,barang.id_kategori');
         $this->db->from('ref_bom_detail_cost');
         $this->db->join('barang', 'barang.id = ref_bom_detail_cost.id_barang', 'left');
         $this->db->where('id_bom', $id);
-        $this->db->where('persen >', 0);
+        // $this->db->where('persen >', 0);
         return $this->db->get();
     }
     public function hapusdetail($id, $head)
@@ -64,6 +64,12 @@ class Billmaterial_cost_model extends CI_Model
     public function simpandetail($data)
     {
         $this->db->trans_start();
+        // Cek kategori barang 
+        $cekbarang = $this->db->get_where('barang',['id' => $data['id_barang']])->row_array();
+        if($cekbarang['id_kategori']!='8189'){
+            $data['persen_sm'] = $data['persen'];
+            unset($data['persen']);
+        }
         $this->db->insert('ref_bom_detail_cost', $data);
         $this->helpermodel->isilog($this->db->last_query());
 
@@ -86,6 +92,13 @@ class Billmaterial_cost_model extends CI_Model
     public function updatedetail($data)
     {
         $this->db->trans_start();
+        // Cek kategori barang 
+        $cekbarang = $this->db->get_where('barang',['id' => $data['id_barang']])->row_array();
+        if($cekbarang['id_kategori']!='8189'){
+            $data['persen_sm'] = $data['persen'];
+            $data['persen'] = 0;
+        }
+
         $this->db->where('id', $data['id']);
         $this->db->update('ref_bom_detail_cost', $data);
         $this->helpermodel->isilog($this->db->last_query());

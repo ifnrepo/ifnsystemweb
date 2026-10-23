@@ -32,27 +32,30 @@
             </div>
             <div class="col-12">
             <div id="table-default" class="table-responsive mb-1">
-                <table class="table datatable6" id="cobasisip">
+                <table class="table table-hover datatable6" id="cobasisip">
                     <thead style="background-color: blue !important">
                         <tr>
                             <th>No</th>
                             <th>Nama Barang</th>
                             <th>Nobontr</th>
                             <th>Persen RM</th>
+                            <th>Persen SM</th>
                         </tr>
                     </thead>
                     <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
-                        <?php $no=0; $jmlpersen=0; foreach($detail->result_array() as $det): $no++; $jmlpersen+= $det['persen'];?>
+                        <?php $no=0; $jmlpersen=0; foreach($detail->result_array() as $det): $no++; $jmlpersen+= $det['persen']; $warna = $det['id_kategori']!='8189' ? 'text-orange' : '';?>
                             <tr>
-                                <td><?= $no ?></td>
-                                <td><?= $det['nama_barang'] ?></td>
-                                <td><?= $det['nobontr'] ?></td>
-                                <td class="text-right"><?= rupiah($det['persen'],6) ?></td>
+                                <td class="font-kecil"><?= $no ?></td>
+                                <td class="font-kecil <?= $warna ?>"><?= $det['nama_barang'] ?></td>
+                                <td class="font-kecil"><?= $det['nobontr'] ?></td>
+                                <td class="font-kecil text-right"><?= rupiah($det['persen'],6) ?></td>
+                                <td class="font-kecil text-right"><?= rupiah($det['persen_sm'],6) ?></td>
                             </tr>
                         <?php endforeach; ?>
                         <tr>
                             <td colspan="3" class="text-center font-bold">TOTAL</td>
                             <td class="text-right font-bold"><?= rupiah($jmlpersen,2) ?></td>
+                            <td class="text-right font-bold"></td>
                         </tr>
                     </tbody>
                 </table>

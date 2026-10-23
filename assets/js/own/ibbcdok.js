@@ -482,30 +482,6 @@ function cekkolom(mode) {
 		pesan("Cek Jumlah Netto dan Jumlah detail harus Sama", "error");
 		return false;
 	}
-	if ($("#jns_bc").val() == "261") {
-		if ($("#sumdetailbc").val() != $("#nilai_pab").val()) {
-			pesan("Cek Nilai Pabean (CIF) dengan Detail Harga BC !", "error");
-			return false;
-		}
-		if(selisihhari($("#tgl_aju").val(),$("#tgl_sj").val()) < 0){
-			pesan("Tanggal surat jalan Harus lebih besar atau sama dengan tgl Pengajuan","error");
-			return false;
-		}
-	} else {
-		if ($("#jns_bc").val() == "25" || $("#jns_bc").val() == "41") {
-			if ($("#sumdetail").val() != $("#nilai_serah").val()) {
-				// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
-				pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
-				return false;
-			}
-		}else{
-			if ($("#sumdetail").val() != $("#jumlahcif").val()) {
-				// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
-				pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
-				return false;
-			}
-		}
-	}
 	if ($("#tg_jawab").val() == "") {
 		// $("#keteranganerr").text("Isi Nama Penanggung Jawab !");
 		pesan("Isi Nama Penanggung Jawab !", "error");
@@ -545,6 +521,38 @@ function cekkolom(mode) {
 		// $("#keteranganerr").text("Isi Lampiran Dokumen !");
 		pesan("Jenis Kemasan harus di isi !", "error");
 		return false;
+	}
+	// Untuk cek BC 261
+	if ($("#jns_bc").val() == "261") {
+		if ($("#sumdetailbc").val() != $("#nilai_pab").val()) {
+			pesan("Cek Nilai Pabean (CIF) dengan Detail Harga BC !", "error");
+			return false;
+		}
+		if(selisihhari($("#tgl_aju").val(),$("#tgl_sj").val()) < 0){
+			pesan("Tanggal surat jalan Harus lebih besar atau sama dengan tgl Pengajuan","error");
+			return false;
+		}
+	}
+	// Untuk cek BC 25 atau 41
+	if ($("#jns_bc").val() == "25" || $("#jns_bc").val() == "41") {
+		if ($("#sumdetail").val() != $("#nilai_serah").val()) {
+			pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
+			return false;
+		}
+		if ($("#jns_bc").val() == "25") {
+			if ($("#mtuang").val() != '1') {
+				pesan("Cek Kurs Pabean (Harus IDR) !", "error");
+				return false;
+			}
+		}
+	}else{
+		if($("#jns_bc").val() != "261"){
+			if ($("#sumdetail").val() != $("#jumlahcif").val()) {
+				// $("#keteranganerr").text("Cek Nilai Pabean (CIF) dengan Detail Harga !");
+				pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
+				return false;
+			}
+		}
 	}
 	// Untuk cek BC 23
 	if ($("#jns_bc").val() == "23") {
@@ -650,6 +658,14 @@ function cekkolom(mode) {
 		}
 		if($("#txtsum").html() != $("#bruto").val()){
 			pesan("Berat Bruto dan Berat detail tidak sama, cek Data !", "error");
+			return false;
+		}
+		if ($("#devisa_usd").val() == "" || $("#devisa_usd").val() == "-") {
+			pesan("Devisa USD harus isi", "error");
+			return false;
+		}
+		if ($("#kurs_usd").val() == "" || $("#kurs_usd").val() == "-") {
+			pesan("Kurs USD harus isi", "error");
 			return false;
 		}
 	}
