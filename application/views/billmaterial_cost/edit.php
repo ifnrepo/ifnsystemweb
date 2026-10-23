@@ -98,7 +98,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <hr class="small m-1">
                                 </div>
                                 <div class="row font-kecil mb-0">
-                                    <label class="col-2 col-form-label font-kecil">Spec</label>
+                                    <label class="col-3 col-form-label font-kecil">Spec</label>
                                     <div class="col input-group mb-1">
                                         <input type="text" id="id_header" name="id_header" class="hilang" value="<?= $material['id'] ?>">
                                         <input type="text" id="id_detail" name="id_detail" class="hilang" value="">
@@ -108,21 +108,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     </div>
                                 </div>
                                 <div class="row font-kecil mb-0 hilang" id="cont-spek">
-                                    <label class="col-2 col-form-label font-kecil"></label>
+                                    <label class="col-3 col-form-label font-kecil"></label>
                                     <div class="col input-group mb-1 text-teal" id="spekbarangnya"></div>
                                 </div>
                                 <div class="row font-kecil mb-1">
-                                    <label class="col-2 col-form-label">Nobontr</label>
+                                    <label class="col-3 col-form-label">Nobontr</label>
                                     <div class="col">
                                         <input type="text" id="nobontr" name="nobontr" class="form-control font-kecil">
                                     </div>
                                 </div>
                                 <div class="row font-kecil mb-1">
-                                    <label class="col-2 col-form-label">Persen</label>
+                                    <label class="col-3 col-form-label">Persen</label>
                                     <div class="col">
                                         <input type="text" id="persen" name="persen" class="form-control font-kecil inputangka text-right">
                                     </div>
                                 </div>
+                                <hr class="small m-1">
                                 <div class="row">
                                     <div class="col-6">
                                         <a href="#" class="btn btn-sm btn-primary" style="width:100%" id="simpandetailbarang">Simpan Barang</a>
@@ -143,6 +144,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                         <th>Nama Barang</th>
                                         <th>Nobontr</th>
                                         <th>Persen RM</th>
+                                        <th>Persen SM</th>
                                         <th>Aksi</th>
                                     </tr>
                                 </thead>
@@ -150,12 +152,13 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                     <?php $no = 0;
                                     $jumlahpersen = 0;
                                     foreach ($detail->result_array() as $deta) : $no++;
-                                        $jumlahpersen += $deta['persen']; ?>
+                                        $jumlahpersen += $deta['persen']; $warna = $deta['id_kategori']!='8189' ? 'text-orange' : ''; ?>
                                         <tr>
-                                            <td class="line-11"><span class="font-kecil text-teal"><?= $deta['kode'] ?></span><br><?= $deta['nama_barang'] ?></td>
-                                            <td><?= $deta['nobontr'] ?></td>
+                                            <td class="line-11 <?= $warna ?>"><span class="font-kecil text-teal"><?= $deta['kode'] ?></span><br><?= $deta['nama_barang'] ?></td>
+                                            <td class="font-11"><?= $deta['nobontr'] ?></td>
                                             <td class="text-right"><?= rupiah($deta['persen'], 6) ?></td>
-                                            <td class="text-center">
+                                            <td class="text-right"><?= rupiah($deta['persen_sm'], 6) ?></td>
+                                            <td class="text-center text-nowrap">
                                                 <a href="#" class="btn btn-sm btn-primary btn-icon text-white" id="editdetailbillmaterial" rel="<?= $deta['id']; ?>" rel2="<?= $deta['id_barang']; ?>" rel3="<?= $deta['nobontr']; ?>" rel4="<?= $deta['persen']; ?>" rel5="<?= $deta['nama_barang']; ?>" title="Edit data">
                                                     <i class="fa fa-edit"></i>
                                                 </a>
@@ -169,7 +172,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             </table>
                         </div>
                         <div class="text-right">
-                            <h4>Persentase <?= rupiah($jumlahpersen, 2) ?></h4>
+                            <h4>Persentase RawMat : <span class="text-primary"><?= rupiah($jumlahpersen, 2) ?></span></h4>
                         </div>
                     </div>
                 </div>

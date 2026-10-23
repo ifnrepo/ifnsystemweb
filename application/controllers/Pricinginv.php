@@ -101,6 +101,7 @@ class Pricinginv extends CI_Controller
         $filter_missed = $_POST['missbom'];
         $filter_missedplus = $_POST['missbomplus'];
         $filter_milik = $_POST['milik'];
+        $filter_asalwaste = $_POST['asalwastekosong'];
         if($filter_periode!="all"){
             $arrayu['periode'] = $filter_periode;
         }
@@ -121,6 +122,11 @@ class Pricinginv extends CI_Controller
         }
         if($filter_missedplus=='true'){
             $arrayu['missedplus'] = 1;
+        }
+        if($this->session->userdata('deptpricinginv')=='GW'){
+            if($filter_asalwaste=='true'){
+                $arrayu['asalwastekosong'] = 1;
+            }
         }
         // if($excel==1){
             echo $this->pricingmodel->getdatainv($arrayu,$excel);
@@ -228,12 +234,25 @@ class Pricinginv extends CI_Controller
         $data['data'] = $this->pricingmodel->getdatabyid($id)->row_array();
         $this->load->view('pricinginv/edittglprod',$data);
     }
+    public function editasalwaste($id){
+        $data['data'] = $this->pricingmodel->getdatabyid($id)->row_array();
+        $data['dept'] = $this->deptmodel->getdata();
+        $this->load->view('pricinginv/editasalwaste',$data);
+    }
     public function updatetglprod(){
         $data = [
             'id' => $_POST['id'],
             'tglprod' => tglmysql($_POST['tglprod'])
         ];
         $hasil = $this->pricingmodel->updatetglprod($data);
+        echo $hasil;
+    }
+    public function updateasalwaste(){
+        $data = [
+            'id' => $_POST['id'],
+            'asal_waste' => $_POST['asal']
+        ];
+        $hasil = $this->pricingmodel->updateasalwaste($data);
         echo $hasil;
     }
     public function viewdetail($id){
@@ -284,6 +303,8 @@ class Pricinginv extends CI_Controller
         foreach ($inv->result_array() as $data) {
             $sku = trim($data['po'])!='' ? viewsku($data['po'], $data['item'], $data['dis']) : namaspekbarang($data['id_barang'],'kode');
             $spekbarang = trim($data['po'])!='' ? spekpo($data['po'], $data['item'], $data['dis']) : namaspekbarang($data['id_barang']);
+            // $pengali =  $data['id_satuan']==22 ? $data['kgs_akhir'] : ($data['pcs_akhir']==0 ? $data['kgs_akhir'] : $data['pcs_akhir']);
+            $pengali =  $data['id_satuan']==22 ? $data['kgs_akhir'] : $data['pcs_akhir'];
             // Lakukan looping pada variabel      
             $sheet->setCellValue('A' . $numrow, $no);
             $sheet->setCellValue('B' . $numrow, $data['dept_id']);
@@ -297,7 +318,8 @@ class Pricinginv extends CI_Controller
             $sheet->setCellValue('J' . $numrow, $data['kgs_akhir']);
             $sheet->setCellValue('K' . $numrow, $data['rm']+$data['sm']);
             $sheet->setCellValue('L' . $numrow, $data['spinning']+$data['netting']+$data['ringrope']+$data['senshoku']+$data['hoshu1']+$data['koatsu']+$data['hoshu2']+$data['packing']+$data['shitate']);
-            $sheet->setCellValue('M' . $numrow, $data['amount']);
+            // $sheet->setCellValue('M' . $numrow, $data['amount']);
+            $sheet->setCellValue('M' . $numrow, $data['harga']*$pengali);
             $sheet->setCellValue('N' . $numrow, $data['nobontr']);
             $sheet->setCellValue('O' . $numrow, $data['dln']);
             $sheet->setCellValue('P' . $numrow, $data['asal_waste']);

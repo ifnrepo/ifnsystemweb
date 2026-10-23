@@ -64,11 +64,11 @@
                         </thead>
                         <tbody class="table-tbody">
                             <tr>
-                                <td class="text-right font-kecil"><?= rupiah($data['rm']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['sm']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['spinning']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['ringrope']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['netting']*$pengaliatas,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['rm']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['sm']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['spinning']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['ringrope']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['netting']*$pengaliatase,8) ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -85,12 +85,12 @@
                         </thead>
                         <tbody class="table-tbody">
                             <tr>
-                                <td class="text-right font-kecil"><?= rupiah($data['senshoku']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['hoshu1']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['koatsu']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['hoshu2']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['packing']*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah($data['shitate']*$pengaliatas,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['senshoku']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['hoshu1']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['koatsu']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['hoshu2']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['packing']*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah($data['shitate']*$pengaliatase,8) ?></td>
                             </tr>
                         </tbody>
                     </table>
@@ -104,9 +104,9 @@
                         </thead>
                         <tbody class="table-tbody">
                             <tr>
-                                <td class="text-right font-kecil"><?= rupiah(($data['rm']+$data['sm'])*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil"><?= rupiah(($data['spinning']+$data['ringrope']+$data['netting']+$data['senshoku']+$data['hoshu1']+$data['koatsu']+$data['hoshu2']+$data['packing']+$data['shitate'])*$pengaliatas,8) ?></td>
-                                <td class="text-right font-kecil font-bold"><?= rupiah(($data['rm']+$data['sm']+$data['spinning']+$data['ringrope']+$data['netting']+$data['senshoku']+$data['hoshu1']+$data['koatsu']+$data['hoshu2']+$data['packing']+$data['shitate'])*$pengaliatas,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah(($data['rm']+$data['sm'])*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil"><?= rupiah(($data['spinning']+$data['ringrope']+$data['netting']+$data['senshoku']+$data['hoshu1']+$data['koatsu']+$data['hoshu2']+$data['packing']+$data['shitate'])*$pengaliatase,8) ?></td>
+                                <td class="text-right font-kecil font-bold"><?= rupiah(($data['rm']+$data['sm']+$data['spinning']+$data['ringrope']+$data['netting']+$data['senshoku']+$data['hoshu1']+$data['koatsu']+$data['hoshu2']+$data['packing']+$data['shitate'])*$pengaliatase,8) ?></td>
 
                             </tr>
                         </tbody>
@@ -120,7 +120,7 @@
                     <table class="table datatable6" id="cobasisip">
                         <thead style="background-color: blue !important">
                             <tr>
-                                <th>No</th>
+                                <th>NoX</th>
                                 <th>Nama Barang</th>
                                 <th>Nobontr</th>
                                 <th>Kgs</th>
@@ -131,7 +131,11 @@
                         </thead>
                         <tbody class="table-tbody" id="body-table" style="font-size: 12px !important;">
                             <?php $no=0; $jmlkgs=0; $jmlpcs=0; $jumlahrm=0; $jumlahsm=0; foreach($detail->result_array() as $det): $no++; $jmlpcs += $det['pcs']; $jmlkgs += $det['kgs']; ?>
-                            <?php $pengali = $det['id_satuan']==22 ? $det['kgs'] : ($det['pcs']==0 ? $det['kgs'] : $det['pcs']); ?>
+                            <?php if($data['dept_id']=='GF'): ?>
+                                <?php $pengali = $det['id_satuan']==22 ? $det['kgs']+$det['kgs_sm'] : ($det['pcs']==0 ? $det['kgs']+$det['kgs_sm'] : $det['pcs']); ?>
+                            <?php else: ?>
+                                <?php $pengali = $det['id_satuan']==22 ? $det['kgs'] : ($det['pcs']==0 ? $det['kgs'] : $det['pcs']); ?>
+                            <?php endif; ?>
                             <?php $jumlahrm += $det['id_kategori']=='8189' ? round($det['harga_acct']*$pengali,10) : 0; ?>
                             <?php $jumlahsm += $det['id_kategori']!='8189' ? round($det['harga_acct']*$pengali,10) : 0; ?>
                             <?php $rawmat = $det['id_kategori']=='8189' ? 'text-pink' : 'text-teal'; ?>
@@ -149,7 +153,7 @@
                             <?php endforeach; ?>
                             <tr>
                                 <td colspan="2" ><span class="badge bg-pink mr-1"></span> Raw Material</td>
-                                <td class="font-bold">TOTAL</td>
+                                <td class="font-bold">TOTAL RM+SM</td>
                                 <td class="text-right font-bold"><?= rupiah($jmlkgs,2) ?></td>
                                 <td class="text-right font-bold"><?= rupiah($jmlpcs,0) ?></td>
                                 <td></td>

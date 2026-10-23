@@ -1368,7 +1368,7 @@ function getdatabomcost($que)
                     'nomor_bc' => $hamat['nomor_bc'],
                     'tgl_bc' => $hamat['tgl_bc'],
                     'harga_rm' => round($hamat['hargarm'] * ($datadetbom['persen'] / 100),8),
-                    'harga_sm' => round($hamat['hargasm'] * ($datadetbom['persen'] / 100),8),
+                    'harga_sm' => round($hamat['hargasm'] * ($datadetbom['persen_sm'] / 100),8),
                     'price' => $hamat['price'],
                     'harga_acct' => $hamat['harga_akt'],
                     'prod_date' => $databom['prod_date'],

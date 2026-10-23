@@ -73,6 +73,7 @@ $(document).ready(function(){
 				d.tgkosong = $('#ceklistgprodkosong').is(':checked');
 				d.missbom = $('#ceklistmissedbom').is(':checked');
 				d.missbomplus = $('#ceklistmissedbomplus').is(':checked');
+				d.asalwastekosong = $('#ceklistasalkosong').is(':checked');
 				// d.exnet = $('#idexnet').val();
 				// d.dataneh = $('#dataneh').is(':checked');
 			// 	d.filtinv = $('#filterinv').val();
@@ -112,10 +113,20 @@ $(document).ready(function(){
 					return tglmysql(row.prod_date);
 				}
 			},
-			{ "data": "insno",
+			{ "data": "id",
 				"className": "line-11 font-11",
+				"createdCell" : function(td, cellData, rowData, row, col){
+					if(rowData.dept_id=='GW'){
+						$(td).attr('id', cellData+'waste');
+						$(td).attr('title', cellData+'waste');
+					}
+				},
                 "render": function(data, type, row, meta){
-					return "<span>"+row.nobontr+"</span><br><span class='text-pink'>"+row.insno+"</span>"
+					if(row.dept_id=='GW'){
+						return "<span>Asal Waste</span><br><span id='spanasalwaste' class='text-pink'>"+row.asal_waste+"</span>"
+					}else{
+						return "<span>"+row.nobontr+"</span><br><span class='text-pink'>"+row.insno+"</span>"
+					}
 				}
             },
 			{ "data": "nobale"},
@@ -166,6 +177,9 @@ $(document).ready(function(){
                     but += '<div class="dropdown-menu dropdown-menu-end line-11 font-kecil">';
                     but += '<a href="'+base_url+'pricinginv/viewdetailbom/'+row.id+'" data-bs-toggle="modal" data-bs-target="#modal-largescroll" data-title="View Detail" class="dropdown-item py-1">View Detail</a>';
                     but += '<a href="'+base_url+'pricinginv/edittglprod/'+row.id+'" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Tgl" class="dropdown-item py-1">Edit Tgl Produksi</a>';
+					if(row.dept_id == 'GW'){
+						but += '<a href="'+base_url+'pricinginv/editasalwaste/'+row.id+'" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Edit Asal Waste" class="dropdown-item py-1">Edit Asal Waste</a>';
+					}
                     but += '</div>';
                     but += '</div>';
 
@@ -302,7 +316,7 @@ $(document).ready(function(){
 				"className": "font-kecil text-right",
 				"render" : function(data, type, row, meta){
 					var s = (row.harga_akt === null) ? 0 : row.harga_akt;
-					var k = (row.id_satuan == 22) ? row.kgs : row.pcs;
+					var k = (row.id_satuan == 22) ? parseFloat(row.kgs)+parseFloat(row.kgs_sm) : row.pcs;
 					return rupiah(s*(parseFloat(k)),'.',',',2);
 				}
 			 },
@@ -364,6 +378,13 @@ $(document).ready(function(){
 		$(".loadered").removeClass('hilang');
 	})
 	$("#ceklistmissedbomplus").on('change',function(){
+		jadi = 0;
+		table.ajax.reload();
+		tabledet.ajax.reload();
+		// $("#tabeldetailnya").DataTable().ajax.reload()
+		$(".loadered").removeClass('hilang');
+	})
+	$("#ceklistasalkosong").on('change',function(){
 		jadi = 0;
 		table.ajax.reload();
 		tabledet.ajax.reload();

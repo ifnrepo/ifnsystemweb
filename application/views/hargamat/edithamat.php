@@ -323,14 +323,16 @@
         var pcs = $("#qty").val();
         var kgs = $("#weight").val();
         var nilai = $(this).val();
-        if(nilai==22){
-            var kali = parseFloat(toAngka(kurs))*parseFloat(toAngka(cif));
-            var hgbr = kali/parseFloat(toAngka(kgs));
-        }else{
-            var kali = parseFloat(toAngka(kurs))*parseFloat(toAngka(cif));
-            var hgbr = kali / parseFloat(toAngka(pcs));
+        if(kurs!='' && $cif!=''){
+            if(nilai==22){
+                var kali = parseFloat(toAngka(kurs))*parseFloat(toAngka(cif));
+                var hgbr = kali/parseFloat(toAngka(kgs));
+            }else{
+                var kali = parseFloat(toAngka(kurs))*parseFloat(toAngka(cif));
+                var hgbr = kali / parseFloat(toAngka(pcs));
+            }
+            $("#price").val(rupiah(hgbr,'.',',',8));
         }
-        $("#price").val(rupiah(hgbr,'.',',',8));
         $("#refhargakt").click();
     })
     $("#landing_ch").on("change click keyup input paste", function() {

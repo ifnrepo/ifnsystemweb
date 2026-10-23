@@ -46,7 +46,7 @@ class Pricinginv_model extends CI_Model
         // $this->db->order_by('stokinv.dept_id','stokinv.urut');
         $query1 = $this->db->get_compiled_select();
 
-        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(round(kgs_akhir,6)) over() as totalkgs,sum(harga*kgs_akhir) over() as totalamount,kgs_akhir-kgsdet as selisih from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
+        $kolom = "Select *,sum(pcs_akhir) over() as totalpcs,sum(round(kgs_akhir,6)) over() as totalkgs,sum(harga*IF(id_satuan=22,kgs_akhir,pcs_akhir)) over() as totalamount,kgs_akhir-kgsdet as selisih from (Select r1.*,LEFT(CONCAT(IFNULL(ydln,''),IFNULL(xdln,'')),1) AS mdln,LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) AS id_kategori,kategori.nama_kategori,satuan.kodesatuan from (".$query1.") r1 ";
         $kolom .= "LEFT JOIN kategori on kategori.kategori_id = LEFT(CONCAT(IFNULL(yidkategori,''),IFNULL(xidkategori,'')),4) ";
         $kolom .= "LEFT JOIN satuan on satuan.id = id_satuan ";
         if($this->session->userdata('milik')!=''){
@@ -83,16 +83,20 @@ class Pricinginv_model extends CI_Model
             $setWhere = array();
             foreach ($where as $key => $value)
             {
-                if($key=='tgkosong'){
-                    $setWhere[] = "(prod_date is null OR prod_date = '0000-00-00') ";
+                if($key=='asalwastekosong'){
+                    $setWhere[] = "asal_waste = '' ";
                 }else{
-                    if($key=='missed'){
-                        $setWhere[] = "pcs_bom = 0 AND kgs_bom = 0";
+                    if($key=='tgkosong'){
+                        $setWhere[] = "(prod_date is null OR prod_date = '0000-00-00') ";
                     }else{
-                        if($key=='missedplus'){
-                            $setWhere[] = "(round(kgsdet,2)-round(kgs_akhir,2)) > 0.03 ";
+                        if($key=='missed'){
+                            $setWhere[] = "pcs_bom = 0 AND kgs_bom = 0";
                         }else{
-                            $setWhere[] = $key."='".$value."'";
+                            if($key=='missedplus'){
+                                $setWhere[] = "(round(kgsdet,2)-round(kgs_akhir,2)) > 0.03 ";
+                            }else{
+                                $setWhere[] = $key."='".$value."'";
+                            }
                         }
                     }
                 }
@@ -442,6 +446,7 @@ class Pricinginv_model extends CI_Model
                         }
                     }
                 }
+                $aslwaste = $que['dept_id']=='GW' ? ($depas!='' && $depas != $que['asal_waste']) ? $depas : $que['asal_waste'] : '';
                 $hasil = [
                     'id_stok' => $que['id'],
                     'urut' => $que['urut'],
@@ -459,14 +464,17 @@ class Pricinginv_model extends CI_Model
                     'tgl_bc' => '-',
                     'harga_acct' => 0,
                     'dept_asal' => $depas,
+                    'asal_waste' => $aslwaste,
                     'prod_date' => $prod
                 ];
                 $this->db->insert('stokinv_detail',$hasil);
 
+                
                 $this->db->set('prod_date','"'.$prod.'"',FALSE);
                 $this->db->set('pcs_bom','pcs_bom + '.$que['pcs_akhir'],FALSE);
                 $this->db->set('kgs_bom','kgs_bom + '.$que['kgs_akhir'],FALSE);
                 $this->db->set('art_type',$artipe);
+                $this->db->set('asal_waste',$aslwaste);
                 $this->db->where('id',$que['id']);
                 $this->db->update('stokinv');
 
@@ -479,7 +487,7 @@ class Pricinginv_model extends CI_Model
                 }
 
                 // Cari data pengenaan bagian apa saja 
-                $cekcostdept = $this->db->get_where('ref_jobcostdep',['dept_id' => $que['dept_id'],'id_kategori'=>$que['id_kategori'],'trim(sublok)'=>trim($que['sublok']),'asal' => $que['asal_waste']]);
+                $cekcostdept = $this->db->get_where('ref_jobcostdep',['dept_id' => $que['dept_id'],'id_kategori'=>$que['id_kategori'],'trim(sublok)'=>trim($que['sublok']),'asal' => $aslwaste]);
                 if($cekcostdept->num_rows() > 0 && $cekcost->num_rows() > 0){
                     $nilaicekcostdept = $cekcostdept->row_array();
                     if($nilaicekcostdept['sp']==1){
@@ -527,7 +535,7 @@ class Pricinginv_model extends CI_Model
                     'hoshu2' => $h2,
                     'packing' => $pa,
                     'shitate' => $sh,
-                    'asal_waste' => $que['dept_id']=='GW' ? $que['asal_waste'] : ''
+                    // 'asal_waste' => $que['dept_id']=='GW' ? $que['asal_waste'] : ''
                 ];
                 $this->db->where('id',$que['id']);
                 $this->db->update('stokinv',$datastokinv);
@@ -542,11 +550,14 @@ class Pricinginv_model extends CI_Model
                     $satt = 0;
                     $jmpcdbom = 0;
                     $jmkgdbom = 0;
+                    $aslwaste = '';
                     foreach($databom as $dbom){
                         if($ke==0){
                             $tglpr = $dbom['prod_date'];
                             $satt = $dbom['id_satuan'];
                         }
+                        $satt = $que['id_satuan'];
+                        $aslwaste = $que['dept_id']=='GW' ? ($dbom['dept_asal']!='' && $dbom['dept_asal'] != $que['asal_waste']) ? $dbom['dept_asal'] : $que['asal_waste'] : '';
                         $jmrm += (float) $dbom['harga_rm'];
                         $jmsm += (float) $dbom['harga_sm'];
                         $jmpri += $dbom['price'];
@@ -555,6 +566,7 @@ class Pricinginv_model extends CI_Model
                         $jmpcdbom += $dbom['pcs'];
                         $jmkgdbom += $dbom['kgs'];
                         $dbom['prod_date'] = $tglpr;
+                        $dbom['asal_waste'] = $aslwaste;
                         unset($dbom['harga_rm']);
                         unset($dbom['harga_sm']);
                         unset($dbom['price']);
@@ -572,7 +584,7 @@ class Pricinginv_model extends CI_Model
                     }
 
                     // Cari data pengenaan bagian apa saja 
-                    $cekcostdept = $this->db->get_where('ref_jobcostdep',['dept_id' => $que['dept_id'],'id_kategori'=>$que['id_kategori'],'trim(sublok)'=>trim($que['sublok']),'asal' => $que['asal_waste']]);
+                    $cekcostdept = $this->db->get_where('ref_jobcostdep',['dept_id' => $que['dept_id'],'id_kategori'=>$que['id_kategori'],'trim(sublok)'=>trim($que['sublok']),'asal' => $aslwaste]);
                     if($cekcostdept->num_rows() > 0 && $cekcost->num_rows() > 0){
                         $nilaicekcostdept = $cekcostdept->row_array();
                         if($nilaicekcostdept['sp']==1){
@@ -652,7 +664,8 @@ class Pricinginv_model extends CI_Model
                         'packing' => $pa,
                         'shitate' => $sh,
                         'art_type' => $artipe,
-                        'asal_waste' => $que['dept_id']=='GW' ? $que['asal_waste'] : ''
+                        // 'asal_waste' => $que['dept_id']=='GW' ? $que['asal_waste'] : ''
+                        'asal_waste' => $aslwaste
                     ];
                     $this->db->where('id',$que['id']);
                     $this->db->update('stokinv',$datastokinv);
@@ -668,6 +681,7 @@ class Pricinginv_model extends CI_Model
                         'urut' => $que['urut'],
                         'id_barang' => $que['id_barang'],
                         'kgs' => 0,
+                        'asal_waste' => $que['asal_waste']
                     ];
 
                     $this->db->insert('stokinv_detail',$dbom);
@@ -794,16 +808,21 @@ class Pricinginv_model extends CI_Model
         return $this->db->get();
     }
     public function getdatabombyid($id){
-        $this->db->select('stokinv_detail.*,barang.id_kategori,barang.kode,tb_po.spek as speki');
+        $this->db->select('stokinv_detail.*,barang.id_kategori,barang.kode,tb_po.spek as speki,stokinv.dept_id');
         $this->db->from('stokinv_detail');
         $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
         $this->db->join('tb_po','tb_po.ind_po = concat(stokinv_detail.det_po,stokinv_detail.det_item,stokinv_detail.det_dis)','left');
+        $this->db->join('stokinv','stokinv.id = stokinv_detail.id_stok','left');
         $this->db->where('stokinv_detail.id_stok',$id);
         return $this->db->get();
     }
     public function updatetglprod($data){
         $this->db->where('id',$data['id']);
         return $this->db->update('stokinv',['prod_date' => $data['tglprod']]);
+    }
+    public function updateasalwaste($data){
+        $this->db->where('id',$data['id']);
+        return $this->db->update('stokinv',['asal_waste' => $data['asal_waste']]);
     }
     public function toexcel(){
         return $this->db->query($this->getdata());
