@@ -456,6 +456,11 @@ $("#kirimexcel").on('click',function(){
 		},
 	});
 })
+$('#textcari').on('keypress', function(e) {
+    if (e.which == 13) {
+		$("#buttoncari").click();
+    }
+});
 function buatexcel(isi){
 	$.ajax({
 		dataType: "json",
