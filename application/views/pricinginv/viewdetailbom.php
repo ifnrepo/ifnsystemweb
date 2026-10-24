@@ -120,7 +120,7 @@
                     <table class="table datatable6" id="cobasisip">
                         <thead style="background-color: blue !important">
                             <tr>
-                                <th>NoX</th>
+                                <th>#</th>
                                 <th>Nama Barang</th>
                                 <th>Nobontr</th>
                                 <th>Kgs</th>
@@ -141,10 +141,11 @@
                             <?php $rawmat = $det['id_kategori']=='8189' ? 'text-pink' : 'text-teal'; ?>
                             <?php $namspek = $det['det_po']!='' ? $det['speki'] : namaspekbarang($det['id_barang']); ?>
                             <?php $xsku = $det['det_po']!='' ? viewsku($det['det_po'],$det['det_item'],$det['det_dis']) : $det['kode']; ?>
+                            <?php $rmsm = $det['id_kategori']=='8189' ? 'RM' : 'SM'; ?>
                                 <tr>
-                                    <td><?= $no ?></td>
+                                    <td class="text-center"><?= $rmsm ?></td>
                                     <td class="line-11"><?= '<span class="'.$rawmat.' font-kecil">'.$xsku.'</span><br>'.$namspek ?></td>
-                                    <td><?= $det['nobontr'] ?></td>
+                                    <td class="font-kecil"><?= $det['nobontr'] ?></td>
                                     <td class="text-right"><?= rupiah($det['kgs'],6) ?></td>
                                     <td class="text-right"><?= rupiah($det['pcs'],0) ?></td>
                                     <td class="text-right"><?= rupiah($det['harga_acct'],8) ?></td>

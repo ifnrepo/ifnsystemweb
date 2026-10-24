@@ -287,9 +287,10 @@ class Pricinginv extends CI_Controller
         $sheet->setCellValue('L3', "JOB COST");
         $sheet->setCellValue('M3', "TOTAL");
         $sheet->setCellValue('N3', "NOBONTR");
-        $sheet->setCellValue('O3', "DLN");
-        $sheet->setCellValue('P3', "ASAL WASTE");
-        $sheet->setCellValue('Q3', "NO BALE");
+        $sheet->setCellValue('O3', "INSNO");
+        $sheet->setCellValue('P3', "DLN");
+        $sheet->setCellValue('Q3', "ASAL WASTE");
+        $sheet->setCellValue('R3', "NO BALE");
         // Panggil model Get Data   
         $arrayu = [];
         $inv = $this->pricingmodel->toexcel();
@@ -321,9 +322,10 @@ class Pricinginv extends CI_Controller
             // $sheet->setCellValue('M' . $numrow, $data['amount']);
             $sheet->setCellValue('M' . $numrow, $data['harga']*$pengali);
             $sheet->setCellValue('N' . $numrow, $data['nobontr']);
-            $sheet->setCellValue('O' . $numrow, $data['dln']);
-            $sheet->setCellValue('P' . $numrow, $data['asal_waste']);
-            $sheet->setCellValue('Q' . $numrow, $data['nobale']);
+            $sheet->setCellValue('O' . $numrow, $data['insno']);
+            $sheet->setCellValue('P' . $numrow, $data['dln']);
+            $sheet->setCellValue('Q' . $numrow, $data['asal_waste']);
+            $sheet->setCellValue('R' . $numrow, $data['nobale']);
             $no++;
             // Tambah 1 setiap kali looping      
             $numrow++; // Tambah 1 setiap kali looping    
@@ -338,8 +340,9 @@ class Pricinginv extends CI_Controller
         $sheet->setTitle(" DATA INV");
 
         // Proses file excel    
+        $filename = 'PRICING-'.$this->session->userdata('deptpricinginv').date('dmY');
         header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
-        header('Content-Disposition: attachment; filename="RM-Pricing.xlsx"'); // Set nama file excel nya    
+        header('Content-Disposition: attachment; filename="'.$filename.'.xlsx"'); // Set nama file excel nya    
         header('Cache-Control: max-age=0');
         $writer = new Xlsx($spreadsheet);
         $writer->save('php://output');

@@ -808,12 +808,13 @@ class Pricinginv_model extends CI_Model
         return $this->db->get();
     }
     public function getdatabombyid($id){
-        $this->db->select('stokinv_detail.*,barang.id_kategori,barang.kode,tb_po.spek as speki,stokinv.dept_id');
+        $this->db->select('stokinv_detail.*,barang.id_kategori,barang.kode,tb_po.spek as speki,stokinv.dept_id,IF(barang.id_kategori="8189",1,2) as xorder');
         $this->db->from('stokinv_detail');
         $this->db->join('barang','barang.id = stokinv_detail.id_barang','left');
         $this->db->join('tb_po','tb_po.ind_po = concat(stokinv_detail.det_po,stokinv_detail.det_item,stokinv_detail.det_dis)','left');
         $this->db->join('stokinv','stokinv.id = stokinv_detail.id_stok','left');
         $this->db->where('stokinv_detail.id_stok',$id);
+        $this->db->order_by('IF(barang.id_kategori="8189",1,2) ASC');
         return $this->db->get();
     }
     public function updatetglprod($data){

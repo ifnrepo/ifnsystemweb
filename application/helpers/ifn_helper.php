@@ -1336,6 +1336,7 @@ function getdatabomcost($que)
                 $CI->db->where('trim(nomor_bc) != ', "");
                 $datahamat = $CI->db->get();
                 // $datahamat = $CI->db->get_where('tb_hargamaterial',['id_barang' => $datadetbom['id_barang'],'trim(nobontr)' => trim($datadetbom['nobontr']),'trim(nobontr) != ' => "",'trim(nomor_bc) != ' => ""]);
+                $pengalism = $datadetbom['persen_sm']==0 ? ($datadetbom['persen']!=0 ? $datadetbom['persen'] : $datadetbom['persen_sm']) : $datadetbom['persen'];
                 if ($datahamat->num_rows() > 0) {
                     $hamat = $datahamat->row_array();
                     $hamat['hargarm'] = $hamat['id_kategori'] == '8189' ? $hamat['harga_akt'] : 0;
@@ -1368,7 +1369,7 @@ function getdatabomcost($que)
                     'nomor_bc' => $hamat['nomor_bc'],
                     'tgl_bc' => $hamat['tgl_bc'],
                     'harga_rm' => round($hamat['hargarm'] * ($datadetbom['persen'] / 100),8),
-                    'harga_sm' => round($hamat['hargasm'] * ($datadetbom['persen_sm'] / 100),8),
+                    'harga_sm' => round($hamat['hargasm'] * ($pengalism / 100),8),
                     'price' => $hamat['price'],
                     'harga_acct' => $hamat['harga_akt'],
                     'prod_date' => $databom['prod_date'],
