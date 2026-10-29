@@ -4,16 +4,16 @@
             <form method="POST" action="<?= base_url() . 'hargamat/updatehamat'; ?>" id="formhamat" name="formhamat" enctype="multipart/form-data">
                 <input type="hidden" name="id" id="id_hargamaterial" value="<?= $data['idx']; ?>">
                 <div class="row">
-                    <div class="col-10">
+                    <div class="col-9">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0 font-bold text-primary">Nama Barang</label>
                             <input type="text" class="form-control font-kecil" placeholder="Nama Barang KOSONG" value="<?= $data['nama_barang']; ?>" disabled>
                         </div>
                     </div>
-                    <div class="col-2">
+                    <div class="col-3">
                         <div class="mb-1">
                             <label class="form-label font-kecil mb-0">ID Barang</label>
-                            <input type="text" class="form-control font-kecil" placeholder="Input placeholder" value="<?= $data['kode'] . '-' . $data['id_barang']; ?>" disabled>
+                            <input type="text" class="form-control font-kecil" placeholder="Input placeholder" value="<?= $data['kode'] . '- ID.' . $data['id_barang']; ?>" disabled>
                         </div>
                     </div>
                 </div>

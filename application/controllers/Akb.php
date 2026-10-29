@@ -862,6 +862,44 @@ class Akb extends CI_Controller
             redirect($url);
         }
     }
+    public function getdokbc($id, $mode = 0)
+    {
+        $token = $this->akbmodel->gettoken();
+        $dataaju = $this->akbmodel->getdatanomoraju($id);
+        $curl = curl_init();
+        // $token = $consID;
+        $headers = array(
+            "Content-Type: application/pdf",
+            "Authorization: Bearer " . $token,
+        );
+
+        curl_setopt($curl, CURLOPT_HTTPHEADER, $headers);
+        curl_setopt($curl, CURLOPT_CUSTOMREQUEST, "GET");
+        curl_setopt($curl, CURLOPT_RETURNTRANSFER, true);
+        // curl_setopt($curl, CURLOPT_POSTFIELDS, json_encode($data));
+        curl_setopt($curl, CURLOPT_URL, "https://apis-gw.beacukai.go.id/openapi/respon/cetak-formulir?nomorAju=" . $dataaju);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYHOST, 0);
+        curl_setopt($curl, CURLOPT_SSL_VERIFYPEER, 0);
+        $result = curl_exec($curl);
+        curl_close($curl);
+        // echo $result;
+        // print_r($data);  
+        // $pisah = explode('/', $data);
+        $filename = 'XXXXX';
+        $databalik = $result;
+        $lokfile = $dataaju;
+        // header('Cache-Control: public');
+        header('Content-type: application/pdf');
+        header('Content-Disposition: attachment; filename="' . $lokfile . '"');
+        header('Content-Length: ' . strlen($databalik));
+        echo $databalik;
+        // if ($mode = 0) {
+        //     $url = base_url() . 'ib/isidokbc/' . $id;
+        // } else {
+        //     $url = base_url() . 'ib';
+        // }
+        // redirect($url);
+    }
     public function tampilkanpdf($data, $id, $mode)
     {
         $token = $this->ibmodel->gettoken();

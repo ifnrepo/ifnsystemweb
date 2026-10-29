@@ -1351,7 +1351,12 @@ class Akb_model extends CI_Model
         $det = $this->db->get_where('tb_bombc', ['id' => $data['id']])->row_array();
         $cekjenisbc = ceknomorbc($data['nobontr'], $data['id_barang']);
         if (isset($cekjenisbc['id'])) {
-            $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
+            if($header['jns_bc']=='261'){
+                $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
+                $kurssekarang['usd'] = $header['kurs_usd'];
+            }else{
+                $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
+            }
             $kursusd = $kurssekarang['usd'] == null ? 1 : $kurssekarang['usd'];
             $ndpbm = $cekjenisbc['mt_uang'] == '' || $cekjenisbc['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
             $pembagi = $cekjenisbc['weight'] == 0 ? 1 : round($cekjenisbc['weight'], 2);
@@ -1409,7 +1414,13 @@ class Akb_model extends CI_Model
             $data['pph_rupiah'] = 0;
             $cekjenisbc = ceknomorbc($deta['nobontr'], $deta['id_barang']);
             if (isset($cekjenisbc['id'])) {
+                // $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
+                if($header['jns_bc']=='261'){
                 $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
+                $kurssekarang['usd'] = $header['kurs_usd'];
+            }else{
+                $kurssekarang = getkurssekarang($header['tgl_aju'])->row_array();
+            }
                 $kursusd = $kurssekarang['usd'] == null ? 1 : $kurssekarang['usd'];
                 $ndpbm = $cekjenisbc['mt_uang'] == '' || $cekjenisbc['mt_uang'] == 'IDR' ? 0 : $kurssekarang['usd'];
                 $pembagi = $cekjenisbc['weight'] == 0 ? 1 : round($cekjenisbc['weight'], 2);
