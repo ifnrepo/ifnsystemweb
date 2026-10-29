@@ -63,7 +63,10 @@ class Bcmasukmodel extends CI_Model
             $this->db->group_end();
         }
         if ($this->session->userdata('nopen')) {
+            $this->db->group_start();
             $this->db->where("nomor_bc", $this->session->userdata('nopen'));
+            $this->db->or_like('nama_supplier',$this->session->userdata('nopen'));
+            $this->db->group_end();
         }
         $this->db->where('data_ok', 1);
         $this->db->where('ok_tuju', 1);
