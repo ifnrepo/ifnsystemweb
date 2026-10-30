@@ -71,7 +71,7 @@ class Bcmasukmodel extends CI_Model
         $this->db->where('data_ok', 1);
         $this->db->where('ok_tuju', 1);
         // $this->db->where('ok_valid', 1);
-        $this->db->group_by('nomor_bc');
+        $this->db->group_by('nomor_bc,nomor_dok');
         $this->db->order_by('tgl_bc');
         return $this->db->get('tb_header');
     }
