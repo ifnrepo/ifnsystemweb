@@ -1212,15 +1212,15 @@ class Helper_model extends CI_Model
         }
         $xdate = date('Y-m-d', $new_date_timestamp);
         $ydate = date('Y-m-d', $new_date_timestamp2);
-        $this->db->select('tgl,jns_bc,keterangan,bc_makloon,COUNT(*) AS jmlbc');
+        $this->db->select('tgl_bc as tgl,jns_bc,keterangan,bc_makloon,COUNT(*) AS jmlbc');
         $this->db->from('tb_header');
-        $this->db->where("jns_bc != '' ");
-        $this->db->where("jns_bc != '0' ");
+        $this->db->where("jns_bc != ","");
+        // $this->db->where("jns_bc != ",0);
         if($mode==1){
-            $this->db->where(' tgl = ', $xdate);
+            $this->db->where(' tgl_bc = ', $xdate);
         }else{
-            $this->db->where(' tgl >= ', $xdate);
-            $this->db->where(' tgl <= ', $ydate);
+            $this->db->where(' tgl_bc >= ', $xdate);
+            $this->db->where(' tgl_bc <= ', $ydate);
         }
         $this->db->where('tb_header.send_ceisa',1);
         $this->db->where('trim(tb_header.nomor_bc) != ', "");
