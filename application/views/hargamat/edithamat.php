@@ -273,10 +273,17 @@
         </div>
     </div>
 </div>
-<div class="modal-footer font-kecil p-0 mx-2" style="display: flex;justify-content: space-between;">
-    <a href="#" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</a>
-    <button type="button" class="btn btn-sm btn-primary" id="simpanbarang">Simpan</button>
-</div>
+<?php if($mode==0){ ?>
+    <div class="modal-footer font-kecil p-0 mx-2" style="display: flex;justify-content: space-between;">
+        <a href="#" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</a>
+        <button type="button" class="btn btn-sm btn-primary" id="simpanbarang">Simpan</button>
+    </div>
+<?php }else{ ?>
+    <div class="modal-footer font-kecil p-0 mx-2" style="display: flex;justify-content: space-between;">
+        <a href="#" class="btn btn-sm btn-danger" data-bs-dismiss="modal">Close</a>
+        <!-- <button type="button" class="btn btn-sm btn-primary" id="simpanbarang">Simpan</button> -->
+    </div>
+<?php } ?>
 <script src="<?= base_url(); ?>assets/js/vendor/jquery.min.js"></script>
 <script>
     $(document).ready(function() {

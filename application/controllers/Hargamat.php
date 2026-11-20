@@ -144,13 +144,14 @@ class Hargamat extends CI_Controller
         }
         echo 1;
     }
-    public function edithamat($id)
+    public function edithamat($id,$mode=0)
     {
         $data['data'] = $this->hargamatmodel->getdatabyid($id)->row_array();
         $data['dokbc'] = $this->hargamatmodel->getdokbc();
         $data['refbendera'] = $this->hargamatmodel->refbendera();
         $data['refmtuang'] = $this->hargamatmodel->refmtuang();
         $data['satuan'] = $this->hargamatmodel->getsatuan();
+        $data['mode'] = $mode;
         $this->load->view('hargamat/edithamat', $data);
     }
     public function updatehamat()
@@ -189,7 +190,7 @@ class Hargamat extends CI_Controller
             $idrprice = (float) $field->price + (float) $field->landing_ch; 
             $no++;
             $row = array();
-            $row[] = '<span class="font-kecil text-teal">'.$sku.'</span><br>'.$barang;
+            $row[] = '<span class="font-kecil text-teal">'.$sku.'</span><br><a href="'.base_url('hargamat/edithamat/'.$field->id.'/1').'" data-bs-toggle="modal" data-bs-target="#modal-large"  data-title="View Data">'.$barang.'</a>';
             $row[] = $field->kodesatuan;
             $row[] = tglmysql($field->tgl);
             $row[] = $field->kode_faktur_pajak;

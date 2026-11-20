@@ -27,7 +27,7 @@
                                     <?php $lokasi = isset($data['lokasi']) ? substr($data['lokasi'],0,3) : '';  ?>
                                     <div class="col-1 text-center">
                                         <div class="bg-red-lt mb-1 mt-1"><?= $lokasi ?></div>
-                                        <input type="text" id="captnomormesin" class="form-control text-center font-bold" style="font-size: 17px;" value="<?= $this->uri->segment(4) ?>">
+                                        <input type="text" id="captnomormesingrap" class="form-control text-center font-bold" style="font-size: 17px;" value="<?= $this->uri->segment(4) ?>">
                                     </div>
                                     <div class="col-4">
                                         <table class="table table-bordered m-0 mt-1 mb-1">
@@ -81,10 +81,10 @@
                                     </div>
                                     <div class="col-4 d-flex ms-auto flex-column" style="margin-top: auto;">
                                         <div class="text-center pt-2">
-                                            <button class="btn btn-sm btn-primary" id="firstrec">First</button>
-                                            <button class="btn btn-sm btn-primary" id="prevrec">Prev</button>
-                                            <button class="btn btn-sm btn-primary" id="nextrec">Next</button>
-                                            <button class="btn btn-sm btn-primary" id="lastrec">Last</button>
+                                            <button class="btn btn-sm btn-primary" id="firstrecgrap">First</button>
+                                            <button class="btn btn-sm btn-primary" id="prevrecgrap">Prev</button>
+                                            <button class="btn btn-sm btn-primary" id="nextrecgrap">Next</button>
+                                            <button class="btn btn-sm btn-primary" id="lastrecgrap">Last</button>
                                             <a href="<?= base_url().'ponet/caripo' ?>" class="btn btn-sm btn-teal text-white disabled" id="caridatapo" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Cari Data PO">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-search"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M3 10a7 7 0 1 0 14 0a7 7 0 1 0 -14 0" /><path d="M21 21l-6 -6" /></svg>
                                                 Cari Data
@@ -129,27 +129,29 @@
                                         <th class="text-center text-nowrap">Stat PP</th>
                                         <th class="text-center text-nowrap">Stat NT</th>
                                         <th class="text-center text-nowrap">#</th>
-                                        <th class="" colspan="4" id="tbheadjan"><?= $this->session->userdata('thgrap') ?>-01</th>
-                                        <th class="" colspan="4" id="tbheadfeb"><?= $this->session->userdata('thgrap') ?>-02</th>
-                                        <th class="" colspan="4" id="tbheadmar"><?= $this->session->userdata('thgrap') ?>-03</th>
-                                        <th class="" colspan="4" id="tbheadjapr"><?= $this->session->userdata('thgrap') ?>-04</th>
-                                        <th class="" colspan="4" id="tbheadmei"><?= $this->session->userdata('thgrap') ?>-05</th>
-                                        <th class="" colspan="4" id="tbheadjun"><?= $this->session->userdata('thgrap') ?>-06</th>
-                                        <th class="" colspan="4" id="tbheadjul"><?= $this->session->userdata('thgrap') ?>-07</th>
-                                        <th class="" colspan="4" id="tbheadagt"><?= $this->session->userdata('thgrap') ?>-08</th>
-                                        <th class="" colspan="4" id="tbheadsep"><?= $this->session->userdata('thgrap') ?>-09</th>
-                                        <th class="" colspan="4" id="tbheadokt"><?= $this->session->userdata('thgrap') ?>-10</th>
-                                        <th class="" colspan="4" id="tbheadnop"><?= $this->session->userdata('thgrap') ?>-11</th>
-                                        <th class="" colspan="4" id="tbheaddes"><?= $this->session->userdata('thgrap') ?>-12</th>
+                                        <th class="text-center" colspan="4" id="tbheadjan"><?= $this->session->userdata('thgrap') ?>-01</th>
+                                        <th class="text-center" colspan="4" id="tbheadfeb"><?= $this->session->userdata('thgrap') ?>-02</th>
+                                        <th class="text-center" colspan="4" id="tbheadmar"><?= $this->session->userdata('thgrap') ?>-03</th>
+                                        <th class="text-center" colspan="4" id="tbheadjapr"><?= $this->session->userdata('thgrap') ?>-04</th>
+                                        <th class="text-center" colspan="4" id="tbheadmei"><?= $this->session->userdata('thgrap') ?>-05</th>
+                                        <th class="text-center" colspan="4" id="tbheadjun"><?= $this->session->userdata('thgrap') ?>-06</th>
+                                        <th class="text-center" colspan="4" id="tbheadjul"><?= $this->session->userdata('thgrap') ?>-07</th>
+                                        <th class="text-center" colspan="4" id="tbheadagt"><?= $this->session->userdata('thgrap') ?>-08</th>
+                                        <th class="text-center" colspan="4" id="tbheadsep"><?= $this->session->userdata('thgrap') ?>-09</th>
+                                        <th class="text-center" colspan="4" id="tbheadokt"><?= $this->session->userdata('thgrap') ?>-10</th>
+                                        <th class="text-center" colspan="4" id="tbheadnop"><?= $this->session->userdata('thgrap') ?>-11</th>
+                                        <th class="text-center" colspan="4" id="tbheaddes"><?= $this->session->userdata('thgrap') ?>-12</th>
                                     </tr>
                                 </thead>
                                 <tbody class="table-tbody" id="body-table" style="font-size: 13px !important;">
                                     <?php if($master->num_rows() > 0): ?>
-                                        <?php foreach($master->result_array() as $mst): ?>
+                                        <?php $nox=1; foreach($master->result_array() as $mst): $nox++; ?>
                                         <?php $statpo = $mst['stat_po']!=1 ? 'text-pink' : ''; ?>
                                         <?php $statdesc = trim($mst['descx'])=='' ? '' : (trim($mst['descx'])=='FINISHED' ? '<span class="badge bg-blue text-blue-fg">'.$mst['descx'].'</span>' : '<span class="badge bg-orange text-black">'.$mst['descx'].'</span>') ?>
                                         <?php $statdescn = trim($mst['descn'])=='' ? '' : (trim($mst['descn'])=='FINISHED' ? '<span class="badge bg-blue text-blue-fg">'.$mst['descn'].'</span>' : '<span class="badge bg-orange text-black">'.$mst['descn'].'</span>') ?>
-                                            <tr>
+                                        <?php $wrngrap = $mst['stat_po']!=1 ? 'background-color: #f322e5;' : (trim($mst['descx'])=='' ? 'background-color: #F76707;' : 'background-color: #2bb43f;'); ?>
+                                        <?php $wrnproc = trim($mst['descx'])=='' ? 'background-color: #F76707;' : 'background-color: #2bb43f;'; ?>
+                                            <tr style="<?= $nox%2==0 ? 'background-color: #f1f1f1;' : '' ?>">
                                                 <td class="font-kecil <?= $statpo ?>"><?= $mst['dateplan'] ?></td>
                                                 <td class="font-kecil text-nowrap"><?= viewsku($mst['po'],$mst['item'],$mst['dis']) ?></td>
                                                 <td class="font-kecil text-nowrap"><?= $mst['insno'] ?></td>
@@ -163,12 +165,20 @@
                                                 <?php $awal = ($persen1+$bulan)-4;  ?>
                                                 <?php $akhir = ($persen2+$bulan2)-4;  ?>
                                                 <td class="text-center font-kecil" title="Day Plan NT"><?= $mst['day'] ?></td>
-                                                <?php $m=0; for ($y=1; $y <= 48 ; $y++) { if($y%4==1) { $m++; }  ?>
-                                                    <td class="text-center" title="Mg Ke <?= $y%4==0 ? 4 : $y%4 ?>&#10;<?= namabulanpendek($m).' '.$this->session->userdata('thgrap') ?>" style="padding:0 !important;min-width: 22px;<?= $awal == $y ? 'background-color : green; border-right-color : green;' : ''; ?><?= $awal < $y && $y < $akhir ? 'background-color : green; border-right-color : green;' : ''; ?><?= $akhir == $y ? 'background-color : green; border-right-color : green;' : ''; ?>">
-                                                        <!-- <hr class="mt-2 w-100" style="border: none;border-top: 5px solid #FF0000; margin-bottom: 4px;z-index:1000;"> -->
-                                                        <!-- <hr class="m-0" style="border-top: 5px solid blue;"> -->
-                                                        <!-- <div class="mt-1 bg-red w-100 font-kecil text-white" style="height: 9px !important; border-right-color: red;"></div>
-                                                        <div class="mt-0 bg-blue w-100 font-kecil text-white" style="height: 9px !important; border-right-color: red;"></div> -->
+                                                <?php $m=0; $r=0; for ($y=1; $y <= 48 ; $y++) { if($y%4==1) { $m++; $r=$y+1; }  ?>
+                                                    <?php $borderl = $y%4!=0 ? "border: none;" : "border-left: none;border-right-color: gray-750;";  ?>
+                                                    <td class="text-center" title="Mg Ke <?= $y%4==0 ? 4 : $y%4 ?>&#10;<?= namabulanpendek($m).' '.$this->session->userdata('thgrap') ?>" style="<?= $borderl ?>padding:0 !important;min-width: 22px;">
+                                                        <?php $tngh = ($awal < $y && $y < $akhir) ? '1' : '0'; ?>
+                                                        <?php $blk = ($persen1 == $persen2) ? 'border-radius: 5px;' : 'border-radius: 5px 0 0 5px;'; ?>
+                                                        <?php if($awal == $y): ?>
+                                                                <div class="mt-2 w-100 font-kecil text-white" style="<?= $wrngrap ?> height: 17px !important; border-right-color: red; <?= $blk ?>"></div>
+                                                        <?php endif; ?>
+                                                        <?php if($awal < $y && $y < $akhir): ?>
+                                                                <div class="mt-2 w-100 font-kecil text-white" style="<?= $wrngrap ?> height: 17px !important; border-right-color: red;"></div>
+                                                        <?php endif; ?>
+                                                        <?php if($akhir == $y && $awal != $y): ?>
+                                                                <div class="mt-2 w-100 font-kecil text-white" style="<?= $wrngrap ?> height: 17px !important; border-right-color: red;border-radius: 0 5px 5px 0;"></div>
+                                                        <?php endif; ?>
                                                     </td>
                                                 <?php } ?>
                                             </tr>
