@@ -1,11 +1,11 @@
 $(document).ready(function () {
 	if($("#nomormesin").val()==$("#maxid").val()){
-		$("#nextrec").addClass('disabled');
-		$("#lastrec").addClass('disabled');
+		$("#nextrecgrap").addClass('disabled');
+		$("#lastrecgrap").addClass('disabled');
 	}
 	if($("#nomormesin").val()==$("#minid").val()){
-		$("#firstrec").addClass('disabled');
-		$("#prevrec").addClass('disabled');
+		$("#firstrecgrap").addClass('disabled');
+		$("#prevrecgrap").addClass('disabled');
 	}
 	var isInitialLoad = true;
 	// table = $('#tabelnya').DataTable({
@@ -174,8 +174,8 @@ $("#cekitem").on('click',function(){
 	// var xx = $(this).attr('rel');
 	// alert(xx);
 })
-$("#firstrec").on('click',function(){
-	window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+$("#minid").val();
+$("#firstrecgrap").on('click',function(){
+	window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+$("#minid").val()+'/1';
 	// $.ajax({
 	// 	type: "POST",
 	// 	url: base_url + "ponet/currentrec",
@@ -191,16 +191,16 @@ $("#firstrec").on('click',function(){
 	// 	},
 	// });
 })
-$("#captnomormesin").on('blur',function(){
-	if($("#captnomormesin").val() !=''){
+$("#captnomormesingrap").on('blur',function(){
+	if($("#captnomormesingrap").val() !=''){
 		$.ajax({
 			type: "POST",
 			url: base_url + "ponet/prevrecmesin",
 			data: {
-				id: parseFloat($("#captnomormesin").val())+1,
+				id: parseFloat($("#captnomormesingrap").val())+1,
 			},
 			success: function (data) {
-				window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+data;
+				window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+data+'/1';
 			},
 			error: function (xhr, ajaxOptions, thrownError) {
 				console.log(xhr.status);
@@ -213,12 +213,12 @@ $("#captnomormesin").on('blur',function(){
 		return false;
 	}
 })
-$("#captnomormesin").on("keypress", function (e) {
+$("#captnomormesingrap").on("keypress", function (e) {
 	if (e.keyCode == 13) {
-		$("#captnomormesin").blur();
+		$("#captnomormesingrap").blur();
 	}
 });
-$("#prevrec").on('click',function(){
+$("#prevrecgrap").on('click',function(){
 	$.ajax({
 		type: "POST",
 		url: base_url + "ponet/prevrecmesin",
@@ -226,7 +226,7 @@ $("#prevrec").on('click',function(){
 			id: $("#nomormesin").val(),
 		},
 		success: function (data) {
-			window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+data;
+			window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+data+'/1';
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -234,7 +234,7 @@ $("#prevrec").on('click',function(){
 		},
 	});
 })
-$("#nextrec").on('click',function(){
+$("#nextrecgrap").on('click',function(){
 	$.ajax({
 		type: "POST",
 		url: base_url + "ponet/nextrecmesin",
@@ -242,7 +242,7 @@ $("#nextrec").on('click',function(){
 			id: $("#nomormesin").val(),
 		},
 		success: function (data) {
-			window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+data;
+			window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+data+'/1';
 		},
 		error: function (xhr, ajaxOptions, thrownError) {
 			console.log(xhr.status);
@@ -250,8 +250,8 @@ $("#nextrec").on('click',function(){
 		},
 	});
 })
-$("#lastrec").on('click',function(){
-	window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+$("#maxid").val();
+$("#lastrecgrap").on('click',function(){
+	window.location.href = base_url+'ponet/netplan/'+$("#kodeponet").val()+'/'+$("#maxid").val()+'/1';
 	// $.ajax({
 	// 	type: "POST",
 	// 	url: base_url + "ponet/currentrec",
@@ -525,6 +525,11 @@ $("#lastrec").on('click',function(){
 // 		},
 // 	});
 // }
+$("#texttahungrap").on("keypress", function (e) {
+	if (e.keyCode == 13) {
+		$("#btnapplygrap").click();
+	}
+});
 $("#btnapplygrap").click(function(){
 	$.ajax({
 		type: "POST",

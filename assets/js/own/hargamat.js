@@ -37,7 +37,7 @@ $(document).ready(function () {
 				// className: "text-right",
 				targets: [4],
 				// orderable: false,
-				className: "text-primary",
+				className: "line-11 font-kecil text-nowrap",
 			},
 			{
 				className: "line-11",

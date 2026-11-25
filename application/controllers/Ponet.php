@@ -163,6 +163,20 @@ class Ponet extends CI_Controller
             $this->load->view('layouts/footer',$footer);
         }
     }
+    public function machplan(){
+        if($this->session->userdata('thmachplan')==''){
+            $this->session->set_userdata('thmachplan',date('Y'));
+        }
+        $header['header'] = 'other';
+        $data['datamesin'] = $this->ponetmodel->datamesinplan();
+        $data['maxrek'] = $this->ponetmodel->getmaxminmesin();
+        $data['master'] = $this->ponetmodel->getinstr();
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+        $footer['fungsi'] = 'netplangrap';
+        $this->load->view('layouts/header', $header);
+        $this->load->view('ponet/machplangrap',$data);
+        $this->load->view('layouts/footer',$footer);
+    }
     public function getdatainstruksi(){
         $arrayu = [];
         $filter_mesin = $_POST['mesin'];

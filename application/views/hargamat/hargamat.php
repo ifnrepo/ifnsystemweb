@@ -145,7 +145,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
       <div class="card-body pt-1">
         <!-- <a href="#" class='btn btn-sm btn-info' style='padding: 2px 5px !important;' id="xmodal" data-bs-target='#modal-large-loading' data-bs-toggle='modal' data-title='Edit HAMAT' title='EDIT'><i class='fa fa-pencil mr-1'></i> Edit</a> -->
         <div id="table-default" class="table-responsive font-kecil">
-          <table id="tabelnya" class="table nowrap order-column table-hover" style="width: 100% !important;">
+          <table id="tabelnya" class="table order-column table-hover" style="width: 100% !important;">
             <thead>
               <tr>
                 <th>Article</th>

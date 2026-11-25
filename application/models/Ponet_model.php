@@ -299,13 +299,25 @@ class Ponet_model extends CI_Model
         $url = base_url() . 'ponet/view/' . $id;
         redirect($url);
     }
-    public function datamesin($msno){
+    public function datamesin($msno=0){
         $this->db->select('downtime_spekmesin.*,tb_mesin.*');
         $this->db->from('downtime_spekmesin');
         $this->db->join('tb_mesin','tb_mesin.mach_id = downtime_spekmesin.mach_id','left');
-        $this->db->where('downtime_spekmesin.mach_no',$msno);
+        if($msno!=0){
+            $this->db->where('downtime_spekmesin.mach_no',$msno);
+        }
         $this->db->where('left(downtime_spekmesin.mach_id,2)','NT');
         return $this->db->get()->row_array();
+    }
+    public function datamesinplan($msno=0){
+        $this->db->select('downtime_spekmesin.*,tb_mesin.*');
+        $this->db->from('downtime_spekmesin');
+        $this->db->join('tb_mesin','tb_mesin.mach_id = downtime_spekmesin.mach_id','left');
+        if($msno!=0){
+            $this->db->where('downtime_spekmesin.mach_no',$msno);
+        }
+        $this->db->where('left(downtime_spekmesin.mach_id,2)','NT');
+        return $this->db->get();
     }
     public function getlab($id){
         //cari po dari tb_po
@@ -602,10 +614,12 @@ class Ponet_model extends CI_Model
         // return $query." WHERE (".$cari.")".$order." LIMIT ".$limit." OFFSET ".$start;
         return json_encode($callback); // Convert array $callback ke json
     }
-    public function getinstr($msno){
+    public function getinstr($msno=0){
         $this->db->select('tb_netinstr.*,tb_po.stat_po');
         $this->db->join('tb_po','tb_po.ind_po = concat(tb_netinstr.po,tb_netinstr.item,tb_netinstr.dis)','left');
-        $this->db->where('tb_netinstr.machno',$msno);
+        if($msno!=0){
+            $this->db->where('tb_netinstr.machno',$msno);
+        }
         $this->db->where('year(dateplan)',$this->session->userdata('thgrap'));
         $this->db->order_by('dateplan');
         return $this->db->get('tb_netinstr');
