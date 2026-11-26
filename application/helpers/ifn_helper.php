@@ -1523,3 +1523,25 @@ function ceklengpo($po,$item,$dis,$field = 'po'){
     }
     return $datahasil;
 }
+function getrealisasikontrak($id,$field = 'kgs'){
+    $CI = &get_instance();
+    $hasilw = $CI->helpermodel->getrealisasikontrak($id);
+    if(!empty($hasilw)){
+        $xhasil = $hasilw->row_array();
+        $datahasil = $xhasil[$field];
+    }else{
+        $datahasil = 0;
+    }
+    return $datahasil;
+}
+function getpengembalianbc($id,$field = 'kgs'){
+    $CI = &get_instance();
+    $hasilw = $CI->helpermodel->getpengembalianbc($id);
+    if(!empty($hasilw)){
+        $xhasil = $hasilw->row_array();
+        $datahasil = $xhasil[$field];
+    }else{
+        $datahasil = 0;
+    }
+    return $datahasil;
+}

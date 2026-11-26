@@ -3,25 +3,11 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 ?><!DOCTYPE html>
 <div class="page-body">
   <div class="container-xl">
+    <button href="<?= base_url().'main/notifbc' ?>" class="btn btn-sm btn-success hilang" id="getnotifikasi" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Notifikasi !">View Notifikasi</button>
+    <input type="text" class="hilang" name="bagian" id="bagian" value="<?= $this->session->userdata('dept_user') ?>">
+    <input type="text" class="hilang" name="jumlahdokbc" id="jumlahdokbc" value="<?= $monitoringjaminan->num_rows() ?>">
     <div class="bg-blue mb-3 p-3 text-white" style="min-height: 80px; background-image: url('<?= base_url().'assets/image/blue-wave.jpg'; ?>'); background-size: cover;">
       <?php 
-        // $gretpagi = [
-        //   "Jadikan hari ini lebih baik daripada kemarin dengan semangat baru dan harapan baru",
-        //   "Setiap pagi adalah kesempatan untuk memperbaiki diri. Bangun, berdoa, dan hadapi dunia!",
-        //   "Jangan menunggu kesempatan, ciptakanlah.",
-        //   "Pagi hari adalah hadiah, buatlah itu berarti",
-        //   "Kerja keras hari ini adalah senyum di masa depan"
-        // ];
-        // $gretsiang = [
-        //   "Teruslah bergerak maju, bahkan jika langkahmu kecil",
-        //   "Setiap hari adalah kesempatan baru untuk menjadi lebih baik",
-        //   "Jangan ragu untuk mencoba karena yang belum dicoba belum tentu mustahil"
-        // ];
-        // $gretmalam = [ 
-        //   "Setiap detik adalah kesempatan buat berubah, Fokus !",
-        //   "Capek itu wajar, nyerah itu pilihan. Aku boleh ragu, tapi tetap maju.",
-        //   "Jadikan setiap kesalahan sebagai peluang untuk berkembang."
-        // ];
         $gretpagi = $greeting['pagi'];
         $gretsiang = $greeting['siang'];
         $gretmalam = $greeting['malam'];
@@ -474,6 +460,17 @@ defined('BASEPATH') OR exit('No direct script access allowed');
                     </div>
                   </div>
                 </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-12">
+        <div class="row row-cards">
+          <div class="col-sm-12">
+            <div class="card">
+              <div class="card-body">
+                <hr class="m-0">
               </div>
             </div>
           </div>

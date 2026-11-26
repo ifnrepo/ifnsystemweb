@@ -1386,4 +1386,62 @@ class Helper_model extends CI_Model
         $data = $this->db->get_where('tb_po',$kondisi);
         return $data;
     }
+    public function getdatajaminanexp(){
+        $this->db->select('tb_kontrak.*,supplier.nama_supplier');
+        $this->db->join('supplier','supplier.id = tb_kontrak.id_supplier','left');
+        // $this->db->where('tgl_akhir >= ','NOW()',false);
+        $this->db->where('tgl_akhir <= ','NOW()+INTERVAL 20 DAY',false);
+        $this->db->where('tutup',0);
+        if($this->session->userdata('deptnotif')!=''){
+            $this->db->where('id_supplier',$this->session->userdata('deptnotif'));
+        }
+        $this->db->order_by('tgl_akhir');
+        return $this->db->get('tb_kontrak');
+    }
+    public function getdatajaminanexpsemua(){ // Untuk dihalaman Main
+        $this->db->select('tb_kontrak.*,supplier.nama_supplier');
+        $this->db->join('supplier','supplier.id = tb_kontrak.id_supplier','left');
+        // $this->db->where('tgl_akhir >= ','NOW()',false);
+        $this->db->where('tgl_akhir <= ','NOW()+INTERVAL 20 DAY',false);
+        $this->db->where('tutup',0);
+        $this->db->order_by('tgl_akhir');
+        return $this->db->get('tb_kontrak');
+    }
+    public function getrealisasikontrak($id){
+        $hasil = [];
+        $header = $this->db->get_where('tb_header',['id_kontrak' => $id])->row_array();
+        if(!empty($header)){
+            $this->db->select('sum(pcs) as pcs,sum(kgs) as kgs');
+            $this->db->where('id_akb',$header['id']);
+            $hasil = $this->db->get('tb_detail');
+        }
+        return $hasil;
+    }
+    public function getpengembalianbc($id){
+        $hasil = [];
+        $header = $this->db->get_where('tb_header',['id_kontrak' => $id])->row_array();
+        if(!empty($header)){
+            $isi = [];
+            $jnsbc = $header['jns_bc']=='261' ? '262' : ($header['jns_bc']=='40' ? '41' : '262');
+            $this->db->select('id');
+            $this->db->where('exnomor_bc',$header['nomor_bc']);
+            $this->db->where('jns_bc',$jnsbc);
+            $this->db->where('tb_header.send_ceisa = 1 and trim(tb_header.exnomor_bc) != "" ');
+            // $this->db->where('no_inv',0);
+            $data = $this->db->get('tb_header');
+
+            if(!empty($data->result())){
+                foreach($data->result_array() as $dt){
+                    array_push($isi,$dt['id']);
+                }
+                $this->db->select('sum(pcs) as pcs,sum(kgs) as kgs');
+                $this->db->where_in('id_akb',$isi);
+                $hasil = $this->db->get('tb_detail');
+            }else{
+                $isi = ['@#$#$#$'];
+            }
+
+        }
+        return $hasil;
+    }
 }

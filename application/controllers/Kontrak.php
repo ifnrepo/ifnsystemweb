@@ -1104,11 +1104,54 @@ class Kontrak extends CI_Controller
         ob_end_clean();
         $writer->save('php://output');
     }
+    public function excel_kontrak_expired()
+    {
+        $this->load->model('helper_model','helpermodel');
+        $data = $this->helpermodel->getdatajaminanexp();
 
+        $spreadsheet = new \PhpOffice\PhpSpreadsheet\Spreadsheet();
+        $sheet = $spreadsheet->getActiveSheet();
 
+        // $sheet->mergeCells('B2:G2')->setCellValue('B2', 'REKAP MONITORING');
+        // $sheet->getStyle('B2')->getFont()->setBold(true)->setSize(12);
+        // $sheet->getStyle('B2')->getAlignment()->setHorizontal('left');
+        // $sheet->mergeCells('B3:G3')->setCellValue('B3', 'NOMOR KONTRAK : ' . $header['nomor']);
+        // $sheet->getStyle('B3')->getFont()->setBold(true)->setSize(12);
+        // $sheet->getStyle('B3')->getAlignment()->setHorizontal('left');
+        // $sheet->mergeCells('B4:G4')->setCellValue('B4', 'Tanggal Berlaku : ' . tglmysql($header['tgl_awal']) . ' s/d ' . tglmysql($header['tgl_akhir']));
+        // $sheet->getStyle('B4')->getFont()->setBold(true)->setSize(12);
+        // $sheet->getStyle('B4')->getAlignment()->setHorizontal('left');
 
+        $headers = ["#", "Nomor", "Rekanan", "Proses", "Tgl Berakhir", "PCS", "KGS", "Realisasi", "Pengembalian", "SALDO"];
+        $col = 'A';
+        foreach ($headers as $header) {
+            $sheet->setCellValue($col . '1', $header);
+            $col++;
+        }
 
+        $numrow = 2;
+        foreach($data->result_array() as $dt){
+            $sheet->setCellValue("A{$numrow}", $numrow-1);
+            $sheet->setCellValue("B{$numrow}", $dt['nomor']);
+            $sheet->setCellValue("C{$numrow}", $dt['nama_supplier']);
+            $sheet->setCellValue("D{$numrow}", $dt['proses']);
+            $sheet->setCellValue("E{$numrow}", $dt['tgl_akhir']);
+            $sheet->setCellValue("F{$numrow}", $dt['pcs']);
+            $sheet->setCellValue("G{$numrow}", $dt['kgs']);
+            $sheet->setCellValue("H{$numrow}", rupiah(getrealisasikontrak($dt['id']),2));
+            $sheet->setCellValue("I{$numrow}", rupiah(getpengembalianbc($dt['id']),2));
+            $sheet->setCellValue("J{$numrow}", rupiah(getrealisasikontrak($dt['id'])-getpengembalianbc($dt['id']),2));
+            $numrow ++;
+        }
 
+        $writer = new \PhpOffice\PhpSpreadsheet\Writer\Xlsx($spreadsheet);
+        $filename = 'LAPORAN BC EXPIRED'.date('Y-m-d H:i:s');
+        header('Content-Type: application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        header('Content-Disposition: attachment;filename="'.$filename.'.xlsx"');
+        header('Cache-Control: max-age=0');
+        ob_end_clean();
+        $writer->save('php://output');
+    }
 
     public function simpankedatabase()
     {
@@ -1528,6 +1571,18 @@ class Kontrak extends CI_Controller
         ];
         $hasil = $this->kontrakmodel->simpankontrakbaru($data);
         echo $hasil;
+    }
+    public function tutupkontrak($id,$mode=0){
+        $hasil = $this->kontrakmodel->tutupkontrak($id);
+        if($hasil){
+            if($mode==0){
+                $url = base_url().'kontrak';
+                redirect($url);
+            }else{
+                $url = base_url().'main/viewnotifbc';
+                redirect($url);
+            }
+        }
     }
     public function generateword($id) {
         $datakontrak = $this->kontrakmodel->getdata($id)->row_array();

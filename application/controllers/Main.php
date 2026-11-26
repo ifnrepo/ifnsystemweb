@@ -13,6 +13,7 @@ class Main extends CI_Controller {
         $this->load->model('helper_model','helpermodel');
         $this->load->model('taskmodel');
         $this->load->model('userappsmodel','usermodel');
+        $this->load->model('kontrak_model','kontrakmodel');
     }
 	public function index()
 	{
@@ -28,12 +29,14 @@ class Main extends CI_Controller {
         $datajumlahbc = $this->helpermodel->getdatabc2bulan();
         $datapengiriman = $this->helpermodel->getdatapengirimangf();
         $dataloss = $this->helpermodel->getdatapengirimanloss();
+        $header['monitoringjaminan'] = $this->helpermodel->getdatajaminanexp();
         $data['greeting'] = $this->helpermodel->getdatagreeting();
-		$this->load->view('layouts/header');
+		$this->load->view('layouts/header',$header);
         $data['dataproduksi'] = $dataproduksi;
         $data['kurshariini'] = $kurshariini;
         $data['personlogin'] = $datapersonlogin;
         $data['bc2bulan'] = $datajumlahbc;
+        $data['monitoringjaminan'] =  $header['monitoringjaminan'];
 		$this->load->view('main',$data);
         $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
         $footer['fungsi'] = 'main';
@@ -92,5 +95,23 @@ class Main extends CI_Controller {
         $this->session->unset_userdata('statTgl');
         $url = base_url('Main');
         redirect($url);
+    }
+    public function notifbc(){
+        $data['datadokumenexp'] = $this->helpermodel->getdatajaminanexpsemua();
+        $this->load->view('notifbc',$data);
+    }
+    public function viewnotifbc(){
+        $this->load->view('layouts/header');
+        $data['monitoringjaminan'] = $this->helpermodel->getdatajaminanexp();
+        $data['deprekanan'] = $this->kontrakmodel->getkontrakrekanan()->result_array();
+        $this->load->view('notif/viewnotifbc',$data);
+        $footer['fungsi'] = 'notifbc';
+        $footer['data'] = $this->helpermodel->getdatafooter()->row_array();
+		$this->load->view('layouts/footer',$footer);
+    }
+    public function setdeptnotif(){
+        $inp = $_POST['dept'];
+        $this->session->set_userdata('deptnotif',$inp);
+        echo 1;
     }
 }
