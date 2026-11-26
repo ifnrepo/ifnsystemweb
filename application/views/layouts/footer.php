@@ -67,7 +67,7 @@
 		});
 	</script>
 <?php } ?>
-<?php $updatejs = '1775880169'; ?>
+<?php $updatejs = '1775880171'; ?>
 <!-- Custom JS -->
 <script src="<?= base_url(); ?>assets/js/myscript.js?<?= $updatejs; ?>"></script>
 <!-- <script src="<?= base_url(); ?>assets/js/refresh.js"></script> -->
@@ -185,6 +185,9 @@
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'main') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/main.js?<?= $updatejs; ?>"></script>
+<?php } ?>
+<?php if (isset($fungsi) && $fungsi == 'notifbc') { ?>
+	<script src="<?= base_url(); ?>assets/js/own/notifbc.js?<?= $updatejs; ?>"></script>
 <?php } ?>
 <?php if (isset($fungsi) && $fungsi == 'kurs') { ?>
 	<script src="<?= base_url(); ?>assets/js/own/kurs.js?<?= $updatejs; ?>"></script>

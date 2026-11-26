@@ -73,6 +73,7 @@ class Userappsmodel extends CI_Model
         $data['bagian'] = strtoupper($data['bagian']);
         $data['rolestokopname'] = strtoupper($data['rolestokopname']);
         $data['cek_modulproduksi'] = isset($data['cek_modulproduksi']) ? 1 : 0;
+        $data['tutup_kontrak'] = isset($data['tutup_kontrak']) ? 1 : 0;
         // Set modul master
         $master = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {
@@ -242,6 +243,7 @@ class Userappsmodel extends CI_Model
         $data['bagian'] = strtoupper($data['bagian']);
         $data['rolestokopname'] = strtoupper($data['rolestokopname']);
         $data['cek_modulproduksi'] = isset($data['cek_modulproduksi']) ? 1 : 0;
+        $data['tutup_kontrak'] = isset($data['tutup_kontrak']) ? 1 : 0;
         // Set modul master
         $master = str_repeat('0', 100);
         for ($x = 1; $x <= 50; $x++) {

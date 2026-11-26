@@ -1016,7 +1016,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                   </div>
                 </div>
-                <div class="mb-1 row bg-primary-lt">
+                <div class="mb-0 row bg-primary-lt">
                   <label class="col-3 col-form-label"></label>
                   <div class="col mt-2">
                     <div class="col-11">
@@ -1026,6 +1026,22 @@ defined('BASEPATH') or exit('No direct script access allowed');
                           <label class="form-check form-check-single form-switch">
                             <?php $pcaktif = $user['cek_modulproduksi'] == 1 ? 'checked' : ''; ?>
                             <input class="form-check-input" name="cek_modulproduksi" id="cek_modulproduksi" type="checkbox" <?= $pcaktif; ?>>
+                          </label>
+                        </span>
+                      </label>
+                    </div>
+                  </div>
+                </div>
+                <div class="mb-1 row bg-primary-lt">
+                  <label class="col-3 col-form-label"></label>
+                  <div class="col mt-2">
+                    <div class="col-11">
+                      <label class="row" title="Hak Tutup Kontrak">
+                        <span class="col font-bold">Tutup Kontrak</span>
+                        <span class="col-auto">
+                          <label class="form-check form-check-single form-switch">
+                            <?php $pcaktif = $user['tutup_kontrak'] == 1 ? 'checked' : ''; ?>
+                            <input class="form-check-input" name="tutup_kontrak" id="tutup_kontrak" type="checkbox" <?= $pcaktif; ?>>
                           </label>
                         </span>
                       </label>

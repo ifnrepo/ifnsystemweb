@@ -202,7 +202,7 @@
                                 <td class="text-right" id="pcskirim"></td>
                                 <td class="text-right" id="kgskirim"></td>
                                 <td class="text-right"><?= rupiah($totaljaminan['cifrupiah'], 2); ?></td>
-                                <?php $ndpbm = isset($totaljaminan['ndpbm']) ? $totaljaminan['ndpbm'] : 1;  ?>
+                                <?php $ndpbm = isset($totaljaminan['ndpbm']) ? ($totaljaminan['ndpbm']==0 ? 1 : $totaljaminan['ndpbm']) : 1;  ?>
                                 <td class="text-right" id="cifrup"><?= rupiah($totaljaminan['cifrupiah'] / $ndpbm, 2) ?></td>
                             </tr>
                         </tbody>

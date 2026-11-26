@@ -703,4 +703,8 @@ class Kontrak_model extends CI_Model
         $this->db->group_by('tb_kontrak.id_supplier');
         return $this->db->get();
     }
+    public function tutupkontrak($id){
+        $this->db->where('id',$id);
+        return $this->db->update('tb_kontrak',['tutup' => 1,'tutup_oleh' => $this->session->userdata('id'),'tutup_pada' => date('Y-m-d H:i:s')]);
+    }
 }
