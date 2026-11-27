@@ -4,7 +4,7 @@ defined('BASEPATH') OR exit('No direct script access allowed');
 <div class="page-body">
   <div class="container-xl">
     <button href="<?= base_url().'main/notifbc' ?>" class="btn btn-sm btn-success hilang" id="getnotifikasi" data-bs-toggle="modal" data-bs-target="#modal-large-loading" data-title="Notifikasi !">View Notifikasi</button>
-    <input type="text" class="hilang" name="bagian" id="bagian" value="<?= $this->session->userdata('dept_user') ?>">
+    <input type="text" class="hilang" name="bagian" id="bagian" value="<?= datadepartemen($this->session->userdata('dept_user'),'notif_bc') ?>">
     <input type="text" class="hilang" name="jumlahdokbc" id="jumlahdokbc" value="<?= $monitoringjaminan->num_rows() ?>">
     <div class="bg-blue mb-3 p-3 text-white" style="min-height: 80px; background-image: url('<?= base_url().'assets/image/blue-wave.jpg'; ?>'); background-size: cover;">
       <?php 

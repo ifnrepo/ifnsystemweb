@@ -52,6 +52,10 @@
                         <input class="form-check-input" name="stokopname" id="stokopname" type="checkbox" <?php if($data['stokopname']=='1'){ echo "checked"; } ?> >
                         <span class="form-check-label">Stok Opname</span>
                     </label>
+                    <label class="form-check mt-1 mb-1">
+                        <input class="form-check-input" name="notifbc" id="notifbc" type="checkbox" <?php if($data['notif_bc']=='1'){ echo "checked"; } ?> >
+                        <span class="form-check-label">Notifikasi BC</span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -66,6 +70,8 @@
         var cekpb = $("#pb").prop('checked') ? '1' : '0';
         var cekbbl = $("#bbl").prop('checked') ? '1' : '0';
         var cekadj = $("#adj").prop('checked') ? '1' : '0';
+        var stokopname = $("#stokopname").prop('checked') ? '1' : '0';
+        var notifbc = $("#notifbc").prop('checked') ? '1' : '0';
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -76,7 +82,9 @@
                 kat: $("#katedept_id").val(),
                 pb: cekpb,
                 bbl: cekbbl,
-                adj: cekadj
+                adj: cekadj,
+                so: stokopname,
+                notif: notifbc
             },
             success: function(data) {
                 window.location.reload();

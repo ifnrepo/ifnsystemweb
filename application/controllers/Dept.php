@@ -51,7 +51,9 @@ class Dept extends CI_Controller
             'jabatan' => $_POST['jabatan'],
             'pb' => $_POST['pb'],
             'bbl' => $_POST['bbl'],
-            'adj' => $_POST['adj']
+            'adj' => $_POST['adj'],
+            'stokopname' => $_POST['so'],
+            'notif_bc' => $_POST['notif']
         ];
         $hasil = $this->dept_model->simpandept($data);
         $this->helpermodel->isilog($this->db->last_query());
