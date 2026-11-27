@@ -1,6 +1,5 @@
 $(document).ready(function () {
-	const deptallow = ["IT", "BC", "AR", "PP"];
-	if(deptallow.includes($("#bagian").val()) && $("#jumlahdokbc").val() != '0'){
+	if($("#bagian").val()=='1' && $("#jumlahdokbc").val() != '0'){
 		setTimeout(() => {
 			$("#getnotifikasi").off().click();
 		}, 1000);

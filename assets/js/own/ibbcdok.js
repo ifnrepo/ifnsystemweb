@@ -549,12 +549,22 @@ function cekkolom(mode) {
 			pesan("Cek Nilai Pabean (CIF) dengan Detail Harga !", "error");
 			return false;
 		}
+		if ($("#tujuan_pengeluaran").val() == "") {
+			pesan("Tujuan Pengeluaran harus di isi", "error");
+			return false;
+		}
 		if ($("#jns_bc").val() == "25") {
 			if ($("#mtuang").val() != '1') {
 				pesan("Cek Kurs Pabean (Harus IDR) !", "error");
 				return false;
 			}
 		}
+		if ($("#jns_bc").val() == "41" && $("#cirimakloon").html()=='MAKLOON'){ 
+			if ($("#exnomor_bc").val() == '') {
+				pesan("Nomor ExBC Harus di Isi", "error");
+				return false;
+			}
+		}	
 	}else{
 		if($("#jns_bc").val() != "261"){
 			if ($("#sumdetail").val() != $("#jumlahcif").val()) {

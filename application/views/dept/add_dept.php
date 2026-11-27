@@ -59,7 +59,7 @@
             </div>
             <div class="hr m-0"></div>
             <div class="mt-1 row">
-                <label class="col-3 col-form-label"></label>
+                <!-- <label class="col-3 col-form-label"></label> -->
                 <div class="col">
                     <label class="form-check mt-1 mb-1">
                         <input class="form-check-input" name="pb" id="pb" type="checkbox" >
@@ -85,6 +85,10 @@
                         <input class="form-check-input" name="stokopname" id="stokopname" type="checkbox" >
                         <span class="form-check-label">Stok Opname / <strong>SO</strong></span>
                     </label>
+                    <label class="form-check mt-1 mb-1">
+                        <input class="form-check-input" name="notifbc" id="notifbc" type="checkbox" >
+                        <span class="form-check-label">Notifikasi BC</span>
+                    </label>
                 </div>
             </div>
         </div>
@@ -103,6 +107,7 @@
         var cekbbl = $("#bbl").prop('checked') ? '1' : '0';
         var cekadj = $("#adj").prop('checked') ? '1' : '0';
         var cekso = $("#stokopname").prop('checked') ? '1' : '0';
+        var ceknotifbc = $("#notifbc").prop('checked') ? '1' : '0';
         $.ajax({
             dataType: "json",
             type: "POST",
@@ -119,7 +124,8 @@
                 pb: cekpb,
                 bbl: cekbbl,
                 adj: cekadj,
-                so: cekso
+                so: cekso,
+                notif: notifbc
             },
             success: function(data) {
                 window.location.reload();

@@ -10,7 +10,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 </h2>
             </div>
             <div class="col-md-6" style="text-align: right;">
-                <a href="<?= base_url() . 'dept/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-simple" data-title="Add Data Departemen"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
+                <a href="<?= base_url() . 'dept/tambahdata'; ?>" class="btn btn-primary btn-sm" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Add Data Departemen"><i class="fa fa-plus"></i><span class="ml-1">Tambah Data</span></a>
             </div>
         </div>
     </div>
@@ -27,7 +27,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                     </div>
                 </div>
                 <div id="table-default" class="table-responsivee">
-                    <table class="table datatable w-100" >
+                    <table class="table table-bordered table-hover w-100" >
                         <thead>
                             <tr>
                                 <th>No</th>
@@ -35,7 +35,8 @@ defined('BASEPATH') or exit('No direct script access allowed');
                                 <th>Nama Departemen</th>
                                 <th>Kategori</th>
                                 <th>Oth</th>
-                                <th>Stok Opn</th>
+                                <th class="line-11">Stok<br>Opn</th>
+                                <th class="line-11">Notif<br>BC</th>
                                 <th>Aksi</th>
                             </tr>
                         </thead>
@@ -43,14 +44,16 @@ defined('BASEPATH') or exit('No direct script access allowed');
                             <?php $no = 0;
                             foreach ($dept as $key) : $no++;
                                 $oth = cekoth($key['pb'], $key['bbl'], $key['adj']);
-                                $so = $key['stokopname']==1 ? 'Y' : ''; ?>
-                                <tr>
+                                $so = $key['stokopname']==1 ? '<i class="fa fa-check"></i>' : '';
+                                $notifbc = $key['notif_bc']==1 ? '<i class="fa fa-check"></i>' : ''; ?>
+                                <tr class="font-kecil">
                                     <td><?= trim($no); ?></td>
                                     <td><?= trim($key['dept_id']); ?></td>
                                     <td><?= trim($key['departemen']); ?></td>
                                     <td><?= trim(strtoupper($key['nama'])); ?></td>
                                     <td><?= $oth ?></td>
-                                    <td class="text-green font-bold"><?= $so ?></td>
+                                    <td class="text-green font-bold text-center"><?= $so ?></td>
+                                    <td class="text-green font-bold text-center"><?= $notifbc ?></td>
                                     <td>
                                         <a href="<?= base_url() . 'dept/edit_new/' . $key['dept_id']; ?>" class="btn btn-sm btn-primary btn-icon text-white" id="edituser" rel="<?= $key['dept_id']; ?>" title="Edit data">
                                             <i class="fa fa-edit"></i>
