@@ -20,13 +20,14 @@ class Kontrak_model extends CI_Model
 
     public function getdatakontrak($kode)
     {
-        $this->db->select("tb_kontrak.*,dept.departemen,ROUND(SUM(tb_detail.kgs), 2) AS total_kgs,tb_header.nomor_bc,supplier.nama_supplier");
+        $this->db->select("tb_kontrak.*,dept.departemen,ROUND(SUM(tb_detail.kgs), 2) AS total_kgs,tb_header.nomor_bc,supplier.nama_supplier,b.nomor as nomorperpanjangan");
         $this->db->from('tb_kontrak');
         $this->db->join('tb_header', "tb_header.id_kontrak = tb_kontrak.id AND tb_header.jns_bc = '" . $kode['jnsbc'] . "'", 'left');
 
         $this->db->join('tb_detail', 'tb_detail.id_akb = tb_header.id', 'left');
         $this->db->join('supplier', 'supplier.id = tb_kontrak.id_supplier', 'left');
         $this->db->join('dept', 'dept.dept_id = tb_kontrak.dept_id', 'left');
+        $this->db->join('tb_kontrak b', 'b.id = tb_kontrak.id_kontrak_panjang', 'left');
 
         if (!empty($kode['id_supplier'])) {
             $this->db->where('tb_kontrak.id_supplier', $kode['id_supplier']);
@@ -41,13 +42,13 @@ class Kontrak_model extends CI_Model
 
 
         if ($kode['status'] == 1) {
-            $this->db->where("tgl_akhir >= '" . date('Y-m-d') . "'");
+            $this->db->where("tb_kontrak.tgl_akhir >= '" . date('Y-m-d') . "'");
         } else if ($kode['status'] == 2) {
-            $this->db->where("tgl_akhir < '" . date('Y-m-d') . "'");
+            $this->db->where("tb_kontrak.tgl_akhir < '" . date('Y-m-d') . "'");
         }
 
         if (!empty($kode['thkontrak'])) {
-            $this->db->where("YEAR(tgl_awal)", $kode['thkontrak']);
+            $this->db->where("YEAR(tb_kontrak.tgl_awal)", $kode['thkontrak']);
         }
 
         if (isset($kode['datkecuali'])) {
@@ -57,7 +58,7 @@ class Kontrak_model extends CI_Model
 
 
         $this->db->group_by('tb_kontrak.id');
-        $this->db->order_by('nomor DESC,tgl_akhir');
+        $this->db->order_by('tb_kontrak.nomor DESC,tb_kontrak.tgl_akhir');
 
         return $this->db->get();
     }
@@ -703,8 +704,22 @@ class Kontrak_model extends CI_Model
         $this->db->group_by('tb_kontrak.id_supplier');
         return $this->db->get();
     }
-    public function tutupkontrak($id){
-        $this->db->where('id',$id);
-        return $this->db->update('tb_kontrak',['tutup' => 1,'tutup_oleh' => $this->session->userdata('id'),'tutup_pada' => date('Y-m-d H:i:s')]);
+    public function tutupkontrak($data){    
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_kontrak',['tutup' => 1,'tutup_oleh' => $this->session->userdata('id'),'tutup_pada' => date('Y-m-d H:i:s'),'alasan_tutup' => $data['alasan']]);
+    }
+    public function caridatakontrakuntukperpanjang($id){
+        $data = $this->db->get_where('tb_kontrak',['id' => $id])->row_array();
+
+        $this->db->where('id !=',$data['id']);
+        $this->db->where('id_supplier',$data['id_supplier']);
+        // $this->db->where('tgl_awal >=',$data['tgl_akhir']);
+        $this->db->where('jns_bc',$data['jns_bc']);
+        $this->db->where('tutup',0);
+        return $this->db->get('tb_kontrak');
+    }
+    public function perpanjangkontrak($data){    
+        $this->db->where('id',$data['id']);
+        return $this->db->update('tb_kontrak',['tutup' => 1,'tutup_oleh' => $this->session->userdata('id'),'tutup_pada' => date('Y-m-d H:i:s'),'alasan_tutup' => $data['alasan'],'id_kontrak_panjang' => $data['idpanjang']]);
     }
 }

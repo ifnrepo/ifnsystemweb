@@ -1572,17 +1572,54 @@ class Kontrak extends CI_Controller
         $hasil = $this->kontrakmodel->simpankontrakbaru($data);
         echo $hasil;
     }
-    public function tutupkontrak($id,$mode=0){
-        $hasil = $this->kontrakmodel->tutupkontrak($id);
+    public function tutupkontrak(){
+        $data = [
+            'id' => $_POST['id'],
+            'alasan' => $_POST['alasan'],
+            'mode' => $_POST['mode']
+        ];
+        $hasil = $this->kontrakmodel->tutupkontrak($data);
+        $mode = $_POST['mode'];
         if($hasil){
-            if($mode==0){
-                $url = base_url().'kontrak';
-                redirect($url);
-            }else{
-                $url = base_url().'main/viewnotifbc';
-                redirect($url);
-            }
+            // if($mode==0){
+            //     $url = base_url().'kontrak';
+            //     redirect($url);
+            // }else{
+            //     $url = base_url().'main/viewnotifbc';
+            //     redirect($url);
+            // }
+            echo 1;
         }
+    }
+    public function perpanjangkontrak(){
+        $kontrak = $this->db->get_where('tb_kontrak',['id' => $_POST['idpanjang']])->row_array();
+        $data = [
+            'id' => $_POST['id'],
+            'alasan' => 'Diperpanjang dengan kontrak No '.$kontrak['nomor'],
+            'idpanjang' => $_POST['idpanjang']
+        ];
+        $mode = $_POST['mode'];
+        $hasil = $this->kontrakmodel->perpanjangkontrak($data);
+        if($hasil){
+            // if($mode==0){
+            //     $url = base_url().'kontrak';
+            //     redirect($url);
+            // }else{
+            //     $url = base_url().'main/viewnotifbc';
+            //     redirect($url);
+            // }
+            echo 1;
+        }
+    }
+    public function tutupkontrakorperpanjang($id,$mode=0){
+        $data['data'] = $this->kontrakmodel->getdata($id)->row_array();
+        $data['nomorkontrak'] = $this->kontrakmodel->caridatakontrakuntukperpanjang($id);
+        $data['mode'] = $mode;
+        $this->load->view('kontrak/tutupatauperpanjang',$data);
+    }
+    public function viewalasantutup($id){
+        $data['data'] = $this->kontrakmodel->getdata($id)->row_array();
+        $this->load->view('kontrak/viewalasantutup',$data);
     }
     public function generateword($id) {
         $datakontrak = $this->kontrakmodel->getdata($id)->row_array();

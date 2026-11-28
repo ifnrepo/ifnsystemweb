@@ -117,8 +117,9 @@ class Userapps extends CI_Controller
 	{
 		$hasil = $this->userappsmodel->refreshsess($id);
 		if ($hasil) {
-			$url  = base_url($urrl);
+			$url  = base_url();
 			redirect($url);
+			// header("Refresh:0");
 		}
 	}
 	public function cekusername()

@@ -559,12 +559,12 @@ function cekkolom(mode) {
 				return false;
 			}
 		}
-		if ($("#jns_bc").val() == "41" && $("#cirimakloon").html()=='MAKLOON'){ 
-			if ($("#exnomor_bc").val() == '') {
-				pesan("Nomor ExBC Harus di Isi", "error");
-				return false;
-			}
-		}	
+		// if ($("#jns_bc").val() == "41" && $("#cirimakloon").html()=='MAKLOON'){ 
+		// 	if ($("#exnomor_bc").val() == '') {
+		// 		pesan("Nomor ExBC Harus di Isi", "error");
+		// 		return false;
+		// 	}
+		// }	
 	}else{
 		if($("#jns_bc").val() != "261"){
 			if ($("#sumdetail").val() != $("#jumlahcif").val()) {
