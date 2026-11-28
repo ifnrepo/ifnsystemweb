@@ -87,14 +87,14 @@
     </div>
   </div> -->
   <!-- Kummpulan Modal -->
-  <div class="modal modal-blur fade" id="modal-simple" role="dialog" data-backdrop="static" data-keyboard="false" aria-hidden="true">
+  <div class="modal modal-blur fade" id="modal-simple" role="dialog" data-bs-backdrop="static" data-bs-keyboard="false" aria-hidden="true">
     <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
       <div class="modal-content">
         <div class="modal-header bg-info">
           <h5 class="modal-title">Modal title</h5>
           <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
         </div>
-        <div class="modal-body fetched-data">
+        <div class="modal-body fetched-data p-1">
           Fetching Data ..
         </div>
         <!-- <div class="modal-footer">
@@ -1008,7 +1008,7 @@
           <span class="navbar-toggler-icon"></span>
         </button>
         <div class="navbar-nav flex-row order-md-last">
-          <div class="nav-item dropdown d-none d-md-flex me-3">
+          <div class="nav-item dropdown d-none d-md-flex me-3 <?php if(datadepartemen($this->session->userdata('dept_user'),'notif_bc')!=1){ echo "hilang"; } ?>">
             <a href="#" class="nav-link px-0" data-bs-toggle="dropdown" tabindex="-1" aria-label="Show notifications" title="Show Notifications">
               <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="icon icon-tabler icons-tabler-outline icon-tabler-file-text-check"><path stroke="none" d="M0 0h24v24H0z" fill="none" /><path d="M14 3v4a1 1 0 0 0 1 1h4" /><path d="M11.537 21h-4.537c-1.105 0 -2 -.895 -2 -2v-14c0 -1.105 .895 -2 2 -2h7l5 5v5.536" /><path d="M9 9l1 0" /><path d="M9 13l6 0" /><path d="M9 17h2.541" /><path d="M15 19l2 2l4 -4" /></svg>
               <span class="badge bg-transparent">

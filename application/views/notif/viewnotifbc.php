@@ -82,7 +82,7 @@ defined('BASEPATH') or exit('No direct script access allowed');
                         <td class="text-center text-nowrap">
                             <a href="<?= base_url('kontrak/view/') . $mon['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" title="View Detail Kontrak" style="padding: 3px 5px !important;" class="btn btn-sm btn-success btn-icon p-0">View</a>
                             <?php if(datauser($this->session->userdata('id'),'tutup_kontrak')==1){ ?>
-                                <a href="#" data-href="<?= base_url('kontrak/tutupkontrak/') . $mon['id'].'/1'; ?>" data-bs-toggle="modal" data-bs-target="#modal-info" title="Tutup Kontrak" data-message="akan menutup kontrak <b><?= $mon['nomor'] ?></b>" style="padding: 3px 5px !important;" class="btn btn-sm btn-danger btn-icon p-0">Tutup</a>
+                                <a href="<?= base_url() . 'kontrak/tutupkontrakorperpanjang/' . $mon['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Tutup Kontrak" style="padding: 3px 5px !important;" class="btn btn-sm btn-danger btn-icon p-0">Tutup</a>
                             <?php } ?>
                         </td>
                     </tr>

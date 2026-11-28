@@ -299,11 +299,12 @@ defined('BASEPATH') or exit('No direct script access allowed');
                 $warnahuruf = ($datdet['kgs'] < $datdet['total_kgs']) ? 'text-pink' : 'text-primary';
                 $saldo = $datdet['total_kgs'] - $jumlahbcmasuk;
                 $tahap = $datdet['tipe'] == 0 ? '' : ($datdet['tipe'] == 1 ? 'TIPE 1' : 'TIPE 2');
+                $kontraklalu = $datdet['id_kontrak_panjang']!=0 ? '<br><span class="font-kecil text-indigo"><i class="fa fa-exchange mr-1 text-green"></i>diperpanjang ke '.$datdet['nomorperpanjangan'].'</span>' : '';
                 $nomer++;
               ?>
                 <tr>
                   <td><?= $nomer; ?></td>
-                  <td class="line-12 text-nowrap"><?= $datdet['nomor']; ?><br><span class="text-pink" style="font-size: 11px"><?= $datdet['nama_supplier']; ?></span></td>
+                  <td class="line-12 text-nowrap"><?= $datdet['nomor']; ?><br><span class="text-pink" style="font-size: 11px"><?= $datdet['nama_supplier']; ?></span><?= $kontraklalu ?></td>
                   <td class="line-12"><?= $datdet['proses']; ?><br><span class="text-primary" style="font-size: 11px"><?= $tahap ?></span></td>
                   <td><?= tglmysql($datdet['tgl_awal']); ?></td>
                   <td class="<?= $class_tgl_akhir ?>">
@@ -314,22 +315,43 @@ defined('BASEPATH') or exit('No direct script access allowed');
                   <td class="text-right <?= $warnahuruf ?> <?= $bold ?>"><?= rupiah($datdet['total_kgs'], 2); ?></td>
                   <td class="text-right"><?= rupiah($jumlahbcmasuk, 2) ?></td>
                   <td class="text-right <?= $warnahuruf ?> "><a href="<?= base_url() . 'kontrak/viewdetail/' . $datdet['id'] ?>" class="" title="View detail" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Realisasi dan Pengembalian"><?= rupiah($saldo, 2)  ?></a></td>
-                  <td class="text-nowrap">
-                    <a href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak" style="padding: 3px 5px !important;" class="btn btn-sm btn-success btn-icon p-0">View</a>
-                    <a href="<?= base_url() . 'kontrak/editdata/' . $datdet['id']; ?>" class="onprogress btn btn-sm btn-primary btn-icon p-0" style="padding: 3px 5px !important;">Edit</a>
-                    <a href="#" class="btn btn-sm btn-danger btn-icon p-0" data-href="<?= base_url() . 'kontrak/hapuskontrak/' . $datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Kontrak <br><?= $datdet['nomor']; ?>" style="padding: 3px 5px !important;">Delete</a>
-                    <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="dropdown"><i class="fa fa-file-word-o" aria-hidden="true"></i></a></span>
-                    <div class="dropdown-menu dropdown-menu-end">
-                      <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generateword/'.$datdet['id']; ?>">
-                        Kontrak
-                      </a>
-                      <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generatemohon/'.$datdet['id']; ?>">
-                        Permohonan
-                      </a>
-                      <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generatepernyataan/'.$datdet['id']; ?>">
-                        Pernyataan
-                      </a>
+                  <td class="text-nowrap line-11">
+                    <div>
+                      <button type="button" class="btn btn-sm btn-success p-0" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" style="padding: 3px 5px !important;">
+                        Aksi
+                      </button>
+                      <div class="dropdown-menu dropdown-menu-end" id="dropdown-avatar">
+                        <a class="dropdown-item p-2 font-kecil" href="<?= base_url('kontrak/view/') . $datdet['id']; ?>" data-bs-toggle="offcanvas" data-bs-target="#canvasdet" data-title="View Detail Kontrak">
+                          View Kontrak
+                        </a>
+                        <hr class="m-0">
+                        <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/editdata/' . $datdet['id']; ?>">
+                          Edit
+                        </a>
+                        <hr class="m-0">
+                        <a class="dropdown-item p-2 font-kecil" href="#" data-href="<?= base_url() . 'kontrak/hapuskontrak/' . $datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-danger" data-message="Hapus Kontrak <br><?= $datdet['nomor']; ?>">
+                          Delete
+                        </a>
+                      </div>
+                      <a href="#" class="btn btn-sm btn-primary" data-bs-toggle="dropdown"><i class="fa fa-file-word-o" aria-hidden="true"></i></a></span>
+                      <div class="dropdown-menu dropdown-menu-end" id="dropdown-avatar">
+                        <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generateword/'.$datdet['id']; ?>">
+                          Kontrak
+                        </a>
+                        <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generatemohon/'.$datdet['id']; ?>">
+                          Permohonan
+                        </a>
+                        <a class="dropdown-item p-2 font-kecil" href="<?= base_url() . 'kontrak/generatepernyataan/'.$datdet['id']; ?>">
+                          Pernyataan
+                        </a>
+                      </div>
+                      <?php if($datdet['tutup']==0): ?>
+                        <a class="btn btn-sm btn-info btn-icon p-0" href="<?= base_url() . 'kontrak/tutupkontrakorperpanjang/' . $datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="Tutup Kontrak" style="padding: 3px 5px !important;">Tutup</a>
+                      <?php else: ?>
+                        <a class="btn btn-sm btn-danger btn-icon p-0" href="<?= base_url() . 'kontrak/viewalasantutup/' . $datdet['id'] ?>" data-bs-toggle="modal" data-bs-target="#modal-large" data-title="View Alasan" style="padding: 3px 5px !important;">Alasan Tutup</a>
+                      <?php endif; ?>
                     </div>
+                    <div class="font-kecil <?php if($datdet['tutup']==0){ echo "hilang"; } ?>"><?= datauser($datdet['tutup_oleh'],'username').' # '.$datdet['tutup_pada']; ?></div>
                   </td>
                 </tr>
               <?php endforeach; ?>
